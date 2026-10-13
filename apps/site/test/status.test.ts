@@ -34,6 +34,14 @@ describe('runChecks', () => {
     }
   })
 
+  it('reads a package npm has not published yet as pending, not down', async () => {
+    const npm = CHECKS.find((c) => c.id === 'npm')!
+    const results = await runChecks(fakeFetch({ ...allUp, [npm.url]: { status: 404, body: {} } }))
+    const r = results.find((x) => x.id === 'npm')!
+    expect(r.ok).toBeNull()
+    expect(r.detail).toBe('Not on npm yet, install from GitHub')
+  })
+
   it('marks a check down when the network fails', async () => {
     const results = await runChecks(fakeFetch({}))
     expect(results.every((r) => !r.ok && r.detail === 'Unreachable')).toBe(true)

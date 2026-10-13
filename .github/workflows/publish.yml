@@ -1,0 +1,31 @@
+name: Publish @dualkit/format
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: npm dist-tag for this release
+        default: beta
+        required: true
+permissions:
+  contents: read
+  id-token: write # npm provenance: proves the package was built from this repo
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@11.5.1
+      - run: npm ci
+      - run: npm publish -w @dualkit/format --provenance --access public --tag ${{ inputs.tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Point latest at this version while it is the only one
+        run: |
+          VERSION=$(node -p "require('./packages/format/package.json').version")
+          npm dist-tag add "@dualkit/format@$VERSION" latest
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
