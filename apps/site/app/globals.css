@@ -197,24 +197,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .points strong { font-size: 14px; font-weight: 500; }
 .points span { color: var(--soft); }
 
-/* Starter: centred header over a full-width pipeline */
 .centre-head { display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
 .centre-head .lede { max-width: 588px; }
-.pipeline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 56px; background: var(--raised); min-height: 320px; }
-.pipe-pane { position: relative; display: flex; flex-direction: column; border-radius: var(--r-media); background: var(--page); overflow: hidden; }
-.pipe-pane::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--line); pointer-events: none; }
-.pipe-pane > .h { padding: 8px 12px; font: 12px var(--mono); color: var(--faint); box-shadow: inset 0 -1px 0 var(--grid); }
-.pipe-pane pre { margin: 0; padding: 8px; font: 12px/1.6 var(--mono); }
-.pipe-pane pre > span { display: block; padding: 2px 8px; }
-.pipe-pane pre > span.hot { background: var(--highlight); }
-.pipe-pane .v { display: inline-block; font: inherit; padding: 0 4px; margin: 0 -4px; border-radius: 4px; transition: background-color 300ms var(--ease-ui), box-shadow 300ms var(--ease-ui); }
-.pipe-pane button.v { cursor: pointer; box-shadow: inset 0 0 0 1px var(--line); background: var(--page); }
-.pipe-pane .v.lit { background: rgba(22,163,74,.12); box-shadow: inset 0 0 0 1px rgba(22,163,74,.4); }
-.pipe-pane .v.flash { animation: flash 900ms ease-out; }
-.pipe-pane .hint { float: right; color: var(--ghost); }
 .mini.lit { box-shadow: inset 0 0 0 1.5px var(--green); }
 @keyframes flash { from { background: rgba(22,163,74,.28); } }
-.pipe-canvas { flex: 1; display: grid; place-items: center; background: var(--raised); }
 .mini { width: 150px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding: 12px; border-radius: var(--r, 24px); background: var(--page); box-shadow: inset 0 0 0 1px var(--select); transition: border-radius 600ms var(--ease-expo); }
 .mini i { display: block; height: 6px; border-radius: 3px; background: var(--panel); }
 .mini b { display: block; width: 80px; height: 10px; border-radius: 3px; background: var(--ink); }
@@ -336,7 +322,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .skill-cell:nth-child(3), .strip > div:nth-child(3), .f-grid > div:nth-child(3) { box-shadow: inset 0 1px 0 var(--grid); }
   .skill-cell:nth-child(4), .strip > div:nth-child(4), .f-grid > div:nth-child(4) { box-shadow: inset 1px 0 0 var(--grid), inset 0 1px 0 var(--grid); }
   .format-row, .mirror-row { grid-template-columns: minmax(0, 1fr); gap: 48px; }
-  .pipeline { grid-template-columns: minmax(0, 1fr); padding: 16px; }
   .entry { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .next-cards { grid-template-columns: minmax(0, 1fr); }
   .check { grid-template-columns: minmax(0, 1fr) auto; }
@@ -368,9 +353,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* Phones: proportion pass */
 @media (max-width: 960px) {
-  .pipeline { gap: 10px; }
-  .pipe-canvas { min-height: 180px; padding: 24px 16px; }
-  .pipe-pane pre { font-size: 12px; }
   .halftone .hint { font-size: 11px; }
 }
 @media (max-width: 560px) {
@@ -381,8 +363,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .strip > div:nth-child(n+3) { box-shadow: inset 0 1px 0 var(--grid) !important; }
   .strip > div:nth-child(4) { box-shadow: inset 1px 0 0 var(--grid), inset 0 1px 0 var(--grid) !important; }
   .figure { font-size: 40px; }
-  .pipeline { padding: 12px; }
-  .pipe-pane pre { padding: 4px; }
   .mini { width: 136px; }
 }
 .hint-touch { display: none; }
@@ -410,3 +390,41 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .fb-error { margin: 0; color: #b91c1c; }
 .fb-sent { margin: 0; display: flex; gap: 8px; align-items: center; font-weight: 500; }
 @media (prefers-reduced-motion: reduce) { .fb-panel { transition: opacity 120ms linear; scale: 1; translate: 0 0; } }
+
+/* Starter: eight tiles, each a real @dualkit/starter component. Hover or focus peeks at the other language; a click or tap keeps it. */
+.st-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; }
+.st-copy { display: flex; flex-direction: column; gap: 24px; max-width: 588px; }
+.st-head .cmd { max-width: min(360px, 100%); }
+.st-grid {
+  /* The site loads its faces through next/font, so point the Starter's families at them. Type families are
+     redeclared here because :root already resolved them to the plain family names. */
+  --dk-font-family-latin: var(--sans); --dk-font-family-arabic: var(--arabic); --dk-font-family-mono: var(--mono);
+  --dk-type-display-family: var(--dk-font-family-latin); --dk-type-heading-family: var(--dk-font-family-latin);
+  --dk-type-title-family: var(--dk-font-family-latin); --dk-type-body-family: var(--dk-font-family-latin);
+  --dk-type-label-family: var(--dk-font-family-latin); --dk-type-caption-family: var(--dk-font-family-latin);
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;
+}
+.st-tile { display: flex; flex-direction: column; gap: 16px; padding: 24px; border-radius: var(--r-media); background: var(--page); box-shadow: inset 0 0 0 1px var(--line); cursor: pointer; text-align: start; -webkit-tap-highlight-color: transparent; transition: background-color 200ms var(--ease-ui); }
+@media (hover: hover) { .st-tile:hover { background: #fdfdfd; } }
+.st-tile:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.st-stage { display: grid; height: 200px; align-items: center; }
+.st-layer { grid-area: 1 / 1; display: flex; flex-direction: column; align-items: center; min-width: 0; opacity: 0; translate: var(--st-from, -10px) 0; pointer-events: none; transition: opacity 220ms var(--ease-ui), translate 420ms var(--ease-expo); }
+.st-layer[dir="rtl"] { --st-from: 10px; }
+.st-layer[data-on="true"] { opacity: 1; translate: 0 0; }
+.st-layer > .dk-field, .st-layer > .dk-date, .st-layer > .dk-toast, .st-layer > .st-sheet { width: 100%; }
+.st-layer .dk-digits__boxes { gap: 8px; }
+.st-layer .dk-digits__box { inline-size: 32px; block-size: 40px; font-size: 20px; }
+/* The fourth box carries the focus ring in the Figma tile: the next digit to type. */
+.st-layer .dk-digits__box:nth-child(4) { box-shadow: inset 0 0 0 2px var(--dk-color-border-focus); }
+.st-layer .dk-tabs__tab { white-space: nowrap; padding-inline: 12px; }
+.st-name { font-size: 14px; font-weight: 500; color: var(--soft); }
+.st-sheet { display: flex; flex-direction: column; gap: 16px; padding: 16px; border-radius: var(--r-media); background: var(--page); box-shadow: inset 0 0 0 1px var(--line); color: var(--ink); }
+.st-sheet__rows { display: flex; flex-direction: column; gap: 8px; }
+.st-sheet__actions { display: flex; justify-content: flex-end; }
+@media (max-width: 960px) { .st-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) {
+  .st-grid { grid-template-columns: minmax(0, 1fr); }
+  .st-stage { height: auto; padding-block: 24px; }
+  .st-head .cmd { max-width: 100%; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .st-layer { translate: 0 0; transition: opacity 120ms linear; } }

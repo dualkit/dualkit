@@ -1,6 +1,6 @@
 {
   "name": "@dualkit/starter",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0-beta.0",
   "description": "A bilingual design system you can fork. One DTCG token file feeds Figma and code.",
   "license": "MIT",
   "type": "module",
@@ -13,7 +13,9 @@
   "exports": {
     "./tokens.css": "./generated/tokens.css",
     "./theme.css": "./generated/theme.css",
-    "./figma-variables.json": "./generated/figma-variables.json"
+    "./figma-variables.json": "./generated/figma-variables.json",
+    "./components": "./components/index.ts",
+    "./components/styles.css": "./components/styles.css"
   },
   "scripts": {
     "build": "node scripts/build.mjs",

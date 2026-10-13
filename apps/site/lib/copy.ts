@@ -2,6 +2,8 @@
 // npm has the first publish on hold; until it lands, install the identical tarball from the GitHub release.
 // Switch back to 'npm i @dualkit/format' once npm serves it.
 export const FORMAT_COMMAND = 'npm i https://github.com/dualkit/dualkit/releases/download/format-v0.1.0-beta.0/dualkit-format-0.1.0-beta.0.tgz'
+// The Starter has the same hold. Switch to 'npm i @dualkit/starter' once npm serves it.
+export const STARTER_COMMAND = 'npm i https://github.com/dualkit/dualkit/releases/download/starter-v0.1.0-beta.0/dualkit-starter-0.1.0-beta.0.tgz'
 export const SKILLS_COMMAND = '/plugin marketplace add dualkit/dualkit'
 export const REPO_URL = 'https://github.com/dualkit/dualkit'
 
@@ -10,7 +12,7 @@ export const COPY = {
   drawer: [
     { name: 'Skills', line: 'Teach Claude Code and Cursor to build right to left', href: '/#skills' },
     { name: 'Format', line: 'AED, Hijri, Arabic digits, UAE phone and IBAN', href: '/#format' },
-    { name: 'Starter', line: 'A bilingual design system, coming next', href: '/#starter' },
+    { name: 'Starter', line: 'Eight components that read both ways', href: '/#starter' },
   ],
   hero: {
     headline: ['Build for the Gulf.', 'In both directions.'],
@@ -38,9 +40,8 @@ export const COPY = {
     ] as const,
   },
   starter: {
-    tag: 'Coming next',
-    heading: ['Tokens in git.', 'Figma and code follow.'],
-    lede: 'A bilingual design system you can fork. One token file feeds Figma and code, so neither drifts from the other.',
+    heading: ['A design system', 'that reads both ways.'],
+    lede: 'Eight React components on one token file. Copy them in and Arabic works from the first commit.',
   },
   mirror: {
     heading: ['Every component,', 'both directions.'],
@@ -49,7 +50,7 @@ export const COPY = {
     hint: 'Move over it. Click to switch.',
     hintTouch: 'Tap to switch.',
   },
-  strip: [['4', 'skills'], ['6', 'Gulf formats'], ['0', 'dependencies'], ['152', 'tests passing']] as const,
+  strip: [['4', 'skills'], ['6', 'Gulf formats'], ['0', 'dependencies'], ['272', 'tests passing']] as const,
   closing: { heading: 'Ship in both directions today.', primary: 'Get started', secondary: 'Read the docs' },
   feedback: {
     open: 'Send feedback',
