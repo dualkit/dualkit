@@ -19,4 +19,5 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build -w @dualkit/skills-tooling && git diff --exit-code cursor/rules
+      - run: npm run build -w @dualkit/starter && git diff --exit-code packages/starter/generated
       - run: npm run build
