@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { compactCount } from '@/lib/counters'
 import { COPY } from '@/lib/copy'
 import { OVERALL_LABEL, type Overall } from '@/lib/status'
-import { ArrowIcon, Mark } from './icons'
+import { Mark } from './icons'
 import { Mascot } from './Mascot'
 import { Wordmark } from './Wordmark'
 
@@ -27,15 +27,13 @@ export function Footer({ status, downloads }: { status: Overall; downloads: numb
             </div>
           ))}
           <div className="maker">
-            <span className="t">{f.maker.label}</span>
-            <span className="maker-name">{f.maker.name}</span>
-            <span className="soft">{f.maker.line}</span>
-            <a className="maker-link" href={f.maker.href}>{f.maker.site}<ArrowIcon /></a>
+            <Mascot />
+            <span className="credit">{f.maker.label} <a href={f.maker.href}>{f.maker.name}</a></span>
           </div>
         </div>
         <div className="f-ruler" aria-hidden="true">{Array.from({ length: 49 }, (_, k) => <i key={k} />)}</div>
       </div>
-      <div className="f-mark"><Wordmark /><Mascot /></div>
+      <Wordmark />
       <div className="wrap f-bottom"><span>{f.legal}</span><span>{f.tagline}</span></div>
     </footer>
   )

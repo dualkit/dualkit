@@ -354,14 +354,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
 }
 
-/* Footer: the maker column and the mascot */
-.maker .maker-name { font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
-.maker .soft { max-width: 22ch; }
-.maker .maker-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-weight: 500; }
-.maker .maker-link svg { transition: transform 300ms var(--ease-expo); }
-@media (hover: hover) { .maker .maker-link:hover svg { transform: translateX(3px); } }
-.f-mark { position: relative; }
-.mascot { position: absolute; right: max(16px, calc((100vw - var(--content)) / 2)); top: -24px; width: 96px; height: 96px; border-radius: 50%; background: var(--ink); display: grid; place-items: center; overflow: hidden; }
-.mascot .eyes { display: flex; gap: 16px; will-change: transform; }
-.mascot .eyes i { width: 9px; height: 20px; border-radius: 6px; background: var(--page); transform: rotate(14deg); }
-@media (max-width: 560px) { .mascot { width: 72px; height: 72px; top: -12px; } .mascot .eyes { gap: 12px; } .mascot .eyes i { width: 7px; height: 15px; } }
+/* Footer: the maker cell, a small floating mascot and a quiet credit */
+.f-grid .maker { justify-content: space-between; align-items: flex-start; min-height: 200px; }
+.mascot { width: 56px; height: 56px; animation: bob 3.6s ease-in-out infinite; }
+.mascot svg { display: block; }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+.credit { font-size: 13px; color: var(--faint); }
+.credit a { color: var(--soft); background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 300ms var(--ease-expo), color 150ms var(--ease-ui); }
+@media (hover: hover) { .credit a:hover { color: var(--ink); background-size: 100% 1px; } }
+@media (prefers-reduced-motion: reduce) { .mascot { animation: none; } }
