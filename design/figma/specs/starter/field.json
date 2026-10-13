@@ -1,0 +1,444 @@
+{
+  "component": "Field",
+  "textColor": "color.text.primary",
+  "setLayout": {
+    "rows": "Script",
+    "columns": "State",
+    "gap": "space.stack.lg",
+    "pad": "space.stack.lg"
+  },
+  "variants": [
+    {
+      "props": {
+        "Script": "En",
+        "State": "Empty"
+      },
+      "dir": "col",
+      "w": 320,
+      "gap": "space.stack.sm",
+      "align": "start",
+      "children": [
+        {
+          "text": "Email",
+          "style": "En/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Box",
+          "dir": "row",
+          "children": [
+            {
+              "text": "name@company.com",
+              "style": "En/Body",
+              "name": "Value",
+              "color": "color.text.tertiary"
+            }
+          ],
+          "w": "fill",
+          "align": "center",
+          "gap": 1,
+          "radius": "radius.surface",
+          "fill": "color.surface.raised",
+          "pad": {
+            "block": "space.inline.md",
+            "inline": "space.inline.lg"
+          },
+          "stroke": {
+            "color": "color.border.subtle",
+            "width": 1
+          }
+        },
+        {
+          "text": "We only use it to send receipts.",
+          "style": "En/Caption",
+          "name": "Help",
+          "color": "color.text.secondary",
+          "w": "fill"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "En",
+        "State": "Filled"
+      },
+      "dir": "col",
+      "w": 320,
+      "gap": "space.stack.sm",
+      "align": "start",
+      "children": [
+        {
+          "text": "Email",
+          "style": "En/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Box",
+          "dir": "row",
+          "children": [
+            {
+              "text": "sam@dualkit.dev",
+              "style": "En/Body",
+              "name": "Value"
+            }
+          ],
+          "w": "fill",
+          "align": "center",
+          "gap": 1,
+          "radius": "radius.surface",
+          "fill": "color.surface.raised",
+          "pad": {
+            "block": "space.inline.md",
+            "inline": "space.inline.lg"
+          },
+          "stroke": {
+            "color": "color.border.subtle",
+            "width": 1
+          }
+        },
+        {
+          "text": "We only use it to send receipts.",
+          "style": "En/Caption",
+          "name": "Help",
+          "color": "color.text.secondary",
+          "w": "fill"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "En",
+        "State": "Focus"
+      },
+      "dir": "col",
+      "w": 320,
+      "gap": "space.stack.sm",
+      "align": "start",
+      "children": [
+        {
+          "text": "Email",
+          "style": "En/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Box",
+          "dir": "row",
+          "children": [
+            {
+              "text": "sam@dualkit",
+              "style": "En/Body",
+              "name": "Value"
+            },
+            {
+              "shape": "Caret",
+              "kind": "rect",
+              "size": [
+                1,
+                20
+              ],
+              "fill": "color.text.primary"
+            }
+          ],
+          "w": "fill",
+          "align": "center",
+          "gap": 1,
+          "radius": "radius.surface",
+          "fill": "color.surface.raised",
+          "pad": {
+            "block": "space.inline.md",
+            "inline": "space.inline.lg"
+          },
+          "stroke": {
+            "color": "color.border.focus",
+            "width": 2
+          }
+        },
+        {
+          "text": "We only use it to send receipts.",
+          "style": "En/Caption",
+          "name": "Help",
+          "color": "color.text.secondary",
+          "w": "fill"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "En",
+        "State": "Error"
+      },
+      "dir": "col",
+      "w": 320,
+      "gap": "space.stack.sm",
+      "align": "start",
+      "children": [
+        {
+          "text": "Email",
+          "style": "En/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Box",
+          "dir": "row",
+          "children": [
+            {
+              "text": "sam@dualkit.dev",
+              "style": "En/Body",
+              "name": "Value"
+            }
+          ],
+          "w": "fill",
+          "align": "center",
+          "gap": 1,
+          "radius": "radius.surface",
+          "fill": "color.surface.raised",
+          "pad": {
+            "block": "space.inline.md",
+            "inline": "space.inline.lg"
+          },
+          "stroke": {
+            "color": "color.state.danger",
+            "width": 1
+          }
+        },
+        {
+          "text": "Enter a valid email address.",
+          "style": "En/Caption",
+          "name": "Help",
+          "color": "color.state.danger",
+          "w": "fill"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "State": "Empty"
+      },
+      "dir": "col",
+      "w": 320,
+      "gap": "space.stack.sm",
+      "align": "end",
+      "children": [
+        {
+          "text": "البريد الإلكتروني",
+          "style": "Ar/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Box",
+          "dir": "row",
+          "children": [
+            {
+              "text": "name@company.com",
+              "style": "En/Body",
+              "name": "Value",
+              "color": "color.text.tertiary"
+            }
+          ],
+          "w": "fill",
+          "align": "center",
+          "gap": 1,
+          "radius": "radius.surface",
+          "fill": "color.surface.raised",
+          "pad": {
+            "block": "space.inline.md",
+            "inline": "space.inline.lg"
+          },
+          "stroke": {
+            "color": "color.border.subtle",
+            "width": 1
+          }
+        },
+        {
+          "text": "نستخدمه لإرسال الإيصالات فقط.",
+          "style": "Ar/Caption",
+          "name": "Help",
+          "color": "color.text.secondary",
+          "w": "fill",
+          "align": "end"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "State": "Filled"
+      },
+      "dir": "col",
+      "w": 320,
+      "gap": "space.stack.sm",
+      "align": "end",
+      "children": [
+        {
+          "text": "البريد الإلكتروني",
+          "style": "Ar/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Box",
+          "dir": "row",
+          "children": [
+            {
+              "text": "sam@dualkit.dev",
+              "style": "En/Body",
+              "name": "Value"
+            }
+          ],
+          "w": "fill",
+          "align": "center",
+          "gap": 1,
+          "radius": "radius.surface",
+          "fill": "color.surface.raised",
+          "pad": {
+            "block": "space.inline.md",
+            "inline": "space.inline.lg"
+          },
+          "stroke": {
+            "color": "color.border.subtle",
+            "width": 1
+          }
+        },
+        {
+          "text": "نستخدمه لإرسال الإيصالات فقط.",
+          "style": "Ar/Caption",
+          "name": "Help",
+          "color": "color.text.secondary",
+          "w": "fill",
+          "align": "end"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "State": "Focus"
+      },
+      "dir": "col",
+      "w": 320,
+      "gap": "space.stack.sm",
+      "align": "end",
+      "children": [
+        {
+          "text": "البريد الإلكتروني",
+          "style": "Ar/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Box",
+          "dir": "row",
+          "children": [
+            {
+              "text": "sam@dualkit",
+              "style": "En/Body",
+              "name": "Value"
+            },
+            {
+              "shape": "Caret",
+              "kind": "rect",
+              "size": [
+                1,
+                20
+              ],
+              "fill": "color.text.primary"
+            }
+          ],
+          "w": "fill",
+          "align": "center",
+          "gap": 1,
+          "radius": "radius.surface",
+          "fill": "color.surface.raised",
+          "pad": {
+            "block": "space.inline.md",
+            "inline": "space.inline.lg"
+          },
+          "stroke": {
+            "color": "color.border.focus",
+            "width": 2
+          }
+        },
+        {
+          "text": "نستخدمه لإرسال الإيصالات فقط.",
+          "style": "Ar/Caption",
+          "name": "Help",
+          "color": "color.text.secondary",
+          "w": "fill",
+          "align": "end"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "State": "Error"
+      },
+      "dir": "col",
+      "w": 320,
+      "gap": "space.stack.sm",
+      "align": "end",
+      "children": [
+        {
+          "text": "البريد الإلكتروني",
+          "style": "Ar/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Box",
+          "dir": "row",
+          "children": [
+            {
+              "text": "sam@dualkit.dev",
+              "style": "En/Body",
+              "name": "Value"
+            }
+          ],
+          "w": "fill",
+          "align": "center",
+          "gap": 1,
+          "radius": "radius.surface",
+          "fill": "color.surface.raised",
+          "pad": {
+            "block": "space.inline.md",
+            "inline": "space.inline.lg"
+          },
+          "stroke": {
+            "color": "color.state.danger",
+            "width": 1
+          }
+        },
+        {
+          "text": "أدخل بريدًا إلكترونيًا صحيحًا.",
+          "style": "Ar/Caption",
+          "name": "Help",
+          "color": "color.state.danger",
+          "w": "fill",
+          "align": "end"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    }
+  ]
+}

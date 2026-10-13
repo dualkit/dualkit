@@ -1,0 +1,1246 @@
+{
+  "component": "Digit input",
+  "textColor": "color.text.primary",
+  "setLayout": {
+    "rows": "Script",
+    "columns": "State",
+    "gap": "space.stack.lg",
+    "pad": "space.stack.lg"
+  },
+  "variants": [
+    {
+      "props": {
+        "Script": "En",
+        "State": "Empty"
+      },
+      "dir": "col",
+      "gap": "space.stack.sm",
+      "align": "start",
+      "children": [
+        {
+          "text": "Verification code",
+          "style": "En/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Boxes",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Digit 1",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 2",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 3",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 4",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 5",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 6",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            }
+          ],
+          "gap": "space.inline.sm"
+        },
+        {
+          "stack": "Help",
+          "dir": "row",
+          "children": [
+            {
+              "text": "Sent to",
+              "style": "En/Caption",
+              "color": "color.text.secondary",
+              "name": "Sent to"
+            },
+            {
+              "text": "+971 50 123 4567",
+              "style": "En/Caption",
+              "color": "color.text.secondary",
+              "name": "Phone"
+            }
+          ],
+          "gap": "space.inline.xs"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "En",
+        "State": "Typing"
+      },
+      "dir": "col",
+      "gap": "space.stack.sm",
+      "align": "start",
+      "children": [
+        {
+          "text": "Verification code",
+          "style": "En/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Boxes",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Digit 1",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "4",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 2",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "8",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 3",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "2",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 4",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.focus",
+                "width": 2
+              }
+            },
+            {
+              "stack": "Digit 5",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 6",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            }
+          ],
+          "gap": "space.inline.sm"
+        },
+        {
+          "stack": "Help",
+          "dir": "row",
+          "children": [
+            {
+              "text": "Sent to",
+              "style": "En/Caption",
+              "color": "color.text.secondary",
+              "name": "Sent to"
+            },
+            {
+              "text": "+971 50 123 4567",
+              "style": "En/Caption",
+              "color": "color.text.secondary",
+              "name": "Phone"
+            }
+          ],
+          "gap": "space.inline.xs"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "En",
+        "State": "Complete"
+      },
+      "dir": "col",
+      "gap": "space.stack.sm",
+      "align": "start",
+      "children": [
+        {
+          "text": "Verification code",
+          "style": "En/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Boxes",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Digit 1",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "4",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 2",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "8",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 3",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "2",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 4",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "9",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 5",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "1",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 6",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "3",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            }
+          ],
+          "gap": "space.inline.sm"
+        },
+        {
+          "stack": "Help",
+          "dir": "row",
+          "children": [
+            {
+              "text": "Sent to",
+              "style": "En/Caption",
+              "color": "color.text.secondary",
+              "name": "Sent to"
+            },
+            {
+              "text": "+971 50 123 4567",
+              "style": "En/Caption",
+              "color": "color.text.secondary",
+              "name": "Phone"
+            }
+          ],
+          "gap": "space.inline.xs"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "En",
+        "State": "Error"
+      },
+      "dir": "col",
+      "gap": "space.stack.sm",
+      "align": "start",
+      "children": [
+        {
+          "text": "Verification code",
+          "style": "En/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Boxes",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Digit 1",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "4",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.state.danger",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 2",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "8",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.state.danger",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 3",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "2",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.state.danger",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 4",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "9",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.state.danger",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 5",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "1",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.state.danger",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 6",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "3",
+                  "style": "Mono/Digit",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.state.danger",
+                "width": 1
+              }
+            }
+          ],
+          "gap": "space.inline.sm"
+        },
+        {
+          "text": "That code did not match. Try again.",
+          "style": "En/Caption",
+          "name": "Help",
+          "color": "color.state.danger"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "State": "Empty"
+      },
+      "dir": "col",
+      "gap": "space.stack.sm",
+      "align": "end",
+      "children": [
+        {
+          "text": "رمز التحقق",
+          "style": "Ar/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Boxes",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Digit 1",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 2",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 3",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 4",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 5",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 6",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            }
+          ],
+          "gap": "space.inline.sm"
+        },
+        {
+          "stack": "Help",
+          "dir": "row",
+          "children": [
+            {
+              "text": "‎+971 50 123 4567",
+              "style": "En/Caption",
+              "color": "color.text.secondary",
+              "name": "Phone"
+            },
+            {
+              "text": "أُرسل إلى",
+              "style": "Ar/Caption",
+              "color": "color.text.secondary",
+              "name": "Sent to"
+            }
+          ],
+          "gap": "space.inline.xs"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "State": "Typing"
+      },
+      "dir": "col",
+      "gap": "space.stack.sm",
+      "align": "end",
+      "children": [
+        {
+          "text": "رمز التحقق",
+          "style": "Ar/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Boxes",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Digit 1",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٤",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 2",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٨",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 3",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٢",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 4",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.focus",
+                "width": 2
+              }
+            },
+            {
+              "stack": "Digit 5",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 6",
+              "dir": "col",
+              "children": [],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            }
+          ],
+          "gap": "space.inline.sm"
+        },
+        {
+          "stack": "Help",
+          "dir": "row",
+          "children": [
+            {
+              "text": "‎+971 50 123 4567",
+              "style": "En/Caption",
+              "color": "color.text.secondary",
+              "name": "Phone"
+            },
+            {
+              "text": "أُرسل إلى",
+              "style": "Ar/Caption",
+              "color": "color.text.secondary",
+              "name": "Sent to"
+            }
+          ],
+          "gap": "space.inline.xs"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "State": "Complete"
+      },
+      "dir": "col",
+      "gap": "space.stack.sm",
+      "align": "end",
+      "children": [
+        {
+          "text": "رمز التحقق",
+          "style": "Ar/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Boxes",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Digit 1",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٤",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 2",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٨",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 3",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٢",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 4",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٩",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 5",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "١",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 6",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٣",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            }
+          ],
+          "gap": "space.inline.sm"
+        },
+        {
+          "stack": "Help",
+          "dir": "row",
+          "children": [
+            {
+              "text": "‎+971 50 123 4567",
+              "style": "En/Caption",
+              "color": "color.text.secondary",
+              "name": "Phone"
+            },
+            {
+              "text": "أُرسل إلى",
+              "style": "Ar/Caption",
+              "color": "color.text.secondary",
+              "name": "Sent to"
+            }
+          ],
+          "gap": "space.inline.xs"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "State": "Error"
+      },
+      "dir": "col",
+      "gap": "space.stack.sm",
+      "align": "end",
+      "children": [
+        {
+          "text": "رمز التحقق",
+          "style": "Ar/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Boxes",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Digit 1",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٤",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.state.danger",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 2",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٨",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.state.danger",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 3",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٢",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.state.danger",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 4",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٩",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.state.danger",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 5",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "١",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.state.danger",
+                "width": 1
+              }
+            },
+            {
+              "stack": "Digit 6",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٣",
+                  "style": "Ar/Title",
+                  "name": "Digit"
+                }
+              ],
+              "w": 44,
+              "h": 52,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.surface",
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.state.danger",
+                "width": 1
+              }
+            }
+          ],
+          "gap": "space.inline.sm"
+        },
+        {
+          "text": "الرمز غير صحيح. حاول مرة أخرى.",
+          "style": "Ar/Caption",
+          "name": "Help",
+          "color": "color.state.danger"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    }
+  ]
+}

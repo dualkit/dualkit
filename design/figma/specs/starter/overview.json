@@ -1,0 +1,728 @@
+{
+  "screen": "Starter · Overview · EN and AR",
+  "size": [
+    1600,
+    "hug"
+  ],
+  "direction": "ltr",
+  "lang": "en",
+  "fill": "color.surface.ground",
+  "textColor": "color.text.primary",
+  "pad": {
+    "block": "space.stack.xl",
+    "inline": "space.stack.xl"
+  },
+  "gap": "space.stack.lg",
+  "children": [
+    {
+      "stack": "Intro",
+      "dir": "col",
+      "children": [
+        {
+          "text": "Dualkit Starter",
+          "style": "En/Heading",
+          "name": "Title"
+        },
+        {
+          "text": "Eight components, each drawn in both directions from one token file.",
+          "style": "En/Body",
+          "name": "Lede",
+          "color": "color.text.secondary"
+        }
+      ],
+      "gap": "space.stack.sm",
+      "pad": {
+        "bottom": "space.stack.lg"
+      }
+    },
+    {
+      "stack": "Column heads",
+      "dir": "row",
+      "children": [
+        {
+          "stack": "Head spacer",
+          "dir": "row",
+          "children": [],
+          "w": 280,
+          "h": 1
+        },
+        {
+          "text": "English, left to right",
+          "style": "En/Label",
+          "name": "English head",
+          "color": "color.text.secondary",
+          "w": "fill"
+        },
+        {
+          "text": "العربية، من اليمين إلى اليسار",
+          "style": "Ar/Label",
+          "name": "Arabic head",
+          "color": "color.text.secondary",
+          "w": "fill",
+          "align": "end"
+        }
+      ],
+      "w": "fill",
+      "gap": "space.stack.xl"
+    },
+    {
+      "shape": "Head rule",
+      "kind": "rect",
+      "size": [
+        1,
+        1
+      ],
+      "fill": "color.border.subtle",
+      "w": "fill",
+      "h": 1
+    },
+    {
+      "stack": "Button row",
+      "dir": "row",
+      "children": [
+        {
+          "stack": "Button about",
+          "dir": "col",
+          "children": [
+            {
+              "text": "Button",
+              "style": "En/Title",
+              "name": "Name"
+            },
+            {
+              "text": "Arrows flip with the reading direction; other icons stay.",
+              "style": "En/Caption",
+              "name": "Why",
+              "color": "color.text.secondary",
+              "w": "fill"
+            }
+          ],
+          "w": 280,
+          "gap": "space.stack.xs",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Button En",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Button",
+              "name": "Button instance",
+              "props": {
+                "Script": "En",
+                "Variant": "Primary",
+                "State": "Default"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "start",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Button Ar",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Button",
+              "name": "Button instance",
+              "props": {
+                "Script": "Ar",
+                "Variant": "Primary",
+                "State": "Default"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "end",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        }
+      ],
+      "w": "fill",
+      "gap": "space.stack.xl",
+      "align": "start"
+    },
+    {
+      "shape": "Button rule",
+      "kind": "rect",
+      "size": [
+        1,
+        1
+      ],
+      "fill": "color.border.subtle",
+      "w": "fill",
+      "h": 1
+    },
+    {
+      "stack": "Field row",
+      "dir": "row",
+      "children": [
+        {
+          "stack": "Field about",
+          "dir": "col",
+          "children": [
+            {
+              "text": "Field",
+              "style": "En/Title",
+              "name": "Name"
+            },
+            {
+              "text": "Values like email and IBAN stay left to right inside Arabic.",
+              "style": "En/Caption",
+              "name": "Why",
+              "color": "color.text.secondary",
+              "w": "fill"
+            }
+          ],
+          "w": 280,
+          "gap": "space.stack.xs",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Field En",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Field",
+              "name": "Field instance",
+              "props": {
+                "Script": "En",
+                "State": "Filled"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "start",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Field Ar",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Field",
+              "name": "Field instance",
+              "props": {
+                "Script": "Ar",
+                "State": "Filled"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "end",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        }
+      ],
+      "w": "fill",
+      "gap": "space.stack.xl",
+      "align": "start"
+    },
+    {
+      "shape": "Field rule",
+      "kind": "rect",
+      "size": [
+        1,
+        1
+      ],
+      "fill": "color.border.subtle",
+      "w": "fill",
+      "h": 1
+    },
+    {
+      "stack": "Digit input row",
+      "dir": "row",
+      "children": [
+        {
+          "stack": "Digit input about",
+          "dir": "col",
+          "children": [
+            {
+              "text": "Digit input",
+              "style": "En/Title",
+              "name": "Name"
+            },
+            {
+              "text": "Takes Arabic-Indic digits; the boxes never reverse.",
+              "style": "En/Caption",
+              "name": "Why",
+              "color": "color.text.secondary",
+              "w": "fill"
+            }
+          ],
+          "w": 280,
+          "gap": "space.stack.xs",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Digit input En",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Digit input",
+              "name": "Digit input instance",
+              "props": {
+                "Script": "En",
+                "State": "Typing"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "start",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Digit input Ar",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Digit input",
+              "name": "Digit input instance",
+              "props": {
+                "Script": "Ar",
+                "State": "Typing"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "end",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        }
+      ],
+      "w": "fill",
+      "gap": "space.stack.xl",
+      "align": "start"
+    },
+    {
+      "shape": "Digit input rule",
+      "kind": "rect",
+      "size": [
+        1,
+        1
+      ],
+      "fill": "color.border.subtle",
+      "w": "fill",
+      "h": 1
+    },
+    {
+      "stack": "Amount row",
+      "dir": "row",
+      "children": [
+        {
+          "stack": "Amount about",
+          "dir": "col",
+          "children": [
+            {
+              "text": "Amount",
+              "style": "En/Title",
+              "name": "Name"
+            },
+            {
+              "text": "AED and SAR in either digit system, isolated from the sentence.",
+              "style": "En/Caption",
+              "name": "Why",
+              "color": "color.text.secondary",
+              "w": "fill"
+            }
+          ],
+          "w": 280,
+          "gap": "space.stack.xs",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Amount En",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Amount",
+              "name": "Amount instance",
+              "props": {
+                "Script": "En",
+                "Currency": "AED"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "start",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Amount Ar",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Amount",
+              "name": "Amount instance",
+              "props": {
+                "Script": "Ar",
+                "Currency": "AED"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "end",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        }
+      ],
+      "w": "fill",
+      "gap": "space.stack.xl",
+      "align": "start"
+    },
+    {
+      "shape": "Amount rule",
+      "kind": "rect",
+      "size": [
+        1,
+        1
+      ],
+      "fill": "color.border.subtle",
+      "w": "fill",
+      "h": 1
+    },
+    {
+      "stack": "Date row",
+      "dir": "row",
+      "children": [
+        {
+          "stack": "Date about",
+          "dir": "col",
+          "children": [
+            {
+              "text": "Date",
+              "style": "En/Title",
+              "name": "Name"
+            },
+            {
+              "text": "Gregorian and Umm al-Qura Hijri, pinned to Gulf time.",
+              "style": "En/Caption",
+              "name": "Why",
+              "color": "color.text.secondary",
+              "w": "fill"
+            }
+          ],
+          "w": 280,
+          "gap": "space.stack.xs",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Date En",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Date",
+              "name": "Date instance",
+              "props": {
+                "Script": "En",
+                "Calendar": "Gregorian"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "start",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Date Ar",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Date",
+              "name": "Date instance",
+              "props": {
+                "Script": "Ar",
+                "Calendar": "Gregorian"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "end",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        }
+      ],
+      "w": "fill",
+      "gap": "space.stack.xl",
+      "align": "start"
+    },
+    {
+      "shape": "Date rule",
+      "kind": "rect",
+      "size": [
+        1,
+        1
+      ],
+      "fill": "color.border.subtle",
+      "w": "fill",
+      "h": 1
+    },
+    {
+      "stack": "Tabs row",
+      "dir": "row",
+      "children": [
+        {
+          "stack": "Tabs about",
+          "dir": "col",
+          "children": [
+            {
+              "text": "Tabs",
+              "style": "En/Title",
+              "name": "Name"
+            },
+            {
+              "text": "Order and arrow keys follow the direction.",
+              "style": "En/Caption",
+              "name": "Why",
+              "color": "color.text.secondary",
+              "w": "fill"
+            }
+          ],
+          "w": 280,
+          "gap": "space.stack.xs",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Tabs En",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Tabs",
+              "name": "Tabs instance",
+              "props": {
+                "Script": "En",
+                "Active": "First"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "start",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Tabs Ar",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Tabs",
+              "name": "Tabs instance",
+              "props": {
+                "Script": "Ar",
+                "Active": "First"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "end",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        }
+      ],
+      "w": "fill",
+      "gap": "space.stack.xl",
+      "align": "start"
+    },
+    {
+      "shape": "Tabs rule",
+      "kind": "rect",
+      "size": [
+        1,
+        1
+      ],
+      "fill": "color.border.subtle",
+      "w": "fill",
+      "h": 1
+    },
+    {
+      "stack": "Sheet row",
+      "dir": "row",
+      "children": [
+        {
+          "stack": "Sheet about",
+          "dir": "col",
+          "children": [
+            {
+              "text": "Sheet",
+              "style": "En/Title",
+              "name": "Name"
+            },
+            {
+              "text": "Opens from the side reading ends on; actions mirror.",
+              "style": "En/Caption",
+              "name": "Why",
+              "color": "color.text.secondary",
+              "w": "fill"
+            }
+          ],
+          "w": 280,
+          "gap": "space.stack.xs",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Sheet En",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Sheet",
+              "name": "Sheet instance",
+              "props": {
+                "Script": "En"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "start",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Sheet Ar",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Sheet",
+              "name": "Sheet instance",
+              "props": {
+                "Script": "Ar"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "end",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        }
+      ],
+      "w": "fill",
+      "gap": "space.stack.xl",
+      "align": "start"
+    },
+    {
+      "shape": "Sheet rule",
+      "kind": "rect",
+      "size": [
+        1,
+        1
+      ],
+      "fill": "color.border.subtle",
+      "w": "fill",
+      "h": 1
+    },
+    {
+      "stack": "Toast row",
+      "dir": "row",
+      "children": [
+        {
+          "stack": "Toast about",
+          "dir": "col",
+          "children": [
+            {
+              "text": "Toast",
+              "style": "En/Title",
+              "name": "Name"
+            },
+            {
+              "text": "Mixed Arabic and English messages read in the right order.",
+              "style": "En/Caption",
+              "name": "Why",
+              "color": "color.text.secondary",
+              "w": "fill"
+            }
+          ],
+          "w": 280,
+          "gap": "space.stack.xs",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Toast En",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Toast",
+              "name": "Toast instance",
+              "props": {
+                "Script": "En",
+                "Tone": "Success"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "start",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        },
+        {
+          "stack": "Toast Ar",
+          "dir": "col",
+          "children": [
+            {
+              "instance": "Toast",
+              "name": "Toast instance",
+              "props": {
+                "Script": "Ar",
+                "Tone": "Success"
+              }
+            }
+          ],
+          "w": "fill",
+          "align": "end",
+          "pad": {
+            "block": "space.stack.lg"
+          }
+        }
+      ],
+      "w": "fill",
+      "gap": "space.stack.xl",
+      "align": "start"
+    },
+    {
+      "shape": "Toast rule",
+      "kind": "rect",
+      "size": [
+        1,
+        1
+      ],
+      "fill": "color.border.subtle",
+      "w": "fill",
+      "h": 1
+    }
+  ]
+}
