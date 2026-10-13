@@ -47,6 +47,7 @@ export const COPY = {
     lede: 'Flip the direction and every Dualkit pattern follows: layout, icons, gestures and numbers. The slider below works the same way in both languages.',
     slide: { en: 'Slide to pay', ar: 'اسحب للدفع', enDone: 'Paid', arDone: 'تم الدفع' },
     hint: 'Move over it. Click to switch.',
+    hintTouch: 'Tap to switch.',
   },
   strip: [['4', 'skills'], ['6', 'Gulf formats'], ['0', 'dependencies'], ['141', 'tests passing']] as const,
   closing: { heading: 'Ship in both directions today.', primary: 'Get started', secondary: 'Read the docs' },

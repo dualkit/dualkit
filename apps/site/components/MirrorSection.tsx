@@ -7,7 +7,7 @@ export function MirrorSection() {
   return (
     <section className="section">
       <div className="mirror-row">
-        <Halftone hint={m.hint} />
+        <Halftone hint={m.hint} hintTouch={m.hintTouch} />
         <div className="mirror-copy">
           <h2 className="h2">{m.heading[0]}<br />{m.heading[1]}</h2>
           <p className="lede">{m.lede}</p>

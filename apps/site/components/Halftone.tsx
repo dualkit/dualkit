@@ -4,7 +4,8 @@ import { prefersReducedMotion, useVisible } from '@/lib/motion'
 
 // A dot grid drawn from a real glyph. Dots near the cursor are pushed away and spring back;
 // a click morphs ع into A and back. The loop sleeps once everything has settled.
-const PITCH = 18
+const PITCH_WIDE = 18
+const PITCH_NARROW = 12 // phones get a finer grid so the glyph reads as dots, not blobs
 const PUSH_RADIUS = 90
 const GLYPHS = [{ ch: 'ع', fontVar: '--font-plex-arabic', weight: 600 }, { ch: 'A', fontVar: '--font-switzer', weight: 500 }] as const
 
@@ -21,11 +22,11 @@ function sampleGlyph(w: number, h: number, glyph: (typeof GLYPHS)[number]): (x: 
   return (x, y) => data[(Math.floor(y) * w + Math.floor(x)) * 4 + 3]! / 255
 }
 
-export function Halftone({ hint }: { hint: string }) {
+export function Halftone({ hint, hintTouch }: { hint: string; hintTouch: string }) {
   const [box, visible] = useVisible<HTMLDivElement>()
   const canvas = useRef<HTMLCanvasElement>(null)
   const [which, setWhich] = useState(0)
-  const state = useRef<{ dots: Dot[]; pointer: { x: number; y: number } | null; raf: number; w: number; h: number; dpr: number }>({ dots: [], pointer: null, raf: 0, w: 0, h: 0, dpr: 1 })
+  const state = useRef<{ dots: Dot[]; pointer: { x: number; y: number } | null; raf: number; w: number; h: number; dpr: number; pitch: number }>({ dots: [], pointer: null, raf: 0, w: 0, h: 0, dpr: 1, pitch: PITCH_WIDE })
 
   // Build the grid once per size and glyph.
   useEffect(() => {
@@ -36,21 +37,26 @@ export function Halftone({ hint }: { hint: string }) {
       await document.fonts?.ready
       if (cancelled) return
       const w = el.clientWidth, h = el.clientHeight, dpr = Math.min(devicePixelRatio || 1, 2)
+      const pitch = w < 480 ? PITCH_NARROW : PITCH_WIDE
       cv.width = w * dpr; cv.height = h * dpr
       const read = sampleGlyph(w, h, GLYPHS[which]!)
       const old = state.current.dots
       const dots: Dot[] = []
       let k = 0
-      for (let y = PITCH / 2; y < h; y += PITCH) for (let x = PITCH / 2; x < w; x += PITCH) {
+      for (let y = pitch / 2; y < h; y += pitch) for (let x = pitch / 2; x < w; x += pitch) {
         const target = read(x, y)
         const prev = old[k++]
         dots.push({ hx: x, hy: y, x: prev?.x ?? x, y: prev?.y ?? y, r: prev?.r ?? target, target })
       }
-      Object.assign(state.current, { dots, w, h, dpr })
+      Object.assign(state.current, { dots, w, h, dpr, pitch })
       kick()
     }
     build()
-    const ro = new ResizeObserver(() => { state.current.dots = []; build() })
+    let lastWidth = el.clientWidth
+    const ro = new ResizeObserver(() => {
+      if (el.clientWidth === lastWidth) return // mobile browser bars change the height of the page, not this box
+      lastWidth = el.clientWidth; state.current.dots = []; build()
+    })
     ro.observe(el)
     return () => { cancelled = true; ro.disconnect() }
   }, [which])
@@ -74,7 +80,7 @@ export function Halftone({ hint }: { hint: string }) {
       if (Math.abs(tx - d.x) + Math.abs(ty - d.y) + Math.abs(d.target - d.r) > 0.02) moving = true
       const on = d.r > 0.5
       ctx.fillStyle = on ? '#09090b' : '#d4d4d8'
-      ctx.beginPath(); ctx.arc(d.x, d.y, 1.4 + d.r * PITCH * 0.42, 0, Math.PI * 2); ctx.fill()
+      ctx.beginPath(); ctx.arc(d.x, d.y, (s.pitch < PITCH_WIDE ? 1 : 1.4) + d.r * s.pitch * 0.42, 0, Math.PI * 2); ctx.fill()
     }
     return moving || s.pointer !== null
   }
@@ -88,12 +94,12 @@ export function Halftone({ hint }: { hint: string }) {
 
   return (
     <div className="halftone" ref={box} role="button" tabIndex={0} aria-label={`A dotted ${GLYPHS[which]!.ch}. Press to switch to ${GLYPHS[1 - which]!.ch}.`}
-      onPointerMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); state.current.pointer = { x: e.clientX - r.left, y: e.clientY - r.top }; kick() }}
+      onPointerMove={(e) => { if (e.pointerType === 'touch') return; const r = e.currentTarget.getBoundingClientRect(); state.current.pointer = { x: e.clientX - r.left, y: e.clientY - r.top }; kick() }}
       onPointerLeave={() => { state.current.pointer = null; kick() }}
       onClick={() => setWhich((w) => 1 - w)}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setWhich((w) => 1 - w) } }}>
       <canvas ref={canvas} aria-hidden="true" />
-      <span className="hint">{hint}</span>
+      <span className="hint"><span className="hint-pointer">{hint}</span><span className="hint-touch">{hintTouch}</span></span>
     </div>
   )
 }

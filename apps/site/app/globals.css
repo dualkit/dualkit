@@ -99,7 +99,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* Stage: the product window over the painting */
 .stage { position: relative; height: 760px; border-radius: var(--r-media); overflow: hidden; background: #d8d2c6 url('/img/dunes.webp') center / cover no-repeat; display: grid; place-items: center; }
-.win { position: absolute; display: flex; flex-direction: column; background: var(--page); border-radius: var(--r-window); box-shadow: 0 0 0 1px var(--line), 0 28px 70px rgba(0,0,0,.14), 0 14px 32px rgba(0,0,0,.08); overflow: hidden; touch-action: none; }
+.win { position: absolute; display: flex; flex-direction: column; background: var(--page); border-radius: var(--r-window); box-shadow: 0 0 0 1px var(--line), 0 28px 70px rgba(0,0,0,.14), 0 14px 32px rgba(0,0,0,.08); overflow: hidden; }
+@media (min-width: 961px) { .titlebar { touch-action: none; } }
 .win.app { width: min(1000px, calc(100% - 48px)); height: 600px; left: 50%; top: 50%; translate: -50% -50%; }
 .win.term { width: min(440px, calc(100% - 48px)); left: 48px; bottom: 48px; background: var(--raised); }
 .win.dragging { cursor: grabbing; }
@@ -200,7 +201,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .centre-head { display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center; }
 .centre-head .lede { max-width: 588px; }
 .pipeline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 56px; background: var(--raised); min-height: 320px; }
-.pipe-pane { display: flex; flex-direction: column; border-radius: var(--r-media); background: var(--page); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.pipe-pane { position: relative; display: flex; flex-direction: column; border-radius: var(--r-media); background: var(--page); overflow: hidden; }
+.pipe-pane::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--line); pointer-events: none; }
 .pipe-pane > .h { padding: 8px 12px; font: 12px var(--mono); color: var(--faint); box-shadow: inset 0 -1px 0 var(--grid); }
 .pipe-pane pre { margin: 0; padding: 8px; font: 12px/1.6 var(--mono); }
 .pipe-pane pre > span { display: block; padding: 2px 8px; }
@@ -241,9 +243,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .strip > div + div { box-shadow: inset 1px 0 0 var(--grid); }
 .figure { font-size: 56px; font-weight: 500; letter-spacing: -0.04em; line-height: 1.05; }
 .figure { font-variant-numeric: tabular-nums; }
-.odo { display: inline-flex; overflow: hidden; height: 1em; line-height: 1em; vertical-align: top; }
+.odo { --row: 1.15em; display: inline-flex; overflow: hidden; height: var(--row); line-height: var(--row); vertical-align: top; }
 .odo .col { display: flex; flex-direction: column; transition: transform 640ms var(--ease-odo); will-change: transform; }
-.odo .col span { display: block; height: 1em; line-height: 1em; }
+.odo .col span { display: block; height: var(--row); line-height: var(--row); }
 
 /* Closing */
 .closing { padding-block: clamp(160px, 20vw, 280px); display: flex; flex-direction: column; align-items: center; gap: 32px; text-align: center; }
@@ -268,7 +270,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .f-ruler { display: flex; justify-content: space-between; align-items: flex-start; padding-top: 24px; }
 .f-ruler i { width: 1px; height: 6px; background: var(--line); }
 .f-ruler i:nth-child(4n+1) { height: 12px; }
-.wordmark { display: flex; justify-content: center; height: clamp(110px, 21vw, 300px); font-size: clamp(150px, 26vw, 320px); font-weight: 500; letter-spacing: -0.06em; line-height: 0.8; color: var(--ghost); user-select: none; overflow: hidden; }
+.wordmark { display: flex; justify-content: center; height: clamp(64px, 20.5vw, 300px); font-size: clamp(80px, 25vw, 320px); font-weight: 500; letter-spacing: -0.06em; line-height: 0.8; color: var(--ghost); user-select: none; overflow: hidden; }
 .wordmark button { display: inline-block; font: inherit; letter-spacing: inherit; line-height: inherit; transition: color 300ms var(--ease-ui), translate 300ms var(--ease-expo); }
 @media (hover: hover) { .wordmark button:hover { color: var(--ink); translate: 0 -0.04em; } }
 .f-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding-block: 24px; font-size: 13px; color: var(--faint); }
@@ -363,3 +365,25 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .credit a { color: var(--soft); background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 300ms var(--ease-expo), color 150ms var(--ease-ui); }
 @media (hover: hover) { .credit a:hover { color: var(--ink); background-size: 100% 1px; } }
 @media (prefers-reduced-motion: reduce) { .mascot { animation: none; } }
+
+/* Phones: proportion pass */
+@media (max-width: 960px) {
+  .pipeline { gap: 10px; }
+  .pipe-canvas { min-height: 180px; padding: 24px 16px; }
+  .pipe-pane pre { font-size: 12px; }
+  .halftone .hint { font-size: 11px; }
+}
+@media (max-width: 560px) {
+  .strip { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .strip > div { padding: 28px 20px; }
+  .strip > div + div { box-shadow: none !important; }
+  .strip > div:nth-child(2n) { box-shadow: inset 1px 0 0 var(--grid) !important; }
+  .strip > div:nth-child(n+3) { box-shadow: inset 0 1px 0 var(--grid) !important; }
+  .strip > div:nth-child(4) { box-shadow: inset 1px 0 0 var(--grid), inset 0 1px 0 var(--grid) !important; }
+  .figure { font-size: 40px; }
+  .pipeline { padding: 12px; }
+  .pipe-pane pre { padding: 4px; }
+  .mini { width: 136px; }
+}
+.hint-touch { display: none; }
+@media (hover: none) { .hint-pointer { display: none; } .hint-touch { display: inline; } }
