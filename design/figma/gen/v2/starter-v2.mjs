@@ -110,12 +110,12 @@ const TILES = [
   ['Date', 'Ar', date],
   ['Tabs', 'Ar', tabs],
   ['Sheet', 'En', sheetMini],
-  ['Toast', 'En', toastMini],
+  ['Toast', 'Ar', toastMini],
 ]
 
 function tile([name, s, build], mobile) {
   return col(`${name} tile`, [
-    col(`${name} stage`, [build(s)], { w: 'fill', h: mobile ? 'hug' : 220, ...(mobile ? { pad: { block: 'space.block' } } : {}), justify: 'center', align: ar(s) ? 'end' : 'start' }),
+    col(`${name} stage`, [build(s)], { w: 'fill', h: mobile ? 'hug' : 200, ...(mobile ? { pad: { block: 'space.block' } } : {}), justify: 'center', align: 'center' }),
     text(name, 'V2Label', { name: 'Name', color: 'color.text.soft' }),
   ], { w: 'fill', h: mobile ? 'hug' : 'fill', gap: 'space.item', pad: 'space.group', radius: 'radius.media', fill: 'color.surface.page', stroke: LINE })
 }
