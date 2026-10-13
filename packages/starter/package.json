@@ -1,13 +1,13 @@
 {
   "name": "@dualkit/starter",
   "version": "0.1.0-alpha.0",
-  "private": true,
   "description": "A bilingual design system you can fork. One DTCG token file feeds Figma and code.",
   "license": "MIT",
   "type": "module",
   "files": [
     "tokens",
-    "generated"
+    "generated",
+    "README.md"
   ],
   "exports": {
     "./tokens.css": "./generated/tokens.css",
@@ -18,5 +18,22 @@
     "build": "node scripts/build.mjs",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dualkit/dualkit.git",
+    "directory": "packages/starter"
+  },
+  "homepage": "https://dualkit.dev",
+  "keywords": [
+    "design-tokens",
+    "dtcg",
+    "rtl",
+    "arabic",
+    "tailwind",
+    "figma"
+  ]
 }
