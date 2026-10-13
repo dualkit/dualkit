@@ -2,7 +2,8 @@ import Link from 'next/link'
 import { compactCount } from '@/lib/counters'
 import { COPY } from '@/lib/copy'
 import { OVERALL_LABEL, type Overall } from '@/lib/status'
-import { Mark } from './icons'
+import { ArrowIcon, Mark } from './icons'
+import { Mascot } from './Mascot'
 import { Wordmark } from './Wordmark'
 
 const isExternal = (href: string) => href.startsWith('http')
@@ -25,10 +26,16 @@ export function Footer({ status, downloads }: { status: Overall; downloads: numb
               {links.map(([label, href]) => isExternal(href) ? <a key={label} href={href}>{label}</a> : <Link key={label} href={href}>{label}</Link>)}
             </div>
           ))}
+          <div className="maker">
+            <span className="t">{f.maker.label}</span>
+            <span className="maker-name">{f.maker.name}</span>
+            <span className="soft">{f.maker.line}</span>
+            <a className="maker-link" href={f.maker.href}>{f.maker.site}<ArrowIcon /></a>
+          </div>
         </div>
         <div className="f-ruler" aria-hidden="true">{Array.from({ length: 49 }, (_, k) => <i key={k} />)}</div>
       </div>
-      <Wordmark />
+      <div className="f-mark"><Wordmark /><Mascot /></div>
       <div className="wrap f-bottom"><span>{f.legal}</span><span>{f.tagline}</span></div>
     </footer>
   )

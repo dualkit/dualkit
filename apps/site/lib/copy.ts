@@ -54,8 +54,8 @@ export const COPY = {
     columns: [
       ['Product', [['Skills', '/#skills'], ['Format', '/#format'], ['Starter', '/#starter'], ['Updates', '/updates']]],
       ['Resources', [['Docs', '/docs'], ['Status', '/status'], ['GitHub', REPO_URL], ['npm', 'https://www.npmjs.com/package/@dualkit/format']]],
-      ['Made by', [['Sam Santos', 'https://snts.im'], ['snts.im', 'https://snts.im']]],
     ] as const,
+    maker: { label: 'Made by', name: 'Sam Santos', line: 'Design systems for AI-native products.', site: 'snts.im', href: 'https://snts.im' },
     legal: 'MIT licensed · v0.1 beta',
     tagline: 'Build for the Gulf. In both directions.',
   },
