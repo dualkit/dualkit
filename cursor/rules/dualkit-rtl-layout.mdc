@@ -1,0 +1,81 @@
+---
+description: Use when building or reviewing UI that must work right-to-left in Arabic as well as English, including mirroring, icons, phone numbers or codes inside Arabic text, input fields, Tailwind or CSS direction, and bidi bugs where numbers or punctuation appear in the wrong order
+globs:
+alwaysApply: false
+---
+
+# RTL layout
+
+## Overview
+
+Direction is set once, on the root, and everything else follows it. The hard bugs are not margins. They are left-to-right runs (phone numbers, IBANs, codes, emails) inside Arabic text, which the bidi algorithm reorders.
+
+## Set direction on the document
+
+```tsx
+<html lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+```
+
+Use the `dir` attribute, never `direction` in CSS. Flex, grid, text alignment and native controls follow it for free. Set `lang` too, because fonts, hyphenation and screen readers depend on it.
+
+## Logical properties, always
+
+| Physical (never) | Logical (always) | Tailwind |
+|---|---|---|
+| `margin-left` | `margin-inline-start` | `ms-4` |
+| `padding-right` | `padding-inline-end` | `pe-4` |
+| `left: 0` | `inset-inline-start: 0` | `inset-s-0` (v4.3+), `start-0` before |
+| `text-align: left` | `text-align: start` | `text-start` |
+| `border-left` | `border-inline-start` | `border-s` |
+| `border-top-left-radius` | `border-start-start-radius` | `rounded-ss-lg` |
+
+`transform: translateX()`, `background-position`, SVG coordinates and animation keyframes do **not** flip. Negate them under `[dir="rtl"]` or the `rtl:` variant (`rtl:-translate-x-full`).
+
+## Left-to-right runs inside Arabic text (the bug every model ships)
+
+In an RTL line, the bidi algorithm resolves the spaces between digit groups to right-to-left, so each group becomes its own run and `مثال 050 123 4567` renders as `مثال 4567 123 050`. The same thing happens to `+971 50 123 4567`, card numbers, times like `10:30 - 11:00`, and versions.
+
+Wrap every such run in an isolate:
+
+```tsx
+<p>{t.phoneHint} <bdi dir="ltr">050 123 4567</bdi></p>
+```
+
+When markup is not possible (placeholders, `aria-label`, toasts, push text), put the isolate characters in the string: `⁦` (LRI) before the run and `⁩` (PDI) after it.
+
+```ts
+const hint = `مثال ⁦050 123 4567⁩`
+```
+
+`dir="ltr"` is only for runs with no Arabic letters in them. A formatted Arabic amount (`1,234.50 د.إ`) or an Arabic date contains Arabic, so give it a plain `<bdi>` with no `dir`. Forcing it to LTR moves the currency to the wrong side. The same goes for user-supplied names and values: plain `<bdi>`, so each one picks its own direction.
+
+## Inputs that are always left to right
+
+Phone, IBAN, Emirates ID, email, URL, card and OTP fields stay `dir="ltr"` in Arabic. Keep the label and the error message in the page direction.
+
+```tsx
+<input dir="ltr" inputMode="tel" autoComplete="tel" className="text-start" />
+```
+
+A `+971` prefix chip sits inside the same `dir="ltr"` wrapper as the input, so it stays on the left.
+
+## What to mirror
+
+| Mirror | Do not mirror |
+|---|---|
+| Back and forward arrows, chevrons | Play, pause, fast-forward (they follow tape direction) |
+| Progress bars, steppers, sliders | Clocks and anything circular that shows time |
+| Send icons, reply and redo arrows | Checkmarks, logos, brand marks |
+| Carousels and swipe direction | Phone numbers, numerals, Latin text, code |
+| Drawers (open from the start edge) | Media timelines |
+
+Use `rtl:-scale-x-100` (or `rtl:rotate-180` for a symmetric arrow) on the icon, never a separate icon set.
+
+## Common mistakes
+
+- `left-0` or `ml-2` on anything that should follow the reading edge.
+- Mirroring with `rotate-180` on an icon that is not vertically symmetric, so it ends up upside down. Use `-scale-x-100`.
+- A phone number or IBAN example in an Arabic hint or error, with no isolate.
+- Forcing `dir="ltr"` on the whole field group, which flips the label too.
+- `<bdi dir="ltr">` around a formatted Arabic amount or date. Use `<bdi>` with no `dir`.
+- Testing RTL only with Lorem ipsum. Test with real Arabic copy and real numbers mixed in.

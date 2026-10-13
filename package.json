@@ -1,0 +1,14 @@
+{
+  "name": "dualkit",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "test": "npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "build": "npm run build -w @dualkit/site",
+    "dev": "npm run dev -w @dualkit/site"
+  }
+}

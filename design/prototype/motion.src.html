@@ -1,0 +1,872 @@
+<title>Dualkit Motion Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Readex+Pro:wght@400;500;600&display=swap">
+<style>
+/* Layout: one 1120px column on white; every section is a live object you can click. Single light theme by design (dualkit.dev v0.1 ships light only). */
+:root {
+  color-scheme: light;
+  --page: #ffffff;
+  --raised: #fafafa;
+  --panel: #f4f4f5;
+  --ink: #09090b;
+  --secondary: #52525b;
+  --muted: #71717a;
+  --ghost: #d4d4d8;
+  --ring: rgba(0, 0, 0, 0.08);
+  --divider: rgba(0, 0, 0, 0.06);
+  --strong: rgba(0, 0, 0, 0.12);
+  --select: rgba(0, 0, 0, 0.4);
+  --highlight: rgba(0, 0, 0, 0.04);
+  --green: #16a34a;
+  --mark-on-panel: #cfcfd4;
+  --inverse-fg: #ffffff;
+  --glass: rgba(255, 255, 255, 0.72);
+
+  --sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+  --arabic: "Readex Pro", "Geeza Pro", "Noto Sans Arabic", sans-serif;
+
+  /* Measured from the references (Mobbin, recent.design, collectui) */
+  --ease-expo: cubic-bezier(.16, 1, .3, 1);
+  --ease-pill: cubic-bezier(.19, 1, .22, 1);
+  --ease-odo: cubic-bezier(.22, 1, .36, 1);
+  --ease-ui: cubic-bezier(.2, 0, 0, 1);
+
+  --content: 1120px;
+  --section: clamp(96px, 12vw, 160px);
+  --r-card: 24px;
+  --r-inset: 12px;
+  --r-control: 12px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+:lang(ar), [lang="ar"] { font-family: var(--arabic); letter-spacing: 0; text-transform: none; font-style: normal; line-height: 1.7; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 8px; }
+.wrap { width: 100%; max-width: calc(var(--content) + 32px); margin-inline: auto; padding-inline: 16px; }
+.mono { font-family: var(--mono); }
+.muted { color: var(--muted); }
+.secondary { color: var(--secondary); }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* Reveal: blur-rise, 800ms ease, from a visible resting state */
+@keyframes rise { from { opacity: 0; transform: translateY(20px); filter: blur(8px); } }
+.rise { animation: rise 800ms ease backwards; }
+
+/* Nav: translucent material, content scrolls under it */
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--glass); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); }
+.nav .wrap { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding-block: 18px; }
+.brand { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
+.mark { width: 20px; height: 20px; flex: none; transition: transform 500ms var(--ease-expo); }
+.brand:hover .mark { transform: scaleX(-1); }
+.links { display: flex; gap: 4px; }
+.links a, .footer a { color: var(--secondary); text-decoration: none; font-size: 14px; font-weight: 500; }
+.links a { padding: 6px 12px; border-radius: 999px; transition: background-color 120ms var(--ease-ui), color 120ms var(--ease-ui); }
+@media (hover: hover) { .links a:hover { background: var(--panel); color: var(--ink); } }
+.nav-end { display: flex; justify-content: flex-end; }
+.ghost-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--ring); font-size: 14px; font-weight: 500; transition: background-color 150ms cubic-bezier(0,0,.2,1), scale 200ms ease-out; }
+@media (hover: hover) { .ghost-btn:hover { background: var(--panel); } .ghost-btn:hover .star { transform: rotate(72deg) scale(1.1); } }
+.ghost-btn:active, .primary:active, .cmd:active { scale: 0.97; }
+.star { transition: transform 600ms var(--ease-expo); }
+
+/* Hero */
+.hero { text-align: center; padding-block: var(--section) 64px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.badge { font: 12px/1.5 var(--mono); color: var(--secondary); padding: 4px 12px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--ring); }
+h1 { margin: 0; font-size: clamp(48px, 7.2vw, 96px); line-height: 1; letter-spacing: -0.045em; font-weight: 600; text-wrap: balance; }
+h1 .line { display: block; }
+.slot { display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; height: 0.78em; width: 1.25em; margin-inline: 0.12em; border-radius: 999px; background: var(--panel); box-shadow: inset 0 0 0 1px var(--ring); overflow: hidden; position: relative; transform: translateY(-0.06em); transition: width 560ms var(--ease-expo), background-color 150ms var(--ease-ui); }
+@media (hover: hover) { .slot:hover { background: #ececee; } }
+.slot span { position: absolute; font-size: 0.4em; letter-spacing: -0.01em; font-weight: 600; white-space: nowrap; }
+.slot .measure { visibility: hidden; position: absolute; }
+.slot span.ar { font-family: var(--arabic); letter-spacing: 0; }
+@keyframes glyphIn { from { opacity: 0; transform: scale(.72); filter: blur(7px); } 70% { transform: scale(1.02); } }
+@keyframes glyphOut { to { opacity: 0; transform: scale(.9); filter: blur(7px); } }
+.lede { margin: 0; max-width: 46rem; font-size: clamp(17px, 1.6vw, 20px); color: var(--secondary); letter-spacing: -0.005em; text-wrap: balance; }
+.install { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.cmd { display: inline-flex; align-items: center; gap: 24px; max-width: 100%; padding: 14px 20px 14px 24px; border-radius: var(--r-control); background: var(--panel); box-shadow: inset 0 0 0 1px var(--ring); font: 14px/1.5 var(--mono); transition: background-color 150ms var(--ease-ui), scale 200ms ease-out; }
+.cmd code { font: inherit; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+@media (hover: hover) { .cmd:hover { background: #ececee; } }
+.copy-ico { position: relative; width: 16px; height: 16px; flex: none; color: var(--muted); }
+.copy-ico svg { position: absolute; inset: 0; transition: opacity 200ms ease-out, transform 200ms ease-out, filter 200ms ease-out; }
+.copy-ico .tick { opacity: 0; transform: scale(.25); filter: blur(4px); color: var(--green); }
+.copied .copy-ico .tick { opacity: 1; transform: none; filter: none; }
+.copied .copy-ico .sheet { opacity: 0; transform: scale(.25); filter: blur(4px); }
+.primary { display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; border-radius: var(--r-control); background: var(--ink); color: var(--inverse-fg); font-size: 14px; font-weight: 500; text-decoration: none; transition: scale 200ms ease-out; }
+.primary svg { transition: transform 300ms var(--ease-expo); }
+@media (hover: hover) { .primary:hover svg { transform: translateX(3px); } }
+.swap-out { animation: swapOut 180ms var(--ease-expo) forwards; }
+.swap-in { animation: swapIn 240ms var(--ease-odo) backwards; }
+@keyframes swapOut { to { opacity: 0; filter: blur(4px); } }
+@keyframes swapIn { from { opacity: 0; filter: blur(4px); } }
+
+/* Segmented control with a sliding indicator (420ms, measured on Mobbin) */
+.seg { position: relative; display: inline-flex; padding: 4px; border-radius: 999px; background: var(--panel); isolation: isolate; }
+.seg button { position: relative; z-index: 1; padding: 6px 16px; font-size: 14px; font-weight: 500; color: var(--muted); border-radius: 999px; transition: color 200ms var(--ease-ui); }
+.seg button[aria-pressed="true"] { color: var(--ink); }
+.seg .ind { position: absolute; z-index: 0; top: 4px; bottom: 4px; left: 0; border-radius: 999px; background: var(--page); box-shadow: inset 0 0 0 1px var(--ring); transition: transform 420ms var(--ease-pill), width 420ms var(--ease-pill); }
+
+/* Stage: one card, both directions */
+.stage { padding: 64px 24px; border-radius: var(--r-card); background: var(--raised); box-shadow: inset 0 0 0 1px var(--ring); display: flex; flex-direction: column; align-items: center; gap: 40px; overflow: hidden; }
+.stage-cap { margin: 16px 0 0; text-align: center; font-size: 13px; color: var(--muted); }
+.pay { width: min(440px, 100%); padding: 32px; border-radius: var(--r-card); background: var(--page); box-shadow: inset 0 0 0 1px var(--ring); display: flex; flex-direction: column; gap: 24px; }
+.pay .head { display: flex; align-items: center; gap: 12px; }
+.pay .back { width: 32px; height: 32px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--ring); display: grid; place-items: center; flex: none; }
+.pay[dir="rtl"] .back svg { transform: scaleX(-1); }
+.pay .title { font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
+.pay[dir="rtl"] .title { letter-spacing: 0; }
+.pay .amt-l { font-size: 13px; color: var(--muted); }
+.pay .amt { font-size: 40px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.pay[dir="rtl"] .amt { letter-spacing: 0; }
+.pay .rows { border-block: 1px solid var(--divider); }
+.pay .row { display: flex; justify-content: space-between; gap: 16px; padding-block: 12px; font-size: 14px; font-weight: 500; }
+.pay .row + .row { border-top: 1px solid var(--divider); }
+.pay .row .k { color: var(--muted); }
+.pay .items { color: var(--secondary); }
+.pay .field-l { font-size: 14px; font-weight: 500; color: var(--secondary); margin-bottom: 8px; }
+.pay .phone { display: flex; gap: 8px; padding: 14px 16px; border-radius: var(--r-control); box-shadow: inset 0 0 0 1px var(--ring); font: 14px/1.5 var(--mono); position: relative; }
+.pay .phone .cc { color: var(--muted); }
+.ltr-flag { position: absolute; inset-inline-end: 12px; top: 50%; translate: 0 -50%; font: 11px/1.5 var(--mono); color: var(--secondary); padding: 2px 8px; border-radius: 999px; background: var(--panel); opacity: 0; transition: opacity 300ms var(--ease-ui); }
+.pay[dir="rtl"] .ltr-flag { opacity: 1; }
+.pay .btn { padding: 14px; border-radius: var(--r-control); background: var(--ink); color: var(--inverse-fg); text-align: center; font-size: 14px; font-weight: 500; }
+
+/* Works with: the tools Dualkit plugs into, 32px/s, pauses on hover */
+.works { padding-block: 8px 72px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.works .cap { text-align: center; }
+.works .ticker { padding-block: 4px; width: 100%; }
+.tool { display: inline-flex; align-items: center; gap: 10px; padding-inline: 28px; font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: var(--muted); white-space: nowrap; transition: color 200ms var(--ease-ui); }
+.tool svg { flex: none; }
+@media (hover: hover) { .tool:hover { color: var(--ink); } }
+
+/* Ticker: 40px/s, pauses on hover */
+.ticker { overflow: hidden; padding-block: 28px; mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+.track { display: flex; gap: 12px; width: max-content; animation: tick var(--dur, 60s) linear infinite; }
+.ticker:hover .track { animation-play-state: paused; }
+@keyframes tick { to { transform: translateX(-50%); } }
+.chip { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--ring); background: var(--page); white-space: nowrap; font: 13px/1.5 var(--mono); }
+.chip .k { color: var(--muted); font-family: var(--sans); }
+
+/* Strip of real numbers: one closed panel, four cells, each with the source of its number */
+.strip { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-radius: var(--r-card); background: var(--raised); overflow: hidden; }
+.strip::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--ring); pointer-events: none; }
+.strip > div { padding: 28px 32px 32px; display: flex; flex-direction: column; gap: 4px; transition: background-color 200ms var(--ease-ui); }
+.strip > div + div { box-shadow: inset 1px 0 0 var(--divider); }
+@media (hover: hover) { .strip > div:hover { background: var(--page); } }
+.strip .src { align-self: flex-start; margin-bottom: 20px; font: 11px/1.5 var(--mono); color: var(--muted); padding: 2px 8px; border-radius: 999px; background: var(--page); box-shadow: inset 0 0 0 1px var(--ring); }
+.figure { font-size: 40px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; }
+.odo { display: inline-flex; overflow: hidden; height: 1.1em; }
+.odo .col { display: flex; flex-direction: column; transition: transform 420ms var(--ease-odo); }
+.odo .col span { height: 1.1em; }
+.cap { font-size: 13px; color: var(--muted); }
+
+/* Sections */
+section { padding-top: var(--section); }
+.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 64px; align-items: start; }
+.split.center { align-items: center; }
+#skills.split { align-items: stretch; }
+#evalCard { display: flex; flex-direction: column; }
+#evalCard .score { margin-top: auto; padding-top: 24px; }
+.eyebrow { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; color: var(--muted); }
+h2 { margin: 16px 0; font-size: clamp(32px, 3.6vw, 44px); line-height: 1.12; letter-spacing: -0.03em; font-weight: 600; text-wrap: balance; }
+.sec-lede { margin: 0; font-size: 19px; color: var(--secondary); letter-spacing: -0.005em; }
+.typer { margin-top: 24px; font: 14px/1.5 var(--mono); color: var(--secondary); min-height: 21px; }
+.typer .caret { display: inline-block; width: 8px; height: 1.1em; vertical-align: -0.15em; background: var(--ink); margin-inline-start: 2px; animation: blink 1060ms steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+.skill-list { margin-top: 40px; }
+.skill { display: grid; grid-template-columns: 240px minmax(0, 1fr) 16px; gap: 16px; align-items: center; padding: 16px 12px; margin-inline: -12px; border-radius: 12px; background: linear-gradient(var(--divider), var(--divider)) 50% 0 / calc(100% - 24px) 1px no-repeat; transition: background-color 150ms var(--ease-ui); }
+.skill:first-child { background-image: none; }
+.skill .n { font: 14px/1.5 var(--mono); }
+.skill .d { font-size: 13px; color: var(--muted); }
+.skill .go { opacity: 0; transform: translateX(-2px); transition: opacity 300ms var(--ease-expo), transform 300ms var(--ease-expo); color: var(--muted); }
+@media (hover: hover) { .skill:hover { background-color: var(--raised); background-image: none; } .skill:hover + .skill { background-image: none; } .skill:hover .go { opacity: 1; transform: none; } }
+
+.card { padding: 40px; border-radius: var(--r-card); background: var(--raised); box-shadow: inset 0 0 0 1px var(--ring); min-width: 0; }
+.card-head { display: flex; justify-content: space-between; align-items: start; gap: 16px; flex-wrap: wrap; }
+.card h3 { margin: 0; font-size: 20px; font-weight: 500; letter-spacing: -0.01em; }
+.live { margin-top: 24px; padding: 20px; border-radius: var(--r-inset); background: var(--page); box-shadow: inset 0 0 0 1px var(--ring); }
+.live .tag { font: 11px/1.5 var(--mono); color: var(--muted); display: flex; justify-content: space-between; }
+.live p { margin: 10px 0 0; font-size: 22px; }
+.score { margin-top: 24px; }
+.score .r { display: grid; grid-template-columns: minmax(0, 1fr) 96px 40px; gap: 16px; align-items: center; padding-block: 12px; border-top: 1px solid var(--divider); font-size: 14px; font-weight: 500; }
+.bar { height: 6px; border-radius: 999px; background: var(--panel); overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--ink); transition: width 700ms var(--ease-odo); }
+.score .v { font: 12px/1.5 var(--mono); text-align: end; }
+
+/* Format demo */
+.demo { padding: 12px; border-radius: var(--r-card); background: var(--raised); box-shadow: inset 0 0 0 1px var(--ring); min-width: 0; }
+.tabs { display: flex; gap: 4px; padding: 4px; overflow-x: auto; scrollbar-width: none; }
+.tabs button { padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 500; color: var(--muted); white-space: nowrap; transition: background-color 120ms var(--ease-ui), color 120ms var(--ease-ui); }
+.tabs button[aria-selected="true"] { background: var(--page); color: var(--ink); box-shadow: inset 0 0 0 1px var(--ring); }
+@media (hover: hover) { .tabs button:hover { color: var(--ink); } }
+.input-row { padding: 12px 4px 16px; display: flex; flex-direction: column; gap: 8px; }
+.input-row label { font-size: 14px; font-weight: 500; color: var(--secondary); display: flex; justify-content: space-between; gap: 8px; }
+.input-row label button { font-size: 12px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+.input-row input { width: 100%; padding: 14px 16px; border-radius: var(--r-control); border: 0; background: var(--page); box-shadow: inset 0 0 0 1px var(--strong); font: 15px/1.5 var(--mono); color: var(--ink); transition: box-shadow 150ms var(--ease-ui); }
+.input-row input:focus { outline: none; box-shadow: inset 0 0 0 1.5px var(--ink); }
+.outs { padding-inline: 16px; border-radius: var(--r-inset); background: var(--page); box-shadow: inset 0 0 0 1px var(--ring); }
+.out { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; align-items: center; padding-block: 13px; border-top: 1px solid var(--divider); min-height: 50px; }
+.out:first-child { border-top: 0; }
+.out .k { font-size: 13px; color: var(--muted); }
+.out .val { font: 14px/1.5 var(--mono); overflow-wrap: anywhere; }
+.out .val.ar { font-family: var(--arabic); font-size: 16px; }
+.ok, .bad { display: inline-flex; align-items: center; gap: 6px; font: 13px/1.5 var(--sans); }
+.ok { color: var(--green); }
+.bad { color: var(--secondary); }
+
+/* Starter pipeline: one source value, linked across three panes */
+.pipe { padding: 40px; border-radius: var(--r-card); background: var(--raised); box-shadow: inset 0 0 0 1px var(--ring); }
+.panes { display: grid; grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr) 56px minmax(0, 1fr); align-items: center; }
+.pane { height: 288px; border-radius: var(--r-inset); background: var(--page); box-shadow: inset 0 0 0 1px var(--ring); overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.pane-h { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--divider); font: 12px/1.5 var(--mono); }
+.pane-h .meta { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); transition: color 240ms var(--ease-ui); }
+.pane-h .meta::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: var(--ghost); transition: background-color 240ms var(--ease-ui), transform 400ms var(--ease-expo); }
+.pane-h .meta.on { color: var(--ink); }
+.pane-h .meta.on::before { background: var(--green); transform: scale(1.3); }
+.code { padding: 8px; font: 12px/1.5 var(--mono); }
+.ln { display: grid; grid-template-columns: 16px minmax(0, 1fr); gap: 12px; padding: 4px 8px; border-radius: 8px; white-space: pre; }
+.ln .no { color: var(--ghost); }
+.v { display: inline-block; padding: 0 4px; margin: 0 -4px; border-radius: 4px; transition: background-color 500ms var(--ease-ui), box-shadow 500ms var(--ease-ui); cursor: default; }
+.v.lit, .linked .v[data-link], .v.hover { background: rgba(22, 163, 74, 0.12); box-shadow: inset 0 0 0 1px rgba(22, 163, 74, 0.35); transition-duration: 120ms; }
+.canvas { flex: 1; display: grid; place-items: center; background: var(--raised); background-image: radial-gradient(var(--strong) 1px, transparent 1px); background-size: 16px 16px; }
+.frame-tag { display: flex; justify-content: space-between; font: 11px/1.5 var(--mono); color: var(--secondary); margin-bottom: 6px; width: 208px; }
+.mini { position: relative; width: 208px; padding: 16px; border-radius: var(--r, 24px); background: var(--page); box-shadow: inset 0 0 0 1px var(--select); display: flex; flex-direction: column; gap: 10px; }
+.mini.hover, .mini.lit { box-shadow: inset 0 0 0 1.5px var(--green); }
+.mini .t { font-size: 12px; font-weight: 500; }
+.mini .a { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.mini[dir="rtl"] .a, .mini[dir="rtl"] .t { letter-spacing: 0; }
+.mini .l { font-size: 10px; color: var(--muted); }
+.mini .b { padding: 7px; text-align: center; font-size: 11px; font-weight: 500; color: var(--inverse-fg); background: var(--ink); border-radius: calc(var(--r, 24px) / 2.4); }
+.mini .corner { position: absolute; top: -4px; inset-inline-start: -4px; width: 8px; height: 8px; border-radius: 2px; background: var(--page); box-shadow: inset 0 0 0 1px var(--select); }
+.wire { position: relative; height: 1px; background: var(--strong); overflow: visible; }
+.wire i { position: absolute; top: -3.5px; left: 0; width: 8px; height: 8px; border-radius: 999px; background: var(--ink); opacity: 0; }
+.wire i::before { content: ""; position: absolute; top: 3px; right: 4px; width: 28px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--ink)); }
+.controls { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px 32px; padding-top: 24px; }
+.control { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+.slider { position: relative; width: 200px; height: 32px; display: flex; align-items: center; touch-action: none; cursor: grab; }
+.slider:active { cursor: grabbing; }
+.slider .track { position: absolute; inset-inline: 0; height: 4px; border-radius: 999px; background: var(--panel); box-shadow: inset 0 0 0 1px var(--ring); }
+.slider .fill { position: absolute; inset-inline-start: 0; height: 4px; border-radius: 999px; background: var(--ink); }
+.slider .ticks { position: absolute; inset-inline: 0; top: 24px; display: flex; justify-content: space-between; font: 10px/1 var(--mono); color: var(--ghost); pointer-events: none; }
+.slider .thumb { position: absolute; width: 20px; height: 20px; margin-inline-start: -10px; border-radius: 999px; background: var(--page); box-shadow: inset 0 0 0 1px var(--strong), 0 0 0 0 var(--ring); transition: scale 200ms ease-out, box-shadow 200ms ease-out; }
+.slider:hover .thumb, .slider:focus-visible .thumb { box-shadow: inset 0 0 0 1px var(--strong), 0 0 0 6px var(--highlight); }
+.slider.dragging .thumb { scale: 1.12; box-shadow: inset 0 0 0 1px var(--ink), 0 0 0 6px var(--highlight); }
+.slider:focus-visible { outline: none; }
+.rval { font: 13px/1 var(--mono); color: var(--ink); width: 36px; }
+.agents { font: 12px/1.5 var(--mono); color: var(--secondary); padding: 4px 12px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--ring); position: relative; transition: color 240ms var(--ease-ui); }
+.agents.on { color: var(--ink); }
+.agents::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: 0 0 0 1px var(--green); opacity: 0; }
+.try { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--secondary); }
+
+/* Closing */
+.closing { padding-block: var(--section); }
+.closing .in { padding: var(--section) 24px; border-radius: var(--r-card); background: var(--raised); box-shadow: inset 0 0 0 1px var(--ring); display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+.closing h2 { font-size: clamp(44px, 6vw, 80px); line-height: 1; letter-spacing: -0.045em; margin: 0; }
+
+/* Footer: the wordmark is a toy, click a letter and it mirrors */
+.footer { background: var(--panel); padding-top: var(--section); overflow: hidden; }
+.f-grid { display: grid; grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr)); gap: 48px; }
+.f-brand { display: flex; flex-direction: column; gap: 16px; }
+.f-col { display: flex; flex-direction: column; gap: 12px; }
+.f-col .t { font-size: 14px; font-weight: 500; color: var(--muted); }
+.f-col a { font-size: 16px; font-weight: 400; color: var(--ink); width: fit-content; background: linear-gradient(var(--ink), var(--ink)) 0 100% / 0 1px no-repeat; transition: background-size 300ms var(--ease-expo); }
+@media (hover: hover) { .f-col a:hover { background-size: 100% 1px; } }
+.status { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: var(--secondary); }
+.dot { position: relative; width: 8px; height: 8px; border-radius: 999px; background: var(--green); }
+.dot::before, .dot::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--green); animation: ripple 1800ms ease-out infinite; }
+.dot::after { animation-delay: 900ms; }
+@keyframes ripple { from { transform: scale(1); opacity: .55; } to { transform: scale(2.75); opacity: 0; } }
+.f-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; margin-top: 48px; font-size: 13px; color: var(--muted); }
+.wordmark { display: flex; justify-content: center; margin-top: 48px; height: clamp(110px, 21vw, 300px); font-size: clamp(160px, 30.5vw, 440px); font-weight: 600; letter-spacing: -0.06em; line-height: 0.8; user-select: none; }
+.wordmark button { display: inline-block; font: inherit; letter-spacing: inherit; line-height: inherit; transition: translate 300ms var(--ease-expo), color 300ms var(--ease-ui); }
+.wordmark button.k { color: var(--ghost); }
+@media (hover: hover) { .wordmark button:hover { translate: 0 -0.04em; } }
+.wordmark-hint { text-align: center; font-size: 12px; color: var(--muted); margin-top: 24px; }
+
+/* Narrow screens */
+@media (max-width: 860px) {
+  .nav .links { display: none; }
+  .nav .wrap { grid-template-columns: 1fr auto; }
+  .split, .f-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .strip > div:nth-child(3) { box-shadow: inset 0 1px 0 var(--divider); }
+  .strip > div:nth-child(4) { box-shadow: inset 1px 0 0 var(--divider), inset 0 1px 0 var(--divider); }
+  .strip > div { padding: 24px; }
+  .panes { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .wire { width: 1px; height: 24px; margin-inline: auto; }
+  .slider { width: 160px; }
+  .wire i { display: none; }
+  .pane { height: auto; min-height: 200px; }
+  .skill { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .skill .go { display: none; }
+  .card, .pipe { padding: 24px; }
+  .pay { padding: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+  .track { animation: none; }
+}
+</style>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top" style="color: inherit; text-decoration: none;"><svg class="mark" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M 8.9855 18.5469 C 8.9855 19.4675 8.2087 20.1961 7.3483 19.9526 C 3.1124 18.7535 0 14.7519 0 10 C 0 5.2481 3.1124 1.2465 7.3483 0.0474 C 8.2087 -0.1961 8.9855 0.5325 8.9855 1.4531 L 8.9855 18.5469 Z" fill="var(--ink)"/><path d="M 11.0145 1.4531 C 11.0145 0.5325 11.7913 -0.1961 12.6517 0.0474 C 16.8876 1.2465 20 5.2481 20 10 C 20 14.7519 16.8876 18.7535 12.6517 19.9526 C 11.7913 20.1961 11.0145 19.4675 11.0145 18.5469 L 11.0145 1.4531 Z" fill="var(--panel)"/></svg>Dualkit</a>
+    <div class="links"><a href="#skills">Skills</a><a href="#format">Format</a><a href="#starter">Starter</a><a href="#updates">Updates</a><a href="#docs">Docs</a></div>
+    <div class="nav-end"><a class="ghost-btn" href="#github" style="color: inherit; text-decoration: none;"><svg class="star" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.2l1.75 3.55 3.9.57-2.82 2.75.66 3.88L8 11.12l-3.49 1.83.66-3.88L2.35 6.32l3.9-.57L8 2.2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Star on GitHub</a></div>
+  </div>
+</nav>
+
+<main id="top">
+  <div class="wrap">
+    <header class="hero">
+      <span class="badge rise" style="animation-delay: 300ms">v0.1 beta · free and open source</span>
+      <h1>
+        <span class="line rise" style="animation-delay: 400ms">Build for the Gulf.</span>
+        <span class="line rise" style="animation-delay: 500ms">In both <button class="slot" id="slot" aria-label="Next script sample"></button> directions.</span>
+      </h1>
+      <p class="lede rise" style="animation-delay: 700ms">The skills, formats and starter behind products that ship in Arabic and English. Install once and your agent builds right to left on the first pass.</p>
+      <div class="install rise" style="animation-delay: 850ms">
+        <div class="seg" id="installTabs" role="group" aria-label="Install"><span class="ind"></span><button aria-pressed="true" data-cmd="/plugin marketplace add dualkit/dualkit">Skills</button><button aria-pressed="false" data-cmd="npm i @dualkit/format">Format</button></div>
+        <div class="actions">
+          <button class="cmd" id="heroCmd" aria-label="Copy install command"><code>/plugin marketplace add dualkit/dualkit</code><span class="copy-ico" aria-hidden="true"><svg class="sheet" viewBox="0 0 16 16" fill="none"><rect x="5.5" y="5.5" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 3.5v-.25a.75.75 0 00-.75-.75h-6.5a.75.75 0 00-.75.75v6.5c0 .41.34.75.75.75h.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><svg class="tick" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+          <a class="primary" href="#docs">Read the docs <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9.5 4.5L13 8l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+    </header>
+
+  </div>
+  <div class="works rise" style="animation-delay: 950ms">
+    <span class="cap">Works with the tools your team already ships with</span>
+    <div class="ticker"><div class="track" id="tools"></div></div>
+  </div>
+  <div class="wrap">
+    <div class="stage rise" style="animation-delay: 1000ms">
+      <div class="seg" id="langSeg" role="group" aria-label="Language"><span class="ind"></span><button aria-pressed="true" data-lang="en">English</button><button aria-pressed="false" data-lang="ar" lang="ar">العربية</button></div>
+      <div class="pay" id="pay" dir="ltr" lang="en"></div>
+    </div>
+    <p class="stage-cap">One component, flipping in place. The phone number stays left to right in Arabic, as it should.</p>
+  </div>
+
+  <div class="ticker" aria-hidden="true"><div class="track" id="track"></div></div>
+
+  <div class="wrap">
+    <div class="strip" id="strip">
+      <div><span class="src">skills/</span><span class="figure tnum" data-odo="4">4</span><span class="cap">skills for Claude Code and Cursor</span></div>
+      <div><span class="src">@dualkit/format</span><span class="figure tnum" data-odo="6">6</span><span class="cap">Gulf formats</span></div>
+      <div><span class="src">package.json</span><span class="figure tnum" data-odo="0">0</span><span class="cap">dependencies</span></div>
+      <div><span class="src">vitest</span><span class="figure tnum" data-odo="105">105</span><span class="cap">tests passing</span></div>
+    </div>
+
+    <section id="skills" class="split">
+      <div>
+        <div class="eyebrow">Skills</div>
+        <h2>Your agent writes React.<br>Dualkit teaches it Arabic.</h2>
+        <p class="sec-lede">Four skills for Claude Code and Cursor that fix the bugs every model ships in Arabic. Phone numbers stop reversing, dates stop landing a day out, and digits stay in one system across the screen.</p>
+        <div class="typer" aria-live="off"><span class="muted">loading </span><span id="typer"></span><span class="caret"></span></div>
+        <div class="skill-list">
+          <a class="skill" href="#skills" style="color: inherit; text-decoration: none;"><span class="n">dualkit-rtl-layout</span><span class="d">Mirroring, logical properties and bidi isolation</span><svg class="go" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9.5 4.5L13 8l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+          <a class="skill" href="#skills" style="color: inherit; text-decoration: none;"><span class="n">dualkit-type-pairing</span><span class="d">Arabic and Latin pairs, leading and tracking</span><svg class="go" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9.5 4.5L13 8l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+          <a class="skill" href="#skills" style="color: inherit; text-decoration: none;"><span class="n">dualkit-gulf-formats</span><span class="d">Money, digits, Hijri, phone, Emirates ID, IBAN</span><svg class="go" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9.5 4.5L13 8l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+          <a class="skill" href="#skills" style="color: inherit; text-decoration: none;"><span class="n">dualkit-bilingual-copy</span><span class="d">Six plural forms, gender and punctuation</span><svg class="go" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9.5 4.5L13 8l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+        </div>
+      </div>
+      <div class="card" id="evalCard">
+        <div class="card-head">
+          <div><h3>Measured against a baseline</h3><p class="cap" style="margin: 4px 0 0">The same checkout screen, built three times without the skills and three times with them.</p></div>
+          <div class="seg" id="evalSeg" role="group" aria-label="Skills"><span class="ind"></span><button aria-pressed="false" data-mode="without">Without</button><button aria-pressed="true" data-mode="with">With skills</button></div>
+        </div>
+        <div class="live">
+          <div class="tag"><span>Rendered live by your browser</span><span id="liveState">isolated</span></div>
+          <p dir="rtl" lang="ar" id="liveLine"></p>
+        </div>
+        <div class="score" id="score"></div>
+      </div>
+    </section>
+
+    <section id="format" class="split center">
+      <div class="demo">
+        <div class="tabs" role="tablist" id="fmtTabs"></div>
+        <div class="input-row">
+          <label for="fmtInput"><span id="fmtLabel">Amount</span><button type="button" id="arabicFill">Type it in Arabic digits</button></label>
+          <input id="fmtInput" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="outs" id="fmtOuts"></div>
+      </div>
+      <div>
+        <div class="eyebrow">Format</div>
+        <h2>Gulf formats,<br>solved in 12 KB.</h2>
+        <p class="sec-lede">Money in AED and SAR, Umm al-Qura dates, Arabic numerals, UAE phone numbers, Emirates ID and Gulf IBANs, in one library with no dependencies. Every parser reads Arabic digits the way people type them.</p>
+        <div style="margin-top: 32px"><button class="cmd" data-copy="npm i @dualkit/format" aria-label="Copy install command"><code>npm i @dualkit/format</code><span class="copy-ico" aria-hidden="true"><svg class="sheet" viewBox="0 0 16 16" fill="none"><rect x="5.5" y="5.5" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 3.5v-.25a.75.75 0 00-.75-.75h-6.5a.75.75 0 00-.75.75v6.5c0 .41.34.75.75.75h.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><svg class="tick" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button></div>
+      </div>
+    </section>
+
+    <section id="starter">
+      <div style="max-width: 640px">
+        <div class="eyebrow">Starter <span class="mono" style="font-size: 12px; color: var(--secondary); padding: 2px 8px; border-radius: 999px; background: var(--panel)">Coming next</span></div>
+        <h2>Tokens in git.<br>Figma and code follow.</h2>
+        <p class="sec-lede">A bilingual design system starter, right to left from the first commit. One token file generates the Figma library and the React components, and AGENTS.md tells every agent how to build with them.</p>
+      </div>
+      <div class="pipe" id="pipe" style="margin-top: 64px">
+        <div class="panes">
+          <div class="pane"><div class="pane-h"><span>tokens.json</span><span class="meta" id="m0">source</span></div><div class="code" id="tokCode"></div></div>
+          <div class="wire" id="w1"><i></i></div>
+          <div class="pane"><div class="pane-h"><span>Figma</span><span class="meta" id="m1">synced</span></div><div class="canvas"><div><div class="frame-tag"><span id="frameTag">Card · RTL</span><span id="frameR">r 24</span></div><div class="mini" id="mini" data-link-target="r"><span class="corner" aria-hidden="true"></span><span class="t" data-k="t"></span><span class="l" data-k="l"></span><span class="a" data-k="a"></span><span class="b" data-k="b"></span></div></div></div></div>
+          <div class="wire" id="w2"><i></i></div>
+          <div class="pane"><div class="pane-h"><span>Code</span><span class="meta" id="m2">synced</span></div><div class="code" id="jsxCode"></div></div>
+        </div>
+        <div class="controls">
+          <span class="try"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 2.5l9 4.2-3.9 1.2-1.3 3.9-3.8-9.3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Drag the radius, flip the direction</span>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px 32px">
+            <div class="control">Radius
+              <div class="slider" id="rad" role="slider" tabindex="0" aria-label="Card radius" aria-valuemin="0" aria-valuemax="32" aria-valuenow="24"><span class="track"></span><span class="fill"></span><span class="thumb"></span><span class="ticks"><span>0</span><span>8</span><span>16</span><span>24</span><span>32</span></span></div>
+              <span class="rval" id="radVal">24</span>
+            </div>
+            <div class="control">Direction <div class="seg" id="dirSeg" role="group" aria-label="Direction"><span class="ind"></span><button aria-pressed="false" data-d="ltr">LTR</button><button aria-pressed="true" data-d="rtl">RTL</button></div></div>
+          </div>
+          <span class="agents" id="agents">AGENTS.md in sync</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="closing" id="docs">
+      <div class="in">
+        <h2>Ship in both<br>directions today.</h2>
+        <p class="sec-lede">Free and open source, for the agents you already use.</p>
+        <div class="actions"><button class="cmd" data-copy="/plugin marketplace add dualkit/dualkit" aria-label="Copy install command"><code>/plugin marketplace add dualkit/dualkit</code><span class="copy-ico" aria-hidden="true"><svg class="sheet" viewBox="0 0 16 16" fill="none"><rect x="5.5" y="5.5" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 3.5v-.25a.75.75 0 00-.75-.75h-6.5a.75.75 0 00-.75.75v6.5c0 .41.34.75.75.75h.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><svg class="tick" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button><a class="primary" href="#docs">Read the docs <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8h10M9.5 4.5L13 8l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer" id="updates">
+  <div class="wrap">
+    <div class="f-grid">
+      <div class="f-brand">
+        <span class="brand"><svg class="mark" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M 8.9855 18.5469 C 8.9855 19.4675 8.2087 20.1961 7.3483 19.9526 C 3.1124 18.7535 0 14.7519 0 10 C 0 5.2481 3.1124 1.2465 7.3483 0.0474 C 8.2087 -0.1961 8.9855 0.5325 8.9855 1.4531 L 8.9855 18.5469 Z" fill="var(--ink)"/><path d="M 11.0145 1.4531 C 11.0145 0.5325 11.7913 -0.1961 12.6517 0.0474 C 16.8876 1.2465 20 5.2481 20 10 C 20 14.7519 16.8876 18.7535 12.6517 19.9526 C 11.7913 20.1961 11.0145 19.4675 11.0145 18.5469 L 11.0145 1.4531 Z" fill="var(--mark-on-panel)"/></svg>Dualkit</span>
+        <span class="secondary">Build for the Gulf. In both directions.</span>
+        <span class="status"><span class="dot" aria-hidden="true"></span>All systems normal</span>
+      </div>
+      <div class="f-col"><span class="t">Product</span><a href="#skills">Skills</a><a href="#format">Format</a><a href="#starter">Starter</a><a href="#updates">Updates</a></div>
+      <div class="f-col"><span class="t">Resources</span><a href="#docs">Docs</a><a href="#updates">Status</a><a href="#github">GitHub</a><a href="#npm">npm</a></div>
+      <div class="f-col"><span class="t">Made by</span><a href="#top">Sam Santos</a><a href="#top">snts.im</a></div>
+    </div>
+    <div class="f-bottom"><span>MIT licensed · v0.1 beta</span><span>If any Arabic reads wrong, open an issue.</span></div>
+    <p class="wordmark-hint">Click a letter. It works in both directions.</p>
+  </div>
+  <div class="wordmark" id="wordmark" aria-label="Dualkit"></div>
+</footer>
+
+<script>/*FORMAT_BUNDLE*/</script>
+<script>
+(() => {
+  const F = window.DualkitFormat
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+  const $ = (s, r = document) => r.querySelector(s)
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)]
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms))
+
+  // Segmented controls: the indicator slides under the pressed button (420ms, cubic-bezier(.19,1,.22,1)).
+  function segment(root, onPick) {
+    const ind = $('.ind', root)
+    const place = () => {
+      const on = $('button[aria-pressed="true"]', root)
+      if (!on) return
+      ind.style.width = on.offsetWidth + 'px'
+      ind.style.transform = `translateX(${on.offsetLeft}px)`
+    }
+    root.addEventListener('click', (e) => {
+      const b = e.target.closest('button')
+      if (!b || b.getAttribute('aria-pressed') === 'true') return
+      $$('button', root).forEach((x) => x.setAttribute('aria-pressed', String(x === b)))
+      place()
+      onPick(b, true)
+    })
+    const api = { place, pick(i) { $$('button', root).forEach((x, k) => x.setAttribute('aria-pressed', String(k === i))); place() } }
+    document.fonts.ready.then(place)
+    addEventListener('resize', place)
+    place()
+    return api
+  }
+
+  // Blur crossfade for a text swap: out 180ms, in 240ms.
+  async function swapText(el, html) {
+    if (el.innerHTML === html) return
+    if (reduced) { el.innerHTML = html; return }
+    el.classList.remove('swap-in'); el.classList.add('swap-out')
+    await wait(180)
+    el.innerHTML = html
+    el.classList.remove('swap-out'); void el.offsetWidth; el.classList.add('swap-in')
+  }
+
+  // Copy buttons: the sheet icon cross-fades to a tick, then back.
+  function copyable(btn, getText) {
+    btn.addEventListener('click', async () => {
+      const t = getText()
+      try { await navigator.clipboard.writeText(t) } catch (_) {
+        const r = document.createRange(); r.selectNodeContents($('code', btn)); const s = getSelection(); s.removeAllRanges(); s.addRange(r)
+      }
+      btn.classList.add('copied')
+      clearTimeout(btn._t); btn._t = setTimeout(() => btn.classList.remove('copied'), 1600)
+    })
+  }
+
+  // Hero slot: script samples swap inside the headline every 2050ms (out 240ms, in 198ms).
+  // The pill springs to each sample's own width, so the words around it slide over.
+  function heroSlot() {
+    const slot = $('#slot')
+    const samples = [['Aa', ''], ['أب', 'ar'], ['123', ''], ['١٢٣', 'ar'], ['AED', ''], ['د.إ', 'ar']]
+    let i = 0, timer
+    const make = ([t, cls]) => { const s = document.createElement('span'); s.textContent = t; if (cls) { s.className = cls; s.lang = 'ar' } return s }
+    const widthFor = (sample) => {
+      const m = make(sample); m.classList.add('measure'); slot.append(m)
+      const w = m.getBoundingClientRect().width; m.remove()
+      const em = parseFloat(getComputedStyle(slot).fontSize)
+      return Math.max(w + em * 0.5, em * 0.78)
+    }
+    const show = (k, first) => {
+      const old = $('span:not(.measure)', slot)
+      const s = make(samples[k])
+      slot.style.width = widthFor(samples[k]) + 'px'
+      if (!reduced && !first) s.style.animation = 'glyphIn 440ms var(--ease-expo) backwards'
+      if (old) {
+        if (reduced) old.remove()
+        else { old.style.animation = 'glyphOut 240ms ease-out forwards'; setTimeout(() => old.remove(), 240) }
+      }
+      setTimeout(() => slot.append(s), old && !reduced ? 60 : 0)
+    }
+    const next = () => { i = (i + 1) % samples.length; show(i) }
+    const loop = () => { clearInterval(timer); if (!reduced) timer = setInterval(next, 2050) }
+    document.fonts.ready.then(() => { show(0, true); setTimeout(loop, 1500) })
+    addEventListener('resize', () => { slot.style.transition = 'none'; slot.style.width = widthFor(samples[i]) + 'px'; void slot.offsetWidth; slot.style.transition = '' })
+    slot.addEventListener('click', () => { next(); loop() })
+  }
+
+  // Works with: the tools Dualkit plugs into, drawn with their own marks (Simple Icons 16.33.0).
+  function tools() {
+    const list = /*TOOLS*/[]
+    const html = list.map((t) => `<span class="tool"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="${t.d}"/></svg>${esc(t.label)}</span>`).join('')
+    const track = $('#tools')
+    track.innerHTML = html + html
+    requestAnimationFrame(() => track.style.setProperty('--dur', (track.scrollWidth / 2 / 32) + 's'))
+  }
+
+  // Install tabs swap the command; the command box copies it.
+  function install() {
+    const code = $('#heroCmd code')
+    segment($('#installTabs'), (b) => swapText(code, esc(b.dataset.cmd)))
+    copyable($('#heroCmd'), () => code.textContent)
+    $$('[data-copy]').forEach((b) => copyable(b, () => b.dataset.copy))
+  }
+
+  // The stage card. Every keyed element springs from its old place to its mirrored one (FLIP).
+  const due = new Date('2026-02-18T12:00:00Z')
+  const LOCALE = {
+    en: { title: 'Payment summary', amountL: 'Amount due', amount: F.formatMoney(1234.5, { currency: 'AED' }),
+      dueL: 'Due date', due: '18 Feb 2026', hijriL: 'Hijri', hijri: F.formatHijri(due, { timeZone: 'Asia/Dubai' }),
+      items: 'You have 3 items in this order', phoneL: 'Mobile for the receipt', pay: 'Pay now' },
+    ar: { title: 'ملخص الدفع', amountL: 'المبلغ المستحق', amount: F.formatMoney(1234.5, { currency: 'AED', locale: 'ar' }),
+      dueL: 'تاريخ الاستحقاق', due: '18 فبراير 2026', hijriL: 'هجري', hijri: F.formatHijri(due, { locale: 'ar', timeZone: 'Asia/Dubai' }),
+      items: 'لديك 3 عناصر في هذا الطلب', phoneL: 'رقم الجوال للإيصال', pay: 'إتمام الدفع' },
+  }
+  const cardHTML = (c) => `
+    <div class="head"><span class="back" data-k="back"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M13 8H3M7.5 3.5L3 8l4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="title" data-k="title">${esc(c.title)}</span></div>
+    <div><div class="amt-l" data-k="amtl">${esc(c.amountL)}</div><div class="amt" data-k="amt"><bdi>${esc(c.amount)}</bdi></div></div>
+    <div class="rows"><div class="row"><span class="k" data-k="duel">${esc(c.dueL)}</span><span data-k="due"><bdi>${esc(c.due)}</bdi></span></div><div class="row"><span class="k" data-k="hijl">${esc(c.hijriL)}</span><span data-k="hij"><bdi>${esc(c.hijri)}</bdi></span></div></div>
+    <div class="items" data-k="items">${esc(c.items)}</div>
+    <div><div class="field-l" data-k="phl">${esc(c.phoneL)}</div><div class="phone" dir="ltr" data-k="phone"><span class="cc">+971</span><span>050 123 4567</span><span class="ltr-flag">stays LTR</span></div></div>
+    <div class="btn" data-k="pay">${esc(c.pay)}</div>`
+
+  function flip(root, mutate) {
+    const before = new Map($$('[data-k]', root).map((el) => [el.dataset.k, el.getBoundingClientRect()]))
+    mutate()
+    if (reduced) return
+    $$('[data-k]', root).forEach((el) => {
+      const a = before.get(el.dataset.k); if (!a) return
+      const b = el.getBoundingClientRect()
+      const dx = a.left - b.left, dy = a.top - b.top
+      el.animate([{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }], { duration: 640, easing: 'cubic-bezier(.16,1,.3,1)' })
+      el.animate([{ opacity: 0.2, filter: 'blur(4px)' }, { opacity: 1, filter: 'blur(0)' }], { duration: 360, easing: 'cubic-bezier(.22,1,.36,1)' })
+    })
+  }
+
+  function stage() {
+    const pay = $('#pay')
+    let lang = 'en', auto
+    const set = (l) => flip(pay, () => { lang = l; pay.dir = l === 'ar' ? 'rtl' : 'ltr'; pay.lang = l; pay.innerHTML = cardHTML(LOCALE[l]) })
+    pay.innerHTML = cardHTML(LOCALE.en)
+    const seg = segment($('#langSeg'), (b, byUser) => { set(b.dataset.lang); if (byUser) clearInterval(auto) })
+    if (!reduced) auto = setInterval(() => { const n = lang === 'en' ? 1 : 0; seg.pick(n); set(n ? 'ar' : 'en') }, 4000)
+    pay.addEventListener('pointerdown', () => clearInterval(auto), { once: true })
+  }
+
+  // Ticker: real outputs of the library, moving at 40px/s.
+  function ticker() {
+    const chips = [
+      ['Money', F.formatMoney(1234.5, { currency: 'AED' })],
+      ['Arabic', F.formatMoney(1234.5, { currency: 'AED', locale: 'ar', numerals: 'arab' }), 'ar'],
+      ['Riyal', F.formatMoney(99, { currency: 'SAR', locale: 'ar' }), 'ar'],
+      ['Hijri', F.formatHijri(due, { timeZone: 'Asia/Riyadh' })],
+      ['هجري', F.formatHijri(due, { locale: 'ar', numerals: 'arab', timeZone: 'Asia/Riyadh' }), 'ar'],
+      ['Phone', F.formatUaePhone('0501234567', { style: 'international' })],
+      ['Digits', F.toArabicDigits('2026'), 'ar'],
+      ['IBAN', F.formatIban('SA0380000000608010167519')],
+      ['Emirates ID', F.formatEmiratesId('784199012345676')],
+    ]
+    const html = chips.map(([k, v, ar]) => `<span class="chip"><span class="k">${esc(k)}</span><bdi${ar ? ' lang="ar" style="font-family:var(--arabic)"' : ''}>${esc(v)}</bdi></span>`).join('')
+    const track = $('#track')
+    track.innerHTML = html + html
+    requestAnimationFrame(() => track.style.setProperty('--dur', (track.scrollWidth / 2 / 40) + 's'))
+  }
+
+  // Odometer digits: each digit is a 0-9 column that rolls into place (420ms).
+  function odometer(el) {
+    const target = el.dataset.odo
+    el.innerHTML = `<span class="odo">${[...target].map(() => `<span class="col">${'0123456789'.split('').map((d) => `<span>${d}</span>`).join('')}</span>`).join('')}</span>`
+    el.setAttribute('aria-label', target)
+    const cols = $$('.col', el)
+    requestAnimationFrame(() => requestAnimationFrame(() => cols.forEach((c, k) => {
+      c.style.transitionDelay = (k * 60) + 'ms'
+      c.style.transform = `translateY(-${Number(target[k]) * 1.1}em)`
+    })))
+  }
+
+  function onView(el, fn, opts = { threshold: 0.35 }) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { io.disconnect(); fn() } }), opts)
+    io.observe(el)
+  }
+
+  // Typewriter: types 33ms a character, deletes 17ms, holds 3.2s (measured on Mobbin).
+  async function typer() {
+    const el = $('#typer')
+    const names = ['dualkit-rtl-layout', 'dualkit-type-pairing', 'dualkit-gulf-formats', 'dualkit-bilingual-copy']
+    if (reduced) { el.textContent = names[0]; return }
+    for (let i = 0; ; i = (i + 1) % names.length) {
+      for (const ch of names[i]) { el.textContent += ch; await wait(33) }
+      await wait(3200)
+      while (el.textContent) { el.textContent = el.textContent.slice(0, -1); await wait(17) }
+      await wait(530)
+    }
+  }
+
+  // The baseline card. The Arabic line is rendered by the browser, so "Without" shows the real reversal.
+  function evalCard() {
+    const rows = [['Phone numbers stay in order in Arabic', 0, 3], ['Dates pinned to a time zone', 1, 3], ['One digit system per screen', 1, 3], ['Arabic leading and tracking', 0, 3]]
+    $('#score').innerHTML = rows.map(([l]) => `<div class="r"><span>${esc(l)}</span><span class="bar"><i></i></span><span class="v"></span></div>`).join('')
+    const line = $('#liveLine'), state = $('#liveState')
+    const show = (mode) => {
+      const withS = mode === 'with'
+      line.innerHTML = withS ? 'مثال: <bdi dir="ltr">050 123 4567</bdi>' : 'مثال: 050 123 4567'
+      state.textContent = withS ? 'isolated' : 'not isolated'
+      $$('#score .r').forEach((r, k) => {
+        const v = withS ? rows[k][2] : rows[k][1]
+        $('i', r).style.width = (v / 3 * 100) + '%'
+        swapText($('.v', r), `${v}/3`)
+      })
+    }
+    const seg = segment($('#evalSeg'), (b) => show(b.dataset.mode))
+    seg.pick(0); show('without')
+    onView($('#evalCard'), () => setTimeout(() => { seg.pick(1); show('with') }, reduced ? 0 : 700))
+  }
+
+  // Format demo: the real library, run on every keystroke.
+  function formatDemo() {
+    const tabs = {
+      Money: { label: 'Amount', value: '1234.5', arabic: '١٢٣٤٫٥', run(v) {
+        const n = Number(F.toWesternDigits(v).replace(/,/g, ''))
+        if (!v.trim() || !Number.isFinite(n)) return { error: 'Enter a number, in Western or Arabic digits.' }
+        return { rows: [['English', F.formatMoney(n, { currency: 'AED' })], ['Arabic', F.formatMoney(n, { currency: 'AED', locale: 'ar', numerals: 'arab' }), 'ar'], ['Riyal', F.formatMoney(n, { currency: 'SAR' })], ['ريال', F.formatMoney(n, { currency: 'SAR', locale: 'ar' }), 'ar']] }
+      } },
+      Hijri: { label: 'Date (YYYY-MM-DD)', value: '2026-02-18', arabic: '٢٠٢٦-٠٢-١٨', run(v) {
+        const d = new Date(F.toWesternDigits(v).trim() + 'T12:00:00Z')
+        if (Number.isNaN(d.getTime())) return { error: 'Enter a date like 2026-02-18.' }
+        const o = { timeZone: 'Asia/Riyadh' }
+        return { rows: [['English', F.formatHijri(d, o)], ['Arabic', F.formatHijri(d, { ...o, locale: 'ar' }), 'ar'], ['Arabic digits', F.formatHijri(d, { ...o, locale: 'ar', numerals: 'arab' }), 'ar']] }
+      } },
+      Phone: { label: 'UAE phone number', value: '050 123 4567', arabic: '٠٥٠ ١٢٣ ٤٥٦٧', run(v) {
+        const p = F.parseUaePhone(v)
+        if (!p.ok) return { error: p.error.message }
+        return { rows: [['National', F.formatUaePhone(v)], ['International', F.formatUaePhone(v, { style: 'international' })], ['E.164', p.value.e164], ['Type', p.value.type]], valid: true }
+      } },
+      IBAN: { label: 'Gulf IBAN', value: 'AE07 0331 2345 6789 0123 456', arabic: 'AE٠٧ ٠٣٣١ ٢٣٤٥ ٦٧٨٩ ٠١٢٣ ٤٥٦', run(v) {
+        const p = F.parseIban(v)
+        if (!p.ok) return { error: p.error.message }
+        return { rows: [['Formatted', p.value.formatted], ['Country', p.value.country], ['Bank code', p.value.bankCode]], valid: true }
+      } },
+      'Emirates ID': { label: 'Emirates ID', value: '784-1990-1234567-6', arabic: '٧٨٤-١٩٩٠-١٢٣٤٥٦٧-٦', run(v) {
+        const p = F.parseEmiratesId(v)
+        if (!p.ok) return { error: p.error.message }
+        return { rows: [['Formatted', p.value.formatted], ['Masked', `784-****-*******-${p.value.digits.slice(-1)}`], ['Year', String(p.value.year)]], valid: true }
+      } },
+    }
+    const names = Object.keys(tabs)
+    const tabEl = $('#fmtTabs'), input = $('#fmtInput'), outs = $('#fmtOuts'), label = $('#fmtLabel')
+    let cur = 'Money'
+    tabEl.innerHTML = names.map((n) => `<button role="tab" aria-selected="${n === cur}" data-t="${esc(n)}">${esc(n)}</button>`).join('')
+    const ok = '<span class="ok"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>Valid</span>'
+    const render = (fresh) => {
+      const r = tabs[cur].run(input.value)
+      const rows = r.error ? [['Result', `<span class="bad">${esc(r.error)}</span>`, '', true]] : [...r.rows.map(([k, v, ar]) => [k, esc(v), ar]), ...(r.valid ? [['Check', ok, '', true]] : [])]
+      if (fresh || outs.children.length !== rows.length) {
+        outs.innerHTML = rows.map(([k, v, ar, raw]) => `<div class="out"><span class="k">${esc(k)}</span><span class="val${ar ? ' ar' : ''}"${ar ? ' lang="ar"' : ''}>${raw ? v : `<bdi>${v}</bdi>`}</span></div>`).join('')
+        if (fresh && !reduced) $$('.out', outs).forEach((o, k) => o.animate([{ opacity: 0, filter: 'blur(4px)', transform: 'translateY(4px)' }, { opacity: 1, filter: 'blur(0)', transform: 'none' }], { duration: 240, delay: k * 40, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'backwards' }))
+        return
+      }
+      $$('.out', outs).forEach((o, k) => {
+        const [key, v, ar, raw] = rows[k]
+        $('.k', o).textContent = key
+        const val = $('.val', o)
+        val.className = 'val' + (ar ? ' ar' : '')
+        const html = raw ? v : `<bdi>${v}</bdi>`
+        if (val.innerHTML !== html) val.innerHTML = html
+      })
+    }
+    const pick = (n) => { cur = n; label.textContent = tabs[n].label; input.value = tabs[n].value; render(true) }
+    tabEl.addEventListener('click', (e) => {
+      const b = e.target.closest('button'); if (!b) return
+      $$('button', tabEl).forEach((x) => x.setAttribute('aria-selected', String(x === b)))
+      pick(b.dataset.t)
+    })
+    input.addEventListener('input', () => render(false))
+    $('#arabicFill').addEventListener('click', () => { input.value = tabs[cur].arabic; render(false); input.focus() })
+    pick(cur)
+  }
+
+  // Starter pipeline. The state is applied to every pane at once, so a new drag or click can
+  // interrupt at any moment and nothing is left half-written. Motion only shows the edit travelling.
+  function starter() {
+    const st = { r: 24, d: 'rtl' }
+    const pipe = $('#pipe'), tok = $('#tokCode'), jsx = $('#jsxCode'), mini = $('#mini')
+    const v = (link, text) => `<span class="v" data-link="${link}">${esc(text)}</span>`
+    const line = (k, html) => `<div class="ln"><span class="no">${k + 1}</span><span>${html}</span></div>`
+    tok.innerHTML = [
+      '{', '  "radius": {', `    "card": ${v('r', st.r)}`, '  },', `  "direction": ${v('d', `"${st.d}"`)}`, '}',
+    ].map((l, k) => line(k, l)).join('')
+    jsx.innerHTML = [
+      `&lt;Card dir=${v('d', `"${st.d}"`)}&gt;`, '  &lt;Amount value={1234.5} /&gt;', '  &lt;Button&gt;Pay now&lt;/Button&gt;', '&lt;/Card&gt;', '', `// radius-card: ${v('r', `${st.r}px`)}`,
+    ].map((l, k) => line(k, l)).join('')
+    const vals = (link) => $$(`.v[data-link="${link}"]`, pipe)
+
+    // Linked hover: any value lights up its twins in the other panes, and the card it drives.
+    pipe.addEventListener('pointerover', (e) => {
+      const t = e.target.closest('.v'); if (!t) return
+      vals(t.dataset.link).forEach((x) => x.classList.add('hover'))
+      if (t.dataset.link === 'r') mini.classList.add('hover')
+    })
+    pipe.addEventListener('pointerout', (e) => {
+      const t = e.target.closest('.v'); if (!t) return
+      $$('.v.hover', pipe).forEach((x) => x.classList.remove('hover')); mini.classList.remove('hover')
+    })
+
+    // Figma pane: a real tiny card. Radius animates from its current on-screen value; direction is a FLIP.
+    const CARD = {
+      ltr: { t: 'Payment summary', l: 'Amount due', a: F.formatMoney(1234.5, { currency: 'AED' }), b: 'Pay now' },
+      rtl: { t: 'ملخص الدفع', l: 'المبلغ المستحق', a: F.formatMoney(1234.5, { currency: 'AED', locale: 'ar' }), b: 'إتمام الدفع' },
+    }
+    const paintCard = () => { const c = CARD[st.d]; $$('[data-k]', mini).forEach((el) => { el.innerHTML = `<bdi>${esc(c[el.dataset.k])}</bdi>` }) }
+    mini.dir = st.d; mini.lang = st.d === 'rtl' ? 'ar' : 'en'; mini.style.alignItems = 'flex-start'; paintCard()
+    const setRadius = (r) => { mini.style.setProperty('--r', r + 'px'); $('#frameR').textContent = `r ${r}` }
+    setRadius(st.r)
+    const flipDir = () => {
+      const before = $$('[data-k]', mini).map((el) => el.getBoundingClientRect())
+      mini.dir = st.d; mini.lang = st.d === 'rtl' ? 'ar' : 'en'; paintCard()
+      $('#frameTag').textContent = `Card · ${st.d.toUpperCase()}`
+      if (reduced) return
+      $$('[data-k]', mini).forEach((el, k) => {
+        const a = before[k], b = el.getBoundingClientRect()
+        el.animate([{ transform: `translateX(${(a.left + a.width / 2) - (b.left + b.width / 2)}px)`, opacity: 0.3, filter: 'blur(3px)' }, { transform: 'none', opacity: 1, filter: 'blur(0)' }],
+          { duration: 620, delay: k * 30, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' })
+      })
+    }
+
+    // Travelling pulse: the full width of the wire, with a short trail.
+    const pulse = (w) => {
+      if (reduced) return
+      const dot = $('i', w), dist = w.getBoundingClientRect().width - 8
+      dot.getAnimations().forEach((a) => a.cancel())
+      dot.animate([{ transform: 'translateX(0)', opacity: 0 }, { opacity: 1, offset: 0.2 }, { opacity: 1, offset: 0.8 }, { transform: `translateX(${dist}px)`, opacity: 0 }],
+        { duration: 420, easing: 'cubic-bezier(.65,0,.35,1)' })
+    }
+    const light = (els) => { els.forEach((x) => { x.classList.remove('lit'); void x.offsetWidth; x.classList.add('lit') }); setTimeout(() => els.forEach((x) => x.classList.remove('lit')), 520) }
+    const meta = (ids, on) => ids.forEach((id) => $(id).classList.toggle('on', on))
+    const agentsPing = () => {
+      const a = $('#agents'); a.classList.add('on')
+      if (!reduced) a.animate([{ opacity: 1, boxShadow: '0 0 0 0 rgba(22,163,74,.5)' }, { opacity: 0, boxShadow: '0 0 0 8px rgba(22,163,74,0)' }], { duration: 700, easing: 'cubic-bezier(.16,1,.3,1)', pseudoElement: '::after' })
+      setTimeout(() => a.classList.remove('on'), 900)
+    }
+
+    // One edit travelling: tokens, wire, Figma, wire, code, AGENTS.md. A new edit cancels the old timers.
+    let timers = []
+    const later = (ms, fn) => timers.push(setTimeout(fn, reduced ? 0 : ms))
+    const travel = (link, applyFigma, valueFor) => {
+      timers.forEach(clearTimeout); timers = []
+      const [tv, jv] = vals(link)
+      tv.textContent = valueFor('tok'); light([tv]); meta(['#m0'], true)
+      later(60, () => pulse($('#w1')))
+      later(380, () => { applyFigma(); meta(['#m1'], true); if (link === 'r') light([mini]) })
+      later(520, () => pulse($('#w2')))
+      later(840, () => { jv.textContent = valueFor('jsx'); light([jv]); meta(['#m2'], true) })
+      later(980, agentsPing)
+      later(1500, () => meta(['#m0', '#m1', '#m2'], false))
+    }
+    const rValue = (where) => where === 'jsx' ? `${st.r}px` : String(st.r)
+    const dValue = () => `"${st.d}"`
+
+    // Radius slider: 1:1 while dragging (no pulse per frame), the pulse travels on release.
+    const rad = $('#rad'), fill = $('.fill', rad), thumb = $('.thumb', rad), out = $('#radVal')
+    const MAX = 32
+    const place = () => { const p = st.r / MAX * 100; fill.style.width = p + '%'; thumb.style.insetInlineStart = p + '%'; out.textContent = st.r; rad.setAttribute('aria-valuenow', st.r) }
+    const live = (r) => {
+      if (r === st.r) return
+      st.r = r; place(); setRadius(r)
+      const [tv, jv] = vals('r'); tv.textContent = rValue('tok'); jv.textContent = rValue('jsx')
+      tv.classList.add('hover'); jv.classList.add('hover'); mini.classList.add('hover')
+    }
+    const endLive = () => { $$('.v.hover', pipe).forEach((x) => x.classList.remove('hover')); mini.classList.remove('hover'); travel('r', () => setRadius(st.r), rValue) }
+    const fromPointer = (x) => { const b = rad.getBoundingClientRect(); return Math.round(Math.min(1, Math.max(0, (x - b.left) / b.width)) * MAX) }
+    let dragging = false
+    rad.addEventListener('pointerdown', (e) => { dragging = true; rad.setPointerCapture(e.pointerId); rad.classList.add('dragging'); live(fromPointer(e.clientX)) })
+    rad.addEventListener('pointermove', (e) => { if (dragging) live(fromPointer(e.clientX)) })
+    const stop = () => { if (!dragging) return; dragging = false; rad.classList.remove('dragging'); endLive() }
+    rad.addEventListener('pointerup', stop); rad.addEventListener('pointercancel', stop)
+    rad.addEventListener('keydown', (e) => {
+      const step = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1, PageUp: 4, PageDown: -4 }[e.key]
+      if (step === undefined) return
+      e.preventDefault(); live(Math.min(MAX, Math.max(0, st.r + step))); clearTimeout(rad._k); rad._k = setTimeout(endLive, 250)
+    })
+    place()
+
+    segment($('#dirSeg'), (b) => { st.d = b.dataset.d; travel('d', flipDir, dValue) })
+  }
+
+  // Footer wordmark: every letter is a button that mirrors itself with a spring.
+  function wordmark() {
+    const wm = $('#wordmark')
+    wm.innerHTML = [...'Dualkit'].map((ch, k) => `<button class="${k > 3 ? 'k' : ''}" aria-label="Mirror ${ch}">${ch}</button>`).join('')
+    $$('button', wm).forEach((b) => {
+      let flipped = false
+      b.addEventListener('click', () => {
+        flipped = !flipped
+        const to = flipped ? -1 : 1, from = -to
+        if (reduced) { b.style.transform = `scaleX(${to})`; return }
+        b.animate([{ transform: `scaleX(${from})` }, { transform: `scaleX(${to * 1.06})`, offset: 0.55 }, { transform: `scaleX(${to * 0.98})`, offset: 0.8 }, { transform: `scaleX(${to})` }], { duration: 620, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards' })
+      })
+    })
+  }
+
+  heroSlot(); tools(); install(); stage(); ticker(); evalCard(); formatDemo(); starter(); wordmark()
+  typer()
+  onView($('#strip'), () => $$('#strip [data-odo]').forEach(odometer))
+
+  // Sections below the fold blur-rise as they arrive; they are visible at rest.
+  if (!reduced) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return
+      io.unobserve(e.target)
+      e.target.animate([{ opacity: 0, transform: 'translateY(20px)', filter: 'blur(8px)' }, { opacity: 1, transform: 'none', filter: 'blur(0)' }], { duration: 800, easing: 'ease' })
+    }), { threshold: 0.15 })
+    $$('section h2, .sec-lede, .card, .demo, .pipe, .closing .in, .f-grid').forEach((el) => { if (el.getBoundingClientRect().top > innerHeight) io.observe(el) })
+  }
+})()
+</script>

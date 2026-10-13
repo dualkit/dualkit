@@ -1,0 +1,53 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/resolver.json",
+  "name": "Dualkit",
+  "version": "2025.10",
+  "description": "dualkit.dev site tokens. Shades of white and grey, near-black ink, Geist, 1px rings and no shadows. One theme for v0.1.",
+  "sets": {
+    "primitives": {
+      "sources": [
+        {
+          "$ref": "primitives/color.json"
+        },
+        {
+          "$ref": "primitives/dimension.json"
+        },
+        {
+          "$ref": "primitives/font.json"
+        }
+      ]
+    },
+    "semantic": {
+      "sources": [
+        {
+          "$ref": "semantic/color.json"
+        },
+        {
+          "$ref": "semantic/space.json"
+        },
+        {
+          "$ref": "semantic/typography.json"
+        }
+      ]
+    }
+  },
+  "modifiers": {
+    "theme": {
+      "contexts": {
+        "default": []
+      },
+      "default": "default"
+    }
+  },
+  "resolutionOrder": [
+    {
+      "$ref": "#/sets/primitives"
+    },
+    {
+      "$ref": "#/sets/semantic"
+    },
+    {
+      "$ref": "#/modifiers/theme"
+    }
+  ]
+}
