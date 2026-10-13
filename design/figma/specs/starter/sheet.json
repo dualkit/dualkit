@@ -1,0 +1,452 @@
+{
+  "component": "Sheet",
+  "textColor": "color.text.primary",
+  "setLayout": {
+    "wrap": true,
+    "width": 960,
+    "gap": "space.stack.lg",
+    "pad": "space.stack.lg"
+  },
+  "variants": [
+    {
+      "props": {
+        "Script": "En"
+      },
+      "dir": "col",
+      "w": 400,
+      "radius": "radius.surface",
+      "fill": "color.surface.raised",
+      "stroke": {
+        "color": "color.border.subtle",
+        "width": 1
+      },
+      "clip": true,
+      "children": [
+        {
+          "stack": "Header",
+          "dir": "row",
+          "children": [
+            {
+              "text": "Payment details",
+              "style": "En/Title",
+              "name": "Title"
+            },
+            {
+              "stack": "Close",
+              "dir": "col",
+              "children": [
+                {
+                  "shape": "Close icon",
+                  "kind": "svg",
+                  "size": [
+                    16,
+                    16
+                  ],
+                  "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M4.5 4.5l7 7M11.5 4.5l-7 7\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                  "tint": "color.text.secondary"
+                }
+              ],
+              "w": 32,
+              "h": 32,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.control",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            }
+          ],
+          "w": "fill",
+          "justify": "between",
+          "align": "center",
+          "pad": {
+            "block": "space.stack.md",
+            "inline": "space.inset.surface"
+          }
+        },
+        {
+          "shape": "Header rule",
+          "kind": "rect",
+          "size": [
+            1,
+            1
+          ],
+          "fill": "color.border.subtle",
+          "w": "fill",
+          "h": 1
+        },
+        {
+          "stack": "Body",
+          "dir": "col",
+          "children": [
+            {
+              "stack": "Row 1",
+              "dir": "row",
+              "children": [
+                {
+                  "text": "Amount",
+                  "style": "En/Body",
+                  "name": "Key",
+                  "color": "color.text.secondary"
+                },
+                {
+                  "text": "AED 1,250.00",
+                  "style": "En/Body",
+                  "name": "Value"
+                }
+              ],
+              "w": "fill",
+              "justify": "between",
+              "align": "center"
+            },
+            {
+              "stack": "Row 2",
+              "dir": "row",
+              "children": [
+                {
+                  "text": "IBAN",
+                  "style": "En/Body",
+                  "name": "Key",
+                  "color": "color.text.secondary"
+                },
+                {
+                  "text": "AE07 0331 2345 6789 0123 456",
+                  "style": "Mono/Label",
+                  "name": "Value"
+                }
+              ],
+              "w": "fill",
+              "justify": "between",
+              "align": "center"
+            },
+            {
+              "stack": "Row 3",
+              "dir": "row",
+              "children": [
+                {
+                  "text": "Reference",
+                  "style": "En/Body",
+                  "name": "Key",
+                  "color": "color.text.secondary"
+                },
+                {
+                  "text": "INV-2041",
+                  "style": "Mono/Label",
+                  "name": "Value"
+                }
+              ],
+              "w": "fill",
+              "justify": "between",
+              "align": "center"
+            }
+          ],
+          "w": "fill",
+          "gap": "space.stack.md",
+          "pad": "space.inset.surface"
+        },
+        {
+          "shape": "Footer rule",
+          "kind": "rect",
+          "size": [
+            1,
+            1
+          ],
+          "fill": "color.border.subtle",
+          "w": "fill",
+          "h": 1
+        },
+        {
+          "stack": "Footer",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Cancel",
+              "dir": "row",
+              "gap": "space.inline.sm",
+              "align": "center",
+              "radius": "radius.control",
+              "pad": {
+                "block": "space.inline.md",
+                "inline": "space.stack.lg"
+              },
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              },
+              "children": [
+                {
+                  "text": "Cancel",
+                  "style": "En/Label",
+                  "name": "Label",
+                  "color": "color.text.primary"
+                }
+              ]
+            },
+            {
+              "stack": "Pay",
+              "dir": "row",
+              "gap": "space.inline.sm",
+              "align": "center",
+              "radius": "radius.control",
+              "pad": {
+                "block": "space.inline.md",
+                "inline": "space.stack.lg"
+              },
+              "fill": "color.surface.inverse",
+              "children": [
+                {
+                  "text": "Pay now",
+                  "style": "En/Label",
+                  "name": "Label",
+                  "color": "color.text.inverse"
+                },
+                {
+                  "shape": "Icon",
+                  "kind": "svg",
+                  "size": [
+                    16,
+                    16
+                  ],
+                  "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M3 8h10M9.5 4.5L13 8l-3.5 3.5\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                  "tint": "color.text.inverse"
+                }
+              ]
+            }
+          ],
+          "w": "fill",
+          "justify": "end",
+          "gap": "space.inline.sm",
+          "pad": {
+            "block": "space.stack.md",
+            "inline": "space.inset.surface"
+          }
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar"
+      },
+      "dir": "col",
+      "w": 400,
+      "radius": "radius.surface",
+      "fill": "color.surface.raised",
+      "stroke": {
+        "color": "color.border.subtle",
+        "width": 1
+      },
+      "clip": true,
+      "children": [
+        {
+          "stack": "Header",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Close",
+              "dir": "col",
+              "children": [
+                {
+                  "shape": "Close icon",
+                  "kind": "svg",
+                  "size": [
+                    16,
+                    16
+                  ],
+                  "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M4.5 4.5l7 7M11.5 4.5l-7 7\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                  "tint": "color.text.secondary"
+                }
+              ],
+              "w": 32,
+              "h": 32,
+              "align": "center",
+              "justify": "center",
+              "radius": "radius.control",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              }
+            },
+            {
+              "text": "تفاصيل الدفع",
+              "style": "Ar/Title",
+              "name": "Title"
+            }
+          ],
+          "w": "fill",
+          "justify": "between",
+          "align": "center",
+          "pad": {
+            "block": "space.stack.md",
+            "inline": "space.inset.surface"
+          }
+        },
+        {
+          "shape": "Header rule",
+          "kind": "rect",
+          "size": [
+            1,
+            1
+          ],
+          "fill": "color.border.subtle",
+          "w": "fill",
+          "h": 1
+        },
+        {
+          "stack": "Body",
+          "dir": "col",
+          "children": [
+            {
+              "stack": "Row 1",
+              "dir": "row",
+              "children": [
+                {
+                  "text": "١٬٢٥٠٫٠٠ د.إ",
+                  "style": "Ar/Body",
+                  "name": "Value"
+                },
+                {
+                  "text": "المبلغ",
+                  "style": "Ar/Body",
+                  "name": "Key",
+                  "color": "color.text.secondary"
+                }
+              ],
+              "w": "fill",
+              "justify": "between",
+              "align": "center"
+            },
+            {
+              "stack": "Row 2",
+              "dir": "row",
+              "children": [
+                {
+                  "text": "AE07 0331 2345 6789 0123 456",
+                  "style": "Mono/Label",
+                  "name": "Value"
+                },
+                {
+                  "text": "رقم الآيبان",
+                  "style": "Ar/Body",
+                  "name": "Key",
+                  "color": "color.text.secondary"
+                }
+              ],
+              "w": "fill",
+              "justify": "between",
+              "align": "center"
+            },
+            {
+              "stack": "Row 3",
+              "dir": "row",
+              "children": [
+                {
+                  "text": "INV-2041",
+                  "style": "Mono/Label",
+                  "name": "Value"
+                },
+                {
+                  "text": "المرجع",
+                  "style": "Ar/Body",
+                  "name": "Key",
+                  "color": "color.text.secondary"
+                }
+              ],
+              "w": "fill",
+              "justify": "between",
+              "align": "center"
+            }
+          ],
+          "w": "fill",
+          "gap": "space.stack.md",
+          "pad": "space.inset.surface"
+        },
+        {
+          "shape": "Footer rule",
+          "kind": "rect",
+          "size": [
+            1,
+            1
+          ],
+          "fill": "color.border.subtle",
+          "w": "fill",
+          "h": 1
+        },
+        {
+          "stack": "Footer",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Pay",
+              "dir": "row",
+              "gap": "space.inline.sm",
+              "align": "center",
+              "radius": "radius.control",
+              "pad": {
+                "block": "space.inline.md",
+                "inline": "space.stack.lg"
+              },
+              "fill": "color.surface.inverse",
+              "children": [
+                {
+                  "shape": "Icon",
+                  "kind": "svg",
+                  "size": [
+                    16,
+                    16
+                  ],
+                  "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M13 8H3M7.5 3.5L3 8l4.5 4.5\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                  "tint": "color.text.inverse"
+                },
+                {
+                  "text": "ادفع الآن",
+                  "style": "Ar/Label",
+                  "name": "Label",
+                  "color": "color.text.inverse"
+                }
+              ]
+            },
+            {
+              "stack": "Cancel",
+              "dir": "row",
+              "gap": "space.inline.sm",
+              "align": "center",
+              "radius": "radius.control",
+              "pad": {
+                "block": "space.inline.md",
+                "inline": "space.stack.lg"
+              },
+              "fill": "color.surface.raised",
+              "stroke": {
+                "color": "color.border.subtle",
+                "width": 1
+              },
+              "children": [
+                {
+                  "text": "إلغاء",
+                  "style": "Ar/Label",
+                  "name": "Label",
+                  "color": "color.text.primary"
+                }
+              ]
+            }
+          ],
+          "w": "fill",
+          "justify": "start",
+          "gap": "space.inline.sm",
+          "pad": {
+            "block": "space.stack.md",
+            "inline": "space.inset.surface"
+          }
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    }
+  ]
+}

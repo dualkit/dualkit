@@ -1,0 +1,92 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/resolver.json",
+  "name": "Dualkit Starter",
+  "version": "2025.10",
+  "description": "One token source for a bilingual product. Two modifiers: theme (light, dark) and script (en, ar).",
+  "sets": {
+    "primitives": {
+      "sources": [
+        {
+          "$ref": "primitives/color.json"
+        },
+        {
+          "$ref": "primitives/dimension.json"
+        },
+        {
+          "$ref": "primitives/font.json"
+        }
+      ]
+    },
+    "semantic": {
+      "sources": [
+        {
+          "$ref": "semantic/color.json"
+        },
+        {
+          "$ref": "semantic/space.json"
+        },
+        {
+          "$ref": "semantic/motion.json"
+        }
+      ]
+    },
+    "script": {
+      "sources": [
+        {
+          "$ref": "script/type.json"
+        }
+      ],
+      "$extensions": {
+        "com.figma": {
+          "collection": "Script"
+        }
+      }
+    }
+  },
+  "modifiers": {
+    "theme": {
+      "contexts": {
+        "light": [],
+        "dark": [
+          {
+            "$ref": "modifiers/theme/dark.json"
+          }
+        ]
+      },
+      "default": "light"
+    },
+    "script": {
+      "contexts": {
+        "en": [],
+        "ar": [
+          {
+            "$ref": "modifiers/script/ar.json"
+          }
+        ]
+      },
+      "default": "en",
+      "$extensions": {
+        "com.figma": {
+          "collection": "Script"
+        }
+      }
+    }
+  },
+  "resolutionOrder": [
+    {
+      "$ref": "#/sets/primitives"
+    },
+    {
+      "$ref": "#/sets/semantic"
+    },
+    {
+      "$ref": "#/sets/script"
+    },
+    {
+      "$ref": "#/modifiers/script"
+    },
+    {
+      "$ref": "#/modifiers/theme"
+    }
+  ]
+}

@@ -1,0 +1,279 @@
+{
+  "component": "Toast",
+  "textColor": "color.text.primary",
+  "setLayout": {
+    "rows": "Script",
+    "columns": "Tone",
+    "gap": "space.stack.lg",
+    "pad": "space.stack.lg"
+  },
+  "variants": [
+    {
+      "props": {
+        "Script": "En",
+        "Tone": "Neutral"
+      },
+      "dir": "row",
+      "w": 400,
+      "gap": "space.inline.md",
+      "align": "center",
+      "radius": "radius.surface",
+      "fill": "color.surface.inverse",
+      "pad": {
+        "block": "space.inline.md",
+        "inline": "space.inline.lg"
+      },
+      "children": [
+        {
+          "shape": "Icon",
+          "kind": "svg",
+          "size": [
+            16,
+            16
+          ],
+          "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M8 7.25v4M8 5v.25M14 8A6 6 0 1 1 2 8a6 6 0 0 1 12 0z\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+          "tint": "color.text.inverse"
+        },
+        {
+          "text": "Draft saved.",
+          "style": "En/Body",
+          "name": "Message",
+          "color": "color.text.inverse",
+          "w": "fill"
+        },
+        {
+          "text": "Undo",
+          "style": "En/Label",
+          "name": "Action",
+          "color": "color.text.inverse"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "En",
+        "Tone": "Success"
+      },
+      "dir": "row",
+      "w": 400,
+      "gap": "space.inline.md",
+      "align": "center",
+      "radius": "radius.surface",
+      "fill": "color.surface.inverse",
+      "pad": {
+        "block": "space.inline.md",
+        "inline": "space.inline.lg"
+      },
+      "children": [
+        {
+          "shape": "Icon",
+          "kind": "svg",
+          "size": [
+            16,
+            16
+          ],
+          "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M3.5 8.5l3 3 6-7\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+          "tint": "color.text.inverse"
+        },
+        {
+          "text": "Sent AED 250.00 to Sam Santos.",
+          "style": "En/Body",
+          "name": "Message",
+          "color": "color.text.inverse",
+          "w": "fill"
+        },
+        {
+          "text": "Undo",
+          "style": "En/Label",
+          "name": "Action",
+          "color": "color.text.inverse"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "En",
+        "Tone": "Error"
+      },
+      "dir": "row",
+      "w": 400,
+      "gap": "space.inline.md",
+      "align": "center",
+      "radius": "radius.surface",
+      "fill": "color.surface.inverse",
+      "pad": {
+        "block": "space.inline.md",
+        "inline": "space.inline.lg"
+      },
+      "children": [
+        {
+          "shape": "Icon",
+          "kind": "svg",
+          "size": [
+            16,
+            16
+          ],
+          "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M8 5v3.5M8 10.75v.25M14 8A6 6 0 1 1 2 8a6 6 0 0 1 12 0z\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+          "tint": "color.text.inverse"
+        },
+        {
+          "text": "Payment failed. Check the IBAN.",
+          "style": "En/Body",
+          "name": "Message",
+          "color": "color.text.inverse",
+          "w": "fill"
+        },
+        {
+          "text": "Undo",
+          "style": "En/Label",
+          "name": "Action",
+          "color": "color.text.inverse"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "Tone": "Neutral"
+      },
+      "dir": "row",
+      "w": 400,
+      "gap": "space.inline.md",
+      "align": "center",
+      "radius": "radius.surface",
+      "fill": "color.surface.inverse",
+      "pad": {
+        "block": "space.inline.md",
+        "inline": "space.inline.lg"
+      },
+      "children": [
+        {
+          "text": "تراجع",
+          "style": "Ar/Label",
+          "name": "Action",
+          "color": "color.text.inverse"
+        },
+        {
+          "text": "تم حفظ المسودة.",
+          "style": "Ar/Body",
+          "name": "Message",
+          "color": "color.text.inverse",
+          "w": "fill",
+          "align": "end"
+        },
+        {
+          "shape": "Icon",
+          "kind": "svg",
+          "size": [
+            16,
+            16
+          ],
+          "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M8 7.25v4M8 5v.25M14 8A6 6 0 1 1 2 8a6 6 0 0 1 12 0z\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+          "tint": "color.text.inverse"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "Tone": "Success"
+      },
+      "dir": "row",
+      "w": 400,
+      "gap": "space.inline.md",
+      "align": "center",
+      "radius": "radius.surface",
+      "fill": "color.surface.inverse",
+      "pad": {
+        "block": "space.inline.md",
+        "inline": "space.inline.lg"
+      },
+      "children": [
+        {
+          "text": "تراجع",
+          "style": "Ar/Label",
+          "name": "Action",
+          "color": "color.text.inverse"
+        },
+        {
+          "text": "تم إرسال ٢٥٠٫٠٠ د.إ إلى Sam Santos.",
+          "style": "Ar/Body",
+          "name": "Message",
+          "color": "color.text.inverse",
+          "w": "fill",
+          "align": "end"
+        },
+        {
+          "shape": "Icon",
+          "kind": "svg",
+          "size": [
+            16,
+            16
+          ],
+          "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M3.5 8.5l3 3 6-7\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+          "tint": "color.text.inverse"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "Tone": "Error"
+      },
+      "dir": "row",
+      "w": 400,
+      "gap": "space.inline.md",
+      "align": "center",
+      "radius": "radius.surface",
+      "fill": "color.surface.inverse",
+      "pad": {
+        "block": "space.inline.md",
+        "inline": "space.inline.lg"
+      },
+      "children": [
+        {
+          "text": "تراجع",
+          "style": "Ar/Label",
+          "name": "Action",
+          "color": "color.text.inverse"
+        },
+        {
+          "text": "تعذّر الدفع. تحقق من رقم الآيبان.",
+          "style": "Ar/Body",
+          "name": "Message",
+          "color": "color.text.inverse",
+          "w": "fill",
+          "align": "end"
+        },
+        {
+          "shape": "Icon",
+          "kind": "svg",
+          "size": [
+            16,
+            16
+          ],
+          "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M8 5v3.5M8 10.75v.25M14 8A6 6 0 1 1 2 8a6 6 0 0 1 12 0z\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+          "tint": "color.text.inverse"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    }
+  ]
+}

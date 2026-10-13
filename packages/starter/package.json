@@ -1,0 +1,63 @@
+{
+  "name": "@dualkit/starter",
+  "version": "0.1.0-alpha.0",
+  "description": "A bilingual design system you can fork. One DTCG token file feeds Figma and code.",
+  "license": "MIT",
+  "type": "module",
+  "files": [
+    "tokens",
+    "generated",
+    "components",
+    "README.md"
+  ],
+  "exports": {
+    "./tokens.css": "./generated/tokens.css",
+    "./theme.css": "./generated/theme.css",
+    "./figma-variables.json": "./generated/figma-variables.json"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dualkit/dualkit.git",
+    "directory": "packages/starter"
+  },
+  "homepage": "https://dualkit.dev",
+  "keywords": [
+    "design-tokens",
+    "dtcg",
+    "rtl",
+    "arabic",
+    "tailwind",
+    "figma"
+  ],
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "jsdom": "^26.1.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "@dualkit/format": "*"
+  },
+  "peerDependencies": {
+    "@dualkit/format": ">=0.1.0-beta.0",
+    "react": ">=19"
+  },
+  "peerDependenciesMeta": {
+    "@dualkit/format": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
+  }
+}

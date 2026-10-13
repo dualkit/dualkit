@@ -1,7 +1,13 @@
-name: Publish @dualkit/format
+name: Publish a package
 on:
   workflow_dispatch:
     inputs:
+      package:
+        description: Which package to publish
+        type: choice
+        options: [format, starter]
+        default: format
+        required: true
       tag:
         description: npm dist-tag for this release
         default: beta
@@ -20,12 +26,15 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: npm install -g npm@11.5.1
       - run: npm ci
-      - run: npm publish -w @dualkit/format --provenance --access public --tag ${{ inputs.tag }}
+      - name: Starter outputs must match the token file
+        if: inputs.package == 'starter'
+        run: npm run build -w @dualkit/starter && git diff --exit-code packages/starter/generated
+      - run: npm publish -w @dualkit/${{ inputs.package }} --provenance --access public --tag ${{ inputs.tag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Point latest at this version while it is the only one
         run: |
-          VERSION=$(node -p "require('./packages/format/package.json').version")
-          npm dist-tag add "@dualkit/format@$VERSION" latest
+          VERSION=$(node -p "require('./packages/${{ inputs.package }}/package.json').version")
+          npm dist-tag add "@dualkit/${{ inputs.package }}@$VERSION" latest
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

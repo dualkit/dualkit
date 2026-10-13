@@ -1,0 +1,308 @@
+{
+  "component": "Date",
+  "textColor": "color.text.primary",
+  "setLayout": {
+    "rows": "Script",
+    "columns": "Calendar",
+    "gap": "space.stack.lg",
+    "pad": "space.stack.lg"
+  },
+  "variants": [
+    {
+      "props": {
+        "Script": "En",
+        "Calendar": "Gregorian"
+      },
+      "dir": "col",
+      "w": 320,
+      "gap": "space.stack.sm",
+      "align": "start",
+      "children": [
+        {
+          "text": "Due date",
+          "style": "En/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Box",
+          "dir": "row",
+          "children": [
+            {
+              "shape": "Calendar",
+              "kind": "svg",
+              "size": [
+                16,
+                16
+              ],
+              "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M3 4h10v9H3zM3 6.75h10M5.75 2.5v3M10.25 2.5v3\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+              "tint": "color.text.secondary"
+            },
+            {
+              "stack": "Dates",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "Tue, 13 Oct 2026",
+                  "style": "En/Body",
+                  "name": "Primary"
+                },
+                {
+                  "text": "2 Jumada al-Awwal 1448 AH",
+                  "style": "En/Caption",
+                  "name": "Secondary",
+                  "color": "color.text.secondary"
+                }
+              ],
+              "w": "fill",
+              "align": "start"
+            }
+          ],
+          "w": "fill",
+          "gap": "space.inline.md",
+          "align": "center",
+          "radius": "radius.surface",
+          "fill": "color.surface.raised",
+          "stroke": {
+            "color": "color.border.subtle",
+            "width": 1
+          },
+          "pad": {
+            "block": "space.inline.md",
+            "inline": "space.inline.lg"
+          }
+        },
+        {
+          "text": "Gulf Standard Time",
+          "style": "En/Caption",
+          "name": "Zone",
+          "color": "color.text.tertiary"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "En",
+        "Calendar": "Hijri"
+      },
+      "dir": "col",
+      "w": 320,
+      "gap": "space.stack.sm",
+      "align": "start",
+      "children": [
+        {
+          "text": "Due date",
+          "style": "En/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Box",
+          "dir": "row",
+          "children": [
+            {
+              "shape": "Calendar",
+              "kind": "svg",
+              "size": [
+                16,
+                16
+              ],
+              "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M3 4h10v9H3zM3 6.75h10M5.75 2.5v3M10.25 2.5v3\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+              "tint": "color.text.secondary"
+            },
+            {
+              "stack": "Dates",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "2 Jumada al-Awwal 1448 AH",
+                  "style": "En/Body",
+                  "name": "Primary"
+                },
+                {
+                  "text": "Tue, 13 Oct 2026",
+                  "style": "En/Caption",
+                  "name": "Secondary",
+                  "color": "color.text.secondary"
+                }
+              ],
+              "w": "fill",
+              "align": "start"
+            }
+          ],
+          "w": "fill",
+          "gap": "space.inline.md",
+          "align": "center",
+          "radius": "radius.surface",
+          "fill": "color.surface.raised",
+          "stroke": {
+            "color": "color.border.subtle",
+            "width": 1
+          },
+          "pad": {
+            "block": "space.inline.md",
+            "inline": "space.inline.lg"
+          }
+        },
+        {
+          "text": "Gulf Standard Time",
+          "style": "En/Caption",
+          "name": "Zone",
+          "color": "color.text.tertiary"
+        }
+      ],
+      "modes": {
+        "Script": "en"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "Calendar": "Gregorian"
+      },
+      "dir": "col",
+      "w": 320,
+      "gap": "space.stack.sm",
+      "align": "end",
+      "children": [
+        {
+          "text": "تاريخ الاستحقاق",
+          "style": "Ar/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Box",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Dates",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "الثلاثاء، ١٣ أكتوبر ٢٠٢٦",
+                  "style": "Ar/Body",
+                  "name": "Primary"
+                },
+                {
+                  "text": "٢ جمادى الأولى ١٤٤٨ هـ",
+                  "style": "Ar/Caption",
+                  "name": "Secondary",
+                  "color": "color.text.secondary"
+                }
+              ],
+              "w": "fill",
+              "align": "end"
+            },
+            {
+              "shape": "Calendar",
+              "kind": "svg",
+              "size": [
+                16,
+                16
+              ],
+              "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M3 4h10v9H3zM3 6.75h10M5.75 2.5v3M10.25 2.5v3\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+              "tint": "color.text.secondary"
+            }
+          ],
+          "w": "fill",
+          "gap": "space.inline.md",
+          "align": "center",
+          "radius": "radius.surface",
+          "fill": "color.surface.raised",
+          "stroke": {
+            "color": "color.border.subtle",
+            "width": 1
+          },
+          "pad": {
+            "block": "space.inline.md",
+            "inline": "space.inline.lg"
+          }
+        },
+        {
+          "text": "بتوقيت الخليج",
+          "style": "Ar/Caption",
+          "name": "Zone",
+          "color": "color.text.tertiary"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    },
+    {
+      "props": {
+        "Script": "Ar",
+        "Calendar": "Hijri"
+      },
+      "dir": "col",
+      "w": 320,
+      "gap": "space.stack.sm",
+      "align": "end",
+      "children": [
+        {
+          "text": "تاريخ الاستحقاق",
+          "style": "Ar/Label",
+          "name": "Label"
+        },
+        {
+          "stack": "Box",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Dates",
+              "dir": "col",
+              "children": [
+                {
+                  "text": "٢ جمادى الأولى ١٤٤٨ هـ",
+                  "style": "Ar/Body",
+                  "name": "Primary"
+                },
+                {
+                  "text": "الثلاثاء، ١٣ أكتوبر ٢٠٢٦",
+                  "style": "Ar/Caption",
+                  "name": "Secondary",
+                  "color": "color.text.secondary"
+                }
+              ],
+              "w": "fill",
+              "align": "end"
+            },
+            {
+              "shape": "Calendar",
+              "kind": "svg",
+              "size": [
+                16,
+                16
+              ],
+              "svg": "<svg width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M3 4h10v9H3zM3 6.75h10M5.75 2.5v3M10.25 2.5v3\" stroke=\"#000000\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+              "tint": "color.text.secondary"
+            }
+          ],
+          "w": "fill",
+          "gap": "space.inline.md",
+          "align": "center",
+          "radius": "radius.surface",
+          "fill": "color.surface.raised",
+          "stroke": {
+            "color": "color.border.subtle",
+            "width": 1
+          },
+          "pad": {
+            "block": "space.inline.md",
+            "inline": "space.inline.lg"
+          }
+        },
+        {
+          "text": "بتوقيت الخليج",
+          "style": "Ar/Caption",
+          "name": "Zone",
+          "color": "color.text.tertiary"
+        }
+      ],
+      "modes": {
+        "Script": "ar"
+      }
+    }
+  ]
+}

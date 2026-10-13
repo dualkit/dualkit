@@ -1,0 +1,145 @@
+/*
+ * Dualkit Starter components. Load after @dualkit/starter/tokens.css.
+ * Every value comes from a --dk- token; the few raw numbers are geometry from the Figma frames
+ * (1px hairlines, the 2px focus gap and ring, 44x52 code boxes, 32px close button).
+ * Logical properties throughout, so dir="rtl" mirrors everything with no extra rules,
+ * except the few things that move: directional icons and the sheet's slide, both on :dir(), which follows
+ * the nearest dir attribute (an [dir="rtl"] ancestor selector would also match an LTR block nested inside).
+ */
+
+/* Type roles. :lang(ar) swaps the family, size, leading and tracking in tokens.css. */
+.dk-label { font-family: var(--dk-type-label-family); font-size: var(--dk-type-label-size); font-weight: var(--dk-type-label-weight); line-height: var(--dk-type-label-leading); letter-spacing: var(--dk-type-label-tracking); }
+.dk-body { font-family: var(--dk-type-body-family); font-size: var(--dk-type-body-size); font-weight: var(--dk-type-body-weight); line-height: var(--dk-type-body-leading); letter-spacing: var(--dk-type-body-tracking); }
+.dk-caption { margin: 0; font-family: var(--dk-type-caption-family); font-size: var(--dk-type-caption-size); font-weight: var(--dk-type-caption-weight); line-height: var(--dk-type-caption-leading); letter-spacing: var(--dk-type-caption-tracking); }
+.dk-title { margin: 0; font-family: var(--dk-type-title-family); font-size: var(--dk-type-title-size); font-weight: var(--dk-type-title-weight); line-height: var(--dk-type-title-leading); letter-spacing: var(--dk-type-title-tracking); }
+.dk-mono { font-family: var(--dk-font-family-mono); font-size: var(--dk-font-size-14); font-weight: var(--dk-font-weight-regular); line-height: var(--dk-font-line-height-140); }
+.dk-secondary { color: var(--dk-color-text-secondary); }
+.dk-tertiary { color: var(--dk-color-text-tertiary); }
+.dk-danger { color: var(--dk-color-state-danger); }
+
+.dk-icon { flex: none; display: block; }
+.dk-icon--directional:dir(rtl) { transform: scaleX(-1); }
+
+/* Button: a pill. The focus ring is offset: a ground-coloured gap, then the ink ring, zero blur. */
+.dk-button {
+  display: inline-flex; align-items: center; gap: var(--dk-space-inline-sm);
+  padding-block: var(--dk-space-inline-md); padding-inline: var(--dk-space-stack-lg);
+  border: 0; border-radius: var(--dk-radius-control); cursor: pointer;
+  font-family: var(--dk-type-label-family); font-size: var(--dk-type-label-size); font-weight: var(--dk-type-label-weight); line-height: var(--dk-type-label-leading); letter-spacing: var(--dk-type-label-tracking);
+  transition: background-color var(--dk-motion-duration-fast) var(--dk-motion-easing-standard), scale var(--dk-motion-duration-base) var(--dk-motion-easing-out);
+}
+.dk-button--primary { background: var(--dk-color-surface-inverse); color: var(--dk-color-text-inverse); }
+.dk-button--secondary { background: var(--dk-color-surface-raised); color: var(--dk-color-text-primary); box-shadow: inset 0 0 0 1px var(--dk-color-border-subtle); }
+@media (hover: hover) { .dk-button--secondary:hover:not(:disabled) { background-image: linear-gradient(var(--dk-color-state-hover), var(--dk-color-state-hover)); } }
+.dk-button:active:not(:disabled) { scale: 0.97; }
+.dk-button:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--dk-color-surface-ground), 0 0 0 4px var(--dk-color-border-focus); }
+.dk-button--secondary:focus-visible { box-shadow: inset 0 0 0 1px var(--dk-color-border-subtle), 0 0 0 2px var(--dk-color-surface-ground), 0 0 0 4px var(--dk-color-border-focus); }
+.dk-button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Field */
+.dk-field { display: flex; flex-direction: column; align-items: stretch; gap: var(--dk-space-stack-sm); color: var(--dk-color-text-primary); }
+.dk-field__input {
+  inline-size: 100%; box-sizing: border-box; margin: 0; border: 0; border-radius: var(--dk-radius-surface);
+  padding-block: var(--dk-space-inline-md); padding-inline: var(--dk-space-inline-lg);
+  background: var(--dk-color-surface-raised); color: var(--dk-color-text-primary); box-shadow: inset 0 0 0 1px var(--dk-color-border-subtle);
+  font-family: var(--dk-type-body-family); font-size: max(16px, var(--dk-type-body-size)); line-height: var(--dk-type-body-leading);
+}
+/* A left-to-right value, such as an email, keeps Latin type inside an Arabic form. */
+.dk-field__input:dir(ltr) { font-family: var(--dk-font-family-latin); }
+.dk-field__input::placeholder { color: var(--dk-color-text-tertiary); }
+.dk-field__input:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--dk-color-border-focus); }
+.dk-field--error .dk-field__input { box-shadow: inset 0 0 0 1px var(--dk-color-state-danger); }
+.dk-field--error .dk-field__input:focus-visible { box-shadow: inset 0 0 0 2px var(--dk-color-state-danger); }
+
+/* Digit input: 44 by 52 boxes, always left to right. */
+.dk-digits { display: flex; flex-direction: column; align-items: flex-start; gap: var(--dk-space-stack-sm); color: var(--dk-color-text-primary); }
+.dk-digits__boxes { display: flex; gap: var(--dk-space-inline-sm); }
+.dk-digits__box {
+  inline-size: 44px; block-size: 52px; box-sizing: border-box; padding: 0; margin: 0; border: 0; text-align: center;
+  border-radius: var(--dk-radius-surface); background: var(--dk-color-surface-raised); color: var(--dk-color-text-primary);
+  box-shadow: inset 0 0 0 1px var(--dk-color-border-subtle); caret-color: var(--dk-color-text-primary);
+  font-family: var(--dk-font-family-mono); font-size: var(--dk-font-size-24); font-weight: var(--dk-font-weight-regular); line-height: var(--dk-font-line-height-120);
+}
+/* Plex Mono has no Arabic-Indic digits, so Arabic codes use the Arabic title style. */
+.dk-digits--arab .dk-digits__box { font-family: var(--dk-type-title-family); font-size: var(--dk-type-title-size); font-weight: var(--dk-type-title-weight); line-height: var(--dk-type-title-leading); }
+.dk-digits__box:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--dk-color-border-focus); }
+.dk-digits--error .dk-digits__box { box-shadow: inset 0 0 0 1px var(--dk-color-state-danger); }
+
+/* Amount */
+.dk-amount { display: flex; flex-direction: column; align-items: flex-start; gap: var(--dk-space-stack-xs); color: var(--dk-color-text-primary); }
+.dk-amount__figure { font-family: var(--dk-type-heading-family); font-size: var(--dk-type-heading-size); font-weight: var(--dk-type-heading-weight); line-height: var(--dk-type-heading-leading); letter-spacing: var(--dk-type-heading-tracking); font-variant-numeric: tabular-nums; }
+
+/* Date */
+.dk-date { display: flex; flex-direction: column; align-items: stretch; gap: var(--dk-space-stack-sm); color: var(--dk-color-text-primary); }
+.dk-date__box {
+  display: flex; align-items: center; gap: var(--dk-space-inline-md);
+  padding-block: var(--dk-space-inline-md); padding-inline: var(--dk-space-inline-lg);
+  border-radius: var(--dk-radius-surface); background: var(--dk-color-surface-raised); box-shadow: inset 0 0 0 1px var(--dk-color-border-subtle);
+}
+.dk-date__lines { display: flex; flex-direction: column; align-items: flex-start; flex: 1; min-inline-size: 0; }
+.dk-date__line { display: block; }
+
+/* Tabs: the indicator sits under the active tab, the rule runs under the row. */
+.dk-tabs { color: var(--dk-color-text-primary); }
+.dk-tabs__list { display: flex; gap: var(--dk-space-inline-xs); box-shadow: inset 0 -1px 0 var(--dk-color-border-subtle); }
+.dk-tabs__tab {
+  position: relative; margin: 0; border: 0; background: none; cursor: pointer; color: var(--dk-color-text-secondary);
+  padding-block: var(--dk-space-inline-md); padding-inline: var(--dk-space-inline-lg);
+  font-family: var(--dk-type-label-family); font-size: var(--dk-type-label-size); font-weight: var(--dk-type-label-weight); line-height: var(--dk-type-label-leading); letter-spacing: var(--dk-type-label-tracking);
+  transition: color var(--dk-motion-duration-fast) var(--dk-motion-easing-standard);
+}
+.dk-tabs__tab::after { content: ''; position: absolute; inset-inline: 0; inset-block-end: 0; block-size: 2px; background: var(--dk-color-border-focus); scale: 0 1; transition: scale var(--dk-motion-duration-base) var(--dk-motion-easing-out); }
+.dk-tabs__tab[aria-selected="true"] { color: var(--dk-color-text-primary); }
+.dk-tabs__tab[aria-selected="true"]::after { scale: 1 1; }
+@media (hover: hover) { .dk-tabs__tab:hover { color: var(--dk-color-text-primary); } }
+.dk-tabs__tab:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--dk-color-border-focus); border-radius: var(--dk-radius-surface); }
+.dk-tabs__panel:focus-visible { outline: 2px solid var(--dk-color-border-focus); outline-offset: 2px; }
+
+/* Sheet: comes in from the inline end. */
+.dk-sheet { position: fixed; inset: 0; z-index: 50; }
+.dk-sheet__scrim { position: absolute; inset: 0; background: var(--dk-color-surface-scrim); animation: dk-fade var(--dk-motion-duration-base) var(--dk-motion-easing-standard); }
+.dk-sheet__panel {
+  position: absolute; inset-block: var(--dk-space-stack-md); inset-inline-end: var(--dk-space-stack-md);
+  display: flex; flex-direction: column; inline-size: min(400px, calc(100% - 2 * var(--dk-space-stack-md))); max-block-size: calc(100% - 2 * var(--dk-space-stack-md)); block-size: fit-content;
+  border-radius: var(--dk-radius-surface); background: var(--dk-color-surface-raised); color: var(--dk-color-text-primary);
+  box-shadow: inset 0 0 0 1px var(--dk-color-border-subtle); overflow: hidden; touch-action: pan-y;
+  --dk-sheet-from: 24px;
+  animation: dk-sheet-in var(--dk-motion-duration-slow) var(--dk-motion-easing-out);
+  transition: translate var(--dk-motion-duration-base) var(--dk-motion-easing-out);
+}
+.dk-sheet__panel:dir(rtl) { --dk-sheet-from: -24px; }
+.dk-sheet__header { display: flex; align-items: center; justify-content: space-between; gap: var(--dk-space-inline-md); padding-block: var(--dk-space-stack-md); padding-inline: var(--dk-space-inset-surface); box-shadow: inset 0 -1px 0 var(--dk-color-border-subtle); }
+.dk-sheet__close {
+  display: grid; place-items: center; flex: none; inline-size: 32px; block-size: 32px; padding: 0; border: 0; cursor: pointer;
+  border-radius: var(--dk-radius-control); background: none; color: var(--dk-color-text-secondary); box-shadow: inset 0 0 0 1px var(--dk-color-border-subtle);
+}
+@media (hover: hover) { .dk-sheet__close:hover { background: var(--dk-color-state-hover); } }
+.dk-sheet__close:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--dk-color-surface-ground), 0 0 0 4px var(--dk-color-border-focus); }
+.dk-sheet__body { display: flex; flex-direction: column; gap: var(--dk-space-stack-md); padding: var(--dk-space-inset-surface); overflow-y: auto; }
+.dk-sheet__row { display: flex; align-items: center; justify-content: space-between; gap: var(--dk-space-inline-lg); }
+.dk-sheet__footer { display: flex; justify-content: flex-end; gap: var(--dk-space-inline-sm); padding-block: var(--dk-space-stack-md); padding-inline: var(--dk-space-inset-surface); box-shadow: inset 0 1px 0 var(--dk-color-border-subtle); }
+
+/* Toast */
+.dk-toast-region { position: fixed; z-index: 60; inset-block-end: var(--dk-space-stack-md); inset-inline-end: var(--dk-space-stack-md); display: flex; flex-direction: column; align-items: flex-end; gap: var(--dk-space-stack-sm); inline-size: min(400px, calc(100% - 2 * var(--dk-space-stack-md))); }
+.dk-toast {
+  display: flex; align-items: center; gap: var(--dk-space-inline-md); box-sizing: border-box; inline-size: min(400px, 100%);
+  padding-block: var(--dk-space-inline-md); padding-inline: var(--dk-space-inline-lg);
+  border-radius: var(--dk-radius-surface); background: var(--dk-color-surface-inverse); color: var(--dk-color-text-inverse);
+  touch-action: pan-y; transition: translate var(--dk-motion-duration-base) var(--dk-motion-easing-out);
+  animation: dk-toast-in var(--dk-motion-duration-base) var(--dk-motion-easing-out);
+}
+.dk-toast__message { flex: 1; min-inline-size: 0; margin: 0; }
+.dk-toast__action { flex: none; margin: 0; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; border-radius: var(--dk-radius-media); }
+.dk-toast__action:focus-visible { outline: 2px solid var(--dk-color-text-inverse); outline-offset: 2px; }
+
+.dk-is-dragging { transition: none; }
+
+@keyframes dk-fade { from { opacity: 0; } }
+@keyframes dk-sheet-in { from { opacity: 0; translate: var(--dk-sheet-from) 0; } }
+@keyframes dk-toast-in { from { opacity: 0; translate: 0 8px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .dk-button, .dk-tabs__tab, .dk-tabs__tab::after, .dk-sheet__panel, .dk-toast { transition: none; }
+  .dk-sheet__scrim, .dk-sheet__panel, .dk-toast { animation-duration: 1ms; }
+  .dk-button:active:not(:disabled) { scale: none; }
+}
