@@ -1,0 +1,478 @@
+{
+  "screen": "Dualkit · Starter section · v2 · 1 One app on a painting · Mobile",
+  "size": [
+    390,
+    "hug"
+  ],
+  "direction": "ltr",
+  "lang": "en",
+  "fill": "color.surface.ground",
+  "textColor": "color.text.primary",
+  "pad": {
+    "block": 120,
+    "inline": "space.item"
+  },
+  "gap": "space.stack",
+  "children": [
+    {
+      "stack": "Starter header",
+      "dir": "col",
+      "children": [
+        {
+          "stack": "Starter copy",
+          "dir": "col",
+          "children": [
+            {
+              "text": "A design system\nthat reads\nboth ways.",
+              "style": "V2H2",
+              "name": "Heading",
+              "w": "fill"
+            },
+            {
+              "text": "Eight React components on one token file. Copy them in and Arabic works from the first commit.",
+              "style": "V2Lede",
+              "color": "color.text.soft",
+              "w": "fill",
+              "name": "Lede"
+            }
+          ],
+          "w": "fill",
+          "gap": "space.group"
+        },
+        {
+          "stack": "Install command",
+          "dir": "row",
+          "children": [
+            {
+              "text": "$ npm i @dualkit/starter",
+              "style": "V2Mono",
+              "name": "Command"
+            },
+            {
+              "shape": "copy icon",
+              "kind": "svg",
+              "size": [
+                "size.icon",
+                "size.icon"
+              ],
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><rect x=\"5.5\" y=\"5.5\" width=\"8\" height=\"8\" rx=\"2\" stroke=\"#09090b\" stroke-width=\"1.5\"/><path d=\"M10.5 3.5v-.25A.75.75 0 009.75 2.5h-6.5a.75.75 0 00-.75.75v6.5c0 .41.34.75.75.75h.25\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\"/></svg>",
+              "tint": "color.text.soft"
+            }
+          ],
+          "w": "fill",
+          "gap": "space.item",
+          "justify": "between",
+          "align": "center",
+          "pad": {
+            "block": "space.snug",
+            "inline": "space.item"
+          },
+          "radius": "radius.media",
+          "fill": "color.surface.page",
+          "stroke": {
+            "color": "color.border.ring",
+            "width": "size.stroke"
+          }
+        }
+      ],
+      "w": "fill",
+      "gap": "space.block"
+    },
+    {
+      "stack": "Painting",
+      "dir": "col",
+      "children": [
+        {
+          "stack": "Language toggle",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "English option",
+              "dir": "row",
+              "children": [
+                {
+                  "text": "English",
+                  "style": "V2Label",
+                  "color": "color.text.soft"
+                }
+              ],
+              "pad": {
+                "block": "space.tight",
+                "inline": "space.item"
+              },
+              "radius": "radius.pill"
+            },
+            {
+              "stack": "Arabic option",
+              "dir": "row",
+              "children": [
+                {
+                  "text": "العربية",
+                  "style": "ArabicLabel",
+                  "color": "color.text.primary"
+                }
+              ],
+              "pad": {
+                "block": "space.tight",
+                "inline": "space.item"
+              },
+              "radius": "radius.pill",
+              "fill": "color.surface.page",
+              "stroke": {
+                "color": "color.border.ring",
+                "width": "size.stroke"
+              }
+            }
+          ],
+          "pad": "space.hair",
+          "radius": "radius.pill",
+          "fill": "color.surface.panel"
+        },
+        {
+          "stack": "App window",
+          "dir": "col",
+          "children": [
+            {
+              "stack": "Title bar",
+              "dir": "row",
+              "children": [
+                {
+                  "stack": "Traffic lights",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "shape": "Light 1",
+                      "kind": "ellipse",
+                      "size": [
+                        "size.v2.dot",
+                        "size.v2.dot"
+                      ],
+                      "fill": "color.surface.panel"
+                    },
+                    {
+                      "shape": "Light 2",
+                      "kind": "ellipse",
+                      "size": [
+                        "size.v2.dot",
+                        "size.v2.dot"
+                      ],
+                      "fill": "color.surface.panel"
+                    },
+                    {
+                      "shape": "Light 3",
+                      "kind": "ellipse",
+                      "size": [
+                        "size.v2.dot",
+                        "size.v2.dot"
+                      ],
+                      "fill": "color.surface.panel"
+                    }
+                  ],
+                  "gap": "space.tight"
+                }
+              ],
+              "w": "fill",
+              "align": "center",
+              "pad": {
+                "block": "space.snug",
+                "inline": "space.item"
+              }
+            },
+            {
+              "stack": "Window rule",
+              "dir": "row",
+              "children": [],
+              "w": "fill",
+              "h": "size.stroke",
+              "fill": "color.border.grid"
+            },
+            {
+              "stack": "Window body",
+              "dir": "col",
+              "children": [
+                {
+                  "stack": "Checkout Ar",
+                  "dir": "col",
+                  "children": [
+                    {
+                      "text": "الدفع",
+                      "style": "V2ArTitle",
+                      "name": "Screen title"
+                    },
+                    {
+                      "stack": "Amount Ar",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "text": "المبلغ المستحق",
+                          "style": "ArabicCaption",
+                          "color": "color.text.soft",
+                          "name": "Label"
+                        },
+                        {
+                          "text": "١٬٢٥٠٫٠٠ د.إ",
+                          "style": "V2ArAmount",
+                          "name": "Value"
+                        },
+                        {
+                          "text": "شامل ضريبة القيمة المضافة ٥٪",
+                          "style": "ArabicCaption",
+                          "color": "color.text.faint",
+                          "name": "Note"
+                        }
+                      ],
+                      "gap": "space.hair",
+                      "align": "end"
+                    },
+                    {
+                      "stack": "Field Ar",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "text": "البريد الإلكتروني",
+                          "style": "ArabicLabel",
+                          "name": "Label"
+                        },
+                        {
+                          "stack": "Input",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "text": "sam@dualkit.dev",
+                              "style": "Body",
+                              "name": "Value"
+                            }
+                          ],
+                          "w": "fill",
+                          "pad": {
+                            "block": "space.snug",
+                            "inline": "space.snug"
+                          },
+                          "radius": "radius.media",
+                          "fill": "color.surface.page",
+                          "stroke": {
+                            "color": "color.border.ring",
+                            "width": "size.stroke"
+                          }
+                        },
+                        {
+                          "text": "نستخدمه لإرسال الإيصالات فقط.",
+                          "style": "ArabicCaption",
+                          "color": "color.text.soft",
+                          "w": "fill",
+                          "align": "end",
+                          "name": "Help"
+                        }
+                      ],
+                      "w": "fill",
+                      "gap": "space.tight",
+                      "align": "end"
+                    },
+                    {
+                      "stack": "Digit input Ar",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "text": "رمز التحقق",
+                          "style": "ArabicLabel",
+                          "name": "Label"
+                        },
+                        {
+                          "stack": "Boxes",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "stack": "Box 1",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "text": "٤",
+                                  "style": "ArabicTitle",
+                                  "name": "Digit"
+                                }
+                              ],
+                              "w": 32,
+                              "h": 40,
+                              "justify": "center",
+                              "align": "center",
+                              "radius": "radius.media",
+                              "fill": "color.surface.page",
+                              "stroke": {
+                                "color": "color.border.ring",
+                                "width": "size.stroke"
+                              }
+                            },
+                            {
+                              "stack": "Box 2",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "text": "٨",
+                                  "style": "ArabicTitle",
+                                  "name": "Digit"
+                                }
+                              ],
+                              "w": 32,
+                              "h": 40,
+                              "justify": "center",
+                              "align": "center",
+                              "radius": "radius.media",
+                              "fill": "color.surface.page",
+                              "stroke": {
+                                "color": "color.border.ring",
+                                "width": "size.stroke"
+                              }
+                            },
+                            {
+                              "stack": "Box 3",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "text": "٢",
+                                  "style": "ArabicTitle",
+                                  "name": "Digit"
+                                }
+                              ],
+                              "w": 32,
+                              "h": 40,
+                              "justify": "center",
+                              "align": "center",
+                              "radius": "radius.media",
+                              "fill": "color.surface.page",
+                              "stroke": {
+                                "color": "color.border.ring",
+                                "width": "size.stroke"
+                              }
+                            },
+                            {
+                              "stack": "Box 4",
+                              "dir": "row",
+                              "children": [],
+                              "w": 32,
+                              "h": 40,
+                              "justify": "center",
+                              "align": "center",
+                              "radius": "radius.media",
+                              "fill": "color.surface.page",
+                              "stroke": {
+                                "color": "color.text.primary",
+                                "width": 2
+                              }
+                            },
+                            {
+                              "stack": "Box 5",
+                              "dir": "row",
+                              "children": [],
+                              "w": 32,
+                              "h": 40,
+                              "justify": "center",
+                              "align": "center",
+                              "radius": "radius.media",
+                              "fill": "color.surface.page",
+                              "stroke": {
+                                "color": "color.border.ring",
+                                "width": "size.stroke"
+                              }
+                            },
+                            {
+                              "stack": "Box 6",
+                              "dir": "row",
+                              "children": [],
+                              "w": 32,
+                              "h": 40,
+                              "justify": "center",
+                              "align": "center",
+                              "radius": "radius.media",
+                              "fill": "color.surface.page",
+                              "stroke": {
+                                "color": "color.border.ring",
+                                "width": "size.stroke"
+                              }
+                            }
+                          ],
+                          "gap": "space.tight"
+                        }
+                      ],
+                      "gap": "space.tight",
+                      "align": "end"
+                    },
+                    {
+                      "stack": "Pay row",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "stack": "Button Ar",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "shape": "back icon",
+                              "kind": "svg",
+                              "size": [
+                                "size.icon",
+                                "size.icon"
+                              ],
+                              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M13 8H3M7.5 3.5L3 8l4.5 4.5\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                              "tint": "color.text.inverse"
+                            },
+                            {
+                              "text": "ادفع الآن",
+                              "style": "ArabicLabel",
+                              "color": "color.text.inverse",
+                              "name": "Label"
+                            }
+                          ],
+                          "gap": "space.tight",
+                          "align": "center",
+                          "pad": {
+                            "block": "space.snug",
+                            "inline": "space.group"
+                          },
+                          "radius": "radius.pill",
+                          "fill": "color.surface.inverse"
+                        }
+                      ],
+                      "w": "fill",
+                      "justify": "start"
+                    }
+                  ],
+                  "w": "fill",
+                  "gap": "space.group",
+                  "align": "end"
+                }
+              ],
+              "w": "fill",
+              "pad": {
+                "block": "space.card",
+                "inline": "space.card"
+              }
+            }
+          ],
+          "w": "fill",
+          "radius": "radius.window",
+          "fill": "color.surface.page",
+          "stroke": {
+            "color": "color.border.ring",
+            "width": "size.stroke"
+          },
+          "clip": true
+        }
+      ],
+      "w": "fill",
+      "justify": "center",
+      "align": "center",
+      "radius": "radius.media",
+      "clip": true,
+      "fill": {
+        "type": "image",
+        "image": "dunes",
+        "scaleMode": "FILL"
+      },
+      "h": "hug",
+      "gap": "space.group",
+      "pad": {
+        "block": "space.card",
+        "inline": "space.item"
+      }
+    }
+  ]
+}

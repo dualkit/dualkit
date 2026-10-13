@@ -3,6 +3,7 @@
 // Component visuals follow the approved "Dualkit Starter" file, redrawn on the site's own tokens.
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { pathToFileURL } from 'node:url'
 import { V2 } from './copy.mjs'
 import { LINE, band, col, hline, icon, row, text, vline } from './parts.mjs'
 import { formatSection, formatTile, mirror } from './home.mjs'
@@ -40,7 +41,7 @@ export const STARTER = {
 }
 
 // Lines inside the components, as in the approved Starter file.
-const C = {
+export const C = {
   next: { En: 'Continue', Ar: 'متابعة' },
   more: { En: 'Learn more', Ar: 'اعرف المزيد' },
   email: { En: 'Email', Ar: 'البريد الإلكتروني' },
@@ -65,18 +66,18 @@ const GLYPH = {
   close: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7" stroke="#09090b" stroke-width="1.5" stroke-linecap="round"/></svg>',
   calendar: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2.75" y="3.75" width="10.5" height="9.5" rx="1.5" stroke="#09090b" stroke-width="1.5"/><path d="M2.75 6.75h10.5M5.5 2.25v2.5M10.5 2.25v2.5" stroke="#09090b" stroke-width="1.5" stroke-linecap="round"/></svg>',
 }
-const glyph = (name, tint = 'color.text.primary') => ({ shape: `${name} icon`, kind: 'svg', size: ['size.icon', 'size.icon'], svg: GLYPH[name], tint })
+export const glyph = (name, tint = 'color.text.primary') => ({ shape: `${name} icon`, kind: 'svg', size: ['size.icon', 'size.icon'], svg: GLYPH[name], tint })
 
 // Script helpers: Arabic rows run reversed and hug the reading start, which is the right edge.
-const ar = (s) => s === 'Ar'
-const T = (s) => ar(s)
+export const ar = (s) => s === 'Ar'
+export const T = (s) => ar(s)
   ? { label: 'ArabicLabel', body: 'ArabicBody', small: 'ArabicCaption', title: 'ArabicTitle', amount: 'V2ArAmount', ui: 'ArabicLabel' }
   : { label: 'V2Label', body: 'Body', small: 'V2Small', title: 'Title', amount: 'Figure', ui: 'V2Label' }
-const ord = (s, list) => (ar(s) ? [...list].reverse() : list)
-const start = (s) => (ar(s) ? 'end' : 'start')
-const box = { radius: 'radius.media', fill: 'color.surface.page', stroke: LINE }
+export const ord = (s, list) => (ar(s) ? [...list].reverse() : list)
+export const start = (s) => (ar(s) ? 'end' : 'start')
+export const box = { radius: 'radius.media', fill: 'color.surface.page', stroke: LINE }
 
-function button(s, label, primary = true, arrowed = true) {
+export function button(s, label, primary = true, arrowed = true) {
   const t = text(label, T(s).ui, { color: primary ? 'color.text.inverse' : 'color.text.primary', name: 'Label' })
   const arrow = icon(ar(s) ? 'back' : 'forward', primary ? 'color.text.inverse' : 'color.text.primary')
   return row(`Button ${s}${primary ? '' : ' secondary'}`, arrowed ? ord(s, [t, arrow]) : [t], {
@@ -85,7 +86,7 @@ function button(s, label, primary = true, arrowed = true) {
   })
 }
 
-function field(s, radius = 'radius.media') {
+export function field(s, radius = 'radius.media') {
   return col(`Field ${s}`, [
     text(C.email[s], T(s).label, { name: 'Label' }),
     row('Input', [text('sam@dualkit.dev', 'Body', { name: 'Value' })], { w: 'fill', pad: { block: 'space.snug', inline: 'space.snug' }, ...box, radius }),
@@ -93,7 +94,7 @@ function field(s, radius = 'radius.media') {
   ], { w: 'fill', gap: 'space.tight', align: start(s) })
 }
 
-function digits(s, compact = false) {
+export function digits(s, compact = false) {
   const cell = (d, k) => row(`Box ${k + 1}`, d ? [text(d, ar(s) ? 'ArabicTitle' : 'Title', { name: 'Digit' })] : [], {
     w: compact ? 32 : 40, h: compact ? 40 : 44, justify: 'center', align: 'center', radius: 'radius.media', fill: 'color.surface.page',
     stroke: k === 3 ? { color: 'color.text.primary', width: 2 } : LINE,
@@ -104,7 +105,7 @@ function digits(s, compact = false) {
   ], { gap: 'space.tight', align: start(s) })
 }
 
-function amount(s) {
+export function amount(s) {
   return col(`Amount ${s}`, [
     text(C.total[s], T(s).small, { color: 'color.text.soft', name: 'Label' }),
     text(C.aed[s], T(s).amount, { name: 'Value' }),
@@ -112,7 +113,7 @@ function amount(s) {
   ], { gap: 'space.hair', align: start(s) })
 }
 
-function date(s) {
+export function date(s) {
   const lines = col('Dates', [
     text(C.greg[s], T(s).body, { name: 'Gregorian' }),
     text(C.hijri[s], T(s).small, { color: 'color.text.soft', name: 'Hijri' }),
@@ -120,7 +121,7 @@ function date(s) {
   return row(`Date ${s}`, ord(s, [glyph('calendar', 'color.text.soft'), lines]), { w: 'fill', gap: 'space.snug', align: 'center', pad: { block: 'space.snug', inline: 'space.snug' }, ...box })
 }
 
-function tabs(s) {
+export function tabs(s) {
   const tab = (label, k) => col(`Tab ${k + 1}`, [
     row('Tab label', [text(label, T(s).ui, { color: k === 0 ? 'color.text.primary' : 'color.text.soft', name: 'Label' })], { pad: { block: 'space.snug', inline: 'space.snug' } }),
     { shape: 'Indicator', kind: 'rect', size: [1, 2], w: 'fill', h: 2, fill: k === 0 ? 'color.surface.inverse' : 'color.border.grid' },
@@ -128,7 +129,7 @@ function tabs(s) {
   return row(`Tabs ${s}`, ord(s, C.tabs[s].map(tab)), {})
 }
 
-function sheet(s) {
+export function sheet(s) {
   const pair = ([k, v], i) => row(`Sheet row ${i + 1}`, ord(s, [text(k, T(s).small, { color: 'color.text.soft', name: 'Key' }), text(v, ar(s) && i === 0 ? 'ArabicBody' : 'V2Mono', { name: 'Value' })]), { w: 'fill', justify: 'between', align: 'center' })
   const close = row('Close', [glyph('close', 'color.text.soft')], { w: 28, h: 28, justify: 'center', align: 'center', radius: 'radius.pill', stroke: LINE })
   return col(`Sheet ${s}`, [
@@ -140,7 +141,7 @@ function sheet(s) {
   ], { w: 'fill', ...box })
 }
 
-function toast(s, compact = false) {
+export function toast(s, compact = false) {
   return row(`Toast ${s}`, ord(s, [
     icon('check', 'color.text.inverse'),
     text(C.toast[s], compact ? T(s).small : T(s).body, { color: 'color.text.inverse', w: 'fill', align: start(s), name: 'Message' }),
@@ -150,12 +151,12 @@ function toast(s, compact = false) {
 
 const BUILD = { Button: (s) => button(s, C.next[s]), Field: field, 'Digit input': (s) => digits(s, true), Amount: amount, Date: date, Tabs: tabs, Sheet: sheet, Toast: toast }
 
-const command = (w = 'hug') => row('Install command', [
+export const command = (w = 'hug') => row('Install command', [
   text(`$ ${STARTER.install}`, 'V2Mono', { name: 'Command' }),
   icon('copy', 'color.text.soft'),
 ], { w, gap: 'space.item', ...(w === 'fill' ? { justify: 'between' } : {}), align: 'center', pad: { block: 'space.snug', inline: 'space.item' }, ...box })
 
-function toggle(labels, active) {
+export function toggle(labels, active) {
   return row('Language toggle', labels.map((l, k) => row(`${k ? 'Arabic' : 'English'} option`, [text(l, k ? 'ArabicLabel' : 'V2Label', { color: k === active ? 'color.text.primary' : 'color.text.soft' })], {
     pad: { block: 'space.tight', inline: 'space.item' }, radius: 'radius.pill', ...(k === active ? { fill: 'color.surface.page', stroke: LINE } : {}),
   })), { pad: 'space.hair', radius: 'radius.pill', fill: 'color.surface.panel' })
@@ -277,9 +278,11 @@ export function mobile(key) {
   }
 }
 
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
 mkdirSync(SPECS, { recursive: true })
 for (const key of Object.keys(SECTIONS)) {
   writeFileSync(resolve(SPECS, `starter-section-${key}-desktop.json`), JSON.stringify(desktop(key), null, 2) + '\n')
   writeFileSync(resolve(SPECS, `starter-section-${key}-mobile.json`), JSON.stringify(mobile(key), null, 2) + '\n')
 }
 console.log('specs written')
+}
