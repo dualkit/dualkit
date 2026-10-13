@@ -1,7 +1,12 @@
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
+  esbuild: { jsx: 'automatic' },
   test: {
-    coverage: { provider: 'v8', include: ['scripts/tokens.mjs'], thresholds: { lines: 90, branches: 85 } },
+    coverage: {
+      provider: 'v8',
+      include: ['scripts/tokens.mjs', 'components/**/*.{ts,tsx}'],
+      thresholds: { lines: 90, branches: 85 },
+    },
   },
 })
