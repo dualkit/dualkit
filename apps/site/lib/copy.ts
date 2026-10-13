@@ -1,6 +1,8 @@
 // Every line on dualkit.dev. Signed off by Sam on 13 Oct 2026 after a /design-reply pass.
 export const SKILLS_COMMAND = '/plugin marketplace add dualkit/dualkit'
-export const FORMAT_COMMAND = 'npm i @dualkit/format'
+// npm has the first publish on hold; until it lands, install the identical tarball from the GitHub release.
+// Switch back to 'npm i @dualkit/format' once npm serves it.
+export const FORMAT_COMMAND = 'npm i https://github.com/dualkit/dualkit/releases/download/format-v0.1.0-beta.0/dualkit-format-0.1.0-beta.0.tgz'
 
 export const COPY = {
   nav: [['Skills', '/#skills'], ['Format', '/#format'], ['Starter', '/#starter'], ['Updates', '/updates'], ['Docs', '/docs']] as const,
