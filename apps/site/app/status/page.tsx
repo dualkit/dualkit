@@ -17,14 +17,14 @@ export default async function Status() {
         <header className="page-head">
           <h1 className="rise">Status</h1>
           <p className={`status status-${live.status} status-big rise`} style={{ animationDelay: '120ms' }}><span className="dot" aria-hidden="true" />{OVERALL_LABEL[live.status]}</p>
-          <p className="cap">Checked {checked} Gulf time. Each check is a real request, repeated at most every five minutes.</p>
+          <p className="small soft">Checked {checked} Gulf time. Each check is a real request, repeated at most every five minutes.</p>
         </header>
         <div className="card checks">
           {live.checks.map((c) => (
             <div className="check" key={c.id}>
               <span className={`status status-${c.ok === null ? 'unknown' : c.ok ? 'normal' : 'down'}`}><span className="dot" aria-hidden="true" />{c.name}</span>
-              <span className="mono cap">{c.detail}</span>
-              <span className="mono cap tnum">{c.ms} ms</span>
+              <span className="small soft mono">{c.detail}</span>
+              <span className="small soft mono ms">{c.ms} ms</span>
             </div>
           ))}
         </div>

@@ -7,6 +7,7 @@ export const ICONS = {
   star: s('M8 2.2l1.75 3.55 3.9.57-2.82 2.75.66 3.88L8 11.12l-3.49 1.83.66-3.88L2.35 6.32l3.9-.57L8 2.2z'),
   check: s('M3.5 8.5l3 3 6-7'),
   arrow: s('M3 8h10M9.5 4.5L13 8l-3.5 3.5'),
+  chevron: s('M4 6l4 4 4-4'),
   cursor: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3.5 2.5l9 4.2-3.9 1.2-1.3 3.9-3.8-9.3z" stroke="#09090b" stroke-width="1.5" stroke-linejoin="round"/></svg>`,
   rss: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3.5a9.5 9.5 0 019.5 9.5M3 7.5A5.5 5.5 0 018.5 13" stroke="#09090b" stroke-width="1.5" stroke-linecap="round"/><circle cx="3.75" cy="12.25" r="1.25" fill="#09090b"/></svg>`,
 }

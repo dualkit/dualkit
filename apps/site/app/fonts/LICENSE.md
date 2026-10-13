@@ -1,0 +1,1 @@
+Switzer is by the Indian Type Foundry and distributed by Fontshare under the ITF Free Font License, which allows free personal and commercial use, including on the web: https://www.fontshare.com/licenses/itf-ffl

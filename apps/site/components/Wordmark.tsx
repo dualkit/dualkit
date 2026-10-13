@@ -14,7 +14,7 @@ export function Wordmark() {
   return (
     <div className="wordmark" aria-label="Dualkit">
       {[...'Dualkit'].map((ch, k) => (
-        <button key={k} type="button" className={k > 3 ? 'k' : undefined} aria-label={`Mirror the letter ${ch}`} onClick={(e) => flip(e.currentTarget)}>{ch}</button>
+        <button key={k} type="button" aria-label={`Mirror the letter ${ch}`} onClick={(e) => flip(e.currentTarget)}>{ch}</button>
       ))}
     </div>
   )

@@ -1,17 +1,12 @@
 import Link from 'next/link'
-import { COPY, SKILLS_COMMAND } from '@/lib/copy'
-import { CopyCommand } from './CopyCommand'
-import { ArrowIcon } from './icons'
+import { COPY } from '@/lib/copy'
 
 export function Closing() {
   const c = COPY.closing
   return (
-    <div className="closing">
-      <div className="in reveal">
-        <h2>{c.heading[0]}<br />{c.heading[1]}</h2>
-        <p className="sec-lede">{c.lede}</p>
-        <div className="actions"><CopyCommand command={SKILLS_COMMAND} /><Link className="primary" href="/docs">{COPY.hero.cta} <ArrowIcon /></Link></div>
-      </div>
-    </div>
+    <section className="closing reveal">
+      <h2 className="h2">{c.heading}</h2>
+      <div className="actions"><Link className="pill primary" href="/docs">{c.primary}</Link><Link className="pill" href="/docs">{c.secondary}</Link></div>
+    </section>
   )
 }

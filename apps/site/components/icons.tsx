@@ -4,7 +4,7 @@ type P = { className?: string; size?: number }
 const MARK_START = 'M 8.9855 18.5469 C 8.9855 19.4675 8.2087 20.1961 7.3483 19.9526 C 3.1124 18.7535 0 14.7519 0 10 C 0 5.2481 3.1124 1.2465 7.3483 0.0474 C 8.2087 -0.1961 8.9855 0.5325 8.9855 1.4531 L 8.9855 18.5469 Z'
 const MARK_END = 'M 11.0145 1.4531 C 11.0145 0.5325 11.7913 -0.1961 12.6517 0.0474 C 16.8876 1.2465 20 5.2481 20 10 C 20 14.7519 16.8876 18.7535 12.6517 19.9526 C 11.7913 20.1961 11.0145 19.4675 11.0145 18.5469 L 11.0145 1.4531 Z'
 
-export function Mark({ light = 'var(--panel)' }: { light?: string }) {
+export function Mark({ light = 'var(--mark-light)' }: { light?: string }) {
   return (
     <svg className="mark" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
       <path d={MARK_START} fill="var(--ink)" />
@@ -24,6 +24,7 @@ export const BackIcon = (p: P) => <Stroke {...p} d="M13 8H3M7.5 3.5L3 8l4.5 4.5"
 export const CheckIcon = (p: P) => <Stroke {...p} d="M3.5 8.5l3 3 6-7" />
 export const StarIcon = (p: P) => <Stroke {...p} d="M8 2.2l1.75 3.55 3.9.57-2.82 2.75.66 3.88L8 11.12l-3.49 1.83.66-3.88L2.35 6.32l3.9-.57L8 2.2z" />
 export const CursorIcon = (p: P) => <Stroke {...p} d="M3.5 2.5l9 4.2-3.9 1.2-1.3 3.9-3.8-9.3z" />
+export const ChevronIcon = (p: P) => <Stroke {...p} d="M4 6l4 4 4-4" />
 
 export function CopyIcon() {
   return (

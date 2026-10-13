@@ -1,0 +1,364 @@
+{
+  "screen": "Dualkit · Menu open · Desktop · v2",
+  "size": [
+    "size.desktop",
+    "hug"
+  ],
+  "direction": "ltr",
+  "lang": "en",
+  "fill": "color.surface.ground",
+  "textColor": "color.text.primary",
+  "children": [
+    {
+      "stack": "Nav",
+      "dir": "col",
+      "children": [
+        {
+          "stack": "Nav band",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Nav",
+              "dir": "col",
+              "children": [
+                {
+                  "stack": "Nav row",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "stack": "Brand",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "stack": "Mark",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "shape": "Mark start",
+                              "kind": "svg",
+                              "size": [
+                                9,
+                                20
+                              ],
+                              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"9\" height=\"20\" viewBox=\"0 0 8.9855 20\" fill=\"none\"><path d=\"M 8.9855 18.5469 C 8.9855 19.4675 8.2087 20.1961 7.3483 19.9526 C 3.1124 18.7535 0 14.7519 0 10 C 0 5.2481 3.1124 1.2465 7.3483 0.0474 C 8.2087 -0.1961 8.9855 0.5325 8.9855 1.4531 L 8.9855 18.5469 Z\" fill=\"#09090b\"/></svg>",
+                              "tint": "color.text.primary"
+                            },
+                            {
+                              "shape": "Mark end",
+                              "kind": "svg",
+                              "size": [
+                                9,
+                                20
+                              ],
+                              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"9\" height=\"20\" viewBox=\"0 0 8.9855 20\" fill=\"none\"><path d=\"M 0 1.4531 C 0 0.5325 0.7768 -0.1961 1.6372 0.0474 C 5.8731 1.2465 8.9855 5.2481 8.9855 10 C 8.9855 14.7519 5.8731 18.7535 1.6372 19.9526 C 0.7768 20.1961 0 19.4675 0 18.5469 L 0 1.4531 Z\" fill=\"#09090b\"/></svg>",
+                              "tint": "color.mark.onPanel"
+                            }
+                          ],
+                          "gap": "space.mark"
+                        },
+                        {
+                          "text": "Dualkit",
+                          "style": "Title"
+                        }
+                      ],
+                      "w": "size.v2.nav",
+                      "gap": "space.tight",
+                      "align": "center"
+                    },
+                    {
+                      "stack": "Links",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "stack": "Product link",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "text": "Product",
+                              "style": "V2Label",
+                              "color": "color.text.soft"
+                            },
+                            {
+                              "shape": "chevron icon",
+                              "kind": "svg",
+                              "size": [
+                                12,
+                                12
+                              ],
+                              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M4 6l4 4 4-4\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                              "tint": "color.text.faint"
+                            }
+                          ],
+                          "gap": "space.hair",
+                          "align": "center"
+                        },
+                        {
+                          "text": "Docs",
+                          "style": "V2Label",
+                          "color": "color.text.soft",
+                          "name": "Docs"
+                        },
+                        {
+                          "text": "Updates",
+                          "style": "V2Label",
+                          "color": "color.text.soft",
+                          "name": "Updates"
+                        }
+                      ],
+                      "gap": "space.block",
+                      "align": "center"
+                    },
+                    {
+                      "stack": "Nav end",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "stack": "GitHub button",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "shape": "star icon",
+                              "kind": "svg",
+                              "size": [
+                                "size.icon",
+                                "size.icon"
+                              ],
+                              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M8 2.2l1.75 3.55 3.9.57-2.82 2.75.66 3.88L8 11.12l-3.49 1.83.66-3.88L2.35 6.32l3.9-.57L8 2.2z\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                              "tint": "color.text.primary"
+                            },
+                            {
+                              "text": "GitHub",
+                              "style": "V2Label",
+                              "color": "color.text.primary"
+                            }
+                          ],
+                          "gap": "space.tight",
+                          "align": "center",
+                          "pad": {
+                            "block": "space.snug",
+                            "inline": "space.group"
+                          },
+                          "radius": "radius.pill",
+                          "stroke": {
+                            "color": "color.border.ring",
+                            "width": "size.stroke"
+                          },
+                          "fill": "color.surface.page"
+                        },
+                        {
+                          "stack": "Get started button",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "text": "Get started",
+                              "style": "V2Label",
+                              "color": "color.text.inverse"
+                            }
+                          ],
+                          "gap": "space.tight",
+                          "align": "center",
+                          "pad": {
+                            "block": "space.snug",
+                            "inline": "space.group"
+                          },
+                          "radius": "radius.pill",
+                          "fill": "color.surface.inverse"
+                        }
+                      ],
+                      "w": "size.v2.nav",
+                      "justify": "end",
+                      "gap": "space.tight",
+                      "align": "center"
+                    }
+                  ],
+                  "w": "fill",
+                  "justify": "between",
+                  "align": "center"
+                }
+              ],
+              "w": "size.v2.content",
+              "pad": {
+                "block": "space.item"
+              }
+            }
+          ],
+          "w": "fill",
+          "justify": "center"
+        },
+        {
+          "shape": "Nav rule",
+          "kind": "rect",
+          "size": [
+            1,
+            "size.stroke"
+          ],
+          "w": "fill",
+          "h": "size.stroke",
+          "fill": "color.border.grid"
+        }
+      ],
+      "w": "fill"
+    },
+    {
+      "stack": "Drawer",
+      "dir": "col",
+      "children": [
+        {
+          "stack": "Drawer grid band",
+          "dir": "row",
+          "children": [
+            {
+              "stack": "Drawer grid",
+              "dir": "col",
+              "children": [
+                {
+                  "stack": "Drawer columns",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "stack": "Skills entry",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "text": "01",
+                          "style": "V2Mono",
+                          "color": "color.text.faint",
+                          "name": "Number"
+                        },
+                        {
+                          "text": "Skills",
+                          "style": "V2H2",
+                          "name": "Name"
+                        },
+                        {
+                          "text": "Teach Claude Code and Cursor to build right to left",
+                          "style": "V2Small",
+                          "color": "color.text.soft",
+                          "w": "fill",
+                          "name": "Line"
+                        }
+                      ],
+                      "w": "fill",
+                      "gap": "space.snug",
+                      "pad": {
+                        "block": "space.card",
+                        "inline": "space.group"
+                      }
+                    },
+                    {
+                      "shape": "Drawer rule 1",
+                      "kind": "rect",
+                      "size": [
+                        "size.stroke",
+                        1
+                      ],
+                      "w": "size.stroke",
+                      "h": "fill",
+                      "fill": "color.border.grid"
+                    },
+                    {
+                      "stack": "Format entry",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "text": "02",
+                          "style": "V2Mono",
+                          "color": "color.text.faint",
+                          "name": "Number"
+                        },
+                        {
+                          "text": "Format",
+                          "style": "V2H2",
+                          "name": "Name"
+                        },
+                        {
+                          "text": "AED, Hijri, Arabic digits, UAE phone and IBAN",
+                          "style": "V2Small",
+                          "color": "color.text.soft",
+                          "w": "fill",
+                          "name": "Line"
+                        }
+                      ],
+                      "w": "fill",
+                      "gap": "space.snug",
+                      "pad": {
+                        "block": "space.card",
+                        "inline": "space.group"
+                      }
+                    },
+                    {
+                      "shape": "Drawer rule 2",
+                      "kind": "rect",
+                      "size": [
+                        "size.stroke",
+                        1
+                      ],
+                      "w": "size.stroke",
+                      "h": "fill",
+                      "fill": "color.border.grid"
+                    },
+                    {
+                      "stack": "Starter entry",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "text": "03",
+                          "style": "V2Mono",
+                          "color": "color.text.faint",
+                          "name": "Number"
+                        },
+                        {
+                          "text": "Starter",
+                          "style": "V2H2",
+                          "name": "Name"
+                        },
+                        {
+                          "text": "A bilingual design system, coming next",
+                          "style": "V2Small",
+                          "color": "color.text.soft",
+                          "w": "fill",
+                          "name": "Line"
+                        }
+                      ],
+                      "w": "fill",
+                      "gap": "space.snug",
+                      "pad": {
+                        "block": "space.card",
+                        "inline": "space.group"
+                      }
+                    }
+                  ],
+                  "w": "fill"
+                }
+              ],
+              "w": "size.v2.content"
+            }
+          ],
+          "w": "fill",
+          "justify": "center"
+        },
+        {
+          "shape": "Drawer rule",
+          "kind": "rect",
+          "size": [
+            1,
+            "size.stroke"
+          ],
+          "w": "fill",
+          "h": "size.stroke",
+          "fill": "color.border.grid"
+        }
+      ],
+      "w": "fill",
+      "fill": "color.surface.page"
+    },
+    {
+      "stack": "Scrim",
+      "dir": "row",
+      "children": [],
+      "w": "fill",
+      "h": "size.v2.cell",
+      "fill": "color.surface.panel"
+    }
+  ]
+}

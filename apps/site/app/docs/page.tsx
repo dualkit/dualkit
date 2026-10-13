@@ -23,28 +23,28 @@ export default async function Docs() {
     <>
       <Nav stars={live.stars} />
       <main className="wrap page docs">
-        <header className="page-head"><h1 className="rise">Docs</h1><p className="sec-lede">Two installs. The skills teach your agent, the library does the formatting.</p></header>
+        <header className="page-head"><h1 className="rise">Docs</h1><p className="lede">Two installs. The skills teach your agent, the library does the formatting.</p></header>
         <section className="doc-block" id="skills">
-          <h2>Skills</h2>
-          <p className="secondary">In Claude Code, add the marketplace, then install the plugin. In Cursor, copy <code>cursor/rules</code> into your project&rsquo;s <code>.cursor/rules</code>.</p>
+          <h2 className="h2">Skills</h2>
+          <p className="soft">In Claude Code, add the marketplace, then install the plugin. In Cursor, copy <code>cursor/rules</code> into your project&rsquo;s <code>.cursor/rules</code>.</p>
           <CopyCommand command={SKILLS_COMMAND} />
           <CopyCommand command="/plugin install dualkit@dualkit" />
-          <p className="cap">Four skills load on their own when the task calls for them: RTL layout, type pairing, Gulf formats and bilingual copy.</p>
+          <p className="small soft">Four skills load on their own when the task calls for them: RTL layout, type pairing, Gulf formats and bilingual copy.</p>
         </section>
         <section className="doc-block" id="format">
-          <h2>@dualkit/format</h2>
+          <h2 className="h2">@dualkit/format</h2>
           <CopyCommand command={FORMAT_COMMAND} />
-          <p className="cap">The package is on its way to npm. Until it lands, this installs the same build from the <a href="https://github.com/dualkit/dualkit/releases/tag/format-v0.1.0-beta.0">GitHub release</a>, and <code>npm i @dualkit/format</code> takes over afterwards.</p>
+          <p className="small soft">The package is on its way to npm. Until it lands, this installs the same build from the <a href="https://github.com/dualkit/dualkit/releases/tag/format-v0.1.0-beta.0">GitHub release</a>, and <code>npm i @dualkit/format</code> takes over afterwards.</p>
           <div className="card api">
             {API.map(([call, out, note]) => (
-              <div className="api-row" key={call}><code>{call}</code><code className="muted">{out}</code><span className="cap">{note}</span></div>
+              <div className="api-row" key={call}><code>{call}</code><code className="muted">{out}</code><span className="small">{note}</span></div>
             ))}
           </div>
-          <p className="cap">The parse functions never throw. They return <code>{'{ ok: false, error: { code, message } }'}</code>, and the code is stable, so you can map it to your own Arabic and English copy.</p>
+          <p className="small soft">The parse functions never throw. They return <code>{'{ ok: false, error: { code, message } }'}</code>, and the code is stable, so you can map it to your own Arabic and English copy.</p>
         </section>
         <section className="doc-block">
-          <h2>Source</h2>
-          <p className="secondary">Everything is MIT licensed and lives at <a href="https://github.com/dualkit/dualkit">github.com/dualkit/dualkit</a>. Open an issue if any Arabic reads wrong.</p>
+          <h2 className="h2">Source</h2>
+          <p className="soft">Everything is MIT licensed and lives at <a href="https://github.com/dualkit/dualkit">github.com/dualkit/dualkit</a>. Open an issue if any Arabic reads wrong.</p>
         </section>
       </main>
       <Footer status={live.status} downloads={live.downloads} />
