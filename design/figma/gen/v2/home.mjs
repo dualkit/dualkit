@@ -176,7 +176,7 @@ function strip() {
   return band('Strip', [hline('Strip top'), row('Strip row', cells, { w: 'fill' }), hline('Strip bottom')], { pad: { top: 'space.v2.section' } })
 }
 
-function closing() {
+export function closing() {
   const c = V2.closing
   return band('Closing', [
     text(c.heading, 'V2H2', { align: 'center', name: 'Closing headline' }),
@@ -184,7 +184,7 @@ function closing() {
   ], { align: 'center', gap: 'space.block', pad: { block: 'space.v2.gap' } })
 }
 
-function footer() {
+export function footer() {
   const f = V2.footer
   const column = ([title, links]) => col(`${title} column`, [text(title, 'V2Mono', { color: 'color.text.faint', name: 'Column title' }), ...links.map((l) => text(l, 'V2Body', { name: l }))],
     { w: 'fill', gap: 'space.snug', pad: { block: 'space.card', inline: 'space.group' } })
