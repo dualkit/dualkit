@@ -72,7 +72,7 @@ function skillsSection(p) {
   ], { gap: 'space.v2.inner', pad: { top: 'space.v2.section' } })
 }
 
-function formatTile() {
+export function formatTile() {
   const cell = (d, k) => row(`Digit ${k + 1}`, [text(d, 'V2ArAmount', { name: 'Digit' })], { w: 'size.v2.otp', h: 'size.v2.otp', justify: 'center', align: 'center', radius: 'radius.media', fill: 'color.surface.page', stroke: LINE })
   const otp = col('Code', [
     text('Verification code, typed in Arabic digits', 'V2Small', { color: 'color.text.soft' }),
@@ -127,7 +127,7 @@ function headBlock(p) {
   ], { w: 'fill', gap: 'space.item' })
 }
 
-function formatSection(p, tile) {
+export function formatSection(p, tile) {
   return band(p.name, [row(`${p.name} row`, [
     tile,
     col(`${p.name} copy`, [headBlock(p), text(p.lede, 'V2Lede', { color: 'color.text.soft', w: 'fill', name: 'Lede' }), points(p.points, p.name)], { w: 'size.v2.half', gap: 'space.group' }),
@@ -152,7 +152,7 @@ function slider(label, rtl) {
     { w: 'fill', h: 52, align: 'center', pad: 4, radius: 'radius.pill', fill: 'color.surface.panel' })
 }
 
-function mirror() {
+export function mirror() {
   const m = V2.mirror
   return band('Mirror', [row('Mirror row', [
     row('Halftone', [], { w: 'size.v2.half', h: 'size.v2.mirror', radius: 'radius.media', stroke: LINE, fill: { type: 'image', image: 'halftone-ain', scaleMode: 'FILL' } }),

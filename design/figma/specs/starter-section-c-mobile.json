@@ -1,0 +1,831 @@
+{
+  "screen": "Dualkit · Starter section · C · Mobile",
+  "size": [
+    390,
+    "hug"
+  ],
+  "direction": "ltr",
+  "lang": "en",
+  "fill": "color.surface.ground",
+  "textColor": "color.text.primary",
+  "pad": {
+    "block": 120,
+    "inline": "space.item"
+  },
+  "gap": "space.stack",
+  "children": [
+    {
+      "stack": "Starter header",
+      "dir": "col",
+      "children": [
+        {
+          "stack": "Starter copy",
+          "dir": "col",
+          "children": [
+            {
+              "text": "Change one token.\nBoth languages follow.",
+              "style": "V2H2",
+              "name": "Heading",
+              "w": "fill"
+            },
+            {
+              "text": "One token file generates the Figma variables and the CSS. Change a value and Figma, code, English and Arabic move together.",
+              "style": "V2Lede",
+              "color": "color.text.soft",
+              "w": "fill",
+              "name": "Lede"
+            }
+          ],
+          "w": "fill",
+          "gap": "space.group"
+        },
+        {
+          "stack": "Install command",
+          "dir": "row",
+          "children": [
+            {
+              "text": "$ npm i @dualkit/starter",
+              "style": "V2Mono",
+              "name": "Command"
+            },
+            {
+              "shape": "copy icon",
+              "kind": "svg",
+              "size": [
+                "size.icon",
+                "size.icon"
+              ],
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><rect x=\"5.5\" y=\"5.5\" width=\"8\" height=\"8\" rx=\"2\" stroke=\"#09090b\" stroke-width=\"1.5\"/><path d=\"M10.5 3.5v-.25A.75.75 0 009.75 2.5h-6.5a.75.75 0 00-.75.75v6.5c0 .41.34.75.75.75h.25\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\"/></svg>",
+              "tint": "color.text.soft"
+            }
+          ],
+          "w": "fill",
+          "gap": "space.item",
+          "justify": "between",
+          "align": "center",
+          "pad": {
+            "block": "space.snug",
+            "inline": "space.item"
+          },
+          "radius": "radius.media",
+          "fill": "color.surface.page",
+          "stroke": {
+            "color": "color.border.ring",
+            "width": "size.stroke"
+          }
+        }
+      ],
+      "w": "fill",
+      "gap": "space.block"
+    },
+    {
+      "stack": "Pipeline",
+      "dir": "col",
+      "children": [
+        {
+          "stack": "tokens.json pane",
+          "dir": "col",
+          "children": [
+            {
+              "stack": "tokens.json head",
+              "dir": "row",
+              "children": [
+                {
+                  "text": "tokens.json",
+                  "style": "V2Mono",
+                  "color": "color.text.faint",
+                  "name": "Pane title"
+                }
+              ],
+              "w": "fill",
+              "pad": {
+                "block": "space.tight",
+                "inline": "space.snug"
+              }
+            },
+            {
+              "shape": "tokens.json rule",
+              "kind": "rect",
+              "size": [
+                1,
+                "size.stroke"
+              ],
+              "w": "fill",
+              "h": "size.stroke",
+              "fill": "color.border.grid"
+            },
+            {
+              "stack": "Tokens body",
+              "dir": "col",
+              "children": [
+                {
+                  "stack": "Tokens",
+                  "dir": "col",
+                  "children": [
+                    {
+                      "stack": "Code row 1",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "{",
+                          "style": "V2Mono",
+                          "name": "Code text"
+                        }
+                      ],
+                      "w": "fill",
+                      "pad": {
+                        "block": 2,
+                        "inline": "space.tight"
+                      }
+                    },
+                    {
+                      "stack": "Code row 2",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "  \"radius\": {",
+                          "style": "V2Mono",
+                          "name": "Code text"
+                        }
+                      ],
+                      "w": "fill",
+                      "pad": {
+                        "block": 2,
+                        "inline": "space.tight"
+                      }
+                    },
+                    {
+                      "stack": "Code row 3",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "    \"control\": 12",
+                          "style": "V2Mono",
+                          "name": "Code text"
+                        }
+                      ],
+                      "w": "fill",
+                      "pad": {
+                        "block": 2,
+                        "inline": "space.tight"
+                      },
+                      "fill": "color.surface.highlight"
+                    },
+                    {
+                      "stack": "Code row 4",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "  },",
+                          "style": "V2Mono",
+                          "name": "Code text"
+                        }
+                      ],
+                      "w": "fill",
+                      "pad": {
+                        "block": 2,
+                        "inline": "space.tight"
+                      }
+                    },
+                    {
+                      "stack": "Code row 5",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "  \"script\": {",
+                          "style": "V2Mono",
+                          "name": "Code text"
+                        }
+                      ],
+                      "w": "fill",
+                      "pad": {
+                        "block": 2,
+                        "inline": "space.tight"
+                      }
+                    },
+                    {
+                      "stack": "Code row 6",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "    \"ar\": { \"body\": 17 }",
+                          "style": "V2Mono",
+                          "name": "Code text"
+                        }
+                      ],
+                      "w": "fill",
+                      "pad": {
+                        "block": 2,
+                        "inline": "space.tight"
+                      }
+                    },
+                    {
+                      "stack": "Code row 7",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "  }",
+                          "style": "V2Mono",
+                          "name": "Code text"
+                        }
+                      ],
+                      "w": "fill",
+                      "pad": {
+                        "block": 2,
+                        "inline": "space.tight"
+                      }
+                    },
+                    {
+                      "stack": "Code row 8",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "}",
+                          "style": "V2Mono",
+                          "name": "Code text"
+                        }
+                      ],
+                      "w": "fill",
+                      "pad": {
+                        "block": 2,
+                        "inline": "space.tight"
+                      }
+                    }
+                  ],
+                  "w": "fill",
+                  "gap": 2,
+                  "pad": "space.tight"
+                },
+                {
+                  "shape": "Values rule",
+                  "kind": "rect",
+                  "size": [
+                    1,
+                    "size.stroke"
+                  ],
+                  "w": "fill",
+                  "h": "size.stroke",
+                  "fill": "color.border.grid"
+                },
+                {
+                  "stack": "Values",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "text": "radius.control",
+                      "style": "V2Small",
+                      "color": "color.text.soft"
+                    },
+                    {
+                      "stack": "Value 4",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "4",
+                          "style": "V2Mono",
+                          "color": "color.text.primary"
+                        }
+                      ],
+                      "pad": {
+                        "block": "space.hair",
+                        "inline": "space.snug"
+                      },
+                      "radius": "radius.pill",
+                      "stroke": {
+                        "color": "color.border.ring",
+                        "width": "size.stroke"
+                      }
+                    },
+                    {
+                      "stack": "Value 8",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "8",
+                          "style": "V2Mono",
+                          "color": "color.text.primary"
+                        }
+                      ],
+                      "pad": {
+                        "block": "space.hair",
+                        "inline": "space.snug"
+                      },
+                      "radius": "radius.pill",
+                      "stroke": {
+                        "color": "color.border.ring",
+                        "width": "size.stroke"
+                      }
+                    },
+                    {
+                      "stack": "Value 12",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "12",
+                          "style": "V2Mono",
+                          "color": "color.text.inverse"
+                        }
+                      ],
+                      "pad": {
+                        "block": "space.hair",
+                        "inline": "space.snug"
+                      },
+                      "radius": "radius.pill",
+                      "fill": "color.surface.inverse"
+                    },
+                    {
+                      "stack": "Value 999",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "999",
+                          "style": "V2Mono",
+                          "color": "color.text.primary"
+                        }
+                      ],
+                      "pad": {
+                        "block": "space.hair",
+                        "inline": "space.snug"
+                      },
+                      "radius": "radius.pill",
+                      "stroke": {
+                        "color": "color.border.ring",
+                        "width": "size.stroke"
+                      }
+                    }
+                  ],
+                  "w": "fill",
+                  "gap": "space.tight",
+                  "align": "center",
+                  "pad": {
+                    "block": "space.snug",
+                    "inline": "space.snug"
+                  }
+                }
+              ],
+              "w": "fill"
+            }
+          ],
+          "w": "fill",
+          "radius": "radius.media",
+          "fill": "color.surface.page",
+          "stroke": {
+            "color": "color.border.ring",
+            "width": "size.stroke"
+          },
+          "clip": true
+        },
+        {
+          "stack": "Figma variables pane",
+          "dir": "col",
+          "children": [
+            {
+              "stack": "Figma variables head",
+              "dir": "row",
+              "children": [
+                {
+                  "text": "Figma variables",
+                  "style": "V2Mono",
+                  "color": "color.text.faint",
+                  "name": "Pane title"
+                }
+              ],
+              "w": "fill",
+              "pad": {
+                "block": "space.tight",
+                "inline": "space.snug"
+              }
+            },
+            {
+              "shape": "Figma variables rule",
+              "kind": "rect",
+              "size": [
+                1,
+                "size.stroke"
+              ],
+              "w": "fill",
+              "h": "size.stroke",
+              "fill": "color.border.grid"
+            },
+            {
+              "stack": "Variables",
+              "dir": "col",
+              "children": [
+                {
+                  "stack": "Variables head",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "text": "Variable",
+                      "style": "V2Small",
+                      "color": "color.text.faint",
+                      "w": "fill"
+                    },
+                    {
+                      "text": "en",
+                      "style": "V2Small",
+                      "color": "color.text.faint",
+                      "w": 64
+                    },
+                    {
+                      "text": "ar",
+                      "style": "V2Small",
+                      "color": "color.text.faint",
+                      "w": 64
+                    }
+                  ],
+                  "w": "fill",
+                  "pad": {
+                    "block": "space.tight",
+                    "inline": "space.snug"
+                  }
+                },
+                {
+                  "shape": "Variables head rule",
+                  "kind": "rect",
+                  "size": [
+                    1,
+                    "size.stroke"
+                  ],
+                  "w": "fill",
+                  "h": "size.stroke",
+                  "fill": "color.border.grid"
+                },
+                {
+                  "stack": "radius/control",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "text": "radius/control",
+                      "style": "V2Mono",
+                      "w": "fill"
+                    },
+                    {
+                      "text": "12",
+                      "style": "V2Mono",
+                      "w": 64
+                    },
+                    {
+                      "text": "12",
+                      "style": "V2Mono",
+                      "w": 64
+                    }
+                  ],
+                  "w": "fill",
+                  "pad": {
+                    "block": "space.tight",
+                    "inline": "space.snug"
+                  },
+                  "fill": "color.surface.highlight"
+                },
+                {
+                  "stack": "type/body/size",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "text": "type/body/size",
+                      "style": "V2Mono",
+                      "w": "fill"
+                    },
+                    {
+                      "text": "16",
+                      "style": "V2Mono",
+                      "w": 64
+                    },
+                    {
+                      "text": "17",
+                      "style": "V2Mono",
+                      "w": 64
+                    }
+                  ],
+                  "w": "fill",
+                  "pad": {
+                    "block": "space.tight",
+                    "inline": "space.snug"
+                  }
+                },
+                {
+                  "stack": "type/body/leading",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "text": "type/body/leading",
+                      "style": "V2Mono",
+                      "w": "fill"
+                    },
+                    {
+                      "text": "24",
+                      "style": "V2Mono",
+                      "w": 64
+                    },
+                    {
+                      "text": "28",
+                      "style": "V2Mono",
+                      "w": 64
+                    }
+                  ],
+                  "w": "fill",
+                  "pad": {
+                    "block": "space.tight",
+                    "inline": "space.snug"
+                  }
+                },
+                {
+                  "stack": "type/body/family",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "text": "type/body/family",
+                      "style": "V2Mono",
+                      "w": "fill"
+                    },
+                    {
+                      "text": "Switzer",
+                      "style": "V2Mono",
+                      "w": 64
+                    },
+                    {
+                      "text": "Plex",
+                      "style": "V2Mono",
+                      "w": 64
+                    }
+                  ],
+                  "w": "fill",
+                  "pad": {
+                    "block": "space.tight",
+                    "inline": "space.snug"
+                  }
+                },
+                {
+                  "stack": "color/surface/inverse",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "text": "color/surface/inverse",
+                      "style": "V2Mono",
+                      "w": "fill"
+                    },
+                    {
+                      "text": "ink",
+                      "style": "V2Mono",
+                      "w": 64
+                    },
+                    {
+                      "text": "ink",
+                      "style": "V2Mono",
+                      "w": 64
+                    }
+                  ],
+                  "w": "fill",
+                  "pad": {
+                    "block": "space.tight",
+                    "inline": "space.snug"
+                  }
+                }
+              ],
+              "w": "fill"
+            }
+          ],
+          "w": "fill",
+          "radius": "radius.media",
+          "fill": "color.surface.page",
+          "stroke": {
+            "color": "color.border.ring",
+            "width": "size.stroke"
+          },
+          "clip": true
+        },
+        {
+          "stack": "Your app pane",
+          "dir": "col",
+          "children": [
+            {
+              "stack": "Your app head",
+              "dir": "row",
+              "children": [
+                {
+                  "text": "Your app",
+                  "style": "V2Mono",
+                  "color": "color.text.faint",
+                  "name": "Pane title"
+                }
+              ],
+              "w": "fill",
+              "pad": {
+                "block": "space.tight",
+                "inline": "space.snug"
+              }
+            },
+            {
+              "shape": "Your app rule",
+              "kind": "rect",
+              "size": [
+                1,
+                "size.stroke"
+              ],
+              "w": "fill",
+              "h": "size.stroke",
+              "fill": "color.border.grid"
+            },
+            {
+              "stack": "App",
+              "dir": "col",
+              "children": [
+                {
+                  "stack": "App En",
+                  "dir": "col",
+                  "children": [
+                    {
+                      "stack": "Field En",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "text": "Email",
+                          "style": "V2Label",
+                          "name": "Label"
+                        },
+                        {
+                          "stack": "Input",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "text": "sam@dualkit.dev",
+                              "style": "Body",
+                              "name": "Value"
+                            }
+                          ],
+                          "w": "fill",
+                          "pad": {
+                            "block": "space.snug",
+                            "inline": "space.snug"
+                          },
+                          "radius": "radius.control",
+                          "fill": "color.surface.page",
+                          "stroke": {
+                            "color": "color.border.ring",
+                            "width": "size.stroke"
+                          }
+                        },
+                        {
+                          "text": "We only use it to send receipts.",
+                          "style": "V2Small",
+                          "color": "color.text.soft",
+                          "w": "fill",
+                          "align": "start",
+                          "name": "Help"
+                        }
+                      ],
+                      "w": "fill",
+                      "gap": "space.tight",
+                      "align": "start"
+                    },
+                    {
+                      "stack": "Button En",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "Continue",
+                          "style": "V2Label",
+                          "color": "color.text.inverse",
+                          "name": "Label"
+                        },
+                        {
+                          "shape": "forward icon",
+                          "kind": "svg",
+                          "size": [
+                            "size.icon",
+                            "size.icon"
+                          ],
+                          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M3 8h10M8.5 3.5L13 8l-4.5 4.5\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                          "tint": "color.text.inverse"
+                        }
+                      ],
+                      "gap": "space.tight",
+                      "align": "center",
+                      "pad": {
+                        "block": "space.snug",
+                        "inline": "space.group"
+                      },
+                      "radius": "radius.pill",
+                      "fill": "color.surface.inverse"
+                    }
+                  ],
+                  "w": "fill",
+                  "gap": "space.item",
+                  "align": "start",
+                  "pad": "space.item"
+                },
+                {
+                  "shape": "App rule",
+                  "kind": "rect",
+                  "size": [
+                    1,
+                    "size.stroke"
+                  ],
+                  "w": "fill",
+                  "h": "size.stroke",
+                  "fill": "color.border.grid"
+                },
+                {
+                  "stack": "App Ar",
+                  "dir": "col",
+                  "children": [
+                    {
+                      "stack": "Field Ar",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "text": "البريد الإلكتروني",
+                          "style": "ArabicLabel",
+                          "name": "Label"
+                        },
+                        {
+                          "stack": "Input",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "text": "sam@dualkit.dev",
+                              "style": "Body",
+                              "name": "Value"
+                            }
+                          ],
+                          "w": "fill",
+                          "pad": {
+                            "block": "space.snug",
+                            "inline": "space.snug"
+                          },
+                          "radius": "radius.control",
+                          "fill": "color.surface.page",
+                          "stroke": {
+                            "color": "color.border.ring",
+                            "width": "size.stroke"
+                          }
+                        },
+                        {
+                          "text": "نستخدمه لإرسال الإيصالات فقط.",
+                          "style": "ArabicCaption",
+                          "color": "color.text.soft",
+                          "w": "fill",
+                          "align": "end",
+                          "name": "Help"
+                        }
+                      ],
+                      "w": "fill",
+                      "gap": "space.tight",
+                      "align": "end"
+                    },
+                    {
+                      "stack": "Button Ar",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "shape": "back icon",
+                          "kind": "svg",
+                          "size": [
+                            "size.icon",
+                            "size.icon"
+                          ],
+                          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M13 8H3M7.5 3.5L3 8l4.5 4.5\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                          "tint": "color.text.inverse"
+                        },
+                        {
+                          "text": "متابعة",
+                          "style": "ArabicLabel",
+                          "color": "color.text.inverse",
+                          "name": "Label"
+                        }
+                      ],
+                      "gap": "space.tight",
+                      "align": "center",
+                      "pad": {
+                        "block": "space.snug",
+                        "inline": "space.group"
+                      },
+                      "radius": "radius.pill",
+                      "fill": "color.surface.inverse"
+                    }
+                  ],
+                  "w": "fill",
+                  "gap": "space.item",
+                  "align": "end",
+                  "pad": "space.item"
+                }
+              ],
+              "w": "fill"
+            }
+          ],
+          "w": "fill",
+          "radius": "radius.media",
+          "fill": "color.surface.page",
+          "stroke": {
+            "color": "color.border.ring",
+            "width": "size.stroke"
+          },
+          "clip": true
+        }
+      ],
+      "w": "fill",
+      "gap": "space.snug"
+    }
+  ]
+}
