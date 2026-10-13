@@ -24,6 +24,7 @@ export const BackIcon = (p: P) => <Stroke {...p} d="M13 8H3M7.5 3.5L3 8l4.5 4.5"
 export const CheckIcon = (p: P) => <Stroke {...p} d="M3.5 8.5l3 3 6-7" />
 export const StarIcon = (p: P) => <Stroke {...p} d="M8 2.2l1.75 3.55 3.9.57-2.82 2.75.66 3.88L8 11.12l-3.49 1.83.66-3.88L2.35 6.32l3.9-.57L8 2.2z" />
 export const CursorIcon = (p: P) => <Stroke {...p} d="M3.5 2.5l9 4.2-3.9 1.2-1.3 3.9-3.8-9.3z" />
+export const FeedbackIcon = (p: P) => <Stroke {...p} d="M2.75 4.25c0-.83.67-1.5 1.5-1.5h7.5c.83 0 1.5.67 1.5 1.5v5.5c0 .83-.67 1.5-1.5 1.5H7l-3 2.5v-2.5h.25c-.83 0-1.5-.67-1.5-1.5v-5.5z" />
 export const ChevronIcon = (p: P) => <Stroke {...p} d="M4 6l4 4 4-4" />
 
 export function CopyIcon() {

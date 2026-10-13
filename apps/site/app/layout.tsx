@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { IBM_Plex_Mono, IBM_Plex_Sans_Arabic } from 'next/font/google'
 import localFont from 'next/font/local'
+import { Feedback } from '../components/Feedback'
 import './globals.css'
 
 // Switzer comes from Fontshare (ITF Free Font License, see app/fonts/LICENSE.md), so it ships with the site.
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" dir="ltr" className={`${switzer.variable} ${plexArabic.variable} ${plexMono.variable}`}>
-      <body>{children}</body>
+      <body>{children}<Feedback /></body>
     </html>
   )
 }
