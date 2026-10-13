@@ -408,9 +408,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 @media (hover: hover) { .st-tile:hover { background: #fdfdfd; } }
 .st-tile:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .st-stage { display: grid; height: 200px; align-items: center; }
-.st-layer { grid-area: 1 / 1; display: flex; flex-direction: column; align-items: center; min-width: 0; opacity: 0; translate: var(--st-from, -10px) 0; pointer-events: none; transition: opacity 220ms var(--ease-ui), translate 420ms var(--ease-expo); }
+.st-layer { grid-area: 1 / 1; display: flex; flex-direction: column; align-items: center; min-width: 0; opacity: 0; translate: var(--st-from, -10px) 0; filter: blur(3px); pointer-events: none; transition: opacity 220ms var(--ease-ui), translate 420ms var(--ease-expo), filter 260ms var(--ease-ui); }
 .st-layer[dir="rtl"] { --st-from: 10px; }
-.st-layer[data-on="true"] { opacity: 1; translate: 0 0; }
+.st-layer[data-on="true"] { opacity: 1; translate: 0 0; filter: blur(0); }
 .st-layer > .dk-field, .st-layer > .dk-date, .st-layer > .dk-toast, .st-layer > .st-sheet { width: 100%; }
 .st-layer .dk-digits__boxes { gap: 8px; }
 .st-layer .dk-digits__box { inline-size: 32px; block-size: 40px; font-size: 20px; }
@@ -427,4 +427,4 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .st-stage { height: auto; padding-block: 24px; }
   .st-head .cmd { max-width: 100%; width: 100%; }
 }
-@media (prefers-reduced-motion: reduce) { .st-layer { translate: 0 0; transition: opacity 120ms linear; } }
+@media (prefers-reduced-motion: reduce) { .st-layer { translate: 0 0; filter: none; transition: opacity 120ms linear; } }
