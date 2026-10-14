@@ -84,6 +84,14 @@ Then in your CSS:
 
 `<html lang="ar" dir="rtl">` switches to Arabic type, and `data-theme="dark"` to dark mode. More in [the starter README](packages/starter/README.md).
 
+## Contributing
+
+The most useful help right now:
+
+- **Read Arabic?** Review the skill rules in [`skills/`](skills/) and comment wherever something reads wrong. See [#6](https://github.com/dualkit/dualkit/issues/6).
+- **Shipping in the Gulf?** Tell us where it breaks in [Discussions](https://github.com/dualkit/dualkit/discussions).
+- **Want a first PR?** Saudi phone numbers ([#2](https://github.com/dualkit/dualkit/issues/2)) and the other Gulf currencies ([#3](https://github.com/dualkit/dualkit/issues/3)) are small and well scoped.
+
 ## Repo
 
 | Path | Contents |
