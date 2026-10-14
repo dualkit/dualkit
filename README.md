@@ -21,6 +21,8 @@ Ask Claude Code or Cursor for a bilingual screen and you get the same three bugs
 
 Dualkit fixes them at the source, in the agent and in the code.
 
+<p align="center"><img src=".github/assets/demo.gif" alt="Claude Code builds an Arabic checkout. Without Dualkit the phone number renders backwards; with the skills loaded it is isolated and reads left to right." width="100%"></p>
+
 | | What it is | Install |
 | --- | --- | --- |
 | **[Skills](skills/)** | Four agent skills for Claude Code and Cursor: RTL layout, Arabic and Latin type pairing, Gulf formats, bilingual copy | `/plugin marketplace add dualkit/dualkit` |
