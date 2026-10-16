@@ -1,5 +1,5 @@
 import { afterAll, describe, expect, it } from 'vitest'
-import { closeBrowser, modelAt, modelOf } from './helpers/browser'
+import { closeBrowser, modelAt, modelOf, timeRead } from './helpers/browser'
 
 afterAll(closeBrowser)
 
@@ -102,5 +102,66 @@ describe('options', () => {
   it('skips excluded regions and survives an invalid selector', async () => {
     const m = await modelOf(doc('<div class="skip"><p>تخطى</p></div><p>اقرأ</p>'), { exclude: ['.skip', '[[['] })
     expect(m.texts.map((t) => t.text)).toEqual(['اقرأ'])
+  })
+})
+
+describe('real page fixes', () => {
+  const svg = (attrs: string, inner = '<path d="M2 8h12"/>') => `<svg ${attrs} width="16" height="16" viewBox="0 0 16 16">${inner}</svg>`
+
+  it('reports a wrapped icon once, on the innermost element', async () => {
+    const m = await modelOf(doc(`<span class="icon">${svg('style="transform:scaleX(-1)"', '<use href="#arrow-left"/>')}</span>`))
+    expect(m.icons).toHaveLength(1)
+    expect(m.icons[0]).toMatchObject({ name: 'arrow-left', mirrored: true })
+  })
+
+  it('prefers the icon class over aria-label', async () => {
+    const m = await modelOf(doc(svg('class="lucide lucide-chevron-left" aria-label="رجوع"')))
+    expect(m.icons[0]!.name).toBe('chevron-left')
+  })
+
+  it('falls back to aria-label when nothing else names the icon', async () => {
+    const m = await modelOf(doc(svg('aria-label="Close"')))
+    expect(m.icons[0]!.name).toBe('close')
+  })
+
+  it('reads 5,000 inline spans in one block quickly', async () => {
+    const spans = Array.from({ length: 5000 }, (_, i) => `<span>كلمة${i} </span>`).join('')
+    const { ms, texts } = await timeRead(doc(`<pre>${spans}</pre>`))
+    expect(texts).toBe(5000)
+    expect(ms).toBeLessThan(1500)
+  })
+
+  it('reads 5,000 style rules quickly and still finds the physical one', async () => {
+    const css = Array.from({ length: 5000 }, (_, i) => `div:not(.r${i}){color:red}`).join('') + '.x{margin-left:8px}'
+    const filler = '<div>نص</div>'.repeat(2000)
+    const t = Date.now()
+    const m = await modelOf(doc(`${filler}<div class="x">نص</div>`, css))
+    expect(m.layouts.find((l) => l.id.includes('div.x'))?.physical).toEqual([{ property: 'margin-left', value: '8px' }])
+    expect(Date.now() - t).toBeLessThan(1500)
+  })
+
+  it('does not report a physical property that a later rule zeroed out', async () => {
+    const m = await modelOf(doc('<div class="w">نص</div><div class="a">نص</div>', '.w{margin-left:16px}.w{margin-inline-start:16px;margin-left:0}.a{margin-left:16px}'))
+    expect(m.layouts).toHaveLength(1)
+    expect(m.layouts[0]!.id).toContain('div.a')
+  })
+
+  it('walks @import stylesheets', async () => {
+    const m = await modelAt('http://a.test/', {
+      'http://a.test/': { body: doc('<div class="i">نص</div>', '@import url("http://a.test/i.css");').replace('<style>', '<style>@import url("http://a.test/i.css");'), type: 'text/html' },
+      'http://a.test/i.css': { body: '.i{padding-left:20px}', type: 'text/css' },
+    })
+    expect(m.layouts.find((l) => l.id.includes('div.'))?.physical).toEqual([{ property: 'padding-left', value: '20px' }])
+  })
+
+  it('treats the sr-only pattern as hidden text', async () => {
+    const m = await modelOf(doc('<span style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">للقراءة فقط</span><p>ظاهر</p>'))
+    expect(m.texts.map((t) => t.text)).toEqual(['ظاهر'])
+  })
+
+  it('does not isolate on an empty or invalid dir attribute', async () => {
+    const m = await modelOf(doc('<p>الهاتف <span dir="">050 123 4567</span> <span dir="foo">050 123 4568</span></p>'))
+    expect(m.texts.find((t) => t.text === '050 123 4567')?.isolated).toBe(false)
+    expect(m.texts.find((t) => t.text === '050 123 4568')?.isolated).toBe(false)
   })
 })

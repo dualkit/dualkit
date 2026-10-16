@@ -45,6 +45,25 @@ export async function modelAt(url: string, routes: Record<string, { body: string
   }
 }
 
+/**
+ * Times the read inside the page and returns only counts, so a huge model is never copied out
+ * (every run carries its block text, so a 5,000-run block would be a quarter of a gigabyte).
+ */
+export async function timeRead(html: string): Promise<{ ms: number; texts: number }> {
+  const p = await page()
+  try {
+    await p.setContent(html)
+    await p.addScriptTag({ content: await readerSource() })
+    return await p.evaluate(() => {
+      const start = performance.now()
+      const m = (globalThis as unknown as { dualkitReader: { readScreen: (d: Document) => { texts: unknown[] } } }).dualkitReader.readScreen(document)
+      return { ms: performance.now() - start, texts: m.texts.length }
+    })
+  } finally {
+    await p.close()
+  }
+}
+
 export async function closeBrowser(): Promise<void> {
   if (browser) await (await browser).close()
   browser = null
