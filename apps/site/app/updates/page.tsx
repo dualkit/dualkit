@@ -4,7 +4,7 @@ import { CheckIcon, RssIcon, StarIcon } from '@/components/icons'
 import { Nav } from '@/components/Nav'
 import { Reveal } from '@/components/Reveal'
 import { liveData } from '@/lib/live'
-import { RELEASES, UP_NEXT, displayDate } from '@/lib/updates'
+import { RELEASES, UP_NEXT, displayDate, progress } from '@/lib/updates'
 
 export const metadata: Metadata = { title: 'Updates', description: 'Every Dualkit release, newest first.' }
 export const revalidate = 300
@@ -42,9 +42,20 @@ export default async function Updates() {
         <section className="entry next">
           <div className="entry-rail"><span className="entry-date">Up next</span></div>
           <div className="next-cards">
-            {UP_NEXT.map((n) => (
-              <div className="card" key={n.title}><div className="card-head"><h3>{n.title}</h3><span className="tag">{n.state}</span></div><p className="soft">{n.line}</p></div>
-            ))}
+            {UP_NEXT.map((n) => {
+              const p = progress(n)
+              return (
+                <div className="card" key={n.title}>
+                  <div className="card-head"><h3>{n.title}</h3><span className="tag">{n.state}</span></div>
+                  <p className="soft">{n.line}</p>
+                  <div className="meter" role="progressbar" aria-label={`${n.title} progress`} aria-valuenow={p.percent} aria-valuemin={0} aria-valuemax={100}>
+                    <div className="meter-head"><span className="figure-sm">{p.percent}%</span><span className="small soft">{p.done} of {p.total} steps</span></div>
+                    <div className="meter-track"><span style={{ width: `${p.percent}%` }} /></div>
+                    <ol className="meter-steps small">{n.steps.map(([label, ok]) => <li key={label} className={ok ? 'done' : undefined}>{label}</li>)}</ol>
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </section>
       </main>
