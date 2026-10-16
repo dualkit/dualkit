@@ -49,9 +49,8 @@ export default async function Updates() {
                   <div className="card-head"><h3>{n.title}</h3><span className="tag">{n.state}</span></div>
                   <p className="soft">{n.line}</p>
                   <div className="meter" role="progressbar" aria-label={`${n.title} progress`} aria-valuenow={p.percent} aria-valuemin={0} aria-valuemax={100}>
-                    <div className="meter-head"><span className="figure-sm">{p.percent}%</span><span className="small soft">{p.done} of {p.total} steps</span></div>
+                    <span className="figure-sm">{p.percent}%</span>
                     <div className="meter-track"><span style={{ width: `${p.percent}%` }} /></div>
-                    <ol className="meter-steps small">{n.steps.map(([label, ok]) => <li key={label} className={ok ? 'done' : undefined}>{label}</li>)}</ol>
                   </div>
                 </div>
               )

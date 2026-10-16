@@ -35,14 +35,12 @@ describe('rss', () => {
 describe('roadmap', () => {
   it('counts progress from its steps, never a typed number', async () => {
     const { progress } = await import('../lib/updates')
-    expect(progress({ title: 't', line: 'l', state: 'Planned', steps: [['a', true], ['b', false], ['c', false]] })).toEqual({ done: 1, total: 3, percent: 33 })
+    expect(progress({ title: 't', line: 'l', state: 'Coming', steps: [['a', true], ['b', false], ['c', false]] })).toEqual({ done: 1, total: 3, percent: 33 })
   })
 
-  it('marks work in review only when the last step is the one left', async () => {
+  it('never shows a percentage that no step backs up', async () => {
     const { UP_NEXT, progress } = await import('../lib/updates')
-    for (const item of UP_NEXT.filter((i) => i.state === 'In review')) {
-      const p = progress(item)
-      expect(p.done, item.title).toBe(p.total - 1)
-    }
+    for (const item of UP_NEXT) expect(item.steps.length, item.title).toBeGreaterThan(0)
+    expect(UP_NEXT.filter((i) => i.state === 'In progress').every((i) => progress(i).done > 0)).toBe(true)
   })
 })
