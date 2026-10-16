@@ -9,6 +9,8 @@ export type ReadOptions = { exclude?: string[] }
 const SKIP_TEXT = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE', 'TITLE'])
 const CODE_FIELD = /iban|card|cc-number|otp|one-time-code|postal|zip|code/i
 const ISOLATING_DIR = /^(ltr|rtl|auto)$/i
+const BLOCK_TEXT_CAP = 600
+const BLOCK_TEXT_KEEP = 300
 const CLIPPED = /^rect\(\s*(0|1)(px)?[\s,)]/
 
 export function readScreen(doc: Document, options: ReadOptions = {}): ScreenModel {
@@ -57,6 +59,11 @@ function isolatedBelow(el: Element, block: Element, style: Style): boolean {
   return false
 }
 
+/** Long blocks keep their first and last 300 characters, so the model stays small however many runs share a block. */
+function capBlockText(full: string): string {
+  return full.length <= BLOCK_TEXT_CAP ? full : `${full.slice(0, BLOCK_TEXT_KEEP)}…${full.slice(-BLOCK_TEXT_KEEP)}`
+}
+
 function fontOf(s: CSSStyleDeclaration): Font {
   return {
     families: s.fontFamily.split(',').map((f) => f.trim().replace(/^["']|["']$/g, '')),
@@ -77,14 +84,18 @@ function screenReaderOnly(el: Element, s: CSSStyleDeclaration): boolean {
 
 function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, ref: Ref, rect: (r: DOMRect) => Rect, pathOf: (el: Element) => string): TextRun[] {
   const runs: TextRun[] = []
-  const blockCache = new Map<Element, { block: Element; id: string; text: string; dir: ReturnType<typeof dirOf> }>()
+  const blockCache = new Map<Element, { block: Element; id: string; full: string; text: string; dir: ReturnType<typeof dirOf> }>()
   const hidden = new Map<Element, boolean>()
+  const newBlockInfo = (block: Element) => {
+    const full = clean(block.textContent ?? '')
+    return { block, id: pathOf(block), full, text: capBlockText(full), dir: dirOf(style(block)) }
+  }
   const blockInfo = (parent: Element) => {
     const hit = blockCache.get(parent)
     if (hit) return hit
     const block = blockOf(parent, style)
     const shared = blockCache.get(block)
-    const info = shared ?? { block, id: pathOf(block), text: clean(block.textContent ?? ''), dir: dirOf(style(block)) }
+    const info = shared ?? newBlockInfo(block)
     blockCache.set(parent, info)
     blockCache.set(block, info)
     return info
@@ -104,13 +115,13 @@ function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, re
     const range = doc.createRange()
     range.selectNodeContents(node)
     const lines = new Set(Array.from(range.getClientRects()).map((r) => Math.round(r.top))).size
-    const { block, id, text: blockText, dir: blockDir } = blockInfo(parent)
+    const { block, id, full, text: blockText, dir: blockDir } = blockInfo(parent)
     const s = style(parent)
     runs.push({
       ...ref(parent, rect(range.getBoundingClientRect())),
       text, blockId: id, blockText, blockDir, dir: dirOf(s),
       lang: parent.closest('[lang]')?.getAttribute('lang') || null,
-      isolated: isolatedBelow(parent, block, style), isLastInBlock: blockText.endsWith(text),
+      isolated: isolatedBelow(parent, block, style), isLastInBlock: full.endsWith(text),
       font: fontOf(s), lines: Math.max(1, lines),
     })
   }

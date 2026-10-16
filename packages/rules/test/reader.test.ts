@@ -129,6 +129,10 @@ describe('real page fixes', () => {
     const { ms, texts } = await timeRead(doc(`<pre>${spans}</pre>`))
     expect(texts).toBe(5000)
     expect(ms).toBeLessThan(1500)
+    const t = Date.now()
+    const m = await modelOf(doc(`<pre>${spans}</pre>`))
+    expect(m.texts).toHaveLength(5000)
+    expect(Date.now() - t).toBeLessThan(5000)
   })
 
   it('reads 5,000 style rules quickly and still finds the physical one', async () => {
@@ -163,5 +167,17 @@ describe('real page fixes', () => {
     const m = await modelOf(doc('<p>الهاتف <span dir="">050 123 4567</span> <span dir="foo">050 123 4568</span></p>'))
     expect(m.texts.find((t) => t.text === '050 123 4567')?.isolated).toBe(false)
     expect(m.texts.find((t) => t.text === '050 123 4568')?.isolated).toBe(false)
+  })
+
+  it('caps block text on every run but still decides isLastInBlock from the full text', async () => {
+    const spans = Array.from({ length: 2000 }, (_, i) => `<span>كلمة${i}</span> `).join('')
+    const m = await modelOf(doc(`<p>${spans}</p>`))
+    expect(m.texts).toHaveLength(2000)
+    for (const t of m.texts) {
+      expect(t.blockText.length).toBeLessThanOrEqual(601)
+      expect(t.blockText.startsWith('كلمة0 كلمة1')).toBe(true)
+      expect(t.blockText.endsWith('كلمة1999')).toBe(true)
+    }
+    expect(m.texts.filter((t) => t.isLastInBlock).map((t) => t.text)).toEqual(['كلمة1999'])
   })
 })
