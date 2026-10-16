@@ -1,0 +1,178 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "dualkit",
+  "homepage": "https://dualkit.dev",
+  "items": [
+    {
+      "name": "base",
+      "type": "registry:lib",
+      "title": "Dualkit base",
+      "description": "Tokens, component styles, icons and the direction helpers every Dualkit component shares.",
+      "files": [
+        {
+          "path": "generated/tokens.css",
+          "type": "registry:file",
+          "target": "components/dualkit/tokens.css"
+        },
+        {
+          "path": "components/styles.css",
+          "type": "registry:file",
+          "target": "components/dualkit/styles.css"
+        },
+        {
+          "path": "components/direction.ts",
+          "type": "registry:lib",
+          "target": "components/dualkit/direction.ts"
+        },
+        {
+          "path": "components/icons.tsx",
+          "type": "registry:ui",
+          "target": "components/dualkit/icons.tsx"
+        },
+        {
+          "path": "components/useSwipeDismiss.ts",
+          "type": "registry:hook",
+          "target": "components/dualkit/useSwipeDismiss.ts"
+        }
+      ],
+      "docs": "Import components/dualkit/tokens.css, then components/dualkit/styles.css, once in your root layout. Set lang and dir on <html>: lang=\"ar\" dir=\"rtl\" switches to Arabic type and mirrors the layout."
+    },
+    {
+      "name": "amount",
+      "type": "registry:ui",
+      "title": "Amount",
+      "description": "Money in all six Gulf currencies, isolated from the sentence, with Arabic-Indic digits in Arabic.",
+      "dependencies": [
+        "@dualkit/format"
+      ],
+      "registryDependencies": [
+        "https://dualkit.dev/r/base.json"
+      ],
+      "files": [
+        {
+          "path": "components/Amount.tsx",
+          "type": "registry:ui",
+          "target": "components/dualkit/Amount.tsx"
+        }
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Forward and back icons flip with the reading direction; close and check never do.",
+      "registryDependencies": [
+        "https://dualkit.dev/r/base.json"
+      ],
+      "files": [
+        {
+          "path": "components/Button.tsx",
+          "type": "registry:ui",
+          "target": "components/dualkit/Button.tsx"
+        }
+      ]
+    },
+    {
+      "name": "date-display",
+      "type": "registry:ui",
+      "title": "Date display",
+      "description": "Gregorian with Umm al-Qura Hijri, pinned to Gulf time.",
+      "dependencies": [
+        "@dualkit/format"
+      ],
+      "registryDependencies": [
+        "https://dualkit.dev/r/base.json"
+      ],
+      "files": [
+        {
+          "path": "components/DateDisplay.tsx",
+          "type": "registry:ui",
+          "target": "components/dualkit/DateDisplay.tsx"
+        }
+      ]
+    },
+    {
+      "name": "digit-input",
+      "type": "registry:ui",
+      "title": "Digit input",
+      "description": "One-time code boxes that read Western, Arabic-Indic and Persian digits, typed or pasted.",
+      "dependencies": [
+        "@dualkit/format"
+      ],
+      "registryDependencies": [
+        "https://dualkit.dev/r/base.json"
+      ],
+      "files": [
+        {
+          "path": "components/DigitInput.tsx",
+          "type": "registry:ui",
+          "target": "components/dualkit/DigitInput.tsx"
+        }
+      ]
+    },
+    {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "description": "A text field whose value keeps its own direction, so an email or IBAN stays left to right in an Arabic form.",
+      "registryDependencies": [
+        "https://dualkit.dev/r/base.json"
+      ],
+      "files": [
+        {
+          "path": "components/Field.tsx",
+          "type": "registry:ui",
+          "target": "components/dualkit/Field.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet",
+      "description": "A modal side sheet from the inline end: right in English, left in Arabic. Traps focus and swipes back to close.",
+      "registryDependencies": [
+        "https://dualkit.dev/r/base.json"
+      ],
+      "files": [
+        {
+          "path": "components/Sheet.tsx",
+          "type": "registry:ui",
+          "target": "components/dualkit/Sheet.tsx"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "WAI-ARIA tabs where the arrow keys follow the reading direction.",
+      "registryDependencies": [
+        "https://dualkit.dev/r/base.json"
+      ],
+      "files": [
+        {
+          "path": "components/Tabs.tsx",
+          "type": "registry:ui",
+          "target": "components/dualkit/Tabs.tsx"
+        }
+      ]
+    },
+    {
+      "name": "toast",
+      "type": "registry:ui",
+      "title": "Toast",
+      "description": "A status toast that swipes away towards the inline end and pauses on hover and focus.",
+      "registryDependencies": [
+        "https://dualkit.dev/r/base.json"
+      ],
+      "files": [
+        {
+          "path": "components/Toast.tsx",
+          "type": "registry:ui",
+          "target": "components/dualkit/Toast.tsx"
+        }
+      ]
+    }
+  ]
+}

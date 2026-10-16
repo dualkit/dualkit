@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "date-display",
+  "type": "registry:ui",
+  "title": "Date display",
+  "description": "Gregorian with Umm al-Qura Hijri, pinned to Gulf time.",
+  "dependencies": [
+    "@dualkit/format"
+  ],
+  "registryDependencies": [
+    "https://dualkit.dev/r/base.json"
+  ],
+  "files": [
+    {
+      "path": "components/DateDisplay.tsx",
+      "type": "registry:ui",
+      "target": "components/dualkit/DateDisplay.tsx",
+      "content": "import { formatHijri, toArabicDigits } from '@dualkit/format'\nimport type { ReactNode } from 'react'\nimport { cx } from './direction'\nimport { Icon } from './icons'\n\nexport type DateDisplayProps = {\n  date: Date\n  locale?: 'en' | 'ar'\n  /** Which calendar leads. The other sits underneath. */\n  calendar?: 'gregorian' | 'hijri'\n  /** Gulf Standard Time by default, so the day never shifts with the visitor's clock. */\n  timeZone?: string\n  label?: ReactNode\n  zone?: ReactNode\n  className?: string\n}\n\n// Names are written out, so every browser prints the same words whatever locale data it ships.\nconst WEEKDAYS = {\n  en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],\n  ar: ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'],\n}\nconst MONTHS = {\n  en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],\n  ar: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'],\n}\n\n/** Year, month and day as the clock reads in that time zone. en-US is used only for its digits, which every Intl build has. */\nfunction partsIn(date: Date, timeZone: string) {\n  const parts = new Intl.DateTimeFormat('en-US', { timeZone, year: 'numeric', month: 'numeric', day: 'numeric' }).formatToParts(date)\n  const get = (type: string) => Number(parts.find((p) => p.type === type)?.value)\n  const year = get('year'), month = get('month'), day = get('day')\n  return { year, month, day, weekday: new Date(Date.UTC(year, month - 1, day)).getUTCDay() }\n}\n\nexport function formatGregorian(date: Date, locale: 'en' | 'ar', timeZone: string) {\n  const { year, month, day, weekday } = partsIn(date, timeZone)\n  if (locale === 'en') return `${WEEKDAYS.en[weekday]}, ${day} ${MONTHS.en[month - 1]} ${year}`\n  return `${WEEKDAYS.ar[weekday]}، ${toArabicDigits(day)} ${MONTHS.ar[month - 1]} ${toArabicDigits(year)}`\n}\n\nconst iso = (date: Date, timeZone: string) => {\n  const { year, month, day } = partsIn(date, timeZone)\n  return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`\n}\n\n/** Gregorian and Umm al-Qura Hijri together, each isolated so neither reorders the other. */\nexport function DateDisplay({ date, locale = 'en', calendar = 'gregorian', timeZone = 'Asia/Dubai', label, zone, className }: DateDisplayProps) {\n  if (Number.isNaN(date.getTime())) throw new RangeError('DateDisplay needs a valid date')\n  const gregorian = formatGregorian(date, locale, timeZone)\n  const hijri = formatHijri(date, { locale, numerals: locale === 'ar' ? 'arab' : 'latn', timeZone })\n  const [first, second] = calendar === 'hijri' ? [hijri, gregorian] : [gregorian, hijri]\n  return (\n    <div className={cx('dk-date', className)}>\n      {label != null && <span className=\"dk-label\">{label}</span>}\n      <time className=\"dk-date__box\" dateTime={iso(date, timeZone)}>\n        <span className=\"dk-secondary\"><Icon name=\"calendar\" /></span>\n        <span className=\"dk-date__lines\">\n          <bdi className=\"dk-date__line dk-body\">{first}</bdi>\n          <bdi className=\"dk-date__line dk-caption dk-secondary\">{second}</bdi>\n        </span>\n      </time>\n      {zone != null && <span className=\"dk-caption dk-tertiary\">{zone}</span>}\n    </div>\n  )\n}\n"
+    }
+  ]
+}

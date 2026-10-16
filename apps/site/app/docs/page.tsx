@@ -24,12 +24,14 @@ export default async function Docs() {
     <>
       <Nav stars={live.stars} />
       <main className="wrap page docs">
-        <header className="page-head"><h1 className="rise">Docs</h1><p className="lede">Two installs. The skills teach your agent, the library does the formatting.</p></header>
+        <header className="page-head"><h1 className="rise">Docs</h1><p className="lede">The skills teach your agent, the library does the formatting, and the components are yours to change.</p></header>
         <section className="doc-block" id="skills">
           <h2 className="h2">Skills</h2>
           <p className="soft">In Claude Code, add the marketplace, then install the plugin. In Cursor, copy <code>cursor/rules</code> into your project&rsquo;s <code>.cursor/rules</code>.</p>
           <CopyCommand command={SKILLS_COMMAND} />
           <CopyCommand command="/plugin install dualkit@dualkit" />
+          <p className="small soft">Any other agent that reads skills, such as Codex or Cursor:</p>
+          <CopyCommand command="npx skills add dualkit/dualkit" />
           <p className="small soft">Four skills load on their own when the task calls for them: RTL layout, type pairing, Gulf formats and bilingual copy.</p>
         </section>
         <section className="doc-block" id="format">
@@ -41,6 +43,12 @@ export default async function Docs() {
             ))}
           </div>
           <p className="small soft">The parse functions never throw. They return <code>{'{ ok: false, error: { code, message } }'}</code>, and the code is stable, so you can map it to your own Arabic and English copy.</p>
+        </section>
+        <section className="doc-block" id="starter">
+          <h2 className="h2">Starter components</h2>
+          <p className="soft">Each of the eight installs with the shadcn CLI as source you own, along with the shared tokens and styles.</p>
+          <CopyCommand command="npx shadcn@latest add https://dualkit.dev/r/amount.json" />
+          <p className="small soft">Swap <code>amount</code> for <code>button</code>, <code>date-display</code>, <code>digit-input</code>, <code>field</code>, <code>sheet</code>, <code>tabs</code> or <code>toast</code>. Then import <code>components/dualkit/tokens.css</code> and <code>styles.css</code> once.</p>
         </section>
         <section className="doc-block">
           <h2 className="h2">Source</h2>

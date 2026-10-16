@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tabs",
+  "type": "registry:ui",
+  "title": "Tabs",
+  "description": "WAI-ARIA tabs where the arrow keys follow the reading direction.",
+  "registryDependencies": [
+    "https://dualkit.dev/r/base.json"
+  ],
+  "files": [
+    {
+      "path": "components/Tabs.tsx",
+      "type": "registry:ui",
+      "target": "components/dualkit/Tabs.tsx",
+      "content": "import { useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'\nimport { cx, directionOf } from './direction'\n\nexport type TabItem = { id: string; label: ReactNode; panel: ReactNode }\nexport type TabsProps = {\n  /** Names the tab list for screen readers. */\n  label: string\n  items: readonly TabItem[]\n  value?: string\n  defaultValue?: string\n  onValueChange?: (id: string) => void\n  className?: string\n}\n\n/**\n * The WAI-ARIA tabs pattern with automatic activation. Arrow keys move towards the\n * reading end, so ArrowLeft goes forward in Arabic; Home and End do not change.\n */\nexport function Tabs({ label, items, value, defaultValue, onValueChange, className }: TabsProps) {\n  const [own, setOwn] = useState(defaultValue ?? items[0]?.id)\n  const current = value ?? own\n  const base = useId()\n  const refs = useRef<Array<HTMLButtonElement | null>>([])\n  const tabId = (id: string) => `${base}-tab-${id}`\n  const panelId = (id: string) => `${base}-panel-${id}`\n\n  const select = (k: number) => {\n    const item = items[k]\n    if (!item) return\n    refs.current[k]?.focus()\n    if (item.id === current) return\n    if (value === undefined) setOwn(item.id)\n    onValueChange?.(item.id)\n  }\n\n  const onKeyDown = (k: number, e: KeyboardEvent<HTMLButtonElement>) => {\n    const n = items.length\n    const forward = directionOf(e.currentTarget) === 'rtl' ? 'ArrowLeft' : 'ArrowRight'\n    const back = forward === 'ArrowLeft' ? 'ArrowRight' : 'ArrowLeft'\n    const target = e.key === forward ? (k + 1) % n : e.key === back ? (k - 1 + n) % n : e.key === 'Home' ? 0 : e.key === 'End' ? n - 1 : -1\n    if (target < 0) return\n    e.preventDefault()\n    select(target)\n  }\n\n  const active = items.find((i) => i.id === current) ?? items[0]\n  return (\n    <div className={cx('dk-tabs', className)}>\n      <div className=\"dk-tabs__list\" role=\"tablist\" aria-label={label}>\n        {items.map((item, k) => {\n          const on = item.id === active?.id\n          return (\n            <button key={item.id} ref={(el) => { refs.current[k] = el }} type=\"button\" role=\"tab\" id={tabId(item.id)}\n              className=\"dk-tabs__tab\" aria-selected={on} aria-controls={panelId(item.id)} tabIndex={on ? 0 : -1}\n              onClick={() => select(k)} onKeyDown={(e) => onKeyDown(k, e)}>\n              {item.label}\n            </button>\n          )\n        })}\n      </div>\n      {items.map((item) => (\n        <div key={item.id} className=\"dk-tabs__panel\" role=\"tabpanel\" id={panelId(item.id)} aria-labelledby={tabId(item.id)}\n          tabIndex={0} hidden={item.id !== active?.id}>\n          {item.panel}\n        </div>\n      ))}\n    </div>\n  )\n}\n"
+    }
+  ]
+}

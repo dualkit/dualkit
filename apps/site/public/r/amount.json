@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "amount",
+  "type": "registry:ui",
+  "title": "Amount",
+  "description": "Money in all six Gulf currencies, isolated from the sentence, with Arabic-Indic digits in Arabic.",
+  "dependencies": [
+    "@dualkit/format"
+  ],
+  "registryDependencies": [
+    "https://dualkit.dev/r/base.json"
+  ],
+  "files": [
+    {
+      "path": "components/Amount.tsx",
+      "type": "registry:ui",
+      "target": "components/dualkit/Amount.tsx",
+      "content": "import { formatMoney, type Currency } from '@dualkit/format'\nimport type { ReactNode } from 'react'\nimport { cx } from './direction'\n\nexport type AmountProps = {\n  amount: number\n  currency: Currency\n  /** Arabic puts the abbreviation after the number and uses Arabic-Indic digits. */\n  locale?: 'en' | 'ar'\n  label?: ReactNode\n  note?: ReactNode\n  className?: string\n}\n\n/** The figure sits in a bdi, so it never trades places with the words around it. */\nexport function Amount({ amount, currency, locale = 'en', label, note, className }: AmountProps) {\n  const figure = formatMoney(amount, { currency, locale, numerals: locale === 'ar' ? 'arab' : 'latn' })\n  return (\n    <div className={cx('dk-amount', className)}>\n      {label != null && <span className=\"dk-caption dk-secondary\">{label}</span>}\n      <bdi className=\"dk-amount__figure\">{figure}</bdi>\n      {note != null && <span className=\"dk-caption dk-tertiary\">{note}</span>}\n    </div>\n  )\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button",
+  "type": "registry:ui",
+  "title": "Button",
+  "description": "Forward and back icons flip with the reading direction; close and check never do.",
+  "registryDependencies": [
+    "https://dualkit.dev/r/base.json"
+  ],
+  "files": [
+    {
+      "path": "components/Button.tsx",
+      "type": "registry:ui",
+      "target": "components/dualkit/Button.tsx",
+      "content": "import type { ButtonHTMLAttributes } from 'react'\nimport { cx } from './direction'\nimport { Icon, type IconName } from './icons'\n\nexport type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {\n  variant?: 'primary' | 'secondary'\n  /** forward and back flip with the reading direction; the others never do. */\n  icon?: IconName\n}\n\nexport function Button({ variant = 'primary', icon, className, type = 'button', children, ...rest }: ButtonProps) {\n  return (\n    <button {...rest} type={type} className={cx('dk-button', `dk-button--${variant}`, className)}>\n      <span className=\"dk-button__label\">{children}</span>\n      {icon && <Icon name={icon} />}\n    </button>\n  )\n}\n"
+    }
+  ]
+}

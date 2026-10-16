@@ -50,6 +50,12 @@ In Claude Code:
 /plugin install dualkit@dualkit
 ```
 
+In any agent that reads skills (Claude Code, Cursor, Codex and others):
+
+```
+npx skills add dualkit/dualkit
+```
+
 In Cursor, copy [`cursor/rules`](cursor/rules/) into your project's `.cursor/rules`. The rules are generated from the same source as the skills, and CI fails if they drift.
 
 ## Format
@@ -83,6 +89,14 @@ Then in your CSS:
 ```
 
 `<html lang="ar" dir="rtl">` switches to Arabic type, and `data-theme="dark"` to dark mode. More in [the starter README](packages/starter/README.md).
+
+The eight components install with the shadcn CLI, as source you own:
+
+```
+npx shadcn@latest add https://dualkit.dev/r/amount.json
+```
+
+Swap `amount` for `button`, `date-display`, `digit-input`, `field`, `sheet`, `tabs` or `toast`.
 
 ## Contributing
 

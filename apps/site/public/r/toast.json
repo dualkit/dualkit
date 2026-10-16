@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toast",
+  "type": "registry:ui",
+  "title": "Toast",
+  "description": "A status toast that swipes away towards the inline end and pauses on hover and focus.",
+  "registryDependencies": [
+    "https://dualkit.dev/r/base.json"
+  ],
+  "files": [
+    {
+      "path": "components/Toast.tsx",
+      "type": "registry:ui",
+      "target": "components/dualkit/Toast.tsx",
+      "content": "import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react'\nimport { cx } from './direction'\nimport { Icon, type IconName } from './icons'\nimport { useSwipeDismiss } from './useSwipeDismiss'\n\nexport type ToastTone = 'neutral' | 'success' | 'error'\nexport type ToastProps = {\n  message: ReactNode\n  tone?: ToastTone\n  action?: { label: ReactNode; onAction: () => void }\n  onDismiss?: () => void\n  /** Milliseconds before it dismisses itself. Paused while hovered or focused. Leave out to keep it. */\n  duration?: number\n  className?: string\n}\n\nconst GLYPH: Record<ToastTone, IconName> = { neutral: 'info', success: 'check', error: 'alert' }\n\n/**\n * A status message. Mixed Arabic and English reads in order because the message is one\n * bidi paragraph in the page direction. Swipe towards the inline end, or press Escape, to dismiss.\n */\nexport function Toast({ message, tone = 'neutral', action, onDismiss, duration, className }: ToastProps) {\n  const swipe = useSwipeDismiss(onDismiss)\n  const [paused, setPaused] = useState(false)\n  const dismiss = useRef(onDismiss)\n  dismiss.current = onDismiss\n\n  useEffect(() => {\n    if (!duration || paused) return\n    const timer = setTimeout(() => dismiss.current?.(), duration)\n    return () => clearTimeout(timer)\n  }, [duration, paused])\n\n  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {\n    if (e.key === 'Escape' && onDismiss) { e.stopPropagation(); onDismiss() }\n  }\n\n  return (\n    <div role=\"status\" data-tone={tone} className={cx('dk-toast', swipe.dragging && 'dk-is-dragging', className)}\n      style={swipe.offset ? { translate: `${swipe.offset}px 0` } : undefined}\n      onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)}\n      onFocus={() => setPaused(true)} onBlur={() => setPaused(false)}\n      onKeyDown={onKeyDown} {...swipe.handlers}>\n      <Icon name={GLYPH[tone]} />\n      <p className=\"dk-toast__message dk-body\">{message}</p>\n      {action && <button type=\"button\" className=\"dk-toast__action dk-label\" onClick={action.onAction}>{action.label}</button>}\n    </div>\n  )\n}\n\n/** Holds toasts in the corner the page reads towards, newest at the bottom. */\nexport function ToastRegion({ label, children, className }: { label: string; children: ReactNode; className?: string }) {\n  return <section className={cx('dk-toast-region', className)} aria-label={label}>{children}</section>\n}\n"
+    }
+  ]
+}

@@ -47,7 +47,7 @@ export const COPY = {
     hint: 'Move over it. Click to switch.',
     hintTouch: 'Tap to switch.',
   },
-  strip: [['4', 'skills'], ['6', 'Gulf formats'], ['0', 'dependencies'], ['306', 'tests passing']] as const,
+  strip: [['4', 'skills'], ['6', 'Gulf formats'], ['0', 'dependencies'], ['311', 'tests passing']] as const,
   closing: { heading: 'Ship in both directions today.', primary: 'Get started', secondary: 'Read the docs' },
   feedback: {
     open: 'Send feedback',

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field",
+  "type": "registry:ui",
+  "title": "Field",
+  "description": "A text field whose value keeps its own direction, so an email or IBAN stays left to right in an Arabic form.",
+  "registryDependencies": [
+    "https://dualkit.dev/r/base.json"
+  ],
+  "files": [
+    {
+      "path": "components/Field.tsx",
+      "type": "registry:ui",
+      "target": "components/dualkit/Field.tsx",
+      "content": "import { useId, type InputHTMLAttributes, type ReactNode } from 'react'\nimport { cx } from './direction'\n\nexport type FieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'dir'> & {\n  label: ReactNode\n  help?: ReactNode\n  /** Replaces the help and marks the input invalid. */\n  error?: ReactNode\n}\n\n/** Label and help follow the page; the value picks its own direction, so an email stays left to right in Arabic. */\nexport function Field({ label, help, error, id, className, ...input }: FieldProps) {\n  const auto = useId()\n  const inputId = id ?? auto\n  const noteId = `${inputId}-note`\n  const note = error ?? help\n  return (\n    <div className={cx('dk-field', error != null && 'dk-field--error', className)}>\n      <label className=\"dk-label\" htmlFor={inputId}>{label}</label>\n      <input {...input} id={inputId} dir=\"auto\" className=\"dk-field__input\"\n        aria-invalid={error != null ? true : undefined} aria-describedby={note != null ? noteId : undefined} />\n      {note != null && <p id={noteId} className={cx('dk-caption', error != null ? 'dk-danger' : 'dk-secondary')}>{note}</p>}\n    </div>\n  )\n}\n"
+    }
+  ]
+}

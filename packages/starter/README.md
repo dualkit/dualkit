@@ -35,7 +35,7 @@ Eight React 19 components in `components/`, each with a real right-to-left probl
 | `Button` | `icon="forward"` and `"back"` flip with the reading direction; close and check never do. |
 | `Field` | The value takes `dir="auto"`, so an email or IBAN stays left to right in an Arabic form. |
 | `DigitInput` | Reads Western, Arabic-Indic and Persian digits, typed or pasted. Boxes stay left to right. Reports Western digits. |
-| `Amount` | AED and SAR through `@dualkit/format`, isolated in a `bdi`, Arabic-Indic digits in Arabic. |
+| `Amount` | All six Gulf currencies through `@dualkit/format`, isolated in a `bdi`, Arabic-Indic digits in Arabic. |
 | `DateDisplay` | Gregorian with Umm al-Qura Hijri, pinned to Gulf time, never shifted by the visitor's clock. |
 | `Tabs` | WAI-ARIA tabs. ArrowLeft moves forward in Arabic. |
 | `Sheet` | Modal side sheet from the inline end. Traps focus, closes on Escape, the scrim or a swipe back to its edge, returns focus. |
@@ -44,6 +44,14 @@ Eight React 19 components in `components/`, each with a real right-to-left probl
 They are source you copy in, not a compiled package, so you own them and change them like your own code.
 
 ### Copy them in
+
+With the shadcn CLI, one at a time:
+
+```sh
+npx shadcn@latest add https://dualkit.dev/r/amount.json
+```
+
+That brings in the shared base and `@dualkit/format` too. Or take all of them at once:
 
 ```sh
 npx degit dualkit/dualkit/packages/starter/components src/components/dualkit
