@@ -1,5 +1,15 @@
 import { defineRule, pick } from '../rule'
-import { ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, LATIN_TOKEN, excerpt, firstStrong } from '../text'
+import { ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, LATIN_TOKEN, arabicShare, excerpt, firstStrong } from '../text'
+
+const LATIN_LETTER = /[A-Za-zÀ-ɏ]/
+
+/** The direction a paragraph's words mostly run in, so a leading Latin word does not decide it. */
+const naturalDirection = (s: string): 'ltr' | 'rtl' | null => {
+  const share = arabicShare(s)
+  if (share > 0.5) return 'rtl'
+  if (share < 0.5 && LATIN_LETTER.test(s)) return 'ltr'
+  return firstStrong(s)
+}
 
 export const unisolatedNumber = defineRule({
   id: 'bidi/unisolated-number', group: 'bidi', severity: 'error',
@@ -29,7 +39,7 @@ export const punctuationFlip = defineRule({
   check: (m) => m.texts
     .filter((t) => {
       if (!t.isLastInBlock || t.isolated || !ENDS_WITH_PUNCTUATION.test(t.blockText)) return false
-      const natural = firstStrong(t.blockText)
+      const natural = naturalDirection(t.blockText)
       return natural !== null && natural !== t.blockDir
     })
     .map((t) => ({ node: pick(t), message: `"${excerpt(t.blockText)}" runs ${t.blockDir === 'rtl' ? 'right to left' : 'left to right'}, so its last mark moves to the start.` })),

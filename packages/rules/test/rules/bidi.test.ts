@@ -31,6 +31,12 @@ describe('bidi/punctuation-flip', () => {
   it('flags Arabic ending in punctuation inside an LTR block', () => {
     expect(ids(screen({ texts: [text({ text: 'مرحبا!', blockText: 'مرحبا!', blockDir: 'ltr' })] }))).toEqual(['bidi/punctuation-flip'])
   })
+  it('passes an Arabic-majority paragraph that starts with a Latin word', () => {
+    expect(ids(screen({ texts: [text({ text: 'iPhone 15 متوفر الآن.', blockText: 'iPhone 15 متوفر الآن.', blockDir: 'rtl' })] }))).toEqual([])
+  })
+  it('flags a mostly English paragraph set right to left', () => {
+    expect(ids(screen({ texts: [text({ text: 'Download the app now مجانا!', blockText: 'Download the app now مجانا!', blockDir: 'rtl' })] }))).toEqual(['bidi/punctuation-flip'])
+  })
   it('passes when the text matches its block, or is not last', () => {
     expect(ids(screen({ texts: [text({ text: 'مرحبا!', blockText: 'مرحبا!' })] }))).toEqual([])
     expect(ids(screen({ texts: [text({ text: 'Hi!', blockText: 'Hi! مرحبا', isLastInBlock: false })] }))).toEqual([])
