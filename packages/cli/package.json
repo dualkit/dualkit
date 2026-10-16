@@ -1,0 +1,32 @@
+{
+  "name": "dualkit",
+  "version": "0.1.0-beta.0",
+  "description": "Check any screen for Arabic and right-to-left bugs, and get a Gulf-ready report.",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "dualkit": "./dist/cli.js" },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "dependencies": {
+    "@dualkit/rules": "0.1.0-beta.0",
+    "playwright": "1.55.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  },
+  "keywords": ["arabic", "rtl", "bidi", "audit", "cli", "gulf"],
+  "author": "Sam Santos (https://snts.im)",
+  "homepage": "https://dualkit.dev",
+  "repository": { "type": "git", "url": "git+https://github.com/dualkit/dualkit.git", "directory": "packages/cli" },
+  "bugs": { "url": "https://github.com/dualkit/dualkit/issues" },
+  "publishConfig": { "access": "public" },
+  "engines": { "node": ">=18" }
+}
