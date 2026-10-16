@@ -3,7 +3,7 @@ import { join } from 'node:path'
 import { parseSkill, renderCursorRule } from './skill-file.mjs'
 
 const ROOT = join(import.meta.dirname, '../../..')
-const SKILLS = join(ROOT, 'skills')
+const SKILLS = join(ROOT, 'plugin/skills')
 const RULES = join(ROOT, 'cursor/rules')
 
 rmSync(RULES, { recursive: true, force: true })

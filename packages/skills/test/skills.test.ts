@@ -5,7 +5,7 @@ import * as format from '../../format/src/index'
 import { parseSkill, renderCursorRule } from '../scripts/skill-file.mjs'
 
 const ROOT = join(import.meta.dirname, '../../..')
-const SKILLS = join(ROOT, 'skills')
+const SKILLS = join(ROOT, 'plugin/skills')
 const RULES = join(ROOT, 'cursor/rules')
 const names = readdirSync(SKILLS).filter((n) => existsSync(join(SKILLS, n, 'SKILL.md')))
 const read = (name: string) => readFileSync(join(SKILLS, name, 'SKILL.md'), 'utf8')
@@ -73,7 +73,7 @@ describe('the Cursor rules', () => {
 describe('the Claude Code plugin', () => {
   it('lists the plugin in the marketplace', () => {
     const market = JSON.parse(readFileSync(join(ROOT, '.claude-plugin/marketplace.json'), 'utf8'))
-    const plugin = JSON.parse(readFileSync(join(ROOT, '.claude-plugin/plugin.json'), 'utf8'))
-    expect(market.plugins).toEqual([expect.objectContaining({ name: plugin.name, source: './' })])
+    const plugin = JSON.parse(readFileSync(join(ROOT, 'plugin/.claude-plugin/plugin.json'), 'utf8'))
+    expect(market.plugins).toEqual([expect.objectContaining({ name: plugin.name, source: './plugin' })])
   })
 })

@@ -14,7 +14,7 @@ export function SkillsSection() {
       </div>
       <div className="tile skill-cells">
         {s.cells.map((c) => (
-          <a className="skill-cell" key={c.name} href={`https://github.com/dualkit/dualkit/tree/main/skills/${c.name}`}>
+          <a className="skill-cell" key={c.name} href={`https://github.com/dualkit/dualkit/tree/main/plugin/skills/${c.name}`}>
             <div><code>{c.name}</code><p>{c.line}</p></div>
             <div className="score" aria-label={`Without the skill ${c.without} of 3 runs passed, with it 3 of 3`}>
               <Ticks filled={asTicks(c.without)} total={TOTAL} />

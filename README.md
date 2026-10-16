@@ -25,7 +25,7 @@ Dualkit fixes them at the source, in the agent and in the code.
 
 | | What it is | Install |
 | --- | --- | --- |
-| **[Skills](skills/)** | Four agent skills for Claude Code and Cursor: RTL layout, Arabic and Latin type pairing, Gulf formats, bilingual copy | `/plugin marketplace add dualkit/dualkit` |
+| **[Skills](plugin/skills/)** | Four agent skills for Claude Code and Cursor: RTL layout, Arabic and Latin type pairing, Gulf formats, bilingual copy | `/plugin marketplace add dualkit/dualkit` |
 | **[Format](packages/format/)** | Six Gulf currencies, Umm al-Qura dates, Arabic numerals, UAE and Saudi phone, Emirates ID, Gulf IBAN. No dependencies | `npm i @dualkit/format` |
 | **[Starter](packages/starter/)** | A bilingual design system to fork: one token file feeds CSS, Tailwind and Figma, plus eight React components | [From the release](#starter) |
 
@@ -102,7 +102,7 @@ Swap `amount` for `button`, `date-display`, `digit-input`, `field`, `sheet`, `ta
 
 The most useful help right now:
 
-- **Read Arabic?** Review the skill rules in [`skills/`](skills/) and comment wherever something reads wrong. See [#6](https://github.com/dualkit/dualkit/issues/6).
+- **Read Arabic?** Review the skill rules in [`plugin/skills/`](plugin/skills/) and comment wherever something reads wrong. See [#6](https://github.com/dualkit/dualkit/issues/6).
 - **Shipping in the Gulf?** Tell us where it breaks in [Discussions](https://github.com/dualkit/dualkit/discussions).
 - **Want a first PR?** Saudi phone numbers ([#2](https://github.com/dualkit/dualkit/issues/2)) and the other Gulf currencies ([#3](https://github.com/dualkit/dualkit/issues/3)) are small and well scoped.
 
