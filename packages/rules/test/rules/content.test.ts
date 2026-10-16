@@ -24,6 +24,18 @@ describe('content rules', () => {
     expect(out.map((f) => f.rule)).toEqual(['content/mixed-digits'])
     expect(out[0]?.message).toContain('٥٠')
   })
+  it('accepts Arabic-script language tags as Arabic', () => {
+    expect(ids(screen({ texts: [text({ lang: 'fa' })] }))).toEqual([])
+    expect(ids(screen({ texts: [text({ lang: 'ar-AE' })] }))).toEqual([])
+    expect(ids(screen({ texts: [text({ lang: 'FA-ir' })] }))).toEqual([])
+  })
+  it('still flags Arabic tagged with a non-Arabic-script language, including look-alike subtags', () => {
+    expect(ids(screen({ texts: [text({ lang: 'en' })] }))).toEqual(['content/lang-mismatch'])
+    expect(ids(screen({ texts: [text({ lang: 'art' })] }))).toEqual(['content/lang-mismatch'])
+  })
+  it('does not flag lang-mismatch when the run has no lang at all (missing-lang covers it)', () => {
+    expect(ids(screen({ texts: [text({ lang: null })] }))).toEqual([])
+  })
   it('flags placeholder text', () => {
     expect(ids(screen({ texts: [text({ text: 'لوريم إيبسوم دولور' })] }))).toEqual(['content/placeholder-text'])
   })

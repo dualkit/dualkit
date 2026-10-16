@@ -1,5 +1,11 @@
+import type { TextRun } from '../model'
 import { defineRule, pick } from '../rule'
 import { ARABIC_INDIC_DIGIT, PLACEHOLDER, WESTERN_DIGIT, arabicShare, excerpt, hasArabic } from '../text'
+
+/** Languages written in the Arabic script, matched as a whole subtag so 'art' is not Arabic. */
+const ARABIC_SCRIPT_LANG = /^(ar|fa|ur|ps|ku|ckb|sd|ug)(-|$)/i
+
+const isArabicScriptLang = (lang: string): boolean => ARABIC_SCRIPT_LANG.test(lang)
 
 export const missingLang = defineRule({
   id: 'content/missing-lang', group: 'content', severity: 'error',
@@ -26,8 +32,8 @@ export const langMismatch = defineRule({
   why: 'Screen readers read this Arabic with the wrong voice.',
   fix: 'Put lang="ar" on the element that holds the Arabic.',
   check: (m) => m.texts
-    .filter((t) => arabicShare(t.text) > 0.5 && !(t.lang ?? '').toLowerCase().startsWith('ar'))
-    .map((t) => ({ node: pick(t), message: `"${excerpt(t.text)}" is tagged ${t.lang ?? 'with no language'}.` })),
+    .filter((t): t is TextRun & { lang: string } => t.lang !== null && arabicShare(t.text) > 0.5 && !isArabicScriptLang(t.lang))
+    .map((t) => ({ node: pick(t), message: `"${excerpt(t.text)}" is tagged ${t.lang}.` })),
 })
 
 export const mixedDigits = defineRule({

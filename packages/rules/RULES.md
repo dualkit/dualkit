@@ -9,14 +9,14 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 
 **error.** Inside right-to-left text the bidi algorithm reorders digit groups split by spaces, so 050 123 4567 shows as 4567 123 050.
 
-**Fix:** Wrap the number in <bdi>, or give its element dir="ltr".
+**Fix:** Wrap the number in `<bdi>`, or give its element dir="ltr".
 
 <a id="bidi-unisolated-latin"></a>
 ### `bidi/unisolated-latin` An email, link or code that will scramble
 
 **error.** Punctuation inside emails, URLs and codes takes the direction of the Arabic around it, so dots and slashes jump to the wrong end.
 
-**Fix:** Wrap it in <bdi>, or give its element dir="ltr".
+**Fix:** Wrap it in `<bdi>`, or give its element dir="ltr".
 
 <a id="bidi-punctuation-flip"></a>
 ### `bidi/punctuation-flip` Punctuation at the wrong end
@@ -120,16 +120,16 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 <a id="content-missing-lang"></a>
 ### `content/missing-lang` No page language
 
-**error.** Without lang on <html>, screen readers guess the language and browsers pick the wrong fonts and line breaks.
+**error.** Without lang on `<html>`, screen readers guess the language and browsers pick the wrong fonts and line breaks.
 
-**Fix:** Add lang="ar" or lang="en" to <html>.
+**Fix:** Add lang="ar" or lang="en" to `<html>`.
 
 <a id="content-missing-dir"></a>
 ### `content/missing-dir` An Arabic page without dir="rtl"
 
 **error.** The page is mostly Arabic but the document still runs left to right, so the whole layout starts on the wrong side.
 
-**Fix:** Set dir="rtl" on <html> whenever lang is Arabic.
+**Fix:** Set dir="rtl" on `<html>` whenever lang is Arabic.
 
 <a id="content-lang-mismatch"></a>
 ### `content/lang-mismatch` Arabic tagged as another language
