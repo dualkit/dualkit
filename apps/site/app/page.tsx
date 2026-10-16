@@ -9,6 +9,7 @@ import { SkillsSection } from '@/components/SkillsSection'
 import { Stage } from '@/components/Stage'
 import { StarterSection } from '@/components/StarterSection'
 import { Strip } from '@/components/Strip'
+import { WorksWith } from '@/components/WorksWith'
 import { liveData } from '@/lib/live'
 
 export const revalidate = 300
@@ -21,6 +22,7 @@ export default async function Home() {
       <main id="top" className="wrap">
         <Hero />
         <Stage />
+        <WorksWith />
         <SkillsSection />
         <FormatSection />
         <StarterSection />

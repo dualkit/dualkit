@@ -9,15 +9,18 @@ export const RELEASES: readonly Release[] = [
     slug: 'v0-1-0-beta-1',
     date: '2026-10-16',
     version: 'v0.1.0-beta.1',
-    tags: ['Format', 'Starter'],
-    title: 'On npm, with Saudi phones and every Gulf currency',
+    tags: ['Format', 'Starter', 'Skills'],
+    title: 'On npm and shadcn, with Saudi phones and every Gulf currency',
     body: [
       '@dualkit/format and @dualkit/starter now install straight from npm, published from GitHub Actions with signed provenance.',
       'Format reads Saudi mobiles and landlines, and formats all six Gulf currencies. The Kuwaiti and Bahraini dinars and the Omani rial show three decimals, because they split into 1,000 fils or baisa.',
+      'The eight Starter components now install one at a time with the shadcn CLI, and the skills install into any agent with npx skills. The Claude Code plugin moved into its own folder, so it carries only the skills.',
     ],
     shipped: [
       { name: '@dualkit/format 0.1.0-beta.1', line: 'parseSaudiPhone, plus QAR, KWD, BHD and OMR in formatMoney, with 117 tests' },
       { name: '@dualkit/starter 0.1.0-beta.0', line: 'The eight bilingual components, now on npm' },
+      { name: 'shadcn registry', line: 'npx shadcn@latest add https://dualkit.dev/r/amount.json, for any of the eight' },
+      { name: 'npx skills add dualkit/dualkit', line: 'The four skills in Codex, Cursor and any agent that reads skills' },
     ],
   },
   {

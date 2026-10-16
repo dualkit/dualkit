@@ -224,6 +224,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .slide.done .label { color: #15803d; font-weight: 500; }
 
 /* Strip */
+.works { padding-top: var(--inner); display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+.works p { margin: 0; }
+.works-row { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 44px; }
+.works-row a { display: inline-flex; align-items: center; gap: 10px; padding-block: 8px; font-size: 17px; font-weight: 500; letter-spacing: -0.01em; color: var(--faint); transition: color 200ms var(--ease-ui); }
+.works-row svg { fill: currentColor; flex: none; }
+@media (hover: hover) { .works-row a:hover { color: var(--ink); } }
+.works-row a:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; border-radius: 2px; color: var(--ink); }
 .strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); box-shadow: inset 0 1px 0 var(--grid), inset 0 -1px 0 var(--grid); }
 .strip > div { display: flex; flex-direction: column; gap: 8px; padding: 56px 32px; }
 .strip > div + div { box-shadow: inset 1px 0 0 var(--grid); }
