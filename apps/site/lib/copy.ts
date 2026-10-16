@@ -1,9 +1,6 @@
 // Every line on dualkit.dev v2. Signed off in Figma by Sam on 13 Oct 2026.
-// npm has the first publish on hold; until it lands, install the identical tarball from the GitHub release.
-// Switch back to 'npm i @dualkit/format' once npm serves it.
-export const FORMAT_COMMAND = 'npm i https://github.com/dualkit/dualkit/releases/download/format-v0.1.0-beta.0/dualkit-format-0.1.0-beta.0.tgz'
-// The Starter has the same hold. Switch to 'npm i @dualkit/starter' once npm serves it.
-export const STARTER_COMMAND = 'npm i https://github.com/dualkit/dualkit/releases/download/starter-v0.1.0-beta.0/dualkit-starter-0.1.0-beta.0.tgz'
+export const FORMAT_COMMAND = 'npm i @dualkit/format'
+export const STARTER_COMMAND = 'npm i @dualkit/starter'
 export const SKILLS_COMMAND = '/plugin marketplace add dualkit/dualkit'
 export const REPO_URL = 'https://github.com/dualkit/dualkit'
 

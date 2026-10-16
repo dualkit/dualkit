@@ -35,7 +35,6 @@ export default async function Docs() {
         <section className="doc-block" id="format">
           <h2 className="h2">@dualkit/format</h2>
           <CopyCommand command={FORMAT_COMMAND} />
-          <p className="small soft">The package is on its way to npm. Until it lands, this installs the same build from the <a href="https://github.com/dualkit/dualkit/releases/tag/format-v0.1.0-beta.0">GitHub release</a>, and <code>npm i @dualkit/format</code> takes over afterwards.</p>
           <div className="card api">
             {API.map(([call, out, note]) => (
               <div className="api-row" key={call}><code>{call}</code><code className="muted">{out}</code><span className="small">{note}</span></div>

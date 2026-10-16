@@ -6,6 +6,21 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'v0-1-0-beta-1',
+    date: '2026-10-16',
+    version: 'v0.1.0-beta.1',
+    tags: ['Format', 'Starter'],
+    title: 'On npm, with Saudi phones and every Gulf currency',
+    body: [
+      '@dualkit/format and @dualkit/starter now install straight from npm, published from GitHub Actions with signed provenance.',
+      'Format reads Saudi mobiles and landlines, and formats all six Gulf currencies. The Kuwaiti and Bahraini dinars and the Omani rial show three decimals, because they split into 1,000 fils or baisa.',
+    ],
+    shipped: [
+      { name: '@dualkit/format 0.1.0-beta.1', line: 'parseSaudiPhone, plus QAR, KWD, BHD and OMR in formatMoney, with 117 tests' },
+      { name: '@dualkit/starter 0.1.0-beta.0', line: 'The eight bilingual components, now on npm' },
+    ],
+  },
+  {
     slug: 'v0-1-0-beta',
     date: '2026-10-13',
     version: 'v0.1.0-beta',
@@ -24,8 +39,7 @@ export const RELEASES: readonly Release[] = [
 ]
 
 export const UP_NEXT = [
-  { title: 'Starter', line: 'A bilingual design system template: tokens in git, a generated Figma library and AGENTS.md.', state: 'In progress' },
-  { title: 'Native Arabic review', line: 'Every Arabic rule checked by a native reviewer before 1.0.', state: 'Planned' },
+  { title: 'Oman IBAN', line: 'OM joins AE, SA, BH, KW and QA in parseIban.', state: 'Planned' },
 ] as const
 
 export const displayDate = (iso: string) => new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
