@@ -9,10 +9,11 @@ export const metadata: Metadata = { title: 'Docs', description: 'Install the Dua
 export const revalidate = 300
 
 const API: [string, string, string][] = [
-  ['formatMoney(1234.5, { currency: "AED" })', 'AED 1,234.50', 'Money in AED or SAR. Add locale: "ar" and numerals: "arab" for Arabic.'],
+  ['formatMoney(1234.5, { currency: "AED" })', 'AED 1,234.50', 'AED, SAR, QAR, KWD, BHD or OMR. Dinars and rials get three decimals. Add locale: "ar" and numerals: "arab" for Arabic.'],
   ['formatHijri(date, { timeZone: "Asia/Riyadh" })', '1 Ramadan 1447 AH', 'Umm al-Qura dates. Always pass the time zone.'],
   ['toWesternDigits("٠٥٠١٢٣٤٥٦٧")', '0501234567', 'Normalise typed digits before you validate or store them.'],
   ['parseUaePhone("+971 50 123 4567")', '{ ok: true, value: { e164, type } }', 'Every common way of writing a UAE mobile or landline.'],
+  ['parseSaudiPhone("+966 55 123 4567")', '{ ok: true, value: { e164, type } }', 'The same for Saudi mobiles and landlines.'],
   ['parseEmiratesId("784-1990-1234567-6")', '{ ok: true, value: { formatted, year } }', 'Checks the 784 prefix and the Luhn check digit.'],
   ['parseIban(value, { country: "AE" })', '{ ok: true, value: { formatted, bankCode } }', 'AE, SA, BH, KW and QA. Length per country and mod 97.'],
 ]

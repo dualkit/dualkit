@@ -1,6 +1,6 @@
 import { applyNumerals, type Numerals } from './numerals'
 
-export type Currency = 'AED' | 'SAR'
+export type Currency = 'AED' | 'SAR' | 'QAR' | 'KWD' | 'BHD' | 'OMR'
 export type Locale = 'en' | 'ar'
 
 export type MoneyOptions = {
@@ -10,7 +10,17 @@ export type MoneyOptions = {
   readonly fractionDigits?: number
 }
 
-const ARABIC_ABBREVIATION: Record<Currency, string> = { AED: 'د.إ', SAR: 'ر.س' }
+const ARABIC_ABBREVIATION: Record<Currency, string> = {
+  AED: 'د.إ',
+  SAR: 'ر.س',
+  QAR: 'ر.ق',
+  KWD: 'د.ك',
+  BHD: 'د.ب',
+  OMR: 'ر.ع',
+}
+
+/** The dinars and the Omani rial split into 1,000 fils or baisa, so they show three decimals. */
+const MINOR_UNIT_DIGITS: Record<Currency, number> = { AED: 2, SAR: 2, QAR: 2, KWD: 3, BHD: 3, OMR: 3 }
 const NBSP = ' '
 const LRI = '⁦'
 const PDI = '⁩'
@@ -21,7 +31,7 @@ const PDI = '⁩'
  */
 export function formatMoney(amount: number, options: MoneyOptions): string {
   if (!Number.isFinite(amount)) throw new RangeError(`formatMoney needs a finite amount, got ${amount}`)
-  const { currency, locale = 'en', numerals = 'latn', fractionDigits = 2 } = options
+  const { currency, locale = 'en', numerals = 'latn', fractionDigits = MINOR_UNIT_DIGITS[currency] } = options
   const digits = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,

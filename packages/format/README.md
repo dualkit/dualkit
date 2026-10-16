@@ -14,7 +14,10 @@ No dependencies. It runs in any modern browser, in Node 18 and later, and at the
 formatMoney(1234.5, { currency: 'AED' })                                    // AED 1,234.50
 formatMoney(1234.5, { currency: 'SAR', locale: 'ar' })                      // 1,234.50 ر.س
 formatMoney(1234.5, { currency: 'AED', locale: 'ar', numerals: 'arab' })    // ١٬٢٣٤٫٥٠ د.إ
+formatMoney(1.5, { currency: 'KWD' })                                       // KWD 1.500
 ```
+
+It covers AED, SAR, QAR, KWD, BHD and OMR. The Kuwaiti and Bahraini dinars and the Omani rial show three decimals by default, because they split into 1,000 fils or baisa. Pass `fractionDigits` to override.
 
 The output is the same in every browser, because it never depends on a runtime's Arabic locale data. A negative Arabic amount is wrapped in a bidi isolate, so the minus stays on the number.
 
@@ -47,6 +50,17 @@ isValidUaePhone('0511234567')                             // false, no network u
 ```
 
 It reads 050…, +971…, 00971…, 971…, spaces, dashes, brackets and Arabic digits. It covers mobiles (50, 52, 54, 55, 56, 58) and landlines (2, 3, 4, 6, 7, 9).
+
+## Saudi phone numbers
+
+```ts
+parseSaudiPhone('+966 55 123 4567')  // { ok: true, value: { e164: '+966551234567', type: 'mobile' } }
+formatSaudiPhone('0551234567')                              // 055 123 4567
+formatSaudiPhone('0112345678', { style: 'international' })  // +966 11 234 5678
+isValidSaudiPhone('0521234567')                             // false, 052 is not assigned
+```
+
+It reads the same shapes as the UAE parser. It covers mobiles (50, 51, 53 to 59) and landlines (11, 12, 13, 14, 16, 17).
 
 ## Emirates ID
 

@@ -1,5 +1,5 @@
 ---
-description: Use when showing or accepting money in AED or SAR, Arabic-Indic or Western digits, Hijri or Umm al-Qura dates, UAE phone numbers, Emirates ID, IBANs, or weekends and working days, in a product for the UAE, Saudi Arabia or the wider Gulf
+description: Use when showing or accepting money in AED, SAR, QAR, KWD, BHD or OMR, Arabic-Indic or Western digits, Hijri or Umm al-Qura dates, UAE or Saudi phone numbers, Emirates ID, IBANs, or weekends and working days, in a product for the UAE, Saudi Arabia or the wider Gulf
 globs:
 alwaysApply: false
 ---
@@ -13,7 +13,7 @@ Make every format decision explicit. Intl defaults change by locale and by brows
 `@dualkit/format` implements every rule below, with tests.
 
 ```ts
-import { formatMoney, formatHijri, parseUaePhone, parseEmiratesId, parseIban, toWesternDigits } from '@dualkit/format'
+import { formatMoney, formatHijri, parseUaePhone, parseSaudiPhone, parseEmiratesId, parseIban, toWesternDigits } from '@dualkit/format'
 ```
 
 ## Digits
@@ -28,10 +28,12 @@ import { formatMoney, formatHijri, parseUaePhone, parseEmiratesId, parseIban, to
 ```ts
 formatMoney(1234.5, { currency: 'AED' })                                  // AED 1,234.50
 formatMoney(1234.5, { currency: 'SAR', locale: 'ar', numerals: 'arab' })  // ١٬٢٣٤٫٥٠ ر.س
+formatMoney(1.5, { currency: 'KWD', locale: 'ar' })                       // 1.500 د.ك
 ```
 
-- Two decimals (fils and halalas) unless the product rounds on purpose.
-- Use the code (AED, SAR) or the Arabic abbreviation (د.إ, ر.س). Both currencies got new signs in 2025. The riyal sign is U+20C1 (Unicode 17), and few fonts have it yet. Check whether the dirham sign is encoded before you rely on it. Only show a sign with a font you ship that draws it.
+- AED, SAR and QAR take two decimals (fils, halalas, dirhams). KWD, BHD and OMR take **three** (fils and baisa). Never hardcode two decimals for every Gulf currency.
+- Round on purpose, never by accident.
+- Use the code (AED, SAR) or the Arabic abbreviation (د.إ, ر.س). Both currencies got new signs in 2025. The riyal sign is U+20C1 (Unicode 17), and few fonts have it yet. Check whether the dirham sign is encoded before you rely on it. Only show a sign with a font you ship that draws it. The other four use the code or the abbreviation: QAR ر.ق, KWD د.ك, BHD د.ب, OMR ر.ع.
 - Keep amounts as integers in minor units in storage and APIs, never floats.
 
 ## Dates
@@ -50,6 +52,7 @@ formatHijri(dueDate, { locale: 'ar', numerals: 'arab', timeZone: 'Asia/Riyadh' }
 
 ```ts
 parseUaePhone('٠٥٠ ١٢٣ ٤٥٦٧')  // { ok: true, value: { e164: '+971501234567', type: 'mobile' } }
+parseSaudiPhone('055 123 4567')  // { ok: true, value: { e164: '+966551234567', type: 'mobile' } }
 parseEmiratesId(value)          // checks the 784 prefix and the Luhn check digit
 parseIban(value, { country: 'AE' })  // checks the length per country and mod 97
 ```

@@ -11,7 +11,7 @@ export const COPY = {
   nav: { product: 'Product', links: [['Docs', '/docs'], ['Updates', '/updates']] as const, github: 'GitHub', cta: 'Get started' },
   drawer: [
     { name: 'Skills', line: 'Teach Claude Code and Cursor to build right to left', href: '/#skills' },
-    { name: 'Format', line: 'AED, Hijri, Arabic digits, UAE phone and IBAN', href: '/#format' },
+    { name: 'Format', line: 'Gulf money, Hijri, Arabic digits, phones and IBAN', href: '/#format' },
     { name: 'Starter', line: 'Eight components that read both ways', href: '/#starter' },
   ],
   hero: {
@@ -34,9 +34,9 @@ export const COPY = {
     heading: ['Gulf formats,', 'solved in 12 KB.'],
     lede: 'One library for the formats Gulf products touch every day. Every parser reads Arabic digits the way people type them, with no dependencies.',
     points: [
-      ['Money', 'AED and SAR, in English or Arabic, with either digit system.'],
+      ['Money', 'All six Gulf currencies, in English or Arabic, with either digit system.'],
       ['Dates', 'Umm al-Qura Hijri, pinned to the right time zone.'],
-      ['Identity and payments', 'UAE phones, Emirates ID with its check digit, and Gulf IBANs.'],
+      ['Identity and payments', 'UAE and Saudi phones, Emirates ID with its check digit, and Gulf IBANs.'],
     ] as const,
   },
   starter: {
@@ -50,7 +50,7 @@ export const COPY = {
     hint: 'Move over it. Click to switch.',
     hintTouch: 'Tap to switch.',
   },
-  strip: [['4', 'skills'], ['6', 'Gulf formats'], ['0', 'dependencies'], ['272', 'tests passing']] as const,
+  strip: [['4', 'skills'], ['6', 'Gulf formats'], ['0', 'dependencies'], ['306', 'tests passing']] as const,
   closing: { heading: 'Ship in both directions today.', primary: 'Get started', secondary: 'Read the docs' },
   feedback: {
     open: 'Send feedback',

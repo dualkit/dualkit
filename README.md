@@ -26,7 +26,7 @@ Dualkit fixes them at the source, in the agent and in the code.
 | | What it is | Install |
 | --- | --- | --- |
 | **[Skills](skills/)** | Four agent skills for Claude Code and Cursor: RTL layout, Arabic and Latin type pairing, Gulf formats, bilingual copy | `/plugin marketplace add dualkit/dualkit` |
-| **[Format](packages/format/)** | AED and SAR, Umm al-Qura dates, Arabic numerals, UAE phone, Emirates ID, Gulf IBAN. No dependencies | [From the release](#format), npm soon |
+| **[Format](packages/format/)** | Six Gulf currencies, Umm al-Qura dates, Arabic numerals, UAE and Saudi phone, Emirates ID, Gulf IBAN. No dependencies | [From the release](#format), npm soon |
 | **[Starter](packages/starter/)** | A bilingual design system to fork: one token file feeds CSS, Tailwind and Figma, plus eight React components | [From the release](#starter) |
 
 ## Proof

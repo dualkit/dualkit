@@ -5,6 +5,10 @@ export {
   formatUaePhone, isValidUaePhone, parseUaePhone,
   type UaePhone, type UaePhoneError, type UaePhoneStyle, type UaePhoneType,
 } from './phone'
+export {
+  formatSaudiPhone, isValidSaudiPhone, parseSaudiPhone,
+  type SaudiPhone, type SaudiPhoneError, type SaudiPhoneStyle, type SaudiPhoneType,
+} from './saudi-phone'
 export { formatEmiratesId, isValidEmiratesId, parseEmiratesId, type EmiratesId, type EmiratesIdError } from './emirates-id'
 export { formatIban, isValidIban, parseIban, type GulfIbanCountry, type Iban, type IbanError } from './iban'
 export type { Err, Ok, Result } from './result'

@@ -1,4 +1,4 @@
-import { toWesternDigits } from './numerals'
+import { nationalNumber, readPhoneInput } from './phone-input'
 import { err, ok, type Result } from './result'
 
 export type UaePhoneType = 'mobile' | 'landline'
@@ -12,22 +12,11 @@ const AREA_CODES = new Set(['2', '3', '4', '6', '7', '9'])
 const MOBILE_LENGTH = 9
 const LANDLINE_LENGTH = 8
 
-/** People often keep the trunk 0 after +971, as in "+971 (0) 50 123 4567". */
-const dropTrunkZero = (digits: string): string => (digits.startsWith('0') ? digits.slice(1) : digits)
-
-function nationalDigits(raw: string): Result<string, UaePhoneError> {
-  const plus = raw.startsWith('+')
-  const digits = raw.replace(/\D/g, '')
-  if (plus || digits.startsWith('00')) {
-    const international = plus ? digits : digits.slice(2)
-    if (!international.startsWith(COUNTRY_CODE)) return err('not_uae', 'This is not a UAE number.')
-    return ok(dropTrunkZero(international.slice(COUNTRY_CODE.length)))
-  }
-  if (digits.startsWith(COUNTRY_CODE) && digits.length >= COUNTRY_CODE.length + LANDLINE_LENGTH) {
-    return ok(digits.slice(COUNTRY_CODE.length))
-  }
-  return ok(dropTrunkZero(digits))
-}
+const NATIONAL_RULE = {
+  countryCode: COUNTRY_CODE,
+  minLength: LANDLINE_LENGTH,
+  otherCountry: err('not_uae', 'This is not a UAE number.'),
+} as const
 
 function classify(nsn: string): Result<UaePhone, UaePhoneError> {
   const e164 = `+${COUNTRY_CODE}${nsn}`
@@ -45,10 +34,9 @@ function classify(nsn: string): Result<UaePhone, UaePhoneError> {
 
 /** Reads any common way of writing a UAE mobile or landline number, in Western or Arabic digits. */
 export function parseUaePhone(input: string): Result<UaePhone, UaePhoneError> {
-  const raw = toWesternDigits(input).trim()
-  if (raw === '') return err('empty', 'Enter a phone number.')
-  if (!/^\+?[\d\s().-]+$/.test(raw)) return err('invalid_characters', 'Use digits only.')
-  const nsn = nationalDigits(raw)
+  const raw = readPhoneInput(input)
+  if (!raw.ok) return raw
+  const nsn = nationalNumber(raw.value, NATIONAL_RULE)
   return nsn.ok ? classify(nsn.value) : nsn
 }
 
