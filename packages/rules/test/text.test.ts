@@ -26,11 +26,12 @@ describe('script detection', () => {
 })
 
 describe('patterns', () => {
-  it.each(['050 123 4567', '+971501234567', '٠٥٠ ١٢٣ ٤٥٦٧', '4111 1111 1111 1111'])('flags %s as a number that can reverse', (s) => {
+  it.each(['050 123 4567', '+971501234567', '4111 1111 1111 1111', '+\u0669\u0667\u0661', '050 \u0661\u0662\u0663', '\u0661\u0662\u0663 456'])('flags %s as a number that can reverse', (s) => {
     expect(GROUPED_NUMBER.test(s)).toBe(true)
   })
 
-  it.each(['1,234.50', '050-123-4567', '18/02/2026', 'AED 99'])('leaves %s alone', (s) => {
+  // Chromium paints Arabic-Indic groups first group on the right with or without isolation (see verify.test.ts).
+  it.each(['1,234.50', '050-123-4567', '18/02/2026', 'AED 99', '\u0660\u0665\u0660 \u0661\u0662\u0663 \u0664\u0665\u0666\u0667', '\u06F0\u06F5\u06F0 \u06F1\u06F2\u06F3'])('leaves %s alone', (s) => {
     expect(GROUPED_NUMBER.test(s)).toBe(false)
   })
 

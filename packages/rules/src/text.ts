@@ -9,8 +9,12 @@ const DIGIT = '[0-9\\u0660-\\u0669\\u06F0-\\u06F9]'
 export const WESTERN_DIGIT = /[0-9]/
 export const ARABIC_INDIC_DIGIT = /[٠-٩۰-۹]/
 
-/** Digit groups split by spaces, or a leading plus: the shapes the bidi algorithm reorders inside RTL text. */
-export const GROUPED_NUMBER = new RegExp(`${DIGIT}+(?:[ \\u00A0]+${DIGIT}+)+|\\+${DIGIT}`)
+/**
+ * Digit groups split by spaces with at least one Western digit, or a leading plus: the shapes the bidi
+ * algorithm reorders inside RTL text. Groups of Arabic-Indic digits alone are left out: Chromium paints them
+ * first group on the right with or without isolation, so isolating them changes nothing.
+ */
+export const GROUPED_NUMBER = new RegExp(`(?=[0-9\\u0660-\\u0669\\u06F0-\\u06F9 \\u00A0]*[0-9])${DIGIT}+(?:[ \\u00A0]+${DIGIT}+)+|\\+${DIGIT}`)
 /** Emails, URLs and codes such as ORDER-2041. */
 export const LATIN_TOKEN = /[\w.+-]+@[\w-]+\.[\w.]{2,}|https?:\/\/\S+|www\.\S+|\b[A-Z]{2,}[-_]?\d{2,}\b/
 /** Closing marks the bidi algorithm treats as neutral, so they land at the paragraph's far end. U+060C is the Arabic comma. */

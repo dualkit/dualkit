@@ -4,7 +4,7 @@ import { RULES } from '../src/rules'
 import { runRules } from '../src/run'
 import { page } from './fixtures'
 import { closeBrowser, modelOf, withPage } from './helpers/browser'
-import { charBoxes, markEdge } from './helpers/visual'
+import { charBoxes, markEdge, visualText } from './helpers/visual'
 
 afterAll(closeBrowser)
 
@@ -156,5 +156,47 @@ describe('X1 layout/arabic-ltr-block on lang-tagged Arabic in an English page', 
   it('stays quiet on a one or two word language switcher', async () => {
     const html = page('<ul><li><a lang="ar" href="/ar">العربية</a></li><li><a lang="ar" href="/ar">مرحبا بكم</a></li></ul>', { lang: 'en', dir: 'ltr' })
     expect(await found(html, 'layout/arabic-ltr-block')).toEqual([])
+  })
+})
+
+// Ruling after R17: Chromium paints Arabic-Indic groups first group on the right whether or not they are
+// isolated (only <bdo> changes it), so the fix the rule gives would change nothing for them.
+describe('bidi/unisolated-number and Arabic-Indic digit groups', () => {
+  const order = (html: string) => withPage(html, async (p) => visualText(await charBoxes(p, '#n')).replace(/[^\u0660-\u0669]/g, ''))
+  const AI = '\u0660\u0665\u0660 \u0661\u0662\u0663'
+  it('Chromium paints Arabic-Indic groups the same with or without isolation', async () => {
+    const bare = await order(page(`<p id="n">رقم الهاتف ${AI}</p>`))
+    const isolated = await order(page(`<p id="n">رقم الهاتف <bdi dir="ltr">${AI}</bdi></p>`))
+    expect(bare).toBe('\u0661\u0662\u0663\u0660\u0665\u0660')
+    expect(isolated).toBe(bare)
+  })
+
+  it('does not flag groups made only of Arabic-Indic or Extended Arabic-Indic digits', async () => {
+    expect(await found(page(`<p>رقم الهاتف ${AI}</p>`), 'bidi/unisolated-number')).toEqual([])
+    expect(await found(page('<p>رقم الهاتف \u06F0\u06F5\u06F0 \u06F1\u06F2\u06F3</p>'), 'bidi/unisolated-number')).toEqual([])
+  })
+
+  it('still flags Western groups, a leading plus and a group mixing both systems', async () => {
+    for (const n of ['050 123 4567', '+971501234567', '050 \u0661\u0662\u0663']) {
+      expect(await found(page(`<p>رقم الهاتف ${n}</p>`), 'bidi/unisolated-number')).toEqual(['bidi/unisolated-number'])
+    }
+  })
+})
+
+// Follow-up: on a real checkout page the email field was flagged and the tel field was not.
+describe('bidi/field-direction and type="tel"', () => {
+  const FIELDS = '<label>البريد الإلكتروني <input type="email" value="sara@example.com"></label><label>رقم الجوال <input type="tel" value="050 123 4567"></label>'
+  const dirs = (html: string) => withPage(html, (p) => p.evaluate(() => [...document.querySelectorAll('input')].map((i) => getComputedStyle(i).direction)))
+
+  it('Chromium lays a tel input out left to right on its own, so only the email field is flagged', async () => {
+    expect(await dirs(page(FIELDS))).toEqual(['rtl', 'ltr'])
+    const findings = runRules(await modelOf(page(FIELDS)), { rules: RULES.filter((r) => r.id === 'bidi/field-direction') })
+    expect(findings.map((f) => f.node?.id ?? '')).toEqual([expect.stringContaining('label:nth-of-type(1) > input')])
+  })
+
+  it('flags a tel input once author CSS turns it right to left', async () => {
+    const html = page(FIELDS, { css: 'input{direction:inherit}' })
+    expect(await dirs(html)).toEqual(['rtl', 'rtl'])
+    expect(await found(html, 'bidi/field-direction')).toEqual(['bidi/field-direction', 'bidi/field-direction'])
   })
 })
