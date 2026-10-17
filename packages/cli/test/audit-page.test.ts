@@ -1,0 +1,83 @@
+import { createServer, type Server } from 'node:http'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { chromium } from 'playwright'
+import { audit } from '../src/audit'
+import { UserError } from '../src/config'
+
+const HERO_COLOUR = [0, 255, 0, 255]
+const HERO = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><style>body{margin:0;font:16px/1.7 sans-serif}
+.hero{min-height:100vh;background:rgb(0,255,0)}.x{margin:0;margin-left:16px;height:40px;background:rgb(255,0,255)}</style></head>
+<body><section class="hero">مرحبا</section><p class="x">نص</p><div style="height:1500px"></div></body></html>`
+
+const TALL_RTL = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><style>html,body{margin:0}.b{position:absolute;top:0;width:40px;height:40px}</style></head>
+<body><div class="b" style="inset-inline-start:0;background:#f00"></div><div class="b" style="left:0;background:#00f"></div><div style="height:3000px"></div></body></html>`
+
+let server: Server
+let base = ''
+
+beforeAll(async () => {
+  server = createServer((req, res) => {
+    if (req.url === '/missing') {
+      res.writeHead(404, { 'content-type': 'text/html; charset=utf-8' }).end('<!doctype html><html><body><p>Not found</p></body></html>')
+      return
+    }
+    if (req.url === '/broken') {
+      res.writeHead(500, { 'content-type': 'text/html; charset=utf-8' }).end('<!doctype html><html><body><p>Oops</p></body></html>')
+      return
+    }
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' }).end(req.url === '/tall-rtl' ? TALL_RTL : HERO)
+  })
+  await new Promise<void>((r) => server.listen(0, r))
+  base = `http://localhost:${(server.address() as { port: number }).port}`
+})
+afterAll(() => new Promise<void>((r) => { server.closeAllConnections(); server.close(() => r()) }))
+
+const options = (url: string) => ({ url, width: 1024, height: 768, config: { ignore: [], exclude: [] } })
+
+async function pixels(png: string, probes: Array<[number, number]>): Promise<{ height: number; colours: number[][] }> {
+  const b = await chromium.launch()
+  try {
+    const p = await b.newPage()
+    return await p.evaluate(async ({ data, probes }) => {
+      const doc = (globalThis as any).document
+      const img = doc.createElement('img')
+      await new Promise((ok, no) => { img.onload = ok; img.onerror = no; img.src = `data:image/png;base64,${data}` })
+      const c = doc.createElement('canvas')
+      c.width = img.width; c.height = img.height
+      const ctx = c.getContext('2d')
+      ctx.drawImage(img, 0, 0)
+      return { height: img.height, colours: probes.map(([x, y]) => Array.from(ctx.getImageData(x, y, 1, 1).data) as number[]) }
+    }, { data: png, probes })
+  } finally {
+    await b.close()
+  }
+}
+
+describe('audit on real page shapes', () => {
+  it('puts markers on the right pixels below a min-height:100vh hero', async () => {
+    const r = await audit(options(`${base}/`))
+    const f = r.findings.find((x) => x.rule === 'layout/physical-spacing')
+    expect(f?.node).toBeTruthy()
+    const box = f!.node!.box
+    const centre: [number, number] = [Math.round(box.x + box.width / 2), Math.round(box.y + box.height / 2)]
+    const shot = await pixels(r.screenshot, [centre])
+    expect(box.y).toBeGreaterThanOrEqual(0)
+    expect(box.y + box.height).toBeLessThanOrEqual(shot.height)
+    expect(shot.height).toBe(r.pageHeight)
+    expect(shot.colours[0]).not.toEqual(HERO_COLOUR)
+    expect(shot.colours[0]).toEqual([255, 0, 255, 255])
+  })
+
+  it('keeps the inline end of a tall RTL page in the capture', async () => {
+    const r = await audit(options(`${base}/tall-rtl`))
+    const shot = await pixels(r.screenshot, [[1024 - 10, 10], [10, 10]])
+    expect(shot.height).toBe(3000)
+    expect(shot.colours).toEqual([[255, 0, 0, 255], [0, 0, 255, 255]])
+  })
+
+  it.each([['/missing', 404], ['/broken', 500]])('refuses to score an error page (%s)', async (path, status) => {
+    const err = await audit(options(`${base}${path}`)).catch((e: unknown) => e)
+    expect(err).toBeInstanceOf(UserError)
+    expect((err as Error).message).toBe(`${base}${path} returned ${status}.`)
+  })
+})

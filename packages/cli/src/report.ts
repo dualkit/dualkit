@@ -33,7 +33,7 @@ main{max-width:1200px;margin:0 auto;padding:48px 24px}h1{font-size:28px;font-wei
 .mark.top span{top:0;inset-inline-start:0;border-start-start-radius:0}.mark span{color:#fff}.error{color:var(--err);--c:var(--err)}.warning{color:var(--warn);--c:var(--warn)}.note{color:var(--note);--c:var(--note)}
 section.rule{background:#fff;border-radius:6px;box-shadow:0 0 0 1px var(--line);padding:24px;margin-bottom:16px}
 section.rule h2{font-size:17px;font-weight:500;margin:0}.id{font-family:ui-monospace,monospace;font-size:12px;color:var(--soft)}
-.fix{margin:8px 0 12px}ol{margin:0;padding-inline-start:20px}li{margin:8px 0}code{unicode-bidi:isolate;font-family:ui-monospace,monospace;font-size:12px;background:var(--bg);padding:2px 4px;border-radius:3px;word-break:break-all}
+.fix{margin:8px 0 12px}ol{margin:0;padding:0;list-style:none}li{margin:8px 0}code{unicode-bidi:isolate;font-family:ui-monospace,monospace;font-size:12px;background:var(--bg);padding:2px 4px;border-radius:3px;word-break:break-all}
 .notice{color:var(--soft)}footer{margin-top:48px;color:var(--soft);font-size:13px}a{color:inherit}`
 
 export function renderReport(result: AuditResult): string {

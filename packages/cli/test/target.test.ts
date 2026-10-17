@@ -1,3 +1,6 @@
+import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { UserError } from '../src/config'
 import { toUrl } from '../src/target'
@@ -9,6 +12,12 @@ describe('toUrl', () => {
   })
   it('turns an existing file path into a file URL', () => {
     expect(toUrl('test/fixtures/page.html', process.cwd())).toMatch(/^file:\/\/.+page\.html$/)
+  })
+  it('reads a one-letter prefix as a Windows drive, not a URL scheme', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'dualkit-target-'))
+    mkdirSync(join(dir, 'C:'))
+    writeFileSync(join(dir, 'C:', 'page.html'), '<p>x</p>')
+    expect(toUrl('C:/page.html', dir)).toMatch(/^file:\/\/.+page\.html$/)
   })
   it('rejects anything else with a clear message', () => {
     expect(() => toUrl('not a page')).toThrow(UserError)

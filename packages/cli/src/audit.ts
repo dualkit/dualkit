@@ -17,6 +17,7 @@ const READER = createRequire(import.meta.url).resolve('@dualkit/rules/reader')
 const SETTLE_MS = 800
 const LOAD_WAIT_MS = 10_000
 const MAX_SHOT_HEIGHT = 8000
+const HTTP_ERROR = 400
 export const PLAYWRIGHT_VERSION = '1.55.0'
 
 const firstLine = (e: unknown) => (e instanceof Error ? e.message : String(e)).split('\n')[0] ?? ''
@@ -33,15 +34,16 @@ async function open(launch: () => Promise<Browser>): Promise<Browser> {
 }
 
 // Playwright's own screenshot waits on pending subresources and times out when one never answers,
-// so ask Chromium for the pixels directly.
-async function capture(page: Page, width: number, height: number): Promise<Buffer> {
-  // Resize the viewport to the whole page instead of using captureBeyondViewport, which re-lays
-  // the page out wider and shifts an RTL page's right edge out of the clip.
-  await page.setViewportSize({ width, height })
-  await page.evaluate(() => new Promise<void>((done) => (globalThis as unknown as { requestAnimationFrame: (cb: () => void) => void }).requestAnimationFrame(() => done())))
+// so ask Chromium for the pixels directly. The viewport stays at the size the model was read at:
+// growing it to the page height would stretch min-height:100vh sections and move every box, so
+// captureBeyondViewport paints the rest of the page at the same layout instead. A page that fits
+// the viewport is captured without it: Chromium shifts an RTL page's inline end out of the clip then.
+async function capture(page: Page, width: number, height: number, viewportHeight: number): Promise<Buffer> {
   const cdp = await page.context().newCDPSession(page)
   try {
-    const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width, height, scale: 1 } })
+    const { data } = await cdp.send('Page.captureScreenshot', {
+      format: 'png', captureBeyondViewport: height > viewportHeight, clip: { x: 0, y: 0, width, height, scale: 1 },
+    })
     return Buffer.from(data, 'base64')
   } finally {
     await cdp.detach().catch(() => {})
@@ -56,7 +58,7 @@ async function read(page: Page, options: AuditOptions): Promise<{ model: ScreenM
       options.config.exclude,
     )
     const pageHeight = Math.min(MAX_SHOT_HEIGHT, await page.evaluate(() => document.documentElement.scrollHeight))
-    const shot = await capture(page, options.width, pageHeight)
+    const shot = await capture(page, options.width, pageHeight, options.height)
     return { model, pageHeight, shot }
   } catch (e) {
     throw new UserError(`Could not read ${options.url}: ${firstLine(e)}`)
@@ -69,12 +71,15 @@ export async function audit(options: AuditOptions, launch: () => Promise<Browser
     // bypassCSP: a strict script-src would otherwise block the injected reader.
     const context = await browser.newContext({ viewport: { width: options.width, height: options.height }, bypassCSP: true })
     const page = await context.newPage()
+    let status = 0
     try {
       // domcontentloaded, then a bounded wait for `load`: a hung image or font must not fail the audit.
-      await page.goto(options.url, { waitUntil: 'domcontentloaded', timeout: 30_000 })
+      status = (await page.goto(options.url, { waitUntil: 'domcontentloaded', timeout: 30_000 }))?.status() ?? 0
     } catch (e) {
       throw new UserError(`Could not open ${options.url}: ${firstLine(e)}`)
     }
+    // An error page is not the screen the user asked about, so scoring it would mislead.
+    if (status >= HTTP_ERROR) throw new UserError(`${options.url} returned ${status}.`)
     await page.waitForLoadState('load', { timeout: LOAD_WAIT_MS }).catch(() => {})
     await page.waitForTimeout(SETTLE_MS)
     const { model, pageHeight, shot } = await read(page, options)

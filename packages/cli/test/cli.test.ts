@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import type { AuditResult } from '../src/audit'
 import { run } from '../src/cli'
@@ -53,6 +54,21 @@ describe('dualkit check', () => {
       expect(await run(argv, t.io), argv.join(' ')).toBe(2)
       expect(t.err.join('').length, argv.join(' ')).toBeGreaterThan(0)
     }
+  })
+
+  it.each([
+    ['--width', '0'], ['--height', '0'], ['--width', ''], ['--height', ''], ['--min-score', ''], ['--min-score', 'high'], ['--min-score', '-1'],
+  ])('rejects %s "%s" before running the audit', async (flag, value) => {
+    const t = io()
+    expect(await run(['check', 'https://example.com', flag, value], t.io)).toBe(2)
+    expect(t.err.join('')).toContain(flag)
+    expect(t.calls).toHaveLength(0)
+  })
+
+  it('sets the exit code instead of exiting, so piped JSON is never cut short', () => {
+    const source = readFileSync(new URL('../src/cli.ts', import.meta.url), 'utf8')
+    expect(source).not.toMatch(/process\.exit\(/)
+    expect(source).toMatch(/process\.exitCode = code/)
   })
 
   it('prints help', async () => {

@@ -27,10 +27,12 @@ const defaultIo: Io = {
   write: (p, d) => writeFileSync(p, d), audit, cwd: process.cwd(),
 }
 
-const int = (name: string, value: string | undefined, fallback: number): number => {
+const int = (name: string, value: string | undefined, fallback: number, min: number): number => {
   if (value === undefined) return fallback
   const n = Number(value)
-  if (!Number.isInteger(n) || n < 0) throw new UserError(`--${name} must be a whole number, got "${value}".`)
+  if (value.trim() === '' || !Number.isInteger(n) || n < min) {
+    throw new UserError(`--${name} must be a whole number of at least ${min}, got "${value}".`)
+  }
   return n
 }
 
@@ -46,14 +48,16 @@ export async function run(argv: string[], io: Io = defaultIo): Promise<number> {
     if (values.help) { io.out(HELP); return 0 }
     const [command, target] = positionals
     if (command !== 'check' || !target) throw new UserError(`${command ? `Unknown command "${command}".` : 'Missing command.'}\n\n${HELP}`)
+    // Validate every flag before the audit, so a typo fails in milliseconds, not after a browser run.
+    const width = int('width', values.width, 1280, 1)
+    const height = int('height', values.height, 800, 1)
+    const min = int('min-score', values['min-score'], 0, 0)
+    const url = toUrl(target, io.cwd)
     const config = loadConfig(values.config, io.cwd)
-    const result = await io.audit({
-      url: toUrl(target, io.cwd), width: int('width', values.width, 1280), height: int('height', values.height, 800), config,
-    })
+    const result = await io.audit({ url, width, height, config })
     const out = resolve(io.cwd, values.out ?? 'dualkit-report.html')
     io.write(values.out ?? 'dualkit-report.html', renderReport(result))
     io.out(values.json ? `${JSON.stringify({ ...result, screenshot: undefined, report: out })}\n` : `${formatSummary(result)}\nReport: ${out}\n`)
-    const min = int('min-score', values['min-score'], 0)
     return result.score < min ? 1 : 0
   } catch (e) {
     const message = e instanceof UserError || (e instanceof TypeError && 'code' in e) ? e.message : `Something went wrong: ${e instanceof Error ? e.message : String(e)}`
@@ -64,5 +68,6 @@ export async function run(argv: string[], io: Io = defaultIo): Promise<number> {
 
 // npx runs the bin through a symlink, so compare real paths.
 if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
-  run(process.argv.slice(2)).then((code) => process.exit(code))
+  // exitCode, not exit(): exiting would cut off --json output that is still being piped.
+  run(process.argv.slice(2)).then((code) => { process.exitCode = code })
 }

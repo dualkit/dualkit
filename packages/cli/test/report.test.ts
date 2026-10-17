@@ -58,6 +58,12 @@ describe('renderReport', () => {
     expect(html).toContain('<code dir="ltr">')
   })
 
+  it('numbers each finding once, keeping the numbered anchors', () => {
+    const html = renderReport(result([finding(), finding()]))
+    expect(html).toMatch(/<li id="i1"><strong>1\.<\/strong>/)
+    expect(html).toMatch(/ol\{[^}]*list-style:none/)
+  })
+
   it('puts the badge inside the box when the marker is near the top', () => {
     const top = finding({ node: { id: 't', snippet: '<p>x</p>', box: { x: 0, y: 0, width: 10, height: 10 } } })
     const low = finding({ node: { id: 'l', snippet: '<p>x</p>', box: { x: 0, y: 100, width: 10, height: 10 } } })
