@@ -10,7 +10,7 @@ afterAll(() => browser.close())
 
 /** The characters of the first finding's message as painted, line by line and left to right, spaces dropped. */
 const PAINTED = `(() => {
-  const li = document.querySelector('li#i1')
+  const li = document.getElementById('i1')
   const out = []
   const walker = document.createTreeWalker(li.querySelector('bdi'), NodeFilter.SHOW_TEXT)
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
