@@ -20,6 +20,17 @@ const read = async (p: Page, options: ReadOptions): Promise<ScreenModel> => {
   return p.evaluate((o) => (globalThis as unknown as { dualkitReader: { readScreen: (d: Document, o: ReadOptions) => ScreenModel } }).dualkitReader.readScreen(document, o), options)
 }
 
+/** Runs a measurement against rendered HTML in the shared browser. */
+export async function withPage<T>(html: string, measure: (p: Page) => Promise<T>): Promise<T> {
+  const p = await page()
+  try {
+    await p.setContent(html)
+    return await measure(p)
+  } finally {
+    await p.close()
+  }
+}
+
 export async function modelOf(html: string, options: ReadOptions = {}): Promise<ScreenModel> {
   const p = await page()
   try {

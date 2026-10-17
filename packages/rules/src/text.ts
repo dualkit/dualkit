@@ -13,7 +13,13 @@ export const ARABIC_INDIC_DIGIT = /[٠-٩۰-۹]/
 export const GROUPED_NUMBER = new RegExp(`${DIGIT}+(?:[ \\u00A0]+${DIGIT}+)+|\\+${DIGIT}`)
 /** Emails, URLs and codes such as ORDER-2041. */
 export const LATIN_TOKEN = /[\w.+-]+@[\w-]+\.[\w.]{2,}|https?:\/\/\S+|www\.\S+|\b[A-Z]{2,}[-_]?\d{2,}\b/
-export const ENDS_WITH_PUNCTUATION = /[.!?:;,)\]]\s*$/
+/** Closing marks the bidi algorithm treats as neutral, so they land at the paragraph's far end. U+060C is the Arabic comma. */
+export const ENDS_WITH_PUNCTUATION = /[.!?:;,)\]،]\s*$/
+/**
+ * The Arabic semicolon, question mark and full stop are strong right-to-left characters, not neutrals:
+ * they stay beside Arabic text, and only land at the wrong end of left-to-right words in a right-to-left block.
+ */
+export const ENDS_WITH_ARABIC_MARK = /[؛؟۔]\s*$/
 export const PLACEHOLDER = /lorem ipsum|dolor sit amet|لوريم إيبسوم|هذا النص هو مثال/i
 export const ARABIC_FONT =
   /arab|kufi|naskh|cairo|tajawal|almarai|readex|amiri|vazir|alexandria|rubik|geeza|dubai|lateef|scheherazade|harmattan|lalezar|messiri|changa|mada|zain|janna|noto sans arabic|plex sans arabic|segoe ui|system-ui|-apple-system/i
