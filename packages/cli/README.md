@@ -21,4 +21,4 @@ It opens the page in Chromium, runs 20 rules (bidi, layout, icons, type, content
 { "ignore": ["type/arabic-size"], "exclude": [".third-party-widget"] }
 ```
 
-Every rule, why it matters and how to fix it: [RULES.md](https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md). Exit codes: 0 done, 1 below `--min-score`, 2 a problem with the input.
+Every rule, why it matters and how to fix it: [RULES.md](https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md). Exit codes: 0 done, 1 below `--min-score`, 2 a problem with the input, the browser or the page (including a page that answers with an error status such as 404).
