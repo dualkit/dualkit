@@ -53,7 +53,8 @@ export type FieldKind = 'email' | 'tel' | 'url' | 'number' | 'code' | 'text'
 export type FieldNode = NodeRef & { kind: FieldKind; dir: Direction; dirAttr: string | null }
 
 export type ScreenModel = {
-  root: { lang: string | null; dir: string | null }
+  /** dir is the attribute as written; computedDir is how the page body actually runs (dir="auto" resolved). */
+  root: { lang: string | null; dir: string | null; computedDir: Direction }
   texts: TextRun[]
   layouts: LayoutNode[]
   icons: IconNode[]

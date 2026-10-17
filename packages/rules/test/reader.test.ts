@@ -8,8 +8,8 @@ const doc = (body: string, css = '', attrs = 'lang="ar" dir="rtl"') =>
 
 describe('root and texts', () => {
   it('reads lang and dir from <html>', async () => {
-    expect((await modelOf(doc(''))).root).toEqual({ lang: 'ar', dir: 'rtl' })
-    expect((await modelOf(doc('', '', ''))).root).toEqual({ lang: null, dir: null })
+    expect((await modelOf(doc(''))).root).toEqual({ lang: 'ar', dir: 'rtl', computedDir: 'rtl' })
+    expect((await modelOf(doc('', '', ''))).root).toEqual({ lang: null, dir: null, computedDir: 'ltr' })
   })
 
   it('treats an empty lang attribute as null', async () => {

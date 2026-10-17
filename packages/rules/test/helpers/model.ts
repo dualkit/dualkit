@@ -19,5 +19,5 @@ export const layout = (p: Partial<LayoutNode> = {}): LayoutNode => ({ ...base, d
 export const icon = (p: Partial<IconNode> = {}): IconNode => ({ ...base, name: 'arrow-right', dir: 'rtl', mirrored: false, ...p })
 export const field = (p: Partial<FieldNode> = {}): FieldNode => ({ ...base, kind: 'email', dir: 'rtl', dirAttr: null, ...p })
 export const screen = (p: Partial<ScreenModel> = {}): ScreenModel => ({
-  root: { lang: 'ar', dir: 'rtl' }, texts: [], layouts: [], icons: [], fields: [], unreadableStylesheets: 0, ...p,
+  root: { lang: 'ar', dir: 'rtl', computedDir: 'rtl' }, texts: [], layouts: [], icons: [], fields: [], unreadableStylesheets: 0, ...p,
 })

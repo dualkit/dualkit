@@ -109,3 +109,27 @@ describe('R11 rules decide from the whole block, not its capped copy', () => {
     expect(await found(html, 'content/missing-dir')).toEqual(['content/missing-dir'])
   })
 })
+
+// R20: dir="auto" on <html> takes the direction of the page's first strong character.
+const AUTO_LATIN_FIRST = page('<h1>iPhone 15</h1><p>متوفر الآن في جميع فروعنا بأفضل الأسعار مع توصيل مجاني</p>', { lang: 'ar', dir: 'auto' })
+const AUTO_ARABIC_FIRST = page('<h1>متوفر الآن</h1><p>iPhone 15 في جميع فروعنا بأفضل الأسعار مع توصيل مجاني</p>', { lang: 'ar', dir: 'auto' })
+const rootDirection = (html: string) => withPage(html, (p) => p.evaluate(() => getComputedStyle(document.documentElement).direction))
+
+describe('R20 content/missing-dir with dir="auto" on <html>', () => {
+  it('flags an Arabic page whose auto direction resolves left to right from a leading Latin word', async () => {
+    expect(await rootDirection(AUTO_LATIN_FIRST)).toBe('ltr')
+    expect(await found(AUTO_LATIN_FIRST, 'content/missing-dir')).toEqual(['content/missing-dir'])
+    expect((await modelOf(AUTO_LATIN_FIRST)).root.computedDir).toBe('ltr')
+  })
+
+  it('accepts dir="auto" when it resolves right to left', async () => {
+    expect(await rootDirection(AUTO_ARABIC_FIRST)).toBe('rtl')
+    expect((await modelOf(AUTO_ARABIC_FIRST)).root.computedDir).toBe('rtl')
+    expect(await found(AUTO_ARABIC_FIRST, 'content/missing-dir')).toEqual([])
+  })
+
+  it('still accepts dir="rtl" on <body> alone', async () => {
+    const html = page('<p>مرحبا بكم في المتجر</p>', { lang: 'ar', dir: null }).replace('<body>', '<body dir="rtl">')
+    expect(await found(html, 'content/missing-dir')).toEqual([])
+  })
+})

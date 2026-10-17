@@ -2,8 +2,6 @@ import type { TextRun } from '../model'
 import { defineRule, pick } from '../rule'
 import { ARABIC_INDIC_DIGIT, PLACEHOLDER, WESTERN_DIGIT, arabicShare, excerpt, isArabicScriptLang } from '../text'
 
-/** dir="auto" on <html> resolves from the first strong character, which on a mostly Arabic page is right to left. */
-const RTL_ROOT_DIR = new Set(['rtl', 'auto'])
 
 export const missingLang = defineRule({
   id: 'content/missing-lang', group: 'content', severity: 'error',
@@ -20,7 +18,10 @@ export const missingDir = defineRule({
   fix: 'Set dir="rtl" on <html> whenever lang is Arabic.',
   check: (m) => {
     const share = arabicShare(m.texts.map((t) => t.text).join(' '))
-    return share > 0.3 && !RTL_ROOT_DIR.has((m.root.dir ?? '').toLowerCase()) ? [{ node: null, message: `${Math.round(share * 100)}% of the text is Arabic, but <html> has no dir="rtl".` }] : []
+    if (share <= 0.3 || m.root.computedDir === 'rtl') return []
+    // dir="auto" takes the first strong character, so a page opening with a Latin word such as iPhone runs left to right.
+    const why = (m.root.dir ?? '').toLowerCase() === 'auto' ? 'dir="auto" resolves to left to right' : '<html> has no dir="rtl"'
+    return [{ node: null, message: `${Math.round(share * 100)}% of the text is Arabic, but ${why}.` }]
   },
 })
 

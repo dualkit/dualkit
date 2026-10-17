@@ -11,16 +11,21 @@ describe('content rules', () => {
     expect(ids(screen({ texts: [text()] }))).toEqual([])
   })
   it('flags a page with no lang', () => {
-    expect(ids(screen({ root: { lang: null, dir: 'rtl' } }))).toEqual(['content/missing-lang'])
+    expect(ids(screen({ root: { lang: null, dir: 'rtl', computedDir: 'rtl' } }))).toEqual(['content/missing-lang'])
   })
   it('flags an Arabic page with no dir="rtl"', () => {
-    expect(ids(screen({ root: { lang: 'ar', dir: null }, texts: [text()] }))).toEqual(['content/missing-dir'])
+    expect(ids(screen({ root: { lang: 'ar', dir: null, computedDir: 'ltr' }, texts: [text()] }))).toEqual(['content/missing-dir'])
   })
-  it.each(['RTL', 'Rtl', 'auto', 'AUTO'])('accepts dir="%s" on an Arabic page', (dir) => {
-    expect(ids(screen({ root: { lang: 'ar', dir }, texts: [text()] }))).toEqual([])
+  it.each(['RTL', 'Rtl', 'auto', 'AUTO'])('accepts dir="%s" on an Arabic page when the page runs right to left', (dir) => {
+    expect(ids(screen({ root: { lang: 'ar', dir, computedDir: 'rtl' }, texts: [text()] }))).toEqual([])
+  })
+  it('flags dir="auto" that resolves left to right, and says so', () => {
+    const found = runRules(screen({ root: { lang: 'ar', dir: 'auto', computedDir: 'ltr' }, texts: [text()] }), { rules: contentRules })
+    expect(found.map((f) => f.rule)).toEqual(['content/missing-dir'])
+    expect(found[0]!.message).toBe('100% of the text is Arabic, but dir="auto" resolves to left to right.')
   })
   it('flags dir="ltr" on an Arabic page', () => {
-    expect(ids(screen({ root: { lang: 'ar', dir: 'ltr' }, texts: [text()] }))).toEqual(['content/missing-dir'])
+    expect(ids(screen({ root: { lang: 'ar', dir: 'ltr', computedDir: 'ltr' }, texts: [text()] }))).toEqual(['content/missing-dir'])
   })
   it('flags Arabic text tagged as another language', () => {
     expect(ids(screen({ texts: [text({ lang: 'en' })] }))).toEqual(['content/lang-mismatch'])

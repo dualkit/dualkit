@@ -33,7 +33,12 @@ export function readScreen(doc: Document, options: ReadOptions = {}): ScreenMode
 
   const { authored, unreadable } = authoredPhysical(doc, win)
   return {
-    root: { lang: doc.documentElement.getAttribute('lang') || null, dir: doc.documentElement.getAttribute('dir') || doc.body?.getAttribute('dir') || null },
+    root: {
+      lang: doc.documentElement.getAttribute('lang') || null,
+      dir: doc.documentElement.getAttribute('dir') || doc.body?.getAttribute('dir') || null,
+      // The body inherits from <html> unless it sets its own dir, so it is where the page's direction lands.
+      computedDir: dirOf(style(doc.body ?? doc.documentElement)),
+    },
     texts: readTexts(doc, style, skipped, visible, ref, rect, pathOf),
     layouts: readLayouts(doc, style, skipped, visible, ref, authored),
     icons: readIcons(doc, style, skipped, visible, ref),
