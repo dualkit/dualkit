@@ -1,6 +1,9 @@
 import type { LayoutNode } from '../model'
 import { defineRule, pick, type Hit } from '../rule'
-import { arabicShare, excerpt } from '../text'
+import { arabicShare, arabicWordCount, excerpt, isArabicScriptLang } from '../text'
+
+/** Under this many Arabic words a block is a label, such as a language switcher, not a paragraph. */
+const MIN_ARABIC_WORDS = 3
 
 const SPACING = /^(margin|padding)-(left|right)$/
 
@@ -34,7 +37,7 @@ export const textAlignLeft = defineRule({
   why: 'text-align: left pins right-to-left text to the wrong edge.',
   fix: 'Use text-align: start.',
   check: (m) => m.layouts
-    .filter((l) => l.dir === 'rtl' && l.hasOwnText && l.textAlign === 'left')
+    .filter((l) => l.dir === 'rtl' && l.hasOwnText && l.hasArabicText && l.textAlign === 'left')
     .map((l) => ({ node: pick(l), message: 'This right-to-left text is aligned left.' })),
 })
 
@@ -45,8 +48,11 @@ export const arabicLtrBlock = defineRule({
   fix: 'Set dir="rtl" on the page or the element, and lang="ar".',
   check: (m) => {
     const seen = new Set<string>()
+    // A run tagged with an Arabic-script lang in a page in another language is an isolated label.
+    const taggedLabel = (lang: string | null) => isArabicScriptLang(lang) && !isArabicScriptLang(m.root.lang)
     return m.texts
-      .filter((t) => t.blockDir === 'ltr' && arabicShare(t.blockText) > 0.5 && !seen.has(t.blockId) && Boolean(seen.add(t.blockId)))
+      .filter((t) => t.blockDir === 'ltr' && !taggedLabel(t.lang) && arabicShare(t.blockText) > 0.5 && arabicWordCount(t.blockText) >= MIN_ARABIC_WORDS)
+      .filter((t) => !seen.has(t.blockId) && Boolean(seen.add(t.blockId)))
       .map((t) => ({ node: pick(t), message: `"${excerpt(t.blockText)}" is laid out left to right.` }))
   },
 })

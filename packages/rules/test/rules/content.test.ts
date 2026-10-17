@@ -16,6 +16,12 @@ describe('content rules', () => {
   it('flags an Arabic page with no dir="rtl"', () => {
     expect(ids(screen({ root: { lang: 'ar', dir: null }, texts: [text()] }))).toEqual(['content/missing-dir'])
   })
+  it.each(['RTL', 'Rtl', 'auto', 'AUTO'])('accepts dir="%s" on an Arabic page', (dir) => {
+    expect(ids(screen({ root: { lang: 'ar', dir }, texts: [text()] }))).toEqual([])
+  })
+  it('flags dir="ltr" on an Arabic page', () => {
+    expect(ids(screen({ root: { lang: 'ar', dir: 'ltr' }, texts: [text()] }))).toEqual(['content/missing-dir'])
+  })
   it('flags Arabic text tagged as another language', () => {
     expect(ids(screen({ texts: [text({ lang: 'en' })] }))).toEqual(['content/lang-mismatch'])
   })

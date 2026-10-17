@@ -44,8 +44,6 @@ const ASYMMETRIC: Record<string, (s: CSSStyleDeclaration) => boolean> = {
   'margin-right': (s) => s.marginLeft !== s.marginRight,
   'padding-left': (s) => s.paddingLeft !== s.paddingRight,
   'padding-right': (s) => s.paddingLeft !== s.paddingRight,
-  left: (s) => s.position !== 'static' && s.left !== s.right,
-  right: (s) => s.position !== 'static' && s.left !== s.right,
   float: (s) => s.float === 'left' || s.float === 'right',
   'border-left-width': (s) => s.borderLeftWidth !== s.borderRightWidth,
   'border-right-width': (s) => s.borderLeftWidth !== s.borderRightWidth,
@@ -56,12 +54,48 @@ const ASYMMETRIC: Record<string, (s: CSSStyleDeclaration) => boolean> = {
 }
 
 const INACTIVE = new Set(['', '0px', '0', 'auto', 'none', 'normal'])
+const INSET = new Set(['left', 'right'])
+const CENTRE_TOLERANCE_PX = 1
 
-/** A property only counts when its own computed value is set (a later rule may have zeroed it) and the pair differs. */
-export function reportable(property: string, s: CSSStyleDeclaration): boolean {
+/** The left edge and width of the box an inset is measured against (its padding box). */
+function containingBox(el: Element, s: CSSStyleDeclaration): { left: number; width: number } {
+  const root = el.ownerDocument.documentElement
+  const viewport = { left: 0, width: root.clientWidth }
+  if (s.position === 'fixed') return viewport
+  const parent = s.position === 'absolute' ? (el as HTMLElement).offsetParent : el.parentElement
+  if (!parent) return viewport
+  const view = el.ownerDocument.defaultView
+  if (s.position === 'absolute' && parent === el.ownerDocument.body && view?.getComputedStyle(parent).position === 'static') return viewport
+  return { left: parent.getBoundingClientRect().left + parent.clientLeft, width: parent.clientWidth }
+}
+
+/** left: 50% with a -50% translate, and the like: the element sits in the middle, so it mirrors itself. */
+function centred(el: Element, s: CSSStyleDeclaration): boolean {
+  const box = containingBox(el, s)
+  const r = el.getBoundingClientRect()
+  return Math.abs(r.left + r.width / 2 - (box.left + box.width / 2)) <= CENTRE_TOLERANCE_PX
+}
+
+/** Positioned elements resolve auto insets to pixels, so read the computed (not resolved) value. */
+function autoInset(el: Element, property: string): boolean {
+  const map = (el as Element & { computedStyleMap?: () => { get: (p: string) => unknown } }).computedStyleMap?.()
+  return String(map?.get(property) ?? '') === 'auto'
+}
+
+function reportableInset(property: string, s: CSSStyleDeclaration, el: Element | undefined): boolean {
+  if (s.position === 'static' || s.left === s.right || s.getPropertyValue(property) === 'auto') return false
+  return el === undefined || (!autoInset(el, property) && !centred(el, s))
+}
+
+/**
+ * A property only counts when its own computed value is set (a later rule may have zeroed it) and the pair differs.
+ * left and right are the exception: 0 is a real position, only auto is unset.
+ */
+export function reportable(property: string, s: CSSStyleDeclaration, el?: Element): boolean {
+  if (INSET.has(property)) return reportableInset(property, s, el)
   if (property !== 'float' && INACTIVE.has(s.getPropertyValue(property))) return false
   return ASYMMETRIC[property]?.(s) ?? false
 }
 
-export const physicalOf = (properties: Iterable<string>, s: CSSStyleDeclaration): PhysicalDeclaration[] =>
-  Array.from(properties).filter((p) => reportable(p, s)).map((p) => ({ property: p, value: s.getPropertyValue(p) }))
+export const physicalOf = (properties: Iterable<string>, s: CSSStyleDeclaration, el?: Element): PhysicalDeclaration[] =>
+  Array.from(properties).filter((p) => reportable(p, s, el)).map((p) => ({ property: p, value: s.getPropertyValue(p) }))

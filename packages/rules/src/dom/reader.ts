@@ -1,13 +1,15 @@
 import type { FieldKind, FieldNode, Font, LayoutNode, NodeRef, Rect, ScreenModel, TextRun } from '../model'
 import { readIcons } from './icons'
 import { makePathOf } from './path'
+import { hasArabic } from '../text'
 import { authoredPhysical, physicalOf, type Authored } from './styles'
 import { clean, dirOf, type Pred, type Ref, type Style } from './types'
 
 export type ReadOptions = { exclude?: string[] }
 
 const SKIP_TEXT = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE', 'TITLE'])
-const CODE_FIELD = /iban|card|cc-number|otp|one-time-code|postal|zip|code/i
+/** Whole words only, so cardholder_name and country_code stay plain text. */
+const CODE_FIELD = /(^|[^a-z])(iban|otp|one-time-code|postal|zip)([^a-z]|$)|(^|[^a-z])(?<!country[-_]?)code([^a-z]|$)|card[-_]?number|cc-number/i
 const ISOLATING_DIR = /^(ltr|rtl|auto)$/i
 const BLOCK_TEXT_CAP = 600
 const BLOCK_TEXT_KEEP = 300
@@ -133,11 +135,12 @@ function readLayouts(doc: Document, style: Style, skipped: Pred, visible: Pred, 
   for (const el of Array.from(doc.body.querySelectorAll('*'))) {
     if (el.closest('svg') || SKIP_TEXT.has(el.tagName) || skipped(el) || !visible(el)) continue
     const s = style(el)
-    const physical = physicalOf(authored.get(el) ?? [], s)
-    const hasOwnText = Array.from(el.childNodes).some((n) => n.nodeType === 3 && clean(n.textContent ?? '') !== '')
+    const physical = physicalOf(authored.get(el) ?? [], s, el)
+    const ownText = Array.from(el.childNodes).filter((n) => n.nodeType === 3).map((n) => clean(n.textContent ?? '')).join(' ').trim()
+    const hasOwnText = ownText !== ''
     const textAlign = s.textAlign
     if (physical.length > 0 || (hasOwnText && (textAlign === 'left' || textAlign === 'right'))) {
-      out.push({ ...ref(el), dir: dirOf(s), textAlign, hasOwnText, physical })
+      out.push({ ...ref(el), dir: dirOf(s), textAlign, hasOwnText, hasArabicText: hasArabic(ownText), physical })
     }
   }
   return out

@@ -1,11 +1,9 @@
 import type { TextRun } from '../model'
 import { defineRule, pick } from '../rule'
-import { ARABIC_INDIC_DIGIT, PLACEHOLDER, WESTERN_DIGIT, arabicShare, excerpt, hasArabic } from '../text'
+import { ARABIC_INDIC_DIGIT, PLACEHOLDER, WESTERN_DIGIT, arabicShare, excerpt, hasArabic, isArabicScriptLang } from '../text'
 
-/** Languages written in the Arabic script, matched as a whole subtag so 'art' is not Arabic. */
-const ARABIC_SCRIPT_LANG = /^(ar|fa|ur|ps|ku|ckb|sd|ug)(-|$)/i
-
-const isArabicScriptLang = (lang: string): boolean => ARABIC_SCRIPT_LANG.test(lang)
+/** dir="auto" on <html> resolves from the first strong character, which on a mostly Arabic page is right to left. */
+const RTL_ROOT_DIR = new Set(['rtl', 'auto'])
 
 export const missingLang = defineRule({
   id: 'content/missing-lang', group: 'content', severity: 'error',
@@ -22,7 +20,7 @@ export const missingDir = defineRule({
   fix: 'Set dir="rtl" on <html> whenever lang is Arabic.',
   check: (m) => {
     const share = arabicShare(m.texts.map((t) => t.text).join(' '))
-    return share > 0.3 && m.root.dir !== 'rtl' ? [{ node: null, message: `${Math.round(share * 100)}% of the text is Arabic, but <html> has no dir="rtl".` }] : []
+    return share > 0.3 && !RTL_ROOT_DIR.has((m.root.dir ?? '').toLowerCase()) ? [{ node: null, message: `${Math.round(share * 100)}% of the text is Arabic, but <html> has no dir="rtl".` }] : []
   },
 })
 

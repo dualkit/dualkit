@@ -36,6 +36,8 @@ export type LayoutNode = NodeRef & {
   dir: Direction
   textAlign: string
   hasOwnText: boolean
+  /** The element's own text (not its children's) contains Arabic letters. */
+  hasArabicText: boolean
   /** Physical properties the author wrote that render differently on the left and right. */
   physical: PhysicalDeclaration[]
 }

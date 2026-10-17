@@ -18,6 +18,14 @@ export const PLACEHOLDER = /lorem ipsum|dolor sit amet|لوريم إيبسوم|�
 export const ARABIC_FONT =
   /arab|kufi|naskh|cairo|tajawal|almarai|readex|amiri|vazir|alexandria|rubik|geeza|dubai|lateef|scheherazade|harmattan|lalezar|messiri|changa|mada|zain|janna|noto sans arabic|plex sans arabic|segoe ui|system-ui|-apple-system/i
 
+/** Languages written in the Arabic script, matched as a whole subtag so 'art' is not Arabic. */
+const ARABIC_SCRIPT_LANG = /^(ar|fa|ur|ps|ku|ckb|sd|ug)(-|$)/i
+
+export const isArabicScriptLang = (lang: string | null): boolean => lang !== null && ARABIC_SCRIPT_LANG.test(lang)
+
+/** Words that contain at least one Arabic letter. */
+export const arabicWordCount = (s: string): number => s.split(/\s+/).filter(hasArabic).length
+
 export const hasArabic = (s: string): boolean => {
   const letters = (s.match(ARABIC_CHARS) ?? []).length - (s.match(INDIC_CHARS) ?? []).length
   return letters > 0 && ARABIC_CHAR.test(s)
