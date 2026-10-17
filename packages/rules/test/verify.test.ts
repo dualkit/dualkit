@@ -133,3 +133,28 @@ describe('R20 content/missing-dir with dir="auto" on <html>', () => {
     expect(await found(html, 'content/missing-dir')).toEqual([])
   })
 })
+
+// R8: other languages written in Arabic script are right-to-left Arabic-script pages too.
+describe('R8 Arabic-script languages', () => {
+  const PERSIAN = page('<h1>فروشگاه ما</h1><p>به فروشگاه ما خوش آمدید، همه چیز با ارسال رایگان</p>', { lang: 'fa', dir: 'rtl' })
+  it.each(['content/lang-mismatch', 'content/missing-dir', 'layout/arabic-ltr-block'])('a Persian page gets no %s finding', async (id) => {
+    expect(await found(PERSIAN, id)).toEqual([])
+  })
+
+  it('still flags an Arabic run tagged lang="en"', async () => {
+    expect(await found(page('<p lang="en">مرحبا بكم في المتجر</p>'), 'content/lang-mismatch')).toEqual(['content/lang-mismatch'])
+  })
+})
+
+// X1: a lang="ar" tag does not make an Arabic paragraph right to left; only the word count marks a label.
+describe('X1 layout/arabic-ltr-block on lang-tagged Arabic in an English page', () => {
+  it('flags a lang="ar" section holding an Arabic paragraph with no dir', async () => {
+    const html = page('<p>Welcome.</p><section lang="ar"><p>مرحبا بكم في المتجر</p></section>', { lang: 'en', dir: 'ltr' })
+    expect(await found(html, 'layout/arabic-ltr-block')).toEqual(['layout/arabic-ltr-block'])
+  })
+
+  it('stays quiet on a one or two word language switcher', async () => {
+    const html = page('<ul><li><a lang="ar" href="/ar">العربية</a></li><li><a lang="ar" href="/ar">مرحبا بكم</a></li></ul>', { lang: 'en', dir: 'ltr' })
+    expect(await found(html, 'layout/arabic-ltr-block')).toEqual([])
+  })
+})

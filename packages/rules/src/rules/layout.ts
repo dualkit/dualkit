@@ -1,6 +1,6 @@
 import type { LayoutNode } from '../model'
 import { defineRule, pick, type Hit } from '../rule'
-import { excerpt, isArabicScriptLang } from '../text'
+import { excerpt } from '../text'
 
 /** Under this many Arabic words a block is a label, such as a language switcher, not a paragraph. */
 const MIN_ARABIC_WORDS = 3
@@ -48,10 +48,9 @@ export const arabicLtrBlock = defineRule({
   fix: 'Set dir="rtl" on the page or the element, and lang="ar".',
   check: (m) => {
     const seen = new Set<string>()
-    // A run tagged with an Arabic-script lang in a page in another language is an isolated label.
-    const taggedLabel = (lang: string | null) => isArabicScriptLang(lang) && !isArabicScriptLang(m.root.lang)
+    // lang="ar" does not lay text out right to left, so a tagged paragraph still counts; the word minimum skips labels.
     return m.texts
-      .filter((t) => t.blockDir === 'ltr' && !taggedLabel(t.lang) && t.blockArabicShare > 0.5 && t.blockArabicWords >= MIN_ARABIC_WORDS)
+      .filter((t) => t.blockDir === 'ltr' && t.blockArabicShare > 0.5 && t.blockArabicWords >= MIN_ARABIC_WORDS)
       .filter((t) => !seen.has(t.blockId) && Boolean(seen.add(t.blockId)))
       .map((t) => ({ node: pick(t), message: `"${excerpt(t.blockText)}" is laid out left to right.` }))
   },

@@ -41,10 +41,10 @@ describe('layout/arabic-ltr-block', () => {
     const m = screen({ root: { lang: 'en', dir: 'ltr', computedDir: 'ltr' }, texts: [text({ text: label, blockText: label, blockDir: 'ltr', lang: 'en' }), text({ text: two, blockText: two, blockDir: 'ltr', blockId: 'b2', lang: 'en' })] })
     expect(ids(m)).toEqual([])
   })
-  it('passes a run tagged with an Arabic-script lang inside a page in another language', () => {
+  it('flags a paragraph tagged with an Arabic-script lang inside a page in another language', () => {
     const t = { text: '\u0645\u0631\u062d\u0628\u0627 \u0628\u0643\u0645 \u0641\u064a \u0627\u0644\u0645\u062a\u062c\u0631', blockDir: 'ltr' as const }
-    expect(ids(screen({ root: { lang: 'en', dir: 'ltr', computedDir: 'ltr' }, texts: [text({ ...t, blockText: t.text, lang: 'ar' })] }))).toEqual([])
-    expect(ids(screen({ root: { lang: 'en', dir: 'ltr', computedDir: 'ltr' }, texts: [text({ ...t, blockText: t.text, lang: 'fa-IR' })] }))).toEqual([])
+    expect(ids(screen({ root: { lang: 'en', dir: 'ltr', computedDir: 'ltr' }, texts: [text({ ...t, blockText: t.text, lang: 'ar' })] }))).toEqual(['layout/arabic-ltr-block'])
+    expect(ids(screen({ root: { lang: 'en', dir: 'ltr', computedDir: 'ltr' }, texts: [text({ ...t, blockText: t.text, lang: 'fa-IR' })] }))).toEqual(['layout/arabic-ltr-block'])
   })
   it('still flags an Arabic page whose own lang is ar but runs left to right', () => {
     const t = '\u0645\u0631\u062d\u0628\u0627 \u0628\u0643\u0645 \u0641\u064a \u0627\u0644\u0645\u062a\u062c\u0631'
