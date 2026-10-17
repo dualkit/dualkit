@@ -19,7 +19,12 @@ export type TextRun = NodeRef & {
   text: string
   /** The nearest block ancestor: the bidi paragraph this text belongs to. */
   blockId: string
+  /** The block's text, capped at its first and last 300 characters when longer. */
   blockText: string
+  /** Facts about the whole block, measured before the cap, for rules that weigh the middle too. */
+  blockArabicShare: number
+  blockHasArabic: boolean
+  blockArabicWords: number
   blockDir: Direction
   dir: Direction
   lang: string | null

@@ -1,6 +1,6 @@
 import type { TextRun } from '../model'
 import { defineRule, pick } from '../rule'
-import { ARABIC_INDIC_DIGIT, PLACEHOLDER, WESTERN_DIGIT, arabicShare, excerpt, hasArabic, isArabicScriptLang } from '../text'
+import { ARABIC_INDIC_DIGIT, PLACEHOLDER, WESTERN_DIGIT, arabicShare, excerpt, isArabicScriptLang } from '../text'
 
 /** dir="auto" on <html> resolves from the first strong character, which on a mostly Arabic page is right to left. */
 const RTL_ROOT_DIR = new Set(['rtl', 'auto'])
@@ -40,7 +40,7 @@ export const mixedDigits = defineRule({
   why: 'Mixing 50 and ٥٠ in the same Arabic interface looks unfinished and makes numbers harder to compare.',
   fix: 'Pick one digit system for the product and format every number with it.',
   check: (m) => {
-    const inArabic = m.texts.filter((t) => hasArabic(t.blockText))
+    const inArabic = m.texts.filter((t) => t.blockHasArabic)
     const western = inArabic.filter((t) => WESTERN_DIGIT.test(t.text))
     const indic = inArabic.filter((t) => ARABIC_INDIC_DIGIT.test(t.text))
     if (western.length === 0 || indic.length === 0) return []

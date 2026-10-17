@@ -78,3 +78,34 @@ describe('R6 Arabic punctuation at the end of a paragraph', () => {
     expect(reported).toBe(flipped)
   })
 })
+
+// R11: block text is capped at its first and last 300 characters. Each probe puts the deciding text
+// only in the middle of a block over 1,200 characters, so the cap and the full text can disagree.
+const en = (n: number) => 'hello you '.repeat(n / 10)
+const ar = (n: number) => 'مرحبا بكم '.repeat(n / 10)
+
+describe('R11 rules decide from the whole block, not its capped copy', () => {
+  it('layout/arabic-ltr-block flags a long LTR block that is mostly Arabic in the middle', async () => {
+    const html = page(`<p>${en(200)}${ar(800)}${en(200)}</p>`, { lang: 'en', dir: 'ltr' })
+    const m = await modelOf(html)
+    expect(m.texts[0]!.blockText.length).toBeLessThanOrEqual(601)
+    expect(m.texts[0]!.blockArabicShare).toBeGreaterThan(0.5)
+    expect(m.texts[0]!.blockArabicWords).toBe(160)
+    expect(await found(html, 'layout/arabic-ltr-block')).toEqual(['layout/arabic-ltr-block'])
+  })
+
+  it('layout/arabic-ltr-block stays quiet when the Arabic in the middle is a third of the block', async () => {
+    const html = page(`<p>${en(400)}${ar(400)}${en(400)}</p>`, { lang: 'en', dir: 'ltr' })
+    expect(await found(html, 'layout/arabic-ltr-block')).toEqual([])
+  })
+
+  it('content/mixed-digits sees two digit systems in a block whose Arabic is only in the middle', async () => {
+    const html = page(`<p>${en(400)}${ar(200)}<span>السعر 50 درهم</span> ${ar(200)}<span>الكمية ٥٠ قطعة</span>${en(400)}</p>`)
+    expect(await found(html, 'content/mixed-digits')).toEqual(['content/mixed-digits'])
+  })
+
+  it('content/missing-dir counts the Arabic in the middle of a long block', async () => {
+    const html = page(`<p>${en(200)}${ar(800)}${en(200)}</p>`, { lang: 'ar', dir: null })
+    expect(await found(html, 'content/missing-dir')).toEqual(['content/missing-dir'])
+  })
+})

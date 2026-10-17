@@ -1,7 +1,7 @@
 import type { FieldKind, FieldNode, Font, LayoutNode, NodeRef, Rect, ScreenModel, TextRun } from '../model'
 import { readIcons } from './icons'
 import { makePathOf } from './path'
-import { hasArabic } from '../text'
+import { arabicShare, arabicWordCount, hasArabic } from '../text'
 import { authoredPhysical, physicalOf, type Authored } from './styles'
 import { clean, dirOf, type Pred, type Ref, type Style } from './types'
 
@@ -86,11 +86,13 @@ function screenReaderOnly(el: Element, s: CSSStyleDeclaration): boolean {
 
 function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, ref: Ref, rect: (r: DOMRect) => Rect, pathOf: (el: Element) => string): TextRun[] {
   const runs: TextRun[] = []
-  const blockCache = new Map<Element, { block: Element; id: string; full: string; text: string; dir: ReturnType<typeof dirOf> }>()
+  type BlockInfo = { block: Element; id: string; full: string; text: string; dir: ReturnType<typeof dirOf>; facts: Pick<TextRun, 'blockArabicShare' | 'blockHasArabic' | 'blockArabicWords'> }
+  const blockCache = new Map<Element, BlockInfo>()
   const hidden = new Map<Element, boolean>()
-  const newBlockInfo = (block: Element) => {
+  const newBlockInfo = (block: Element): BlockInfo => {
     const full = clean(block.textContent ?? '')
-    return { block, id: pathOf(block), full, text: capBlockText(full), dir: dirOf(style(block)) }
+    const facts = { blockArabicShare: arabicShare(full), blockHasArabic: hasArabic(full), blockArabicWords: arabicWordCount(full) }
+    return { block, id: pathOf(block), full, text: capBlockText(full), dir: dirOf(style(block)), facts }
   }
   const blockInfo = (parent: Element) => {
     const hit = blockCache.get(parent)
@@ -117,11 +119,11 @@ function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, re
     const range = doc.createRange()
     range.selectNodeContents(node)
     const lines = new Set(Array.from(range.getClientRects()).map((r) => Math.round(r.top))).size
-    const { block, id, full, text: blockText, dir: blockDir } = blockInfo(parent)
+    const { block, id, full, text: blockText, dir: blockDir, facts } = blockInfo(parent)
     const s = style(parent)
     runs.push({
       ...ref(parent, rect(range.getBoundingClientRect())),
-      text, blockId: id, blockText, blockDir, dir: dirOf(s),
+      text, blockId: id, blockText, ...facts, blockDir, dir: dirOf(s),
       lang: parent.closest('[lang]')?.getAttribute('lang') || null,
       isolated: isolatedBelow(parent, block, style), isLastInBlock: full.endsWith(text),
       font: fontOf(s), lines: Math.max(1, lines),
