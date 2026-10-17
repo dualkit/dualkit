@@ -1,7 +1,7 @@
 import { createServer, type Server } from 'node:http'
 import { readFileSync } from 'node:fs'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import type { Browser } from 'playwright'
+import { chromium, type Browser } from 'playwright'
 import { audit } from '../src/audit'
 import { UserError } from '../src/config'
 
@@ -11,6 +11,11 @@ let base = ''
 
 beforeAll(async () => {
   server = createServer((req, res) => {
+    if (req.url === '/blocks') {
+      const css = 'html,body{margin:0}div{position:absolute;top:0;width:40px;height:40px}'
+      res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' }).end(`<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><style>${css}</style></head><body><div style="inset-inline-start:0;background:#f00"></div><div style="left:0;background:#00f"></div><p style="margin-top:100px">x</p></body></html>`)
+      return
+    }
     if (req.url === '/hang') return // never answers, like a long poll
     if (req.url === '/csp') {
       res.writeHead(200, { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': "script-src 'none'" }).end(page)
@@ -88,5 +93,28 @@ describe('audit', () => {
     await expect(audit(options(`${base}/`), other)).rejects.toThrow(/^Could not start Chromium: browserType\.launch: Target crashed$/)
     const missing = () => Promise.reject(new Error('Please run playwright install'))
     await expect(audit(options(`${base}/`), missing)).rejects.toThrow(/install chromium/)
+  })
+
+  it('captures the full page width, including the inline end of an RTL page', async () => {
+    const r = await audit(options(`${base}/blocks`))
+    const b = await chromium.launch()
+    try {
+      const p = await b.newPage()
+      const px = await p.evaluate(async ({ data, probes }) => {
+        const doc = (globalThis as any).document
+        const img = doc.createElement('img')
+        await new Promise((ok, no) => { img.onload = ok; img.onerror = no; img.src = `data:image/png;base64,${data}` })
+        const c = doc.createElement('canvas')
+        c.width = img.width; c.height = img.height
+        const ctx = c.getContext('2d')
+        ctx.drawImage(img, 0, 0)
+        return { width: img.width, colours: probes.map(([x, y]: number[]) => Array.from(ctx.getImageData(x, y, 1, 1).data)) }
+      }, { data: r.screenshot, probes: [[1024 - 10, 10], [10, 10]] })
+      expect(px.width).toBe(1024)
+      expect(px.colours[0]).toEqual([255, 0, 0, 255])
+      expect(px.colours[1]).toEqual([0, 0, 255, 255])
+    } finally {
+      await b.close()
+    }
   })
 })

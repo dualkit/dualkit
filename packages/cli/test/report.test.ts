@@ -51,4 +51,17 @@ describe('renderReport', () => {
     const f = finding({ node: { id: 'gone', snippet: '<p>x</p>', box: { x: 0, y: 9000, width: 10, height: 10 } } })
     expect(renderReport(result([f], { pageHeight: 8000 }))).not.toContain('class="mark')
   })
+
+  it('isolates page text so mixed-direction messages do not reverse', () => {
+    const html = renderReport(result([finding({ message: '"4567 123 050 \u0631\u0642\u0645" is not isolated.' })]))
+    expect(html).toContain('<bdi dir="ltr">&quot;4567 123 050 \u0631\u0642\u0645&quot; is not isolated.</bdi>')
+    expect(html).toContain('<code dir="ltr">')
+  })
+
+  it('puts the badge inside the box when the marker is near the top', () => {
+    const top = finding({ node: { id: 't', snippet: '<p>x</p>', box: { x: 0, y: 0, width: 10, height: 10 } } })
+    const low = finding({ node: { id: 'l', snippet: '<p>x</p>', box: { x: 0, y: 100, width: 10, height: 10 } } })
+    expect(renderReport(result([top]))).toMatch(/class="mark top error"/)
+    expect(renderReport(result([low]))).not.toMatch(/class="mark top/)
+  })
 })

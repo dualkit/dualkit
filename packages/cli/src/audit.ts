@@ -35,9 +35,17 @@ async function open(launch: () => Promise<Browser>): Promise<Browser> {
 // Playwright's own screenshot waits on pending subresources and times out when one never answers,
 // so ask Chromium for the pixels directly.
 async function capture(page: Page, width: number, height: number): Promise<Buffer> {
+  // Resize the viewport to the whole page instead of using captureBeyondViewport, which re-lays
+  // the page out wider and shifts an RTL page's right edge out of the clip.
+  await page.setViewportSize({ width, height })
+  await page.evaluate(() => new Promise<void>((done) => (globalThis as unknown as { requestAnimationFrame: (cb: () => void) => void }).requestAnimationFrame(() => done())))
   const cdp = await page.context().newCDPSession(page)
-  const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true, clip: { x: 0, y: 0, width, height, scale: 1 } })
-  return Buffer.from(data, 'base64')
+  try {
+    const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', clip: { x: 0, y: 0, width, height, scale: 1 } })
+    return Buffer.from(data, 'base64')
+  } finally {
+    await cdp.detach().catch(() => {})
+  }
 }
 
 async function read(page: Page, options: AuditOptions): Promise<{ model: ScreenModel; pageHeight: number; shot: Buffer }> {
