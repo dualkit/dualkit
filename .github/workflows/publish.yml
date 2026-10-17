@@ -33,8 +33,12 @@ jobs:
         id: ws
         run: |
           if [ "${{ inputs.package }}" = cli ]; then echo "name=dualkit" >> "$GITHUB_OUTPUT"; else echo "name=@dualkit/${{ inputs.package }}" >> "$GITHUB_OUTPUT"; fi
-      - if: inputs.package == 'cli'
-        run: npm run build -w @dualkit/rules
+      - name: Prepare rules and CLI (their tests need built packages and Chromium)
+        if: inputs.package == 'rules' || inputs.package == 'cli'
+        run: |
+          npm run build -w @dualkit/format
+          npm run build -w @dualkit/rules
+          npx playwright@1.55.0 install --with-deps chromium
       - run: npm publish -w ${{ steps.ws.outputs.name }} --provenance --access public --tag ${{ inputs.tag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

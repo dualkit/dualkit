@@ -54,4 +54,6 @@ runs:
       run: gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file dualkit-summary.md || echo "Could not comment; grant pull-requests write to enable it."
     - if: steps.check.outputs.code == '1'
       shell: bash
-      run: echo "Score is below ${{ inputs.min-score }}." && exit 1
+      env:
+        MIN: ${{ inputs.min-score }}
+      run: echo "Score is below $MIN." && exit 1
