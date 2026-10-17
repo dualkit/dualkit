@@ -47,7 +47,7 @@ export type RoadmapItem = { title: string; line: string; state: RoadmapState; st
 // Progress is counted from real milestones, never typed in. Tick a step only when it is true on main.
 export const UP_NEXT: readonly RoadmapItem[] = [
   { title: 'Dualkit check', line: 'Point it at any screen. See what breaks in Arabic.', state: 'In progress',
-    steps: [['Design', true], ['First 20 rules', false], ['CLI and report', false], ['GitHub Action', false], ['Released', false]] },
+    steps: [['Design', true], ['First 20 rules', true], ['CLI and report', true], ['GitHub Action', true], ['Released', false]] },
   { title: 'The Bench', line: 'How well does AI build Arabic? Find out every month.', state: 'Coming',
     steps: [['Design', true], ['Prompts', false], ['Monthly runner', false], ['Leaderboard page', false], ['First run', false]] },
   { title: 'Dualkit for Figma', line: 'Everything Dualkit knows, inside Figma.', state: 'Coming',

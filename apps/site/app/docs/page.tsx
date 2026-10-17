@@ -50,6 +50,12 @@ export default async function Docs() {
           <CopyCommand command="npx shadcn@latest add https://dualkit.dev/r/amount.json" />
           <p className="small soft">Swap <code>amount</code> for <code>button</code>, <code>date-display</code>, <code>digit-input</code>, <code>field</code>, <code>sheet</code>, <code>tabs</code> or <code>toast</code>. Then import <code>components/dualkit/tokens.css</code> and <code>styles.css</code> once.</p>
         </section>
+        <section className="doc-block" id="check">
+          <h2 className="h2">Check a screen</h2>
+          <p className="soft">Point it at any page, local or live. It runs twenty Arabic and right-to-left rules and writes a report you can share.</p>
+          <CopyCommand command="npx dualkit check https://example.com/ar" />
+          <p className="small soft">Run <code>npx playwright@1.55.0 install chromium</code> once first. In CI, use <code>dualkit/dualkit/action@main</code>. Every rule is in <a href="https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md">RULES.md</a>.</p>
+        </section>
         <section className="doc-block">
           <h2 className="h2">Source</h2>
           <p className="soft">Everything is MIT licensed and lives at <a href="https://github.com/dualkit/dualkit">github.com/dualkit/dualkit</a>. Open an issue if any Arabic reads wrong.</p>

@@ -28,6 +28,7 @@ Dualkit fixes them at the source, in the agent and in the code.
 | **[Skills](plugin/skills/)** | Four agent skills for Claude Code and Cursor: RTL layout, Arabic and Latin type pairing, Gulf formats, bilingual copy | `/plugin marketplace add dualkit/dualkit` |
 | **[Format](packages/format/)** | Six Gulf currencies, Umm al-Qura dates, Arabic numerals, UAE and Saudi phone, Emirates ID, Gulf IBAN. No dependencies | `npm i @dualkit/format` |
 | **[Starter](packages/starter/)** | A bilingual design system to fork: one token file feeds CSS, Tailwind and Figma, plus eight React components | [From the release](#starter) |
+| **[Check](packages/cli/)** | Audit any page for Arabic and RTL bugs, with a shareable Gulf-ready report | `npx dualkit check <url>` |
 
 ## Proof
 

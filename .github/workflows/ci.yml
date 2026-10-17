@@ -16,8 +16,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build -w @dualkit/format
+      - run: npm run build -w @dualkit/rules
+      - run: npx playwright@1.55.0 install --with-deps chromium
       - run: npm run typecheck
       - run: npm test
       - run: npm run build -w @dualkit/skills-tooling && git diff --exit-code cursor/rules
       - run: npm run build -w @dualkit/starter && git diff --exit-code packages/starter/generated
+      - run: npm run build -w dualkit
       - run: npm run build

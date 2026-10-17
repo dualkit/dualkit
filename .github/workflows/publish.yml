@@ -5,7 +5,7 @@ on:
       package:
         description: Which package to publish
         type: choice
-        options: [format, starter]
+        options: [format, starter, rules, cli]
         default: format
         required: true
       tag:
@@ -29,12 +29,18 @@ jobs:
       - name: Starter outputs must match the token file
         if: inputs.package == 'starter'
         run: npm run build -w @dualkit/starter && git diff --exit-code packages/starter/generated
-      - run: npm publish -w @dualkit/${{ inputs.package }} --provenance --access public --tag ${{ inputs.tag }}
+      - name: Resolve the workspace
+        id: ws
+        run: |
+          if [ "${{ inputs.package }}" = cli ]; then echo "name=dualkit" >> "$GITHUB_OUTPUT"; else echo "name=@dualkit/${{ inputs.package }}" >> "$GITHUB_OUTPUT"; fi
+      - if: inputs.package == 'cli'
+        run: npm run build -w @dualkit/rules
+      - run: npm publish -w ${{ steps.ws.outputs.name }} --provenance --access public --tag ${{ inputs.tag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Point latest at this version while it is the only one
         run: |
           VERSION=$(node -p "require('./packages/${{ inputs.package }}/package.json').version")
-          npm dist-tag add "@dualkit/${{ inputs.package }}@$VERSION" latest
+          npm dist-tag add "${{ steps.ws.outputs.name }}@$VERSION" latest
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

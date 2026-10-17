@@ -1,0 +1,57 @@
+name: Dualkit check
+description: Check a page for Arabic and right-to-left bugs and attach a Gulf-ready report.
+branding: { icon: check-circle, color: gray-dark }
+inputs:
+  url: { description: URL or HTML file to check, required: true }
+  min-score: { description: Fail below this score, default: '0' }
+  width: { description: Viewport width, default: '1280' }
+  config: { description: Path to dualkit.config.json, default: '' }
+  comment: { description: Comment the score on pull requests (needs pull-requests write), default: 'true' }
+  command: { description: How to run the CLI, default: npx --yes dualkit@beta }
+  github-token: { description: Token for the PR comment, default: '${{ github.token }}' }
+outputs:
+  score: { description: Score out of 100, value: '${{ steps.check.outputs.score }}' }
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with: { node-version: 22 }
+    - shell: bash
+      run: npx --yes playwright@1.55.0 install --with-deps chromium
+    - id: check
+      shell: bash
+      env:
+        URL: ${{ inputs.url }}
+        MIN: ${{ inputs.min-score }}
+        WIDTH: ${{ inputs.width }}
+        CONFIG: ${{ inputs.config }}
+        CMD: ${{ inputs.command }}
+      run: |
+        set +e
+        ARGS=(check "$URL" --json --out dualkit-report.html --width "$WIDTH" --min-score "$MIN")
+        [ -n "$CONFIG" ] && ARGS+=(--config "$CONFIG")
+        $CMD "${ARGS[@]}" > dualkit.json
+        CODE=$?
+        set -e
+        if [ "$CODE" = 2 ]; then cat dualkit.json; exit 2; fi
+        SCORE=$(node -p "require('./dualkit.json').score")
+        echo "score=$SCORE" >> "$GITHUB_OUTPUT"
+        node -e "
+          const r = require('./dualkit.json');
+          const rules = [...new Set(r.findings.map(f => f.rule))];
+          const lines = ['### Dualkit check: ' + r.score + '/100', '', r.url, '', ...rules.map(id => '- ' + id + ' (' + r.findings.filter(f => f.rule === id).length + ')'), '', 'Full report in the dualkit-report artifact.'];
+          require('fs').writeFileSync('dualkit-summary.md', lines.join('\n'));
+        "
+        cat dualkit-summary.md >> "$GITHUB_STEP_SUMMARY"
+        echo "code=$CODE" >> "$GITHUB_OUTPUT"
+    - uses: actions/upload-artifact@v4
+      with: { name: dualkit-report, path: dualkit-report.html }
+    - if: inputs.comment == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PR: ${{ github.event.pull_request.number }}
+      run: gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file dualkit-summary.md || echo "Could not comment; grant pull-requests write to enable it."
+    - if: steps.check.outputs.code == '1'
+      shell: bash
+      run: echo "Score is below ${{ inputs.min-score }}." && exit 1
