@@ -8,8 +8,9 @@ import { clean, dirOf, type Pred, type Ref, type Style } from './types'
 export type ReadOptions = { exclude?: string[] }
 
 const SKIP_TEXT = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE', 'TITLE'])
-/** Whole words only, so cardholder_name and country_code stay plain text. */
-const CODE_FIELD = /(^|[^a-z])(iban|otp|one-time-code|postal|zip)([^a-z]|$)|(^|[^a-z])(?<!country[-_]?)code([^a-z]|$)|card[-_]?number|cc-number/i
+/** Whole words only, so cardholder_name and country_code stay plain text. camelCase is split into words first. */
+const CODE_FIELD = /(^|[^a-z])(iban|otp|one-time-code|postal|zip|postcode|zipcode)([^a-z]|$)|(^|[^a-z])(?<!country[-_ ]?)code([^a-z]|$)|card[-_ ]?number|cc-number/i
+const splitCamel = (s: string): string => s.replace(/([a-z])([A-Z])/g, '$1 $2')
 const ISOLATING_DIR = /^(ltr|rtl|auto)$/i
 const BLOCK_TEXT_CAP = 600
 const BLOCK_TEXT_KEEP = 300
@@ -156,7 +157,7 @@ function readLayouts(doc: Document, style: Style, skipped: Pred, visible: Pred, 
 function fieldKind(el: HTMLInputElement | HTMLTextAreaElement): FieldKind {
   const type = el.getAttribute('type')?.toLowerCase()
   if (type === 'email' || type === 'tel' || type === 'url' || type === 'number') return type
-  const hints = [el.getAttribute('name'), el.id, el.getAttribute('autocomplete'), el.getAttribute('inputmode')].join(' ')
+  const hints = splitCamel([el.getAttribute('name'), el.id, el.getAttribute('autocomplete'), el.getAttribute('inputmode')].join(' '))
   return CODE_FIELD.test(hints) ? 'code' : 'text'
 }
 

@@ -49,6 +49,9 @@ describe('field kinds', () => {
   it.each([
     ['cardholder_name', 'text'], ['country_code', 'text'], ['country-code', 'text'],
     ['card_number', 'code'], ['card-number', 'code'], ['iban', 'code'], ['otp', 'code'], ['postal_code', 'code'], ['promo-code', 'code'],
+    ['postalCode', 'code'], ['zipCode', 'code'], ['otpCode', 'code'], ['promoCode', 'code'], ['verificationCode', 'code'],
+    ['ibanNumber', 'code'], ['cardNumber', 'code'], ['postcode', 'code'], ['zipcode', 'code'],
+    ['cardholderName', 'text'], ['countryCode', 'text'],
   ])('classifies name="%s" as %s', async (name, kind) => {
     const m = await modelOf(doc(`<input name="${name}">`))
     expect(m.fields[0]?.kind).toBe(kind)

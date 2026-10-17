@@ -141,7 +141,8 @@ describe('real page fixes', () => {
     const t = Date.now()
     const m = await modelOf(doc(`${filler}<div class="x">نص</div>`, css))
     expect(m.layouts.find((l) => l.id.includes('div.x'))?.physical).toEqual([{ property: 'margin-left', value: '8px' }])
-    expect(Date.now() - t).toBeLessThan(1500)
+    // About 800 ms alone; the headroom is for the suite running in parallel.
+    expect(Date.now() - t).toBeLessThan(3000)
   })
 
   it('does not report a physical property that a later rule zeroed out', async () => {
