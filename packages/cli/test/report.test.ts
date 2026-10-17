@@ -52,9 +52,11 @@ describe('renderReport', () => {
     expect(renderReport(result([f], { pageHeight: 8000 }))).not.toContain('class="mark')
   })
 
+  // The old expectation quoted the number as the page paints it (4567 123 050); measured in Chromium
+  // (test/verify.test.ts), the report now shows it as typed, so the quote is isolated by its own script.
   it('isolates page text so mixed-direction messages do not reverse', () => {
-    const html = renderReport(result([finding({ message: '"4567 123 050 \u0631\u0642\u0645" is not isolated.' })]))
-    expect(html).toContain('<bdi dir="ltr">&quot;4567 123 050 \u0631\u0642\u0645&quot; is not isolated.</bdi>')
+    const html = renderReport(result([finding({ message: '"\u0631\u0642\u0645 050 123 4567" is not isolated.' })]))
+    expect(html).toContain('<bdi dir="ltr">&quot;<bdi dir="rtl">\u0631\u0642\u0645 <bdi dir="ltr">050 123 4567</bdi></bdi>&quot; is not isolated.</bdi>')
     expect(html).toContain('<code dir="ltr">')
   })
 

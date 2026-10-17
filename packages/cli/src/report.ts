@@ -1,12 +1,13 @@
 import type { Finding } from '@dualkit/rules'
 import type { AuditResult } from './audit'
+import { escapeHtml } from './escape'
+import { renderMessage } from './quote'
 import { groupByRule } from './summary'
 
 export const MAX_PER_RULE = 20
 const BADGE_ROOM = 24
 
-export const escapeHtml = (s: string): string =>
-  s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)
+export { escapeHtml } from './escape'
 
 const pct = (n: number, of: number) => `${Math.max(0, Math.min(100, (n / of) * 100)).toFixed(3)}%`
 
@@ -44,7 +45,7 @@ export function renderReport(result: AuditResult): string {
     const shown = group.slice(0, MAX_PER_RULE).map((x) => ({ n: ++n, f: x }))
     numbered.push(...shown)
     const items = shown.map(({ n: i, f: x }) =>
-      `<li id="i${i}"><strong>${i}.</strong> <bdi dir="ltr">${escapeHtml(x.message)}</bdi>${x.node ? `<br><code dir="ltr">${escapeHtml(x.node.snippet)}</code>` : ''}</li>`).join('')
+      `<li id="i${i}"><strong>${i}.</strong> <bdi dir="ltr">${renderMessage(x.message)}</bdi>${x.node ? `<br><code dir="ltr">${escapeHtml(x.node.snippet)}</code>` : ''}</li>`).join('')
     const more = group.length > MAX_PER_RULE ? `<p class="notice">And ${group.length - MAX_PER_RULE} more.</p>` : ''
     return `<section class="rule"><p class="id ${f.severity}">${escapeHtml(f.severity)} · ${escapeHtml(f.rule)} · ${group.length}</p><h2>${escapeHtml(f.title)}</h2><p class="fix">${escapeHtml(f.fix)} <a href="${escapeHtml(f.docs)}">Why</a></p><ol>${items}</ol>${more}</section>`
   })
