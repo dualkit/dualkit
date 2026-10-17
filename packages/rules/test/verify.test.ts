@@ -79,6 +79,30 @@ describe('R6 Arabic punctuation at the end of a paragraph', () => {
   })
 })
 
+// R6b: the strong Arabic marks after mixed sentences. A strong mark joins an Arabic run before it, so in an
+// ltr block it stays beside Arabic; after a Latin word, or anywhere in an rtl block, it lands at the block's end.
+const MIXED_ENDINGS: Array<{ name: string; text: string; reads: Dir }> = [
+  { name: 'Arabic-majority, trailing Latin word', text: 'هذا هاتف رائع من Apple', reads: 'rtl' },
+  { name: 'Arabic-majority, leading Latin word', text: 'iPhone هاتف رائع جدا للعمل', reads: 'rtl' },
+  { name: 'English-majority, Arabic at the end', text: 'Welcome to our store in دبي', reads: 'ltr' },
+  { name: 'English-majority, Arabic in the middle', text: 'Download the تطبيق app today', reads: 'ltr' },
+]
+/** Measured: the mark sits inside the line only when an ltr block ends in an Arabic word before a strong mark. */
+const expectedEdge = (dir: Dir, text: string) => {
+  const strongAfterArabic = /[\u061B\u061F\u06D4]$/.test(text) && /[\u0600-\u06FF]$/.test(text.slice(0, -1))
+  if (dir === 'rtl') return 'left'
+  return strongAfterArabic ? 'inside' : 'right'
+}
+const R6B = DIRS.flatMap((dir) => MIXED_ENDINGS.flatMap((c) => ARABIC_MARKS.map(({ name: mark, mark: ch }) => ({ dir, mark, ...c, text: c.text + ch }))))
+
+describe('R6b Arabic marks after mixed sentences', () => {
+  it.each(R6B)('$dir block, $name, $mark, "$text"', async ({ text, dir, reads }) => {
+    const { edge, flipped, reported } = await measureFlip(text, dir, reads)
+    expect(edge).toBe(expectedEdge(dir, text))
+    expect(reported).toBe(flipped)
+  })
+})
+
 // R11: block text is capped at its first and last 300 characters. Each probe puts the deciding text
 // only in the middle of a block over 1,200 characters, so the cap and the full text can disagree.
 const en = (n: number) => 'hello you '.repeat(n / 10)
@@ -126,6 +150,12 @@ describe('R20 content/missing-dir with dir="auto" on <html>', () => {
     expect(await rootDirection(AUTO_ARABIC_FIRST)).toBe('rtl')
     expect((await modelOf(AUTO_ARABIC_FIRST)).root.computedDir).toBe('rtl')
     expect(await found(AUTO_ARABIC_FIRST, 'content/missing-dir')).toEqual([])
+  })
+
+  it('says the body set it back when <html dir="rtl"> has <body dir="ltr">', async () => {
+    const html = page('<p>مرحبا بكم في المتجر</p>', { lang: 'ar', dir: 'rtl' }).replace('<body>', '<body dir="ltr">')
+    const findings = runRules(await modelOf(html), { rules: RULES.filter((r) => r.id === 'content/missing-dir') })
+    expect(findings.map((f) => f.message)).toEqual(['The page runs left to right because the body or a stylesheet sets it back, but 100% of the text is Arabic.'])
   })
 
   it('still accepts dir="rtl" on <body> alone', async () => {

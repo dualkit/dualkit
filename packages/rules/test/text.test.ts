@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   ARABIC_FONT, ARABIC_INDIC_DIGIT, ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, LATIN_TOKEN, PLACEHOLDER, WESTERN_DIGIT,
-  arabicShare, excerpt, firstStrong, hasArabic,
+  arabicShare, excerpt, firstStrong, hasArabic, lastStrong,
 } from '../src/text'
 
 describe('script detection', () => {
@@ -21,6 +21,9 @@ describe('script detection', () => {
   it('reads the first strong direction', () => {
     expect(firstStrong('  مرحبا hello')).toBe('rtl')
     expect(firstStrong('123 hello مرحبا')).toBe('ltr')
+    expect(lastStrong('مرحبا Apple 15')).toBe('ltr')
+    expect(lastStrong('Welcome to دبي')).toBe('rtl')
+    expect(lastStrong('050 123')).toBeNull()
     expect(firstStrong('١٢٣ ...')).toBeNull()
   })
 })

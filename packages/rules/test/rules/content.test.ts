@@ -19,10 +19,14 @@ describe('content rules', () => {
   it.each(['RTL', 'Rtl', 'auto', 'AUTO'])('accepts dir="%s" on an Arabic page when the page runs right to left', (dir) => {
     expect(ids(screen({ root: { lang: 'ar', dir, computedDir: 'rtl' }, texts: [text()] }))).toEqual([])
   })
-  it('flags dir="auto" that resolves left to right, and says so', () => {
-    const found = runRules(screen({ root: { lang: 'ar', dir: 'auto', computedDir: 'ltr' }, texts: [text()] }), { rules: contentRules })
-    expect(found.map((f) => f.rule)).toEqual(['content/missing-dir'])
-    expect(found[0]!.message).toBe('100% of the text is Arabic, but dir="auto" resolves to left to right.')
+  it.each([
+    [null, 'The page runs left to right because <html> has no dir="rtl", but 100% of the text is Arabic.'],
+    ['ltr', 'The page runs left to right because <html> has no dir="rtl", but 100% of the text is Arabic.'],
+    ['auto', 'The page runs left to right because dir="auto" took the direction of a leading Latin word, but 100% of the text is Arabic.'],
+    ['rtl', 'The page runs left to right because the body or a stylesheet sets it back, but 100% of the text is Arabic.'],
+  ])('says why a page with dir=%s runs left to right', (dir, message) => {
+    const found = runRules(screen({ root: { lang: 'ar', dir, computedDir: 'ltr' }, texts: [text()] }), { rules: contentRules })
+    expect(found.map((f) => f.message)).toEqual([message])
   })
   it('flags dir="ltr" on an Arabic page', () => {
     expect(ids(screen({ root: { lang: 'ar', dir: 'ltr', computedDir: 'ltr' }, texts: [text()] }))).toEqual(['content/missing-dir'])

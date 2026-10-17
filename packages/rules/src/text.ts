@@ -20,8 +20,9 @@ export const LATIN_TOKEN = /[\w.+-]+@[\w-]+\.[\w.]{2,}|https?:\/\/\S+|www\.\S+|\
 /** Closing marks the bidi algorithm treats as neutral, so they land at the paragraph's far end. U+060C is the Arabic comma. */
 export const ENDS_WITH_PUNCTUATION = /[.!?:;,)\]\u060C]\s*$/
 /**
- * The Arabic semicolon, question mark and full stop are strong right-to-left characters, not neutrals:
- * they stay beside Arabic text, and only land at the wrong end of left-to-right words in a right-to-left block.
+ * The Arabic semicolon, question mark and full stop are strong right-to-left characters, not neutrals.
+ * Measured in Chromium: in a left-to-right block they stay beside Arabic text before them; after a Latin
+ * word, or anywhere in a right-to-left block, they land at the block's far end like a full stop.
  */
 export const ENDS_WITH_ARABIC_MARK = /[\u061B\u061F\u06D4]\s*$/
 export const PLACEHOLDER = /lorem ipsum|dolor sit amet|لوريم إيبسوم|هذا النص هو مثال/i
@@ -47,6 +48,9 @@ export function arabicShare(s: string): number {
   const latin = (s.match(LATIN_CHARS) ?? []).length
   return arabic + latin === 0 ? 0 : arabic / (arabic + latin)
 }
+
+/** The direction of the last strong character, so the run a closing mark would join. */
+export const lastStrong = (s: string): 'ltr' | 'rtl' | null => firstStrong([...s].reverse().join(''))
 
 /** The direction a paragraph of this text would take on its own, from its first strong character. */
 export function firstStrong(s: string): 'ltr' | 'rtl' | null {

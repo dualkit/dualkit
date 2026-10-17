@@ -1,5 +1,5 @@
 import { defineRule, pick } from '../rule'
-import { ENDS_WITH_ARABIC_MARK, ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, LATIN_TOKEN, excerpt, firstStrong } from '../text'
+import { ENDS_WITH_ARABIC_MARK, ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, LATIN_TOKEN, excerpt, firstStrong, lastStrong } from '../text'
 
 const LATIN_LETTER = /[A-Za-zÀ-ɏ]/
 
@@ -39,7 +39,7 @@ export const punctuationFlip = defineRule({
     .filter((t) => {
       if (!t.isLastInBlock || t.isolated) return false
       const neutral = ENDS_WITH_PUNCTUATION.test(t.blockText)
-      const arabicMark = t.blockDir === 'rtl' && ENDS_WITH_ARABIC_MARK.test(t.blockText)
+      const arabicMark = ENDS_WITH_ARABIC_MARK.test(t.blockText) && (t.blockDir === 'rtl' || lastStrong(t.blockText.replace(ENDS_WITH_ARABIC_MARK, '')) !== 'rtl')
       if (!neutral && !arabicMark) return false
       const natural = naturalDirection(t.blockText, t.blockArabicShare)
       return natural !== null && natural !== t.blockDir
