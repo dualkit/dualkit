@@ -17,6 +17,8 @@ const READER = createRequire(import.meta.url).resolve('@dualkit/rules/reader')
 const SETTLE_MS = 800
 const LOAD_WAIT_MS = 10_000
 const MAX_SHOT_HEIGHT = 8000
+/** Device pixels: a 2x capture is used while it stays this tall, so zoomed crops stay sharp and the PNG stays a sensible size. */
+const MAX_2X_DEVICE_HEIGHT = 8000
 const HTTP_ERROR = 400
 export const PLAYWRIGHT_VERSION = '1.55.0'
 
@@ -38,11 +40,14 @@ async function open(launch: () => Promise<Browser>): Promise<Browser> {
 // growing it to the page height would stretch min-height:100vh sections and move every box, so
 // captureBeyondViewport paints the rest of the page at the same layout instead. A page that fits
 // the viewport is captured without it: Chromium shifts an RTL page's inline end out of the clip then.
+/** 2 for pages short enough to capture at double density, 1 otherwise. Boxes stay in CSS pixels either way. */
+export const shotScale = (pageHeight: number): 1 | 2 => (pageHeight * 2 <= MAX_2X_DEVICE_HEIGHT ? 2 : 1)
+
 async function capture(page: Page, width: number, height: number, viewportHeight: number): Promise<Buffer> {
   const cdp = await page.context().newCDPSession(page)
   try {
     const { data } = await cdp.send('Page.captureScreenshot', {
-      format: 'png', captureBeyondViewport: height > viewportHeight, clip: { x: 0, y: 0, width, height, scale: 1 },
+      format: 'png', captureBeyondViewport: height > viewportHeight, clip: { x: 0, y: 0, width, height, scale: shotScale(height) },
     })
     return Buffer.from(data, 'base64')
   } finally {

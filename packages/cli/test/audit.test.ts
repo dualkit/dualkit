@@ -109,8 +109,8 @@ describe('audit', () => {
         const ctx = c.getContext('2d')
         ctx.drawImage(img, 0, 0)
         return { width: img.width, colours: probes.map(([x, y]: number[]) => Array.from(ctx.getImageData(x, y, 1, 1).data)) }
-      }, { data: r.screenshot, probes: [[1024 - 10, 10], [10, 10]] })
-      expect(px.width).toBe(1024)
+      }, { data: r.screenshot, probes: [[2048 - 20, 20], [20, 20]] })
+      expect(px.width).toBe(2048)
       expect(px.colours[0]).toEqual([255, 0, 0, 255])
       expect(px.colours[1]).toEqual([0, 0, 255, 255])
     } finally {

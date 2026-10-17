@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { contentWindow, cropWindow, mergeMarks, ringPercent } from '../src/report/geometry'
+import { contentWindow, cropWindow, mergeMarks, narrowToContent, ringPercent, settleEdges } from '../src/report/geometry'
 import { pinSize, placePins } from '../src/report/pins'
 
 const overlaps = (a: { x: number; y: number; width: number; height: number }, b: typeof a) =>
@@ -103,5 +103,48 @@ describe('placePins', () => {
   it('sizes a combined pin wider than a single one', () => {
     expect(pinSize('3·16', 18).width).toBeGreaterThan(pinSize('3', 18).width)
     expect(pinSize('3', 18)).toEqual({ width: 18, height: 18 })
+  })
+})
+
+describe('cropWindow inside the content', () => {
+  it('shifts the window into the content span before clamping to the image', () => {
+    const box = { x: 771, y: 144, width: 79, height: 20 }
+    const win = cropWindow(box, 1280, 900, { x0: 430, x1: 874 })
+    expect(win.width).toBe(360)
+    expect(win.x + win.width).toBe(874)
+  })
+
+  it('centres on content narrower than the minimum width', () => {
+    const win = cropWindow({ x: 500, y: 100, width: 40, height: 20 }, 1280, 900, { x0: 450, x1: 650 })
+    expect(win.x + win.width / 2).toBe(550)
+  })
+})
+
+describe('narrowToContent', () => {
+  it('trims page background at the sides but keeps every box and a margin', () => {
+    const win = { x: 374, y: 0, width: 532, height: 600 }
+    expect(narrowToContent(win, { x0: 430, x1: 874 }, 24, [{ x: 430, y: 10, width: 420, height: 40 }])).toEqual({ x: 406, y: 0, width: 492, height: 600 })
+    expect(narrowToContent(win, null, 24, [])).toEqual(win)
+  })
+})
+
+describe('settleEdges', () => {
+  const text = [{ x: 100, y: 40, width: 60, height: 14 }, { x: 300, y: 40, width: 80, height: 14 }]
+  const isClear = (r: { x: number; y: number; width: number; height: number }) => !text.some((t) => overlaps(r, t))
+
+  it('nudges a window whose edge would cut text in half to the nearest clean cut', () => {
+    const box = { x: 300, y: 40, width: 80, height: 14 }
+    const win = { x: 130, y: 0, width: 360, height: 120 }
+    const out = settleEdges(win, box, 1280, 900, isClear)
+    expect(isClear({ x: out.x, y: out.y, width: 1, height: out.height })).toBe(true)
+    expect(isClear({ x: out.x + out.width - 1, y: out.y, width: 1, height: out.height })).toBe(true)
+    expect(out.x).toBeGreaterThan(160)
+    expect(out.x + out.width).toBeGreaterThanOrEqual(box.x + box.width)
+    expect(out.width).toBe(360)
+  })
+
+  it('leaves the window alone when no clean cut keeps the element in view', () => {
+    const win = { x: 130, y: 0, width: 360, height: 120 }
+    expect(settleEdges(win, { x: 300, y: 40, width: 80, height: 14 }, 1280, 900, () => false)).toEqual(win)
   })
 })

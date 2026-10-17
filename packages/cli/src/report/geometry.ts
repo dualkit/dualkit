@@ -17,11 +17,22 @@ const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n
 const RANK: Record<Severity, number> = { error: 0, warning: 1, note: 2 }
 export const bySeverity = (a: Severity, b: Severity): number => RANK[a] - RANK[b]
 
-/** A window centred on the box, wide enough for it plus room each side, clamped inside the image. */
-export function cropWindow(box: Box, imageWidth: number, imageHeight: number): Box {
+export type Span = { x0: number; x1: number }
+
+/**
+ * A window centred on the box, wide enough for it plus room each side, clamped inside the image.
+ * Given the span the page's content covers, the window moves inside it first, so it is never mostly page background.
+ */
+export function cropWindow(box: Box, imageWidth: number, imageHeight: number, content?: Span | null): Box {
   const width = Math.min(imageWidth, Math.max(CROP_MIN_WIDTH, box.width + 2 * CROP_SIDE))
   const height = Math.min(imageHeight, Math.max(width / CROP_ASPECT, box.height + 2 * CROP_MIN_VERTICAL))
-  const x = clamp(box.x + box.width / 2 - width / 2, 0, imageWidth - width)
+  let x = box.x + box.width / 2 - width / 2
+  if (content) {
+    const lo = Math.min(content.x0, box.x)
+    const hi = Math.max(content.x1, box.x + box.width)
+    x = hi - lo >= width ? clamp(x, lo, hi - width) : (lo + hi) / 2 - width / 2
+  }
+  x = clamp(x, 0, imageWidth - width)
   const y = clamp(box.y + box.height / 2 - height / 2, 0, imageHeight - height)
   return { x, y, width, height }
 }
@@ -85,4 +96,43 @@ export function mergeMarks(items: ReadonlyArray<{ n: number; box: Box; severity:
       severity: g.map((i) => i.severity).sort(bySeverity)[0]!,
     }
   })
+}
+
+/** The window with page background trimmed off its sides, keeping a margin and every box whole. */
+export function narrowToContent(win: Box, content: Span | null, margin: number, boxes: readonly Box[]): Box {
+  if (!content) return win
+  const x0 = Math.min(Math.max(win.x, content.x0 - margin), ...boxes.map((b) => b.x))
+  const x1 = Math.max(Math.min(win.x + win.width, content.x1 + margin), ...boxes.map((b) => b.x + b.width))
+  return { ...win, x: x0, width: x1 - x0 }
+}
+
+/** How far a crop may slide to find edges that do not cut through text, and the room kept around its element. */
+const SETTLE_REACH = 96
+const SETTLE_STEP = 4
+const SETTLE_ROOM = 24
+
+/** Offsets nearest first: 0, +s, -s, +2s, -2s ... */
+const offsets = () => [0, ...Array.from({ length: SETTLE_REACH / SETTLE_STEP }, (_, i) => [(i + 1) * SETTLE_STEP, -(i + 1) * SETTLE_STEP]).flat()]
+
+/**
+ * Slides a crop so its edges fall on clear page, not through a word, while its element stays in view
+ * with room around it. Each axis moves independently; an axis with no clean cut stays where it was.
+ */
+export function settleEdges(win: Box, box: Box, imageWidth: number, imageHeight: number, isClear: (r: Box) => boolean): Box {
+  const fits = (lo: number, size: number, max: number, elLo: number, elSize: number) =>
+    lo >= 0 && lo + size <= max && elLo >= lo + Math.min(SETTLE_ROOM, (size - elSize) / 2) - 0.01 && elLo + elSize <= lo + size - Math.min(SETTLE_ROOM, (size - elSize) / 2) + 0.01
+  const dx = offsets().find((d) => {
+    const x = win.x + d
+    return fits(x, win.width, imageWidth, box.x, box.width)
+      && isClear({ x, y: win.y, width: 1, height: win.height })
+      && isClear({ x: x + win.width - 1, y: win.y, width: 1, height: win.height })
+  })
+  const x = win.x + (dx ?? 0)
+  const dy = offsets().find((d) => {
+    const y = win.y + d
+    return fits(y, win.height, imageHeight, box.y, box.height)
+      && isClear({ x, y, width: win.width, height: 1 })
+      && isClear({ x, y: y + win.height - 1, width: win.width, height: 1 })
+  })
+  return { ...win, x, y: win.y + (dy ?? 0) }
 }

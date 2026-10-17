@@ -4,9 +4,9 @@ import type { AuditResult } from './audit'
 import { escapeHtml } from './escape'
 import { groupByRule } from './summary'
 import { renderCard, visibleBox, type Numbered, type RuleGroup } from './report/cards'
-import { bySeverity, contentWindow, mergeMarks, type Box } from './report/geometry'
+import { bySeverity, contentWindow, mergeMarks, narrowToContent, type Box } from './report/geometry'
 import { renderHeader, renderHero } from './report/hero'
-import { clearance, decodeLuma } from './report/png'
+import { paintMap } from './report/paint'
 import { styles } from './report/styles'
 import { WIDE_VIEW_PX, renderView, type ViewContext } from './report/view'
 
@@ -19,6 +19,8 @@ const RULES_URL = 'https://github.com/dualkit/dualkit/blob/main/packages/rules/R
 /** The whole-screen view must read on a 390px phone; past WIDE_VIEW_PX it switches to roomier pins. */
 const WHOLE_MIN_PX = 340
 const WHOLE_MARGIN = 56
+/** Page background kept either side of the content in the whole-screen view. */
+const WHOLE_SIDE_MARGIN = 24
 
 /** Rules in severity order, each with its first MAX_PER_RULE instances numbered 1, 2, 3 down the report. */
 function numberGroups(findings: readonly Finding[]): RuleGroup[] {
@@ -29,9 +31,9 @@ function numberGroups(findings: readonly Finding[]): RuleGroup[] {
 
 function viewContext(result: AuditResult, screenshot: string): ViewContext {
   const ctx = { imageWidth: result.width, imageHeight: result.pageHeight }
-  const img = screenshot ? decodeLuma(screenshot) : null
-  // Only trust the pixels when they are the size the boxes were measured at.
-  return img && img.width === result.width && img.height === result.pageHeight ? { ...ctx, isClear: clearance(img) } : ctx
+  // Null when the PNG is not a whole-number multiple of the page the boxes were measured on.
+  const paint = screenshot ? paintMap(screenshot, result.width, result.pageHeight) : null
+  return paint ? { ...ctx, paint } : ctx
 }
 
 function wholeScreen(numbered: readonly Numbered[], ctx: ViewContext): string {
@@ -40,7 +42,9 @@ function wholeScreen(numbered: readonly Numbered[], ctx: ViewContext): string {
     return box ? [{ n, box, severity: f.severity }] : []
   }))
   const boxes: Box[] = marks.map((m) => m.box)
-  const win = contentWindow(boxes, ctx.imageWidth, ctx.imageHeight, WHOLE_MARGIN)
+  const framed = contentWindow(boxes, ctx.imageWidth, ctx.imageHeight, WHOLE_MARGIN)
+  const content = ctx.paint?.contentSpan(framed.y, framed.y + framed.height) ?? null
+  const win = narrowToContent(framed, content, WHOLE_SIDE_MARGIN, boxes)
   const view = renderView({ win, marks, bands: [WHOLE_MIN_PX, WIDE_VIEW_PX], label: 'The audited screen with every finding numbered', className: 'whole' }, ctx)
   const lede = marks.length > 0 ? 'Every finding in place. Select a number to jump to it.' : 'The screen as it was checked.'
   return `<section class="full"><h2>The whole screen</h2><p class="lede">${lede}</p><div class="card stage">${view}</div></section>`

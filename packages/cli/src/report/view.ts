@@ -2,6 +2,7 @@
 import { clip, ringPercent, type Box, type Mark } from './geometry'
 import { placePins, type Placement } from './pins'
 import { escapeHtml } from '../escape'
+import type { PaintMap } from './paint'
 
 /** Smallest pin on screen, in css px; pins grow with the view up to PIN_MAX_PX. */
 const PIN_MIN_PX = 16
@@ -13,7 +14,7 @@ export const WIDE_VIEW_PX = 700
 /** Views never draw the screenshot larger than this. */
 export const MAX_ZOOM = 2
 
-export type ViewContext = { imageWidth: number; imageHeight: number; isClear?: (r: Box) => boolean }
+export type ViewContext = { imageWidth: number; imageHeight: number; paint?: PaintMap }
 export type ViewSpec = {
   win: Box
   marks: Mark[]
@@ -48,7 +49,7 @@ function pinLayer(spec: ViewSpec, ctx: ViewContext, band: number, cls: string): 
   const perCss = win.width / band
   const pinHeight = PIN_MIN_PX * perCss
   const gap = RING_ROOM_PX * perCss
-  const opts = ctx.isClear ? { pinHeight, gap, isClear: ctx.isClear } : { pinHeight, gap }
+  const opts = ctx.paint ? { pinHeight, gap, isClear: ctx.paint.isClear } : { pinHeight, gap }
   const placed: Placement[] = placePins(marks, win, opts)
   const size = `${n3((pinHeight / win.width) * 100)}cqw`
   const lines = placed.map((p, i) => {

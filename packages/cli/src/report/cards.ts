@@ -2,7 +2,7 @@
 import type { Finding } from '@dualkit/rules'
 import { escapeHtml } from '../escape'
 import { renderMessage } from '../quote'
-import { cropWindow, mergeMarks, type Box } from './geometry'
+import { cropWindow, mergeMarks, settleEdges, type Box } from './geometry'
 import { renderView, type ViewContext } from './view'
 
 export type Numbered = { n: number; f: Finding }
@@ -26,8 +26,12 @@ const message = (f: Finding) => `<bdi dir="ltr">${renderMessage(f.message)}</bdi
 const snippet = (f: Finding) => (f.node ? `<code dir="ltr">${escapeHtml(f.node.snippet)}</code>` : '')
 
 function crop({ n, f }: Numbered, box: Box, ctx: ViewContext, minPx: number, cls: string): string {
+  const rough = cropWindow(box, ctx.imageWidth, ctx.imageHeight)
+  const content = ctx.paint?.contentSpan(rough.y, rough.y + rough.height) ?? null
+  const framed = cropWindow(box, ctx.imageWidth, ctx.imageHeight, content)
+  const win = ctx.paint ? settleEdges(framed, box, ctx.imageWidth, ctx.imageHeight, ctx.paint.isClear) : framed
   return renderView({
-    win: cropWindow(box, ctx.imageWidth, ctx.imageHeight),
+    win,
     marks: mergeMarks([{ n, box, severity: f.severity }]),
     bands: [minPx],
     label: `Finding ${n} on the screen`,
