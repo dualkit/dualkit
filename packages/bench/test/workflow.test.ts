@@ -19,6 +19,16 @@ describe('bench workflow', () => {
     expect(yml).toMatch(/concurrency:\s*\n\s*group: bench/)
     expect(yml).toContain('timeout-minutes: 180')
   })
+  it('uploads bench/runs as an artifact on every run that was not cancelled, so a 2099 rehearsal can be read', () => {
+    const at = yml.indexOf('name: Keep the raw runs')
+    expect(at).toBeGreaterThan(yml.indexOf('name: Run the bench'))
+    const step = yml.slice(at, yml.indexOf('name: Build the summary'))
+    expect(step).toContain('if: ${{ !cancelled() }}')
+    expect(step).toMatch(/uses: actions\/upload-artifact@v4/)
+    expect(step).toContain('name: bench-runs-${{ env.BENCH_MONTH }}')
+    expect(step).toContain('path: bench/runs/${{ env.BENCH_MONTH }}')
+    expect(step).toContain('if-no-files-found: warn')
+  })
   it('commits only when something changed', () => {
     expect(yml).toContain('git diff --cached --quiet ||')
   })

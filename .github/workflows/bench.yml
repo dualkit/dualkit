@@ -74,6 +74,15 @@ jobs:
           git push -q -f origin "$commit:refs/heads/bench-progress" || true
           git reset -q
           exit $status
+      - name: Keep the raw runs
+        # 2099 rehearsal months are gitignored and never committed, so this artifact is the only way to read them.
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-runs-${{ env.BENCH_MONTH }}
+          path: bench/runs/${{ env.BENCH_MONTH }}
+          if-no-files-found: warn
+          retention-days: 30
       - name: Build the summary
         if: ${{ !cancelled() }}
         timeout-minutes: 20

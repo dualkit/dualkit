@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { RUN, type ModelEntry } from '../src/config'
-import { makeGenerate, MAX_RETRIES, MIN_GAP_MS, REQUEST_TIMEOUT_MS } from '../src/providers'
+import { loadModels, RUN, SCREENS, type ModelEntry } from '../src/config'
+import { BACKOFF_MS, makeGenerate, MAX_RETRIES, MIN_GAP_MS, REQUEST_TIMEOUT_MS } from '../src/providers'
 
 const or: ModelEntry = { id: 'g', provider: 'openrouter', model: 'google/gemma-4-31b-it:free', label: 'G', since: '2026-11', by: 'Fake', mark: 'google' }
 const gm: ModelEntry = { id: 'f', provider: 'gemini', model: 'gemini-flash-latest', label: 'F', since: '2026-11', by: 'Fake', mark: 'google' }
@@ -23,14 +23,14 @@ const req = { system: 'sys', prompt: 'build it' }
 
 describe('openrouter', () => {
   it('takes the caps from RUN', () => {
-    expect(RUN).toMatchObject({ maxTokens: 12000, reasoningTokens: 4000 })
+    expect(RUN).toMatchObject({ maxTokens: 16000, reasoningTokens: 4000 })
   })
   it('sends the model, messages, temperature and token cap, and reads the reply', async () => {
     const { f, calls } = fakeFetch([json(200, { choices: [{ message: { content: 'hi' } }], usage: { prompt_tokens: 5, completion_tokens: 7 } })])
     const out = await makeGenerate({ env, fetch: f, ...noSleep })(or, req)
     expect(out).toMatchObject({ ok: true, text: 'hi', usage: { input: 5, output: 7 } })
     const body = JSON.parse(String(calls[0]!.init.body))
-    expect(body).toMatchObject({ model: or.model, temperature: 0.4, max_tokens: 12000, reasoning: { max_tokens: 4000 }, messages: [{ role: 'system', content: 'sys' }, { role: 'user', content: 'build it' }] })
+    expect(body).toMatchObject({ model: or.model, temperature: 0.4, max_tokens: 16000, reasoning: { max_tokens: 4000 }, messages: [{ role: 'system', content: 'sys' }, { role: 'user', content: 'build it' }] })
     expect(calls[0]!.url).toBe('https://openrouter.ai/api/v1/chat/completions')
   })
 })
@@ -41,7 +41,7 @@ describe('gemini', () => {
     const out = await makeGenerate({ env, fetch: f, ...noSleep })(gm, req)
     expect(out).toMatchObject({ ok: true, text: 'ab', usage: { input: 1, output: 2 } })
     expect(calls[0]!.url).toBe('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent')
-    expect(JSON.parse(String(calls[0]!.init.body))).toMatchObject({ systemInstruction: { parts: [{ text: 'sys' }] }, generationConfig: { temperature: 0.4, maxOutputTokens: 12000, thinkingConfig: { thinkingBudget: 4000 } } })
+    expect(JSON.parse(String(calls[0]!.init.body))).toMatchObject({ systemInstruction: { parts: [{ text: 'sys' }] }, generationConfig: { temperature: 0.4, maxOutputTokens: 16000, thinkingConfig: { thinkingBudget: 4000 } } })
   })
 })
 
@@ -144,6 +144,24 @@ describe('request timeout', () => {
     const out = await makeGenerate({ env, fetch: flaky, ...noSleep })(or, req)
     expect(out).toMatchObject({ ok: false, error: 'Network error: socket hang up' })
     expect(n).toBe(1 + MAX_RETRIES)
+  })
+})
+
+describe('upstream rate limits', () => {
+  it('retries four times, waiting 15, 30, 60 then 120 s, so a busy upstream has about four minutes to clear', async () => {
+    const waits: number[] = []
+    const { f, calls } = fakeFetch(Array.from({ length: 5 }, () => json(429, { error: { message: 'temporarily rate-limited upstream' } })))
+    const out = await makeGenerate({ env, fetch: f, sleep: async (ms) => { if (ms >= 10_000) waits.push(ms) }, now: () => 0 })(or, req)
+    expect(out).toMatchObject({ ok: false, error: expect.stringContaining('HTTP 429') })
+    expect(MAX_RETRIES).toBe(4)
+    expect(BACKOFF_MS).toEqual([15_000, 30_000, 60_000, 120_000])
+    expect(calls).toHaveLength(5)
+    expect(waits).toEqual([15_000, 30_000, 60_000, 120_000])
+  })
+  it('keeps a whole month of OpenRouter calls, every retry spent, under the 1,000 a day cap', () => {
+    const openrouter = loadModels().filter((m) => m.provider === 'openrouter').length
+    const worst = openrouter * SCREENS.length * 2 * RUN.runs * (1 + MAX_RETRIES)
+    expect(worst).toBeLessThanOrEqual(1000)
   })
 })
 

@@ -6,7 +6,7 @@ import { readPng } from '../../cli/src/report/png'
 import { cell } from '../src/cells'
 import { loadScreens } from '../src/config'
 import { extractHtml } from '../src/extract'
-import { makeGenerate } from '../src/providers'
+import { makeGenerate, MAX_RETRIES } from '../src/providers'
 import { scoreHtml } from '../src/score'
 
 const fixture = (n: string) => readFileSync(join(import.meta.dirname, 'fixtures', `${n}.html`), 'utf8')
@@ -121,7 +121,7 @@ describe('probes: retries respect the run deadline', () => {
     const { f, calls } = flaky()
     const gen = makeGenerate({ env: { OPENROUTER_API_KEY: 'k' }, fetch: f, sleep: async (ms) => { clock += ms }, now: () => clock, deadline: 1_000_000 })
     await gen(or, req)
-    expect(calls).toHaveLength(3)
+    expect(calls).toHaveLength(1 + MAX_RETRIES)
   })
   it('stops retrying when the backoff itself carries the clock past the deadline', async () => {
     let clock = 0
