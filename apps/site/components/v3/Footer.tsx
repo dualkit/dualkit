@@ -5,7 +5,8 @@ import { REPO_URL } from '@/lib/copy'
 import { OVERALL_LABEL, type Overall } from '@/lib/status'
 import { V3 } from '@/lib/v3/copy'
 import { CLAUDE_URL, MAKER_URL, NPM_ORG_URL, footerColumns } from '@/lib/v3/footer'
-import { Seals, markPath } from './Seals'
+import { Seals } from './Seals'
+import { markPath } from '@/lib/v3/seal-glyphs'
 import './footer.css'
 
 const F = V3.footer

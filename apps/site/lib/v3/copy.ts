@@ -155,7 +155,7 @@ export const V3 = {
       ['Product', ['Skills', 'Format', 'Starter', 'Check', 'Bench']],
       ['Resources', ['Docs', 'Updates', 'Status', 'Registry']],
       ['Community', ['GitHub', 'Discussions', 'npm', 'Plugin directory']],
-      ['Legal', ['MIT licence', 'Privacy']],
+      ['Legal', ['MIT licence']],
     ],
     legal: '© 2026 Dualkit. MIT licensed.',
     madeBy: 'Made by',

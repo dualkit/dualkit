@@ -5,7 +5,7 @@ export const NPM_ORG_URL = 'https://www.npmjs.com/org/dualkit'
 /** No public Claude plugin directory listing exists in lib/copy.ts, so the Claude button opens the skills docs. */
 export const CLAUDE_URL = '/docs#skills'
 
-/** Where each footer link goes. A label with no real destination maps to null and renders as plain text. */
+/** Where each footer link goes. */
 export const FOOTER_LINKS: Record<string, string | null> = {
   Skills: '/docs#skills',
   Format: '/docs#format',
@@ -21,7 +21,6 @@ export const FOOTER_LINKS: Record<string, string | null> = {
   npm: NPM_ORG_URL,
   'Plugin directory': CLAUDE_URL,
   'MIT licence': `${REPO_URL}/blob/main/LICENSE`,
-  Privacy: null,
 }
 
 export const MAKER_URL = 'https://snts.im'

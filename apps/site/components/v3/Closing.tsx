@@ -17,7 +17,7 @@ export function Closing() {
               <h2 id="v3-closing-title" className="v3-h2">{C.heading}</h2>
               <div className="v3-close-cmd"><CopyCommand command={C.command} /></div>
               <div className="v3-close-actions">
-                <Button href="/docs" kind="glass" arrow>{C.primary}</Button>
+                <Button href="/docs#skills" kind="glass" arrow>{C.primary}</Button>
                 <Button href="/docs" kind="outline">{C.secondary}</Button>
               </div>
             </Glass>
