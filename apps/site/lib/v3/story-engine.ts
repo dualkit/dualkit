@@ -66,7 +66,7 @@ export function startStory(root: HTMLElement): StoryHandle {
 
   // ---------- clock: story time t advances while playing; beats wait in a queue ----------
   const clock = createClock()
-  let t = 0, lastPos = 0, playing = false, hoverPause = false, visible = false, started = false, dead = false
+  let t = 0, lastPos = 0, playing = false, hoverPause = false, userPause = false, focusPause = false, visible = false, started = false, dead = false
   type Job = { when: number; fn: () => void }
   let queue: Job[] = []
   const later = (ms: number, fn: () => void): Job => { const job = { when: t + ms, fn }; queue.push(job); queue.sort((a, b) => a.when - b.when); return job }
@@ -79,7 +79,7 @@ export function startStory(root: HTMLElement): StoryHandle {
   // The story's own WAAPI animations; CSS transitions (the highlight's fade) keep running while the story pauses.
   const anims = () => painting.getAnimations({ subtree: true }).concat(rail.getAnimations({ subtree: true })).filter((a) => !(a instanceof CSSTransition))
   function syncPlay() {
-    const p = visible && !hoverPause
+    const p = visible && !hoverPause && !userPause && !focusPause
     if (visible) clock.play(); else clock.pause()
     if (p === playing) return
     playing = p
@@ -517,6 +517,25 @@ export function startStory(root: HTMLElement): StoryHandle {
     const ga = ghost.animate([{ opacity: 1 }, { opacity: 0 }], { duration: BEATS.seekDissolveMs, easing: EASE_OUT, fill: 'forwards' })
     ga.finished.then(() => ghost.remove(), () => ghost.remove())
   }
+  // WCAG 2.2.2: the pause button holds the story until pressed again, and keyboard focus on a tick holds it while it
+  // stays inside (a mouse click on a tick focuses it too, so only :focus-visible counts).
+  const pp = q('[data-k="pp"]', rail)
+  on(pp, 'click', () => {
+    userPause = !userPause
+    pp.setAttribute('aria-pressed', String(userPause))
+    pp.setAttribute('aria-label', userPause ? V3.motion.play : V3.motion.pause)
+    syncPlay()
+  })
+  on(root, 'focusin', (e) => {
+    const el = e.target as HTMLElement
+    focusPause = el !== pp && el.matches(':focus-visible')
+    syncPlay()
+  })
+  on(root, 'focusout', (e) => {
+    if (root.contains((e as FocusEvent).relatedTarget as Node | null)) return
+    focusPause = false
+    syncPlay()
+  })
   on(q('[data-k="ticks"]', rail), 'click', (e) => {
     const b = (e.target as Element).closest<HTMLElement>('[data-tick]')
     if (!b || !started) return
@@ -581,9 +600,9 @@ export function settleStory(root: HTMLElement): () => void {
     rail.querySelectorAll<HTMLElement>(':scope > *').forEach((el) => { el.style.opacity = ''; el.style.transform = ''; el.style.clipPath = '' })
     sky.style.transform = ''
     all(rail, '[data-tick] b').forEach((b) => (b.style.transform = 'scale(1)'))
-    // Settled, the ticks seek nothing, so they leave the tab order and the accessibility tree (set after mount, so the
+    // Settled, the ticks seek nothing and there is nothing to pause, so they leave the tab order and the accessibility tree (set after mount, so the
     // server and client markup stay identical).
-    all(rail, '[data-tick]').forEach((t) => { t.tabIndex = -1; t.setAttribute('aria-hidden', 'true') })
+    all(rail, '[data-tick], [data-k="pp"]').forEach((t) => { t.tabIndex = -1; t.setAttribute('aria-hidden', 'true') })
     sizePanelRings(group)
     const w = painting.clientWidth, h = painting.clientHeight, mobile = matchMedia(MOBILE).matches
     const panel = q('[data-k="panel"]'), pin = mobile ? 4 : 32, inset = mobile ? { x: 2, y: 16 } : 32

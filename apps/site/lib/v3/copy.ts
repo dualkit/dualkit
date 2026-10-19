@@ -121,6 +121,8 @@ export const V3 = {
     tools: [['Claude Code', 'Plugin'], ['Cursor', 'Rules'], ['shadcn', 'Registry'], ['skills.sh', 'Skills'], ['npm', 'Packages']],
     ask: ['Your tool', 'Ask for it'],
   },
+  /** The pause and play control on the hero story and the region video (WCAG 2.2.2). */
+  motion: { pause: 'Pause animation', play: 'Play animation' },
   video: {
     label: 'In the region',
     heading: 'Made for the people\nbuilding the region.',

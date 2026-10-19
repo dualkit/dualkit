@@ -6,7 +6,13 @@
 .v3-rv-video { opacity: 0; transition: opacity 300ms var(--ease-ui); }
 .v3-rv-video[data-playing] { opacity: 1; }
 .v3-rv-chip { position: absolute; left: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; }
-@media (prefers-reduced-motion: reduce) { .v3-rv-video { display: none; } }
+/* Pause and play, matching the hero's rail ticks: a hard-edged 16px square in a 24px hit target. */
+.v3-rv-pp { display: grid; place-items: center; width: 24px; height: 24px; margin: -4px -6px -4px 0; padding: 0; border: 0; background: none; color: var(--v3-glass-text); cursor: pointer; }
+.v3-rv-pp i { display: grid; place-items: center; width: 16px; height: 16px; border: 1px solid rgba(255, 255, 255, 0.7); }
+.v3-rv-pp svg { display: block; }
+.v3-rv-pp:focus-visible { outline: 1px solid #fff; outline-offset: 1px; }
+/* Reduced motion: the poster only, unless the visitor presses play. */
+@media (prefers-reduced-motion: reduce) { .v3-rv-frame:not([data-chosen]) .v3-rv-video { display: none; } .v3-rv-video { transition: none; } }
 
 @media (min-width: 900px) {
   .v3-rv { display: grid; grid-template-columns: minmax(0, 1fr) 640px; max-width: 1440px; height: 900px; margin-inline: auto; }

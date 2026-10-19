@@ -107,6 +107,9 @@ export function panelHTML(settled: boolean): string {
 <div class="istrip" data-k="strip"><div class="bg"></div><span class="icmd"><span class="p">$ </span><span data-k="typed"></span><span class="caret" data-k="caret"></span></span><span class="ld4" data-k="ld4"><span class="sq4">${'<i><b></b></i>'.repeat(4)}</span><span>${S.loaded}</span></span></div>`
 }
 
+/** Pause and play for the story, at the end of the tick row. Two hard-edged glyphs; CSS shows the one for the state. */
+export const PAUSE_HTML = `<button type="button" class="pp" data-k="pp" aria-label="${V3.motion.pause}" aria-pressed="false"><i><svg class="pp-pause" viewBox="0 0 8 8" width="8" height="8" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M1 0h2v8H1zM5 0h2v8H5z"/></svg><svg class="pp-play" viewBox="0 0 8 8" width="8" height="8" aria-hidden="true"><path fill="currentColor" d="M1 0l7 4-7 4z"/></svg></i></button>`
+
 const tickLabel = (title: string) => `Show ${/^[A-Z]{2,}/.test(title) ? title : title[0]!.toLowerCase() + title.slice(1)}`
 
 /** The caption rail, settled on "Checked" with all six ticks filled. The list of rules shows under reduced motion. */
@@ -117,7 +120,7 @@ export function railHTML(): string {
 <div class="rhead"><span class="rno" data-k="rno">${odoHTML(no)}<span>&nbsp;/ 06</span></span><span class="rtitle" data-k="rtitle">${face(title)}</span></div>
 <div class="rline" data-k="rline">${face(line)}</div>
 <ol class="rlist">${PINS.map((p) => `<li><b>${p.title}.</b> ${p.line}</li>`).join('')}</ol>
-<div class="tks" data-k="ticks">${PINS.map((p) => `<button type="button" aria-label="${tickLabel(p.title)}" data-tick="${p.index}"><i><b style="transform:scale(1)"></b></i></button>`).join('')}</div>`
+<div class="tks" data-k="ticks">${PINS.map((p) => `<button type="button" aria-label="${tickLabel(p.title)}" data-tick="${p.index}"><i><b style="transform:scale(1)"></b></i></button>`).join('')}${PAUSE_HTML}</div>`
 }
 
 /** Everything inside the hero frame: the painting with its camera, and the rail. */

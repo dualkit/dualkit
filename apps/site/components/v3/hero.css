@@ -154,6 +154,10 @@
 .v3-story .tks button i { width: 8px; height: 8px; border: 1px solid rgba(255,255,255,.7); display: block; position: relative; }
 .v3-story .tks button i b { position: absolute; inset: -1px; background: #fff; transform: scale(0); }
 .v3-story .tks button:focus-visible { outline: 1px solid #fff; outline-offset: 1px; }
+.v3-story .tks .pp { width: 24px; height: 24px; margin: -3px 0 -3px auto; color: #fff; }
+.v3-story .tks .pp i { width: 16px; height: 16px; display: grid; place-items: center; }
+.v3-story .tks .pp svg { grid-area: 1 / 1; display: block; }
+.v3-story .pp[aria-pressed='true'] .pp-pause, .v3-story .pp:not([aria-pressed='true']) .pp-play { visibility: hidden; }
 /* The six rules: read by screen readers always, shown under reduced motion */
 .v3-story .rlist { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; margin-top: 10px; font-size: 12.5px; line-height: 1.5; color: var(--s-soft); list-style: none; }
 .v3-story .rlist li + li { margin-top: 4px; }
@@ -175,9 +179,11 @@
   .v3-story .tks button i { border-color: var(--v3-ink); }
   .v3-story .tks button i b { background: var(--v3-ink); }
   .v3-story .tks button:focus-visible { outline-color: var(--v3-ink); }
+  .v3-story .tks .pp { color: var(--v3-ink); }
 }
 @media (prefers-reduced-motion: reduce) {
   .v3-story .spec { display: none; }
   .v3-story .rlist { position: static; width: auto; height: auto; overflow: visible; clip-path: none; white-space: normal; }
   .v3-story .rline { min-height: 0; }
+  .v3-story .tks .pp { display: none; }
 }
