@@ -9,7 +9,7 @@ import { productWindow, terminal } from './window.mjs'
 
 const SPECS = resolve(import.meta.dirname, '../../specs')
 
-function nav() {
+export function nav() {
   const n = V2.nav
   const links = row('Links', [
     row('Product link', [text(n.product, 'V2Label', { color: 'color.text.soft' }), icon('chevron', 'color.text.faint', 12)], { gap: 'space.hair', align: 'center' }),
