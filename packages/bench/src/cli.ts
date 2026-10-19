@@ -9,7 +9,7 @@ import { buildSummary, writeSummary } from './summary'
 import { parseBenchMonth } from '../../../apps/site/lib/bench-schema'
 
 const FAKE_MODELS: ModelEntry[] = ['fake-good', 'fake-buggy', 'fake-incomplete', 'fake-garbage']
-  .map((id) => ({ id, provider: 'openrouter' as const, model: id, label: id, since: '2026-11' }))
+  .map((id) => ({ id, provider: 'openrouter' as const, model: id, label: id, since: '2026-11', by: 'Fake', mark: 'google' }))
 
 async function main(): Promise<number> {
   const args = parseCli(process.argv.slice(2))

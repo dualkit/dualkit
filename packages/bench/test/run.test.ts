@@ -10,7 +10,7 @@ import type { Generate } from '../src/providers'
 import { currentMonth, runBench, SCORE_CONCURRENCY } from '../src/run'
 import { makeStore } from '../src/store'
 
-const model = (id: string): ModelEntry => ({ id, provider: 'openrouter', model: id, label: id, since: '2026-11' })
+const model = (id: string): ModelEntry => ({ id, provider: 'openrouter', model: id, label: id, since: '2026-11', by: 'Fake', mark: 'google' })
 const screens = loadScreens().slice(0, 1)
 // A real phone-sized PNG at 2x, as the audit returns it, so the runner's WebP step runs for real.
 const PNG = (await sharp({ create: { width: 780, height: 1600, channels: 3, background: '#ffffff' } }).png().toBuffer()).toString('base64')

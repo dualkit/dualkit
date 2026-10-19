@@ -1,6 +1,6 @@
-import { copyFileSync, existsSync, mkdirSync, writeFileSync } from 'node:fs'
+import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
-import type { BenchCell, BenchModel, BenchMonth } from '../../../apps/site/lib/bench-schema'
+import { parseBenchMonth, type BenchCell, type BenchModel, type BenchMonth } from '../../../apps/site/lib/bench-schema'
 import { cell, lift, total, type BuildScore } from './cells'
 import { ROOT, type ModelEntry, type Screen } from './config'
 import { RULE_COUNT } from './score'
@@ -58,6 +58,24 @@ const newestBuild = (records: BuildRecord[], month: string) =>
 const rank = (a: BenchModel, b: BenchModel) =>
   (b.dualkit?.rulesPassed ?? -1) - (a.dualkit?.rulesPassed ?? -1) || (b.alone?.rulesPassed ?? -1) - (a.alone?.rulesPassed ?? -1) || a.label.localeCompare(b.label)
 
+/** The month before this one; January rolls back to December of the year before. */
+export const previousMonth = (month: string) => {
+  const [y, m] = month.split('-').map(Number) as [number, number]
+  return m === 1 ? `${y - 1}-12` : `${y}-${String(m - 1).padStart(2, '0')}`
+}
+
+/** Model id to rank in the previous month's file; empty when that file is missing or unreadable. */
+function previousRanks(month: string, siteRoot: string): Map<string, number | null> {
+  const file = join(siteRoot, 'content', 'bench', `${previousMonth(month)}.json`)
+  if (!existsSync(file)) return new Map()
+  try {
+    return new Map(parseBenchMonth(JSON.parse(readFileSync(file, 'utf8'))).models.map((m) => [m.id, m.rank]))
+  } catch (e) {
+    console.warn(`Could not read the previous month ${file}: ${e instanceof Error ? e.message : String(e)}`)
+    return new Map()
+  }
+}
+
 type SummaryOptions = { month: string; models: ModelEntry[]; screens: Screen[]; store: Store; siteRoot?: string; shots?: Shots }
 
 export async function buildSummary({ month, models, screens, store, siteRoot = SITE_ROOT, shots = copyShots(store, siteRoot) }: SummaryOptions): Promise<BenchMonth> {
@@ -71,9 +89,12 @@ export async function buildSummary({ month, models, screens, store, siteRoot = S
     }
     const alone = total(rows.map((r) => r.alone), RULE_COUNT)
     const dualkit = total(rows.map((r) => r.dualkit), RULE_COUNT)
-    out.push({ id: m.id, label: m.label, provider: m.provider, isNew: m.since === month, alone, dualkit, lift: lift(alone, dualkit), screens: rows })
+    out.push({ id: m.id, label: m.label, provider: m.provider, by: m.by, mark: m.mark, rank: null, previousRank: null, isNew: m.since === month, alone, dualkit, lift: lift(alone, dualkit), screens: rows })
   }
-  return { month, generatedAt: newestBuild(records, month), ruleCount: RULE_COUNT, models: out.sort(rank) }
+  const before = previousRanks(month, siteRoot)
+  let place = 0
+  const ranked = out.sort(rank).map((m) => ({ ...m, rank: m.dualkit ? ++place : null, previousRank: before.get(m.id) ?? null }))
+  return { month, generatedAt: newestBuild(records, month), ruleCount: RULE_COUNT, models: ranked }
 }
 
 export function writeSummary(month: BenchMonth, siteRoot = SITE_ROOT): string {

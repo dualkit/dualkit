@@ -1,8 +1,8 @@
-import { mkdtempSync, writeFileSync } from 'node:fs'
+import { mkdtempSync, readdirSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { BenchError, loadModels, loadScreens, SCREENS } from '../src/config'
+import { BenchError, loadModels, loadScreens, ROOT, SCREENS } from '../src/config'
 
 const tmp = () => mkdtempSync(join(tmpdir(), 'bench-'))
 
@@ -11,6 +11,33 @@ describe('loadModels', () => {
     const models = loadModels()
     expect(models.length).toBeGreaterThanOrEqual(5)
     expect(new Set(models.map((m) => m.id)).size).toBe(models.length)
+  })
+  it('gives every committed model a maker and a mark that exists in design/assets/marks', () => {
+    for (const m of loadModels()) {
+      expect(m.by.length).toBeGreaterThan(0)
+      expect(readdirSync(join(ROOT, '..', '..', 'design', 'assets', 'marks'))).toContain(`${m.mark}.svg`)
+    }
+  })
+  it('maps each committed model to its maker', () => {
+    const by = Object.fromEntries(loadModels().map((m) => [m.id, `${m.by}/${m.mark}`]))
+    expect(by).toEqual({
+      'gemini-flash': 'Google/google', 'gemma-4-31b': 'Google/google', 'nemotron-3-ultra': 'NVIDIA/nvidia',
+      inkling: 'Thinking Machines/thinking-machines', 'laguna-s': 'Poolside/poolside', 'north-mini-code': 'Cohere/cohere',
+    })
+  })
+  it('rejects a model without by, or with a mark that is not a file in design/assets/marks', () => {
+    const base = { id: 'x', provider: 'gemini', model: 'x', label: 'X', since: '2026-11', by: 'Google', mark: 'google' }
+    const load = (patch: Record<string, unknown>) => {
+      const file = join(tmp(), 'm.json')
+      writeFileSync(file, JSON.stringify([{ ...base, ...patch }]))
+      return () => loadModels(file)
+    }
+    expect(load({})).not.toThrow()
+    expect(load({ by: '' })).toThrow(/by/)
+    expect(load({ by: undefined })).toThrow(/by/)
+    expect(load({ mark: undefined })).toThrow(/mark/)
+    expect(load({ mark: 'acme' })).toThrow(/mark/)
+    expect(load({ mark: '../google' })).toThrow(/mark/)
   })
   it('rejects an unknown provider', () => {
     const file = join(tmp(), 'm.json')

@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest'
 import { RUN, type ModelEntry } from '../src/config'
 import { makeGenerate, MAX_RETRIES, MIN_GAP_MS, REQUEST_TIMEOUT_MS } from '../src/providers'
 
-const or: ModelEntry = { id: 'g', provider: 'openrouter', model: 'google/gemma-4-31b-it:free', label: 'G', since: '2026-11' }
-const gm: ModelEntry = { id: 'f', provider: 'gemini', model: 'gemini-flash-latest', label: 'F', since: '2026-11' }
+const or: ModelEntry = { id: 'g', provider: 'openrouter', model: 'google/gemma-4-31b-it:free', label: 'G', since: '2026-11', by: 'Fake', mark: 'google' }
+const gm: ModelEntry = { id: 'f', provider: 'gemini', model: 'gemini-flash-latest', label: 'F', since: '2026-11', by: 'Fake', mark: 'google' }
 const env = { OPENROUTER_API_KEY: 'or-secret', GEMINI_API_KEY: 'gm-secret' }
 const json = (status: number, body: unknown, headers: Record<string, string> = {}) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', ...headers } })

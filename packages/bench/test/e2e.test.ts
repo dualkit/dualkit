@@ -9,7 +9,7 @@ import { runBench } from '../src/run'
 import { makeStore } from '../src/store'
 import { buildSummary, writeSummary } from '../src/summary'
 
-const model = (id: string): ModelEntry => ({ id, provider: 'openrouter', model: id, label: id, since: '2026-11' })
+const model = (id: string): ModelEntry => ({ id, provider: 'openrouter', model: id, label: id, since: '2026-11', by: 'Fake', mark: 'google' })
 
 describe('the real path, end to end', () => {
   it('builds, scores in Chromium, saves screenshots, summarises, copies shots and passes the site schema', async () => {

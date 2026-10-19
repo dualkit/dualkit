@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
@@ -8,7 +8,7 @@ import { makeStore, type BuildKey, type Condition } from '../src/store'
 import { buildSummary, writeSummary } from '../src/summary'
 
 const screens = loadScreens()
-const model = (id: string, since = '2026-10'): ModelEntry => ({ id, provider: 'openrouter', model: id, label: id.toUpperCase(), since })
+const model = (id: string, since = '2026-10'): ModelEntry => ({ id, provider: 'openrouter', model: id, label: id.toUpperCase(), since, by: 'Fake', mark: 'google' })
 
 function seed(store: ReturnType<typeof makeStore>, id: string, passed: Record<Condition, number>, skip: string[] = []) {
   for (const s of screens) for (const condition of ['alone', 'dualkit'] as const) for (const run of [1, 2, 3]) {
@@ -130,5 +130,64 @@ describe('buildSummary', () => {
     const path = writeSummary(await buildSummary({ month: '2026-11', models: [], screens, store, shots: async () => null }), site)
     expect(path).toBe(join(site, 'content', 'bench', '2026-11.json'))
     expect(JSON.parse(readFileSync(path, 'utf8')).month).toBe('2026-11')
+  })
+})
+
+describe('rank and previousRank', () => {
+  const seedPrev = (site: string, month: string, ranks: Record<string, number | null>) => {
+    mkdirSync(join(site, 'content', 'bench'), { recursive: true })
+    const models = Object.entries(ranks).map(([id, rank]) => ({ id, label: id, provider: 'openrouter', by: 'Fake', mark: 'google', rank, previousRank: null, isNew: false, alone: null, dualkit: null, lift: null, screens: [] }))
+    writeFileSync(join(site, 'content', 'bench', `${month}.json`), JSON.stringify({ month, generatedAt: `${month}-01T00:00:00.000Z`, ruleCount: 20, models }))
+  }
+  const run = async (site: string, month = '2026-11', ids = ['a', 'b', 'c']) => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    if (month === '2026-11') {
+      seed(store, 'a', { alone: 8, dualkit: 18 })
+      seed(store, 'b', { alone: 8, dualkit: 15 })
+    }
+    return buildSummary({ month, models: ids.map((id) => model(id)), screens, store, siteRoot: site, shots: async () => null })
+  }
+  it('fills by and mark from the model entry', async () => {
+    const out = await run(mkdtempSync(join(tmpdir(), 'site-')))
+    expect(out.models[0]).toMatchObject({ by: 'Fake', mark: 'google' })
+  })
+  it('ranks from 1 in sort order, and leaves a model with no totals unranked', async () => {
+    const out = await run(mkdtempSync(join(tmpdir(), 'site-')))
+    expect(out.models.map((m) => [m.id, m.rank])).toEqual([['a', 1], ['b', 2], ['c', null]])
+  })
+  it('reads previousRank from the previous month file', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    seedPrev(site, '2026-10', { a: 3, b: 1, c: null })
+    const out = await run(site)
+    expect(out.models.map((m) => [m.id, m.previousRank])).toEqual([['a', 3], ['b', 1], ['c', null]])
+  })
+  it('gives null to a model absent from the previous file', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    seedPrev(site, '2026-10', { b: 1 })
+    const out = await run(site)
+    expect(out.models.map((m) => m.previousRank)).toEqual([null, 1, null])
+  })
+  it('rolls January back to December of the year before', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    seedPrev(site, '2026-12', { a: 2 })
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    for (const s of screens) for (const condition of ['alone', 'dualkit'] as const) for (const run of [1, 2, 3])
+      store.write({ month: '2027-01', model: 'a', screen: s.id, condition, run, at: '2027-01-01T04:30:00.000Z', reply: 'r', usage: null, ms: 1, finish: 'stop', reasoningTokens: 0, servedModel: 'a', ok: true, rulesPassed: 10, score: 40, missing: [], findings: [], unreadableStylesheets: 0, pageHeight: 900 }, '<html></html>')
+    const out = await buildSummary({ month: '2027-01', models: [model('a')], screens, store, siteRoot: site, shots: async () => null })
+    expect(out.models[0]!.previousRank).toBe(2)
+  })
+  it('is null for everyone when there is no previous file', async () => {
+    const out = await run(mkdtempSync(join(tmpdir(), 'site-')))
+    expect(out.models.every((m) => m.previousRank === null)).toBe(true)
+  })
+  it('warns and is null for everyone when the previous file does not parse', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    mkdirSync(join(site, 'content', 'bench'), { recursive: true })
+    writeFileSync(join(site, 'content', 'bench', '2026-10.json'), '{ not json')
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const out = await run(site)
+    expect(out.models.every((m) => m.previousRank === null)).toBe(true)
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('2026-10'))
+    warn.mockRestore()
   })
 })
