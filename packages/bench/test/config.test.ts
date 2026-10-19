@@ -21,8 +21,8 @@ describe('loadModels', () => {
   it('maps each committed model to its maker', () => {
     const by = Object.fromEntries(loadModels().map((m) => [m.id, `${m.by}/${m.mark}`]))
     expect(by).toEqual({
-      'gemini-flash': 'Google/google', 'gemma-4-31b': 'Google/google', 'nemotron-3-ultra': 'NVIDIA/nvidia',
-      'dots-3-note': 'Dots Studio/dots-studio', 'laguna-s': 'Poolside/poolside', 'north-mini-code': 'Cohere/cohere',
+      'gemini-flash': 'Google/google', 'gemini-flash-lite': 'Google/google', 'nemotron-3-super': 'NVIDIA/nvidia',
+      'dots-3-note': 'Dots Studio/dots-studio', 'laguna-s': 'Poolside/poolside', 'minimax-m3.1-flash': 'MiniMax/minimax',
     })
   })
   it('rejects a model without by, or with a mark that is not a file in design/assets/marks', () => {
