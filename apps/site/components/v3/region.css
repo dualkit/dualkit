@@ -9,9 +9,27 @@
 .v3-region-pin { position: absolute; left: var(--dx); top: var(--dy); width: 0; height: 0; }
 .v3-region-pt { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; background: var(--v3-ink); }
 .v3-region-no { display: none; position: absolute; left: 7px; top: -10px; font-weight: 500; line-height: 1; }
-.v3-region-tag { position: absolute; left: 10px; top: -30px; display: flex; gap: 8px; align-items: center; padding: 2px 8px; background: var(--v3-ink); color: #fff; white-space: nowrap; line-height: 1.5; }
+.v3-region-tag { position: absolute; left: 10px; top: -30px; display: flex; gap: 8px; align-items: center; padding: 2px 8px; margin: 0; border: 0; border-radius: 0; background: var(--v3-ink); color: #fff; font: inherit; white-space: nowrap; line-height: 1.5; cursor: pointer; width: max-content; }
+.v3-region-pin[data-flip] .v3-region-tag { left: auto; right: 10px; }
 .v3-region-tag em { font-style: normal; color: var(--v3-glass-soft); }
+.v3-region-tag:focus-visible, .v3-region-row:focus-visible { outline: 2px solid var(--v3-ink); outline-offset: 2px; }
 .v3-region-list { display: none; list-style: none; margin: 0; padding: 0; }
+
+/* Interaction: a city is picked by hover, focus or tap. Its point gets a 1px ring, its tag opens to one live example and
+   a thin ink arc runs to it from Dubai. The point's hit area is larger than the 8px square. */
+.v3-region-pin { cursor: pointer; }
+.v3-region-pt::after { content: ''; position: absolute; inset: -12px; }
+.v3-region-pin[data-picked] { z-index: 2; }
+.v3-region-pin[data-picked] .v3-region-pt { outline: 1px solid var(--v3-ink); outline-offset: 3px; }
+.v3-region-arcs { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
+.v3-region-arc { fill: none; stroke: var(--v3-ink); stroke-width: 1; vector-effect: non-scaling-stroke; }
+/* The example opens sideways in a tag (grid columns 0fr to 1fr) and downwards in the phone list (rows). */
+.v3-region-ex { display: grid; grid-template-columns: 0fr; margin-inline-start: -8px; }
+.v3-region-ex > span { overflow: hidden; min-width: 0; min-height: 0; }
+.v3-region-ex-in { display: block; width: max-content; padding-inline-start: 8px; white-space: nowrap; color: var(--v3-glass-soft); }
+.v3-region-digits { unicode-bidi: isolate-override; }
+.v3-region-ex-in b { font-weight: inherit; color: #fff; }
+[data-picked] > .v3-region-tag .v3-region-ex { grid-template-columns: 1fr; }
 
 @media (prefers-reduced-motion: no-preference) {
   .v3-region-map .v3-region-pt { opacity: 0; }
@@ -19,8 +37,12 @@
   .v3-region-map .v3-region-no { opacity: 0; }
   .v3-region-map .v3-region-tag { opacity: 0; transform: translateY(-6px); transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out); }
   .v3-region-map .is-point .v3-region-pt, .v3-region-map .is-in .v3-region-no { opacity: 1; }
-  .v3-region-map .is-in .v3-region-tag { opacity: 1; transform: none; }
+  .v3-region-map .is-in .v3-region-tag, .v3-region-map [data-picked] .v3-region-tag { opacity: 1; transform: none; }
+  .v3-region-map [data-picked] .v3-region-pt { opacity: 1; }
+  .v3-region-ex { transition: grid-template-columns 240ms var(--ease-out), grid-template-rows 240ms var(--ease-out); }
+  .v3-region-arc { stroke-dasharray: 1; animation: v3-region-arc 420ms var(--ease-out) both; }
 }
+@keyframes v3-region-arc { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 
 @media (max-width: 899px) {
   .v3-region-head { flex-direction: column; align-items: flex-start; gap: 20px; }
@@ -31,7 +53,14 @@
   .v3-region-no { display: block; }
   .v3-region-tag { display: none; }
   .v3-region-list { display: block; margin-top: 48px; }
-  .v3-region-item { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 8px; border-top: 1px solid var(--v3-line); }
+  .v3-region-item { border-top: 1px solid var(--v3-line); }
+  .v3-region-row { display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 16px; width: 100%; padding: 8px 0; margin: 0; border: 0; border-radius: 0; background: none; color: inherit; font: inherit; text-align: start; cursor: pointer; }
+  .v3-region-row-ex { grid-column: 1 / -1; }
+  .v3-region-row-ex .v3-region-ex { grid-template-columns: none; grid-template-rows: 0fr; margin-inline-start: 0; }
+  .v3-region-row-ex .v3-region-ex-in { padding: 4px 0 0 calc(1ch + 16px); color: var(--v3-soft); white-space: normal; width: auto; }
+  .v3-region-row-ex .v3-region-ex-in b { color: var(--v3-ink); font-weight: 500; }
+  [data-picked] > .v3-region-row .v3-region-ex { grid-template-rows: 1fr; }
+  .v3-region-item[data-picked] .v3-region-n { color: var(--v3-ink); }
   .v3-region-name { display: inline-flex; align-items: center; gap: 16px; font-size: 14px; font-weight: 500; }
   .v3-region-n { color: var(--v3-faint); font-weight: 400; min-width: 1ch; }
   .v3-region-fmt { color: var(--v3-soft); text-align: end; }
