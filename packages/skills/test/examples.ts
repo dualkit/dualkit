@@ -12,6 +12,27 @@ export type Example = { skill: string; quote: string; html: string; cssFromQuote
 export const EXAMPLES: Example[] = [
   {
     skill: 'dualkit-type-pairing',
+    quote: `:lang(ar) {
+  --type-label-size: 14px;
+  --type-caption-size: 14px;
+  --type-body-size: 16px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-style: normal;
+  line-height: 1.7;
+}
+/* set the Latin sizes the same way under :lang(en) */
+body { font-size: var(--type-body-size); }
+label, .badge, nav a { font-size: var(--type-label-size); }
+small, .caption { font-size: var(--type-caption-size); }`,
+    cssFromQuote: true,
+    html: `<nav><a href="#">الطلبات</a></nav>
+<label for="name">الاسم الكامل</label> <input id="name">
+<p>أكمل الطلب <span class="badge">120 ر.س</span></p>
+<small>السعر يشمل ضريبة القيمة المضافة</small>`,
+  },
+  {
+    skill: 'dualkit-type-pairing',
     quote: `@font-face {
   font-family: 'Brand';
   src: url('/fonts/ibm-plex-sans-arabic-500.woff2') format('woff2');
@@ -19,17 +40,10 @@ export const EXAMPLES: Example[] = [
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
   size-adjust: 112%;
 }
-/* then the Latin @font-face for 'Brand' with no unicode-range */`,
+/* then the Latin @font-face for 'Brand' with no unicode-range */
+body { font-family: 'Brand', 'IBM Plex Sans Arabic', sans-serif; }`,
     cssFromQuote: true,
-    // The skill never names a font stack for text, only the face, so text uses 'Brand' exactly as written there.
-    css: "body { font-family: 'Brand'; }",
     html: '<p>مرحبا بكم في المتجر</p>',
-  },
-  {
-    skill: 'dualkit-type-pairing',
-    quote: ':lang(ar) { letter-spacing: 0; text-transform: none; font-style: normal; line-height: 1.7; }',
-    cssFromQuote: true,
-    html: '<p>أكمل الطلب</p>',
   },
   {
     skill: 'dualkit-rtl-layout',
