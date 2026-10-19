@@ -118,3 +118,4 @@ Bump the plugin version (0.1.0 to 0.1.1), rebuild the Cursor rules (`packages/sk
 - `ARABIC_FONT` accepts `system-ui`, `-apple-system` and `segoe ui` as Arabic fonts.
 - The size rule ignores size-adjust, and it treats a lone ر.س like a paragraph.
 - punctuation-flip checks only the last run in a block.
+- The reader counts only `<bdi>`, `dir` and `unicode-bidi` as isolation, never the LRI/PDI characters (U+2066, U+2069), so a correctly isolated plain string fails `bidi/unisolated-number`.

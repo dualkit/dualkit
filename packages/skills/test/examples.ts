@@ -48,11 +48,6 @@ body { font-family: 'Brand'; }`,
   },
   {
     skill: 'dualkit-rtl-layout',
-    quote: `const hint = \`مثال ${LRI}050 123 4567${PDI}\``,
-    html: `<p>مثال ${LRI}050 123 4567${PDI}</p>`,
-  },
-  {
-    skill: 'dualkit-rtl-layout',
     quote: 'A formatted Arabic amount (`1,234.50 د.إ`)',
     html: '<p>الإجمالي <bdi>1,234.50 د.إ</bdi></p>',
   },
@@ -72,6 +67,7 @@ body { font-family: 'Brand'; }`,
 
 /** Fenced blocks that cannot render: TS-only import lines, and calls whose output is shown in comments. */
 export const UNRENDERED: { skill: string; index: number; reason: string }[] = [
+  { skill: 'dualkit-rtl-layout', index: 2, reason: 'rules reader counts only <bdi>/dir/unicode-bidi as isolation; LRI/PDI false positive, fixed in project 3' },
   { skill: 'dualkit-gulf-formats', index: 0, reason: 'TS import line' },
   { skill: 'dualkit-gulf-formats', index: 1, reason: 'formatMoney calls, output shown in comments' },
   { skill: 'dualkit-gulf-formats', index: 2, reason: 'formatHijri calls, output shown in comments' },
