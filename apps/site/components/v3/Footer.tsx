@@ -26,12 +26,19 @@ function FooterLink({ href, children }: { href: string; children: string }) {
     : <Link href={href}>{children}</Link>
 }
 
-/** The grand footer: brand, link columns, seals, legal row, then the painting with the wordmark. Takes the status and npm downloads as props so any page can use it. */
+/** One footer: brand, link columns, seals and legal row on the ground, the grainy painting rising behind them out of the
+ *  ground (its own alpha fade), and the wordmark at the bottom on the painting. Takes the status and npm downloads as
+ *  props so any page can use it. */
 export function Footer({ status, downloads }: { status: Overall; downloads: number | null }) {
   const npm = downloadsLine(downloads)
   return (
     <footer className="v3-foot">
-      <div className="v3-wrap">
+      <div className="v3-foot-art" data-painting="footer" aria-hidden="true">
+        {/* An image, not a CSS background, so it loads lazily as the footer nears view instead of with the page. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="v3-foot-img" src="/v3/footer.webp" srcSet="/v3/footer-1200.webp 1200w, /v3/footer.webp 2880w" sizes="100vw" alt="" width={2880} height={1200} loading="lazy" decoding="async" fetchPriority="low" />
+      </div>
+      <div className="v3-wrap v3-foot-body">
         <div className="v3-foot-top">
           <div className="v3-foot-brand">
             <span className="v3-foot-logo"><Mark />Dualkit</span>
@@ -63,12 +70,7 @@ export function Footer({ status, downloads }: { status: Overall; downloads: numb
           <span className="v3-foot-made">{F.madeBy} <a href={MAKER_URL} rel="noopener noreferrer">{F.maker}</a><span className="v3-foot-mascot"><Mascot /></span></span>
         </div>
       </div>
-      <div className="v3-foot-art" data-painting="footer">
-        {/* An image, not a CSS background, so it loads lazily as the footer nears view instead of with the page. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="v3-foot-img" src="/v3/footer.webp" srcSet="/v3/footer-1200.webp 1200w, /v3/footer.webp 2880w" sizes="100vw" alt="" width={2880} height={1200} loading="lazy" decoding="async" fetchPriority="low" aria-hidden="true" />
-        <span className="v3-foot-word" aria-hidden="true">Dualkit</span>
-      </div>
+      <div className="v3-foot-end" aria-hidden="true"><span className="v3-foot-word">Dualkit</span></div>
     </footer>
   )
 }

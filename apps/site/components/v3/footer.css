@@ -20,7 +20,11 @@
 }
 
 /* Footer */
-.v3-foot { margin-top: 200px; color: var(--v3-ink); }
+/* One footer. The painting is a layer pinned to the footer's bottom, --foot-art tall; the PNG's own alpha fades its top
+   60% out of the ground, so the seals and legal row sit where it is still almost ground and the wordmark sits on the
+   opaque dunes. The end block holds the wordmark and is the opaque part of the painting. */
+.v3-foot { --foot-art: 360px; --foot-end: calc(var(--foot-art) * 0.6); position: relative; margin-top: 200px; color: var(--v3-ink); }
+.v3-foot-body { position: relative; }
 .v3-foot-top { display: flex; flex-direction: column; gap: 40px; }
 .v3-foot-brand { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; }
 .v3-foot-logo { display: inline-flex; align-items: center; gap: 12px; font-size: 22px; line-height: 1.3; letter-spacing: -0.012em; }
@@ -55,8 +59,9 @@
 .v3-foot-mascot .mascot { width: 18px; height: 18px; animation: none; }
 .v3-foot-mascot .mascot svg { width: 18px; height: 18px; }
 
-.v3-foot-art { position: relative; display: flex; align-items: flex-end; justify-content: center; height: 240px; margin-top: 80px; overflow: hidden; background: #c9a27a; }
-.v3-foot-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.v3-foot-art { position: absolute; left: 0; right: 0; bottom: 0; height: var(--foot-art); overflow: hidden; pointer-events: none; }
+.v3-foot-img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; }
+.v3-foot-end { position: relative; display: flex; align-items: flex-end; justify-content: center; height: var(--foot-end); margin-top: 40px; overflow: hidden; }
 .v3-foot-word { position: relative; font-family: var(--font-switzer), system-ui, sans-serif; font-weight: 500; font-size: clamp(88px, 22vw, 320px); line-height: 0.8; letter-spacing: -0.06em; color: var(--v3-glass-text); white-space: nowrap; user-select: none; }
 
 @media (hover: hover) and (pointer: fine) {
@@ -73,7 +78,8 @@
   .v3-seals { display: flex; gap: 8px; }
   .v3-seal { width: 96px; }
   .v3-foot-legal { flex-direction: row; justify-content: space-between; align-items: center; }
-  .v3-foot-art { height: 520px; }
+  .v3-foot { --foot-art: max(560px, calc(100vw * 1200 / 2880)); }
+  .v3-foot-end { margin-top: 80px; }
 }
 
 /* Phone: sections sit 120 apart (mobile.mjs SECTION). */
