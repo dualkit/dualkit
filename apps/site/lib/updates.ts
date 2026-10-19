@@ -9,7 +9,7 @@ export const RELEASES: readonly Release[] = [
     slug: 'format-0-2-0',
     date: '2026-10-20',
     version: '@dualkit/format 0.2.0-beta.0',
-    tags: ['Format'],
+    tags: ['Format', 'Skills'],
     title: 'Phones and IBANs for all six GCC countries',
     body: [
       'Format now reads phone numbers from Qatar, Kuwait, Bahrain and Oman, next to the UAE and Saudi Arabia. parseGulfPhone reads a number from any of the six, as long as it starts with a + or 00 and the country code.',
@@ -18,7 +18,7 @@ export const RELEASES: readonly Release[] = [
     ],
     shipped: [
       { name: '@dualkit/format 0.2.0-beta.0', line: 'Phones for QA, KW, BH and OM, parseGulfPhone, Omani IBANs, parseSaudiVatNumber, gulfWeek, isGulfWeekend and currencySign' },
-      { name: 'dualkit-gulf-formats', line: 'The skill now states the new coverage and its weekend facts match gulfWeek' },
+      { name: 'Plugin 0.1.2', line: 'The gulf-formats skill now states the new coverage and its weekend facts match gulfWeek' },
     ],
   },
   {
