@@ -13,7 +13,7 @@ export const RELEASES: readonly Release[] = [
     title: 'A new dualkit.dev',
     body: [
       'The site has a new design. The home page opens on a painting of a Gulf dusk with a bilingual checkout on it, and steps through what each part of the kit fixes.',
-      'Skills, Format, Starter, Check and the Bench each get a preview before you install anything, and a slider shows every component flipping between left to right and right to left.',
+      'Skills, Format, Starter, Check and the Bench each get a preview before you install anything, and the Slide to pay control flips between left to right and right to left.',
     ],
     shipped: [
       { name: 'dualkit.dev', line: 'A new home page, with a preview of each part of the kit' },
