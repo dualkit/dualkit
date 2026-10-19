@@ -12,7 +12,8 @@ export const MAX_RETRIES = 2
 /** 20 a minute is the free-model cap; a little over 3 s apart stays under it. */
 export const MIN_GAP_MS = 3100
 const BACKOFF_MS = [10_000, 30_000]
-export const REQUEST_TIMEOUT_MS = 120_000
+/** The whole request, body included. Reasoning models can take minutes, and a timeout is not retried. */
+export const REQUEST_TIMEOUT_MS = 600_000
 /** A server asking for longer than this is capped, so one reply cannot stall the run for an hour. */
 export const MAX_RETRY_AFTER_S = 120
 const ERROR_BODY_CHARS = 200
@@ -75,16 +76,24 @@ export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promis
     let error = 'No attempt made'
     for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
       await pace()
+      const signal = AbortSignal.timeout(timeoutMs)
+      const timedOut = (): Generated => ({ ok: false, error: `Timed out after ${timeoutMs / 1000} s`, ms: now() - started })
       let res: Response
       try {
-        res = await f(call.url, { ...call.init, signal: AbortSignal.timeout(timeoutMs) })
+        res = await f(call.url, { ...call.init, signal })
       } catch (e) {
+        if (signal.aborted) return timedOut()
         error = `Network error: ${clipBody(e instanceof Error ? e.message : String(e), key)}`
         if (attempt < MAX_RETRIES) await sleep(BACKOFF_MS[attempt] ?? 30_000)
         continue
       }
-      if (res.ok) return settle(await res.json().catch(() => null), call, key, now() - started)
-      error = `HTTP ${res.status}: ${clipBody(await res.text().catch(() => ''), key)}`
+      if (res.ok) {
+        const body = await res.json().catch(() => null)
+        return signal.aborted ? timedOut() : settle(body, call, key, now() - started)
+      }
+      const text = await res.text().catch(() => '')
+      if (signal.aborted) return timedOut()
+      error = `HTTP ${res.status}: ${clipBody(text, key)}`
       if (!retryable(res.status)) break
       const after = Math.min(Number(res.headers.get('retry-after')), MAX_RETRY_AFTER_S)
       if (attempt < MAX_RETRIES) await sleep(after > 0 ? after * 1000 : BACKOFF_MS[attempt] ?? 30_000)

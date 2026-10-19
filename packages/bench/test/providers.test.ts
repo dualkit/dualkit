@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { RUN, type ModelEntry } from '../src/config'
-import { makeGenerate, MAX_RETRIES } from '../src/providers'
+import { makeGenerate, MAX_RETRIES, REQUEST_TIMEOUT_MS } from '../src/providers'
 
 const or: ModelEntry = { id: 'g', provider: 'openrouter', model: 'google/gemma-4-31b-it:free', label: 'G', since: '2026-11' }
 const gm: ModelEntry = { id: 'f', provider: 'gemini', model: 'gemini-flash-latest', label: 'F', since: '2026-11' }
@@ -99,7 +99,10 @@ describe('pacing', () => {
 })
 
 describe('request timeout', () => {
-  it('aborts a hung request, counts it as a network error, and retries it', async () => {
+  it('gives each request 600 s in total', () => {
+    expect(REQUEST_TIMEOUT_MS).toBe(600_000)
+  })
+  it('aborts a hung request and does not retry it', async () => {
     const calls: RequestInit[] = []
     const hang = (async (_url: string, init: RequestInit) => {
       calls.push(init)
@@ -109,9 +112,26 @@ describe('request timeout', () => {
       })
     }) as unknown as typeof fetch
     const out = await makeGenerate({ env, fetch: hang, timeoutMs: 50, ...noSleep })(or, req)
-    expect(out).toMatchObject({ ok: false })
-    expect(out.ok ? '' : out.error).toMatch(/timeout/i)
-    expect(calls).toHaveLength(1 + MAX_RETRIES)
+    expect(out).toMatchObject({ ok: false, error: 'Timed out after 0.05 s' })
+    expect(calls).toHaveLength(1)
+  })
+  it('counts a body that stalls past the timeout as a timeout, not an empty reply', async () => {
+    const calls: RequestInit[] = []
+    const slowBody = (async (_url: string, init: RequestInit) => {
+      calls.push(init)
+      const body = new ReadableStream({ start(c) { init.signal!.addEventListener('abort', () => c.error(init.signal!.reason)) } })
+      return new Response(body, { status: 200, headers: { 'content-type': 'application/json' } })
+    }) as unknown as typeof fetch
+    const out = await makeGenerate({ env, fetch: slowBody, timeoutMs: 50, ...noSleep })(or, req)
+    expect(out).toMatchObject({ ok: false, error: 'Timed out after 0.05 s' })
+    expect(calls).toHaveLength(1)
+  })
+  it('still retries other network errors', async () => {
+    let n = 0
+    const flaky = (async () => { n++; throw new Error('socket hang up') }) as unknown as typeof fetch
+    const out = await makeGenerate({ env, fetch: flaky, ...noSleep })(or, req)
+    expect(out).toMatchObject({ ok: false, error: 'Network error: socket hang up' })
+    expect(n).toBe(1 + MAX_RETRIES)
   })
 })
 
