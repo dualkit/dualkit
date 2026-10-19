@@ -94,3 +94,49 @@ describe('pacing', () => {
     expect(waits.reduce((a, b) => a + b, 0)).toBeGreaterThanOrEqual(3100)
   })
 })
+
+describe('request timeout', () => {
+  it('aborts a hung request, counts it as a network error, and retries it', async () => {
+    const calls: RequestInit[] = []
+    const hang = (async (_url: string, init: RequestInit) => {
+      calls.push(init)
+      return new Promise<Response>((_, reject) => {
+        if (!init.signal) return reject(new Error('no signal'))
+        init.signal.addEventListener('abort', () => reject(init.signal!.reason))
+      })
+    }) as unknown as typeof fetch
+    const out = await makeGenerate({ env, fetch: hang, timeoutMs: 50, ...noSleep })(or, req)
+    expect(out).toMatchObject({ ok: false })
+    expect(out.ok ? '' : out.error).toMatch(/timeout/i)
+    expect(calls).toHaveLength(1 + MAX_RETRIES)
+  })
+})
+
+describe('retry-after clamp', () => {
+  it('caps a long Retry-After at 120 seconds', async () => {
+    const waits: number[] = []
+    const { f } = fakeFetch([json(429, {}, { 'retry-after': '3600' }), json(200, { choices: [{ message: { content: 'ok' } }] })])
+    await makeGenerate({ env, fetch: f, sleep: async (ms) => { waits.push(ms) }, now: () => 0 })(or, req)
+    expect(waits).toContain(120000)
+    expect(waits).not.toContain(3600000)
+  })
+})
+
+describe('key and length in errors', () => {
+  it('keeps the Gemini key out of a 403 body', async () => {
+    const { f } = fakeFetch([json(403, { error: 'bad key gm-secret' })])
+    const out = await makeGenerate({ env, fetch: f, ...noSleep })(gm, req)
+    expect(out.ok).toBe(false)
+    expect(JSON.stringify(out)).not.toContain('gm-secret')
+  })
+  it('keeps the key out of a network error message', async () => {
+    const f = (async () => { throw new Error('failed for key or-secret') }) as unknown as typeof fetch
+    const out = await makeGenerate({ env, fetch: f, ...noSleep })(or, req)
+    expect(JSON.stringify(out)).not.toContain('or-secret')
+  })
+  it('clips a network error message to 200 characters', async () => {
+    const f = (async () => { throw new Error('x'.repeat(500)) }) as unknown as typeof fetch
+    const out = await makeGenerate({ env, fetch: f, ...noSleep })(or, req)
+    expect(out).toMatchObject({ ok: false, error: `Network error: ${'x'.repeat(200)}` })
+  })
+})
