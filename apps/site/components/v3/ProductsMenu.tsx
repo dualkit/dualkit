@@ -9,7 +9,7 @@ import { GlassLayer } from './GlassLayer'
 import { Frame } from './primitives'
 
 const SCROLL_CLOSE_PX = 24
-const COPIED_MS = 1600
+const COPIED_MS = 1500
 const DRAWER_ID = 'v3-products'
 const NAV_LINKS = [['Docs', '/docs'], ['Bench', '/bench'], ['Updates', '/updates']] as const
 
@@ -58,10 +58,14 @@ function CopyLine({ command }: { command: string }) {
     }
   }
   return (
-    <div className={`v3-menu-cmd${copied ? ' copied' : ''}`}>
+    <div className="v3-menu-cmd">
       <span className="v3-mono v3-menu-faint" aria-hidden="true">$</span>
       <code ref={code} className="v3-mono">{command}</code>
-      <button type="button" className="v3-menu-copy" onClick={copy} aria-label={copied ? 'Copied' : `Copy ${command}`}><CopyIcon /></button>
+      {/* The icon and the word share one cell and crossfade, so the line never reflows. */}
+      <button type="button" className="v3-menu-copy" onClick={copy} aria-label={`Copy ${command}`} data-copied={copied || undefined}>
+        <CopyIcon /><span className="v3-small v3-menu-copied" aria-hidden="true">{V3.menu.copied}</span>
+      </button>
+      <span className="v3-sr" role="status" aria-live="polite">{copied ? V3.menu.copied : ''}</span>
     </div>
   )
 }

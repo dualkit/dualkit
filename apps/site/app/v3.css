@@ -129,7 +129,12 @@ body { background: var(--v3-ground); }
 
 .v3-menu-cmd { display: flex; align-items: center; gap: 12px; padding: 12px 16px; box-shadow: inset 0 0 0 1px var(--v3-line); }
 .v3-menu-cmd code { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-.v3-menu-copy { display: inline-flex; padding: 0; border: 0; background: none; color: var(--v3-soft); cursor: pointer; }
+.v3-menu-copy { display: inline-grid; grid-template: auto / auto; justify-items: end; align-items: center; padding: 0; border: 0; background: none; color: var(--v3-soft); cursor: pointer; }
+/* Copied: the icon gives way to the word for 1.5 s, a 150ms opacity crossfade and nothing else. */
+.v3-menu-copy > * { grid-area: 1 / 1; transition: opacity 150ms var(--ease-ui); }
+.v3-menu-copied { opacity: 0; color: var(--v3-ink); white-space: nowrap; }
+.v3-menu-copy[data-copied] .copy-ico { opacity: 0; }
+.v3-menu-copy[data-copied] .v3-menu-copied { opacity: 1; }
 .v3-menu-go { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
 .v3-menu-go svg { transition: transform 200ms var(--ease-out); }
 .v3-menu-foot-links { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -193,7 +198,7 @@ body { background: var(--v3-ground); }
 .v3-menu-foot-part[data-on] { opacity: 1; }
 @media (hover: hover) and (pointer: fine) { .v3-menu-go:hover svg { transform: translateX(2px); } .v3-menu-copy:hover { color: var(--v3-ink); } }
 @media (prefers-reduced-motion: reduce) {
-  .v3-menu, .v3-menu[data-open], .v3-menu-scrim, .v3-menu-shot, .v3-menu-foot-part, .v3-nav-link { transition: none; }
+  .v3-menu, .v3-menu[data-open], .v3-menu-scrim, .v3-menu-shot, .v3-menu-foot-part, .v3-nav-link, .v3-menu-copy > * { transition: none; }
 }
 
 /* Kit previews: glass panels at their natural size (Task 9 shows them full size; the menu scales them down). */
@@ -264,3 +269,6 @@ body { background: var(--v3-ground); }
    square nav, and the Bench's last band drops its bottom padding because the footer already brings 200 px. */
 :is(main.page, main.bx) :is(.pill, .tag, .cmd, .bx-month, .bx-months, .bx-months a), .fb :is(.pill, textarea, input) { border-radius: 0; }
 main.bx > .bx-how:last-child { padding-bottom: 0; }
+
+/* Read by screen readers, not shown. */
+.v3-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

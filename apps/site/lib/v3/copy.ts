@@ -12,6 +12,7 @@ export const V3 = {
     ],
     command: '/plugin install dualkit@dualkit',
     installLabel: 'Install the skills',
+    copied: 'Copied',
     startLabel: 'Start here',
     start: ['Quick start', 'Docs', 'Updates', 'Status'],
     latest: ['Latest', 'dualkit check, beta', '18 Oct'],
