@@ -19,7 +19,7 @@ async function main(): Promise<number> {
   if (models.length === 0) throw new BenchError(`No model with id "${args.model}". Ids: ${all.map((m) => m.id).join(', ')}`)
   const store = makeStore()
   if (!args.summaryOnly) {
-    const generate = args.fake ? fakeGenerate : makeGenerate({ env: process.env })
+    const generate = args.fake ? fakeGenerate : makeGenerate({ env: process.env, ...(args.deadline !== undefined ? { deadline: args.deadline } : {}) })
     const screens = loadScreens().filter((s) => !args.screen || s.id === args.screen)
     const out = await runBench({
       month, models, screens, generate, store, log: (l) => console.log(l),

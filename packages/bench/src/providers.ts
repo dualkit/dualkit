@@ -6,7 +6,9 @@ export type ReplyMeta = { finish: string | null; reasoningTokens: number; served
 export type Reply = { text: string; usage: Usage } & ReplyMeta
 export type Generated = ({ ok: true; ms: number } & Reply) | { ok: false; error: string; ms: number; reply?: Reply }
 export type Generate = (model: ModelEntry, req: { system: string; prompt: string }) => Promise<Generated>
-type Options = { env: Record<string, string | undefined>; fetch?: typeof fetch; sleep?: (ms: number) => Promise<void>; now?: () => number; timeoutMs?: number }
+type Options = { env: Record<string, string | undefined>; fetch?: typeof fetch; sleep?: (ms: number) => Promise<void>; now?: () => number; timeoutMs?: number
+  /** Epoch ms. Once it passes no retry starts; the call returns its last error. */
+  deadline?: number }
 
 export const MAX_RETRIES = 2
 /** 20 a minute is the free-model cap; a little over 3 s apart stays under it. */
@@ -61,7 +63,7 @@ function settle(body: any, call: Call, key: string, ms: number): Generated {
   return { ok: false, error: 'Empty reply', ms }
 }
 
-export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), now = Date.now, timeoutMs = REQUEST_TIMEOUT_MS }: Options): Generate {
+export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), now = Date.now, timeoutMs = REQUEST_TIMEOUT_MS, deadline = Infinity }: Options): Generate {
   // Models run concurrently through this one instance, so slots are handed out one at a time on a chain:
   // each caller waits for the slot before it, then starts at least MIN_GAP_MS after that one started.
   let last = -Infinity
@@ -82,6 +84,7 @@ export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promis
     const call = request(model, key, req)
     let error = 'No attempt made'
     for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+      if (attempt > 0 && now() >= deadline) break
       await pace()
       const signal = AbortSignal.timeout(timeoutMs)
       const timedOut = (): Generated => ({ ok: false, error: `Timed out after ${timeoutMs / 1000} s`, ms: now() - started })
@@ -91,7 +94,7 @@ export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promis
       } catch (e) {
         if (signal.aborted) return timedOut()
         error = `Network error: ${clipBody(e instanceof Error ? e.message : String(e), key)}`
-        if (attempt < MAX_RETRIES) await sleep(BACKOFF_MS[attempt] ?? 30_000)
+        if (attempt < MAX_RETRIES && now() < deadline) await sleep(BACKOFF_MS[attempt] ?? 30_000)
         continue
       }
       if (res.ok) {
@@ -103,7 +106,7 @@ export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promis
       error = `HTTP ${res.status}: ${clipBody(text, key)}`
       if (!retryable(res.status)) break
       const after = Math.min(Number(res.headers.get('retry-after')), MAX_RETRY_AFTER_S)
-      if (attempt < MAX_RETRIES) await sleep(after > 0 ? after * 1000 : BACKOFF_MS[attempt] ?? 30_000)
+      if (attempt < MAX_RETRIES && now() < deadline) await sleep(after > 0 ? after * 1000 : BACKOFF_MS[attempt] ?? 30_000)
     }
     return { ok: false, error, ms: now() - started }
   }
