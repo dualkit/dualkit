@@ -43,7 +43,6 @@ export function bannedIn(code: string): string[] {
   for (const m of code.matchAll(new RegExp(String.raw`text-\[${SIZE}\]`, 'g')))
     if (toPx(m[1]!, m[2]!) < MIN_PX) hits.push(m[0])
   for (const m of code.matchAll(new RegExp(String.raw`(?<![\w-])(font-size|--[\w-]*(?:text|font|size)[\w-]*)\s*:\s*${SIZE}`, 'g'))) {
-    if (m[1] === 'size-adjust') continue
     if (toPx(m[2]!, m[3]!) < MIN_PX) hits.push(m[0])
   }
   return hits

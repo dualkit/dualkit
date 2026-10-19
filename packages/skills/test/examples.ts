@@ -1,12 +1,13 @@
 /**
  * Good examples from the skills, each as a verbatim `quote` plus a hand-written HTML equivalent
- * (JSX and TS cannot render). The shell supplies only lang="ar" dir="rtl", so anything else a
- * page needs has to appear here because a skill says it.
+ * (JSX and TS cannot render). Each skill renders on its own page, because each is installed on its own.
+ * The shell supplies only lang="ar" dir="rtl", so anything else a page needs has to appear here
+ * because a skill says it.
+ *
+ * `cssFromQuote` uses the quote itself as the page CSS, so the two cannot drift. `css` is extra,
+ * hand-written CSS. For a fenced block, the quotes together must cover every non-blank line.
  */
-export type Example = { skill: string; quote: string; html: string; css?: string }
-
-const LRI = '⁦'
-const PDI = '⁩'
+export type Example = { skill: string; quote: string; html: string; cssFromQuote?: boolean; css?: string }
 
 export const EXAMPLES: Example[] = [
   {
@@ -17,22 +18,17 @@ export const EXAMPLES: Example[] = [
   font-weight: 500;
   unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
   size-adjust: 112%;
-}`,
-    // The skill never names a font stack for text, only the face, so text uses 'Brand' exactly as written there.
-    css: `@font-face {
-  font-family: 'Brand';
-  src: url('/fonts/ibm-plex-sans-arabic-500.woff2') format('woff2');
-  font-weight: 500;
-  unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
-  size-adjust: 112%;
 }
-body { font-family: 'Brand'; }`,
+/* then the Latin @font-face for 'Brand' with no unicode-range */`,
+    cssFromQuote: true,
+    // The skill never names a font stack for text, only the face, so text uses 'Brand' exactly as written there.
+    css: "body { font-family: 'Brand'; }",
     html: '<p>مرحبا بكم في المتجر</p>',
   },
   {
     skill: 'dualkit-type-pairing',
     quote: ':lang(ar) { letter-spacing: 0; text-transform: none; font-style: normal; line-height: 1.7; }',
-    css: ':lang(ar) { letter-spacing: 0; text-transform: none; font-style: normal; line-height: 1.7; }',
+    cssFromQuote: true,
     html: '<p>أكمل الطلب</p>',
   },
   {
@@ -59,17 +55,30 @@ body { font-family: 'Brand'; }`,
   },
   {
     skill: 'dualkit-bilingual-copy',
-    quote: "few: 'لديك {count} عناصر في هذا الطلب',",
-    // {count} filled with a digit, as the skill's .replace does.
+    quote: `const items = {
+  zero: 'لا توجد عناصر في هذا الطلب',
+  one: 'لديك عنصر واحد في هذا الطلب',
+  two: 'لديك عنصران في هذا الطلب',
+  few: 'لديك {count} عناصر في هذا الطلب',
+  many: 'لديك {count} عنصرًا في هذا الطلب',
+  other: 'لديك {count} عنصر في هذا الطلب',
+}
+const line = items[new Intl.PluralRules('ar').select(count)].replace('{count}', formatCount(count))`,
+    // The block renders as the `few` sentence with {count} filled by a digit, as the .replace does.
     html: '<p>لديك 5 عناصر في هذا الطلب</p>',
   },
 ]
 
-/** Fenced blocks that cannot render: TS-only import lines, and calls whose output is shown in comments. */
-export const UNRENDERED: { skill: string; index: number; reason: string }[] = [
-  { skill: 'dualkit-rtl-layout', index: 2, reason: 'rules reader counts only <bdi>/dir/unicode-bidi as isolation; LRI/PDI false positive, fixed in project 3' },
-  { skill: 'dualkit-gulf-formats', index: 0, reason: 'TS import line' },
-  { skill: 'dualkit-gulf-formats', index: 1, reason: 'formatMoney calls, output shown in comments' },
-  { skill: 'dualkit-gulf-formats', index: 2, reason: 'formatHijri calls, output shown in comments' },
-  { skill: 'dualkit-gulf-formats', index: 3, reason: 'parse calls, output shown in comments' },
+/** Fenced blocks that cannot render: TS-only import lines, calls whose output is shown in comments, and known reader gaps. */
+export const UNRENDERED: { skill: string; index: number; quote: string; reason: string }[] = [
+  {
+    skill: 'dualkit-rtl-layout',
+    index: 2,
+    quote: 'const hint = `مثال ⁦050 123 4567⁩`',
+    reason: 'rules reader counts only <bdi>/dir/unicode-bidi as isolation; LRI/PDI false positive, fixed in project 3',
+  },
+  { skill: 'dualkit-gulf-formats', index: 0, quote: "import { formatMoney,", reason: 'TS import line' },
+  { skill: 'dualkit-gulf-formats', index: 1, quote: "formatMoney(1234.5, { currency: 'AED' })", reason: 'formatMoney calls, output shown in comments' },
+  { skill: 'dualkit-gulf-formats', index: 2, quote: "formatHijri(dueDate, { timeZone: 'Asia/Dubai' })", reason: 'formatHijri calls, output shown in comments' },
+  { skill: 'dualkit-gulf-formats', index: 3, quote: "parseUaePhone('٠٥٠ ١٢٣ ٤٥٦٧')", reason: 'parse calls, output shown in comments' },
 ]

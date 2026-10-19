@@ -1,22 +1,29 @@
-import { readFileSync, readdirSync, existsSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { afterAll, describe, expect, it } from 'vitest'
+import { RULES, runRules } from '../../rules/src/index'
 import { closeBrowser, modelOf } from '../../rules/test/helpers/browser'
-import { runRules } from '../../rules/src/index'
-import { EXAMPLES, UNRENDERED } from './examples'
+import { EXAMPLES, UNRENDERED, type Example } from './examples'
 import { fencesOf } from './fences'
 
 const SKILLS = join(import.meta.dirname, '../../../plugin/skills')
 const names = readdirSync(SKILLS).filter((n) => existsSync(join(SKILLS, n, 'SKILL.md')))
 const read = (name: string) => readFileSync(join(SKILLS, name, 'SKILL.md'), 'utf8')
-const RENDERABLE = new Set(['css', 'html', 'tsx', 'ts'])
+/** Fence languages that are never UI code. Any other language, or none, must be covered or listed in UNRENDERED. */
+const NON_RENDER = new Set(['bash', 'sh', 'json', 'md', 'text'])
 
 const shell = (css: string, body: string) =>
   `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><style>${css}</style></head><body>${body}</body></html>`
 
+const cssOf = (e: Example) => [e.cssFromQuote ? e.quote : '', e.css ?? ''].filter(Boolean).join('\n')
+
+const skillsWithExamples = [...new Set(EXAMPLES.map((e) => e.skill))]
+
 afterAll(closeBrowser)
 
 describe('skill examples through the rules', () => {
+  it('runs all 20 rules', () => expect(RULES).toHaveLength(20))
+
   it('renders the bare shell with findings', async () => {
     const ids = runRules(await modelOf(shell('', '<p>مرحبا بكم</p>'))).map((f) => f.rule)
     expect(ids).toContain('type/arabic-font')
@@ -26,22 +33,32 @@ describe('skill examples through the rules', () => {
     for (const e of EXAMPLES) expect(read(e.skill), e.quote).toContain(e.quote)
   })
 
-  it('every renderable block is covered', () => {
-    const uncovered = names.flatMap((name) =>
-      fencesOf(name, read(name))
-        .filter((f) => RENDERABLE.has(f.lang))
-        .filter((f) => !EXAMPLES.some((e) => e.skill === name && f.code.includes(e.quote)))
+  it('every renderable block is covered, line by line', () => {
+    const uncovered = names.flatMap((name) => {
+      const quotes = EXAMPLES.filter((e) => e.skill === name).map((e) => e.quote)
+      return fencesOf(name, read(name))
+        .filter((f) => !NON_RENDER.has(f.lang))
         .filter((f) => !UNRENDERED.some((u) => u.skill === name && u.index === f.index))
-        .map((f) => `${name} block ${f.index} (${f.lang}, under "${f.section}")`))
+        .flatMap((f) =>
+          f.code.split('\n').map((l) => l.trim()).filter(Boolean)
+            .filter((line) => !quotes.some((q) => q.includes(line)))
+            .map((line) => `${name} block ${f.index} (${f.lang || 'untagged'}, under "${f.section}"): ${line}`))
+    })
     expect(uncovered).toEqual([])
   })
 
-  it('lists only unrendered blocks that exist', () => {
-    for (const u of UNRENDERED) expect(fencesOf(u.skill, read(u.skill)).some((f) => f.index === u.index), `${u.skill} ${u.index}`).toBe(true)
+  it('lists only unrendered blocks that exist and contain their quote', () => {
+    for (const u of UNRENDERED) {
+      const fence = fencesOf(u.skill, read(u.skill)).find((f) => f.index === u.index)
+      expect(fence, `${u.skill} block ${u.index} exists`).toBeDefined()
+      expect(fence?.code, `${u.skill} block ${u.index} quote`).toContain(u.quote)
+    }
   })
 
-  it('the good examples pass all 20 rules', async () => {
-    const page = shell(EXAMPLES.map((e) => e.css ?? '').join('\n'), EXAMPLES.map((e) => e.html).join('\n'))
-    expect(runRules(await modelOf(page)).map((f) => `${f.rule}: ${f.message}`)).toEqual([])
+  it.each(skillsWithExamples)('%s: its good examples pass all 20 rules on their own page', async (skill) => {
+    const own = EXAMPLES.filter((e) => e.skill === skill)
+    const page = shell(own.map(cssOf).join('\n'), own.map((e) => e.html).join('\n'))
+    const findings = runRules(await modelOf(page)).map((f) => `${skill} ${f.rule}: ${f.message}`)
+    expect(findings).toEqual([])
   })
 })
