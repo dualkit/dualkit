@@ -34,7 +34,8 @@ async function benchCell(store: Store, records: BuildRecord[], shots: Shots): Pr
   let shot: { file: string; pageHeight: number } | null = null
   try {
     shot = await shots(rec, readFileSync(store.paths(rec).html, 'utf8'))
-  } catch {
+  } catch (e) {
+    console.warn(`Screenshot failed for ${rec.model}/${rec.screen}/${rec.condition}: ${e instanceof Error ? e.message : String(e)}`)
     shot = null
   }
   return {

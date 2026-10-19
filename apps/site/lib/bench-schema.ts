@@ -11,6 +11,7 @@ const fail = (path: string): never => { throw new Error(`Bench data: bad ${path}
 const obj = (v: unknown, path: string): Obj => (v && typeof v === 'object' && !Array.isArray(v) ? (v as Obj) : fail(path))
 const num = (v: unknown, path: string): number => (typeof v === 'number' && Number.isFinite(v) ? v : fail(path))
 const str = (v: unknown, path: string): string => (typeof v === 'string' ? v : fail(path))
+const bool = (v: unknown, path: string): boolean => (typeof v === 'boolean' ? v : fail(path))
 const list = (v: unknown, path: string): unknown[] => (Array.isArray(v) ? v : fail(path))
 const SEVERITIES = ['error', 'warning', 'note']
 
@@ -33,7 +34,7 @@ function finding(v: unknown, path: string): BenchFinding {
 function cell(v: unknown, path: string): BenchCell {
   const o = obj(v, path)
   const runs = num(o.runs, `${path}.runs`)
-  if (o.ran !== true) return { ran: false, runs }
+  if (!bool(o.ran, `${path}.ran`)) return { ran: false, runs }
   return {
     ran: true, runs, rulesPassed: num(o.rulesPassed, `${path}.rulesPassed`), score: num(o.score, `${path}.score`),
     missing: list(o.missing, `${path}.missing`).map((m, i) => str(m, `${path}.missing.${i}`)),
@@ -53,7 +54,7 @@ export function parseBenchMonth(raw: unknown): BenchMonth {
       if (m.provider !== 'openrouter' && m.provider !== 'gemini') fail(`models.${i}.provider`)
       return {
         id: str(m.id, `models.${i}.id`), label: str(m.label, `models.${i}.label`), provider: m.provider as BenchModel['provider'],
-        isNew: m.isNew === true, alone: total(m.alone, `models.${i}.alone`), dualkit: total(m.dualkit, `models.${i}.dualkit`),
+        isNew: bool(m.isNew, `models.${i}.isNew`), alone: total(m.alone, `models.${i}.alone`), dualkit: total(m.dualkit, `models.${i}.dualkit`),
         lift: m.lift === null ? null : num(m.lift, `models.${i}.lift`),
         screens: list(m.screens, `models.${i}.screens`).map((sv, j) => {
           const s = obj(sv, `models.${i}.screens.${j}`)

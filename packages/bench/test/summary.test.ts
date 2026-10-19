@@ -1,7 +1,7 @@
 import { mkdtempSync, readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { parseBenchMonth } from '../../../apps/site/lib/bench-schema'
 import { loadScreens, type ModelEntry } from '../src/config'
 import { makeStore, type BuildKey, type Condition } from '../src/store'
@@ -30,6 +30,16 @@ describe('buildSummary', () => {
     // Three identical builds tie, and cell() picks the lower middle of runs [3, 2, 1]: run 2.
     expect(out.models[0]!.screens[0]!.alone).toMatchObject({ ran: true, raw: 'bench/runs/2026-11/a/payment-summary/alone-2.json' })
     expect(parseBenchMonth(JSON.parse(JSON.stringify(out)))).toEqual(out)
+  })
+  it('keeps the cell and logs when the screenshot step throws', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    seed(store, 'a', { alone: 8, dualkit: 18 })
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const out = await buildSummary({ month: '2026-11', models: [model('a')], screens, store, shots: async () => { throw new Error('boom') } })
+    expect(out.models[0]!.screens[0]!.alone).toMatchObject({ ran: true, shot: null })
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('a/payment-summary/alone'))
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('boom'))
+    warn.mockRestore()
   })
   it('shows a model with a missing screen, with null totals, ranked last', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))

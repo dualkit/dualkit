@@ -20,4 +20,15 @@ describe('parseBenchMonth', () => {
     ;(bad.models[0]!.screens[0]!.dualkit as Record<string, unknown>).rulesPassed = 'many'
     expect(() => parseBenchMonth(bad)).toThrow(/rulesPassed/)
   })
+  it('requires ran and isNew to be booleans', () => {
+    const noRan = structuredClone(month)
+    delete (noRan.models[0]!.screens[0]!.alone as Record<string, unknown>).ran
+    expect(() => parseBenchMonth(noRan)).toThrow(/ran/)
+    const badNew = structuredClone(month)
+    ;(badNew.models[0] as Record<string, unknown>).isNew = 'yes'
+    expect(() => parseBenchMonth(badNew)).toThrow(/isNew/)
+    const noNew = structuredClone(month)
+    delete (noNew.models[0] as Record<string, unknown>).isNew
+    expect(() => parseBenchMonth(noNew)).toThrow(/isNew/)
+  })
 })
