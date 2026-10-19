@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { preload } from 'react-dom'
 import { REPO_URL } from '@/lib/copy'
 import { V3 } from '@/lib/v3/copy'
 import { HeroStory } from './HeroStory'
@@ -16,6 +17,9 @@ const at = (n: number) => ({ '--i': n }) as CSSProperties
 
 /** The v3 hero: label, headline and lede with a one-time word blur-up, then the story panel in a ruled frame. */
 export function Hero() {
+  // The painting is the page's LCP, but as a CSS background it is found only after the stylesheet. Preload the same file
+  // hero.css picks: with "1px" below 1201px the 1200w file always suffices; above it, 100vw picks the 2600w one.
+  preload('/v3/dusk-1200.webp', { as: 'image', fetchPriority: 'high', imageSrcSet: '/v3/dusk-1200.webp 1200w, /v3/dusk.webp 2600w', imageSizes: '(min-width: 1201px) 100vw, 1px' })
   return (
     <section className="v3-hero" aria-labelledby="v3-hero-title">
       <div className="v3-hero-head">

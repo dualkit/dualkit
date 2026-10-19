@@ -55,8 +55,9 @@
 .v3-foot-mascot .mascot { width: 18px; height: 18px; animation: none; }
 .v3-foot-mascot .mascot svg { width: 18px; height: 18px; }
 
-.v3-foot-art { position: relative; display: flex; align-items: flex-end; justify-content: center; height: 240px; margin-top: 80px; overflow: hidden; background: #c9a27a url('/v3/footer.webp') center / cover no-repeat; }
-.v3-foot-word { font-family: var(--font-switzer), system-ui, sans-serif; font-weight: 500; font-size: clamp(88px, 22vw, 320px); line-height: 0.8; letter-spacing: -0.06em; color: var(--v3-glass-text); white-space: nowrap; user-select: none; }
+.v3-foot-art { position: relative; display: flex; align-items: flex-end; justify-content: center; height: 240px; margin-top: 80px; overflow: hidden; background: #c9a27a; }
+.v3-foot-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.v3-foot-word { position: relative; font-family: var(--font-switzer), system-ui, sans-serif; font-weight: 500; font-size: clamp(88px, 22vw, 320px); line-height: 0.8; letter-spacing: -0.06em; color: var(--v3-glass-text); white-space: nowrap; user-select: none; }
 
 @media (hover: hover) and (pointer: fine) {
   .v3-foot-social:hover { background: rgba(0, 0, 0, 0.05); }
