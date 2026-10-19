@@ -15,6 +15,8 @@
   --v3-content: 1200px;
   --v3-gutter: 16px;
   --v3-tick: 7px;
+  /* The sticky nav's height (12px padding, 45px burger, 1px rule; 16px padding and 44px buttons from 1200px). */
+  --v3-nav-h: 70px;
 
   --font-mono: 'Berkeley Mono', var(--font-plex-mono), monospace;
 
@@ -22,6 +24,7 @@
   --ease-out: cubic-bezier(.23, 1, .32, 1);
 }
 @media (min-width: 1024px) { :root { --v3-gutter: 120px; } }
+@media (min-width: 1200px) { :root { --v3-nav-h: 77px; } }
 
 /* The warm ground is every page's background, v2 inner pages included. */
 body { background: var(--v3-ground); }

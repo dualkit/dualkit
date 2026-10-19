@@ -18,12 +18,20 @@ export function Statement() {
     const root = track.current
     if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const words = Array.from(root.querySelectorAll<HTMLElement>('[data-w]'))
-    // The sticky block's height only changes with the viewport, so it is measured on resize, not on every tick.
-    let stickH = stick.current?.offsetHeight ?? 0
-    const measure = () => { stickH = stick.current?.offsetHeight ?? 0; write() }
+    // The sticky block's height and its top (the nav's height) only change with the viewport, so they are measured on
+    // resize, not on every tick. The run starts when the track's top reaches the sticky top, not the viewport top.
+    let stickH = 0
+    let stickTop = 0
+    const read = () => {
+      const el = stick.current
+      stickH = el?.offsetHeight ?? 0
+      stickTop = el ? parseFloat(getComputedStyle(el).top) || 0 : 0
+    }
+    read()
+    const measure = () => { read(); write() }
     const write = () => {
       const t = root.getBoundingClientRect()
-      const p = trackProgress(t.top, t.height, stickH)
+      const p = trackProgress(t.top - stickTop, t.height, stickH)
       words.forEach((w, i) => w.style.setProperty('--o', wordOpacity(p, i, COUNT).toFixed(3)))
     }
     write()
