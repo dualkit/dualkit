@@ -1,6 +1,7 @@
 /**
- * Good examples from the skills, each as a verbatim `quote` plus a hand-written HTML equivalent
- * (JSX and TS cannot render). Each skill renders on its own page, because each is installed on its own.
+ * Good examples from the skills, each as a verbatim `quote` plus the HTML the page renders.
+ * For an html block, `html` must contain every quoted line verbatim; fixture-only elements go on lines of their own.
+ * Only tsx, ts and prose sources get hand-written HTML, and render.test.ts pins each one to its skill. Each skill renders on its own page, because each is installed on its own.
  * The shell supplies only lang="ar" dir="rtl", so anything else a page needs has to appear here
  * because a skill says it.
  *
@@ -58,7 +59,7 @@ body { font-family: 'Brand', 'IBM Plex Sans Arabic', sans-serif; }`,
   },
   {
     skill: 'dualkit-rtl-layout',
-    quote: 'A formatted Arabic amount (`1,234.50 د.إ`)',
+    quote: 'A formatted Arabic amount (`1,234.50 د.إ`) or Arabic date contains Arabic, so give it a plain `<bdi>` with no `dir`.',
     html: '<p>الإجمالي <bdi>1,234.50 د.إ</bdi></p>',
   },
   {
@@ -95,8 +96,13 @@ body { font-family: 'Brand', 'IBM Plex Sans Arabic', sans-serif; }`,
     quote: `<input type="tel" dir="ltr" inputmode="tel" autocomplete="tel">
 <input type="text" dir="auto" autocomplete="name">`,
     // The skill says labels stay in page direction but its snippet shows inputs only; real fields have labels.
-    html: `<label for="phone">رقم الجوال</label> <input id="phone" type="tel" dir="ltr" inputmode="tel" autocomplete="tel">
-<label for="name">الاسم</label> <input id="name" type="text" dir="auto" autocomplete="name">`,
+    // The labels wrap the quoted lines, on lines of their own.
+    html: `<label>رقم الجوال
+<input type="tel" dir="ltr" inputmode="tel" autocomplete="tel">
+</label>
+<label>الاسم
+<input type="text" dir="auto" autocomplete="name">
+</label>`,
   },
   {
     skill: 'dualkit-rtl-layout',
