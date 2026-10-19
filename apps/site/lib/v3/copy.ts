@@ -97,6 +97,7 @@ export const V3 = {
       points: ['Load on their own when a task touches Arabic', 'Took a fresh agent from 0 of 3 to 3 of 3 on bidi bugs', 'Listed in the Claude plugin directory'],
     },
     rest: ['Format', 'Starter', 'Check', 'Bench'],
+    skillsPanel: { fixed: 'Fixed', diff: 'View the diff' },
     previews: {
       format: {
         package: '@dualkit/format', install: 'npm i @dualkit/format', status: 'Parsed',

@@ -1,0 +1,69 @@
+.v3-kit { padding-top: 200px; }
+.v3-kit-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+.v3-kit-heading { display: flex; flex-direction: column; gap: 20px; }
+.v3-kit-lede { width: 400px; flex: none; }
+.v3-kit-frame { margin-top: 80px; display: grid; grid-template-columns: minmax(0, 1fr); }
+.v3-kit-list { min-width: 0; }
+.v3-kit-item + .v3-kit-item { border-top: 1px solid var(--v3-line); }
+.v3-kit-h { margin: 0; font: inherit; }
+.v3-kit-btn { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 16px; padding: 16px; border: 0; background: none; color: inherit; font: inherit; text-align: start; cursor: pointer; }
+.v3-kit-btn:focus-visible { outline: 2px solid var(--v3-ink); outline-offset: -2px; }
+.v3-kit-name { display: inline-flex; align-items: center; gap: 16px; }
+.v3-kit-no { color: var(--v3-faint); font-variant-numeric: tabular-nums; }
+.v3-kit-square { width: 8px; height: 8px; flex: none; border: 1px solid var(--v3-line); box-sizing: border-box; }
+.v3-kit-item[data-open] .v3-kit-square { background: var(--v3-ink); border-color: var(--v3-ink); }
+
+/* Open height: grid rows 0fr to 1fr. It is a layout property, kept because the open height is not known up front. */
+.v3-kit-collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 250ms var(--ease-ui); }
+.v3-kit-item[data-open] .v3-kit-collapse { grid-template-rows: 1fr; }
+.v3-kit-clip { overflow: hidden; min-height: 0; }
+.v3-kit-detail { display: flex; flex-direction: column; gap: 12px; padding: 0 16px 16px 16px; }
+.v3-kit-body { color: var(--v3-soft); }
+.v3-kit-points { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.v3-kit-points li { display: flex; align-items: flex-start; gap: 12px; }
+.v3-kit-tick { display: inline-flex; padding-top: 4px; flex: none; }
+
+/* Previews sit at their natural size in the pane and shrink to fit on a phone. */
+.v3-kit-pane, .v3-kit-inline { display: grid; align-items: center; justify-items: center; padding: 24px; }
+.v3-kit-pane { display: none; }
+.v3-kit-inline { margin: 0 16px 16px; }
+.v3-kit-pane .v3-pv, .v3-kit-inline .v3-pv { width: 100%; max-width: 400px; box-sizing: border-box; }
+.v3-kit-pane .v3-pv-track, .v3-kit-inline .v3-pv-track { width: 100%; }
+.v3-kit-pane .v3-pv-meter, .v3-kit-inline .v3-pv-meter { width: auto; flex: 1; }
+.v3-kit-inline .v3-pv-family-name { width: 56px; flex: none; }
+.v3-pv-diff { display: flex; flex-direction: column; gap: 8px; padding: 16px; }
+.v3-pv-diff .v3-pv-head { padding-bottom: 4px; }
+.v3-pv-diff-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 8px; border-top: 1px solid var(--v3-glass-ring); }
+.v3-pv-diff-value { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 400; }
+.v3-pv-tag { padding-inline: 8px; font-size: 13px; line-height: 1.5; background: var(--v3-glass-button); color: var(--v3-ink); }
+.v3-pv-note { padding: 12px; margin: 0; box-shadow: inset 0 0 0 1px var(--v3-glass-ring); }
+.v3-pv-view { display: flex; justify-content: center; padding-block: 12px; background: var(--v3-glass-button); color: var(--v3-ink); font-size: 14px; font-weight: 500; }
+
+@media (min-width: 1200px) {
+  .v3-kit-frame { grid-template-columns: 560px minmax(0, 1fr); }
+  .v3-kit-btn { padding: 24px; }
+  .v3-kit-detail { padding: 0 24px 24px 56px; }
+  .v3-kit-inline { display: none; }
+  .v3-kit-pane { display: grid; border-left: 1px solid var(--v3-line); }
+  .v3-kit-shot { grid-area: 1 / 1; display: flex; justify-content: center; opacity: 0; transition: opacity 150ms var(--ease-ui); width: 100%; }
+  .v3-kit-shot[data-on] { opacity: 1; }
+  .v3-kit-pane .v3-pv { max-width: none; }
+  .v3-kit-pane .v3-pv-diff, .v3-kit-pane .v3-pv-format, .v3-kit-pane .v3-pv-bench { width: 380px; }
+  .v3-kit-pane .v3-pv-starter, .v3-kit-pane .v3-pv-check { width: 400px; }
+  .v3-kit-pane .v3-pv-track { width: 348px; }
+  .v3-kit-pane .v3-pv-meter { width: 220px; flex: none; }
+}
+@media (max-width: 1199px) {
+  .v3-kit-frame > .v3-tick:nth-child(n + 5) { display: none; }
+}
+@media (max-width: 899px) {
+  .v3-kit-head { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .v3-kit-lede { width: auto; }
+}
+@media (max-width: 600px) {
+  .v3-kit { padding-top: 120px; }
+  .v3-kit-frame { margin-top: 48px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .v3-kit-collapse, .v3-kit-shot { transition: none; }
+}
