@@ -3,7 +3,9 @@ export type BenchCell =
   | { ran: false; runs: number; reasons: string[] }
   | { ran: true; runs: number; rulesPassed: number; score: number; missing: string[]; findings: BenchFinding[]; shot: string | null; pageHeight: number; raw: string }
 export type BenchTotal = { rulesPassed: number; outOf: number; score: number }
-export type BenchModel = { id: string; label: string; provider: 'openrouter' | 'gemini'; by: string; mark: string; rank: number | null; previousRank: number | null; isNew: boolean; alone: BenchTotal | null; dualkit: BenchTotal | null; lift: number | null; screens: { id: string; title: string; alone: BenchCell; dualkit: BenchCell }[] }
+export type BenchModel = { id: string; label: string; provider: 'openrouter' | 'gemini'; by: string; mark: string; rank: number | null; previousRank: number | null
+  /** Places moved since last month among models ranked in both months, positive for up; null when unranked now or not ranked then. */
+  move: number | null; isNew: boolean; alone: BenchTotal | null; dualkit: BenchTotal | null; lift: number | null; screens: { id: string; title: string; alone: BenchCell; dualkit: BenchCell }[] }
 export type BenchMonth = { month: string; generatedAt: string; ruleCount: number; models: BenchModel[] }
 
 type Obj = Record<string, unknown>
@@ -55,6 +57,7 @@ export function parseBenchMonth(raw: unknown): BenchMonth {
       return {
         by: str(m.by, `models.${i}.by`), mark: str(m.mark, `models.${i}.mark`),
         rank: m.rank === null ? null : num(m.rank, `models.${i}.rank`), previousRank: m.previousRank === null ? null : num(m.previousRank, `models.${i}.previousRank`),
+        move: m.move === null ? null : num(m.move, `models.${i}.move`),
         id: str(m.id, `models.${i}.id`), label: str(m.label, `models.${i}.label`), provider: m.provider as BenchModel['provider'],
         isNew: bool(m.isNew, `models.${i}.isNew`), alone: total(m.alone, `models.${i}.alone`), dualkit: total(m.dualkit, `models.${i}.dualkit`),
         lift: m.lift === null ? null : num(m.lift, `models.${i}.lift`),

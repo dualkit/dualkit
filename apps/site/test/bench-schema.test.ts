@@ -3,7 +3,7 @@ import { parseBenchMonth } from '../lib/bench-schema'
 
 const month = {
   month: '2026-11', generatedAt: '2026-11-01T06:00:00Z', ruleCount: 20,
-  models: [{ id: 'g', label: 'G', provider: 'gemini', by: 'Google', mark: 'google', rank: 1, previousRank: null, isNew: true, alone: { rulesPassed: 50, outOf: 100, score: 10 }, dualkit: null, lift: null,
+  models: [{ id: 'g', label: 'G', provider: 'gemini', by: 'Google', mark: 'google', rank: 1, previousRank: null, move: null, isNew: true, alone: { rulesPassed: 50, outOf: 100, score: 10 }, dualkit: null, lift: null,
     screens: [{ id: 'otp', title: 'OTP', alone: { ran: false, runs: 1, reasons: ['Hit the token cap'] }, dualkit: { ran: true, runs: 3, rulesPassed: 18, score: 70, missing: [], findings: [], shot: null, pageHeight: 900, raw: 'bench/runs/x.json' } }] }],
 }
 
@@ -15,6 +15,13 @@ describe('parseBenchMonth maker and rank', () => {
   })
   it('allows null ranks', () => {
     expect(parseBenchMonth(with_({ rank: null, previousRank: null })).models[0]).toMatchObject({ rank: null, previousRank: null })
+  })
+  it('keeps move, a number or null', () => {
+    expect(parseBenchMonth(with_({ move: 2 })).models[0]!.move).toBe(2)
+    expect(parseBenchMonth(with_({ move: -1 })).models[0]!.move).toBe(-1)
+    expect(parseBenchMonth(with_({ move: null })).models[0]!.move).toBeNull()
+    expect(() => parseBenchMonth(with_({ move: undefined }))).toThrow(/models\.0\.move/)
+    expect(() => parseBenchMonth(with_({ move: 'up' }))).toThrow(/models\.0\.move/)
   })
   it('names a missing or bad field', () => {
     expect(() => parseBenchMonth(with_({ by: undefined }))).toThrow(/models\.0\.by/)

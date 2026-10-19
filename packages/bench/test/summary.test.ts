@@ -136,7 +136,7 @@ describe('buildSummary', () => {
 describe('rank and previousRank', () => {
   const seedPrev = (site: string, month: string, ranks: Record<string, number | null>) => {
     mkdirSync(join(site, 'content', 'bench'), { recursive: true })
-    const models = Object.entries(ranks).map(([id, rank]) => ({ id, label: id, provider: 'openrouter', by: 'Fake', mark: 'google', rank, previousRank: null, isNew: false, alone: null, dualkit: null, lift: null, screens: [] }))
+    const models = Object.entries(ranks).map(([id, rank]) => ({ id, label: id, provider: 'openrouter', by: 'Fake', mark: 'google', rank, previousRank: null, move: null, isNew: false, alone: null, dualkit: null, lift: null, screens: [] }))
     writeFileSync(join(site, 'content', 'bench', `${month}.json`), JSON.stringify({ month, generatedAt: `${month}-01T00:00:00.000Z`, ruleCount: 20, models }))
   }
   const run = async (site: string, month = '2026-11', ids = ['a', 'b', 'c']) => {
@@ -189,6 +189,45 @@ describe('rank and previousRank', () => {
     expect(out.models.every((m) => m.previousRank === null)).toBe(true)
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('2026-10'))
     warn.mockRestore()
+  })
+})
+
+describe('move', () => {
+  const seedPrev = (site: string, ranks: Record<string, number | null>) => {
+    mkdirSync(join(site, 'content', 'bench'), { recursive: true })
+    const models = Object.entries(ranks).map(([id, rank]) => ({ id, label: id, provider: 'openrouter', by: 'Fake', mark: 'google', rank, previousRank: null, move: null, isNew: false, alone: null, dualkit: null, lift: null, screens: [] }))
+    writeFileSync(join(site, 'content', 'bench', '2026-10.json'), JSON.stringify({ month: '2026-10', generatedAt: '2026-10-01T00:00:00.000Z', ruleCount: 20, models }))
+  }
+  const now = async (site: string, scores: Record<string, number>, extra: string[] = []) => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    for (const [id, n] of Object.entries(scores)) seed(store, id, { alone: 5, dualkit: n })
+    const out = await buildSummary({ month: '2026-11', models: [...Object.keys(scores), ...extra].map((id) => model(id)), screens, store, siteRoot: site, shots: async () => null })
+    return Object.fromEntries(out.models.map((m) => [m.id, m.move]))
+  }
+  it('is the change in order among models ranked in both months, positive for up', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    seedPrev(site, { a: 2, b: 1, c: 3 })
+    expect(await now(site, { a: 18, b: 15, c: 10 })).toEqual({ a: 1, b: -1, c: 0 })
+  })
+  it('does not move the others when a model was removed between months', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    seedPrev(site, { x: 1, a: 2, b: 3 })
+    expect(await now(site, { a: 18, b: 15 })).toEqual({ a: 0, b: 0 })
+  })
+  it('does not move the others when a model was added, and is null for the newcomer', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    seedPrev(site, { a: 1, b: 2 })
+    expect(await now(site, { n: 19, a: 18, b: 15 })).toEqual({ n: null, a: 0, b: 0 })
+  })
+  it('is null for a model that returns after failing last month, and for a model unranked now', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    seedPrev(site, { r: null, a: 1, gone: 2 })
+    const out = await now(site, { r: 19, a: 18 }, ['gone'])
+    expect(out).toEqual({ r: null, a: 0, gone: null })
+  })
+  it('is null for everyone with no previous month', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    expect(await now(site, { a: 18, b: 15 })).toEqual({ a: null, b: null })
   })
 })
 

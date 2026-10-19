@@ -7,7 +7,7 @@ const total = (rulesPassed: number) => ({ rulesPassed, outOf: 100, score: rulesP
 type Ran = Extract<BenchCell, { ran: true }>
 const ranCell = (over: Partial<Ran> = {}): Ran => ({ ran: true, runs: 3, rulesPassed: 14, score: 30, missing: [], findings: [], shot: null, pageHeight: 844, raw: 'bench/runs/2026-11/a/b/alone-2.json', ...over })
 const model = (over: Partial<BenchModel> = {}): BenchModel => ({
-  id: 'm', label: 'M', provider: 'gemini', by: 'Google', mark: 'google', rank: 2, previousRank: 3, isNew: false,
+  id: 'm', label: 'M', provider: 'gemini', by: 'Google', mark: 'google', rank: 2, previousRank: 3, move: 1, isNew: false,
   alone: total(61), dualkit: total(92), lift: 31, screens: [{ id: 's', title: 'S', alone: ranCell(), dualkit: ranCell() }], ...over,
 })
 
@@ -30,16 +30,22 @@ describe('facts', () => {
 })
 
 describe('movementOf', () => {
-  it('is new without a previous rank', () => {
-    expect(movementOf(model({ previousRank: null }))).toEqual({ kind: 'new' })
+  it('is new only for a model marked new', () => {
+    expect(movementOf(model({ isNew: true, move: null }))).toEqual({ kind: 'new' })
   })
-  it('goes up, down or stays level', () => {
-    expect(movementOf(model({ rank: 2, previousRank: 3 }))).toEqual({ kind: 'up', n: 1 })
-    expect(movementOf(model({ rank: 3, previousRank: 1 }))).toEqual({ kind: 'down', n: 2 })
-    expect(movementOf(model({ rank: 2, previousRank: 2 }))).toEqual({ kind: 'level' })
+  it('reads move: up, down or level', () => {
+    expect(movementOf(model({ move: 1 }))).toEqual({ kind: 'up', n: 1 })
+    expect(movementOf(model({ move: -2 }))).toEqual({ kind: 'down', n: 2 })
+    expect(movementOf(model({ move: 0 }))).toEqual({ kind: 'level' })
+  })
+  it('is level when move is null: a returning model that failed last month is not new', () => {
+    expect(movementOf(model({ previousRank: null, move: null }))).toEqual({ kind: 'level' })
+  })
+  it('ignores previousRank, which can count models that were removed', () => {
+    expect(movementOf(model({ rank: 1, previousRank: 2, move: 0 }))).toEqual({ kind: 'level' })
   })
   it('is level for an unranked model', () => {
-    expect(movementOf(model({ rank: null, previousRank: 1 }))).toEqual({ kind: 'level' })
+    expect(movementOf(model({ rank: null, previousRank: 1, move: null }))).toEqual({ kind: 'level' })
   })
 })
 

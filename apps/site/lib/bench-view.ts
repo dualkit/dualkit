@@ -36,11 +36,11 @@ export const factsLine = ({ models, screens }: { models: number; screens: number
 export const factsOf = (m: BenchMonth) => ({ models: m.models.length, screens: new Set(m.models.flatMap((x) => x.screens.map((s) => s.id))).size })
 
 export type Movement = { kind: 'new' } | { kind: 'level' } | { kind: 'up' | 'down'; n: number }
+/** From the summary's move, not previousRank: a model removed or added between months would shift every rank below it. */
 export function movementOf(m: BenchModel): Movement {
-  if (m.rank === null) return { kind: 'level' }
-  if (m.previousRank === null) return { kind: 'new' }
-  const d = m.previousRank - m.rank
-  return d === 0 ? { kind: 'level' } : { kind: d > 0 ? 'up' : 'down', n: Math.abs(d) }
+  if (m.isNew) return { kind: 'new' }
+  if (m.move === null || m.move === 0) return { kind: 'level' }
+  return { kind: m.move > 0 ? 'up' : 'down', n: Math.abs(m.move) }
 }
 
 const share = (t: { rulesPassed: number; outOf: number }) => (t.outOf > 0 ? Math.min(100, Math.max(0, (t.rulesPassed / t.outOf) * 100)) : 0)

@@ -76,6 +76,17 @@ function previousRanks(month: string, siteRoot: string): Map<string, number | nu
   }
 }
 
+/** Order among the models ranked both months only, so a model added or removed between months moves no one else. */
+function withMoves(models: BenchModel[]): BenchModel[] {
+  const both = models.filter((m) => m.rank !== null && m.previousRank !== null)
+  const nowOrder = both.map((m) => m.id)
+  const thenOrder = [...both].sort((a, b) => a.previousRank! - b.previousRank!).map((m) => m.id)
+  return models.map((m) => {
+    const at = nowOrder.indexOf(m.id)
+    return { ...m, move: at === -1 ? null : thenOrder.indexOf(m.id) - at }
+  })
+}
+
 type SummaryOptions = { month: string; models: ModelEntry[]; screens: Screen[]; store: Store; siteRoot?: string; shots?: Shots }
 
 export async function buildSummary({ month, models, screens, store, siteRoot = SITE_ROOT, shots = copyShots(store, siteRoot) }: SummaryOptions): Promise<BenchMonth> {
@@ -89,11 +100,11 @@ export async function buildSummary({ month, models, screens, store, siteRoot = S
     }
     const alone = total(rows.map((r) => r.alone), RULE_COUNT)
     const dualkit = total(rows.map((r) => r.dualkit), RULE_COUNT)
-    out.push({ id: m.id, label: m.label, provider: m.provider, by: m.by, mark: m.mark, rank: null, previousRank: null, isNew: m.since === month, alone, dualkit, lift: lift(alone, dualkit), screens: rows })
+    out.push({ id: m.id, label: m.label, provider: m.provider, by: m.by, mark: m.mark, rank: null, previousRank: null, move: null, isNew: m.since === month, alone, dualkit, lift: lift(alone, dualkit), screens: rows })
   }
   const before = previousRanks(month, siteRoot)
   let place = 0
-  const ranked = out.sort(rank).map((m) => ({ ...m, rank: m.dualkit ? ++place : null, previousRank: before.get(m.id) ?? null }))
+  const ranked = withMoves(out.sort(rank).map((m) => ({ ...m, rank: m.dualkit ? ++place : null, previousRank: before.get(m.id) ?? null })))
   return { month, generatedAt: newestBuild(records, month), ruleCount: RULE_COUNT, models: ranked }
 }
 
