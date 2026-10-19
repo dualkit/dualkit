@@ -19,9 +19,34 @@ const GOTO_MS = 30_000
 const LOAD_MS = 10_000
 const SETTLE_MS = 800
 
+// Written as escapes on purpose: these are invisible or look like their ASCII twins.
+const BIDI_CONTROLS = /[\u200E\u200F\u061C\u202A-\u202E\u2066-\u2069]/g
+const ARABIC_INDIC = /[\u0660-\u0669]/g
+const PERSIAN = /[\u06F0-\u06F9]/g
+const ARABIC_THOUSANDS = /\u066C/g
+const ARABIC_DECIMAL = /\u066B/g
+
+/** A faithful Arabic page may write 1,234 as Arabic-Indic digits, with Arabic separators and bidi isolates; the patterns see plain ASCII. */
+export function normaliseText(text: string): string {
+  return text
+    .replace(BIDI_CONTROLS, '')
+    .replace(ARABIC_INDIC, (d) => String.fromCharCode(d.charCodeAt(0) - 0x0660 + 0x30))
+    .replace(PERSIAN, (d) => String.fromCharCode(d.charCodeAt(0) - 0x06f0 + 0x30))
+    .replace(ARABIC_THOUSANDS, ',')
+    .replace(ARABIC_DECIMAL, '.')
+}
+
+/** The visible text plus what every input and textarea holds, since a read-only field is a common way to show an IBAN or phone. */
+async function pageText(page: Page): Promise<string> {
+  const body = await page.locator('body').innerText()
+  const fields = await page.locator('css=input, textarea').all()
+  const values = await Promise.all(fields.map((f) => f.inputValue().catch(() => '')))
+  return normaliseText([body, ...values].join('\n'))
+}
+
 export async function missingParts(page: Page, required: readonly RequiredPart[]): Promise<string[]> {
-  // Locators and innerText run in Playwright's isolated world and the regex runs in Node, so a page cannot patch its way past the check.
-  const text = await page.locator('body').innerText()
+  // Locators, innerText and inputValue run in Playwright's isolated world and the regex runs in Node, so a page cannot patch its way past the check.
+  const text = await pageText(page)
   const missing: string[] = []
   for (const p of required) {
     const bySelector = p.selector ? (await page.locator(`css=${p.selector}`).count()) >= (p.min ?? 1) : true
