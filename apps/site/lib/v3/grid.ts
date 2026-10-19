@@ -59,6 +59,13 @@ export function cityTimings(grid: Pick<Grid, 'cities' | 'step'>, origin: string 
   })
 }
 
+/** Indexes (from `from` on) of the cities the ripple has passed by time t. Timings are sorted by pass time, so the result is contiguous. */
+export function arcsReached(t: number, timings: readonly Pick<CityTiming, 'pass'>[], from = 0): number[] {
+  const out: number[] = []
+  for (let i = from; i < timings.length && (timings[i] as { pass: number }).pass <= t; i++) out.push(i)
+  return out
+}
+
 type Layout = 'desktop' | 'phone'
 
 /** Every land square to draw at the given canvas width (css px), sorted by the time the ripple reaches it. */

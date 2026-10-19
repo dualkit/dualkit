@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { cityTimings, decodeGrid, plotCells, rippleDelay, toCellUnits, type GridJson } from '../lib/v3/grid'
+import { arcsReached, cityTimings, decodeGrid, plotCells, rippleDelay, toCellUnits, type GridJson } from '../lib/v3/grid'
 
 const json = JSON.parse(readFileSync(resolve(__dirname, '../public/v3/gulf-grid.json'), 'utf8')) as GridJson
 const grid = decodeGrid(json)
@@ -60,5 +60,18 @@ describe('plotCells', () => {
     expect(cells.length).toBeGreaterThan(200)
     expect(cells.length).toBeLessThan(13137)
     expect(cells.every((c) => (c.x - 1) % 5 === 0 && c.x < 392 && c.y < 200)).toBe(true)
+  })
+})
+
+describe('arcsReached', () => {
+  const t = cityTimings(grid)
+  it('has only the origin at t=0 and everything at the end', () => {
+    expect(arcsReached(0, t)).toEqual([0])
+    expect(arcsReached(1e6, t)).toEqual([0, 1, 2, 3, 4, 5, 6])
+  })
+  it('resumes from a pointer without repeating', () => {
+    const mid = t[3]!.pass
+    expect(arcsReached(mid, t, 2)).toEqual([2, 3])
+    expect(arcsReached(mid, t, 4)).toEqual([])
   })
 })

@@ -1,5 +1,5 @@
 import { createClock } from '@/lib/v3/clock'
-import { CROP, cityTimings, plotCells, type Cell, type CityTiming, type Grid } from '@/lib/v3/grid'
+import { CROP, arcsReached, cityTimings, plotCells, type Cell, type CityTiming, type Grid } from '@/lib/v3/grid'
 
 const PHONE_QUERY = '(max-width: 899px)'
 const LAND_ALPHA = 0.3
@@ -24,6 +24,7 @@ export function createGulfEngine(root: HTMLElement, canvas: HTMLCanvasElement, g
   let width = 0
   let ratio = 0
   let drawn = 0
+  let arcsDrawn = 0
   let end = 0
   let finished = false
 
@@ -62,6 +63,10 @@ export function createGulfEngine(root: HTMLElement, canvas: HTMLCanvasElement, g
   const advance = (t: number) => {
     ctx.fillStyle = ink
     while (drawn < cells.length && (cells[drawn] as Cell).delay <= t) square(cells[drawn++] as Cell)
+    for (const i of arcsReached(t, timings, arcsDrawn)) {
+      arc(timings[i] as CityTiming)
+      arcsDrawn = i + 1
+    }
     show(t)
     if (!finished && t >= end) {
       finished = true
@@ -74,9 +79,9 @@ export function createGulfEngine(root: HTMLElement, canvas: HTMLCanvasElement, g
     ctx.setTransform(1, 0, 0, 1, 0, 0)
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     drawn = 0
+    arcsDrawn = 0
     const t = settled || finished ? Infinity : clock.now()
     advance(t)
-    timings.forEach((c) => (t >= c.pass ? arc(c) : undefined))
   }
 
   const measure = () => {
