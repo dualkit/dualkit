@@ -11,7 +11,7 @@ Four agent skills for building bilingual Arabic and English products for the Gul
 
 ## Install
 
-In Claude Code:
+Dualkit is listed in the Claude plugin directory, so you can install it from there in Claude Code, Cowork and the Claude apps. Or, in Claude Code:
 
 ```
 /plugin marketplace add dualkit/dualkit
