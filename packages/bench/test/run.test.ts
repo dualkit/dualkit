@@ -1,8 +1,8 @@
-import { mkdtempSync } from 'node:fs'
+import { mkdirSync, mkdtempSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { loadScreens, type ModelEntry } from '../src/config'
+import { BenchError, loadScreens, type ModelEntry } from '../src/config'
 import { fakeGenerate } from '../src/fake'
 import type { Generate } from '../src/providers'
 import { currentMonth, runBench } from '../src/run'
@@ -38,6 +38,18 @@ describe('runBench', () => {
     const boom = async () => { throw new Error('chromium died') }
     const out = await runBench({ month: '2026-11', models: [model('fake-good')], screens, generate: fakeGenerate, store, score: boom })
     expect(out.failed).toBe(6)
+  })
+})
+
+describe('skills check', () => {
+  it('throws a BenchError before any API call when a skill has no SKILL.md', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'skills-'))
+    mkdirSync(join(dir, 'broken'))
+    let calls = 0
+    const counting: Generate = async (m, r) => { calls++; return fakeGenerate(m, r) }
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    await expect(runBench({ month: '2026-11', models: [model('fake-good')], screens, generate: counting, store, score: fastScore, skillsDir: dir })).rejects.toBeInstanceOf(BenchError)
+    expect(calls).toBe(0)
   })
 })
 

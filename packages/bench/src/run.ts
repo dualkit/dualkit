@@ -4,7 +4,7 @@ import { extractHtml } from './extract'
 import type { Generate } from './providers'
 import { scoreHtml } from './score'
 import type { BuildKey, BuildRecord, Condition, Store } from './store'
-import { systemPrompt } from './system'
+import { checkSkills, SKILLS_DIR, systemPrompt } from './system'
 
 const CONDITIONS: readonly Condition[] = ['alone', 'dualkit']
 const LOCKED = /^No [A-Z_]+_API_KEY$|^HTTP (401|403|404)\b/
@@ -13,9 +13,10 @@ const NO_REPLY = { reply: null, usage: null, finish: null, reasoningTokens: null
 
 export const currentMonth = (now = new Date()) => now.toISOString().slice(0, 7)
 
-type Options = { month: string; models: ModelEntry[]; screens: Screen[]; generate: Generate; store: Store; score?: typeof scoreHtml; log?: (line: string) => void }
+type Options = { month: string; models: ModelEntry[]; screens: Screen[]; generate: Generate; store: Store; score?: typeof scoreHtml; log?: (line: string) => void; skillsDir?: string }
 
-export async function runBench({ month, models, screens, generate, store, score = scoreHtml, log = () => {} }: Options) {
+export async function runBench({ month, models, screens, generate, store, score = scoreHtml, log = () => {}, skillsDir = SKILLS_DIR }: Options) {
+  checkSkills(skillsDir)
   const counts = { built: 0, skipped: 0, failed: 0 }
   const browser = score === scoreHtml ? await chromium.launch() : undefined
   try {
@@ -25,7 +26,7 @@ export async function runBench({ month, models, screens, generate, store, score 
         const key: BuildKey = { month, model: model.id, screen: screen.id, condition, run }
         if (store.isDone(key)) { counts.skipped++; continue }
         if (locked >= LOCK_AFTER) continue
-        const rec = await build(key, model, screen, generate, score, browser)
+        const rec = await build(key, model, screen, generate, score, skillsDir, browser)
         locked = !rec.record.ok && LOCKED.test(rec.record.error) ? locked + 1 : 0
         store.write(rec.record, rec.html)
         if (rec.record.ok) counts.built++
@@ -40,9 +41,9 @@ export async function runBench({ month, models, screens, generate, store, score 
   return counts
 }
 
-async function build(key: BuildKey, model: ModelEntry, screen: Screen, generate: Generate, score: typeof scoreHtml, browser?: Browser): Promise<{ record: BuildRecord; html: string | null }> {
+async function build(key: BuildKey, model: ModelEntry, screen: Screen, generate: Generate, score: typeof scoreHtml, skillsDir: string, browser?: Browser): Promise<{ record: BuildRecord; html: string | null }> {
   const base = { ...key, at: new Date().toISOString() }
-  const gen = await generate(model, { system: systemPrompt(key.condition), prompt: screen.prompt })
+  const gen = await generate(model, { system: systemPrompt(key.condition, skillsDir), prompt: screen.prompt })
   if (!gen.ok) {
     const r = gen.reply
     const reply = r ? { reply: r.text, usage: r.usage, finish: r.finish, reasoningTokens: r.reasoningTokens, servedModel: r.servedModel } : NO_REPLY
