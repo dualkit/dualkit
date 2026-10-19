@@ -162,6 +162,27 @@ export function GulfMapView({ examples }: { examples: Record<string, CityExample
   const home = GRID.cities[HOME]
   const target = selected ? GRID.cities[selected] : undefined
   const arc = frame && home && target ? arcPath(spot(home, frame), spot(target, frame), ARC_LIFT) : null
+  const arcEl = useRef<SVGPathElement>(null)
+  // The path stays mounted once drawn, hidden while nothing is picked, so a quick sweep (leave, then enter the next pin)
+  // keeps one element and one draw.
+  const lastArc = useRef<string | null>(null)
+  if (arc) lastArc.current = arc
+  const shownArc = arc ?? lastArc.current
+
+  // One arc path that retargets: a pick while it is still drawing swaps the path and the draw carries on; a pick after it
+  // has finished draws again from Dubai. Under reduced motion or a keyboard pick CSS has no transition, so it shows whole.
+  useLayoutEffect(() => {
+    const p = arcEl.current
+    if (!p || arc === null) return
+    const drawing = (parseFloat(getComputedStyle(p).strokeDashoffset) || 0) > 0.001
+    if (!drawing) {
+      p.style.transition = 'none'
+      p.style.strokeDashoffset = '1'
+      void p.getBoundingClientRect()
+      p.style.transition = ''
+    }
+    p.style.strokeDashoffset = '0'
+  }, [selected, arc === null]) // eslint-disable-line react-hooks/exhaustive-deps -- a new size alone must not redraw
 
   return (
     <section className="v3-region" aria-labelledby="v3-region-title" data-via={via}>
@@ -184,7 +205,7 @@ export function GulfMapView({ examples }: { examples: Record<string, CityExample
       >
         <canvas ref={canvas} className="v3-region-canvas" aria-hidden="true" />
         <svg className="v3-region-arcs" aria-hidden="true" width="100%" height="100%">
-          {arc ? <path key={selected} className="v3-region-arc" d={arc} pathLength={1} /> : null}
+          {shownArc ? <path ref={arcEl} className="v3-region-arc" d={shownArc} pathLength={1} data-off={arc ? undefined : ''} /> : null}
         </svg>
         {CITIES.map(([name, at], n) => (
           <Pin key={name} name={name} at={at} n={n} on={selected === name} flip={flips.includes(name)} ex={examples[name] as CityExample} handlers={handlers} />
