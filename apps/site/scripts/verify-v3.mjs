@@ -4,7 +4,7 @@
 //   PLAYWRIGHT_DIR=/path/to/pw node scripts/verify-v3.mjs [--perf] [--only=pages,lazy,reduced,hero,menu,perf]
 // Frame timing needs a real GPU: PW_HEADED=1 PW_CHANNEL=chrome (headless rAF is synthetic and reads a flat 16.7 ms).
 //
-// Env: BASE (default http://localhost:3100), OUT (screenshots and frames; default .superpowers/.../shots/task15).
+// Env: BASE (default http://localhost:3100), OUT (screenshots and frames; default apps/site/.verify-out, gitignored).
 // Checks: no horizontal scroll, no console errors, every [lang="ar"] is dir="rtl" (numeric LTR <bdi> runs excepted), full-page screenshots at 1440 and 390;
 // under reduced motion the hero shows the fixed Arabic panel and the map canvas is fully drawn; a 30 fps screencast of
 // one hero loop (panel never under the rail, single-frame pops flagged) and of the menu opening and closing (opacity
@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url'
 
 const HERE = dirname(fileURLToPath(import.meta.url))
 const BASE = process.env.BASE ?? 'http://localhost:3100'
-const OUT = resolve(process.env.OUT ?? join(HERE, '../../../.superpowers/sdd/2026-10-19-rebrand-v3/shots/task15'))
+const OUT = resolve(process.env.OUT ?? join(HERE, '..', '.verify-out'))
 const PW_DIR = process.env.PLAYWRIGHT_DIR ?? process.cwd()
 const ARGS = process.argv.slice(2)
 const ONLY = (ARGS.find((a) => a.startsWith('--only='))?.slice(7).split(',')) ?? ['pages', 'lazy', 'reduced', 'hero', 'menu', ...(ARGS.includes('--perf') ? ['perf'] : [])]
@@ -26,6 +26,8 @@ const HERO_LOOP_MS = 24_500
 const FRAME_BUDGET_MS = 20
 const POP_MIN_DIFF = 2.5
 const POP_RATIO = 3
+/** The page height that goes with each tested width: a desktop window or an iPhone-sized phone. */
+const heightFor = (width) => (width > 600 ? 900 : 844)
 
 const { chromium } = createRequire(join(PW_DIR, 'package.json'))('playwright')
 const failures = []
@@ -61,7 +63,7 @@ const scrollToSel = (page, sel, offset = 80) => page.evaluate(([s, o]) => {
 async function checkPages(browser) {
   console.log('pages')
   for (const width of WIDTHS) {
-    const ctx = await browser.newContext({ viewport: { width, height: width > 600 ? 900 : 844 } })
+    const ctx = await browser.newContext({ viewport: { width, height: heightFor(width) } })
     for (const path of PAGES) {
       const page = await ctx.newPage()
       const errors = watchErrors(page)
@@ -70,9 +72,9 @@ async function checkPages(browser) {
       const m = await page.evaluate(() => ({
         sw: document.documentElement.scrollWidth,
         iw: innerWidth,
-        // Allowed: the hero's broken frame (lang="ar" dir="ltr" on purpose: an agent that knows no Arabic; the reduced run
+        // Allowed: the hero's broken panel (lang="ar" dir="ltr" on purpose: an agent that knows no Arabic; the reduced run
         // checks its settled frame) and an LTR <bdi> that holds no Arabic letters (a phone number in Arabic-Indic digits).
-        badAr: [...document.querySelectorAll('[lang="ar"]')].filter((el) => el.getAttribute('dir') !== 'rtl' && !el.closest('.v3-story')
+        badAr: [...document.querySelectorAll('[lang="ar"]')].filter((el) => el.getAttribute('dir') !== 'rtl' && !el.matches('.v3-story [data-k="panel"]')
           && !(el.tagName === 'BDI' && el.getAttribute('dir') === 'ltr' && !/[\u0621-\u064A]/.test(el.textContent))).map((el) => el.outerHTML.slice(0, 80)),
       }))
       const tag = `${path} @${width}`
@@ -91,7 +93,7 @@ async function checkPages(browser) {
 async function checkLazy(browser) {
   console.log('lazy media')
   for (const width of WIDTHS) {
-    const ctx = await browser.newContext({ viewport: { width, height: width > 600 ? 900 : 844 } })
+    const ctx = await browser.newContext({ viewport: { width, height: heightFor(width) } })
     const page = await ctx.newPage()
     const got = []
     page.on('request', (r) => { const name = r.url().split('/').pop(); if (/^(region|footer)/.test(name)) got.push(name) })
@@ -117,7 +119,7 @@ const inkPixels = (page) => page.evaluate(() => {
 async function checkReduced(browser) {
   console.log('reduced motion')
   for (const width of WIDTHS) {
-    const height = width > 600 ? 900 : 844
+    const height = heightFor(width)
     const still = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' })
     const page = await still.newPage()
     const errors = watchErrors(page)
@@ -150,7 +152,7 @@ async function checkReduced(browser) {
     await scrollToSel(ref, '.v3-region-map', 40)
     await ref.waitForSelector('.v3-region-map[data-done]', { timeout: 15_000 })
     const doneInk = await inkPixels(ref)
-    check(reducedInk > 0 && reducedInk >= doneInk * 0.99, `@${width} map fully drawn under reduced motion (${reducedInk} of ${doneInk} ink px), pins shown ${pinsShown}`)
+    check(pinsShown && reducedInk > 0 && reducedInk >= doneInk * 0.99, `@${width} map fully drawn under reduced motion (${reducedInk} of ${doneInk} ink px), pins shown ${pinsShown}`)
     await moving.close()
     await still.close()
   }
@@ -240,7 +242,7 @@ async function checkHero(browser) {
 async function checkMenu(browser) {
   console.log('menu')
   for (const width of WIDTHS) {
-    const ctx = await browser.newContext({ viewport: { width, height: width > 600 ? 900 : 844 } })
+    const ctx = await browser.newContext({ viewport: { width, height: heightFor(width) } })
     const page = await ctx.newPage()
     await page.goto(BASE + '/docs', { waitUntil: 'networkidle' })
     const button = width > 600 ? '.v3-nav-link[aria-controls]' : '.v3-nav-burger'
@@ -307,12 +309,18 @@ async function checkPerf(browser) {
   await page.evaluate(() => scrollTo(0, 0))
   await page.waitForTimeout(300)
   results.menuOpen = await sampleFrames(page, async () => { await page.click('.v3-nav-link[aria-controls]'); await page.waitForTimeout(400); await page.click('.v3-nav-link[aria-controls]'); await page.waitForTimeout(300) })
-  for (const [name, r] of Object.entries(results)) console.log(`  info ${name}: ${JSON.stringify(r)}`)
+  for (const [name, r] of Object.entries(results)) {
+    check(r.over === 0 && r.longTasks.length === 0, `${name}: ${r.frames} frames, p50 ${r.p50} p95 ${r.p95} max ${r.max} ms, ${r.over} over ${FRAME_BUDGET_MS} ms, ${r.longTasks.length} long tasks`)
+  }
   writeFileSync(join(OUT, 'perf.json'), JSON.stringify(results, null, 2))
   await ctx.close()
   return results
 }
 
+if (ONLY.includes('perf') && !process.env.PW_HEADED && !process.env.PW_CHANNEL) {
+  console.error('--perf needs a real renderer: set PW_HEADED=1 and PW_CHANNEL=chrome. Headless rAF is synthetic (a flat 16.7 ms) or software-rastered.')
+  process.exit(2)
+}
 mkdirSync(OUT, { recursive: true })
 const browser = await chromium.launch({ channel: process.env.PW_CHANNEL || undefined, headless: !process.env.PW_HEADED })
 try {
