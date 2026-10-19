@@ -76,6 +76,9 @@ describe('probes: Hijri dates', () => {
   it.each(['1446 ه', '١٤٤٦ ه.'])('accepts %s, an earlier year in the window', async (text) => {
     expect(await hijriMissing(orders(`<p>${text}</p>`))).toBe(false)
   })
+  it('an order number like A-14523 is not a Hijri year', async () => {
+    expect(await hijriMissing(page('<p>#A-14523</p>'))).toBe(true)
+  })
   it.each(['5 هدايا', 'هذه طلباتك وهذا كل شيء'])('reports %s missing Hijri dates', async (text) => {
     expect(await hijriMissing(orders(`<p>${text}</p>`))).toBe(true)
   })
