@@ -161,6 +161,7 @@ export const V3 = {
       ['Legal', ['MIT licence']],
     ],
     legal: '© 2026 Dualkit. MIT licensed.',
+    trademarks: 'OSI® and Open Source Initiative® are trademarks of the Open Source Initiative. Dualkit is not affiliated with or endorsed by the Open Source Initiative. npm is a registered trademark of npm, Inc.',
     madeBy: 'Made by',
     maker: 'Sam Santos',
   },

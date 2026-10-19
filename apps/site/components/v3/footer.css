@@ -47,12 +47,17 @@
 .v3-seals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px 8px; margin: 0; padding: 0; list-style: none; }
 .v3-seal { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
 .v3-seal-ring { display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; border: 1px solid var(--v3-line); border-radius: 50%; }
-.v3-seal-ain { font-family: var(--font-plex-arabic), sans-serif; font-size: 22px; line-height: 1; }
+.v3-seal-text { font-size: 13px; line-height: 1; letter-spacing: 0; white-space: nowrap; }
+.v3-seal-logo { display: inline-flex; }
+.v3-seal-logo img { display: block; width: auto; height: 36px; }
+.v3-seal-logo:focus-visible { outline: 2px solid var(--v3-ink); outline-offset: 2px; }
 .v3-seal-words { display: flex; flex-direction: column; font-size: 13px; line-height: 1.5; }
 .v3-seal-scope { color: var(--v3-faint); }
 .v3-seals-note { margin: 0; max-width: 260px; color: var(--v3-faint); }
 .v3-foot-rule { margin: 40px 0 0; border: 0; border-top: 1px solid var(--v3-line); }
 .v3-foot-legal { display: flex; flex-direction: column; gap: 8px; padding-top: 24px; font-size: 13px; line-height: 1.5; color: var(--v3-soft); }
+.v3-foot-legal-words { display: flex; flex-direction: column; gap: 4px; }
+.v3-foot-tm { max-width: 640px; color: var(--v3-soft); }
 .v3-foot-made { display: inline-flex; white-space: nowrap; align-items: center; gap: 8px; }
 .v3-foot-made a { color: var(--v3-ink); }
 .v3-foot-mascot { display: inline-flex; width: 18px; height: 18px; }

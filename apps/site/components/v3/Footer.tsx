@@ -66,7 +66,7 @@ export function Footer({ status, downloads }: { status: Overall; downloads: numb
         <Seals />
         <hr className="v3-foot-rule" />
         <div className="v3-foot-legal">
-          <span>{F.legal}</span>
+          <span className="v3-foot-legal-words"><span>{F.legal}</span><span className="v3-foot-tm">{F.trademarks}</span></span>
           <span className="v3-foot-made">{F.madeBy} <a href={MAKER_URL} rel="noopener noreferrer">{F.maker}</a><span className="v3-foot-mascot"><Mascot /></span></span>
         </div>
       </div>

@@ -1,11 +1,25 @@
 import { describe, expect, it } from 'vitest'
 import { downloadsLine, footerColumns, FOOTER_LINKS } from '../lib/v3/footer'
-import { GLYPHS } from '../lib/v3/seal-glyphs'
+import { SEAL_MARKS } from '../lib/v3/seal-glyphs'
 import { V3 } from '../lib/v3/copy'
 
 describe('v3 seals', () => {
-  it('has a glyph entry for every seal', () => {
-    for (const [id] of V3.seals) expect(id in GLYPHS).toBe(true)
+  it('has a mark for every seal', () => {
+    for (const [id] of V3.seals) expect(id in SEAL_MARKS).toBe(true)
+  })
+  it('uses a logo only for the OSI mark, served from the site and linked to opensource.org', () => {
+    const logos = Object.entries(SEAL_MARKS).filter(([, m]) => m.kind === 'logo')
+    expect(logos.map(([id]) => id)).toEqual(['MIT'])
+    for (const [, m] of logos) if (m.kind === 'logo') {
+      expect(m.src.startsWith('/v3/marks/')).toBe(true)
+      expect(m.href.startsWith('https://opensource.org/')).toBe(true)
+    }
+  })
+  it('keeps text seals short enough for the ring', () => {
+    for (const m of Object.values(SEAL_MARKS)) if (m.kind === 'text') expect(m.text.length).toBeLessThanOrEqual(5)
+  })
+  it('credits the OSI trademarks in the footer', () => {
+    expect(V3.footer.trademarks).toContain('OSI® and Open Source Initiative® are trademarks of the Open Source Initiative.')
   })
 })
 

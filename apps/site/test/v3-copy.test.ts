@@ -10,7 +10,7 @@ function strings(node: unknown, path: string[] = []): Entry[] {
   return []
 }
 
-const ALLOWED_CAPS = ['AED', 'SAR', 'QAR', 'KWD', 'BHD', 'OMR', 'IBAN', 'MIT', 'UAX', 'ISO', 'CLI', 'RTL', 'LTR', 'UAE', 'npm']
+const ALLOWED_CAPS = ['AED', 'SAR', 'QAR', 'KWD', 'BHD', 'OMR', 'IBAN', 'MIT', 'UAX', 'ISO', 'CLI', 'RTL', 'LTR', 'UAE', 'npm', 'OSI']
 const ARABIC = /[؀-ۿ]/
 const all = strings(V3)
 
