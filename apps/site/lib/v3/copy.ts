@@ -78,6 +78,7 @@ export const V3 = {
       ['02', 'Build as usual', 'Ask for the screen you need. The skills load on their own and handle direction, digits and type.'],
       ['03', 'Check before you ship', 'Run npx dualkit check. It scores the page against 20 rules and shows every failure next to its fix.'],
     ],
+    media: { loaded: 'Loaded for this task', now: 'now', ranks: ['rtl-layout', 'gulf-formats', 'type-pairing'] },
   },
   region: {
     label: 'Across the Gulf',
