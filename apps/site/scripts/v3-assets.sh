@@ -12,8 +12,11 @@ mkdir -p "$OUT/video"
 # Paintings. The footer keeps its alpha.
 cwebp -quiet -q 90 "$ROOT/design/assets/dunes-dusk.png" -o "$OUT/dusk.webp"
 cwebp -quiet -q 90 -resize 1200 0 "$ROOT/design/assets/dunes-dusk.png" -o "$OUT/dusk-1200.webp"
-cwebp -quiet -q 90 -alpha_q 100 "$ROOT/design/assets/dunes-footer.png" -o "$OUT/footer.webp"
-cwebp -quiet -q 90 -alpha_q 100 -resize 1200 0 "$ROOT/design/assets/dunes-footer.png" -o "$OUT/footer-1200.webp"
+# Footer at q80 in three widths (srcset): 1200 for phones, 1600 for desktop, the full 2880 for wide and dense screens.
+for w in 1200 1600; do
+  cwebp -quiet -q 80 -alpha_q 100 -resize "$w" 0 "$ROOT/design/assets/dunes-footer.png" -o "$OUT/footer-$w.webp"
+done
+cwebp -quiet -q 80 -alpha_q 100 "$ROOT/design/assets/dunes-footer.png" -o "$OUT/footer.webp"
 
 # Gulf land grid (STEP 9 over a 1440x900 frame), packed as a base64 bitset.
 python3 -I "$ROOT/design/assets/gulf-map.py" "$GEO_JSON" "$OUT" >/dev/null
