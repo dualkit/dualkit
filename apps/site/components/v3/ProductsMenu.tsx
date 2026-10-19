@@ -76,6 +76,10 @@ export function ProductsMenu({ parts, previews, latest, benchDays, end }: {
 }) {
   const [state, dispatch] = useReducer(menuReducer, MENU_CLOSED)
   const [days, setDays] = useState(benchDays)
+  // The preview painting is fetched only once the menu may open: hover or focus on Products warms it, so the first
+  // open paints without a flash and a page where the menu never opens never downloads it.
+  const [warm, setWarm] = useState(false)
+  const warmUp = useCallback(() => setWarm(true), [])
   const drawer = useRef<HTMLDivElement>(null)
   const desktopButton = useRef<HTMLButtonElement>(null)
   const phoneButton = useRef<HTMLButtonElement>(null)
@@ -164,11 +168,12 @@ export function ProductsMenu({ parts, previews, latest, benchDays, end }: {
   const linkProps = { onClick: close }
 
   return (
-    <header className="v3-nav" data-open={state.open || undefined}>
+    <header className="v3-nav" data-open={state.open || undefined} data-warm={warm || state.open || undefined}>
       <div ref={navRow} className="v3-wrap v3-nav-row">
         <Link className="v3-nav-brand" href="/"><Mark />Dualkit</Link>
         <nav className="v3-nav-links" aria-label="Main">
-          <button ref={desktopButton} type="button" className="v3-nav-link" aria-expanded={state.open} aria-controls={DRAWER_ID} onClick={toggle} onKeyDown={openFromKey}>
+          <button ref={desktopButton} type="button" className="v3-nav-link" aria-expanded={state.open} aria-controls={DRAWER_ID} onClick={toggle} onKeyDown={openFromKey}
+            onPointerEnter={warmUp} onFocus={warmUp}>
             {V3.nav.links[0]}<span className="v3-nav-tick" aria-hidden="true" />
           </button>
           {NAV_LINKS.map(([label, href]) => (

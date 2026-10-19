@@ -178,6 +178,9 @@ body { background: var(--v3-ground); }
 }
 
 .v3-menu-painting { display: grid; grid-template: 100% / 100%; height: 260px; }
+/* The hidden drawer still lays out, so its painting would download on every page. It loads once the nav is warm
+   (Products hovered or focused) or open. */
+.v3-nav:not([data-warm]) .v3-menu-painting { background-image: none; }
 .v3-menu-shot { position: relative; grid-area: 1 / 1; min-height: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 150ms var(--ease-ui); }
 .v3-menu-shot[data-on] { opacity: 1; }
 .v3-menu-shot > * { flex: none; transform: scale(calc(var(--pv-scale, 1) * var(--v3-menu-fit))); }
