@@ -3791,101 +3791,149 @@
       "children": [
         {
           "stack": "Video",
-          "dir": "col",
+          "dir": "row",
           "children": [
             {
-              "stack": "Scrim",
+              "stack": "Video words",
               "dir": "col",
-              "children": [],
-              "w": 1440,
-              "h": 900,
-              "abs": {
-                "start": 0,
-                "top": 0
-              },
-              "fill": {
-                "type": "linear",
-                "angle": 90,
-                "stops": [
-                  [
-                    0.35,
-                    "#0b0a0900"
-                  ],
-                  [
-                    1,
-                    "#0b0a09b3"
-                  ]
-                ]
-              }
-            },
-            {
-              "stack": "Video copy band",
-              "dir": "row",
               "children": [
                 {
-                  "stack": "Video copy",
-                  "dir": "col",
+                  "stack": "In the region label",
+                  "dir": "row",
                   "children": [
                     {
-                      "stack": "Video words",
-                      "dir": "col",
-                      "children": [
-                        {
-                          "text": "Made for the people\nbuilding the region.",
-                          "style": "V3Display",
-                          "color": "color.v3.glassText",
-                          "name": "Heading"
-                        },
-                        {
-                          "stack": "Video action",
-                          "dir": "row",
-                          "children": [
-                            {
-                              "text": "Get started",
-                              "style": "V3Label"
-                            },
-                            {
-                              "shape": "arrow icon",
-                              "kind": "svg",
-                              "size": [
-                                14,
-                                14
-                              ],
-                              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M3 8h10M9.5 4.5L13 8l-3.5 3.5\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
-                              "tint": "color.text.primary"
-                            }
-                          ],
-                          "gap": "space.tight",
-                          "align": "center",
-                          "pad": {
-                            "block": "space.snug",
-                            "inline": "space.group"
-                          },
-                          "fill": "color.v3.glassButton"
-                        }
+                      "shape": "Label square",
+                      "kind": "rect",
+                      "size": [
+                        7,
+                        7
                       ],
-                      "gap": "space.card"
+                      "fill": "color.v3.tick"
+                    },
+                    {
+                      "text": "In the region",
+                      "style": "V3Label",
+                      "name": "Label"
                     }
                   ],
-                  "w": "size.v2.content",
+                  "gap": "space.snug",
+                  "align": "center"
+                },
+                {
+                  "text": "Made for the people\nbuilding the region.",
+                  "style": "V3Display",
+                  "name": "Heading"
+                },
+                {
+                  "text": "Developers across the Gulf ship Arabic and English from one codebase. Dualkit keeps both right.",
+                  "style": "V3Lede",
+                  "color": "color.text.soft",
+                  "w": 420,
+                  "name": "Lede"
+                },
+                {
+                  "stack": "Get started button",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "text": "Get started",
+                      "style": "V3Label",
+                      "color": "color.text.inverse"
+                    },
+                    {
+                      "shape": "arrow icon",
+                      "kind": "svg",
+                      "size": [
+                        14,
+                        14
+                      ],
+                      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M3 8h10M9.5 4.5L13 8l-3.5 3.5\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                      "tint": "color.text.inverse"
+                    }
+                  ],
+                  "gap": "space.tight",
+                  "align": "center",
+                  "justify": "center",
                   "pad": {
-                    "bottom": "space.120"
-                  }
+                    "block": "space.snug",
+                    "inline": "space.group"
+                  },
+                  "fill": "color.surface.inverse"
                 }
               ],
               "w": "fill",
-              "justify": "center"
+              "h": "fill",
+              "justify": "center",
+              "gap": "space.card",
+              "pad": {
+                "start": 120,
+                "end": "space.v2.tile"
+              }
+            },
+            {
+              "stack": "Video frame",
+              "dir": "col",
+              "children": [
+                {
+                  "stack": "Video chip",
+                  "dir": "col",
+                  "children": [
+                    {
+                      "stack": "Video chip row",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "shape": "Video chip square",
+                          "kind": "rect",
+                          "size": [
+                            6,
+                            6
+                          ],
+                          "fill": "color.signal.dot"
+                        },
+                        {
+                          "text": "dualkit check",
+                          "style": "V3Mono",
+                          "color": "color.v3.glassText"
+                        },
+                        {
+                          "text": "0 rules failing",
+                          "style": "V3Small",
+                          "color": "color.v3.glassSoft"
+                        }
+                      ],
+                      "gap": "space.snug",
+                      "align": "center"
+                    }
+                  ],
+                  "fill": "color.v3.glass",
+                  "blur": 24,
+                  "stroke": {
+                    "color": "color.v3.glassLine",
+                    "width": "size.stroke"
+                  },
+                  "pad": {
+                    "block": "space.snug",
+                    "inline": "space.item"
+                  },
+                  "abs": {
+                    "start": 40,
+                    "bottom": 48
+                  }
+                }
+              ],
+              "w": 640,
+              "h": "fill",
+              "clip": true,
+              "fill": {
+                "type": "image",
+                "image": "video",
+                "scaleMode": "FILL"
+              }
             }
           ],
           "w": "fill",
-          "h": 900,
-          "justify": "end",
-          "clip": true,
-          "fill": {
-            "type": "image",
-            "image": "video",
-            "scaleMode": "FILL"
-          }
+          "h": 900
         }
       ],
       "w": "fill",

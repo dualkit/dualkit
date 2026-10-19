@@ -14,7 +14,7 @@ export const S = {
     lede: 'Six currencies, the Hijri calendar, and the formats people type every day.',
     cities: [['Kuwait City', 'KWD, 3 decimals', 500, 0.36], ['Riyadh', 'SAR, Umm al-Qura', 640, 0.56], ['Manama', 'BHD, 3 decimals', 780, 0.42], ['Doha', 'QAR', 900, 0.50], ['Dubai', 'AED, +971', 1040, 0.60], ['Muscat', 'OMR, 3 decimals', 1160, 0.47]],
   },
-  video: { heading: 'Made for the people\nbuilding the region.', action: 'Get started' },
+  video: { label: 'In the region', heading: 'Made for the people\nbuilding the region.', lede: 'Developers across the Gulf ship Arabic and English from one codebase. Dualkit keeps both right.', action: 'Get started' },
   numbers: {
     label: 'In numbers', heading: 'Open source, tested,\nand checked every month.',
     stats: [['1,031', 'tests across the kit'], ['20', 'rules in dualkit check'], ['6', 'Gulf currencies'], ['4', 'skills for your agent']],
@@ -59,13 +59,13 @@ export function video() {
 }
 function videoBlock() {
   const v = S.video
-  const scrim = { stack: 'Scrim', dir: 'col', children: [], w: 1440, h: VIEW, abs: { start: 0, top: 0 }, fill: { type: 'linear', angle: 90, stops: [[0.35, '#0b0a0900'], [1, '#0b0a09b3']] } }
-  return col('Video', [
-    scrim,
-    band('Video copy', [col('Video words', [text(v.heading, 'V3Display', { color: 'color.v3.glassText', name: 'Heading' }),
-      row('Video action', [text(v.action, 'V3Label'), icon('arrow', 'color.text.primary', 14)], { gap: 'space.tight', align: 'center', pad: { block: 'space.snug', inline: 'space.group' }, fill: 'color.v3.glassButton' })], { gap: 'space.card' })],
-    { pad: { bottom: 'space.120' } }),
-  ], { w: 'fill', h: VIEW, justify: 'end', clip: true, fill: { type: 'image', image: 'video', scaleMode: 'FILL' } })
+  const chip = glass('Video chip', [row('Video chip row', [square('Video chip square', 6, 'color.signal.dot'), text('dualkit check', 'V3Mono', { color: 'color.v3.glassText' }), gsoft('0 rules failing')], { gap: 'space.snug', align: 'center' })],
+    { pad: { block: 'space.snug', inline: 'space.item' }, abs: { start: 40, bottom: 48 } })
+  return row('Video', [
+    col('Video words', [label(v.label), text(v.heading, 'V3Display', { name: 'Heading' }), text(v.lede, 'V3Lede', { color: 'color.text.soft', w: 420, name: 'Lede' }),
+      button(v.action, 'ink', 'arrow')], { w: 'fill', h: 'fill', justify: 'center', gap: 'space.card', pad: { start: 120, end: 'space.v2.tile' } }),
+    col('Video frame', [chip], { w: 640, h: 'fill', clip: true, fill: { type: 'image', image: 'video', scaleMode: 'FILL' } }),
+  ], { w: 'fill', h: VIEW })
 }
 
 export function numbers() {
