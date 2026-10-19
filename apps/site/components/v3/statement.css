@@ -1,0 +1,11 @@
+.v3-st { position: relative; height: calc(min(100svh, 900px) + 60svh); }
+.v3-st-stick { position: sticky; top: 0; height: min(100svh, 900px); display: flex; align-items: center; overflow: clip; }
+.v3-st-text { margin: 0; width: 100%; }
+.v3-st-line { display: block; }
+.v3-st-w { opacity: var(--o, 1); }
+@media (min-width: 601px) { .v3-st { height: calc(900px + 600px); } .v3-st-stick { height: 900px; } }
+@media (prefers-reduced-motion: reduce) {
+  .v3-st { height: auto; }
+  .v3-st-stick { position: static; }
+  .v3-st-w { opacity: 1 !important; }
+}
