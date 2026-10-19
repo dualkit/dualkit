@@ -33,7 +33,8 @@
 .v3-story .cam.moving { will-change: transform; }
 .v3-story .group, .v3-story .ghost { position: absolute; left: 0; top: 0; width: 520px; display: flex; flex-direction: column; gap: 16px; }
 @media (prefers-reduced-motion: no-preference) {
-  .v3-story:not([data-live]) .group, .v3-story:not([data-live]) .rail { opacity: 0; }
+  /* visibility, not opacity: an ancestor with opacity below 1 makes the glass inside it lose its backdrop. */
+  .v3-story:not([data-live]) .group, .v3-story:not([data-live]) .rail { visibility: hidden; }
 }
 
 /* Panel */
@@ -124,7 +125,10 @@
 .v3-story .pin .pq svg { width: 12px; height: 12px; opacity: 0; }
 
 /* Install strip */
-.v3-story .istrip { position: relative; height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; color: #fff; opacity: 0; }
+.v3-story .istrip { position: relative; height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; color: #fff; }
+/* Off until the install beat: the glass is clipped away and the command is transparent (the strip itself never fades). */
+.v3-story .istrip > .bg { clip-path: inset(100% 0 0 0); }
+.v3-story .istrip > .icmd { opacity: 0; }
 .v3-story .istrip .bg { position: absolute; inset: 0; width: auto; height: auto; border: 1px solid var(--s-line); }
 .v3-story .icmd { position: relative; font-family: var(--font-mono); font-size: 12px; white-space: pre; }
 .v3-story .icmd .p { color: var(--s-faint); }

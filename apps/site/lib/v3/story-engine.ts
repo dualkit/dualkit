@@ -20,6 +20,12 @@ const MOBILE = '(max-width: 760px)'
 const GREEN = '#3ecf6e'
 /** Width change below which a resize is the phone toolbar, not a new layout. */
 const RESIZE_GUARD_PX = 40
+// Glass (backdrop-filter) is never faded: an element with a backdrop is shown and hidden with clip-path, and only the
+// text on it fades. Opacity on the glass, or on any ancestor, makes Chromium and WebKit re-composite the backdrop, so the
+// panel flashes dark or unblurred for a frame or two before it turns into glass.
+const OPEN = 'inset(0px 0px 0px 0px)'
+const SHUT_UP = 'inset(0px 0px 100% 0px)'
+const SHUT_DOWN = 'inset(100% 0px 0px 0px)'
 const KEYS: readonly KeyName[] = ['amount', 'date', 'phone', 'iban']
 
 const SPRING_MS = MIRROR_SPRING.sampleMs
@@ -52,6 +58,11 @@ export function startStory(root: HTMLElement): StoryHandle {
   const C = (k: string) => q(`[data-c="${k}"]`, group)
   const offs: Array<() => void> = []
   const on = (el: EventTarget, type: string, fn: EventListener) => { el.addEventListener(type, fn); offs.push(() => el.removeEventListener(type, fn)) }
+  // The rail's glass is clipped, its text fades: the rail itself never animates opacity or transform.
+  const railBg = q('.bg', rail)
+  const railParts = () => qa(':scope > :not(.bg)', rail)
+  const railHidden = () => { railBg.style.clipPath = SHUT_DOWN; railParts().forEach((el) => (el.style.opacity = '0')) }
+  const railShown = () => { railBg.style.clipPath = ''; railParts().forEach((el) => { el.style.opacity = ''; el.style.transform = '' }) }
 
   // ---------- clock: story time t advances while playing; beats wait in a queue ----------
   const clock = createClock()
@@ -218,7 +229,8 @@ export function startStory(root: HTMLElement): StoryHandle {
     specTick = () => { if (!spec.isConnected || !over) return; x += (tx - x) * 0.18; y += (ty - y) * 0.18; spec.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)` }
   }
   function showStatic() {
-    for (const el of [g('bg'), ...qa('.row', group)]) el.style.opacity = '1'
+    g('bg').style.clipPath = OPEN
+    for (const el of qa('.row', group)) el.style.opacity = '1'
     const ring = g('ring'); ring.style.strokeDashoffset = '0'; ring.style.strokeOpacity = '.14'
   }
 
@@ -227,7 +239,7 @@ export function startStory(root: HTMLElement): StoryHandle {
     const b = BEATS.build, ring = g('ring'), rows = qa('.row', group)
     rows.forEach((r) => (r.style.opacity = '0')); qa('.pin', group).forEach((p) => (p.style.opacity = '0'))
     tween(ring, 'd', [{ strokeDashoffset: 1, strokeOpacity: 0.55 }, { strokeDashoffset: 0, strokeOpacity: 0.55, offset: 0.8 }, { strokeDashoffset: 0, strokeOpacity: 0.14 }], { duration: b.ringMs, easing: EASE_IO })
-    tween(g('bg'), 'o', [{ opacity: 0 }, { opacity: 1 }], { duration: b.bgMs, delay: b.bgDelay, easing: EASE_OUT })
+    tween(g('bg'), 'o', [{ clipPath: SHUT_UP }, { clipPath: OPEN }], { duration: b.bgMs, delay: b.bgDelay, easing: EASE_OUT })
     rows.forEach((r, i) => fadeIn(r, b.rowsAt + i * b.rowStagger))
     rollIn(C('amountV'), b.countAt)
     tween(g('bar'), 'b', [{ transform: 'scaleX(0)' }, { transform: `scaleX(${14 / 20})` }], { duration: 600, delay: b.countAt, easing: EASE_ODO })
@@ -238,8 +250,9 @@ export function startStory(root: HTMLElement): StoryHandle {
       tween(pin, 'f', [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 320, delay: d, easing: EASE_EXPO })
       later(d, () => setNumber(g('failN'), i + 1, 0, 1))
     })
-    rail.style.opacity = '0'; railTo(RAIL.build, b.railAt)
-    tween(rail, 'o', [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'translateY(0px)' }], { duration: 420, delay: b.railFadeAt, easing: EASE_EXPO })
+    railHidden(); railTo(RAIL.build, b.railAt)
+    railParts().forEach((el) => tween(el, 'o', [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'translateY(0px)' }], { duration: 420, delay: b.railFadeAt, easing: EASE_EXPO }))
+    tween(railBg, 'o', [{ clipPath: SHUT_DOWN }, { clipPath: OPEN }], { duration: 420, delay: b.railFadeAt, easing: EASE_EXPO })
   }
 
   // ---------- 2. install ----------
@@ -248,7 +261,8 @@ export function startStory(root: HTMLElement): StoryHandle {
     stripShown = true
     moveCam(camFor(strip, 1.2), 800)
     railTo(RAIL.install, 80)
-    tween(strip, 'f', [{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'translateY(0px)' }], { duration: 420, delay: b.stripAt, easing: EASE_EXPO })
+    tween(q('.bg', strip), 'f', [{ clipPath: SHUT_DOWN }, { clipPath: OPEN }], { duration: 420, delay: b.stripAt, easing: EASE_EXPO })
+    tween(q('.icmd', strip), 'f', [{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'translateY(0px)' }], { duration: 420, delay: b.stripAt, easing: EASE_EXPO })
     ;[...COMMAND].forEach((_, i) => later(b.typeAt + i * b.typePerChar, () => { typed.textContent = COMMAND.slice(0, i + 1) }))
     tween(g('caret'), 'b', [{ opacity: 1 }, { opacity: 1, offset: 0.5 }, { opacity: 0, offset: 0.51 }, { opacity: 0 }], { duration: 900, iterations: 3, delay: b.typeAt + COMMAND.length * b.typePerChar })
     later(b.loadedAt, () => {
@@ -258,7 +272,17 @@ export function startStory(root: HTMLElement): StoryHandle {
   }
   function stripAway(delay = 0) {
     stripShown = false
-    tween(g('strip'), 'f', [{ opacity: 1, transform: 'translateY(0px)' }, { opacity: 0, transform: 'translateY(8px)' }], { duration: 300, delay, easing: EASE_OUT })
+    const strip = g('strip'), ld4 = g('ld4')
+    tween(q('.bg', strip), 'f', [{ clipPath: OPEN }, { clipPath: SHUT_DOWN }], { duration: 300, delay, easing: EASE_OUT })
+    tween(q('.icmd', strip), 'f', [{ opacity: 1, transform: 'translateY(0px)' }, { opacity: 0, transform: 'translateY(8px)' }], { duration: 300, delay, easing: EASE_OUT })
+    tween(ld4, 'f', [{ opacity: getComputedStyle(ld4).opacity }, { opacity: 0 }], { duration: 300, delay, easing: EASE_OUT })
+  }
+  /** The install strip at rest, off: its glass clipped away and its text transparent. */
+  function stripHidden() {
+    const strip = g('strip')
+    q('.bg', strip).style.clipPath = SHUT_DOWN
+    q('.icmd', strip).style.opacity = '0'
+    g('ld4').style.opacity = '0'
   }
 
   // ---------- 3. the six fixes ----------
@@ -455,8 +479,8 @@ export function startStory(root: HTMLElement): StoryHandle {
   const fadeContent = () => tween(g('content'), 'o', [{ opacity: 0 }, { opacity: 1 }], { duration: BEATS.seekDissolveMs, easing: EASE_OUT })
   function startAt(phase: Phase) {
     queue = []; anims().forEach((a) => a.cancel())
-    rail.style.opacity = ''
-    render(); qa('[data-tick] b', rail).forEach((b) => (b.style.transform = 'scale(0)'))
+    railShown()
+    render(); stripHidden(); qa('[data-tick] b', rail).forEach((b) => (b.style.transform = 'scale(0)'))
     let t0 = 0
     if (phase === 'build') { setCam(camRest); build(); later(INSTALL_AT, install) }
     else {
@@ -466,7 +490,6 @@ export function startStory(root: HTMLElement): StoryHandle {
       countersInstant()
       t0 = phase === 'checked' ? CHECK_AT : FIX_AT[phase]!
       railTo(phase === 'checked' ? RAIL.checked : phase ? RAIL.fix(phase - 1) : RAIL.install, 0, true)
-      g('strip').style.opacity = '0'
       fadeContent()
     }
     FIX_AT.forEach((at, k) => { if (at >= t0) later(at - t0, () => chapter(k)) })
@@ -474,7 +497,7 @@ export function startStory(root: HTMLElement): StoryHandle {
     const c = BEATS.close
     later(LOOP_MS - t0 - c.contentFadeBefore, () => tween(g('content'), 'o', [{ opacity: 1 }, { opacity: 0 }], { duration: 360, easing: EASE_OUT }))
     later(LOOP_MS - t0 - c.ringBefore, () => {
-      tween(g('bg'), 'o', [{ opacity: 1 }, { opacity: 0 }], { duration: 300, easing: EASE_OUT })
+      tween(g('bg'), 'o', [{ clipPath: OPEN }, { clipPath: SHUT_UP }], { duration: 300, easing: EASE_OUT })
       tween(g('ring'), 'd', [{ strokeDashoffset: 0 }, { strokeDashoffset: 1 }], { duration: 300, easing: EASE_OUT })
     })
     later(LOOP_MS - t0 + c.camAfter, () => { moveCam(camRest, c.camMs); later(c.camMs, () => startAt('build')) })
@@ -486,6 +509,8 @@ export function startStory(root: HTMLElement): StoryHandle {
     qa('.ghost', cam).forEach((gh) => gh.remove())
     group.getAnimations({ subtree: true }).forEach((a) => { try { a.commitStyles() } catch { /* a detached target has nothing to commit */ } })
     const ghost = group.cloneNode(true) as HTMLElement
+    // The live panel's glass is already under the ghost; the ghost keeps only its text, so no backdrop ever fades.
+    ghost.querySelectorAll('.bg').forEach((bg) => bg.remove())
     ghost.removeAttribute('data-k'); ghost.classList.add('ghost'); ghost.style.pointerEvents = 'none'; cam.appendChild(ghost)
     startAt(i)
     cam.style.transform = keep; sky.style.transform = keepSky
@@ -508,8 +533,8 @@ export function startStory(root: HTMLElement): StoryHandle {
   const ready = (document.fonts?.ready ?? Promise.resolve()).then(() => {
     if (dead) return
     render(); layout(); setCam(camRest)
-    qa('.row', group).forEach((r) => (r.style.opacity = '0')); g('bg').style.opacity = '0'
-    rail.style.opacity = '0'
+    qa('.row', group).forEach((r) => (r.style.opacity = '0')); g('bg').style.clipPath = SHUT_UP
+    railHidden()
     // The rail starts empty on "00", as in the prototype; the server's settled caption never shows under motion.
     q('[data-k="rtitle"]', rail).innerHTML = ''; q('[data-k="rline"]', rail).innerHTML = ''
     qa<Odo>('.od', rno).forEach((o) => { o.dataset.d = '0' }); snapOdos(rno)
@@ -517,7 +542,7 @@ export function startStory(root: HTMLElement): StoryHandle {
     root.dataset.live = ''
   }).catch((err: unknown) => {
     console.error('[hero]', err)
-    rail.style.opacity = ''
+    railShown()
     root.dataset.live = ''
   })
 
@@ -553,7 +578,8 @@ export function settleStory(root: HTMLElement): () => void {
     group.innerHTML = panelHTML(true)
     q('[data-k="rtitle"]').innerHTML = face(RAIL.checked[1]); q('[data-k="rline"]').innerHTML = face(RAIL.checked[2])
     q('[data-k="rno"]').querySelectorAll<HTMLElement>('.od').forEach((o, i) => { o.dataset.d = RAIL.checked[0][i]; (o.firstElementChild as HTMLElement).style.transform = `translateY(${-((10 + +RAIL.checked[0][i]!) / 30) * 100}%)` })
-    rail.style.opacity = ''; sky.style.transform = ''
+    rail.querySelectorAll<HTMLElement>(':scope > *').forEach((el) => { el.style.opacity = ''; el.style.transform = ''; el.style.clipPath = '' })
+    sky.style.transform = ''
     all(rail, '[data-tick] b').forEach((b) => (b.style.transform = 'scale(1)'))
     sizePanelRings(group)
     const w = painting.clientWidth, h = painting.clientHeight, mobile = matchMedia(MOBILE).matches
