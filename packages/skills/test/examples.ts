@@ -106,7 +106,8 @@ body { font-family: 'Brand', 'IBM Plex Sans Arabic', sans-serif; }`,
   },
   {
     skill: 'dualkit-bilingual-copy',
-    quote: `const items = {
+    quote: `const count = 5
+const items = {
   zero: 'لا توجد عناصر في هذا الطلب',
   one: 'لديك عنصر واحد في هذا الطلب',
   two: 'لديك عنصران في هذا الطلب',
@@ -121,12 +122,12 @@ const line = items[new Intl.PluralRules('ar').select(count)].replace('{count}', 
   },
   {
     skill: 'dualkit-bilingual-copy',
-    quote: `<div class="label-pair">
-  <p lang="ar">رقم الهوية الإماراتية</p>
+    quote: `<div>
+  <p lang="ar">الطلبات السابقة</p>
   <p lang="en" dir="ltr">Past orders</p>
 </div>`,
-    html: `<div class="label-pair">
-  <p lang="ar">رقم الهوية الإماراتية</p>
+    html: `<div>
+  <p lang="ar">الطلبات السابقة</p>
   <p lang="en" dir="ltr">Past orders</p>
 </div>`,
   },

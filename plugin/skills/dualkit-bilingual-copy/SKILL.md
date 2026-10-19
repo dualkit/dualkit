@@ -14,6 +14,7 @@ Arabic is not English with different words. It has six plural forms, gendered se
 Arabic plural rules have `zero`, `one`, `two`, `few`, `many` and `other`. Above 10 they go by the last two digits, so 103 is `few`, 111 is `many`, and 100, 101 and 200 are `other`. Provide all six, and never pick the form by hand. Select it with `Intl.PluralRules`.
 
 ```ts
+const count = 5
 const items = {
   zero: 'لا توجد عناصر في هذا الطلب',
   one: 'لديك عنصر واحد في هذا الطلب',
@@ -48,17 +49,17 @@ Arabic imperatives and "you" are gendered. In buttons and labels, use the verbal
 
 ## Punctuation and register
 
-- Arabic uses the same full stop as English. Only the comma, semicolon and question mark change: `،` `؛` `؟`.
+- Arabic uses the same full stop as English. The comma, semicolon and question mark change: `،` `؛` `؟`.
 - Use Modern Standard Arabic for UI text. Use Gulf dialect only for marketing, and only on purpose.
 - Keep brand and product names in Latin script inside Arabic, isolated.
 
 ## Two languages on one label
 
-When a label shows both languages stacked, give each line its own `lang`, and a `dir` when it differs from the page. The `lang` lets screen readers switch voice, and lets the `:lang(ar)` rules from dualkit-type-pairing reach the Arabic line.
+When a label shows both languages stacked, give each line its own `lang`, and a `dir` when it differs from the page. On an English page, `lang="ar"` lets the `:lang(ar)` rules from dualkit-type-pairing reach the Arabic line. On an Arabic page, `lang="en"` keeps them off the English line, and screen readers read it in an English voice.
 
 ```html
-<div class="label-pair">
-  <p lang="ar">رقم الهوية الإماراتية</p>
+<div>
+  <p lang="ar">الطلبات السابقة</p>
   <p lang="en" dir="ltr">Past orders</p>
 </div>
 ```
