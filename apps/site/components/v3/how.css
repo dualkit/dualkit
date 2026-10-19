@@ -1,0 +1,77 @@
+.v3-how { padding-top: 200px; }
+.v3-how-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+.v3-how-heading { display: flex; flex-direction: column; gap: 20px; }
+.v3-how-lede { width: 400px; flex: none; }
+.v3-how-frame { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 80px; }
+.v3-how-cell { display: flex; flex-direction: column; gap: 24px; padding: 24px; min-width: 0; }
+.v3-how-cell + .v3-how-cell { border-left: 1px solid var(--v3-line); }
+.v3-how-art { height: 240px; display: flex; align-items: center; justify-content: center; }
+.v3-how-text { display: flex; flex-direction: column; gap: 8px; }
+.v3-how-no { color: var(--v3-faint); }
+.v3-how-body { color: var(--v3-soft); }
+@media (max-width: 1199px) {
+  .v3-how-frame { grid-template-columns: minmax(0, 1fr); }
+  .v3-how-frame > .v3-tick:nth-child(n + 5) { display: none; }
+  .v3-how-cell + .v3-how-cell { border-left: 0; border-top: 1px solid var(--v3-line); }
+}
+@media (max-width: 899px) {
+  .v3-how-head { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .v3-how-lede { width: auto; }
+}
+@media (max-width: 600px) {
+  .v3-how { padding-top: 120px; }
+  .v3-how-frame { margin-top: 48px; }
+  .v3-how-cell { gap: 20px; padding: 16px; }
+}
+
+.v3-how-title { font-size: 14px; font-weight: 500; line-height: 1.25; }
+.v3-how-soft, .v3-how-status { color: var(--v3-glass-soft); font-size: 13px; font-weight: 400; }
+.v3-how-status { display: inline-flex; align-items: center; gap: 8px; }
+.v3-how-sq { width: 6px; height: 6px; background: var(--v3-glass-text); flex: none; }
+.v3-how-sq.is-ok { background: #16a34a; }
+
+/* Cell 01 */
+.v3-how-connect { display: flex; align-items: center; color: var(--v3-glass-text); }
+.v3-how-chips { display: flex; flex-direction: column; gap: 16px; }
+.v3-how-chip { display: flex; align-items: center; gap: 8px; height: 24px; padding-inline: 12px; font-size: 13px; font-weight: 500; line-height: 1; white-space: nowrap; }
+.v3-how-wires { position: relative; width: 56px; height: 104px; flex: none; }
+.v3-how-wires svg { display: block; }
+.v3-how-dot { position: absolute; left: 0; top: 0; width: 32px; height: 8px; offset-anchor: 100% 50%; offset-rotate: auto; offset-distance: 0%; opacity: 0; pointer-events: none;
+  background: linear-gradient(#fff, #fff) right center / 8px 8px no-repeat, linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7)) left center / 24px 2px no-repeat; }
+.v3-how-node { position: relative; padding: 8px; flex: none; }
+.v3-how-ring { position: absolute; inset: 0; box-shadow: inset 0 0 0 1px #fff; }
+.v3-how-node-sq { position: relative; display: flex; align-items: center; justify-content: center; width: 64px; height: 64px; background: #fff; }
+.v3-how-node-sq .mark { width: 24px; height: 24px; }
+.v3-how-connect[data-armed] .v3-how-ring { opacity: 0.4; }
+
+/* Cell 02 */
+.v3-how-loaded { width: 268px; max-width: 100%; padding: 12px; font-size: 14px; }
+.v3-how-loaded-head, .v3-how-check-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.v3-how-loaded-head { padding-bottom: 8px; }
+.v3-how-ranks { list-style: none; margin: 0; padding: 0; }
+.v3-how-rank { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-inline: 12px; box-sizing: border-box; }
+.v3-how-rank > * { position: relative; }
+.v3-how-rank-start { display: inline-flex; align-items: center; gap: 12px; }
+.v3-how-hi { position: absolute !important; inset: 0; background: var(--v3-glass-ring); }
+.v3-how-meter { width: 48px; height: 3px; background: var(--v3-glass-ring); flex: none; }
+.v3-how-bar { display: block; height: 100%; background: var(--v3-glass-text); transform-origin: left; }
+.v3-how-loaded[data-armed] .v3-how-bar { transform: scaleX(0); }
+.v3-how-loaded[data-armed] .v3-how-hi { opacity: 0; }
+.v3-how-loaded[data-armed] .v3-how-rank:not(:last-child) { transform: translateY(36px); }
+.v3-how-loaded[data-armed] .v3-how-rank:last-child { transform: translateY(-72px); }
+
+/* Cell 03 */
+.v3-how-check { display: flex; flex-direction: column; gap: 16px; width: 268px; max-width: 100%; padding: 16px; box-sizing: border-box; }
+.v3-how-check-title { display: inline-flex; align-items: center; gap: 12px; }
+.v3-how-skels { display: flex; flex-direction: column; gap: 8px; }
+.v3-how-skel { display: block; height: 4px; max-width: 100%; background: var(--v3-glass-ring); }
+.v3-how-actions { display: flex; gap: 8px; font-size: 14px; font-weight: 500; }
+.v3-how-open { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding-block: 8px; background: var(--v3-glass-button); color: var(--v3-ink); }
+.v3-how-copy { padding: 8px 12px; box-shadow: inset 0 0 0 1px var(--v3-glass-ring); }
+.v3-how-check[data-armed] .v3-how-skel { clip-path: inset(0 100% 0 0); }
+.v3-how-check[data-armed] .v3-how-open { opacity: 0.35; }
+
+@media (prefers-reduced-motion: reduce) {
+  .v3-how-dot { display: none; }
+  .v3-how-loaded[data-armed] .v3-how-bar, .v3-how-check[data-armed] .v3-how-skel, .v3-how-check[data-armed] .v3-how-open, .v3-how-loaded[data-armed] .v3-how-rank { transform: none !important; clip-path: none !important; opacity: 1 !important; }
+}

@@ -1,7 +1,11 @@
 'use client'
+import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { COPY } from '../lib/copy'
 import { CheckIcon, FeedbackIcon } from './icons'
+
+/** Window event that opens the feedback panel from anywhere on the page. */
+export const FEEDBACK_OPEN_EVENT = 'dualkit:feedback-open'
 
 type State = { kind: 'idle' } | { kind: 'sending' } | { kind: 'sent' } | { kind: 'error'; message: string }
 
@@ -17,7 +21,30 @@ async function submit(form: HTMLFormElement): Promise<State> {
   }
 }
 
-/** A round icon button pinned to the reading-end corner; it opens a small panel that mails Sam. */
+/** Covers that the trigger steps aside for on phones: the hero story and the footer painting. */
+const AVOID = '.v3-hero-frame, .v3-foot-art'
+
+/** True while an AVOID element reaches the bottom tenth of the viewport, where the trigger sits. CSS acts on it only on phones. */
+function useTucked(): boolean {
+  const [tucked, setTucked] = useState(false)
+  // Feedback lives in the root layout, so the covers change on every client navigation: observe the new page's nodes.
+  const pathname = usePathname()
+  useEffect(() => {
+    setTucked(false)
+    const targets = document.querySelectorAll(AVOID)
+    if (!targets.length || typeof IntersectionObserver === 'undefined') return
+    const hits = new Set<Element>()
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) { if (e.isIntersecting) hits.add(e.target); else hits.delete(e.target) }
+      setTucked(hits.size > 0)
+    }, { rootMargin: '-90% 0px 0px 0px' })
+    targets.forEach((t) => io.observe(t))
+    return () => { io.disconnect(); hits.clear() }
+  }, [pathname])
+  return tucked
+}
+
+/** A square icon button pinned to the reading-end corner; it opens a small panel that mails Sam. */
 export function Feedback() {
   const f = COPY.feedback
   const [open, setOpen] = useState(false)
@@ -25,6 +52,14 @@ export function Feedback() {
   const root = useRef<HTMLDivElement>(null)
   const field = useRef<HTMLTextAreaElement>(null)
   const trigger = useRef<HTMLButtonElement>(null)
+  const tucked = useTucked()
+
+  // Other parts of the page (the Works with "ask" tile) open the panel with a window event instead of clicking the trigger.
+  useEffect(() => {
+    const onOpen = () => { setOpen(true); setState((s) => (s.kind === 'sent' || s.kind === 'error' ? { kind: 'idle' } : s)) }
+    window.addEventListener(FEEDBACK_OPEN_EVENT, onOpen)
+    return () => window.removeEventListener(FEEDBACK_OPEN_EVENT, onOpen)
+  }, [])
 
   useEffect(() => {
     if (!open) return
@@ -48,7 +83,7 @@ export function Feedback() {
   }
 
   return (
-    <div className="fb" ref={root}>
+    <div className="fb" ref={root} data-tucked={tucked}>
       <div className="fb-panel" id="feedback-panel" role="dialog" aria-label={f.heading} data-open={open} inert={!open}>
         {state.kind === 'sent' ? (
           <p className="fb-sent swap-in"><CheckIcon /> {f.sent}</p>

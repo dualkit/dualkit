@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import { EASE, prefersReducedMotion } from '@/lib/motion'
+import { fillClip, fillLength, slideTravel, type SlideMetrics } from '@/lib/slide'
 import { ArrowIcon, BackIcon, CheckIcon } from './icons'
 
 // Drag the thumb to the far end to pay. In Arabic the track runs right to left, so the drag does too.
@@ -8,7 +9,9 @@ import { ArrowIcon, BackIcon, CheckIcon } from './icons'
 const COMMIT_AT = 0.75
 const RESET_MS = 1600
 
-export function SlideToPay({ label, done, rtl = false }: { label: string; done: string; rtl?: boolean }) {
+type Props = { label: string; done?: string; rtl?: boolean; /** 'glass' is the square v3 look inside a glass panel; the default is the v2 pill. */ variant?: 'pill' | 'glass' }
+
+export function SlideToPay({ label, done, rtl = false, variant = 'pill' }: Props) {
   const track = useRef<HTMLDivElement>(null)
   const thumb = useRef<HTMLButtonElement>(null)
   const fill = useRef<HTMLSpanElement>(null)
@@ -18,17 +21,47 @@ export function SlideToPay({ label, done, rtl = false }: { label: string; done: 
   const [paid, setPaid] = useState(false)
   const sign = rtl ? -1 : 1
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
-  useEffect(() => () => clearTimeout(timer.current), [])
+  const raf = useRef(0)
+  const metrics = useRef<SlideMetrics | null>(null)
+  useEffect(() => () => { clearTimeout(timer.current); cancelAnimationFrame(raf.current) }, [])
+  // A new track width invalidates the cached measures; repaint the resting position at the new size.
+  useEffect(() => {
+    const el = track.current
+    if (!el) return
+    let width = el.clientWidth
+    const ro = new ResizeObserver(() => {
+      if (el.clientWidth === width) return
+      width = el.clientWidth
+      metrics.current = null
+      paint(progress.current)
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps -- paint reads refs only
 
-  const maxTravel = () => (track.current && thumb.current ? track.current.clientWidth - thumb.current.offsetWidth - 8 : 0)
+  /** Reads layout once, at the start of a gesture or an animation, never inside a frame after a write. */
+  const measure = (): SlideMetrics => {
+    const t = track.current
+    const b = thumb.current
+    if (!t || !b) return { max: 0, inset: 0, thumb: 0, radius: '0px' }
+    const inset = parseFloat(getComputedStyle(t).paddingLeft) || 0
+    const radius = fill.current ? getComputedStyle(fill.current).borderTopLeftRadius || '0px' : '0px'
+    const m = { max: slideTravel(t.clientWidth, b.offsetWidth, inset), inset, thumb: b.offsetWidth, radius }
+    metrics.current = m
+    return m
+  }
+  /** Writes only: the thumb moves with transform and the fill is cut with clip-path. */
   const paint = (p: number) => {
     progress.current = p
-    const max = maxTravel()
-    if (thumb.current) thumb.current.style.transform = `translateX(${sign * p * max}px)`
-    if (fill.current) fill.current.style.width = `${p * max + (thumb.current?.offsetWidth ?? 0) / 2 + 4}px`
+    const m = metrics.current ?? measure()
+    if (thumb.current) thumb.current.style.transform = `translateX(${sign * p * m.max}px)`
+    if (fill.current) fill.current.style.clipPath = fillClip(fillLength(p, m), rtl, m.radius)
     if (text.current) text.current.style.opacity = String(1 - p * 0.6)
   }
+  const stop = () => { cancelAnimationFrame(raf.current); raf.current = 0 }
   const animateTo = (to: number, ms: number, easing: string, after?: () => void) => {
+    stop()
+    measure()
     const from = progress.current
     if (prefersReducedMotion() || from === to) { paint(to); after?.(); return }
     const t0 = performance.now()
@@ -36,15 +69,19 @@ export function SlideToPay({ label, done, rtl = false }: { label: string; done: 
     const step = (now: number) => {
       const t = Math.min(1, (now - t0) / ms)
       paint(from + (to - from) * ease(t))
-      if (t < 1) requestAnimationFrame(step); else after?.()
+      if (t < 1) raf.current = requestAnimationFrame(step)
+      else { raf.current = 0; after?.() }
     }
-    requestAnimationFrame(step)
+    raf.current = requestAnimationFrame(step)
   }
 
   const onDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (paid) return
+    // A grab during the spring-back or the reset takes over: one writer on the thumb at a time.
+    stop()
+    clearTimeout(timer.current)
     e.currentTarget.setPointerCapture(e.pointerId)
-    const max = maxTravel()
+    const { max } = measure()
     drag.current = { startX: e.clientX, grab: progress.current * max, max, lastX: e.clientX, lastT: performance.now(), v: 0 }
     if (thumb.current) thumb.current.style.transition = 'none'
   }
@@ -72,9 +109,9 @@ export function SlideToPay({ label, done, rtl = false }: { label: string; done: 
   }
 
   return (
-    <div className={`slide${paid ? ' done' : ''}`} ref={track} dir={rtl ? 'rtl' : 'ltr'} lang={rtl ? 'ar' : 'en'}>
+    <div className={`slide${variant === 'glass' ? ' slide--glass' : ''}${paid ? ' done' : ''}`} ref={track} dir={rtl ? 'rtl' : 'ltr'} lang={rtl ? 'ar' : 'en'}>
       <span className="fill" ref={fill} />
-      <span className="label" ref={text}>{paid ? done : label}</span>
+      <span className="label" ref={text}>{paid && done ? done : label}</span>
       <button ref={thumb} type="button" className="thumb" aria-label={label}
         onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!paid) finish() } }}>

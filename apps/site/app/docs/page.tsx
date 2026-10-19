@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { CopyCommand } from '@/components/CopyCommand'
-import { Footer } from '@/components/Footer'
-import { Nav } from '@/components/Nav'
+import { Footer } from '@/components/v3/Footer'
+import { Nav } from '@/components/v3/Nav'
 import { ACTION_URL, CHECK_COMMAND, FORMAT_COMMAND, SKILLS_COMMAND } from '@/lib/copy'
 import { liveData } from '@/lib/live'
 

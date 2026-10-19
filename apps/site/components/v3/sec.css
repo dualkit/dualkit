@@ -1,0 +1,14 @@
+/* Shared by the Both directions, Bench and Numbers sections: header, spacing. */
+.v3-sec { padding-top: 200px; }
+.v3-sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+.v3-sec-title { display: flex; flex-direction: column; gap: 20px; }
+.v3-sec-side { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; width: 400px; flex: none; }
+.v3-sec-body { margin-top: 80px; }
+@media (max-width: 899px) {
+  .v3-sec-head { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .v3-sec-side { width: auto; }
+  .v3-sec-body { margin-top: 40px; }
+}
+
+/* Phone: sections sit 120 apart (mobile.mjs SECTION). */
+@media (max-width: 600px) { .v3-sec { padding-top: 120px; } }

@@ -21,6 +21,8 @@ const ARABIC_ABBREVIATION: Record<Currency, string> = {
 
 /** The dinars and the Omani rial split into 1,000 fils or baisa, so they show three decimals. */
 const MINOR_UNIT_DIGITS: Record<Currency, number> = { AED: 2, SAR: 2, QAR: 2, KWD: 3, BHD: 3, OMR: 3 }
+/** Every currency the formatter supports. */
+export const CURRENCIES = Object.keys(MINOR_UNIT_DIGITS) as readonly Currency[]
 const NBSP = ' '
 const LRI = '⁦'
 const PDI = '⁩'

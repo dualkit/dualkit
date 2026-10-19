@@ -11,3 +11,10 @@ Shown next to model names on /bench to identify who makes each model. One colour
 | thinking-machines.svg | The square from thinkingmachines.ai's favicon (the company uses only a wordmark) |
 | dots-studio.svg | The sail glyph from studio.dots.ai's header logo (a PNG, traced with potrace) |
 | minimax.svg | The waveform glyph from minimax.io's header logo (`/assets/logo/minimax-horizontal-brand-black.webp`, traced with potrace) |
+
+# Footer seal marks
+
+| File | Source |
+|---|---|
+| osi/OSIApproved.svg | The official OSI Approved License mark, as downloaded from https://opensource.org/wp-content/uploads/2009/06/OSIApproved.svg (linked from opensource.org/osi-logo-files). Unchanged. |
+| apps/site/public/v3/marks/osi-approved.svg | Built from it by `osi/osi-approved.py`: OSI's black-and-white treatment for light backgrounds, the live "Approved License" text outlined in Open Sans ExtraBold, editor metadata removed, viewBox cropped. Usage per opensource.org/trademark-guidelines: ® kept, linked to opensource.org, attribution in the footer. |

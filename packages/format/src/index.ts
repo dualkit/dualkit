@@ -1,5 +1,5 @@
 export { toArabicDigits, toWesternDigits, type Numerals } from './numerals'
-export { formatMoney, type Currency, type Locale, type MoneyOptions } from './money'
+export { CURRENCIES, formatMoney, type Currency, type Locale, type MoneyOptions } from './money'
 export { formatHijri, toHijri, type FormatHijriOptions, type HijriDate, type HijriOptions } from './hijri'
 export {
   formatUaePhone, isValidUaePhone, parseUaePhone,

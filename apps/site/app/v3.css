@@ -1,0 +1,283 @@
+/* dualkit.dev v3: hard edges, ruled frames, smoked glass on a golden-hour painting. No radius except seals and mascot,
+   no shadows beyond 1px rings, no uppercase. Sections scope with .v3 classes; every page uses the v3 Nav, Footer and ground. */
+:root {
+  --v3-ground: #efece4;
+  --v3-ink: #09090b;
+  --v3-soft: rgba(9, 9, 11, 0.6);
+  --v3-faint: rgba(9, 9, 11, 0.45);
+  --v3-line: rgba(0, 0, 0, 0.12);
+  --v3-glass: rgba(11, 10, 9, 0.46);
+  --v3-glass-ring: rgba(255, 255, 255, 0.14);
+  --v3-glass-text: #ffffff;
+  --v3-glass-soft: rgba(255, 255, 255, 0.64);
+  --v3-glass-button: rgba(255, 255, 255, 0.92);
+
+  --v3-content: 1200px;
+  --v3-gutter: 16px;
+  --v3-tick: 7px;
+  /* The sticky nav's height (12px padding, 45px burger, 1px rule; 16px padding and 44px buttons from 1200px). */
+  --v3-nav-h: 70px;
+
+  --font-mono: 'Berkeley Mono', var(--font-plex-mono), monospace;
+
+  --ease-move: cubic-bezier(.77, 0, .175, 1);
+  --ease-out: cubic-bezier(.23, 1, .32, 1);
+}
+@media (min-width: 1024px) { :root { --v3-gutter: 120px; } }
+@media (min-width: 1200px) { :root { --v3-nav-h: 77px; } }
+
+/* The warm ground is every page's background, v2 inner pages included. */
+body { background: var(--v3-ground); }
+
+.v3 { background: var(--v3-ground); color: var(--v3-ink); font-size: 15px; line-height: 1.5; }
+.v3-wrap { width: 100%; max-width: calc(var(--v3-content) + 2 * var(--v3-gutter)); margin-inline: auto; padding-inline: var(--v3-gutter); }
+
+/* Type */
+.v3-display { margin: 0; font-size: 64px; font-weight: 400; line-height: 1.02; letter-spacing: -0.032em; text-wrap: balance; }
+.v3-h2 { margin: 0; font-size: 48px; font-weight: 400; line-height: 1.08; letter-spacing: -0.028em; text-wrap: balance; }
+.v3-step { margin: 0; font-size: 22px; font-weight: 400; line-height: 1.3; letter-spacing: -0.012em; }
+.v3-lede { margin: 0; font-size: 17px; line-height: 1.5; color: var(--v3-soft); text-wrap: pretty; }
+.v3-body { margin: 0; font-size: 15px; line-height: 1.5; }
+.v3-small { font-size: 13px; line-height: 1.5; }
+.v3-mono { font-family: var(--font-mono); font-size: 13px; line-height: 1.5; }
+@media (max-width: 600px) {
+  .v3-display { font-size: 40px; }
+  .v3-h2 { font-size: 32px; }
+}
+
+/* Label: a 7px ink square and a sentence-case 14px label */
+.v3-label { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; line-height: 1.4; }
+.v3-label::before { content: ''; width: 7px; height: 7px; background: var(--v3-ink); flex: none; }
+
+/* Frame: a hairline box with 7px ink ticks on the corners and at each join */
+.v3-frame { position: relative; border: 1px solid var(--v3-line); }
+.v3-tick { position: absolute; width: var(--v3-tick); height: var(--v3-tick); background: var(--v3-ink); pointer-events: none; }
+
+/* Buttons: hard-edged */
+.v3-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 20px; font-size: 14px; font-weight: 500; line-height: 1; white-space: nowrap; border: 1px solid transparent; transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease; }
+.v3-btn svg { width: 14px; height: 14px; flex: none; transition: transform 200ms var(--ease-out); }
+.v3-btn--ink { background: var(--v3-ink); color: #fff; }
+.v3-btn--outline { border-color: var(--v3-line); color: var(--v3-ink); }
+.v3-btn--glass { background: var(--v3-glass-button); color: var(--v3-ink); }
+@media (hover: hover) and (pointer: fine) {
+  .v3-btn:hover svg { transform: translateX(2px); }
+  .v3-btn--ink:hover { background: #26262b; }
+  .v3-btn--outline:hover { border-color: rgba(0, 0, 0, 0.3); }
+  .v3-btn--glass:hover { background: #fff; }
+}
+.v3-btn:focus-visible { outline: 2px solid var(--v3-ink); outline-offset: 2px; border-radius: 0; }
+
+/* Glass: smoked, ringed with 1px, never shadowed */
+.v3-glass { background: var(--v3-glass); color: var(--v3-glass-text); box-shadow: 0 0 0 1px var(--v3-glass-ring); -webkit-backdrop-filter: blur(24px) saturate(140%); backdrop-filter: blur(24px) saturate(140%); }
+.v3-glass-soft { color: var(--v3-glass-soft); }
+/* Glass stage (GlassLayer): one set of glass panes behind crossfading previews. The panes never fade; their clip-path
+   moves to the active preview's glass boxes. Once a stage is live, the previews' own glass keeps only its ring. */
+.v3-gl { position: absolute; inset: 0; pointer-events: none; }
+.v3-gl-pane { position: absolute; inset: 0; background: var(--v3-glass); -webkit-backdrop-filter: blur(24px) saturate(140%); backdrop-filter: blur(24px) saturate(140%); clip-path: inset(50%); visibility: hidden; }
+.v3-gl[data-animate='1'] .v3-gl-pane { transition: clip-path 220ms var(--ease-ui); }
+[data-glass='stage'] .v3-glass { background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+@media (prefers-reduced-motion: reduce) { .v3-gl[data-animate='1'] .v3-gl-pane { transition: none; } }
+
+/* Painting: the dusk dunes behind a glass panel */
+.v3-painting { position: relative; overflow: hidden; background-color: #c9a27a; background-image: url('/v3/dusk-1200.webp'); background-size: cover; background-position: center; }
+@media (min-width: 1201px) { .v3-painting { background-image: url('/v3/dusk.webp'); } }
+
+/* Nav: brand, links with an ink tick under the current one, GitHub and Get started. Below 1200 the links fold into a sheet. */
+.v3-nav { position: sticky; top: 0; z-index: 40; background: var(--v3-ground); color: var(--v3-ink); border-bottom: 1px solid var(--v3-line); }
+.v3-nav-row { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; background: var(--v3-ground); }
+.v3-nav-brand { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+.v3-nav-links { display: none; align-items: center; gap: 32px; }
+.v3-nav-link { position: relative; display: inline-flex; flex-direction: column; gap: 4px; padding: 0; border: 0; background: none; font: inherit; font-size: 14px; font-weight: 500; line-height: 1.5; color: var(--v3-soft); cursor: pointer; transition: color 150ms var(--ease-ui); }
+.v3-nav-tick { height: 2px; background: var(--v3-ink); transform: scaleX(0); transform-origin: left; }
+.v3-nav-link[aria-current='page'], .v3-nav-link[aria-expanded='true'] { color: var(--v3-ink); }
+.v3-nav-link[aria-current='page'] .v3-nav-tick, .v3-nav-link[aria-expanded='true'] .v3-nav-tick { transform: none; }
+.v3-nav-link:focus-visible, .v3-nav-burger:focus-visible, .v3-menu a:focus-visible, .v3-menu-copy:focus-visible { outline: 2px solid var(--v3-ink); outline-offset: 2px; }
+.v3-nav-end { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.v3-nav-gh { display: none; }
+.v3-nav-count { color: var(--v3-faint); font-variant-numeric: tabular-nums; }
+.v3-nav-burger { display: inline-flex; align-items: center; justify-content: center; width: 45px; height: 45px; padding: 0; border: 0; background: none; color: var(--v3-ink); box-shadow: inset 0 0 0 1px var(--v3-line); cursor: pointer; }
+@media (hover: hover) and (pointer: fine) { .v3-nav-link:hover { color: var(--v3-ink); } }
+@media (min-width: 1200px) {
+  .v3-nav-row { padding-block: 16px; }
+  .v3-nav-brand, .v3-nav-end { width: 240px; }
+  .v3-nav-links, .v3-nav-gh { display: flex; }
+  .v3-nav-burger { display: none; }
+}
+
+/* Products menu: opens from under the nav with clip-path (opacity only steps), 220ms in and 150ms out. No animation when opened
+   from the keyboard or under reduced motion. The row highlight moves instantly; the preview crossfades over 150ms when the
+   pointer moves between rows, and switches at once on a keyboard step (arrow keys or Tab, data-step='keyboard'). */
+.v3-menu { --v3-menu-list: 440px; --v3-menu-side: 240px; --v3-menu-fit: 1;
+  position: absolute; z-index: 1; inset-inline: 0; top: 100%; background: var(--v3-ground);
+  clip-path: inset(0 0 100% 0); opacity: 0; visibility: hidden;
+  transition: clip-path 150ms var(--ease-ui), opacity 0s linear 150ms, visibility 0s linear 150ms; }
+/* The drawer holds glass, so it is revealed by clip-path alone: opacity only steps (on at the start, off at the end). */
+.v3-menu[data-open] { clip-path: inset(0); opacity: 1; visibility: visible; transition: clip-path 220ms var(--ease-ui), opacity 0s, visibility 0s; }
+.v3-menu[data-via='keyboard'] { transition: none; }
+.v3-menu-scrim { position: fixed; inset: 0; z-index: 0; background: var(--v3-ground); opacity: 0; pointer-events: none; transition: opacity 150ms var(--ease-ui); }
+.v3-nav[data-open] .v3-menu-scrim { opacity: 0.75; pointer-events: auto; transition-duration: 220ms; }
+.v3-nav:has(.v3-menu[data-via='keyboard']) .v3-menu-scrim { transition: none; }
+
+.v3-menu-faint { color: var(--v3-faint); }
+.v3-menu-soft { color: var(--v3-soft); }
+.v3-menu ul { margin: 0; padding: 0; list-style: none; }
+.v3-menu-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: start; gap: 16px; padding: 16px; }
+.v3-menu-list li + li { border-top: 1px solid var(--v3-line); }
+.v3-menu-row[data-on] { background: rgba(0, 0, 0, 0.04); }
+.v3-menu-words { display: flex; flex-direction: column; gap: 4px; }
+.v3-menu-tag { padding-inline: 8px; color: var(--v3-faint); box-shadow: inset 0 0 0 1px var(--v3-line); white-space: nowrap; }
+.v3-menu-row[data-on] .v3-menu-tag { color: var(--v3-ink); }
+
+.v3-menu-cmd { display: flex; align-items: center; gap: 12px; padding: 12px 16px; box-shadow: inset 0 0 0 1px var(--v3-line); }
+.v3-menu-cmd code { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.v3-menu-copy { display: inline-grid; grid-template: auto / auto; justify-items: end; align-items: center; padding: 0; border: 0; background: none; color: var(--v3-soft); cursor: pointer; }
+/* Copied: the icon gives way to the word for 1.5 s, a 150ms opacity crossfade and nothing else. */
+.v3-menu-copy > * { grid-area: 1 / 1; transition: opacity 150ms var(--ease-ui); }
+.v3-menu-copied { opacity: 0; color: var(--v3-ink); white-space: nowrap; }
+.v3-menu-copy[data-copied] .copy-ico { opacity: 0; }
+.v3-menu-copy[data-copied] .v3-menu-copied { opacity: 1; }
+.v3-menu-go { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; }
+.v3-menu-go svg { transition: transform 200ms var(--ease-out); }
+.v3-menu-foot-links { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+
+.v3-menu-side { display: flex; flex-direction: column; }
+.v3-menu-block { display: flex; flex-direction: column; gap: 4px; padding-block: 24px; }
+.v3-menu-block + .v3-menu-block { border-top: 1px solid var(--v3-line); }
+.v3-menu .v3-menu-start { display: flex; flex-direction: column; gap: 8px; padding-top: 8px; font-size: 22px; line-height: 1.3; letter-spacing: -0.012em; }
+.v3-menu-latest, .v3-menu-count { font-size: 14px; font-weight: 500; }
+.v3-menu-count { display: inline-flex; align-items: center; gap: 8px; }
+.v3-menu-count i { width: 6px; height: 6px; background: var(--v3-ink); flex: none; }
+
+/* Phone and tablet: a full-height sheet. The list leads, then the install line, then where to start. No preview, no keys. */
+.v3-menu-band { padding-inline: 0; }
+.v3-menu-frame { border: 0; }
+.v3-menu-frame > .v3-tick, .v3-menu-preview, .v3-menu-keys { display: none; }
+.v3-menu { max-height: calc(100svh - 70px); overflow-y: auto; overscroll-behavior: contain; }
+.v3-menu-cols { display: flex; flex-direction: column; padding-bottom: 64px; }
+.v3-menu-list { border-bottom: 1px solid var(--v3-line); }
+.v3-menu-install { display: flex; flex-direction: column; gap: 8px; padding: 24px var(--v3-gutter); border-bottom: 1px solid var(--v3-line); }
+.v3-menu-install .v3-menu-cmd { padding-inline: 12px; }
+.v3-menu-side { padding-inline: var(--v3-gutter); }
+
+@media (min-width: 1200px) {
+  .v3-menu { max-height: none; overflow: visible; }
+  .v3-menu-band { padding-inline: var(--v3-gutter); padding-block: 16px 24px; }
+  .v3-menu-frame { border: 1px solid var(--v3-line); }
+  .v3-menu-frame > .v3-tick { display: block; }
+  .v3-menu-cols { display: grid; grid-template-columns: var(--v3-menu-list) minmax(0, 1fr) var(--v3-menu-side); padding-bottom: 0; }
+  .v3-menu-list { border-bottom: 0; }
+  .v3-menu-list li:last-child { border-bottom: 1px solid var(--v3-line); }
+  .v3-menu-install { display: none; }
+  .v3-menu-preview { display: flex; flex-direction: column; gap: 16px; padding: 40px; border-inline: 1px solid var(--v3-line); }
+  .v3-menu-side { padding: 24px 40px; }
+  .v3-menu-block { padding-block: 16px; }
+  .v3-menu-block:first-child { padding-top: 16px; }
+  .v3-menu .v3-menu-start { gap: 12px; font-size: 14px; font-weight: 500; line-height: 1.5; letter-spacing: 0; }
+  .v3-menu-keys { display: flex; align-items: center; gap: 40px; padding: 12px 16px; border-top: 1px solid var(--v3-line); }
+  .v3-menu-keys > span { display: inline-flex; align-items: center; gap: 8px; }
+  .v3-menu-keys kbd { padding-inline: 8px; box-shadow: inset 0 0 0 1px var(--v3-line); }
+}
+@media (min-width: 1200px) and (max-width: 1439px) {
+  .v3-menu { --v3-menu-list: 360px; --v3-menu-side: 220px; --v3-menu-fit: 0.82; }
+  .v3-menu-preview { padding: 24px; }
+  .v3-menu-side { padding-inline: 24px; }
+}
+
+.v3-menu-painting { display: grid; grid-template: 100% / 100%; height: 260px; }
+/* The hidden drawer still lays out, so its painting would download on every page. It loads once the nav is warm
+   (Products hovered or focused) or open. */
+.v3-nav:not([data-warm]) .v3-menu-painting { background-image: none; }
+.v3-menu-shot { position: relative; grid-area: 1 / 1; min-height: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 150ms var(--ease-ui); }
+.v3-menu-shot[data-on] { opacity: 1; }
+.v3-menu-shot > * { flex: none; transform: scale(calc(var(--pv-scale, 1) * var(--v3-menu-fit))); }
+.v3-menu-shot[data-part='1'] { --pv-scale: 0.64; }
+.v3-menu-shot[data-part='2'] { --pv-scale: 0.72; }
+.v3-menu-shot[data-part='3'] { --pv-scale: 0.7; }
+.v3-menu-shot[data-part='4'] { --pv-scale: 0.82; }
+.v3-menu-foot { display: grid; }
+.v3-menu-foot-part { grid-area: 1 / 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 16px; opacity: 0; transition: opacity 150ms var(--ease-ui); }
+.v3-menu-foot-part[data-on] { opacity: 1; }
+.v3-menu[data-step='keyboard'] :is(.v3-menu-shot, .v3-menu-foot-part, .v3-gl-pane) { transition: none; }
+@media (hover: hover) and (pointer: fine) { .v3-menu-go:hover svg { transform: translateX(2px); } .v3-menu-copy:hover { color: var(--v3-ink); } }
+@media (prefers-reduced-motion: reduce) {
+  .v3-menu, .v3-menu[data-open], .v3-menu-scrim, .v3-menu-shot, .v3-menu-foot-part, .v3-nav-link, .v3-menu-copy > * { transition: none; }
+}
+
+/* Kit previews: glass panels at their natural size (Task 9 shows them full size; the menu scales them down). */
+.v3-pv { color: var(--v3-glass-text); font-size: 14px; font-weight: 500; line-height: 1.25; }
+.v3-pv .v3-mono { font-weight: 400; }
+.v3-pv-soft { color: var(--v3-glass-soft); font-size: 13px; font-weight: 400; line-height: 1.5; display: inline-flex; align-items: center; }
+.v3-pv-title { font-size: 14px; font-weight: 500; }
+.v3-pv-fill { flex: 1; min-width: 0; }
+.v3-pv-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; }
+.v3-pv-status { display: inline-flex; align-items: center; gap: 8px; color: var(--v3-glass-soft); font-size: 13px; font-weight: 400; }
+.v3-pv-dot { width: 6px; height: 6px; background: #16a34a; flex: none; }
+.v3-pv-line { display: flex; flex-direction: column; gap: 4px; padding-block: 12px; border-top: 1px solid var(--v3-glass-ring); }
+.v3-pv-parse, .v3-pv-bench-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.v3-pv-parse [lang='ar'] { font-size: 16px; font-weight: 400; line-height: 1.7; }
+.v3-pv-result { display: inline-flex; align-items: center; gap: 12px; }
+.v3-pv-install { display: flex; align-items: center; gap: 12px; padding: 12px; box-shadow: inset 0 0 0 1px var(--v3-glass-ring); }
+
+.v3-pv-skills { display: flex; flex-direction: column; gap: 4px; width: 340px; padding: 12px; }
+.v3-pv-skills .v3-pv-head { padding-bottom: 8px; }
+.v3-pv-skill { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; }
+.v3-pv-skill.is-on { background: var(--v3-glass-ring); }
+.v3-pv-skill-start { display: inline-flex; align-items: center; gap: 12px; }
+
+.v3-pv-format { display: flex; flex-direction: column; gap: 12px; width: 380px; padding: 16px; }
+.v3-pv-format .v3-pv-head { padding-bottom: 0; }
+.v3-pv-format .v3-pv-line { gap: 4px; }
+
+.v3-pv-starter { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 400px; }
+.v3-pv-cell { display: flex; flex-direction: column; gap: 8px; padding: 16px; }
+.v3-pv-amount { display: flex; flex-direction: column; gap: 4px; }
+.v3-pv-amount [lang='ar'] { font-size: 16px; font-weight: 400; line-height: 1.7; }
+
+.v3-pv-check { display: flex; flex-direction: column; gap: 16px; width: 400px; padding: 24px; }
+.v3-pv-check .v3-pv-head { padding-bottom: 0; }
+.v3-pv-check-title { display: inline-flex; align-items: center; gap: 12px; }
+.v3-pv-check-box { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: var(--v3-glass-button); color: var(--v3-ink); }
+.v3-pv-family { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 8px; }
+.v3-pv-family-name { width: 72px; }
+.v3-pv-meter { position: relative; width: 220px; height: 3px; background: var(--v3-glass-ring); }
+.v3-pv-meter i { position: absolute; inset-block: 0; left: 0; background: var(--v3-glass-text); }
+.v3-pv-actions { display: flex; gap: 8px; }
+.v3-pv-solid { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding-block: 8px; background: var(--v3-glass-button); color: var(--v3-ink); }
+.v3-pv-ghost { padding: 8px 12px; box-shadow: inset 0 0 0 1px var(--v3-glass-ring); }
+
+.v3-pv-bench { display: flex; flex-direction: column; gap: 4px; width: 380px; padding: 16px; }
+.v3-pv-bench .v3-pv-line { gap: 12px; }
+.v3-pv-bench-name, .v3-pv-bench-figures { display: inline-flex; align-items: center; gap: 8px; }
+/* Maker marks sit on glass here: white, and the initial tile for an unknown maker turns white with an ink letter. */
+.v3-pv .bx-mark { color: var(--v3-glass-text); }
+.v3-pv .bx-initial { border-radius: 0; background: var(--v3-glass-text); color: var(--v3-ink); }
+.v3-pv-bench-figures { gap: 12px; }
+.v3-pv-track { position: relative; display: block; width: 348px; height: 10px; background: linear-gradient(var(--v3-glass-ring), var(--v3-glass-ring)) 0 50% / 100% 1px no-repeat; }
+.v3-pv-lift { position: absolute; top: 4px; height: 2px; background: var(--v3-glass-text); }
+.v3-pv-pin { position: absolute; top: 0; width: 10px; height: 10px; margin-left: -5px; background: var(--v3-glass); box-shadow: inset 0 0 0 1px var(--v3-glass-text); }
+.v3-pv-pin.is-on { background: var(--v3-glass-text); }
+
+/* Feedback (mounted in layout): square and on the warm ground; on phones it steps aside while the hero story or the footer painting sits under it. */
+/* The open Products menu (a full-height sheet on phones) sits over the feedback button; both are z-index 40 otherwise. */
+:root:has(.v3-nav[data-open]) .fb { z-index: 39; }
+.fb-trigger, .fb-panel { border-radius: 0; background: var(--v3-ground); box-shadow: 0 0 0 1px var(--v3-line); }
+.fb-trigger { transition: background-color 150ms var(--ease-ui), scale 160ms var(--ease-out), opacity 200ms var(--ease-out), translate 200ms var(--ease-out); }
+.fb-trigger:active { scale: 0.97; }
+@media (hover: hover) and (pointer: fine) { .fb-trigger:hover { background: #e6e2d8; } }
+.fb-trigger[aria-expanded='true'] { background: #e6e2d8; }
+@media (max-width: 600px) {
+  .fb[data-tucked='true'] .fb-trigger[aria-expanded='false'] { opacity: 0; translate: 0 8px; pointer-events: none; }
+  .fb[data-tucked='true'] .fb-trigger:focus-visible { opacity: 1; translate: 0 0; pointer-events: auto; }
+}
+/* Reduced motion: the tuck keeps its fade and drops the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .fb[data-tucked='true'] .fb-trigger[aria-expanded='false'] { translate: 0 0; }
+}
+
+/* v2 inner pages (docs, updates, status, bench) on the v3 shell: their controls lose the pill shape so they sit with the
+   square nav, and the Bench's last band drops its bottom padding because the footer already brings 200 px. */
+:is(main.page, main.bx) :is(.pill, .tag, .cmd, .bx-month, .bx-months, .bx-months a), .fb :is(.pill, textarea, input) { border-radius: 0; }
+main.bx > .bx-how:last-child { padding-bottom: 0; }
+
+/* Read by screen readers, not shown. */
+.v3-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

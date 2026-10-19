@@ -1,0 +1,27 @@
+.v3-mirror-grid { display: grid; grid-template-columns: minmax(0, 1fr); }
+.v3-mirror-cell { display: flex; flex-direction: column; gap: 16px; padding: 16px; min-width: 0; }
+.v3-mirror-cell + .v3-mirror-cell { border-top: 1px solid var(--v3-line); }
+.v3-mirror-paint { display: flex; align-items: center; justify-content: center; height: 200px; padding-inline: 16px; }
+.v3-mirror-paint .slide { width: 280px; max-width: 100%; }
+.v3-mirror-caption { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.v3-mirror-name { font-size: 14px; font-weight: 500; line-height: 1.4; }
+.v3-mirror-caption .v3-mono { color: var(--v3-faint); }
+@media (max-width: 899px) { .v3-mirror-frame > .v3-tick:nth-child(n + 5) { display: none; } }
+@media (min-width: 900px) {
+  .v3-mirror-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .v3-mirror-cell { padding: 24px; gap: 16px; }
+  .v3-mirror-cell + .v3-mirror-cell { border-top: 0; border-left: 1px solid var(--v3-line); }
+  .v3-mirror-paint { height: 320px; }
+  .v3-mirror-paint .slide { width: 340px; }
+}
+
+/* The slider, square, inside glass. Pointer behaviour lives in SlideToPay. */
+.slide.slide--glass { height: auto; padding: 8px; border-radius: 0; background: var(--v3-glass); color: var(--v3-glass-text); box-shadow: 0 0 0 1px var(--v3-glass-ring); -webkit-backdrop-filter: blur(24px) saturate(140%); backdrop-filter: blur(24px) saturate(140%); display: flex; align-items: center; overflow: hidden; }
+.slide.slide--glass .fill { border-radius: 0; background: var(--v3-glass-ring); inset-block: 8px; inset-inline: 8px; }
+.slide.slide--glass .label { color: var(--v3-glass-text); font-size: 14px; font-weight: 500; }
+.slide.slide--glass .label:lang(ar) { font-weight: 400; font-size: 16px; }
+.slide.slide--glass .thumb { width: 48px; height: 48px; flex: none; border-radius: 0; background: var(--v3-glass-button); color: var(--v3-ink); }
+.slide.slide--glass .thumb svg { width: 16px; height: 16px; }
+.slide.slide--glass .thumb:focus-visible { outline: 2px solid var(--v3-glass-text); outline-offset: 2px; }
+.slide.slide--glass.done { background: var(--v3-glass); }
+.slide.slide--glass.done .label { color: var(--v3-glass-text); font-weight: 500; }

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import { Footer } from '@/components/Footer'
-import { Nav } from '@/components/Nav'
+import { Footer } from '@/components/v3/Footer'
+import { Nav } from '@/components/v3/Nav'
 import { liveData } from '@/lib/live'
 import { OVERALL_LABEL } from '@/lib/status'
 

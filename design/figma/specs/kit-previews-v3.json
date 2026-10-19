@@ -1,0 +1,1631 @@
+{
+  "screen": "Dualkit · Kit previews · v3",
+  "size": [
+    "size.desktop",
+    "hug"
+  ],
+  "direction": "ltr",
+  "lang": "en",
+  "fill": "color.v3.ground",
+  "textColor": "color.text.primary",
+  "pad": "space.v2.inner",
+  "gap": "space.stack",
+  "children": [
+    {
+      "stack": "Previews title",
+      "dir": "col",
+      "children": [
+        {
+          "stack": "The kit label",
+          "dir": "row",
+          "children": [
+            {
+              "shape": "Label square",
+              "kind": "rect",
+              "size": [
+                7,
+                7
+              ],
+              "fill": "color.v3.tick"
+            },
+            {
+              "text": "The kit",
+              "style": "V3Label",
+              "name": "Label"
+            }
+          ],
+          "gap": "space.snug",
+          "align": "center"
+        },
+        {
+          "text": "What each part shows when it opens.",
+          "style": "V3H2",
+          "name": "Heading"
+        }
+      ],
+      "gap": "space.group"
+    },
+    {
+      "stack": "Previews",
+      "dir": "grid",
+      "columns": 2,
+      "gap": "space.card",
+      "w": "fill",
+      "children": [
+        {
+          "stack": "Format preview",
+          "dir": "col",
+          "children": [
+            {
+              "stack": "Format painting",
+              "dir": "row",
+              "children": [
+                {
+                  "stack": "Format panel",
+                  "dir": "col",
+                  "children": [
+                    {
+                      "stack": "Format head",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "stack": "Parsed",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "shape": "Parsed square",
+                              "kind": "rect",
+                              "size": [
+                                6,
+                                6
+                              ],
+                              "fill": "color.signal.dot"
+                            },
+                            {
+                              "text": "Parsed",
+                              "style": "V3Small",
+                              "color": "color.v3.glassSoft"
+                            }
+                          ],
+                          "gap": "space.tight",
+                          "align": "center"
+                        },
+                        {
+                          "text": "@dualkit/format",
+                          "style": "V3Mono",
+                          "color": "color.v3.glassText"
+                        }
+                      ],
+                      "w": "fill",
+                      "justify": "between",
+                      "align": "center",
+                      "pad": {
+                        "bottom": "space.snug"
+                      }
+                    },
+                    {
+                      "stack": "Money line",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "shape": "Money rule",
+                          "kind": "rect",
+                          "size": [
+                            1,
+                            "size.stroke"
+                          ],
+                          "w": "fill",
+                          "h": "size.stroke",
+                          "fill": "color.v3.glassLine"
+                        },
+                        {
+                          "stack": "Money parse",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "text": "Money",
+                              "style": "V3Small",
+                              "color": "color.v3.glassSoft",
+                              "name": "What"
+                            },
+                            {
+                              "stack": "Money row",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "text": "١٬٢٣٤٫٥٠ د.إ",
+                                  "style": "V2ArBody",
+                                  "color": "color.v3.glassText",
+                                  "name": "Typed"
+                                },
+                                {
+                                  "stack": "Money result",
+                                  "dir": "row",
+                                  "children": [
+                                    {
+                                      "shape": "arrow icon",
+                                      "kind": "svg",
+                                      "size": [
+                                        14,
+                                        14
+                                      ],
+                                      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M3 8h10M9.5 4.5L13 8l-3.5 3.5\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                                      "tint": "color.v3.glassSoft"
+                                    },
+                                    {
+                                      "text": "1234.50 AED",
+                                      "style": "V3Mono",
+                                      "color": "color.v3.glassText",
+                                      "name": "Parsed"
+                                    }
+                                  ],
+                                  "gap": "space.snug",
+                                  "align": "center"
+                                }
+                              ],
+                              "w": "fill",
+                              "justify": "between",
+                              "align": "center"
+                            }
+                          ],
+                          "w": "fill",
+                          "gap": "space.hair",
+                          "pad": {
+                            "block": "space.snug"
+                          }
+                        }
+                      ],
+                      "w": "fill"
+                    },
+                    {
+                      "stack": "Hijri date line",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "shape": "Hijri date rule",
+                          "kind": "rect",
+                          "size": [
+                            1,
+                            "size.stroke"
+                          ],
+                          "w": "fill",
+                          "h": "size.stroke",
+                          "fill": "color.v3.glassLine"
+                        },
+                        {
+                          "stack": "Hijri date parse",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "text": "Hijri date",
+                              "style": "V3Small",
+                              "color": "color.v3.glassSoft",
+                              "name": "What"
+                            },
+                            {
+                              "stack": "Hijri date row",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "text": "١ رمضان ١٤٤٧",
+                                  "style": "V2ArBody",
+                                  "color": "color.v3.glassText",
+                                  "name": "Typed"
+                                },
+                                {
+                                  "stack": "Hijri date result",
+                                  "dir": "row",
+                                  "children": [
+                                    {
+                                      "shape": "arrow icon",
+                                      "kind": "svg",
+                                      "size": [
+                                        14,
+                                        14
+                                      ],
+                                      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M3 8h10M9.5 4.5L13 8l-3.5 3.5\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                                      "tint": "color.v3.glassSoft"
+                                    },
+                                    {
+                                      "text": "2026-02-18",
+                                      "style": "V3Mono",
+                                      "color": "color.v3.glassText",
+                                      "name": "Parsed"
+                                    }
+                                  ],
+                                  "gap": "space.snug",
+                                  "align": "center"
+                                }
+                              ],
+                              "w": "fill",
+                              "justify": "between",
+                              "align": "center"
+                            }
+                          ],
+                          "w": "fill",
+                          "gap": "space.hair",
+                          "pad": {
+                            "block": "space.snug"
+                          }
+                        }
+                      ],
+                      "w": "fill"
+                    },
+                    {
+                      "stack": "Phone line",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "shape": "Phone rule",
+                          "kind": "rect",
+                          "size": [
+                            1,
+                            "size.stroke"
+                          ],
+                          "w": "fill",
+                          "h": "size.stroke",
+                          "fill": "color.v3.glassLine"
+                        },
+                        {
+                          "stack": "Phone parse",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "text": "Phone",
+                              "style": "V3Small",
+                              "color": "color.v3.glassSoft",
+                              "name": "What"
+                            },
+                            {
+                              "stack": "Phone row",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "text": "٠٥٠‎ ١٢٣‎ ٤٥٦٧",
+                                  "style": "V2ArBody",
+                                  "color": "color.v3.glassText",
+                                  "name": "Typed"
+                                },
+                                {
+                                  "stack": "Phone result",
+                                  "dir": "row",
+                                  "children": [
+                                    {
+                                      "shape": "arrow icon",
+                                      "kind": "svg",
+                                      "size": [
+                                        14,
+                                        14
+                                      ],
+                                      "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M3 8h10M9.5 4.5L13 8l-3.5 3.5\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                                      "tint": "color.v3.glassSoft"
+                                    },
+                                    {
+                                      "text": "+971 50 123 4567",
+                                      "style": "V3Mono",
+                                      "color": "color.v3.glassText",
+                                      "name": "Parsed"
+                                    }
+                                  ],
+                                  "gap": "space.snug",
+                                  "align": "center"
+                                }
+                              ],
+                              "w": "fill",
+                              "justify": "between",
+                              "align": "center"
+                            }
+                          ],
+                          "w": "fill",
+                          "gap": "space.hair",
+                          "pad": {
+                            "block": "space.snug"
+                          }
+                        }
+                      ],
+                      "w": "fill"
+                    },
+                    {
+                      "stack": "Format install",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "$",
+                          "style": "V3Mono",
+                          "color": "color.v3.glassSoft"
+                        },
+                        {
+                          "text": "npm i @dualkit/format",
+                          "style": "V3Mono",
+                          "color": "color.v3.glassText",
+                          "w": "fill"
+                        },
+                        {
+                          "shape": "copy icon",
+                          "kind": "svg",
+                          "size": [
+                            14,
+                            14
+                          ],
+                          "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><rect x=\"5.5\" y=\"5.5\" width=\"8\" height=\"8\" rx=\"2\" stroke=\"#09090b\" stroke-width=\"1.5\"/><path d=\"M10.5 3.5v-.25A.75.75 0 009.75 2.5h-6.5a.75.75 0 00-.75.75v6.5c0 .41.34.75.75.75h.25\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\"/></svg>",
+                          "tint": "color.v3.glassSoft"
+                        }
+                      ],
+                      "w": "fill",
+                      "gap": "space.snug",
+                      "align": "center",
+                      "pad": "space.snug",
+                      "stroke": {
+                        "color": "color.v3.glassLine",
+                        "width": "size.stroke"
+                      }
+                    }
+                  ],
+                  "fill": "color.v3.glass",
+                  "blur": 24,
+                  "stroke": {
+                    "color": "color.v3.glassLine",
+                    "width": "size.stroke"
+                  },
+                  "w": 380,
+                  "gap": "space.snug",
+                  "pad": "space.item"
+                }
+              ],
+              "w": "fill",
+              "justify": "center",
+              "align": "center",
+              "clip": true,
+              "fill": {
+                "type": "image",
+                "image": "dusk",
+                "scaleMode": "FILL"
+              },
+              "h": 560
+            },
+            {
+              "stack": "Format caption",
+              "dir": "row",
+              "children": [
+                {
+                  "stack": "Format caption start",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "text": "02",
+                      "style": "V3Small",
+                      "color": "color.text.faint"
+                    },
+                    {
+                      "text": "Format",
+                      "style": "V3Step"
+                    }
+                  ],
+                  "gap": "space.item",
+                  "align": "center"
+                },
+                {
+                  "text": "Money, dates, phones and IBANs from the digits people type",
+                  "style": "V3Small",
+                  "color": "color.text.soft"
+                }
+              ],
+              "w": "fill",
+              "justify": "between",
+              "align": "center"
+            }
+          ],
+          "w": "fill",
+          "h": "fill",
+          "gap": "space.item"
+        },
+        {
+          "stack": "Starter preview",
+          "dir": "col",
+          "children": [
+            {
+              "stack": "Starter painting",
+              "dir": "row",
+              "children": [
+                {
+                  "stack": "Starter grid",
+                  "dir": "col",
+                  "children": [
+                    {
+                      "stack": "Starter cells",
+                      "dir": "grid",
+                      "columns": 2,
+                      "gap": "space.tight",
+                      "w": "fill",
+                      "children": [
+                        {
+                          "stack": "Amount cell",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "text": "Amount",
+                              "style": "V3Mono",
+                              "color": "color.v3.glassText",
+                              "name": "Component"
+                            },
+                            {
+                              "stack": "Amount both",
+                              "dir": "col",
+                              "children": [
+                                {
+                                  "text": "AED 1,234.50",
+                                  "style": "V3Glass",
+                                  "color": "color.v3.glassText",
+                                  "name": "English"
+                                },
+                                {
+                                  "text": "١٬٢٣٤٫٥٠ د.إ",
+                                  "style": "V2ArBody",
+                                  "color": "color.v3.glassText",
+                                  "name": "Arabic"
+                                }
+                              ],
+                              "w": "fill",
+                              "gap": "space.hair"
+                            }
+                          ],
+                          "fill": "color.v3.glass",
+                          "blur": 24,
+                          "stroke": {
+                            "color": "color.v3.glassLine",
+                            "width": "size.stroke"
+                          },
+                          "w": "fill",
+                          "h": "fill",
+                          "gap": "space.tight",
+                          "pad": "space.item"
+                        },
+                        {
+                          "stack": "Button cell",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "text": "Button",
+                              "style": "V3Mono",
+                              "color": "color.v3.glassText",
+                              "name": "Component"
+                            }
+                          ],
+                          "fill": "color.v3.glass",
+                          "blur": 24,
+                          "stroke": {
+                            "color": "color.v3.glassLine",
+                            "width": "size.stroke"
+                          },
+                          "w": "fill",
+                          "h": "fill",
+                          "gap": "space.tight",
+                          "pad": "space.item"
+                        },
+                        {
+                          "stack": "DateDisplay cell",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "text": "DateDisplay",
+                              "style": "V3Mono",
+                              "color": "color.v3.glassText",
+                              "name": "Component"
+                            }
+                          ],
+                          "fill": "color.v3.glass",
+                          "blur": 24,
+                          "stroke": {
+                            "color": "color.v3.glassLine",
+                            "width": "size.stroke"
+                          },
+                          "w": "fill",
+                          "h": "fill",
+                          "gap": "space.tight",
+                          "pad": "space.item"
+                        },
+                        {
+                          "stack": "DigitInput cell",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "text": "DigitInput",
+                              "style": "V3Mono",
+                              "color": "color.v3.glassText",
+                              "name": "Component"
+                            }
+                          ],
+                          "fill": "color.v3.glass",
+                          "blur": 24,
+                          "stroke": {
+                            "color": "color.v3.glassLine",
+                            "width": "size.stroke"
+                          },
+                          "w": "fill",
+                          "h": "fill",
+                          "gap": "space.tight",
+                          "pad": "space.item"
+                        },
+                        {
+                          "stack": "Field cell",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "text": "Field",
+                              "style": "V3Mono",
+                              "color": "color.v3.glassText",
+                              "name": "Component"
+                            }
+                          ],
+                          "fill": "color.v3.glass",
+                          "blur": 24,
+                          "stroke": {
+                            "color": "color.v3.glassLine",
+                            "width": "size.stroke"
+                          },
+                          "w": "fill",
+                          "h": "fill",
+                          "gap": "space.tight",
+                          "pad": "space.item"
+                        },
+                        {
+                          "stack": "Sheet cell",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "text": "Sheet",
+                              "style": "V3Mono",
+                              "color": "color.v3.glassText",
+                              "name": "Component"
+                            }
+                          ],
+                          "fill": "color.v3.glass",
+                          "blur": 24,
+                          "stroke": {
+                            "color": "color.v3.glassLine",
+                            "width": "size.stroke"
+                          },
+                          "w": "fill",
+                          "h": "fill",
+                          "gap": "space.tight",
+                          "pad": "space.item"
+                        },
+                        {
+                          "stack": "Tabs cell",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "text": "Tabs",
+                              "style": "V3Mono",
+                              "color": "color.v3.glassText",
+                              "name": "Component"
+                            }
+                          ],
+                          "fill": "color.v3.glass",
+                          "blur": 24,
+                          "stroke": {
+                            "color": "color.v3.glassLine",
+                            "width": "size.stroke"
+                          },
+                          "w": "fill",
+                          "h": "fill",
+                          "gap": "space.tight",
+                          "pad": "space.item"
+                        },
+                        {
+                          "stack": "Toast cell",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "text": "Toast",
+                              "style": "V3Mono",
+                              "color": "color.v3.glassText",
+                              "name": "Component"
+                            }
+                          ],
+                          "fill": "color.v3.glass",
+                          "blur": 24,
+                          "stroke": {
+                            "color": "color.v3.glassLine",
+                            "width": "size.stroke"
+                          },
+                          "w": "fill",
+                          "h": "fill",
+                          "gap": "space.tight",
+                          "pad": "space.item"
+                        }
+                      ]
+                    }
+                  ],
+                  "w": 400
+                }
+              ],
+              "w": "fill",
+              "justify": "center",
+              "align": "center",
+              "clip": true,
+              "fill": {
+                "type": "image",
+                "image": "dusk",
+                "scaleMode": "FILL"
+              },
+              "h": 560
+            },
+            {
+              "stack": "Starter caption",
+              "dir": "row",
+              "children": [
+                {
+                  "stack": "Starter caption start",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "text": "03",
+                      "style": "V3Small",
+                      "color": "color.text.faint"
+                    },
+                    {
+                      "text": "Starter",
+                      "style": "V3Step"
+                    }
+                  ],
+                  "gap": "space.item",
+                  "align": "center"
+                },
+                {
+                  "text": "Eight bilingual components to copy into your app",
+                  "style": "V3Small",
+                  "color": "color.text.soft"
+                }
+              ],
+              "w": "fill",
+              "justify": "between",
+              "align": "center"
+            }
+          ],
+          "w": "fill",
+          "h": "fill",
+          "gap": "space.item"
+        },
+        {
+          "stack": "Check preview",
+          "dir": "col",
+          "children": [
+            {
+              "stack": "Check painting",
+              "dir": "row",
+              "children": [
+                {
+                  "stack": "Check panel",
+                  "dir": "col",
+                  "children": [
+                    {
+                      "stack": "Check head",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "stack": "Check title",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "stack": "Check square",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "shape": "check icon",
+                                  "kind": "svg",
+                                  "size": [
+                                    12,
+                                    12
+                                  ],
+                                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M3.5 8.5l3 3 6-7\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                                  "tint": "color.text.primary"
+                                }
+                              ],
+                              "w": 18,
+                              "h": 18,
+                              "justify": "center",
+                              "align": "center",
+                              "fill": "color.v3.glassButton"
+                            },
+                            {
+                              "text": "dualkit check",
+                              "style": "V3Glass",
+                              "color": "color.v3.glassText"
+                            }
+                          ],
+                          "gap": "space.snug",
+                          "align": "center"
+                        },
+                        {
+                          "stack": "Score",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "shape": "Score square",
+                              "kind": "rect",
+                              "size": [
+                                6,
+                                6
+                              ],
+                              "fill": "color.signal.dot"
+                            },
+                            {
+                              "text": "20 of 20",
+                              "style": "V3Small",
+                              "color": "color.v3.glassSoft"
+                            }
+                          ],
+                          "gap": "space.tight",
+                          "align": "center"
+                        }
+                      ],
+                      "w": "fill",
+                      "justify": "between",
+                      "align": "center",
+                      "pad": {
+                        "bottom": "space.snug"
+                      }
+                    },
+                    {
+                      "stack": "Families",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "stack": "Bidi family",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "text": "Bidi",
+                              "style": "V3Glass",
+                              "color": "color.v3.glassText",
+                              "w": 72,
+                              "name": "Family"
+                            },
+                            {
+                              "stack": "Bidi bar",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "shape": "Bidi bar fill",
+                                  "kind": "rect",
+                                  "size": [
+                                    220,
+                                    3
+                                  ],
+                                  "fill": "color.v3.glassText"
+                                }
+                              ],
+                              "w": 220,
+                              "h": 3,
+                              "fill": "color.v3.glassLine"
+                            },
+                            {
+                              "text": "4 of 4",
+                              "style": "V3Small",
+                              "color": "color.v3.glassSoft",
+                              "name": "Count"
+                            }
+                          ],
+                          "w": "fill",
+                          "justify": "between",
+                          "align": "center",
+                          "pad": {
+                            "block": "space.tight"
+                          }
+                        },
+                        {
+                          "stack": "Layout family",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "text": "Layout",
+                              "style": "V3Glass",
+                              "color": "color.v3.glassText",
+                              "w": 72,
+                              "name": "Family"
+                            },
+                            {
+                              "stack": "Layout bar",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "shape": "Layout bar fill",
+                                  "kind": "rect",
+                                  "size": [
+                                    220,
+                                    3
+                                  ],
+                                  "fill": "color.v3.glassText"
+                                }
+                              ],
+                              "w": 220,
+                              "h": 3,
+                              "fill": "color.v3.glassLine"
+                            },
+                            {
+                              "text": "4 of 4",
+                              "style": "V3Small",
+                              "color": "color.v3.glassSoft",
+                              "name": "Count"
+                            }
+                          ],
+                          "w": "fill",
+                          "justify": "between",
+                          "align": "center",
+                          "pad": {
+                            "block": "space.tight"
+                          }
+                        },
+                        {
+                          "stack": "Icons family",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "text": "Icons",
+                              "style": "V3Glass",
+                              "color": "color.v3.glassText",
+                              "w": 72,
+                              "name": "Family"
+                            },
+                            {
+                              "stack": "Icons bar",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "shape": "Icons bar fill",
+                                  "kind": "rect",
+                                  "size": [
+                                    220,
+                                    3
+                                  ],
+                                  "fill": "color.v3.glassText"
+                                }
+                              ],
+                              "w": 220,
+                              "h": 3,
+                              "fill": "color.v3.glassLine"
+                            },
+                            {
+                              "text": "2 of 2",
+                              "style": "V3Small",
+                              "color": "color.v3.glassSoft",
+                              "name": "Count"
+                            }
+                          ],
+                          "w": "fill",
+                          "justify": "between",
+                          "align": "center",
+                          "pad": {
+                            "block": "space.tight"
+                          }
+                        },
+                        {
+                          "stack": "Type family",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "text": "Type",
+                              "style": "V3Glass",
+                              "color": "color.v3.glassText",
+                              "w": 72,
+                              "name": "Family"
+                            },
+                            {
+                              "stack": "Type bar",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "shape": "Type bar fill",
+                                  "kind": "rect",
+                                  "size": [
+                                    220,
+                                    3
+                                  ],
+                                  "fill": "color.v3.glassText"
+                                }
+                              ],
+                              "w": 220,
+                              "h": 3,
+                              "fill": "color.v3.glassLine"
+                            },
+                            {
+                              "text": "5 of 5",
+                              "style": "V3Small",
+                              "color": "color.v3.glassSoft",
+                              "name": "Count"
+                            }
+                          ],
+                          "w": "fill",
+                          "justify": "between",
+                          "align": "center",
+                          "pad": {
+                            "block": "space.tight"
+                          }
+                        },
+                        {
+                          "stack": "Content family",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "text": "Content",
+                              "style": "V3Glass",
+                              "color": "color.v3.glassText",
+                              "w": 72,
+                              "name": "Family"
+                            },
+                            {
+                              "stack": "Content bar",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "shape": "Content bar fill",
+                                  "kind": "rect",
+                                  "size": [
+                                    220,
+                                    3
+                                  ],
+                                  "fill": "color.v3.glassText"
+                                }
+                              ],
+                              "w": 220,
+                              "h": 3,
+                              "fill": "color.v3.glassLine"
+                            },
+                            {
+                              "text": "5 of 5",
+                              "style": "V3Small",
+                              "color": "color.v3.glassSoft",
+                              "name": "Count"
+                            }
+                          ],
+                          "w": "fill",
+                          "justify": "between",
+                          "align": "center",
+                          "pad": {
+                            "block": "space.tight"
+                          }
+                        }
+                      ],
+                      "w": "fill"
+                    },
+                    {
+                      "stack": "Check actions",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "stack": "Open report",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "shape": "check icon",
+                              "kind": "svg",
+                              "size": [
+                                12,
+                                12
+                              ],
+                              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><path d=\"M3.5 8.5l3 3 6-7\" stroke=\"#09090b\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>",
+                              "tint": "color.text.primary"
+                            },
+                            {
+                              "text": "Open report",
+                              "style": "V3Glass"
+                            }
+                          ],
+                          "w": "fill",
+                          "gap": "space.tight",
+                          "justify": "center",
+                          "align": "center",
+                          "pad": {
+                            "block": "space.tight"
+                          },
+                          "fill": "color.v3.glassButton"
+                        },
+                        {
+                          "stack": "Copy",
+                          "dir": "row",
+                          "children": [
+                            {
+                              "text": "Copy",
+                              "style": "V3Glass",
+                              "color": "color.v3.glassText"
+                            }
+                          ],
+                          "pad": {
+                            "block": "space.tight",
+                            "inline": "space.snug"
+                          },
+                          "stroke": {
+                            "color": "color.v3.glassLine",
+                            "width": "size.stroke"
+                          }
+                        }
+                      ],
+                      "w": "fill",
+                      "gap": "space.tight"
+                    }
+                  ],
+                  "fill": "color.v3.glass",
+                  "blur": 24,
+                  "stroke": {
+                    "color": "color.v3.glassLine",
+                    "width": "size.stroke"
+                  },
+                  "w": 400,
+                  "gap": "space.item",
+                  "pad": "space.group"
+                }
+              ],
+              "w": "fill",
+              "justify": "center",
+              "align": "center",
+              "clip": true,
+              "fill": {
+                "type": "image",
+                "image": "dusk",
+                "scaleMode": "FILL"
+              },
+              "h": 560
+            },
+            {
+              "stack": "Check caption",
+              "dir": "row",
+              "children": [
+                {
+                  "stack": "Check caption start",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "text": "04",
+                      "style": "V3Small",
+                      "color": "color.text.faint"
+                    },
+                    {
+                      "text": "Check",
+                      "style": "V3Step"
+                    }
+                  ],
+                  "gap": "space.item",
+                  "align": "center"
+                },
+                {
+                  "text": "Score any page against 20 Arabic rules",
+                  "style": "V3Small",
+                  "color": "color.text.soft"
+                }
+              ],
+              "w": "fill",
+              "justify": "between",
+              "align": "center"
+            }
+          ],
+          "w": "fill",
+          "h": "fill",
+          "gap": "space.item"
+        },
+        {
+          "stack": "Bench preview",
+          "dir": "col",
+          "children": [
+            {
+              "stack": "Bench painting",
+              "dir": "row",
+              "children": [
+                {
+                  "stack": "Bench panel",
+                  "dir": "col",
+                  "children": [
+                    {
+                      "stack": "Bench head",
+                      "dir": "row",
+                      "children": [
+                        {
+                          "text": "Alone, then with Dualkit",
+                          "style": "V3Glass",
+                          "color": "color.v3.glassText"
+                        },
+                        {
+                          "text": "Sample data until 1 November",
+                          "style": "V3Small",
+                          "color": "color.v3.glassSoft"
+                        }
+                      ],
+                      "w": "fill",
+                      "justify": "between",
+                      "align": "center",
+                      "pad": {
+                        "bottom": "space.snug"
+                      }
+                    },
+                    {
+                      "stack": "Gemini Flash line",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "shape": "Gemini Flash rule",
+                          "kind": "rect",
+                          "size": [
+                            1,
+                            "size.stroke"
+                          ],
+                          "w": "fill",
+                          "h": "size.stroke",
+                          "fill": "color.v3.glassLine"
+                        },
+                        {
+                          "stack": "Gemini Flash entry",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "stack": "Gemini Flash head",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "stack": "Gemini Flash name",
+                                  "dir": "row",
+                                  "children": [
+                                    {
+                                      "shape": "Gemini Flash maker",
+                                      "kind": "svg",
+                                      "size": [
+                                        14,
+                                        14
+                                      ],
+                                      "svg": "<svg role=\"img\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z\"/></svg>",
+                                      "tint": "color.v3.glassText"
+                                    },
+                                    {
+                                      "text": "Gemini Flash",
+                                      "style": "V3Glass",
+                                      "color": "color.v3.glassText"
+                                    }
+                                  ],
+                                  "gap": "space.tight",
+                                  "align": "center"
+                                },
+                                {
+                                  "stack": "Gemini Flash figures",
+                                  "dir": "row",
+                                  "children": [
+                                    {
+                                      "text": "61",
+                                      "style": "V3Small",
+                                      "color": "color.v3.glassSoft"
+                                    },
+                                    {
+                                      "text": "92",
+                                      "style": "V3Glass",
+                                      "color": "color.v3.glassText"
+                                    },
+                                    {
+                                      "text": "+31",
+                                      "style": "V3Mono",
+                                      "color": "color.v3.glassText"
+                                    }
+                                  ],
+                                  "gap": "space.snug",
+                                  "align": "center"
+                                }
+                              ],
+                              "w": "fill",
+                              "justify": "between",
+                              "align": "center"
+                            },
+                            {
+                              "stack": "Track",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "shape": "Track line",
+                                  "kind": "rect",
+                                  "size": [
+                                    348,
+                                    1
+                                  ],
+                                  "fill": "color.v3.glassLine"
+                                },
+                                {
+                                  "shape": "Lift",
+                                  "kind": "rect",
+                                  "size": [
+                                    108,
+                                    2
+                                  ],
+                                  "fill": "color.v3.glassText",
+                                  "abs": {
+                                    "start": 212,
+                                    "top": 4
+                                  }
+                                },
+                                {
+                                  "stack": "Alone dot",
+                                  "dir": "row",
+                                  "children": [],
+                                  "w": 10,
+                                  "h": 10,
+                                  "fill": "color.v3.glass",
+                                  "stroke": {
+                                    "color": "color.v3.glassText",
+                                    "width": "size.stroke"
+                                  },
+                                  "abs": {
+                                    "start": 207,
+                                    "top": 0
+                                  }
+                                },
+                                {
+                                  "stack": "Dualkit dot",
+                                  "dir": "row",
+                                  "children": [],
+                                  "w": 10,
+                                  "h": 10,
+                                  "fill": "color.v3.glassText",
+                                  "abs": {
+                                    "start": 315,
+                                    "top": 0
+                                  }
+                                }
+                              ],
+                              "w": 348,
+                              "h": 10,
+                              "align": "center"
+                            }
+                          ],
+                          "w": "fill",
+                          "gap": "space.snug",
+                          "pad": {
+                            "block": "space.snug"
+                          }
+                        }
+                      ],
+                      "w": "fill"
+                    },
+                    {
+                      "stack": "Gemma 4 31B line",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "shape": "Gemma 4 31B rule",
+                          "kind": "rect",
+                          "size": [
+                            1,
+                            "size.stroke"
+                          ],
+                          "w": "fill",
+                          "h": "size.stroke",
+                          "fill": "color.v3.glassLine"
+                        },
+                        {
+                          "stack": "Gemma 4 31B entry",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "stack": "Gemma 4 31B head",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "stack": "Gemma 4 31B name",
+                                  "dir": "row",
+                                  "children": [
+                                    {
+                                      "shape": "Gemma 4 31B maker",
+                                      "kind": "svg",
+                                      "size": [
+                                        14,
+                                        14
+                                      ],
+                                      "svg": "<svg role=\"img\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z\"/></svg>",
+                                      "tint": "color.v3.glassText"
+                                    },
+                                    {
+                                      "text": "Gemma 4 31B",
+                                      "style": "V3Glass",
+                                      "color": "color.v3.glassText"
+                                    }
+                                  ],
+                                  "gap": "space.tight",
+                                  "align": "center"
+                                },
+                                {
+                                  "stack": "Gemma 4 31B figures",
+                                  "dir": "row",
+                                  "children": [
+                                    {
+                                      "text": "54",
+                                      "style": "V3Small",
+                                      "color": "color.v3.glassSoft"
+                                    },
+                                    {
+                                      "text": "88",
+                                      "style": "V3Glass",
+                                      "color": "color.v3.glassText"
+                                    },
+                                    {
+                                      "text": "+34",
+                                      "style": "V3Mono",
+                                      "color": "color.v3.glassText"
+                                    }
+                                  ],
+                                  "gap": "space.snug",
+                                  "align": "center"
+                                }
+                              ],
+                              "w": "fill",
+                              "justify": "between",
+                              "align": "center"
+                            },
+                            {
+                              "stack": "Track",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "shape": "Track line",
+                                  "kind": "rect",
+                                  "size": [
+                                    348,
+                                    1
+                                  ],
+                                  "fill": "color.v3.glassLine"
+                                },
+                                {
+                                  "shape": "Lift",
+                                  "kind": "rect",
+                                  "size": [
+                                    118,
+                                    2
+                                  ],
+                                  "fill": "color.v3.glassText",
+                                  "abs": {
+                                    "start": 188,
+                                    "top": 4
+                                  }
+                                },
+                                {
+                                  "stack": "Alone dot",
+                                  "dir": "row",
+                                  "children": [],
+                                  "w": 10,
+                                  "h": 10,
+                                  "fill": "color.v3.glass",
+                                  "stroke": {
+                                    "color": "color.v3.glassText",
+                                    "width": "size.stroke"
+                                  },
+                                  "abs": {
+                                    "start": 183,
+                                    "top": 0
+                                  }
+                                },
+                                {
+                                  "stack": "Dualkit dot",
+                                  "dir": "row",
+                                  "children": [],
+                                  "w": 10,
+                                  "h": 10,
+                                  "fill": "color.v3.glassText",
+                                  "abs": {
+                                    "start": 301,
+                                    "top": 0
+                                  }
+                                }
+                              ],
+                              "w": 348,
+                              "h": 10,
+                              "align": "center"
+                            }
+                          ],
+                          "w": "fill",
+                          "gap": "space.snug",
+                          "pad": {
+                            "block": "space.snug"
+                          }
+                        }
+                      ],
+                      "w": "fill"
+                    },
+                    {
+                      "stack": "Nemotron 3 Ultra line",
+                      "dir": "col",
+                      "children": [
+                        {
+                          "shape": "Nemotron 3 Ultra rule",
+                          "kind": "rect",
+                          "size": [
+                            1,
+                            "size.stroke"
+                          ],
+                          "w": "fill",
+                          "h": "size.stroke",
+                          "fill": "color.v3.glassLine"
+                        },
+                        {
+                          "stack": "Nemotron 3 Ultra entry",
+                          "dir": "col",
+                          "children": [
+                            {
+                              "stack": "Nemotron 3 Ultra head",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "stack": "Nemotron 3 Ultra name",
+                                  "dir": "row",
+                                  "children": [
+                                    {
+                                      "shape": "Nemotron 3 Ultra maker",
+                                      "kind": "svg",
+                                      "size": [
+                                        14,
+                                        14
+                                      ],
+                                      "svg": "<svg role=\"img\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M8.948 8.798v-1.43a6.7 6.7 0 0 1 .424-.018c3.922-.124 6.493 3.374 6.493 3.374s-2.774 3.851-5.75 3.851c-.398 0-.787-.062-1.158-.185v-4.346c1.528.185 1.837.857 2.747 2.385l2.04-1.714s-1.492-1.952-4-1.952a6.016 6.016 0 0 0-.796.035m0-4.735v2.138l.424-.027c5.45-.185 9.01 4.47 9.01 4.47s-4.08 4.964-8.33 4.964c-.37 0-.733-.035-1.095-.097v1.325c.3.035.61.062.91.062 3.957 0 6.82-2.023 9.593-4.408.459.371 2.34 1.263 2.73 1.652-2.633 2.208-8.772 3.984-12.253 3.984-.335 0-.653-.018-.971-.053v1.864H24V4.063zm0 10.326v1.131c-3.657-.654-4.673-4.46-4.673-4.46s1.758-1.944 4.673-2.262v1.237H8.94c-1.528-.186-2.73 1.245-2.73 1.245s.68 2.412 2.739 3.11M2.456 10.9s2.164-3.197 6.5-3.533V6.201C4.153 6.59 0 10.653 0 10.653s2.35 6.802 8.948 7.42v-1.237c-4.84-.6-6.492-5.936-6.492-5.936z\"/></svg>",
+                                      "tint": "color.v3.glassText"
+                                    },
+                                    {
+                                      "text": "Nemotron 3 Ultra",
+                                      "style": "V3Glass",
+                                      "color": "color.v3.glassText"
+                                    }
+                                  ],
+                                  "gap": "space.tight",
+                                  "align": "center"
+                                },
+                                {
+                                  "stack": "Nemotron 3 Ultra figures",
+                                  "dir": "row",
+                                  "children": [
+                                    {
+                                      "text": "58",
+                                      "style": "V3Small",
+                                      "color": "color.v3.glassSoft"
+                                    },
+                                    {
+                                      "text": "85",
+                                      "style": "V3Glass",
+                                      "color": "color.v3.glassText"
+                                    },
+                                    {
+                                      "text": "+27",
+                                      "style": "V3Mono",
+                                      "color": "color.v3.glassText"
+                                    }
+                                  ],
+                                  "gap": "space.snug",
+                                  "align": "center"
+                                }
+                              ],
+                              "w": "fill",
+                              "justify": "between",
+                              "align": "center"
+                            },
+                            {
+                              "stack": "Track",
+                              "dir": "row",
+                              "children": [
+                                {
+                                  "shape": "Track line",
+                                  "kind": "rect",
+                                  "size": [
+                                    348,
+                                    1
+                                  ],
+                                  "fill": "color.v3.glassLine"
+                                },
+                                {
+                                  "shape": "Lift",
+                                  "kind": "rect",
+                                  "size": [
+                                    94,
+                                    2
+                                  ],
+                                  "fill": "color.v3.glassText",
+                                  "abs": {
+                                    "start": 202,
+                                    "top": 4
+                                  }
+                                },
+                                {
+                                  "stack": "Alone dot",
+                                  "dir": "row",
+                                  "children": [],
+                                  "w": 10,
+                                  "h": 10,
+                                  "fill": "color.v3.glass",
+                                  "stroke": {
+                                    "color": "color.v3.glassText",
+                                    "width": "size.stroke"
+                                  },
+                                  "abs": {
+                                    "start": 197,
+                                    "top": 0
+                                  }
+                                },
+                                {
+                                  "stack": "Dualkit dot",
+                                  "dir": "row",
+                                  "children": [],
+                                  "w": 10,
+                                  "h": 10,
+                                  "fill": "color.v3.glassText",
+                                  "abs": {
+                                    "start": 291,
+                                    "top": 0
+                                  }
+                                }
+                              ],
+                              "w": 348,
+                              "h": 10,
+                              "align": "center"
+                            }
+                          ],
+                          "w": "fill",
+                          "gap": "space.snug",
+                          "pad": {
+                            "block": "space.snug"
+                          }
+                        }
+                      ],
+                      "w": "fill"
+                    }
+                  ],
+                  "fill": "color.v3.glass",
+                  "blur": 24,
+                  "stroke": {
+                    "color": "color.v3.glassLine",
+                    "width": "size.stroke"
+                  },
+                  "w": 380,
+                  "gap": "space.hair",
+                  "pad": "space.item"
+                }
+              ],
+              "w": "fill",
+              "justify": "center",
+              "align": "center",
+              "clip": true,
+              "fill": {
+                "type": "image",
+                "image": "dusk",
+                "scaleMode": "FILL"
+              },
+              "h": 560
+            },
+            {
+              "stack": "Bench caption",
+              "dir": "row",
+              "children": [
+                {
+                  "stack": "Bench caption start",
+                  "dir": "row",
+                  "children": [
+                    {
+                      "text": "05",
+                      "style": "V3Small",
+                      "color": "color.text.faint"
+                    },
+                    {
+                      "text": "Bench",
+                      "style": "V3Step"
+                    }
+                  ],
+                  "gap": "space.item",
+                  "align": "center"
+                },
+                {
+                  "text": "How free AI models build Arabic, every month",
+                  "style": "V3Small",
+                  "color": "color.text.soft"
+                }
+              ],
+              "w": "fill",
+              "justify": "between",
+              "align": "center"
+            }
+          ],
+          "w": "fill",
+          "h": "fill",
+          "gap": "space.item"
+        }
+      ]
+    }
+  ]
+}
