@@ -62,6 +62,23 @@ describe('probes: Hijri dates', () => {
   it.each(['1447 ه', '١٤٤٨ هـ', '12 ه', '3 ربيع الأول 1447'])('accepts %s', async (text) => {
     expect(await hijriMissing(orders(`<p>${text}</p>`))).toBe(false)
   })
+  // Review 2, I1: Arabic-Indic order numbers and dates, with the bare ه after a year, joined or followed by a full stop.
+  const indicOrders = (hijri: string) => page(
+    ['A-١٠٢٩١', 'A-١٠٢٩٢', 'A-١٠٢٩٣', 'A-١٠٢٩٤'].map((n) => `<p>${n}</p>`).join('') + hijri,
+  )
+  it.each(['٣٠ ربيع الآخر ١٤٤٨ ه', '١٤٤٨ه', '١٤٤٨ ه.'])('accepts %s with Arabic-Indic order numbers', async (text) => {
+    expect(await missingFor(indicOrders(`<p>${text}</p>`), 'order-history')).toEqual([])
+  })
+  // No 1447 or 1448 and no هـ, so only the digit-before-ه branch can match.
+  it.each(['5 ه', '٥ ه.', '5 ه، الأحد'])('accepts %s through the digit branch alone', async (text) => {
+    expect(await hijriMissing(orders(`<p>${text}</p>`))).toBe(false)
+  })
+  it.each(['1446 ه', '١٤٤٦ ه.'])('accepts %s, an earlier year in the window', async (text) => {
+    expect(await hijriMissing(orders(`<p>${text}</p>`))).toBe(false)
+  })
+  it.each(['5 هدايا', 'هذه طلباتك وهذا كل شيء'])('reports %s missing Hijri dates', async (text) => {
+    expect(await hijriMissing(orders(`<p>${text}</p>`))).toBe(true)
+  })
 })
 
 describe('probes: extraction and render', () => {
