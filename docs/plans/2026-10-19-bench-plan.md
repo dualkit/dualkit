@@ -18,7 +18,7 @@
 - Every build is scored at `390` by `844` CSS px, network on.
 - `3` runs per model, screen and condition. A cell needs at least `2` successful runs.
 - Retries: at most `2` retries per call. Calls spaced to stay under `20` a minute.
-- Schedule: `'17 4 1 * *'` (04:17 UTC on the 1st) plus `workflow_dispatch`.
+- Schedule: `'17 4 1-3 * *'` (04:17 UTC on the 1st, with the 2nd and 3rd finishing any leftovers) plus `workflow_dispatch`.
 - Screenshots: WebP, quality `90`, 1x (390 px wide).
 - Rules total: `RULES.length` from `@dualkit/rules` (20 today); never hard-code 20 in code.
 - Public copy: sentence case, no em dashes, no uppercase labels, no tiny mono section labels.

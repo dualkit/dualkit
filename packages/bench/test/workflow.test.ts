@@ -6,8 +6,8 @@ import { ROOT } from '../src/config'
 const yml = readFileSync(join(ROOT, '..', '..', '.github', 'workflows', 'bench.yml'), 'utf8')
 
 describe('bench workflow', () => {
-  it('runs at 04:17 UTC on the 1st and by hand', () => {
-    expect(yml).toContain("cron: '17 4 1 * *'")
+  it('runs at 04:17 UTC on the 1st to the 3rd, so a resumable run finishes its leftovers, and by hand', () => {
+    expect(yml).toContain("cron: '17 4 1-3 * *'")
     expect(yml).toContain('workflow_dispatch:')
   })
   it('pins Playwright and passes the keys only as secrets', () => {
@@ -40,5 +40,18 @@ describe('bench workflow', () => {
     for (const line of lines) {
       expect(line).toMatch(/^\s*(MONTH|MODEL): \$\{\{ inputs\.(month|model) \}\}$/)
     }
+  })
+  it('builds no summary in the run step', () => {
+    const run = yml.slice(yml.indexOf('name: Run the bench'), yml.indexOf('name: Build the summary'))
+    expect(run).toContain('npm run bench -w @dualkit/bench -- --no-summary')
+  })
+  it('builds the summary in its own step, always, within 20 minutes, before the commit', () => {
+    const at = yml.indexOf('name: Build the summary')
+    expect(at).toBeGreaterThan(yml.indexOf('name: Run the bench'))
+    expect(at).toBeLessThan(yml.indexOf('name: Commit the results'))
+    const step = yml.slice(at, yml.indexOf('name: Commit the results'))
+    expect(step).toMatch(/name: Build the summary\n\s+if: always\(\)\n\s+timeout-minutes: 20\n/)
+    expect(step).toContain('[ -n "$MONTH" ] && args+=(--month "$MONTH")')
+    expect(step).toContain('npm run bench -w @dualkit/bench -- --summary-only "${args[@]}"')
   })
 })
