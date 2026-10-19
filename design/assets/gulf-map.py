@@ -32,3 +32,12 @@ cities = {'Kuwait City': (47.98, 29.37), 'Riyadh': (46.72, 24.71), 'Manama': (50
 out = {'w': W, 'h': H, 'dots': int(inside.sum()), 'path': d, 'lit': lit, 'cities': {k: [round(v, 1) for v in proj(*c)] for k, c in cities.items()}}
 json.dump(out, open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'gulf-map.json'), 'w'))
 print(out['dots'], out['cities'])
+
+# Optional second argument: a directory to also receive gulf-grid.json, the land grid packed as a bitset
+# (row-major, most significant bit first, 1 = land) for the site's canvas map.
+if len(sys.argv) > 2:
+    import base64
+    cols, rows = len(np.arange(STEP / 2, W, STEP)), len(np.arange(STEP / 2, H, STEP))
+    bits = base64.b64encode(np.packbits(inside.astype(np.uint8)).tobytes()).decode()
+    grid = {'cols': cols, 'rows': rows, 'step': STEP, 'w': W, 'h': H, 'dots': int(inside.sum()), 'bits': bits, 'cities': out['cities']}
+    json.dump(grid, open(os.path.join(sys.argv[2], 'gulf-grid.json'), 'w'), separators=(',', ':'))
