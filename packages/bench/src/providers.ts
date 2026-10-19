@@ -62,11 +62,18 @@ function settle(body: any, call: Call, key: string, ms: number): Generated {
 }
 
 export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), now = Date.now, timeoutMs = REQUEST_TIMEOUT_MS }: Options): Generate {
+  // Models run concurrently through this one instance, so slots are handed out one at a time on a chain:
+  // each caller waits for the slot before it, then starts at least MIN_GAP_MS after that one started.
   let last = -Infinity
-  const pace = async () => {
-    const wait = last + MIN_GAP_MS - now()
-    if (wait > 0) await sleep(wait)
-    last = now()
+  let queue: Promise<void> = Promise.resolve()
+  const pace = (): Promise<void> => {
+    const slot = queue.then(async () => {
+      const wait = last + MIN_GAP_MS - now()
+      if (wait > 0) await sleep(wait)
+      last = now()
+    })
+    queue = slot.catch(() => {})
+    return slot
   }
   return async (model, req) => {
     const started = now()

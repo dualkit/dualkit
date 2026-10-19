@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { RUN, type ModelEntry } from '../src/config'
-import { makeGenerate, MAX_RETRIES, REQUEST_TIMEOUT_MS } from '../src/providers'
+import { makeGenerate, MAX_RETRIES, MIN_GAP_MS, REQUEST_TIMEOUT_MS } from '../src/providers'
 
 const or: ModelEntry = { id: 'g', provider: 'openrouter', model: 'google/gemma-4-31b-it:free', label: 'G', since: '2026-11' }
 const gm: ModelEntry = { id: 'f', provider: 'gemini', model: 'gemini-flash-latest', label: 'F', since: '2026-11' }
@@ -95,6 +95,18 @@ describe('pacing', () => {
     await gen(or, req)
     await gen(or, req)
     expect(waits.reduce((a, b) => a + b, 0)).toBeGreaterThanOrEqual(3100)
+  })
+  it('still spaces calls made at the same time from one shared instance', async () => {
+    let clock = 0
+    const starts: number[] = []
+    // A virtual clock: a sleep wakes on a later tick at the time it asked for, so concurrent sleepers really overlap.
+    const sleep = async (ms: number) => { const wake = clock + ms; await new Promise((r) => setTimeout(r, 0)); clock = Math.max(clock, wake) }
+    const f = (async () => { starts.push(clock); return json(200, { choices: [{ message: { content: 'x' } }] }) }) as unknown as typeof fetch
+    const gen = makeGenerate({ env, fetch: f, sleep, now: () => clock })
+    await Promise.all([gen(or, req), gen(gm, req), gen(or, req), gen(gm, req)])
+    expect(starts).toHaveLength(4)
+    const sorted = [...starts].sort((a, b) => a - b)
+    for (let i = 1; i < sorted.length; i++) expect(sorted[i]! - sorted[i - 1]!).toBeGreaterThanOrEqual(MIN_GAP_MS)
   })
 })
 
