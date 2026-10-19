@@ -29,10 +29,11 @@ Use the `dir` attribute, never `direction` in CSS. Flex, grid, text alignment an
 | `border-left` | `border-inline-start` |
 | `border-top-left-radius` | `border-start-start-radius` |
 
-`transform: translateX()`, `background-position`, SVG coordinates and animation keyframes do **not** flip. Negate them for right to left:
+`transform: translateX()`, `background-position`, SVG coordinates and animation keyframes do **not** flip. Pair them with `:dir(rtl)`, which also respects LTR blocks nested inside:
 
 ```css
-[dir="rtl"] .x { transform: translateX(100%) }
+.x { transform: translateX(-100%) }
+.x:dir(rtl) { transform: translateX(100%) }
 ```
 
 ## Left-to-right runs inside Arabic text (the bug every model ships)
@@ -51,20 +52,21 @@ When markup is not possible (placeholders, `aria-label`, toasts, push text), put
 const hint = `مثال ⁦050 123 4567⁩`
 ```
 
-`dir="ltr"` is only for runs with no Arabic letters in them. A formatted Arabic amount (`1,234.50 د.إ`) or an Arabic date contains Arabic, so give it a plain `<bdi>` with no `dir`. Forcing it to LTR moves the currency to the wrong side. The same goes for user-supplied names and values: plain `<bdi>`, so each one picks its own direction.
+`dir="ltr"` is only for runs with no Arabic letters. A formatted Arabic amount (`1,234.50 د.إ`) or Arabic date contains Arabic, so give it a plain `<bdi>` with no `dir`. Forcing it to LTR moves the currency to the wrong side. User-supplied names and values also get plain `<bdi>`.
 
 ## Punctuation and brackets
 
-A block with no Arabic in it still runs right to left on an Arabic page, so its last mark moves to the start. `Gregorian:` shows as `:Gregorian`, and `Great service, thank you!` shows as `!Great service, thank you`.
+A block with no Arabic still runs right to left on an Arabic page, so its last mark shows on the left, before the text. `Gregorian:` shows as `:Gregorian`, and `Great service, thank you!` as `!Great service, thank you`.
 
-A Latin label in Arabic UI: translate it. If the Latin word must stay, isolate the word and its mark together. An isolate around the word alone leaves the colon at the wrong end.
+A Latin label in Arabic UI: translate it. If the Latin word must stay and the label has no Arabic, isolate the word and its colon together. If the label also has Arabic, isolate the word alone and leave the colon outside, or the colon lands between the two words.
 
 ```html
 <label>ميلادي:</label>
 <label><bdi>Gregorian:</bdi></label>
+<label>تاريخ التقويم <bdi>Gregorian</bdi>:</label>
 ```
 
-A bracketed code next to a number, in a cell or badge with no Arabic: `1,234.50 (AED)` shows as `(AED) 1,234.50`. Put the whole amount, brackets included, inside the isolate, or use the Arabic abbreviation.
+A bracketed code next to a number, in a cell or badge with no Arabic: `1,234.50 (AED)` shows as `(AED) 1,234.50`. Isolate the whole amount, brackets included, or use the Arabic abbreviation.
 
 ```html
 <td><bdi>1,234.50 (AED)</bdi></td>
@@ -79,7 +81,7 @@ User content in either script (reviews, comments): give the block `dir="auto"`, 
 
 ## Inputs: direction by what people type
 
-Fixed formats (phone, IBAN, Emirates ID, card, OTP), email and URL use `dir="ltr"`. Fields where people may type either script (names, search, addresses, free text) use `dir="auto"`. The Dualkit starter Field uses `dir="auto"` on every input, which also works, because a value with no Arabic letters resolves to left to right. Keep the label and the error message in the page direction.
+Fixed formats (phone, IBAN, Emirates ID, card, OTP), email and URL use `dir="ltr"`. Fields where people may type either script (names, search, addresses, free text) use `dir="auto"`. The Dualkit starter Field uses `dir="auto"` on every input, which also works, because a typed value with no Arabic letters resolves to left to right. Keep the label and error in the page direction.
 
 ```html
 <input type="tel" dir="ltr" inputmode="tel" autocomplete="tel">
@@ -98,10 +100,10 @@ A `+971` prefix chip sits inside the same `dir="ltr"` wrapper as the input, so i
 | Carousels and swipe direction | Phone numbers, numerals, Latin text, code |
 | Drawers (open from the start edge) | Media timelines |
 
-Flip the icon you already have, never a separate icon set:
+Mirror with CSS, not a second icon set (swapping one icon for its opposite also works). The class goes on the `<svg>`:
 
 ```css
-[dir="rtl"] .icon-directional { transform: scaleX(-1) }
+.icon-directional:dir(rtl) { transform: scaleX(-1) }
 ```
 
 Do not mirror with `rotate(180deg)`. It turns an icon that is not vertically symmetric upside down.
@@ -109,15 +111,14 @@ Do not mirror with `rotate(180deg)`. It turns an icon that is not vertically sym
 ## Common mistakes
 
 - `left: 0` or `margin-left` on anything that should follow the reading edge.
-- Mirroring an icon with a 180 degree rotate. Use `scaleX(-1)`.
 - A phone number or IBAN example in an Arabic hint or error, with no isolate.
 - Forcing `dir="ltr"` on the whole field group, which flips the label too.
-- `<bdi dir="ltr">` around a formatted Arabic amount or date. Use `<bdi>` with no `dir`.
+- `<bdi dir="ltr">` around a formatted Arabic amount or date.
 - A Latin word leading an Arabic label, like `الgregorian:`. Translate the label.
-- A bare `(AED)` next to a number in RTL, with no isolate.
-- `text-xs` badges in Arabic. They are 12px, under the 14px floor.
-- Testing RTL only with Lorem ipsum. Test with real Arabic copy and real numbers mixed in.
+- A bare `(AED)` next to a number, in a cell or badge with no Arabic.
+- 12px badge text in Arabic, under the 14px floor.
+- Testing RTL with Lorem ipsum instead of real Arabic copy mixed with real numbers.
 
 ## In Tailwind
 
-Use the logical classes: `ms-4`, `pe-4`, `text-start`, `border-s`, `rounded-ss-lg`, and `inset-s-0` for `inset-inline-start` (v4.2+; `start-0` before, deprecated since). Negate transforms with the `rtl:` variant, as in `rtl:-translate-x-full`. Mirror directional icons with `rtl:-scale-x-100`. In Arabic, `text-sm` (14px) is the smallest size. Never `text-xs` or an arbitrary size under 14px.
+Use the logical classes: `ms-4`, `pe-4`, `text-start`, `border-s`, `rounded-ss-lg`, and `inset-s-0` for `inset-inline-start` (v4.2+; `start-0` before, deprecated since). Pair transforms with the `rtl:` variant, as in `-translate-x-full rtl:translate-x-full`. Mirror directional icons with `rtl:-scale-x-100`. In Arabic, `text-sm` (14px) is the smallest size. Never `text-xs` or an arbitrary size under 14px.

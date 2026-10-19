@@ -63,16 +63,19 @@ body { font-family: 'Brand', 'IBM Plex Sans Arabic', sans-serif; }`,
   },
   {
     skill: 'dualkit-rtl-layout',
-    quote: '[dir="rtl"] .x { transform: translateX(100%) }',
+    quote: `.x { transform: translateX(-100%) }
+.x:dir(rtl) { transform: translateX(100%) }`,
     cssFromQuote: true,
     html: '<div class="x">القائمة</div>',
   },
   {
     skill: 'dualkit-rtl-layout',
     quote: `<label>ميلادي:</label>
-<label><bdi>Gregorian:</bdi></label>`,
+<label><bdi>Gregorian:</bdi></label>
+<label>تاريخ التقويم <bdi>Gregorian</bdi>:</label>`,
     html: `<label>ميلادي:</label>
-<label><bdi>Gregorian:</bdi></label>`,
+<label><bdi>Gregorian:</bdi></label>
+<label>تاريخ التقويم <bdi>Gregorian</bdi>:</label>`,
   },
   {
     skill: 'dualkit-rtl-layout',
@@ -91,12 +94,13 @@ body { font-family: 'Brand', 'IBM Plex Sans Arabic', sans-serif; }`,
     skill: 'dualkit-rtl-layout',
     quote: `<input type="tel" dir="ltr" inputmode="tel" autocomplete="tel">
 <input type="text" dir="auto" autocomplete="name">`,
+    // The skill says labels stay in page direction but its snippet shows inputs only; real fields have labels.
     html: `<label for="phone">رقم الجوال</label> <input id="phone" type="tel" dir="ltr" inputmode="tel" autocomplete="tel">
 <label for="name">الاسم</label> <input id="name" type="text" dir="auto" autocomplete="name">`,
   },
   {
     skill: 'dualkit-rtl-layout',
-    quote: '[dir="rtl"] .icon-directional { transform: scaleX(-1) }',
+    quote: '.icon-directional:dir(rtl) { transform: scaleX(-1) }',
     cssFromQuote: true,
     html: '<button aria-label="التالي"><svg class="icon-directional" data-icon="chevron-right" width="16" height="16" viewBox="0 0 16 16"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor"/></svg></button>',
   },
