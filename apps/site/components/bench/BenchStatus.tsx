@@ -2,7 +2,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Ticks } from '@/components/Ticks'
 import { BENCH_COPY } from '@/lib/bench-copy'
-import { POLL_MS, clockUtc, formatCountdown, isRunning, nextRunAt, parseProgress, progressUrl, type Progress, type RecentBuild } from '@/lib/bench-live'
+import { POLL_MS, clockUtc, emptyHeading, formatCountdown, inPollWindow, isRunning, nextRunAt, parseProgress, progressUrl, type Progress, type RecentBuild } from '@/lib/bench-live'
 import { PROGRESS_TICKS, tickFill } from '@/lib/bench-view'
 import { EASE, prefersReducedMotion } from '@/lib/motion'
 import { MakerMark } from './MakerMark'
@@ -11,13 +11,20 @@ const C = BENCH_COPY.status
 const OVERRIDE = process.env.NEXT_PUBLIC_BENCH_PROGRESS_URL
 const ENTER_MS = 220
 
-/** Polls the runner's progress file. Any failure reads as between runs; the page never shows an error. */
+/**
+ * Polls the runner's progress file, only on the 1st to the 3rd (UTC): once on load, then every minute while visible.
+ * The rest of the month it makes no request at all. Any failure reads as between runs; the page never shows an error.
+ */
 function useProgress(): Progress | null {
   const [progress, setProgress] = useState<Progress | null>(null)
   useEffect(() => {
     let live = true
     const load = async () => {
       if (document.visibilityState === 'hidden') return
+      if (!inPollWindow(new Date())) {
+        if (live) setProgress(null)
+        return
+      }
       try {
         const res = await fetch(progressUrl(new Date(), OVERRIDE), { cache: 'no-store' })
         const next = res.ok ? parseProgress(await res.json()) : null
@@ -103,6 +110,29 @@ function Ticker({ builds, ruleCount }: { builds: readonly RecentBuild[]; ruleCou
 export function BenchStatus({ lastRun, ruleCount }: { lastRun: string | null; ruleCount: number }) {
   const progress = useProgress()
   const now = useNow()
+  return <StatusLine progress={progress} now={now} lastRun={lastRun} ruleCount={ruleCount} />
+}
+
+/**
+ * The empty state before the first run: the status line and the heading share one progress poll, so on launch day
+ * the heading can say the run is under way exactly when the line says running.
+ */
+export function EmptyBand({ day, inWindow, ruleCount, children }: { day: string; inWindow: boolean; ruleCount: number; children: React.ReactNode }) {
+  const progress = useProgress()
+  const now = useNow()
+  const running = !!now && isRunning(progress, now)
+  return (
+    <>
+      <StatusLine progress={progress} now={now} lastRun={null} ruleCount={ruleCount} />
+      <section className="bx-empty">
+        <h2 className="h2 bx-h2">{emptyHeading({ day, inWindow, running })}</h2>
+        {children}
+      </section>
+    </>
+  )
+}
+
+function StatusLine({ progress, now, lastRun, ruleCount }: { progress: Progress | null; now: Date | null; lastRun: string | null; ruleCount: number }) {
   const running = !!now && isRunning(progress, now)
 
   if (running && progress) {

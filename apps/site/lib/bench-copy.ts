@@ -19,6 +19,7 @@ export const BENCH_COPY = {
   },
   empty: {
     heading: (day: string) => `The first run lands on ${day}.`,
+    running: 'The first run is under way.',
     lede: 'Six free models, five screens, three runs each. The results and every raw file go up here the same day.',
   },
   legend: { alone: 'Alone', dualkit: 'With Dualkit', caption: (outOf: number) => `Rules passed across five screens, out of ${outOf}` },

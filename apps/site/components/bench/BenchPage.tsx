@@ -5,10 +5,10 @@ import { Nav } from '@/components/Nav'
 import { Reveal } from '@/components/Reveal'
 import type { BenchMonth } from '@/lib/bench-schema'
 import { BENCH_COPY } from '@/lib/bench-copy'
-import { lastRunLabel, nextRunAt, runDayLabel } from '@/lib/bench-live'
+import { emptyState, lastRunLabel } from '@/lib/bench-live'
 import { benchOutOf, factsLine, factsOf } from '@/lib/bench-view'
 import { liveData } from '@/lib/live'
-import { BenchStatus } from './BenchStatus'
+import { BenchStatus, EmptyBand } from './BenchStatus'
 import { Board } from './Board'
 import { MonthPicker } from './MonthPicker'
 
@@ -61,23 +61,14 @@ function How() {
   )
 }
 
-function Empty({ day }: { day: string }) {
-  return (
-    <section className="bx-empty">
-      <h2 className="h2 bx-h2">{C.empty.heading(day)}</h2>
-      <p className="lede">{C.empty.lede}</p>
-      <a className="pill" href={C.promptsUrl}>{C.prompts}</a>
-    </section>
-  )
-}
-
 /**
  * The /bench page for one month, or the empty state before the first run.
  * `latest` is the newest month, which the status line's last run comes from.
  */
 export async function BenchPage({ data, latest, months, planned }: { data: BenchMonth | null; latest: BenchMonth | null; months: readonly string[]; planned: { models: number; screens: number } | null }) {
   const live = await liveData()
-  const next = nextRunAt(new Date())
+  // On launch day (04:17 on the 1st to the 3rd) the empty state keeps this month, not the next run's.
+  const empty = emptyState(new Date())
   return (
     <>
       <Nav stars={live.stars} />
@@ -93,10 +84,12 @@ export async function BenchPage({ data, latest, months, planned }: { data: Bench
           </>
         ) : (
           <>
-            <Hero month={next.toISOString().slice(0, 7)} months={[]} facts={planned && factsLine(planned)} />
+            <Hero month={empty.month} months={[]} facts={planned && factsLine(planned)} />
             <section className="bx-board-band bx-empty-band" aria-label="Next run">
-              <BenchStatus lastRun={null} ruleCount={RULE_COUNT} />
-              <Empty day={runDayLabel(next)} />
+              <EmptyBand day={empty.day} inWindow={empty.inWindow} ruleCount={RULE_COUNT}>
+                <p className="lede">{C.empty.lede}</p>
+                <a className="pill" href={C.promptsUrl}>{C.prompts}</a>
+              </EmptyBand>
             </section>
           </>
         )}

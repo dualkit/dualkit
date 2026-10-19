@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { STALE_MS, clockUtc, formatCountdown, isRunning, lastRunLabel, nextRunAt, parseProgress, progressUrl, runDayLabel } from '../lib/bench-live'
+import { STALE_MS, clockUtc, currentRunWindow, emptyHeading, emptyState, formatCountdown, inPollWindow, isRunning, lastRunLabel, nextRunAt, parseProgress, progressUrl, runDayLabel } from '../lib/bench-live'
 
 const at = (iso: string) => new Date(iso)
 
@@ -90,10 +90,66 @@ describe('isRunning', () => {
 })
 
 describe('progressUrl', () => {
-  it('points at the current UTC month on GitHub', () => {
-    expect(progressUrl(at('2026-11-30T23:59:00Z'))).toBe('https://raw.githubusercontent.com/dualkit/dualkit/main/bench/runs/2026-11/progress.json')
+  it('points at the current UTC month on the bench-progress branch', () => {
+    expect(progressUrl(at('2026-11-30T23:59:00Z'))).toBe('https://raw.githubusercontent.com/dualkit/dualkit/bench-progress/bench/runs/2026-11/progress.json')
   })
   it('takes an override', () => {
     expect(progressUrl(at('2026-11-01T00:00:00Z'), 'http://localhost:9000/p.json')).toBe('http://localhost:9000/p.json')
+  })
+})
+
+describe('currentRunWindow', () => {
+  it('is null at 04:16 on the 1st, before the run starts', () => {
+    expect(currentRunWindow(at('2026-11-01T04:16:59Z'))).toBeNull()
+  })
+  it('is this month from 04:17 on the 1st', () => {
+    expect(currentRunWindow(at('2026-11-01T04:17:00Z'))?.toISOString()).toBe('2026-11-01T04:17:00.000Z')
+    expect(currentRunWindow(at('2026-11-01T04:18:00Z'))?.toISOString()).toBe('2026-11-01T04:17:00.000Z')
+  })
+  it('lasts to the end of the 3rd', () => {
+    expect(currentRunWindow(at('2026-11-03T12:00:00Z'))?.toISOString()).toBe('2026-11-01T04:17:00.000Z')
+    expect(currentRunWindow(at('2026-11-03T23:59:59Z'))?.toISOString()).toBe('2026-11-01T04:17:00.000Z')
+  })
+  it('is null from the 4th', () => {
+    expect(currentRunWindow(at('2026-11-04T00:00:00Z'))).toBeNull()
+    expect(currentRunWindow(at('2026-11-19T10:00:00Z'))).toBeNull()
+  })
+})
+
+describe('inPollWindow', () => {
+  it('is the 1st to the 3rd, UTC, whole days', () => {
+    expect(inPollWindow(at('2026-11-01T00:00:00Z'))).toBe(true)
+    expect(inPollWindow(at('2026-11-03T23:59:59Z'))).toBe(true)
+  })
+  it('is false the rest of the month', () => {
+    expect(inPollWindow(at('2026-10-31T23:59:59Z'))).toBe(false)
+    expect(inPollWindow(at('2026-11-04T00:00:00Z'))).toBe(false)
+    expect(inPollWindow(at('2026-10-19T10:00:00Z'))).toBe(false)
+  })
+})
+
+describe('emptyState', () => {
+  it('names the next run before the window', () => {
+    expect(emptyState(at('2026-10-19T10:00:00Z'))).toEqual({ month: '2026-11', day: '1 November', inWindow: false })
+    expect(emptyState(at('2026-11-01T04:16:00Z'))).toEqual({ month: '2026-11', day: '1 November', inWindow: false })
+  })
+  it('keeps the current month on launch day, not next month', () => {
+    expect(emptyState(at('2026-11-01T04:18:00Z'))).toEqual({ month: '2026-11', day: '1 November', inWindow: true })
+    expect(emptyState(at('2026-11-03T20:00:00Z'))).toEqual({ month: '2026-11', day: '1 November', inWindow: true })
+  })
+  it('moves on to next month from the 4th', () => {
+    expect(emptyState(at('2026-11-04T00:00:00Z'))).toEqual({ month: '2026-12', day: '1 December', inWindow: false })
+  })
+})
+
+describe('emptyHeading', () => {
+  it('names the day outside the window', () => {
+    expect(emptyHeading({ day: '1 November', inWindow: false, running: false })).toBe('The first run lands on 1 November.')
+  })
+  it('says the run is under way in the window while the status says running', () => {
+    expect(emptyHeading({ day: '1 November', inWindow: true, running: true })).toBe('The first run is under way.')
+  })
+  it('keeps the day in the window when the status does not say running', () => {
+    expect(emptyHeading({ day: '1 November', inWindow: true, running: false })).toBe('The first run lands on 1 November.')
   })
 })

@@ -1,12 +1,19 @@
 // The live layer: when the next monthly run starts, and what the runner's progress file says right now.
 
-/** The workflow's schedule, '17 4 1 * *': 04:17 UTC on the 1st. */
+import { BENCH_COPY } from './bench-copy'
+
+/**
+ * The workflow's schedule, '17 4 1-3 * *': 04:17 UTC on the 1st to the 3rd. The 1st starts the month's run;
+ * the 2nd and 3rd finish whatever a deadline left, so a month's run window is 04:17 on the 1st to the end of the 3rd.
+ */
 const RUN_HOUR = 4
 const RUN_MINUTE = 17
+const LAST_RUN_DAY = 3
 /** The runner pushes progress every 15 minutes; a file older than this means the run has stopped. */
 export const STALE_MS = 40 * 60_000
 export const POLL_MS = 60_000
-const PROGRESS_BASE = 'https://raw.githubusercontent.com/dualkit/dualkit/main/bench/runs'
+// The workflow force-pushes progress to its own branch, so main never takes a commit mid-run.
+const PROGRESS_BASE = 'https://raw.githubusercontent.com/dualkit/dualkit/bench-progress/bench/runs'
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const pad = (n: number) => String(n).padStart(2, '0')
@@ -21,6 +28,26 @@ export function nextRunAt(now: Date): Date {
   if (thisMonth.getTime() > now.getTime()) return thisMonth
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1, RUN_HOUR, RUN_MINUTE))
 }
+
+/** This month's run start while `now` is in its window (04:17 UTC on the 1st to the end of the 3rd), else null. */
+export function currentRunWindow(now: Date): Date | null {
+  const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, RUN_HOUR, RUN_MINUTE))
+  return now.getTime() >= start.getTime() && now.getUTCDate() <= LAST_RUN_DAY ? start : null
+}
+
+/** The page polls progress only on the 1st to the 3rd, UTC; the rest of the month there is no file to find. */
+export const inPollWindow = (now: Date) => now.getUTCDate() <= LAST_RUN_DAY
+
+/** The empty state's month and run day: this month's while its run window is open, else the next run's. */
+export function emptyState(now: Date): { month: string; day: string; inWindow: boolean } {
+  const open = currentRunWindow(now)
+  const day = open ?? nextRunAt(now)
+  return { month: day.toISOString().slice(0, 7), day: runDayLabel(day), inWindow: open !== null }
+}
+
+/** Under way only inside the window and while the status line says running; otherwise the day, which is today in the window. */
+export const emptyHeading = ({ day, inWindow, running }: { day: string; inWindow: boolean; running: boolean }) =>
+  inWindow && running ? BENCH_COPY.empty.running : BENCH_COPY.empty.heading(day)
 
 /** "12d 04:12:33", or "04:12:33" under a day. */
 export function formatCountdown(ms: number): string {
