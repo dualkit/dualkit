@@ -3,16 +3,18 @@ export type GulfRegion = 'AE' | 'AE-SH' | 'SA' | 'QA' | 'KW' | 'BH' | 'OM'
 export type Weekday = 1 | 2 | 3 | 4 | 5 | 6 | 7
 export type GulfWeek = { readonly weekend: readonly Weekday[]; readonly firstWorkday: Weekday }
 
-const FRIDAY_SATURDAY: GulfWeek = { weekend: [5, 6], firstWorkday: 7 }
+/** Each entry is frozen and separate, so no caller can change what another region reads. */
+const week = (weekend: readonly Weekday[], firstWorkday: Weekday): GulfWeek =>
+  Object.freeze({ weekend: Object.freeze([...weekend]), firstWorkday })
 
 const WEEKS: Record<GulfRegion, GulfWeek> = {
-  AE: { weekend: [6, 7], firstWorkday: 1 },
-  'AE-SH': { weekend: [5, 6, 7], firstWorkday: 1 },
-  SA: FRIDAY_SATURDAY,
-  QA: FRIDAY_SATURDAY,
-  KW: FRIDAY_SATURDAY,
-  BH: FRIDAY_SATURDAY,
-  OM: FRIDAY_SATURDAY,
+  AE: week([6, 7], 1),
+  'AE-SH': week([5, 6, 7], 1),
+  SA: week([5, 6], 7),
+  QA: week([5, 6], 7),
+  KW: week([5, 6], 7),
+  BH: week([5, 6], 7),
+  OM: week([5, 6], 7),
 }
 
 const ISO_WEEKDAY: Record<string, Weekday> = { Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6, Sun: 7 }
@@ -26,6 +28,9 @@ export const gulfWeek = (region: GulfRegion): GulfWeek => WEEKS[region]
  */
 export function isGulfWeekend(date: Date, region: GulfRegion, options: { readonly timeZone: string }): boolean {
   if (Number.isNaN(date.getTime())) throw new RangeError('isGulfWeekend needs a valid date')
+  if (typeof options?.timeZone !== 'string' || options.timeZone === '') {
+    throw new RangeError('isGulfWeekend needs a timeZone, such as "Asia/Dubai"')
+  }
   const name = new Intl.DateTimeFormat('en-US', { weekday: 'short', timeZone: options.timeZone }).format(date)
   const weekday = ISO_WEEKDAY[name]
   if (weekday === undefined) throw new Error(`Could not read the weekday from "${name}"`)

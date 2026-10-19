@@ -19,13 +19,22 @@ export function eightDigitPhone<T extends string, N extends string>(spec: EightD
   const rule = { countryCode: spec.countryCode, minLength: NATIONAL_LENGTH, otherCountry: spec.otherCountry, trunkZero: false } as const
   type Code = 'empty' | 'invalid_characters' | N | 'invalid_length' | 'unknown_prefix'
 
+  /** A short number whose prefix is not fully typed yet, like Oman "90", is too short, not a wrong prefix. */
+  const couldGrow = (nsn: string): boolean =>
+    nsn.length < NATIONAL_LENGTH &&
+    [...'0123456789'].some((digit) => spec.typeOf(nsn + digit.repeat(NATIONAL_LENGTH - nsn.length)) !== null)
+
   function parse(input: string): Result<{ readonly e164: string; readonly type: T }, Code> {
     const raw = readPhoneInput(input)
     if (!raw.ok) return raw
     const nsn = nationalNumber(raw.value, rule)
     if (!nsn.ok) return nsn
     const type = spec.typeOf(nsn.value)
-    if (type === null) return err('unknown_prefix', spec.unknownPrefix)
+    if (type === null) {
+      return couldGrow(nsn.value)
+        ? err('invalid_length', 'This number has the wrong number of digits.')
+        : err('unknown_prefix', spec.unknownPrefix)
+    }
     if (nsn.value.length !== NATIONAL_LENGTH) return err('invalid_length', 'This number has the wrong number of digits.')
     return ok({ e164: `+${spec.countryCode}${nsn.value}`, type })
   }

@@ -49,10 +49,14 @@ describe('formatHijri', () => {
 })
 
 describe('timeZone is required', () => {
-  it('is a type error to leave it out', () => {
+  const date = new Date('2026-02-18T12:00:00Z')
+  it('throws a clear RangeError when it is missing or empty', () => {
     // @ts-expect-error timeZone is required
-    expect(() => toHijri(new Date('2026-02-18T12:00:00Z'), {})).not.toThrow()
+    expect(() => toHijri(date, {})).toThrow(RangeError)
+    expect(() => toHijri(date, { timeZone: '' })).toThrow(/timeZone/)
     // @ts-expect-error options are required
-    expect(() => formatHijri(new Date('2026-02-18T12:00:00Z'))).toThrow()
+    expect(() => formatHijri(date)).toThrow(RangeError)
+    // @ts-expect-error timeZone is required
+    expect(() => formatHijri(date, { locale: 'ar' })).toThrow(/timeZone/)
   })
 })

@@ -21,9 +21,10 @@ const phone = eightDigitPhone<BahrainPhoneType, 'not_bahrain'>({
   group: fourFour,
 })
 
-/** Reads any common way of writing a Bahrainii mobile or landline number, in Western or Arabic digits. */
+/** Reads any common way of writing a Bahraini mobile or landline number, in Western or Arabic digits. */
 export const parseBahrainPhone = (input: string): Result<BahrainPhone, BahrainPhoneError> => phone.parse(input)
 
+/** True when the input reads as a Bahraini mobile or landline number. */
 export const isValidBahrainPhone = (input: string): boolean => phone.isValid(input)
 
 /** "3600 1234", "+973 3600 1234" or "+973...". Null when the number cannot be read. */

@@ -21,6 +21,11 @@ const COUNTRIES: Record<GulfIbanCountry, { readonly length: number; readonly ban
   OM: { length: 23, bankCode: 3 },
 }
 
+/** How each country is named in messages, with its article. */
+const NAMES: Record<GulfIbanCountry, string> = {
+  AE: 'A UAE', SA: 'A Saudi', BH: 'A Bahraini', KW: 'A Kuwaiti', QA: 'A Qatari', OM: 'An Omani',
+}
+
 const isGulfCountry = (code: string): code is GulfIbanCountry => Object.hasOwn(COUNTRIES, code)
 
 function mod97(iban: string): number {
@@ -48,7 +53,7 @@ export function parseIban(
   }
   const spec = COUNTRIES[country]
   if (electronic.length !== spec.length) {
-    return err('invalid_length', `A ${country} IBAN has ${spec.length} characters.`)
+    return err('invalid_length', `${NAMES[country]} IBAN has ${spec.length} characters.`)
   }
   if (mod97(electronic) !== 1) return err('invalid_checksum', 'This IBAN is not valid. Check for a typo.')
   return ok({

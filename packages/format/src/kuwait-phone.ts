@@ -20,6 +20,7 @@ const phone = eightDigitPhone<KuwaitPhoneType, 'not_kuwait'>({
 /** Reads any common way of writing a Kuwaiti mobile or landline number, in Western or Arabic digits. */
 export const parseKuwaitPhone = (input: string): Result<KuwaitPhone, KuwaitPhoneError> => phone.parse(input)
 
+/** True when the input reads as a Kuwaiti mobile or landline number. */
 export const isValidKuwaitPhone = (input: string): boolean => phone.isValid(input)
 
 /** "5001 2345", "+965 5001 2345" or "+965...". Null when the number cannot be read. */

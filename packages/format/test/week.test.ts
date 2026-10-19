@@ -11,6 +11,15 @@ describe('gulfWeek', () => {
   })
 })
 
+describe('gulfWeek is safe to share', () => {
+  it('hands out frozen values, so one caller cannot change another region', () => {
+    expect(Object.isFrozen(gulfWeek('SA'))).toBe(true)
+    expect(Object.isFrozen(gulfWeek('SA').weekend)).toBe(true)
+    expect(() => (gulfWeek('SA').weekend as number[]).push(7)).toThrow(TypeError)
+    expect(gulfWeek('QA').weekend).toEqual([5, 6])
+  })
+})
+
 describe('isGulfWeekend', () => {
   const UTC = { timeZone: 'UTC' }
   // 2026-10-15 is a Thursday.
@@ -31,5 +40,13 @@ describe('isGulfWeekend', () => {
   it('reads Sunday as 7 and Monday as 1', () => {
     expect(isGulfWeekend(day(18), 'AE', UTC)).toBe(true)
     expect(isGulfWeekend(day(12), 'AE', UTC)).toBe(false)
+  })
+  it('throws a clear RangeError when the time zone is missing or empty', () => {
+    // @ts-expect-error timeZone is required
+    expect(() => isGulfWeekend(day(15), 'AE', {})).toThrow(RangeError)
+    expect(() => isGulfWeekend(day(15), 'AE', { timeZone: '' })).toThrow(/timeZone/)
+  })
+  it('throws on an invalid time zone', () => {
+    expect(() => isGulfWeekend(day(15), 'AE', { timeZone: 'Mars/Base' })).toThrow(RangeError)
   })
 })

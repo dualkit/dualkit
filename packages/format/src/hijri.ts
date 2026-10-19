@@ -22,6 +22,9 @@ const ERA: Record<Locale, string> = { en: 'AH', ar: 'هـ' }
 /** The Umm al-Qura date for a moment, on the calendar day of the given time zone, which is required. */
 export function toHijri(date: Date, options: HijriOptions): HijriDate {
   if (Number.isNaN(date.getTime())) throw new RangeError('toHijri needs a valid date')
+  if (typeof options?.timeZone !== 'string' || options.timeZone === '') {
+    throw new RangeError('toHijri needs a timeZone, such as "Asia/Dubai"')
+  }
   const formatter = new Intl.DateTimeFormat(`en-u-ca-${CALENDAR}-nu-latn`, {
     day: 'numeric',
     month: 'numeric',
@@ -37,8 +40,8 @@ export function toHijri(date: Date, options: HijriOptions): HijriDate {
 
 /** "1 Ramadan 1447 AH" or "1 رمضان 1447 هـ". */
 export function formatHijri(date: Date, options: FormatHijriOptions): string {
-  const { locale = 'en', numerals = 'latn' } = options
   const { year, month, day } = toHijri(date, options)
+  const { locale = 'en', numerals = 'latn' } = options
   const text = `${day} ${MONTHS[locale][month - 1]} ${year} ${ERA[locale]}`
   return applyNumerals(text, numerals)
 }

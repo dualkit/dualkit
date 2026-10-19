@@ -159,3 +159,19 @@ describe('Oman phone', () => {
     expect(parseOmanPhone('٩٢١٢٣٤٥٦').ok).toBe(true)
   })
 })
+
+describe('input too short to show its prefix', () => {
+  it('is invalid_length, not unknown_prefix', () => {
+    expect(code(parseOmanPhone('90'))).toBe('invalid_length')
+    expect(code(parseOmanPhone('9'))).toBe('invalid_length')
+    expect(code(parseKuwaitPhone('4'))).toBe('invalid_length')
+    expect(code(parseBahrainPhone('7'))).toBe('invalid_length')
+    expect(code(parseOmanPhone('+968 90'))).toBe('invalid_length')
+  })
+  it('still rejects a prefix that no completion can fix', () => {
+    expect(code(parseOmanPhone('900'))).toBe('unknown_prefix')
+    expect(code(parseKuwaitPhone('40'))).toBe('unknown_prefix')
+    expect(code(parseQatarPhone('1'))).toBe('unknown_prefix')
+    expect(code(parseBahrainPhone('0'))).toBe('unknown_prefix')
+  })
+})

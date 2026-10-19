@@ -87,3 +87,16 @@ describe('Oman IBAN', () => {
     expect(parseIban('OM8101800000012991234')).toMatchObject({ ok: false, error: { code: 'invalid_length' } })
   })
 })
+
+describe('IBAN length message', () => {
+  it.each([
+    ['AE07033123456789012345', 'A UAE IBAN has 23 characters.'],
+    ['SA038000000060801016751', 'A Saudi IBAN has 24 characters.'],
+    ['BH67BMAG0000129912345', 'A Bahraini IBAN has 22 characters.'],
+    ['KW81CBKU000000000000123456010', 'A Kuwaiti IBAN has 30 characters.'],
+    ['QA58DOHB00001234567890ABCDEF', 'A Qatari IBAN has 29 characters.'],
+    ['OM81018000000129912345', 'An Omani IBAN has 23 characters.'],
+  ])('names the country for %s', (input, message) => {
+    expect(parseIban(input)).toMatchObject({ ok: false, error: { code: 'invalid_length', message } })
+  })
+})

@@ -27,6 +27,7 @@ const phone = eightDigitPhone<OmanPhoneType, 'not_oman'>({
 /** Reads any common way of writing an Omani mobile or landline number, in Western or Arabic digits. */
 export const parseOmanPhone = (input: string): Result<OmanPhone, OmanPhoneError> => phone.parse(input)
 
+/** True when the input reads as an Omani mobile or landline number. */
 export const isValidOmanPhone = (input: string): boolean => phone.isValid(input)
 
 /** "9212 3456", "+968 9212 3456" or "+968...". Null when the number cannot be read. */

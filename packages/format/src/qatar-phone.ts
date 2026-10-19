@@ -17,9 +17,10 @@ const phone = eightDigitPhone<QatarPhoneType, 'not_qatar'>({
   group: fourFour,
 })
 
-/** Reads any common way of writing a Qatarii mobile or landline number, in Western or Arabic digits. */
+/** Reads any common way of writing a Qatari mobile or landline number, in Western or Arabic digits. */
 export const parseQatarPhone = (input: string): Result<QatarPhone, QatarPhoneError> => phone.parse(input)
 
+/** True when the input reads as a Qatari mobile or landline number. */
 export const isValidQatarPhone = (input: string): boolean => phone.isValid(input)
 
 /** "3312 3456", "+974 3312 3456" or "+974...". Null when the number cannot be read. */

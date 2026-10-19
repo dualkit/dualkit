@@ -10,5 +10,5 @@ const SIGNS: Record<Currency, string | null> = {
   BHD: null,
 }
 
-/** The Unicode sign for SAR, AED or OMR, and null for the rest. Most fonts lack the glyphs yet, so fall back to the code. */
+/** The Unicode sign for SAR, AED or OMR, and null for the rest. Most fonts lack the glyphs yet, so fall back to the code or the Arabic abbreviation (د.إ, ر.س, ر.ع). */
 export const currencySign = (currency: Currency): string | null => SIGNS[currency]

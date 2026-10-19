@@ -16,6 +16,7 @@ export function parseSaudiVatNumber(input: string): Result<string, SaudiVatError
   return ok(digits)
 }
 
+/** True when the input is a 15-digit Saudi VAT number starting and ending with 3. */
 export const isValidSaudiVatNumber = (input: string): boolean => parseSaudiVatNumber(input).ok
 
 /** The 15 digits with no separators, as ZATCA prints them. Null when the number cannot be read. */

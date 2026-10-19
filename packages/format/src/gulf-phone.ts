@@ -42,4 +42,5 @@ export function parseGulfPhone(input: string): Result<GulfPhone, GulfPhoneError>
   return err(code as GulfPhoneError, message)
 }
 
+/** True when the input is an international number from any GCC country. */
 export const isValidGulfPhone = (input: string): boolean => parseGulfPhone(input).ok
