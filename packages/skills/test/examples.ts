@@ -114,9 +114,21 @@ body { font-family: 'Brand', 'IBM Plex Sans Arabic', sans-serif; }`,
   many: 'لديك {count} عنصرًا في هذا الطلب',
   other: 'لديك {count} عنصر في هذا الطلب',
 }
-const line = items[new Intl.PluralRules('ar').select(count)].replace('{count}', formatCount(count))`,
+const digits = new Intl.NumberFormat('ar-AE-u-nu-latn')
+const line = items[new Intl.PluralRules('ar').select(count)].replace('{count}', digits.format(count))`,
     // The block renders as the `few` sentence with {count} filled by a digit, as the .replace does.
     html: '<p>لديك 5 عناصر في هذا الطلب</p>',
+  },
+  {
+    skill: 'dualkit-bilingual-copy',
+    quote: `<div class="label-pair">
+  <p lang="ar">رقم الهوية الإماراتية</p>
+  <p lang="en" dir="ltr">Past orders</p>
+</div>`,
+    html: `<div class="label-pair">
+  <p lang="ar">رقم الهوية الإماراتية</p>
+  <p lang="en" dir="ltr">Past orders</p>
+</div>`,
   },
 ]
 

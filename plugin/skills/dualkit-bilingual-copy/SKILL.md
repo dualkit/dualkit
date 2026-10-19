@@ -7,7 +7,7 @@ description: Use when writing, structuring or reviewing interface strings for an
 
 ## Overview
 
-Arabic is not English with different words. It has six plural forms, gendered second person, its own punctuation and right-to-left word order. Strings must be whole sentences with placeholders that a translator can move. Concatenated fragments cannot be translated.
+Arabic is not English with different words. It has six plural forms, gendered second person, its own punctuation and right-to-left word order. Strings must be whole sentences with placeholders that a translator can move. Concatenated fragments cannot be translated. This skill sets no font. For fonts and sizes, use dualkit-type-pairing.
 
 ## Plurals: all six Arabic forms
 
@@ -22,10 +22,11 @@ const items = {
   many: 'لديك {count} عنصرًا في هذا الطلب',
   other: 'لديك {count} عنصر في هذا الطلب',
 }
-const line = items[new Intl.PluralRules('ar').select(count)].replace('{count}', formatCount(count))
+const digits = new Intl.NumberFormat('ar-AE-u-nu-latn')
+const line = items[new Intl.PluralRules('ar').select(count)].replace('{count}', digits.format(count))
 ```
 
-`one` and `two` usually drop the number entirely. English still needs its own `one` and `other`.
+`one` and `two` usually drop the number entirely. English still needs its own `one` and `other`. The `-u-nu-latn` tag pins Western digits. Use the same digit system as the rest of the product (see dualkit-gulf-formats).
 
 ## Whole sentences with movable placeholders
 
@@ -47,9 +48,24 @@ Arabic imperatives and "you" are gendered. In buttons and labels, use the verbal
 
 ## Punctuation and register
 
-- Arabic comma `،`, semicolon `؛`, question mark `؟`. Keep the Latin full stop.
+- Arabic uses the same full stop as English. Only the comma, semicolon and question mark change: `،` `؛` `؟`.
 - Use Modern Standard Arabic for UI text. Use Gulf dialect only for marketing, and only on purpose.
 - Keep brand and product names in Latin script inside Arabic, isolated.
+
+## Two languages on one label
+
+When a label shows both languages stacked, give each line its own `lang`, and a `dir` when it differs from the page. The `lang` lets screen readers switch voice, and lets the `:lang(ar)` rules from dualkit-type-pairing reach the Arabic line.
+
+```html
+<div class="label-pair">
+  <p lang="ar">رقم الهوية الإماراتية</p>
+  <p lang="en" dir="ltr">Past orders</p>
+</div>
+```
+
+- The Arabic line keeps the 14px floor, even when it is the secondary line. Mute it with colour, not size.
+- Neither line is italic or tracked.
+- `dir="ltr"` also moves the English line to the left edge. To keep both lines on one edge, add `text-align: end` to the line with its own `dir`.
 
 ## Language switcher
 
@@ -67,3 +83,4 @@ Label each language in itself: `English` and `العربية`. Never use flags, 
 - `count === 1 ? one : other` in shared code that also serves Arabic.
 - A phone or IBAN example dropped into an Arabic sentence with no isolate.
 - Masculine imperatives on every button.
+- A stacked English line with no `lang`, read out in an Arabic voice.
