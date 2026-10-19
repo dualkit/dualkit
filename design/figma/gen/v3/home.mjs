@@ -4,6 +4,7 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { V3 } from './copy.mjs'
+import { heroGraphic } from './hero-graphic.mjs'
 import { LINE, GLASS_LINE, band, button, col, frame, glass, gsoft, gtext, header, hline, icon, label, mark, meter, painting, row, square, text, vline } from './parts.mjs'
 
 const SPECS = resolve(import.meta.dirname, '../../specs')
@@ -70,7 +71,7 @@ export function hero(ground) {
         row('Hero actions', [button(h.primary, 'ink', 'arrow'), button(h.secondary, 'outline')], { gap: 'space.tight' })], { w: 400, gap: 'space.card' }),
     ], { w: 'fill', justify: 'between', align: 'end' })], { pad: { top: 'space.160' } }),
     band('Hero media', [frame('Hero frame', [
-      painting('Hero painting', [claudePanel(), checkoutCard()], { h: 640, gap: 'space.card', align: 'center' }),
+      heroGraphic(3),
     ], { pad: 'space.card' })]),
   ], { w: 'fill', gap: 'space.v2.inner', ...(ground ? { fill: ground } : {}) })
 }
