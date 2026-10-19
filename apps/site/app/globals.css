@@ -145,7 +145,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .halftone canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .halftone .hint { position: absolute; left: 16px; bottom: 16px; font-size: 12px; color: var(--faint); }
 .slide { position: relative; height: 52px; padding: 4px; border-radius: 999px; background: var(--panel); overflow: hidden; user-select: none; touch-action: none; }
-.slide .fill { position: absolute; inset-block: 4px; inset-inline-start: 4px; width: 0; border-radius: 999px; background: rgba(9,9,11,.07); }
+.slide .fill { position: absolute; inset-block: 4px; inset-inline: 4px; border-radius: 999px; background: rgba(9,9,11,.07); clip-path: inset(0 100% 0 0); }
 .slide .label { position: absolute; inset: 0; display: grid; place-items: center; font-size: 14px; color: var(--soft); pointer-events: none; }
 .slide .thumb { position: relative; z-index: 1; width: 44px; height: 44px; border-radius: 999px; background: var(--ink); color: var(--inverse-fg); display: grid; place-items: center; cursor: grab; touch-action: none; will-change: transform; }
 .slide .thumb:active { cursor: grabbing; }
