@@ -12,7 +12,7 @@ Arabic is cursive, has no case, and sits on a different vertical rhythm from Lat
 
 ## Size floor
 
-The computed size of Arabic text is at least 14px for UI text and 16px for body text. Small sizes creep in on badges, field labels, nav labels, the ر.س and د.إ abbreviations, VAT notes and calendar sub-labels. Check those first.
+The computed size of Arabic text is at least 14px for UI text and 16px for body text. Small sizes creep in on badges, field labels, nav labels, the ر.س and د.إ abbreviations, VAT notes and calendar sub-labels.
 
 `size-adjust` makes Arabic look bigger, but it does not change the computed size. Checkers and the 14px floor measure the computed size, so a 12px label with `size-adjust: 120%` still fails.
 
@@ -28,11 +28,13 @@ Set the sizes as tokens scoped to Arabic, next to the other Arabic rules, and us
   font-style: normal;
   line-height: 1.7;
 }
-/* set the Latin sizes the same way under :lang(en) */
+/* set the Latin sizes as the default, outside :lang(ar) */
 body { font-size: var(--type-body-size); }
 label, .badge, nav a { font-size: var(--type-label-size); }
 small, .caption { font-size: var(--type-caption-size); }
 ```
+
+Arabic inside a Latin element, such as a ر.س badge on an English page, gets the Latin sizes. Give it its own `lang="ar"` so the Arabic tokens apply, or keep those Latin sizes at 14px or more.
 
 ## Choose the pair
 
@@ -63,7 +65,7 @@ Scope the Arabic font with `unicode-range` and fix its size with `size-adjust`. 
 body { font-family: 'Brand', 'IBM Plex Sans Arabic', sans-serif; }
 ```
 
-List the real Arabic family after `'Brand'`. It covers Arabic if the file is slow or fails, and the name tells tools and people which Arabic face is meant.
+List the real Arabic family after `'Brand'`. If that family is also loaded (for example from Google Fonts), it covers Arabic while the file loads or if it fails. Either way, the name tells tools and people which Arabic face is meant.
 
 Tune `size-adjust` by eye against the Latin face at body size. Somewhere around 105% to 115% is typical.
 
@@ -96,5 +98,6 @@ Use `font-variant-numeric: tabular-nums` on amounts and tables in both scripts. 
 Keep the plain CSS `:lang(ar)` block above, even in a Tailwind project. A `rtl:` class on the root only sets inherited values, so any element with its own `tracking-*` or `leading-*` class still overrides it.
 
 - The smallest size on Arabic text is `text-sm` (14px). Never `text-xs` (12px), and never an arbitrary size under 14px such as `text-[11px]`.
+- `text-sm` also sets a line-height under 1.5, which can override the `:lang(ar)` one. Pair it with `leading-relaxed`, or set the leading on Arabic.
 - Where an element sets `tracking-*`, add `rtl:tracking-normal` beside it.
 - `tabular-nums` is the class for `font-variant-numeric: tabular-nums`.

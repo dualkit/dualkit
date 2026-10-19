@@ -21,7 +21,7 @@ export const EXAMPLES: Example[] = [
   font-style: normal;
   line-height: 1.7;
 }
-/* set the Latin sizes the same way under :lang(en) */
+/* set the Latin sizes as the default, outside :lang(ar) */
 body { font-size: var(--type-body-size); }
 label, .badge, nav a { font-size: var(--type-label-size); }
 small, .caption { font-size: var(--type-caption-size); }`,
