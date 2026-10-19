@@ -34,23 +34,30 @@ export function statement() {
     { w: 'fill', h: VIEW, justify: 'center', align: 'center' })
 }
 
-/** Full-bleed painting with a route across the dunes and a marker per city. */
+/** The Gulf as a dot-matrix map (Natural Earth 1:50m), one ink square per city and the format Dualkit handles there. */
+const MAP = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../../assets/gulf-map.json'), 'utf8'))
+const FORMATS = { 'Kuwait City': 'KWD, 3 decimals', Riyadh: 'SAR, Umm al-Qura', Manama: 'BHD, 3 decimals', Doha: 'QAR', 'Abu Dhabi': 'AED', Dubai: 'AED, +971', Muscat: 'OMR, 3 decimals' }
 export function region() {
   const r = S.region
-  const pts = r.cities.map(([, , x, y]) => [x + 120, Math.round(y * VIEW)])
-  const path = pts.map(([x, y], k) => (k ? `L${x} ${y}` : `M${x} ${y}`)).join(' ')
-  const route = { shape: 'Route', kind: 'svg', size: [1440, VIEW], abs: { start: 0, top: 0 },
-    svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 ${VIEW}" fill="none"><path d="${path}" stroke="#fff" stroke-width="1.5" stroke-opacity=".85"/>${pts.map(([x, y]) => `<rect x="${x - 4}" y="${y - 4}" width="8" height="8" fill="#fff"/><path d="M${x} ${y - 10}V${y - 120}" stroke="#fff" stroke-opacity=".7" stroke-dasharray="3 4"/>`).join('')}</svg>` }
-  const markers = r.cities.map(([city, fmt, x, y]) => glass(`${city} marker`, [gtext(city), gsoft(fmt)], { pad: { block: 'space.tight', inline: 'space.snug' }, abs: { start: x + 120 - 8, top: Math.round(y * VIEW) - 176 } }))
+  const dots = { shape: 'Land', kind: 'svg', size: [MAP.w, MAP.h], abs: { start: 0, top: 0 }, svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${MAP.w} ${MAP.h}"><path fill="#09090b" fill-opacity=".3" d="${MAP.path}"/><path fill="#09090b" fill-opacity=".85" d="${MAP.lit}"/></svg>` }
+  const [hx, hy] = MAP.cities.Dubai
+  const arcs = { shape: 'Arcs', kind: 'svg', size: [MAP.w, MAP.h], abs: { start: 0, top: 0 }, svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${MAP.w} ${MAP.h}" fill="none">${Object.entries(MAP.cities).filter(([c]) => c !== 'Dubai').map(([, [x, y]]) => `<path d="M${hx} ${hy}Q${(hx + x) / 2} ${Math.min(hy, y) - 90} ${x} ${y}" stroke="#09090b" stroke-opacity=".55" stroke-width="1"/>`).join('')}</svg>` }
+  const pins = Object.entries(MAP.cities).flatMap(([city, [x, y]]) => [
+    { ...square(`${city} point`, 8), abs: { start: Math.round(x) - 4, top: Math.round(y) - 4 } },
+    row(`${city} marker`, [text(city, 'V3Small', { color: 'color.text.inverse' }), text(FORMATS[city], 'V3Small', { color: 'color.v3.glassSoft' })], { gap: 'space.tight', pad: { block: 'space.hair', inline: 'space.snug' }, fill: 'color.surface.inverse', abs: { start: Math.round(x) + 10, top: Math.round(y) - 30 } }),
+  ])
   return col('Region', [
-    route, ...markers,
-    band('Region head', [col('Region title', [row('Region label', [square('Region square', 7, 'color.v3.glassText'), text(r.label, 'V3Label', { color: 'color.v3.glassText' })], { gap: 'space.snug', align: 'center' }),
-      text(r.heading, 'V3H2', { color: 'color.v3.glassText', name: 'Heading' }), text(r.lede, 'V3Lede', { color: 'color.v3.glassSoft', w: 420, name: 'Lede' })], { gap: 'space.group' })], { pad: { top: 'space.120' } }),
-  ], { w: 'fill', h: VIEW, clip: true, fill: { type: 'image', image: 'dusk', scaleMode: 'FILL' } })
+    band('Region head', [row('Region header', [col('Region title', [label(r.label), text(r.heading, 'V3H2', { name: 'Heading' })], { gap: 'space.group' }),
+      col('Region lede wrap', [text(r.lede, 'V3Lede', { color: 'color.text.soft', w: 'fill', name: 'Lede' })], { w: 400 })], { w: 'fill', justify: 'between', align: 'end' })]),
+    col('Map', [dots, ...pins], { w: MAP.w, h: MAP.h, clip: true }),
+  ], { w: 'fill', gap: 'space.v2.inner', align: 'center', pad: { top: 'space.200' } })
 }
 
 /** Full-bleed film still with one line and one action, bottom start. */
 export function video() {
+  return col('Video wrap', [videoBlock()], { w: 'fill', pad: { top: 'space.200' } })
+}
+function videoBlock() {
   const v = S.video
   const scrim = { stack: 'Scrim', dir: 'col', children: [], w: 1440, h: VIEW, abs: { start: 0, top: 0 }, fill: { type: 'linear', angle: 90, stops: [[0.35, '#0b0a0900'], [1, '#0b0a09b3']] } }
   return col('Video', [
@@ -58,7 +65,7 @@ export function video() {
     band('Video copy', [col('Video words', [text(v.heading, 'V3Display', { color: 'color.v3.glassText', name: 'Heading' }),
       row('Video action', [text(v.action, 'V3Label'), icon('arrow', 'color.text.primary', 14)], { gap: 'space.tight', align: 'center', pad: { block: 'space.snug', inline: 'space.group' }, fill: 'color.v3.glassButton' })], { gap: 'space.card' })],
     { pad: { bottom: 'space.120' } }),
-  ], { w: 'fill', h: VIEW, justify: 'end', clip: true, fill: [{ type: 'image', image: 'video', scaleMode: 'FILL' }][0] })
+  ], { w: 'fill', h: VIEW, justify: 'end', clip: true, fill: { type: 'image', image: 'video', scaleMode: 'FILL' } })
 }
 
 export function numbers() {
@@ -70,8 +77,20 @@ export function numbers() {
   ], { gap: 'space.v2.inner', pad: { top: 'space.200' } })
 }
 
-const seal = ([big, small]) => col(`${big} seal`, [text(big, 'V3Label', { name: 'Standard' }), text(small, 'V3Small', { color: 'color.text.faint', name: 'Scope' })],
-  { w: 112, h: 112, justify: 'center', align: 'center', gap: 'space.hair', stroke: { color: 'color.v3.line', width: 'size.stroke' } })
+const SEAL_ICONS = JSON.parse(readFileSync(resolve(import.meta.dirname, 'seal-icons.json'), 'utf8'))
+const glyph = (name, d, vb = 24) => ({ shape: `${name} glyph`, kind: 'svg', size: [18, 18], tint: 'color.text.primary', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${vb} ${vb}"><path fill="#000" d="${d}"/></svg>` })
+const SEAL_GLYPHS = {
+  'UAX #9': glyph('Unicode', SEAL_ICONS.unicode),
+  'ISO 13616': glyph('Bank', 'M12 2 2 7v2h20V7L12 2Zm-8 9v7h3v-7H4Zm6.5 0v7h3v-7h-3ZM17 11v7h3v-7h-3ZM2 20v2h20v-2H2Z'),
+  'Umm al-Qura': glyph('Crescent', 'M15.5 3.2A9 9 0 1 0 20.8 16 7.5 7.5 0 0 1 15.5 3.2Z'),
+  npm: glyph('npm', SEAL_ICONS.npm),
+  MIT: glyph('OSI', SEAL_ICONS.osi),
+  Native: { text: 'ع', style: 'V2ArBody', name: 'Ain glyph' },
+}
+const seal = ([big, small]) => col(`${big} seal`, [
+  col(`${big} ring`, [SEAL_GLYPHS[big]], { w: 56, h: 56, justify: 'center', align: 'center', radius: 28, stroke: { color: 'color.v3.line', width: 'size.stroke' } }),
+  col(`${big} words`, [text(big, 'V3Small', { name: 'Standard' }), text(small, 'V3Small', { color: 'color.text.faint', name: 'Scope' })], { align: 'center' }),
+], { w: 96, gap: 'space.snug', align: 'center' })
 
 export function footerGrand() {
   const f = S.footer
@@ -88,7 +107,7 @@ export function footerGrand() {
   return col('Footer', [
     band('Footer top', [
       row('Footer columns', [brand, row('Link columns', f.columns.map(column), { gap: 'space.card' })], { w: 'fill', justify: 'between' }),
-      col('Seals block', [row('Seals', S.seals.map(seal), { gap: 'space.snug' }), text(S.sealNote, 'V3Small', { color: 'color.text.faint' })], { gap: 'space.item' }),
+      row('Seals block', [row('Seals', S.seals.map(seal), { gap: 'space.tight' }), text(S.sealNote, 'V3Small', { color: 'color.text.faint', w: 260 })], { w: 'fill', justify: 'between', align: 'center' }),
       hline('Footer rule'),
       row('Legal row', [text(f.legal, 'V3Small', { color: 'color.text.soft' }), row('Made by', [text('Made by', 'V3Small', { color: 'color.text.soft' }), text('Sam Santos', 'V3Small', { name: 'Maker link' }), { shape: 'Mascot', kind: 'ellipse', size: [18, 18], fill: 'color.surface.inverse' }], { gap: 'space.tight', align: 'center' })],
         { w: 'fill', justify: 'between', align: 'center' }),
