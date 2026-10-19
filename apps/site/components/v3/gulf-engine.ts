@@ -1,5 +1,5 @@
 import { createClock } from '@/lib/v3/clock'
-import { CROP, arcsReached, cityTimings, plotCells, type Cell, type CityTiming, type Grid } from '@/lib/v3/grid'
+import { arcsReached, cityTimings, phoneCrop, plotCells, type Cell, type CityTiming, type Grid } from '@/lib/v3/grid'
 
 const PHONE_QUERY = '(max-width: 899px)'
 const LAND_ALPHA = 0.3
@@ -37,8 +37,9 @@ export function createGulfEngine(root: HTMLElement, canvas: HTMLCanvasElement, g
   const arc = (city: CityTiming) => {
     const dubai = timings[0]
     if (!phone || !dubai || city === dubai) return
-    const k = width / CROP.w
-    const at = (x: number, y: number) => [(x - CROP.x) * k * ratio, (y - CROP.y) * k * ratio] as const
+    const crop = phoneCrop(grid.cities)
+    const k = width / crop.w
+    const at = (x: number, y: number) => [(x - crop.x) * k * ratio, (y - crop.y) * k * ratio] as const
     const [hx, hy] = at(dubai.x, dubai.y)
     const [x, y] = at(city.x, city.y)
     ctx.globalAlpha = ARC_ALPHA

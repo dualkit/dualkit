@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { arcsReached, cityTimings, decodeGrid, plotCells, rippleDelay, toCellUnits, type GridJson } from '../lib/v3/grid'
+import { arcsReached, phoneCrop, cityTimings, decodeGrid, plotCells, rippleDelay, toCellUnits, type GridJson } from '../lib/v3/grid'
 
 const json = JSON.parse(readFileSync(resolve(__dirname, '../public/v3/gulf-grid.json'), 'utf8')) as GridJson
 const grid = decodeGrid(json)
@@ -73,5 +73,22 @@ describe('arcsReached', () => {
     const mid = t[3]!.pass
     expect(arcsReached(mid, t, 2)).toEqual([2, 3])
     expect(arcsReached(mid, t, 4)).toEqual([])
+  })
+})
+
+describe('phoneCrop', () => {
+  const crop = phoneCrop(grid.cities)
+  it.each([320, 390, 600])('keeps every city 16 px inside the canvas and centred at %i px', (width) => {
+    const k = width / crop.w
+    const height = crop.h * k
+    const pts = Object.values(grid.cities).map(([x, y]) => [(x - crop.x) * k, (y - crop.y) * k] as const)
+    for (const [x, y] of pts) {
+      expect(x).toBeGreaterThanOrEqual(16)
+      expect(x).toBeLessThanOrEqual(width - 16)
+      expect(y).toBeGreaterThanOrEqual(16)
+      expect(y).toBeLessThanOrEqual(height - 16)
+    }
+    const xs = pts.map((p) => p[0])
+    expect(Math.min(...xs) - (width - Math.max(...xs))).toBeCloseTo(0, 5)
   })
 })

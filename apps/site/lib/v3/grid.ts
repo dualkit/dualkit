@@ -10,9 +10,10 @@ export const NEAR_PX = 44
 /** Ripple speed: 1.2 ms for every design px away from the origin. */
 export const MS_PER_PX = 1.2
 export const TAG_GAP_MS = 80
-/** Phone crop of the 1440 x 900 map and the pitch of its re-gridded dots (design/figma/gen/v3/mobile.mjs). */
-export const CROP = { x: 230, y: 110, w: 1100, h: 560 }
+/** Pitch of the phone map's re-gridded dots (design/figma/gen/v3/mobile.mjs). */
 export const PHONE_PITCH = 5
+/** Share of the crop width left empty on each side of the cities, so a point sits at least 5% of the map width from the edge (16 px from 320 px up). */
+export const PHONE_PAD = 0.05
 export const ORIGIN_CITY = 'Dubai'
 
 /** Unpacks the generator's bitset: row-major, most significant bit first, 1 = land. */
@@ -31,6 +32,19 @@ export function decodeGrid(json: GridJson): Grid {
       return ((bytes[i >> 3] ?? 0) >> (7 - (i & 7)) & 1) === 1
     },
   }
+}
+
+export type Crop = { x: number; y: number; w: number; h: number }
+
+/** The phone crop of the 1440 x 900 map: the city bounding box plus padding, centred. The same absolute margin is left above and below. */
+export function phoneCrop(cities: Record<string, [number, number]>): Crop {
+  const pts = Object.values(cities)
+  const xs = pts.map((p) => p[0])
+  const ys = pts.map((p) => p[1])
+  const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)]
+  const w = (x1 - x0) / (1 - 2 * PHONE_PAD)
+  const h = y1 - y0 + 2 * PHONE_PAD * w
+  return { x: (x0 + x1) / 2 - w / 2, y: (y0 + y1) / 2 - h / 2, w, h }
 }
 
 /** Milliseconds until the ripple reaches cell (c, r). The origin is in cell units; distance is measured in design px. */
@@ -73,7 +87,8 @@ export function plotCells(grid: Grid, layout: Layout, width: number): Cell[] {
   const { cols, rows, step, cities } = grid
   const origin = toCellUnits(cities[ORIGIN_CITY] ?? [0, 0], step)
   const near = Object.values(cities)
-  const k = layout === 'phone' ? width / CROP.w : width / DESIGN_W
+  const crop = phoneCrop(cities)
+  const k = layout === 'phone' ? width / crop.w : width / DESIGN_W
   const seen = new Map<string, Cell>()
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < cols; c++) {
@@ -86,9 +101,9 @@ export function plotCells(grid: Grid, layout: Layout, width: number): Cell[] {
         seen.set(`${c},${r}`, { x: cx * k, y: cy * k, lit, delay })
         continue
       }
-      const gx = Math.round(((cx - 1 - CROP.x) * k) / PHONE_PITCH)
-      const gy = Math.round(((cy - 1 - CROP.y) * k) / PHONE_PITCH)
-      if (gx < 0 || gy < 0 || gx * PHONE_PITCH >= width || gy * PHONE_PITCH >= CROP.h * k) continue
+      const gx = Math.round(((cx - 1 - crop.x) * k) / PHONE_PITCH)
+      const gy = Math.round(((cy - 1 - crop.y) * k) / PHONE_PITCH)
+      if (gx < 0 || gy < 0 || gx * PHONE_PITCH >= width || gy * PHONE_PITCH >= crop.h * k) continue
       const key = `${gx},${gy}`
       const prev = seen.get(key)
       // Top-left origin: the phone grid snaps squares to a 5 px pitch, so keep the earliest ripple time and prefer the lit one.

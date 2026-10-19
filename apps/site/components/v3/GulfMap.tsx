@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useRef } from 'react'
 import { V3 } from '@/lib/v3/copy'
-import { CROP, DESIGN_H, DESIGN_W, decodeGrid, type GridJson } from '@/lib/v3/grid'
+import { DESIGN_H, DESIGN_W, decodeGrid, phoneCrop, type GridJson } from '@/lib/v3/grid'
 import { useSequence } from '@/lib/v3/inview'
 import data from '../../public/v3/gulf-grid.json'
 import { createGulfEngine, type Engine } from './gulf-engine'
@@ -11,6 +11,7 @@ import './region.css'
 const R = V3.region
 const GRID = decodeGrid(data as unknown as GridJson)
 const FORMATS: Record<string, string> = R.formats
+const CROP = phoneCrop(GRID.cities)
 const CITIES = Object.entries(GRID.cities)
 const pct = (n: number) => `${(n * 100).toFixed(3)}%`
 
@@ -49,7 +50,7 @@ export function GulfMap() {
           <p className="v3-lede v3-region-lede">{R.lede}</p>
         </div>
       </div>
-      <div ref={map} className="v3-region-map" role="img" aria-label={`Map of the Gulf with ${CITIES.map(([name]) => name).join(', ')} marked`}>
+      <div ref={map} className="v3-region-map" style={{ '--phone-aspect': `${CROP.w.toFixed(2)} / ${CROP.h.toFixed(2)}` } as React.CSSProperties} role="img" aria-label={`Map of the Gulf with ${CITIES.map(([name]) => name).join(', ')} marked`}>
         <canvas ref={canvas} className="v3-region-canvas" aria-hidden="true" />
         {CITIES.map(([name, [x, y]], n) => (
           <span
