@@ -17,8 +17,8 @@ describe('runBench', () => {
   it('builds every model, screen, condition and run, then skips them on a rerun', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
     const opts = { month: '2026-11', models: [model('fake-good')], screens, generate: fakeGenerate, store, score: fastScore }
-    expect(await runBench(opts)).toEqual({ built: 6, skipped: 0, failed: 0 })
-    expect(await runBench(opts)).toEqual({ built: 0, skipped: 6, failed: 0 })
+    expect(await runBench(opts)).toEqual({ built: 6, skipped: 0, failed: 0, stoppedEarly: false })
+    expect(await runBench(opts)).toEqual({ built: 0, skipped: 6, failed: 0, stoppedEarly: false })
   })
   it('records garbage replies as failed builds and redoes them next time', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
@@ -110,6 +110,23 @@ describe('concurrency', () => {
     expect(launched).toHaveLength(2)
     expect(new Set(seen.slice(1)).size).toBe(1)
     expect(seen[1]).not.toBe(seen[0])
+  })
+})
+
+describe('soft deadline', () => {
+  it('starts no build after the deadline, lets the one in flight finish, and says it stopped early', async () => {
+    let clock = 0
+    const timed: Generate = async (m, r) => { clock += 4; return fakeGenerate(m, r) } // builds start at 0, 4, 8, then 12 is past 10
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    const out = await runBench({ month: '2026-11', models: [model('fake-good')], screens, generate: timed, store, score: fastScore, deadline: 10, now: () => clock })
+    expect(out).toEqual({ built: 3, skipped: 0, failed: 0, stoppedEarly: true })
+    expect(store.list('2026-11')).toHaveLength(3)
+    expect(clock).toBe(12) // the build that started at 8 ran past the deadline and was kept
+  })
+  it('does not say it stopped early when everything finished in time', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    const out = await runBench({ month: '2026-11', models: [model('fake-good')], screens, generate: fakeGenerate, store, score: fastScore, deadline: 10, now: () => 0 })
+    expect(out.stoppedEarly).toBe(false)
   })
 })
 
