@@ -56,7 +56,7 @@ Arabic imperatives and "you" are gendered. In buttons and labels, use the verbal
 
 ## Two languages on one label
 
-When a label shows both languages stacked, give each line its own `lang`, and a `dir` when it differs from the page. On an English page, `lang="ar"` lets the `:lang(ar)` rules from dualkit-type-pairing reach the Arabic line. On an Arabic page, `lang="en"` keeps them off the English line, and screen readers read it in an English voice.
+When a label shows both languages stacked, give each line its own `lang`, and a `dir` when it differs from the page. On an English page, `lang="ar"` lets the `:lang(ar)` rules from dualkit-type-pairing reach the Arabic line. On an Arabic page, `lang="en"` stops `:lang(ar)` matching the English line, but it still inherits the Arabic parent's line-height, letter-spacing and size tokens, so reset those on it. Screen readers read it in an English voice.
 
 ```html
 <div>

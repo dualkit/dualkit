@@ -87,7 +87,7 @@ Fixed formats (phone, IBAN, Emirates ID, card, OTP), email and URL use `dir="ltr
 <input type="text" dir="auto" autocomplete="name">
 ```
 
-A `+971` prefix chip sits inside the same `dir="ltr"` wrapper as the input, so it stays on the left.
+Put a `+971` prefix chip and the input, not the label, in one `dir="ltr"` wrapper, so the chip stays on the left.
 
 ## What to mirror
 
@@ -99,7 +99,7 @@ A `+971` prefix chip sits inside the same `dir="ltr"` wrapper as the input, so i
 | Carousels and swipe direction | Phone numbers, numerals, Latin text, code |
 | Drawers (open from the start edge) | Media timelines |
 
-Mirror with CSS, not a second icon set (swapping one icon for its opposite also works). The class goes on the `<svg>`:
+Mirror with CSS. Swapping a single icon for its opposite also works; you don't need a second icon set. The class goes on the `<svg>`:
 
 ```css
 .icon-directional:dir(rtl) { transform: scaleX(-1) }

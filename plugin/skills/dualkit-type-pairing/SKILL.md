@@ -74,7 +74,7 @@ The size block above already sets these under `:lang(ar)`.
 
 | Do | Instead of |
 |---|---|
-| `letter-spacing: 0` under `:lang(ar)` | Any `tracking-*`. It breaks or stretches the joins between letters |
+| `letter-spacing: 0` under `:lang(ar)` | Any `letter-spacing` other than 0. It breaks or stretches the joins between letters |
 | Sentence-case Latin source strings, with uppercase applied in CSS for Latin only | Capitals stored in the string (`'SECURE CHECKOUT'`) |
 | Weight or colour for emphasis | Italic. Arabic has no true italic, so browsers fake a slant |
 | Line-height about 1.6 to 1.8 for body text | Latin defaults of 1.4 to 1.5, which clip dots and marks |
