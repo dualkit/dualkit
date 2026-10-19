@@ -194,7 +194,7 @@ export function ProductsMenu({ parts, previews, latest, benchDays, end }: {
         </div>
       </div>
       <div className="v3-menu-scrim" aria-hidden="true" />
-      <div id={DRAWER_ID} ref={drawer} className="v3-menu" data-open={state.open || undefined} data-via={via} inert={!state.open}>
+      <div id={DRAWER_ID} ref={drawer} className="v3-menu" data-open={state.open || undefined} data-via={via} data-step={state.step} inert={!state.open}>
         <div className="v3-wrap v3-menu-band">
           <Frame className="v3-menu-frame" joins={['var(--v3-menu-list)', 'calc(100% - var(--v3-menu-side))']}>
             <div className="v3-menu-cols">
@@ -202,7 +202,7 @@ export function ProductsMenu({ parts, previews, latest, benchDays, end }: {
                 {m.parts.map(([no, name, line, tag], k) => (
                   <li key={name}>
                     <Link ref={(el) => { rows.current[k] = el }} href={parts[k]?.href ?? '/docs'} className="v3-menu-row" data-on={state.active === k || undefined}
-                      onPointerEnter={() => dispatch({ type: 'hover', index: k })} onFocus={() => dispatch({ type: 'hover', index: k })} {...linkProps}>
+                      onPointerEnter={() => dispatch({ type: 'hover', index: k, via: 'pointer' })} onFocus={() => dispatch({ type: 'hover', index: k, via: 'keyboard' })} {...linkProps}>
                       <span className="v3-small v3-menu-faint">{no}</span>
                       <span className="v3-menu-words"><span className="v3-step">{name}</span><span className="v3-small v3-menu-soft">{line}</span></span>
                       <span className="v3-small v3-menu-tag">{tag}</span>
@@ -213,7 +213,7 @@ export function ProductsMenu({ parts, previews, latest, benchDays, end }: {
 
               <div className="v3-menu-preview">
                 <div className="v3-painting v3-menu-painting" aria-hidden="true">
-                  <GlassLayer active={state.active} />
+                  <GlassLayer active={state.active} animate={state.step !== 'keyboard'} />
                   {previews.map((p, k) => <div key={k} className="v3-menu-shot" data-part={k} data-on={state.active === k || undefined}>{p}</div>)}
                 </div>
                 <div className="v3-menu-foot">

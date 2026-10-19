@@ -105,7 +105,8 @@ body { background: var(--v3-ground); }
 }
 
 /* Products menu: opens from under the nav with clip-path (opacity only steps), 220ms in and 150ms out. No animation when opened
-   from the keyboard or under reduced motion. The row highlight moves instantly; the preview crossfades over 150ms. */
+   from the keyboard or under reduced motion. The row highlight moves instantly; the preview crossfades over 150ms when the
+   pointer moves between rows, and switches at once on a keyboard step (arrow keys or Tab, data-step='keyboard'). */
 .v3-menu { --v3-menu-list: 440px; --v3-menu-side: 240px; --v3-menu-fit: 1;
   position: absolute; z-index: 1; inset-inline: 0; top: 100%; background: var(--v3-ground);
   clip-path: inset(0 0 100% 0); opacity: 0; visibility: hidden;
@@ -196,6 +197,7 @@ body { background: var(--v3-ground); }
 .v3-menu-foot { display: grid; }
 .v3-menu-foot-part { grid-area: 1 / 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 16px; opacity: 0; transition: opacity 150ms var(--ease-ui); }
 .v3-menu-foot-part[data-on] { opacity: 1; }
+.v3-menu[data-step='keyboard'] :is(.v3-menu-shot, .v3-menu-foot-part, .v3-gl-pane) { transition: none; }
 @media (hover: hover) and (pointer: fine) { .v3-menu-go:hover svg { transform: translateX(2px); } .v3-menu-copy:hover { color: var(--v3-ink); } }
 @media (prefers-reduced-motion: reduce) {
   .v3-menu, .v3-menu[data-open], .v3-menu-scrim, .v3-menu-shot, .v3-menu-foot-part, .v3-nav-link, .v3-menu-copy > * { transition: none; }

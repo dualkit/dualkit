@@ -3,7 +3,7 @@ import { V3 } from '../lib/v3/copy'
 import { checkFamilies, parsedFormatLines } from '../lib/v3/kit-data'
 import { LEAVE_MS, MENU_CLOSED, benchCountdown, daysUntil, insideAny, menuReducer, nextBenchRun, type MenuState } from '../lib/v3/menu'
 
-const open = (active = 0, via: MenuState['via'] = 'pointer', away = false): MenuState => ({ open: true, active, via, away })
+const open = (active = 0, via: MenuState['via'] = 'pointer', away = false, step: MenuState['step'] = 'pointer'): MenuState => ({ open: true, active, via, step, away })
 
 describe('menuReducer', () => {
   it('wraps a move down from the last part to the first', () => {
@@ -16,15 +16,31 @@ describe('menuReducer', () => {
     expect(menuReducer(open(2), { type: 'move', dir: 1 }).active).toBe(3)
   })
   it('sets active on hover', () => {
-    expect(menuReducer(open(0), { type: 'hover', index: 3 }).active).toBe(3)
+    expect(menuReducer(open(0), { type: 'hover', index: 3, via: 'pointer' }).active).toBe(3)
   })
   it('ignores a hover outside the list', () => {
     const s = open(2)
-    expect(menuReducer(s, { type: 'hover', index: 9 })).toBe(s)
-    expect(menuReducer(s, { type: 'hover', index: -1 })).toBe(s)
+    expect(menuReducer(s, { type: 'hover', index: 9, via: 'pointer' })).toBe(s)
+    expect(menuReducer(s, { type: 'hover', index: -1, via: 'pointer' })).toBe(s)
   })
   it('records a keyboard toggle', () => {
-    expect(menuReducer(MENU_CLOSED, { type: 'toggle', via: 'keyboard' })).toEqual({ open: true, active: 0, via: 'keyboard', away: false })
+    expect(menuReducer(MENU_CLOSED, { type: 'toggle', via: 'keyboard' })).toEqual({ open: true, active: 0, via: 'keyboard', step: 'keyboard', away: false })
+  })
+  it('marks an arrow move as a keyboard step, so the preview switches at once', () => {
+    expect(menuReducer(open(0), { type: 'move', dir: 1 }).step).toBe('keyboard')
+  })
+  it('marks a Tab focus as a keyboard step and a pointer entering a row as a pointer step', () => {
+    expect(menuReducer(open(0), { type: 'hover', index: 2, via: 'keyboard' }).step).toBe('keyboard')
+    expect(menuReducer(open(0, 'pointer', false, 'keyboard'), { type: 'hover', index: 2, via: 'pointer' }).step).toBe('pointer')
+  })
+  it('keeps how the menu was opened when a step changes, so leaving still closes a pointer menu', () => {
+    const s = menuReducer(open(0, 'pointer'), { type: 'move', dir: 1 })
+    expect(s.via).toBe('pointer')
+    expect(menuReducer(s, { type: 'away' }).away).toBe(true)
+  })
+  it('leaves the state alone when focus lands on the row that is already active', () => {
+    const s = open(1)
+    expect(menuReducer(s, { type: 'hover', index: 1, via: 'keyboard' })).toBe(s)
   })
   it('records a pointer toggle', () => {
     expect(menuReducer(MENU_CLOSED, { type: 'toggle', via: 'pointer' }).via).toBe('pointer')

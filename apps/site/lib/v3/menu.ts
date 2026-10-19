@@ -4,18 +4,22 @@ import { V3 } from './copy'
 export const PART_COUNT = V3.menu.parts.length
 
 export type MenuVia = 'pointer' | 'keyboard'
-/** `away`: the mouse has left the nav and the drawer; the menu closes if it stays away for LEAVE_MS. */
-export type MenuState = { open: boolean; active: number; via: MenuVia | null; away: boolean }
+/**
+ * `via`: how the menu was opened (it decides the open and close animation and whether leaving closes it).
+ * `step`: how the active row last changed. Keyboard steps repeat many times in a row, so they move the preview at once.
+ * `away`: the mouse has left the nav and the drawer; the menu closes if it stays away for LEAVE_MS.
+ */
+export type MenuState = { open: boolean; active: number; via: MenuVia | null; step: MenuVia; away: boolean }
 export type MenuEvent =
   | { type: 'toggle'; via: MenuVia }
   | { type: 'close' }
   | { type: 'move'; dir: 1 | -1 }
-  | { type: 'hover'; index: number }
+  | { type: 'hover'; index: number; via: MenuVia }
   | { type: 'away' }
   | { type: 'back' }
   | { type: 'away-elapsed' }
 
-export const MENU_CLOSED: MenuState = { open: false, active: 0, via: null, away: false }
+export const MENU_CLOSED: MenuState = { open: false, active: 0, via: null, step: 'pointer', away: false }
 
 /** How long the mouse may be outside the nav and the drawer before a pointer-opened menu closes. */
 export const LEAVE_MS = 300
@@ -24,20 +28,21 @@ export const LEAVE_MS = 300
 export function menuReducer(state: MenuState, e: MenuEvent): MenuState {
   switch (e.type) {
     case 'toggle':
-      return state.open ? { ...MENU_CLOSED, via: e.via } : { open: true, active: 0, via: e.via, away: false }
+      return state.open ? { ...MENU_CLOSED, via: e.via, step: e.via } : { open: true, active: 0, via: e.via, step: e.via, away: false }
     case 'close':
-      return state.open || state.active !== 0 ? { ...MENU_CLOSED, via: state.via } : state
+      return state.open || state.active !== 0 ? { ...MENU_CLOSED, via: state.via, step: state.step } : state
     // Leaving only counts for a menu the pointer opened; a keyboard-opened menu stays until Escape, a click or a scroll.
     case 'away':
       return state.open && state.via === 'pointer' && !state.away ? { ...state, away: true } : state
     case 'back':
       return state.away ? { ...state, away: false } : state
     case 'away-elapsed':
-      return state.open && state.away ? { ...MENU_CLOSED, via: state.via } : state
+      return state.open && state.away ? { ...MENU_CLOSED, via: state.via, step: state.step } : state
     case 'move':
-      return { ...state, active: (state.active + e.dir + PART_COUNT) % PART_COUNT }
+      return { ...state, active: (state.active + e.dir + PART_COUNT) % PART_COUNT, step: 'keyboard' }
+    // Focus moved by Tab is a keyboard step; a pointer entering a row is a pointer step. A row that is already active stays put.
     case 'hover':
-      return e.index >= 0 && e.index < PART_COUNT && e.index !== state.active ? { ...state, active: e.index } : state
+      return e.index >= 0 && e.index < PART_COUNT && e.index !== state.active ? { ...state, active: e.index, step: e.via } : state
   }
 }
 

@@ -11,8 +11,11 @@ const box = (r: DOMRect): Box => ({ left: r.left, top: r.top, right: r.right, bo
  * the stage's previews sit in children marked data-on when active. The panes blur once and stay at opacity 1; on a
  * switch only their clip-path moves to the active preview's glass boxes, so the backdrop never re-composites.
  */
-export function GlassLayer({ active }: { active: number }) {
+export function GlassLayer({ active, animate = true }: { active: number; /** False moves the panes at once (a keyboard step). */ animate?: boolean }) {
   const layer = useRef<HTMLDivElement>(null)
+  // Read inside the effect that runs on `active`, so a change of `animate` alone never re-places the panes.
+  const animated = useRef(animate)
+  animated.current = animate
   const first = useRef(true)
   const shown = useRef<Box[]>([])
 
@@ -51,7 +54,7 @@ export function GlassLayer({ active }: { active: number }) {
       place(false)
       // Webfonts change the previews' heights once they load.
       void document.fonts?.ready.then(() => { if (live) place(false) })
-    } else place(true)
+    } else place(animated.current)
     first.current = false
     // A new width can rescale the previews (the menu fits them to its column), so re-measure without animating.
     let width = stage.clientWidth
