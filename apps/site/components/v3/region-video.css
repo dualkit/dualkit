@@ -1,0 +1,17 @@
+.v3-rv { margin-top: 200px; }
+.v3-rv { display: flex; flex-direction: column; }
+.v3-rv-words { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; padding: 40px var(--v3-gutter) 0; order: 2; }
+.v3-rv-lede { max-width: 420px; }
+.v3-rv-frame { position: relative; order: 1; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; background: #1a1816; }
+.v3-rv-poster, .v3-rv-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.v3-rv-video { opacity: 0; transition: opacity 300ms var(--ease-ui); }
+.v3-rv-video[data-playing] { opacity: 1; }
+.v3-rv-chip { position: absolute; left: 16px; bottom: 16px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; }
+@media (prefers-reduced-motion: reduce) { .v3-rv-video { display: none; } }
+
+@media (min-width: 900px) {
+  .v3-rv { display: grid; grid-template-columns: minmax(0, 1fr) 640px; max-width: 1440px; height: 900px; margin-inline: auto; }
+  .v3-rv-words { order: 1; justify-content: center; gap: 20px; padding: 0 40px 0 var(--v3-gutter); }
+  .v3-rv-frame { order: 2; width: 640px; height: 900px; aspect-ratio: auto; }
+  .v3-rv-chip { left: 40px; bottom: 48px; }
+}
