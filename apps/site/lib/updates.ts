@@ -6,6 +6,35 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'check-v0-1-0-beta',
+    date: '2026-10-19',
+    version: 'Check v0.1.0-beta',
+    tags: ['Check', 'Rules'],
+    title: 'Dualkit check: see what breaks in Arabic',
+    body: [
+      'Point one command at any page, local or live. It opens the page in Chromium, scores it out of 100 and writes a report you can share, with every bug marked on a screenshot.',
+      'It runs 20 rules in five families: bidi, layout, icons, type and content. Each finding gets an evidence card with a zoomed crop of the bug and the fix, and a GitHub Action runs the same check on every pull request.',
+    ],
+    shipped: [
+      { name: 'dualkit 0.1.0-beta.0', line: 'npx dualkit check <url> writes the report, prints a summary and can fail CI below a score' },
+      { name: '@dualkit/rules 0.1.0-beta.0', line: 'The 20 rules on their own, each documented in RULES.md' },
+      { name: 'dualkit/dualkit/action@main', line: 'Scores every pull request, writes the job summary and uploads the report' },
+    ],
+  },
+  {
+    slug: 'claude-plugin-directory',
+    date: '2026-10-18',
+    version: 'Plugin 0.1.0',
+    tags: ['Skills'],
+    title: 'Listed in the Claude plugin directory',
+    body: [
+      'The four Dualkit skills now install straight from the Claude plugin directory, inside Claude Code, Cowork and the Claude apps on web, desktop and mobile.',
+    ],
+    shipped: [
+      { name: 'Claude plugin directory', line: 'The four skills, one install away in Claude Code, Cowork and the Claude apps' },
+    ],
+  },
+  {
     slug: 'v0-1-0-beta-1',
     date: '2026-10-16',
     version: 'v0.1.0-beta.1',
@@ -41,13 +70,13 @@ export const RELEASES: readonly Release[] = [
   },
 ]
 
-export type RoadmapState = 'In progress' | 'Coming'
+export type RoadmapState = 'Released' | 'In progress' | 'Coming'
 export type RoadmapItem = { title: string; line: string; state: RoadmapState; steps: readonly (readonly [string, boolean])[] }
 
 // Progress is counted from real milestones, never typed in. Tick a step only when it is true on main.
 export const UP_NEXT: readonly RoadmapItem[] = [
-  { title: 'Dualkit check', line: 'Point it at any screen. See what breaks in Arabic.', state: 'In progress',
-    steps: [['Design', true], ['First 20 rules', true], ['CLI and report', true], ['GitHub Action', true], ['Released', false]] },
+  { title: 'Dualkit check', line: 'Point it at any screen. See what breaks in Arabic.', state: 'Released',
+    steps: [['Design', true], ['First 20 rules', true], ['CLI and report', true], ['GitHub Action', true], ['Released', true]] },
   { title: 'The Bench', line: 'How well does AI build Arabic? Find out every month.', state: 'Coming',
     steps: [['Design', true], ['Prompts', false], ['Monthly runner', false], ['Leaderboard page', false], ['First run', false]] },
   { title: 'Dualkit for Figma', line: 'Everything Dualkit knows, inside Figma.', state: 'Coming',

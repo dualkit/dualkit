@@ -43,4 +43,10 @@ describe('roadmap', () => {
     for (const item of UP_NEXT) expect(item.steps.length, item.title).toBeGreaterThan(0)
     expect(UP_NEXT.filter((i) => i.state === 'In progress').every((i) => progress(i).done > 0)).toBe(true)
   })
+
+  it('only calls an item released when every step is done', async () => {
+    const { UP_NEXT, progress } = await import('../lib/updates')
+    for (const item of UP_NEXT.filter((i) => i.state === 'Released')) expect(progress(item).percent, item.title).toBe(100)
+    for (const item of UP_NEXT.filter((i) => i.state !== 'Released')) expect(progress(item).percent, item.title).toBeLessThan(100)
+  })
 })

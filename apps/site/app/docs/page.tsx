@@ -2,10 +2,10 @@ import type { Metadata } from 'next'
 import { CopyCommand } from '@/components/CopyCommand'
 import { Footer } from '@/components/Footer'
 import { Nav } from '@/components/Nav'
-import { FORMAT_COMMAND, SKILLS_COMMAND } from '@/lib/copy'
+import { ACTION_URL, CHECK_COMMAND, FORMAT_COMMAND, SKILLS_COMMAND } from '@/lib/copy'
 import { liveData } from '@/lib/live'
 
-export const metadata: Metadata = { title: 'Docs', description: 'Install the Dualkit skills and @dualkit/format.' }
+export const metadata: Metadata = { title: 'Docs', description: 'Install the Dualkit skills, @dualkit/format, the Starter components and dualkit check.' }
 export const revalidate = 300
 
 const API: [string, string, string][] = [
@@ -27,7 +27,7 @@ export default async function Docs() {
         <header className="page-head"><h1 className="rise">Docs</h1><p className="lede">The skills teach your agent, the library does the formatting, and the components are yours to change.</p></header>
         <section className="doc-block" id="skills">
           <h2 className="h2">Skills</h2>
-          <p className="soft">In Claude Code, add the marketplace, then install the plugin. In Cursor, copy <code>cursor/rules</code> into your project&rsquo;s <code>.cursor/rules</code>.</p>
+          <p className="soft">The skills are listed in the Claude plugin directory, so you can install them from there in Claude Code, Cowork and the Claude apps. Or, in Claude Code, add the marketplace and install the plugin. In Cursor, copy <code>cursor/rules</code> into your project&rsquo;s <code>.cursor/rules</code>.</p>
           <CopyCommand command={SKILLS_COMMAND} />
           <CopyCommand command="/plugin install dualkit@dualkit" />
           <p className="small soft">Any other agent that reads skills, such as Codex or Cursor:</p>
@@ -53,8 +53,11 @@ export default async function Docs() {
         <section className="doc-block" id="check">
           <h2 className="h2">Check a screen</h2>
           <p className="soft">Point it at any page, local or live. It runs twenty Arabic and right-to-left rules and writes a report you can share.</p>
-          <CopyCommand command="npx dualkit check https://example.com/ar" />
-          <p className="small soft">Run <code>npx playwright@1.55.0 install chromium</code> once first. In CI, use <code>dualkit/dualkit/action@main</code>. Every rule is in <a href="https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md">RULES.md</a>.</p>
+          <p className="small soft">Install the browser once:</p>
+          <CopyCommand command="npx playwright@1.55.0 install chromium" />
+          <p className="small soft">Then check a page:</p>
+          <CopyCommand command={CHECK_COMMAND} />
+          <p className="small soft">In CI, add <code>uses: dualkit/dualkit/action@main</code> to a workflow. It scores every pull request and uploads the report; the inputs are in the <a href={ACTION_URL}>Action README</a>. Every rule is in <a href="https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md">RULES.md</a>.</p>
         </section>
         <section className="doc-block">
           <h2 className="h2">Source</h2>
