@@ -12,6 +12,8 @@ Make every format decision explicit. Intl defaults change by locale and by brows
 
 `@dualkit/format` implements every rule below, with tests.
 
+Coverage today: `@dualkit/format` parses UAE and Saudi phones and Emirates ID, and checks IBANs for AE, SA, BH, KW and QA. Other Gulf phones, national IDs and Omani IBANs are coming.
+
 ```ts
 import { formatMoney, formatHijri, parseUaePhone, parseSaudiPhone, parseEmiratesId, parseIban, toWesternDigits } from '@dualkit/format'
 ```
@@ -33,7 +35,8 @@ formatMoney(1.5, { currency: 'KWD', locale: 'ar' })                       // 1.5
 
 - AED, SAR and QAR take two decimals (fils, halalas, dirhams). KWD, BHD and OMR take **three** (fils and baisa). Never hardcode two decimals for every Gulf currency.
 - Round on purpose, never by accident.
-- Use the code (AED, SAR) or the Arabic abbreviation (د.إ, ر.س). Both currencies got new signs in 2025. The riyal sign is U+20C1 (Unicode 17), and few fonts have it yet. Check whether the dirham sign is encoded before you rely on it. Only show a sign with a font you ship that draws it. The other four use the code or the abbreviation: QAR ر.ق, KWD د.ك, BHD د.ب, OMR ر.ع.
+- In body text, use the code or the Arabic abbreviation: AED / د.إ, SAR / ر.س, QAR / ر.ق, KWD / د.ك, BHD / د.ب, OMR / ر.ع.
+- Saudi Arabia and the UAE got new currency signs in 2025. The Saudi riyal sign is U+20C1 (Unicode 17). The UAE dirham sign is U+20C3 and the Omani rial sign is U+20C4 (Unicode 18). Most fonts show an empty box for them today. Show a sign only with a font you ship that draws it.
 - Keep amounts as integers in minor units in storage and APIs, never floats.
 
 ## Dates
