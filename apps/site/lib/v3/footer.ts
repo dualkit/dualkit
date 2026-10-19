@@ -1,4 +1,5 @@
 import { REPO_URL } from '../copy'
+import { compactCount } from '../counters'
 import { V3 } from './copy'
 
 export const NPM_ORG_URL = 'https://www.npmjs.com/org/dualkit'
@@ -35,4 +36,9 @@ export function footerColumns(): FooterColumn[] {
       return { label, href: FOOTER_LINKS[label] ?? null }
     }),
   }))
+}
+
+/** The npm downloads line under the status: shown only once npm reports a real count above zero. */
+export function downloadsLine(downloads: number | null): string | null {
+  return downloads !== null && downloads > 0 ? `${compactCount(downloads)} npm downloads last week` : null
 }

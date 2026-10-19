@@ -64,7 +64,7 @@ export default async function Docs() {
           <p className="soft">Everything is MIT licensed and lives at <a href="https://github.com/dualkit/dualkit">github.com/dualkit/dualkit</a>. Open an issue if any Arabic reads wrong.</p>
         </section>
       </main>
-      <Footer status={live.status} />
+      <Footer status={live.status} downloads={live.downloads} />
     </>
   )
 }

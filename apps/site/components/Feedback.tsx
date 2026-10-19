@@ -1,4 +1,5 @@
 'use client'
+import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { COPY } from '../lib/copy'
 import { CheckIcon, FeedbackIcon } from './icons'
@@ -23,7 +24,10 @@ const AVOID = '.v3-hero-frame, .v3-foot-art'
 /** True while an AVOID element reaches the bottom tenth of the viewport, where the trigger sits. CSS acts on it only on phones. */
 function useTucked(): boolean {
   const [tucked, setTucked] = useState(false)
+  // Feedback lives in the root layout, so the covers change on every client navigation: observe the new page's nodes.
+  const pathname = usePathname()
   useEffect(() => {
+    setTucked(false)
     const targets = document.querySelectorAll(AVOID)
     if (!targets.length || typeof IntersectionObserver === 'undefined') return
     const hits = new Set<Element>()
@@ -32,8 +36,8 @@ function useTucked(): boolean {
       setTucked(hits.size > 0)
     }, { rootMargin: '-90% 0px 0px 0px' })
     targets.forEach((t) => io.observe(t))
-    return () => io.disconnect()
-  }, [])
+    return () => { io.disconnect(); hits.clear() }
+  }, [pathname])
   return tucked
 }
 

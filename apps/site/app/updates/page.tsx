@@ -58,7 +58,7 @@ export default async function Updates() {
           </div>
         </section>
       </main>
-      <Footer status={live.status} />
+      <Footer status={live.status} downloads={live.downloads} />
       <Reveal />
     </>
   )

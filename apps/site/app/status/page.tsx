@@ -29,7 +29,7 @@ export default async function Status() {
           ))}
         </div>
       </main>
-      <Footer status={live.status} />
+      <Footer status={live.status} downloads={live.downloads} />
     </>
   )
 }

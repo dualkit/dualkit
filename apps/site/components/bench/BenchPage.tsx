@@ -95,7 +95,7 @@ export async function BenchPage({ data, latest, months, planned }: { data: Bench
         )}
         <How />
       </main>
-      <Footer status={live.status} />
+      <Footer status={live.status} downloads={live.downloads} />
       <Reveal />
     </>
   )

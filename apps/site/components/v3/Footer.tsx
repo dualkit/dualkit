@@ -4,7 +4,7 @@ import { Mascot } from '@/components/Mascot'
 import { REPO_URL } from '@/lib/copy'
 import { OVERALL_LABEL, type Overall } from '@/lib/status'
 import { V3 } from '@/lib/v3/copy'
-import { CLAUDE_URL, MAKER_URL, NPM_ORG_URL, footerColumns } from '@/lib/v3/footer'
+import { CLAUDE_URL, MAKER_URL, NPM_ORG_URL, downloadsLine, footerColumns } from '@/lib/v3/footer'
 import { Seals } from './Seals'
 import { markPath } from '@/lib/v3/seal-glyphs'
 import './footer.css'
@@ -26,8 +26,9 @@ function FooterLink({ href, children }: { href: string; children: string }) {
     : <Link href={href}>{children}</Link>
 }
 
-/** The grand footer: brand, link columns, seals, legal row, then the painting with the wordmark. Takes the status as a prop so any page can use it. */
-export function Footer({ status }: { status: Overall }) {
+/** The grand footer: brand, link columns, seals, legal row, then the painting with the wordmark. Takes the status and npm downloads as props so any page can use it. */
+export function Footer({ status, downloads }: { status: Overall; downloads: number | null }) {
+  const npm = downloadsLine(downloads)
   return (
     <footer className="v3-foot">
       <div className="v3-wrap">
@@ -44,6 +45,7 @@ export function Footer({ status }: { status: Overall }) {
               })}
             </div>
             <Link className={`v3-foot-status v3-foot-status--${status}`} href="/status"><span className="v3-foot-dot" aria-hidden="true" />{OVERALL_LABEL[status]}</Link>
+            {npm ? <span className="v3-foot-downloads">{npm}</span> : null}
           </div>
           <nav className="v3-foot-cols" aria-label="Footer">
             {footerColumns().map((col) => (

@@ -33,7 +33,7 @@ export default async function Home() {
         <Numbers />
         <Closing />
       </main>
-      <Footer status={live.status} />
+      <Footer status={live.status} downloads={live.downloads} />
     </>
   )
 }
