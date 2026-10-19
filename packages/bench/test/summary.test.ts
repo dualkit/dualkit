@@ -14,7 +14,7 @@ function seed(store: ReturnType<typeof makeStore>, id: string, passed: Record<Co
   for (const s of screens) for (const condition of ['alone', 'dualkit'] as const) for (const run of [1, 2, 3]) {
     if (skip.includes(`${s.id}/${condition}`)) continue
     const k: BuildKey = { month: '2026-11', model: id, screen: s.id, condition, run }
-    store.write({ ...k, at: 'now', reply: 'r', usage: null, ms: 1, finish: 'stop', reasoningTokens: 0, servedModel: id, ok: true, rulesPassed: passed[condition], score: passed[condition] * 4, missing: [], findings: [], unreadableStylesheets: 0 }, '<html></html>')
+    store.write({ ...k, at: 'now', reply: 'r', usage: null, ms: 1, finish: 'stop', reasoningTokens: 0, servedModel: id, ok: true, rulesPassed: passed[condition], score: passed[condition] * 4, missing: [], findings: [], unreadableStylesheets: 0, pageHeight: 900 }, '<html></html>')
   }
 }
 

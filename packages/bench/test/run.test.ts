@@ -1,7 +1,8 @@
-import { mkdirSync, mkdtempSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import type { Browser } from 'playwright'
+import sharp from 'sharp'
 import { describe, expect, it } from 'vitest'
 import { BenchError, loadScreens, type ModelEntry } from '../src/config'
 import { fakeGenerate } from '../src/fake'
@@ -11,7 +12,9 @@ import { makeStore } from '../src/store'
 
 const model = (id: string): ModelEntry => ({ id, provider: 'openrouter', model: id, label: id, since: '2026-11' })
 const screens = loadScreens().slice(0, 1)
-const fastScore = async () => ({ ok: true as const, rulesPassed: 15, score: 40, missing: [], findings: [], screenshot: 'x', pageHeight: 800, unreadableStylesheets: 1 })
+// A real phone-sized PNG at 2x, as the audit returns it, so the runner's WebP step runs for real.
+const PNG = (await sharp({ create: { width: 780, height: 1600, channels: 3, background: '#ffffff' } }).png().toBuffer()).toString('base64')
+const fastScore = async () => ({ ok: true as const, rulesPassed: 15, score: 40, missing: [], findings: [], screenshot: PNG, pageHeight: 800, unreadableStylesheets: 1 })
 
 describe('runBench', () => {
   it('builds every model, screen, condition and run, then skips them on a rerun', async () => {
@@ -147,6 +150,14 @@ describe('build records', () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
     await runBench({ month: '2026-11', models: [model('fake-good')], screens, generate: fakeGenerate, store, score: fastScore })
     expect(store.list('2026-11')[0]).toMatchObject({ ok: true, finish: 'stop', reasoningTokens: 0, servedModel: 'fake-good', unreadableStylesheets: 1 })
+  })
+  it('write one 1x WebP per scored build, from the scoring screenshot, and keep its page height', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    await runBench({ month: '2026-11', models: [model('fake-good')], screens, generate: fakeGenerate, store, score: fastScore })
+    const rec = store.list('2026-11')[0]!
+    expect(rec).toMatchObject({ ok: true, pageHeight: 800 })
+    const meta = await sharp(readFileSync(store.paths(rec).webp)).metadata()
+    expect(meta).toMatchObject({ format: 'webp', width: 390, height: 800 })
   })
   it('keep a reply cut off at the token cap as a failed build with its metadata', async () => {
     const capped: Generate = async () => ({ ok: false, error: 'Hit the token cap', ms: 9, reply: { text: '<html><body>half', usage: { input: 1, output: 12000 }, finish: 'length', reasoningTokens: 4000, servedModel: 'm-2026' } })

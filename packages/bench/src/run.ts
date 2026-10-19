@@ -1,4 +1,5 @@
 import { chromium, type Browser } from 'playwright'
+import sharp from 'sharp'
 import { RUN, type ModelEntry, type Screen } from './config'
 import { extractHtml } from './extract'
 import type { Generate } from './providers'
@@ -106,9 +107,9 @@ async function runModel({ month, model, screens, generate, store, scorer, log, s
       log(`${model.id}: past the deadline, leaving the rest for the next run`)
       return { ...counts, stoppedEarly: true }
     }
-    const rec = await build(key, model, screen, generate, scorer, skillsDir)
+    const rec = await build(key, model, screen, generate, scorer, skillsDir, log)
     streak = nextStreak(streak, rec.record.ok ? null : rec.record.error)
-    store.write(rec.record, rec.html)
+    store.write(rec.record, rec.html, rec.shot)
     counts = rec.record.ok ? { ...counts, built: counts.built + 1 } : { ...counts, failed: counts.failed + 1 }
     log(`${key.model} ${key.screen} ${key.condition} ${key.run}: ${rec.record.ok ? `${rec.record.rulesPassed} rules` : rec.record.error}`)
   }
@@ -116,22 +117,35 @@ async function runModel({ month, model, screens, generate, store, scorer, log, s
   return counts
 }
 
-async function build(key: BuildKey, model: ModelEntry, screen: Screen, generate: Generate, scorer: Scorer, skillsDir: string): Promise<{ record: BuildRecord; html: string | null }> {
+type Built = { record: BuildRecord; html: string | null; shot: Buffer | null }
+
+/** The page's screenshot from the scoring render, at 1x: the summary copies this file, so the image is the build that was scored. */
+const toWebp = (png: string) => sharp(Buffer.from(png, 'base64')).resize({ width: RUN.width }).webp({ quality: 90 }).toBuffer()
+
+async function build(key: BuildKey, model: ModelEntry, screen: Screen, generate: Generate, scorer: Scorer, skillsDir: string, log: (line: string) => void): Promise<Built> {
   const base = { ...key, at: new Date().toISOString() }
   const gen = await generate(model, { system: systemPrompt(key.condition, skillsDir), prompt: screen.prompt })
   if (!gen.ok) {
     const r = gen.reply
     const reply = r ? { reply: r.text, usage: r.usage, finish: r.finish, reasoningTokens: r.reasoningTokens, servedModel: r.servedModel } : NO_REPLY
-    return { record: { ...base, ...reply, ms: gen.ms, ok: false, error: gen.error }, html: null }
+    return { record: { ...base, ...reply, ms: gen.ms, ok: false, error: gen.error }, html: null, shot: null }
   }
   const meta = { ...base, reply: gen.text, usage: gen.usage, ms: gen.ms, finish: gen.finish, reasoningTokens: gen.reasoningTokens, servedModel: gen.servedModel }
   const html = extractHtml(gen.text)
-  if (html === null) return { record: { ...meta, ok: false, error: 'No HTML in the reply' }, html: null }
+  if (html === null) return { record: { ...meta, ok: false, error: 'No HTML in the reply' }, html: null, shot: null }
   try {
     const s = await scorer(html, screen)
-    if (!s.ok) return { record: { ...meta, ok: false, error: `Render failed: ${s.error}` }, html }
-    return { record: { ...meta, ok: true, rulesPassed: s.rulesPassed, score: s.score, missing: s.missing, findings: s.findings, unreadableStylesheets: s.unreadableStylesheets }, html }
+    if (!s.ok) return { record: { ...meta, ok: false, error: `Render failed: ${s.error}` }, html, shot: null }
+    const shot = await toWebp(s.screenshot).catch((e: unknown) => {
+      log(`${key.model} ${key.screen} ${key.condition} ${key.run}: screenshot not saved: ${e instanceof Error ? e.message : String(e)}`)
+      return null
+    })
+    const record: BuildRecord = {
+      ...meta, ok: true, rulesPassed: s.rulesPassed, score: s.score, missing: s.missing, findings: s.findings,
+      unreadableStylesheets: s.unreadableStylesheets, pageHeight: s.pageHeight,
+    }
+    return { record, html, shot }
   } catch (e) {
-    return { record: { ...meta, ok: false, error: `Render failed: ${e instanceof Error ? e.message : String(e)}` }, html }
+    return { record: { ...meta, ok: false, error: `Render failed: ${e instanceof Error ? e.message : String(e)}` }, html, shot: null }
   }
 }

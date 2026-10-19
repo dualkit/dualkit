@@ -8,7 +8,7 @@ export type Condition = 'alone' | 'dualkit'
 export type BuildKey = { month: string; model: string; screen: string; condition: Condition; run: number }
 /** finish, reasoningTokens and servedModel come from the provider, and are null when a failure left no reply. */
 export type BuildRecord = BuildKey & { at: string; reply: string | null; usage: Usage | null; ms: number; finish: string | null; reasoningTokens: number | null; servedModel: string | null }
-  & ({ ok: true; rulesPassed: number; score: number; missing: string[]; findings: SlimFinding[]; unreadableStylesheets: number } | { ok: false; error: string })
+  & ({ ok: true; rulesPassed: number; score: number; missing: string[]; findings: SlimFinding[]; unreadableStylesheets: number; pageHeight: number } | { ok: false; error: string })
 
 export const RUNS_ROOT = join(ROOT, '..', '..', 'bench', 'runs')
 const FILE = /^(alone|dualkit)-(\d+)\.json$/
@@ -25,18 +25,19 @@ const dirs = (path: string) => (existsSync(path) ? readdirSync(path, { withFileT
 export function makeStore(root = RUNS_ROOT) {
   const paths = (k: BuildKey) => {
     const base = join(root, k.month, k.model, k.screen, `${k.condition}-${k.run}`)
-    return { json: `${base}.json`, html: `${base}.html` }
+    return { json: `${base}.json`, html: `${base}.html`, webp: `${base}.webp` }
   }
   const read = (k: BuildKey) => readRecord(paths(k).json)
   return {
     paths,
     read,
     isDone: (k: BuildKey) => read(k)?.ok === true,
-    write(rec: BuildRecord, html: string | null) {
+    write(rec: BuildRecord, html: string | null, shot: Buffer | null = null) {
       const p = paths(rec)
       mkdirSync(dirname(p.json), { recursive: true })
-      // HTML first, JSON last: the JSON marks the build done, so a crash in between leaves it to be redone.
+      // HTML and screenshot first, JSON last: the JSON marks the build done, so a crash in between leaves it to be redone.
       if (html !== null) writeFileSync(p.html, html)
+      if (shot !== null) writeFileSync(p.webp, shot)
       writeFileSync(p.json, `${JSON.stringify(rec, null, 2)}\n`)
     },
     list(month: string): BuildRecord[] {
