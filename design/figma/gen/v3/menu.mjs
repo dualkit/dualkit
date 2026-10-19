@@ -23,7 +23,7 @@ export const MENU = {
   keys: [['↑ ↓', 'move'], ['Enter', 'open'], ['Esc', 'close']],
 }
 
-function partRow([no, name, line, tag], k) {
+export function partRow([no, name, line, tag], k) {
   const on = k === 0
   return row(`${name} entry`, [
     row(`${name} start`, [text(no, 'V3Small', { color: 'color.text.faint', name: 'Number' }),

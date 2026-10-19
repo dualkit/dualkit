@@ -35,8 +35,8 @@ export function statement() {
 }
 
 /** The Gulf as a dot-matrix map (Natural Earth 1:50m), one ink square per city and the format Dualkit handles there. */
-const MAP = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../../assets/gulf-map.json'), 'utf8'))
-const FORMATS = { 'Kuwait City': 'KWD, 3 decimals', Riyadh: 'SAR, Umm al-Qura', Manama: 'BHD, 3 decimals', Doha: 'QAR', 'Abu Dhabi': 'AED', Dubai: 'AED, +971', Muscat: 'OMR, 3 decimals' }
+export const MAP = JSON.parse(readFileSync(resolve(import.meta.dirname, '../../../assets/gulf-map.json'), 'utf8'))
+export const FORMATS = { 'Kuwait City': 'KWD, 3 decimals', Riyadh: 'SAR, Umm al-Qura', Manama: 'BHD, 3 decimals', Doha: 'QAR', 'Abu Dhabi': 'AED', Dubai: 'AED, +971', Muscat: 'OMR, 3 decimals' }
 export function region() {
   const r = S.region
   const dots = { shape: 'Land', kind: 'svg', size: [MAP.w, MAP.h], abs: { start: 0, top: 0 }, svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${MAP.w} ${MAP.h}"><path fill="#09090b" fill-opacity=".3" d="${MAP.path}"/><path fill="#09090b" fill-opacity=".85" d="${MAP.lit}"/></svg>` }
@@ -87,21 +87,26 @@ const SEAL_GLYPHS = {
   MIT: glyph('OSI', SEAL_ICONS.osi),
   Native: { text: 'ع', style: 'V2ArBody', name: 'Ain glyph' },
 }
-const seal = ([big, small]) => col(`${big} seal`, [
+export const seal = ([big, small]) => col(`${big} seal`, [
   col(`${big} ring`, [SEAL_GLYPHS[big]], { w: 56, h: 56, justify: 'center', align: 'center', radius: 28, stroke: { color: 'color.v3.line', width: 'size.stroke' } }),
   col(`${big} words`, [text(big, 'V3Small', { name: 'Standard' }), text(small, 'V3Small', { color: 'color.text.faint', name: 'Scope' })], { align: 'center' }),
 ], { w: 96, gap: 'space.snug', align: 'center' })
 
-export function footerGrand() {
-  const f = S.footer
+/** The three square social buttons. */
+export function socials() {
   const social = (name, svg) => row(`${name} social`, [svg], { w: 40, h: 40, justify: 'center', align: 'center', stroke: { color: 'color.v3.line', width: 'size.stroke' } })
   const gh = { shape: 'GitHub glyph', kind: 'svg', size: [16, 16], tint: 'color.text.primary', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#000" d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.1 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5Z"/></svg>` }
   const npm = { shape: 'npm glyph', kind: 'svg', size: [16, 16], tint: 'color.text.primary', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#000" d="${toolPath('npm')}"/></svg>` }
   const claude = { shape: 'Claude glyph', kind: 'svg', size: [16, 16], tint: 'color.text.primary', svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#000" d="${toolPath('Claude Code')}"/></svg>` }
+  return row('Socials', [social('GitHub', gh), social('npm', npm), social('Claude', claude)], { gap: 'space.tight' })
+}
+
+export function footerGrand() {
+  const f = S.footer
   const brand = col('Footer brand', [
     row('Footer brand row', [mark('Footer mark'), text('Dualkit', 'V3Step')], { gap: 'space.snug', align: 'center' }),
     text(f.line, 'V3Body', { color: 'color.text.soft', w: 320 }),
-    row('Socials', [social('GitHub', gh), social('npm', npm), social('Claude', claude)], { gap: 'space.tight' }),
+    socials(),
   ], { w: 'fill', gap: 'space.group' })
   const column = ([title, links]) => col(`${title} column`, [text(title, 'V3Label', { name: 'Column title' }), ...links.map((l) => text(l, 'V3Body', { color: 'color.text.soft', name: l }))], { w: 150, gap: 'space.snug' })
   return col('Footer', [

@@ -45,7 +45,8 @@ function node(spinning, loaded) {
   return col('Node', [frameBox, tag], { gap: 'space.item', align: 'center' })
 }
 
-function panel(built) {
+/** The built Arabic panel. `w` and `note` let the phone frame draw it narrower and without the note. */
+export function panel(built, { w = 380, note = true } = {}) {
   const ar = (t, extra = {}) => text(t, 'V2ArBody', { color: 'color.v3.glassText', align: 'end', ...extra })
   const vis = (k) => (k <= built ? {} : { opacity: 0 })
   const line = (k, key, value, extra = []) => col(`${key} line`, [hline(`${key} rule`, 'color.v3.glassLine'), row(`${key} row`, [
@@ -59,9 +60,9 @@ function panel(built) {
     row('Built head', [row('Fixed', [square('Fixed square', 6, 'color.signal.dot'), gsoft('Fixed')], { gap: 'space.tight', align: 'center' }), text('ملخص الدفع', 'V2ArTitle', { color: 'color.v3.glassText' })],
       { w: 'fill', justify: 'between', align: 'center', pad: { bottom: 'space.snug' }, ...vis(1) }),
     line(2, 'المبلغ', '1,234.50 د.إ'), line(3, 'التاريخ', '1 رمضان 1447 هـ'), line(4, 'الجوال', '+971 50 123 4567', [bdi]), check,
-    row('Note', [gsoft('Isolated the phone number so it reads left to right.', 'V3Small', { w: 'fill' })], { w: 'fill', pad: 'space.snug', stroke: GLASS_LINE, ...vis(6) }),
+    ...(note ? [row('Note', [gsoft('Isolated the phone number so it reads left to right.', 'V3Small', { w: 'fill' })], { w: 'fill', pad: 'space.snug', stroke: GLASS_LINE, ...vis(6) })] : []),
     row('Pay', [text('إتمام الدفع', 'V2ArBody', { color: 'color.text.primary' })], { w: 'fill', justify: 'center', pad: { block: 'space.snug' }, fill: 'color.v3.glassButton', ...vis(7) }),
-  ], { w: 380, gap: 'space.snug', pad: 'space.item', ...(built ? {} : { opacity: 0 }) })
+  ], { w, gap: 'space.snug', pad: 'space.item', ...(built ? {} : { opacity: 0 }) })
 }
 
 /** stage: 1 pulses on the way in, 2 panel building, 3 settled. */

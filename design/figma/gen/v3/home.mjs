@@ -78,7 +78,7 @@ export function hero(ground) {
 }
 
 // How it works: three cells in one ruled frame, each a small painting with one piece of glass UI.
-function connectMedia() {
+export function connectMedia() {
   const chip = (name) => glass(`${name} chip`, [gtext(name)], { pad: { block: 'space.tight', inline: 'space.snug' } })
   const wires = { shape: 'Wires', kind: 'svg', size: [56, 104], tint: 'color.v3.glassText',
     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 104" fill="none"><path d="M0 12H20V92H0M0 52H56" stroke="#fff" stroke-width="1"/><rect x="52" y="50" width="4" height="4" fill="#fff"/></svg>' }
@@ -87,7 +87,7 @@ function connectMedia() {
   return row('Connect media', [col('Chips', ['Claude Code', 'Cursor', 'shadcn'].map(chip), { gap: 'space.item' }), wires, node], { align: 'center' })
 }
 
-function rankMedia() {
+export function rankMedia() {
   const r = (k, name, share, on) => row(`Rank ${k}`, [
     row(`Rank ${k} start`, [gsoft(String(k), 'V3Small'), text(name, 'V3Mono', { color: 'color.v3.glassText' })], { gap: 'space.snug', align: 'center' }),
     meter(`Rank ${k} meter`, share),
@@ -98,7 +98,7 @@ function rankMedia() {
   ], { w: 268, gap: 'space.hair', pad: 'space.snug' })
 }
 
-function checkMedia() {
+export function checkMedia() {
   const bar = (k, w) => ({ shape: `Skeleton ${k}`, kind: 'rect', size: [w, 4], fill: 'color.v3.glassLine' })
   return glass('Check panel', [
     row('Check head', [row('Check title', [row('Check square', [icon('check', 'color.text.primary', 12)], { w: 18, h: 18, justify: 'center', align: 'center', fill: 'color.v3.glassButton' }), gtext('dualkit check')], { gap: 'space.snug', align: 'center' }),
@@ -124,27 +124,37 @@ function how() {
 }
 
 // The kit: an accordion on the left, the open part's product on the right, as in the reference's use cases.
-function kit() {
-  const p = V3.kit
-  const o = p.open
-  const point = (t) => row(`${t} point`, [icon('check', 'color.text.primary', 14), text(t, 'V3Body', { name: 'Point' })], { gap: 'space.snug', align: 'center' })
+/** The open Skills item, a closed item, and the Skills product panel; shared with the phone frame. */
+export function kitOpen(pad = 'space.card', wrap = false) {
+  const o = V3.kit.open
+  const point = (t) => row(`${t} point`, [wrap ? row('Point check', [icon('check', 'color.text.primary', 14)], { pad: { top: 'space.hair' } }) : icon('check', 'color.text.primary', 14), text(t, 'V3Body', { name: 'Point', ...(wrap ? { w: 'fill' } : {}) })], { gap: 'space.snug', ...(wrap ? { w: 'fill', align: 'start' } : { align: 'center' }) })
   const open = col('Skills item', [
     row('Skills item head', [row('Skills item name', [text('01', 'V3Small', { color: 'color.text.faint' }), text(o.name, 'V3Step')], { gap: 'space.item', align: 'center' }), square('Open square', 8)], { w: 'fill', justify: 'between', align: 'center' }),
-    col('Skills detail', [text(o.title, 'V3Step', { name: 'Title' }), text(o.body, 'V3Body', { color: 'color.text.soft', w: 'fill', name: 'Body' }), col('Points', o.points.map(point), { gap: 'space.tight' })], { w: 'fill', gap: 'space.snug', pad: { start: 'space.card' } }),
-  ], { w: 'fill', gap: 'space.item', pad: 'space.card' })
-  const closed = (name, k) => row(`${name} item`, [row(`${name} item name`, [text(`0${k + 2}`, 'V3Small', { color: 'color.text.faint' }), text(name, 'V3Step')], { gap: 'space.item', align: 'center' }),
-    row('Closed square', [], { w: 8, h: 8, stroke: LINE })], { w: 'fill', justify: 'between', align: 'center', pad: { block: 'space.item', inline: 'space.card' } })
-  const list = col('Kit list', [open, ...p.rest.flatMap((n, k) => [hline(`Kit rule ${k + 1}`), closed(n, k)])], { w: 560 })
+    col('Skills detail', [text(o.title, 'V3Step', { name: 'Title' }), text(o.body, 'V3Body', { color: 'color.text.soft', w: 'fill', name: 'Body' }), col('Points', o.points.map(point), { gap: 'space.tight' })], { w: 'fill', gap: 'space.snug', pad: { start: pad } }),
+  ], { w: 'fill', gap: 'space.item', pad })
+  return open
+}
+
+export const kitClosed = (name, k, pad = 'space.card') => row(`${name} item`, [row(`${name} item name`, [text(`0${k + 2}`, 'V3Small', { color: 'color.text.faint' }), text(name, 'V3Step')], { gap: 'space.item', align: 'center' }),
+    row('Closed square', [], { w: 8, h: 8, stroke: LINE })], { w: 'fill', justify: 'between', align: 'center', pad: { block: 'space.item', inline: pad } })
+
+export function skillsPanel(w = 380) {
   const ar = (t, extra = {}) => text(t, 'V2ArBody', { color: 'color.v3.glassText', align: 'end', ...extra })
   const line = (k, v, tag) => col(`${k} line`, [hline(`${k} rule`, 'color.v3.glassLine'), row(`${k} row`, [
     row(`${k} value`, [...(tag ? [row('Bdi tag', [text('bdi', 'V3Small', { color: 'color.text.primary' })], { pad: { inline: 'space.tight' }, fill: 'color.v3.glassButton' })] : []), ar(v)], { gap: 'space.snug', align: 'center' }),
     ar(k, { color: 'color.v3.glassSoft' })], { w: 'fill', justify: 'between', align: 'center', pad: { block: 'space.snug' } })], { w: 'fill' })
-  const panel = glass('Skills panel', [
+  return glass('Skills panel', [
     row('Skills panel head', [row('Fixed', [square('Fixed square', 6, 'color.signal.dot'), gsoft('Fixed')], { gap: 'space.tight', align: 'center' }), gtext('ملخص الدفع', 'V2ArBody')], { w: 'fill', justify: 'between', align: 'center', pad: { bottom: 'space.snug' } }),
     line('المبلغ', '1,234.50 د.إ'), line('الجوال', '+971 50 123 4567', true), line('التاريخ', '1 رمضان 1447 هـ'),
     row('Note', [gsoft('Isolated the phone number so it reads left to right.', 'V3Small', { w: 'fill' })], { w: 'fill', pad: 'space.snug', stroke: GLASS_LINE }),
     row('View diff', [text('View the diff', 'V3Glass')], { w: 'fill', justify: 'center', pad: { block: 'space.snug' }, fill: 'color.v3.glassButton' }),
-  ], { w: 380, gap: 'space.snug', pad: 'space.item' })
+  ], { w, gap: 'space.snug', pad: 'space.item' })
+}
+
+function kit() {
+  const p = V3.kit
+  const list = col('Kit list', [kitOpen(), ...p.rest.flatMap((n, k) => [hline(`Kit rule ${k + 1}`), kitClosed(n, k)])], { w: 560 })
+  const panel = skillsPanel()
   return band('Kit', [
     header('Kit', p),
     frame('Kit frame', [list, vline('Kit split'), painting('Kit painting', [panel], { h: 'fill' })], { joins: [560] }),
@@ -169,11 +179,11 @@ function works() {
   ], { gap: 'space.v2.inner', pad: { top: SECTION } })
 }
 
-function slider(dir) {
+export function slider(dir, w = 340) {
   const rtl = dir === 'rtl'
   const knob = row('Knob', [icon(rtl ? 'back' : 'forward', 'color.text.primary', 16)], { w: 48, h: 48, justify: 'center', align: 'center', fill: 'color.v3.glassButton' })
   const words = row('Slider words', [rtl ? text(V3.mirror.ar, 'V2ArBody', { color: 'color.v3.glassText' }) : gtext(V3.mirror.en, 'V3Glass')], { w: 'fill', justify: 'center' })
-  return glass(`${rtl ? 'RTL' : 'LTR'} slider`, [row('Slider row', rtl ? [words, knob] : [knob, words], { w: 'fill', align: 'center' })], { w: 340, pad: 'space.tight' })
+  return glass(`${rtl ? 'RTL' : 'LTR'} slider`, [row('Slider row', rtl ? [words, knob] : [knob, words], { w: 'fill', align: 'center' })], { w, pad: 'space.tight' })
 }
 
 function mirror() {
@@ -188,16 +198,20 @@ function mirror() {
   ], { gap: 'space.v2.inner', pad: { top: SECTION } })
 }
 
+/** The Bench range track: a hollow dot for the model alone, a filled one with Dualkit, the lift between. `ink` and `line` recolour it for glass. */
+export const benchDot = (name, filled, ink = 'color.v3.tick', ground = 'color.v3.ground') => row(name, [], { w: 10, h: 10, ...(filled ? { fill: ink } : { fill: ground, stroke: { color: ink, width: 'size.stroke' } }) })
+export const benchTrack = (a, d, TRACK = 520, ink = 'color.v3.tick', line = 'color.v3.line', ground = 'color.v3.ground') => row('Track', [
+  { shape: 'Track line', kind: 'rect', size: [TRACK, 1], fill: line },
+  { shape: 'Lift', kind: 'rect', size: [Math.round((d - a) / 100 * TRACK), 2], fill: ink, abs: { start: Math.round(a / 100 * TRACK), top: 4 } },
+  { ...benchDot('Alone dot', false, ink, ground), abs: { start: Math.round(a / 100 * TRACK) - 5, top: 0 } },
+  { ...benchDot('Dualkit dot', true, ink, ground), abs: { start: Math.round(d / 100 * TRACK) - 5, top: 0 } },
+], { w: TRACK, h: 10, align: 'center' })
+export const makerSvgFor = (m) => makerSvg(m)
+
 function bench() {
   const p = V3.bench
-  const TRACK = 520
-  const dot = (name, filled) => row(name, [], { w: 10, h: 10, ...(filled ? { fill: 'color.v3.tick' } : { fill: 'color.v3.ground', stroke: { color: 'color.v3.tick', width: 'size.stroke' } }) })
-  const track = (a, d) => row('Track', [
-    { shape: 'Track line', kind: 'rect', size: [TRACK, 1], fill: 'color.v3.line' },
-    { shape: 'Lift', kind: 'rect', size: [Math.round((d - a) / 100 * TRACK), 2], fill: 'color.v3.tick', abs: { start: Math.round(a / 100 * TRACK), top: 4 } },
-    { ...dot('Alone dot', false), abs: { start: Math.round(a / 100 * TRACK) - 5, top: 0 } },
-    { ...dot('Dualkit dot', true), abs: { start: Math.round(d / 100 * TRACK) - 5, top: 0 } },
-  ], { w: TRACK, h: 10, align: 'center' })
+  const dot = benchDot
+  const track = (a, d) => benchTrack(a, d)
   const r = ([name, m, a, d], k) => row(`${name} row`, [
     row(`${name} name`, [text(String(k + 1), 'V3Small', { color: 'color.text.faint' }), { shape: `${name} maker`, kind: 'svg', size: [16, 16], svg: makerSvg(m), tint: 'color.text.primary' }, text(name, 'V3Label')], { w: 300, gap: 'space.item', align: 'center' }),
     track(a, d),
