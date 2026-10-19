@@ -36,7 +36,7 @@ Marketing page, seen occasionally. So the Explanation purpose is allowed, and se
 
 ## Reduced motion
 
-Every sequence renders its settled final state. The ambient loops stop. The menu opens with a 120 ms opacity change only.
+Every sequence renders its settled final state. The ambient loops stop. The menu opens and closes at once, with no transition: the drawer holds glass, and glass must never fade (a fading backdrop re-composites and flashes), so the 120 ms opacity change first planned here was dropped.
 
 ## Verdict
 
