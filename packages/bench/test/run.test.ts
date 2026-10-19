@@ -33,6 +33,23 @@ describe('runBench', () => {
     expect(calls).toBe(3)
     expect(out.built).toBe(6)
   })
+  it('stops calling a model after three identical 400s', async () => {
+    let calls = 0
+    const bad: Generate = async () => (calls++, { ok: false, error: 'HTTP 400: model does not support system prompts', ms: 1 })
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    await runBench({ month: '2026-11', models: [model('bad')], screens, generate: bad, store, score: fastScore })
+    expect(calls).toBe(3)
+  })
+  it('keeps calling a model whose 4xx errors differ, or that is rate limited', async () => {
+    let calls = 0
+    const varied: Generate = async () => (calls++, { ok: false, error: `HTTP 400: request ${calls}`, ms: 1 })
+    await runBench({ month: '2026-11', models: [model('varied')], screens, generate: varied, store: makeStore(mkdtempSync(join(tmpdir(), 'run-'))), score: fastScore })
+    expect(calls).toBe(6)
+    let limited = 0
+    const slow: Generate = async () => (limited++, { ok: false, error: 'HTTP 429: slow down', ms: 1 })
+    await runBench({ month: '2026-11', models: [model('slow')], screens, generate: slow, store: makeStore(mkdtempSync(join(tmpdir(), 'run-'))), score: fastScore })
+    expect(limited).toBe(6)
+  })
   it('keeps going when scoring throws', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
     const boom = async () => { throw new Error('chromium died') }

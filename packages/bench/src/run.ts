@@ -7,8 +7,18 @@ import type { BuildKey, BuildRecord, Condition, Store } from './store'
 import { checkSkills, SKILLS_DIR, systemPrompt } from './system'
 
 const CONDITIONS: readonly Condition[] = ['alone', 'dualkit']
-const LOCKED = /^No [A-Z_]+_API_KEY$|^HTTP (401|403|404)\b/
+const ACCESS = /^No [A-Z_]+_API_KEY$|^HTTP (401|403|404)\b/
+/** A 4xx other than 429 will not get better by asking again. */
+const CLIENT = /^HTTP 4(?!29)\d\d\b/
 const LOCK_AFTER = 3
+type Streak = { key: string | null; n: number }
+
+/** Access errors lock a model whatever their wording; any other 4xx only when the same error comes back each time. */
+export function nextStreak(prev: Streak, error: string | null): Streak {
+  const key = error === null ? null : ACCESS.test(error) ? 'access' : CLIENT.test(error) ? error : null
+  if (key === null) return { key: null, n: 0 }
+  return { key, n: key === prev.key ? prev.n + 1 : 1 }
+}
 const NO_REPLY = { reply: null, usage: null, finish: null, reasoningTokens: null, servedModel: null } as const
 
 export const currentMonth = (now = new Date()) => now.toISOString().slice(0, 7)
@@ -21,19 +31,19 @@ export async function runBench({ month, models, screens, generate, store, score 
   const browser = score === scoreHtml ? await chromium.launch() : undefined
   try {
     for (const model of models) {
-      let locked = 0
+      let streak: Streak = { key: null, n: 0 }
       for (const screen of screens) for (const condition of CONDITIONS) for (let run = 1; run <= RUN.runs; run++) {
         const key: BuildKey = { month, model: model.id, screen: screen.id, condition, run }
         if (store.isDone(key)) { counts.skipped++; continue }
-        if (locked >= LOCK_AFTER) continue
+        if (streak.n >= LOCK_AFTER) continue
         const rec = await build(key, model, screen, generate, score, skillsDir, browser)
-        locked = !rec.record.ok && LOCKED.test(rec.record.error) ? locked + 1 : 0
+        streak = nextStreak(streak, rec.record.ok ? null : rec.record.error)
         store.write(rec.record, rec.html)
         if (rec.record.ok) counts.built++
         else counts.failed++
         log(`${key.model} ${key.screen} ${key.condition} ${key.run}: ${rec.record.ok ? `${rec.record.rulesPassed} rules` : rec.record.error}`)
       }
-      if (locked >= LOCK_AFTER) log(`${model.id}: skipped for this run after ${LOCK_AFTER} access errors`)
+      if (streak.n >= LOCK_AFTER) log(`${model.id}: skipped for this run after ${LOCK_AFTER} errors in a row that will not clear: ${streak.key}`)
     }
   } finally {
     await browser?.close().catch(() => {})
