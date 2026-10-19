@@ -5,7 +5,7 @@
 import { frameCamera, fitScale, type Rect } from './camera'
 import { createClock } from './clock'
 import { springAt } from './spring'
-import { BEATS, CHECK_AT, FIX_AT, INSTALL_AT, LOOP_MS, MIRROR_SPRING, SWAP_GAP_MS } from './story'
+import { BEATS, CHECK_AT, FIX_AT, INSTALL_AT, LOOP_MS, MIRROR_SPRING, SPEC_FOLLOW, SWAP_GAP_MS, followFactor } from './story'
 import {
   AMOUNT_FX, AR_FACES, COMMAND, CURRENCY_FX, DATE, EN_FACES, PAY, PINS, RAIL, TITLE, W, face, keyFace, panelHTML, type KeyName, type RailState,
 } from './story-markup'
@@ -70,11 +70,11 @@ export function startStory(root: HTMLElement): StoryHandle {
   type Job = { when: number; fn: () => void }
   let queue: Job[] = []
   const later = (ms: number, fn: () => void): Job => { const job = { when: t + ms, fn }; queue.push(job); queue.sort((a, b) => a.when - b.when); return job }
-  let specTick: (() => void) | null = null
+  let specTick: ((dt: number) => void) | null = null
   offs.push(clock.onTick((pos) => {
     const dt = Math.min(64, pos - lastPos); lastPos = pos
     if (playing) { t += dt; while (queue.length && queue[0]!.when <= t) queue.shift()!.fn() }
-    specTick?.()
+    specTick?.(dt)
   }))
   // The story's own WAAPI animations; CSS transitions (the highlight's fade) keep running while the story pauses.
   const anims = () => painting.getAnimations({ subtree: true }).concat(rail.getAnimations({ subtree: true })).filter((a) => !(a instanceof CSSTransition))
@@ -226,7 +226,7 @@ export function startStory(root: HTMLElement): StoryHandle {
     panel.addEventListener('pointerenter', () => { over = true; spec.style.opacity = '1'; hoverPause = true; syncPlay() }, { signal })
     panel.addEventListener('pointerleave', () => { over = false; spec.style.opacity = '0'; hoverPause = false; syncPlay() }, { signal })
     panel.addEventListener('pointermove', (ev) => { const r = panel.getBoundingClientRect(), s = r.width / panel.offsetWidth; tx = (ev.clientX - r.left) / s; ty = (ev.clientY - r.top) / s }, { signal })
-    specTick = () => { if (!spec.isConnected || !over) return; x += (tx - x) * 0.18; y += (ty - y) * 0.18; spec.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)` }
+    specTick = (dt) => { if (!spec.isConnected || !over) return; const k = followFactor(SPEC_FOLLOW, dt); x += (tx - x) * k; y += (ty - y) * k; spec.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)` }
   }
   function showStatic() {
     g('bg').style.clipPath = OPEN
@@ -247,7 +247,7 @@ export function startStory(root: HTMLElement): StoryHandle {
     rollIn(g('score'), b.countAt)
     PINS.forEach((p, i) => {
       const pin = q(`[data-pin="${p.index}"]`, group), d = b.pinsAt + i * b.pinStagger
-      tween(pin, 'f', [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 320, delay: d, easing: EASE_EXPO })
+      tween(pin, 'f', [{ opacity: 0, transform: 'scale(.9)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 320, delay: d, easing: EASE_EXPO })
       later(d, () => setNumber(g('failN'), i + 1, 0, 1))
     })
     railHidden(); railTo(RAIL.build, b.railAt)

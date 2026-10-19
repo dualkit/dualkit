@@ -46,3 +46,10 @@ export const SWAP_GAP_MS = 60
 
 /** When the loop restarts: the close beat ends one second after LOOP_MS. */
 export const RESTART_MS = LOOP_MS + BEATS.close.camAfter + BEATS.close.camMs
+
+/** The share of the gap the hover glow closes per 60Hz frame. */
+export const SPEC_FOLLOW = 0.18
+const FRAME_60_MS = 1000 / 60
+
+/** The share of the gap to close over a frame of `dt` ms, so the glow follows at the same speed at 60Hz and 120Hz. */
+export const followFactor = (perFrame: number, dt: number): number => (dt > 0 ? 1 - Math.pow(1 - perFrame, dt / FRAME_60_MS) : 0)

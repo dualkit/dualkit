@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { frameCamera, type Rect } from '../lib/v3/camera'
-import { CHAPTERS, LOOP_MS, chapterAt, FIX_AT, CHECK_AT, INSTALL_AT } from '../lib/v3/story'
+import { CHAPTERS, LOOP_MS, chapterAt, FIX_AT, CHECK_AT, INSTALL_AT, SPEC_FOLLOW, followFactor } from '../lib/v3/story'
 
 describe('story timeline', () => {
   it('chapters are contiguous and cover 0..LOOP_MS', () => {
@@ -89,5 +89,19 @@ describe('springAt', () => {
     kf.slice(0, -1).forEach((v, i) => expect(at((i * 1000) / 60)).toBeCloseTo(v, 9))
     expect(Math.abs(1 - at(760))).toBeLessThan(0.02)
     expect(at(0)).toBe(0)
+  })
+})
+
+describe('followFactor', () => {
+  it('closes 18% of the gap in one 60Hz frame', () => {
+    expect(followFactor(SPEC_FOLLOW, 1000 / 60)).toBeCloseTo(0.18, 10)
+  })
+  it('covers the same ground at 120Hz over two frames as at 60Hz over one', () => {
+    const half = followFactor(SPEC_FOLLOW, 1000 / 120)
+    expect(1 - (1 - half) ** 2).toBeCloseTo(0.18, 10)
+  })
+  it('does not move on a zero or negative frame', () => {
+    expect(followFactor(SPEC_FOLLOW, 0)).toBe(0)
+    expect(followFactor(SPEC_FOLLOW, -4)).toBe(0)
   })
 })
