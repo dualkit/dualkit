@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import * as format from '../../format/src/index'
+import { bannedIn, fencesOf, undefinedCalls } from './fences'
 import { parseSkill, renderCursorRule } from '../scripts/skill-file.mjs'
 
 const ROOT = join(import.meta.dirname, '../../..')
@@ -56,6 +57,12 @@ describe('the skills', () => {
     const used = imports.flatMap((m) => (m[1] ?? '').split(',').map((s) => s.trim()).filter(Boolean))
     for (const fn of used) expect(format, `${fn} is not exported`).toHaveProperty(fn)
   })
+
+  it.each(names)('%s has no banned size or tracking in its code', (name) =>
+    expect(fencesOf(name, read(name)).flatMap((f) => bannedIn(f.code))).toEqual([]))
+
+  it.each(names)('%s only calls functions that exist', (name) =>
+    expect(fencesOf(name, read(name)).filter((f) => f.lang !== 'css').flatMap((f) => undefinedCalls(f.code, new Set(Object.keys(format))))).toEqual([]))
 })
 
 describe('the Cursor rules', () => {

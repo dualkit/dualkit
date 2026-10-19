@@ -20,6 +20,23 @@ export const RELEASES: readonly Release[] = [
     ],
   },
   {
+    slug: 'skills-0-1-1',
+    date: '2026-10-19',
+    version: 'Plugin 0.1.1',
+    tags: ['Skills'],
+    title: 'The skills now teach plain CSS first, and their examples are tested',
+    body: [
+      'The four skills lead with plain CSS and HTML attributes, and Tailwind sits in one closing section. The Arabic size floor of 14px is now part of the snippet you copy, and the skills cover punctuation and brackets in right-to-left text.',
+      'Every HTML and CSS example in the skills is now rendered in a browser and checked against the 20 rules, so a snippet that breaks a rule fails the tests. We have not re-run the bench since this change, so we are not claiming a new result.',
+    ],
+    shipped: [
+      { name: 'dualkit-rtl-layout', line: 'Plain CSS with :dir(rtl) first, paired transforms, input direction, punctuation and brackets, and Tailwind last' },
+      { name: 'dualkit-type-pairing', line: 'The 14px Arabic floor as size tokens, a real Arabic font stack, and Arabic inside Latin elements' },
+      { name: 'dualkit-bilingual-copy', line: 'Helpers that are defined, an explained full stop, and stacked two-language labels' },
+      { name: 'dualkit-gulf-formats', line: 'A plain statement of coverage and verified currency signs, with font unicode-range advice' },
+    ],
+  },
+  {
     slug: 'check-v0-1-0-beta',
     date: '2026-10-19',
     version: 'Check v0.1.0-beta',

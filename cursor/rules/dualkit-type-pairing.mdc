@@ -10,6 +10,32 @@ alwaysApply: false
 
 Arabic is cursive, has no case, and sits on a different vertical rhythm from Latin. At the same pixel size it usually reads smaller. Most Latin type habits (tracking, capitals, italics, tight leading) damage it.
 
+## Size floor
+
+The computed size of Arabic text is at least 14px for UI text and 16px for body text. Small sizes creep in on badges, field labels, nav labels, the ر.س and د.إ abbreviations, VAT notes and calendar sub-labels.
+
+`size-adjust` makes Arabic look bigger, but it does not change the computed size. Checkers and the 14px floor measure the computed size, so a 12px label with `size-adjust: 120%` still fails.
+
+Set the sizes as tokens scoped to Arabic, next to the other Arabic rules, and use the tokens everywhere.
+
+```css
+:lang(ar) {
+  --type-label-size: 14px;
+  --type-caption-size: 14px;
+  --type-body-size: 16px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-style: normal;
+  line-height: 1.7;
+}
+/* set the Latin sizes as the default, outside :lang(ar) */
+body { font-size: var(--type-body-size); }
+label, .badge, nav a { font-size: var(--type-label-size); }
+small, .caption { font-size: var(--type-caption-size); }
+```
+
+Arabic inside a Latin element, such as a ر.س badge on an English page, gets the Latin sizes. Give it its own `lang="ar"` so the Arabic tokens apply, or keep those Latin sizes at 14px or more.
+
 ## Choose the pair
 
 Prefer one superfamily that was drawn for both scripts, so weights and rhythm match.
@@ -21,7 +47,7 @@ Prefer one superfamily that was drawn for both scripts, so weights and rhythm ma
 | Readex Pro | Readex Pro covers both scripts |
 | Inter, Geist (no Arabic glyphs) | IBM Plex Sans Arabic or Readex Pro |
 
-All of these are free on Google Fonts. A `-apple-system` stack gets SF Arabic on Apple devices only, so name a web font for everyone else. Ship the real weights you use (400, 500, 600, 700). Never let the browser fake bold.
+All of these are free on Google Fonts. A `-apple-system` stack gets SF Arabic on Apple devices only, so name a web font for everyone else. A system font stack is not a pairing. Ship the real weights you use (400, 500, 600, 700). Never let the browser fake bold.
 
 ## Load Arabic as its own face
 
@@ -36,33 +62,42 @@ Scope the Arabic font with `unicode-range` and fix its size with `size-adjust`. 
   size-adjust: 112%;
 }
 /* then the Latin @font-face for 'Brand' with no unicode-range */
+body { font-family: 'Brand', 'IBM Plex Sans Arabic', sans-serif; }
 ```
+
+List the real Arabic family after `'Brand'`. If that family is also loaded (for example from Google Fonts), it covers Arabic while the file loads or if it fails. Either way, the name tells tools and people which Arabic face is meant.
 
 Tune `size-adjust` by eye against the Latin face at body size. Somewhere around 105% to 115% is typical.
 
 ## Rules for Arabic text
 
+The size block above already sets these under `:lang(ar)`.
+
 | Do | Instead of |
 |---|---|
-| `letter-spacing: 0` under `:lang(ar)` | Any `tracking-*`. It breaks or stretches the joins between letters |
+| `letter-spacing: 0` under `:lang(ar)` | Any `letter-spacing` other than 0. It breaks or stretches the joins between letters |
 | Sentence-case Latin source strings, with uppercase applied in CSS for Latin only | Capitals stored in the string (`'SECURE CHECKOUT'`) |
 | Weight or colour for emphasis | Italic. Arabic has no true italic, so browsers fake a slant |
 | Line-height about 1.6 to 1.8 for body text | Latin defaults of 1.4 to 1.5, which clip dots and marks |
 | At least 14px for UI text, and 16px for body | 12px captions. Dots and diacritics blur |
 
-```css
-:lang(ar) { letter-spacing: 0; text-transform: none; font-style: normal; line-height: 1.7; }
-```
-
-Use this plain CSS rule, even in a Tailwind project. A `rtl:` class on the root only sets inherited values, so any element with its own `tracking-*` or `leading-*` class still overrides it. Where an element sets tracking, add `rtl:tracking-normal` beside it.
-
 ## Numbers in type
 
-Use `font-variant-numeric: tabular-nums` (`tabular-nums`) on amounts and tables in both scripts. Check that the Arabic face has tabular Arabic-Indic digits if you show them.
+Use `font-variant-numeric: tabular-nums` on amounts and tables in both scripts. Check that the Arabic face has tabular Arabic-Indic digits if you show them.
 
 ## Common mistakes
 
 - A wide-tracked uppercase eyebrow label that keeps its tracking in Arabic.
 - `font-family: 'Inter', sans-serif` for Arabic, which hands Arabic to a random system fallback.
 - One line-height token for both scripts.
+- One size scale for both scripts, so the Arabic badge or VAT note lands at 12px.
 - Arabic headings at the same pixel size as the Latin ones, which look a size smaller.
+
+## In Tailwind
+
+Keep the plain CSS `:lang(ar)` block above, even in a Tailwind project. A `rtl:` class on the root only sets inherited values, so any element with its own `tracking-*` or `leading-*` class still overrides it.
+
+- The smallest size on Arabic text is `text-sm` (14px). Never `text-xs` (12px), and never an arbitrary size under 14px such as `text-[11px]`.
+- `text-sm` also sets a line-height under 1.5, which can override the `:lang(ar)` one. Pair it with `leading-relaxed`, or set the leading on Arabic.
+- Where an element sets `tracking-*`, add `rtl:tracking-normal` beside it.
+- `tabular-nums` is the class for `font-variant-numeric: tabular-nums`.
