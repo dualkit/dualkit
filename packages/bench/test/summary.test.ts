@@ -14,7 +14,7 @@ function seed(store: ReturnType<typeof makeStore>, id: string, passed: Record<Co
   for (const s of screens) for (const condition of ['alone', 'dualkit'] as const) for (const run of [1, 2, 3]) {
     if (skip.includes(`${s.id}/${condition}`)) continue
     const k: BuildKey = { month: '2026-11', model: id, screen: s.id, condition, run }
-    store.write({ ...k, at: 'now', reply: 'r', usage: null, ms: 1, finish: 'stop', reasoningTokens: 0, servedModel: id, ok: true, rulesPassed: passed[condition], score: passed[condition] * 4, missing: [], findings: [], unreadableStylesheets: 0, pageHeight: 900 }, '<html></html>', Buffer.from(`${id}/${s.id}/${condition}-${run}`))
+    store.write({ ...k, at: '2026-11-01T04:30:00.000Z', reply: 'r', usage: null, ms: 1, finish: 'stop', reasoningTokens: 0, servedModel: id, ok: true, rulesPassed: passed[condition], score: passed[condition] * 4, missing: [], findings: [], unreadableStylesheets: 0, pageHeight: 900 }, '<html></html>', Buffer.from(`${id}/${s.id}/${condition}-${run}`))
   }
 }
 
@@ -40,6 +40,27 @@ describe('default shots', () => {
     expect(out.models[0]!.screens.find((x) => x.id === 'otp')!.dualkit).toMatchObject({ ran: true, shot: null, pageHeight: 900 })
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('a/otp/dualkit'))
     warn.mockRestore()
+  })
+})
+
+describe('generatedAt', () => {
+  it('is the newest build time of the month, so a rerun with nothing new writes the same bytes', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    seed(store, 'a', { alone: 8, dualkit: 18 })
+    const k: BuildKey = { month: '2026-11', model: 'a', screen: 'otp', condition: 'alone', run: 1 }
+    store.write({ ...store.read(k)!, at: '2026-11-02T09:15:00.000Z' }, '<html></html>', Buffer.from('x'))
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    const first = await buildSummary({ month: '2026-11', models: [model('a')], screens, store, siteRoot: site })
+    expect(first.generatedAt).toBe('2026-11-02T09:15:00.000Z')
+    const file = writeSummary(first, site)
+    const bytes = readFileSync(file, 'utf8')
+    writeSummary(await buildSummary({ month: '2026-11', models: [model('a')], screens, store, siteRoot: site }), site)
+    expect(readFileSync(file, 'utf8')).toBe(bytes)
+  })
+  it('is the first day of the month when nothing ran', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    const out = await buildSummary({ month: '2026-11', models: [model('gone')], screens, store, shots: async () => null })
+    expect(out.generatedAt).toBe('2026-11-01T00:00:00.000Z')
   })
 })
 

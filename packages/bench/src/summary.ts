@@ -45,6 +45,10 @@ async function benchCell(records: BuildRecord[], shots: Shots): Promise<BenchCel
   }
 }
 
+/** The time of the newest build, not now: a rerun with nothing new then writes the same bytes, and the workflow commits nothing. */
+const newestBuild = (records: BuildRecord[], month: string) =>
+  records.reduce((newest, r) => (r.at > newest ? r.at : newest), `${month}-01T00:00:00.000Z`)
+
 const rank = (a: BenchModel, b: BenchModel) =>
   (b.dualkit?.rulesPassed ?? -1) - (a.dualkit?.rulesPassed ?? -1) || (b.alone?.rulesPassed ?? -1) - (a.alone?.rulesPassed ?? -1) || a.label.localeCompare(b.label)
 
@@ -63,7 +67,7 @@ export async function buildSummary({ month, models, screens, store, siteRoot = S
     const dualkit = total(rows.map((r) => r.dualkit), RULE_COUNT)
     out.push({ id: m.id, label: m.label, provider: m.provider, isNew: m.since === month, alone, dualkit, lift: lift(alone, dualkit), screens: rows })
   }
-  return { month, generatedAt: new Date().toISOString(), ruleCount: RULE_COUNT, models: out.sort(rank) }
+  return { month, generatedAt: newestBuild(records, month), ruleCount: RULE_COUNT, models: out.sort(rank) }
 }
 
 export function writeSummary(month: BenchMonth, siteRoot = SITE_ROOT): string {
