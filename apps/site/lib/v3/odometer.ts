@@ -27,7 +27,7 @@ export function odometerColumns(from: string, to: string): OdometerColumn[] {
     let src: string | undefined
     if (idx < intEnd) {
       intSeen -= 1
-      src = f.int[f.int.length - (t.int.length - intSeen)]
+      src = f.int[f.int.length - 1 - intSeen]
     } else {
       src = f.frac[fracSeen]
       fracSeen += 1

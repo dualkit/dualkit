@@ -6,7 +6,7 @@ import { prefersReducedMotion } from '../motion'
 export function useSequence(ref: RefObject<Element | null>, { threshold = 0.35 }: { threshold?: number } = {}) {
   const [intersecting, setIntersecting] = useState(false)
   const [tabVisible, setTabVisible] = useState(true)
-  const [reduced, setReduced] = useState(false)
+  const [reduced, setReduced] = useState(() => typeof window !== 'undefined' && prefersReducedMotion())
 
   useEffect(() => {
     const el = ref.current
@@ -26,7 +26,7 @@ export function useSequence(ref: RefObject<Element | null>, { threshold = 0.35 }
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
     const onChange = () => setReduced(mq.matches)
-    setReduced(prefersReducedMotion())
+    onChange()
     mq.addEventListener('change', onChange)
     return () => mq.removeEventListener('change', onChange)
   }, [])

@@ -30,6 +30,13 @@ describe('odometerColumns', () => {
     expect(cols[1]).toEqual({ char: ',', fromDigit: null, toDigit: null })
     expect(cols[6]).toEqual({ char: '5', fromDigit: 5, toDigit: 5 })
   })
+  it('pairs integer digits by place value', () => {
+    const cols = odometerColumns('1234.5', '1,234.50')
+    expect(cols[0]?.fromDigit).toBe(1)
+    expect(cols[4]?.fromDigit).toBe(4)
+    expect(odometerColumns('99', '100').map((c) => c.fromDigit)).toEqual([null, 9, 9])
+    expect(odometerColumns('0', '12').map((c) => c.fromDigit)).toEqual([null, 0])
+  })
 })
 
 describe('createClock', () => {
@@ -70,6 +77,21 @@ describe('createClock', () => {
     c.play()
     f.advance(10)
     expect(seen[2]).toBe(42)
+  })
+  it('pause then play inside onTick keeps a single loop', () => {
+    const f = fake()
+    const c = createClock(f)
+    let n = 0
+    c.onTick(() => {
+      n++
+      c.pause()
+      c.play()
+    })
+    c.play()
+    f.advance(16)
+    f.advance(16)
+    f.advance(16)
+    expect(n).toBe(3)
   })
   it('unsubscribe stops callbacks', () => {
     const f = fake()
