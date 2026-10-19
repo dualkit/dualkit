@@ -3,6 +3,7 @@ import sharp from 'sharp'
 import { RUN, type ModelEntry, type Screen } from './config'
 import { extractHtml } from './extract'
 import type { Generate } from './providers'
+import { makeProgressWriter, progressOf, type RecentBuild } from './progress'
 import { scoreHtml } from './score'
 import type { BuildKey, BuildRecord, Condition, Store } from './store'
 import { checkSkills, SKILLS_DIR, systemPrompt } from './system'
@@ -85,20 +86,29 @@ export async function runBench({ month, models, screens, generate, store, score 
   const doLaunch = launch ?? (score === scoreHtml ? () => chromium.launch() : undefined)
   const browser = doLaunch ? sharedBrowser(doLaunch) : undefined
   const limit = semaphore(SCORE_CONCURRENCY)
+  const finished: RecentBuild[] = []
+  const total = models.length * screens.length * CONDITIONS.length * runs
+  const writeFile = makeProgressWriter(store.progressFile(month), log)
+  const keys: BuildKey[] = models.flatMap((m) => screens.flatMap((sc) => CONDITIONS.flatMap((condition) => Array.from({ length: runs }, (_, i) => ({ month, model: m.id, screen: sc.id, condition, run: i + 1 })))))
+  const countDone = () => keys.filter((k) => store.read(k) !== null).length
+  const publish = (running: boolean) => writeFile(progressOf({ month, running, total, done: countDone(), updatedAt: new Date(now()).toISOString(), finished }))
+  const onFinish = (entry: RecentBuild) => { finished.push(entry); return publish(true) }
+  await publish(true)
   const scorer: Scorer = (html, screen) => limit(async () => score(html, screen.required, browser ? { browser: await browser.get() } : {}))
   try {
     // Every model at once, sharing the one paced Generate; each model's own builds stay in order.
-    const all = await Promise.all(models.map((model) => runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, late: () => now() >= deadline })))
+    const all = await Promise.all(models.map((model) => runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, onFinish, late: () => now() >= deadline })))
     return all.reduce((a, c) => ({ built: a.built + c.built, skipped: a.skipped + c.skipped, failed: a.failed + c.failed, stoppedEarly: a.stoppedEarly || c.stoppedEarly }), NONE)
   } finally {
     await browser?.close()
+    await publish(false)
   }
 }
 
-type ModelRun = { month: string; model: ModelEntry; screens: Screen[]; generate: Generate; store: Store; scorer: Scorer; log: (line: string) => void; skillsDir: string; runs: number; late: () => boolean }
+type ModelRun = { month: string; model: ModelEntry; screens: Screen[]; generate: Generate; store: Store; scorer: Scorer; log: (line: string) => void; skillsDir: string; runs: number; onFinish: (entry: RecentBuild) => Promise<void>; late: () => boolean }
 const NONE: Counts = { built: 0, skipped: 0, failed: 0, stoppedEarly: false }
 
-async function runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, late }: ModelRun): Promise<Counts> {
+async function runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, onFinish, late }: ModelRun): Promise<Counts> {
   let counts = NONE
   let streak: Streak = { key: null, n: 0 }
   for (const screen of screens) for (const condition of CONDITIONS) for (let run = 1; run <= runs; run++) {
@@ -114,10 +124,16 @@ async function runModel({ month, model, screens, generate, store, scorer, log, s
     store.write(rec.record, rec.html, rec.shot)
     counts = rec.record.ok ? { ...counts, built: counts.built + 1 } : { ...counts, failed: counts.failed + 1 }
     log(`${key.model} ${key.screen} ${key.condition} ${key.run}: ${rec.record.ok ? `${rec.record.rulesPassed} rules` : rec.record.error}`)
+    await onFinish(recentOf(rec.record, model, screen))
   }
   if (streak.n >= LOCK_AFTER) log(`${model.id}: skipped for this run after ${LOCK_AFTER} errors in a row that will not clear: ${streak.key}`)
   return counts
 }
+
+const recentOf = (r: BuildRecord, model: ModelEntry, screen: Screen): RecentBuild => ({
+  at: r.at, model: model.id, label: model.label, by: model.by, mark: model.mark, screen: screen.id, screenTitle: screen.title, condition: r.condition,
+  ok: r.ok, rulesPassed: r.ok ? r.rulesPassed : null, error: r.ok ? null : r.error,
+})
 
 type Built = { record: BuildRecord; html: string | null; shot: Buffer | null }
 

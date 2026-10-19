@@ -27,9 +27,11 @@ export function makeStore(root = RUNS_ROOT) {
     const base = join(root, k.month, k.model, k.screen, `${k.condition}-${k.run}`)
     return { json: `${base}.json`, html: `${base}.html`, webp: `${base}.webp` }
   }
+  const progressFile = (month: string) => join(root, month, 'progress.json')
   const read = (k: BuildKey) => readRecord(paths(k).json)
   return {
     paths,
+    progressFile,
     read,
     isDone: (k: BuildKey) => read(k)?.ok === true,
     write(rec: BuildRecord, html: string | null, shot: Buffer | null = null) {

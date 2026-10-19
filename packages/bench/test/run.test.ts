@@ -184,3 +184,55 @@ describe('currentMonth', () => {
     expect(currentMonth(new Date('2026-11-01T00:30:00+04:00'))).toBe('2026-10')
   })
 })
+
+describe('progress.json', () => {
+  const two = loadScreens().slice(0, 2)
+  const progress = (store: ReturnType<typeof makeStore>) => JSON.parse(readFileSync(store.progressFile('2026-11'), 'utf8'))
+  it('ends with running false, done equal to total, and the newest build first', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    await runBench({ month: '2026-11', models: [model('fake-good')], screens: two, generate: fakeGenerate, store, score: fastScore, runs: 1 })
+    const p = progress(store)
+    expect(p).toMatchObject({ month: '2026-11', running: false, total: 4, done: 4 })
+    expect(Number.isNaN(Date.parse(p.updatedAt))).toBe(false)
+    expect(p.recent.map((r: { screen: string; condition: string }) => `${r.screen} ${r.condition}`)).toEqual([
+      `${two[1]!.id} dualkit`, `${two[1]!.id} alone`, `${two[0]!.id} dualkit`, `${two[0]!.id} alone`,
+    ])
+    expect(p.recent[0]).toMatchObject({ model: 'fake-good', label: 'fake-good', by: 'Fake', mark: 'google', screenTitle: two[1]!.title, ok: true, rulesPassed: 15, error: null })
+  })
+  it('is written at the start and after every build, with running true until the end', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    const seen: { running: boolean; done: number }[] = []
+    const peek: Generate = async (m, r) => { seen.push(progress(store)); return fakeGenerate(m, r) }
+    await runBench({ month: '2026-11', models: [model('fake-good')], screens: two, generate: peek, store, score: fastScore, runs: 1 })
+    expect(seen.map((s) => s.done)).toEqual([0, 1, 2, 3])
+    expect(seen.every((s) => s.running)).toBe(true)
+  })
+  it('counts failed builds as done and records their clipped error', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    const down: Generate = async () => ({ ok: false, error: `HTTP 503: ${'z'.repeat(200)}`, ms: 1 })
+    await runBench({ month: '2026-11', models: [model('down')], screens: two, generate: down, store, score: fastScore, runs: 1 })
+    const p = progress(store)
+    expect(p).toMatchObject({ running: false, total: 4, done: 4 })
+    expect(p.recent[0]).toMatchObject({ ok: false, rulesPassed: null })
+    expect(p.recent[0].error).toHaveLength(80)
+  })
+  it('counts builds skipped as done but leaves them out of recent', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    const opts = { month: '2026-11', models: [model('fake-good')], screens: two, generate: fakeGenerate, store, score: fastScore, runs: 1 }
+    await runBench(opts)
+    await runBench(opts)
+    expect(progress(store)).toMatchObject({ running: false, total: 4, done: 4, recent: [] })
+  })
+  it('is running false when it stops early at the deadline, with done short of total', async () => {
+    let clock = 0
+    const timed: Generate = async (m, r) => { clock += 4; return fakeGenerate(m, r) }
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    await runBench({ month: '2026-11', models: [model('fake-good')], screens, generate: timed, store, score: fastScore, deadline: 10, now: () => clock })
+    expect(progress(store)).toMatchObject({ running: false, total: 6, done: 3 })
+  })
+  it('keeps one valid file when models finish builds at the same time', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    await runBench({ month: '2026-11', models: ['a', 'b', 'c'].map(model), screens: two, generate: (m, r) => fakeGenerate({ ...m, id: 'fake-good' }, r), store, score: fastScore, runs: 2 })
+    expect(progress(store)).toMatchObject({ running: false, total: 24, done: 24 })
+  })
+})
