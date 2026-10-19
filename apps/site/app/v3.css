@@ -67,6 +67,13 @@ body { background: var(--v3-ground); }
 /* Glass: smoked, ringed with 1px, never shadowed */
 .v3-glass { background: var(--v3-glass); color: var(--v3-glass-text); box-shadow: 0 0 0 1px var(--v3-glass-ring); -webkit-backdrop-filter: blur(24px) saturate(140%); backdrop-filter: blur(24px) saturate(140%); }
 .v3-glass-soft { color: var(--v3-glass-soft); }
+/* Glass stage (GlassLayer): one set of glass panes behind crossfading previews. The panes never fade; their clip-path
+   moves to the active preview's glass boxes. Once a stage is live, the previews' own glass keeps only its ring. */
+.v3-gl { position: absolute; inset: 0; pointer-events: none; }
+.v3-gl-pane { position: absolute; inset: 0; background: var(--v3-glass); -webkit-backdrop-filter: blur(24px) saturate(140%); backdrop-filter: blur(24px) saturate(140%); clip-path: inset(50%); visibility: hidden; }
+.v3-gl[data-animate='1'] .v3-gl-pane { transition: clip-path 220ms var(--ease-ui); }
+[data-glass='stage'] .v3-glass { background: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+@media (prefers-reduced-motion: reduce) { .v3-gl[data-animate='1'] .v3-gl-pane { transition: none; } }
 
 /* Painting: the dusk dunes behind a glass panel */
 .v3-painting { position: relative; overflow: hidden; background-color: #c9a27a; background-image: url('/v3/dusk-1200.webp'); background-size: cover; background-position: center; }
@@ -94,13 +101,14 @@ body { background: var(--v3-ground); }
   .v3-nav-burger { display: none; }
 }
 
-/* Products menu: opens from under the nav with clip-path and opacity, 220ms in and 150ms out. No animation when opened
+/* Products menu: opens from under the nav with clip-path (opacity only steps), 220ms in and 150ms out. No animation when opened
    from the keyboard or under reduced motion. The row highlight moves instantly; the preview crossfades over 150ms. */
 .v3-menu { --v3-menu-list: 440px; --v3-menu-side: 240px; --v3-menu-fit: 1;
   position: absolute; z-index: 1; inset-inline: 0; top: 100%; background: var(--v3-ground);
   clip-path: inset(0 0 100% 0); opacity: 0; visibility: hidden;
-  transition: clip-path 150ms var(--ease-ui), opacity 150ms var(--ease-ui), visibility 0s linear 150ms; }
-.v3-menu[data-open] { clip-path: inset(0); opacity: 1; visibility: visible; transition: clip-path 220ms var(--ease-ui), opacity 220ms var(--ease-ui), visibility 0s; }
+  transition: clip-path 150ms var(--ease-ui), opacity 0s linear 150ms, visibility 0s linear 150ms; }
+/* The drawer holds glass, so it is revealed by clip-path alone: opacity only steps (on at the start, off at the end). */
+.v3-menu[data-open] { clip-path: inset(0); opacity: 1; visibility: visible; transition: clip-path 220ms var(--ease-ui), opacity 0s, visibility 0s; }
 .v3-menu[data-via='keyboard'] { transition: none; }
 .v3-menu-scrim { position: fixed; inset: 0; z-index: 0; background: var(--v3-ground); opacity: 0; pointer-events: none; transition: opacity 150ms var(--ease-ui); }
 .v3-nav[data-open] .v3-menu-scrim { opacity: 0.75; pointer-events: auto; transition-duration: 220ms; }
@@ -167,7 +175,7 @@ body { background: var(--v3-ground); }
 }
 
 .v3-menu-painting { display: grid; grid-template: 100% / 100%; height: 260px; }
-.v3-menu-shot { grid-area: 1 / 1; min-height: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 150ms var(--ease-ui); }
+.v3-menu-shot { position: relative; grid-area: 1 / 1; min-height: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 150ms var(--ease-ui); }
 .v3-menu-shot[data-on] { opacity: 1; }
 .v3-menu-shot > * { flex: none; transform: scale(calc(var(--pv-scale, 1) * var(--v3-menu-fit))); }
 .v3-menu-shot[data-part='1'] { --pv-scale: 0.64; }

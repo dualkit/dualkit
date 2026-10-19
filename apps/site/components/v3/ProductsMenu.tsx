@@ -5,6 +5,7 @@ import { useCallback, useEffect, useReducer, useRef, useState, type KeyboardEven
 import { V3 } from '@/lib/v3/copy'
 import { MENU_CLOSED, PART_COUNT, benchCountdown, daysUntil, menuReducer, nextBenchRun, type MenuVia } from '@/lib/v3/menu'
 import { CopyIcon, Mark } from '../icons'
+import { GlassLayer } from './GlassLayer'
 import { Frame } from './primitives'
 
 const SCROLL_CLOSE_PX = 24
@@ -167,6 +168,7 @@ export function ProductsMenu({ parts, previews, latest, benchDays, end }: {
 
               <div className="v3-menu-preview">
                 <div className="v3-painting v3-menu-painting" aria-hidden="true">
+                  <GlassLayer active={state.active} />
                   {previews.map((p, k) => <div key={k} className="v3-menu-shot" data-part={k} data-on={state.active === k || undefined}>{p}</div>)}
                 </div>
                 <div className="v3-menu-foot">

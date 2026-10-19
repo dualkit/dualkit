@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useReducer, useRef, type KeyboardEvent, type ReactNode } from 'react'
 import { kitInitial, kitKeyEvent, kitReducer, type KitEvent } from '@/lib/v3/kit-accordion'
+import { GlassLayer } from './GlassLayer'
 import { Frame, Painting } from './primitives'
 
 export type KitItem = { name: string; no: string; title: string | null; body: string; points: readonly string[] }
@@ -73,6 +74,7 @@ export function KitAccordion({ items, previews }: { items: readonly KitItem[]; p
         })}
       </div>
       <Painting className="v3-kit-pane">
+        <GlassLayer active={state.open} />
         {previews.map((preview, k) => (
           <div key={items[k]?.name ?? k} className="v3-kit-shot" data-on={state.open === k ? '' : undefined} inert={state.open !== k} aria-hidden={state.open !== k}>{preview}</div>
         ))}
