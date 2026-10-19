@@ -23,35 +23,92 @@ const NO_REPLY = { reply: null, usage: null, finish: null, reasoningTokens: null
 
 export const currentMonth = (now = new Date()) => now.toISOString().slice(0, 7)
 
-type Options = { month: string; models: ModelEntry[]; screens: Screen[]; generate: Generate; store: Store; score?: typeof scoreHtml; log?: (line: string) => void; skillsDir?: string }
+/** Scoring renders in Chromium twice per build; two at once keeps a CI runner responsive. */
+export const SCORE_CONCURRENCY = 2
 
-export async function runBench({ month, models, screens, generate, store, score = scoreHtml, log = () => {}, skillsDir = SKILLS_DIR }: Options) {
-  checkSkills(skillsDir)
-  const counts = { built: 0, skipped: 0, failed: 0 }
-  const browser = score === scoreHtml ? await chromium.launch() : undefined
-  try {
-    for (const model of models) {
-      let streak: Streak = { key: null, n: 0 }
-      for (const screen of screens) for (const condition of CONDITIONS) for (let run = 1; run <= RUN.runs; run++) {
-        const key: BuildKey = { month, model: model.id, screen: screen.id, condition, run }
-        if (store.isDone(key)) { counts.skipped++; continue }
-        if (streak.n >= LOCK_AFTER) continue
-        const rec = await build(key, model, screen, generate, score, skillsDir, browser)
-        streak = nextStreak(streak, rec.record.ok ? null : rec.record.error)
-        store.write(rec.record, rec.html)
-        if (rec.record.ok) counts.built++
-        else counts.failed++
-        log(`${key.model} ${key.screen} ${key.condition} ${key.run}: ${rec.record.ok ? `${rec.record.rulesPassed} rules` : rec.record.error}`)
-      }
-      if (streak.n >= LOCK_AFTER) log(`${model.id}: skipped for this run after ${LOCK_AFTER} errors in a row that will not clear: ${streak.key}`)
+type Options = {
+  month: string; models: ModelEntry[]; screens: Screen[]; generate: Generate; store: Store
+  score?: typeof scoreHtml; log?: (line: string) => void; skillsDir?: string
+  /** Launches the shared Chromium. Defaults to Playwright's when scoring is the real scoreHtml; without one, scoring launches its own. */
+  launch?: () => Promise<Browser>
+}
+type Counts = { built: number; skipped: number; failed: number }
+type Limit = <T>(fn: () => Promise<T>) => Promise<T>
+type Scorer = (html: string, screen: Screen) => ReturnType<typeof scoreHtml>
+
+/** At most `size` callers run at once; a finished caller hands its slot straight to the next in line. */
+export function semaphore(size: number): Limit {
+  let active = 0
+  const waiting: (() => void)[] = []
+  return async (fn) => {
+    if (active < size) active++
+    else await new Promise<void>((resolve) => waiting.push(resolve))
+    try {
+      return await fn()
+    } finally {
+      const next = waiting.shift()
+      if (next) next()
+      else active--
     }
-  } finally {
-    await browser?.close().catch(() => {})
   }
+}
+
+/** One Chromium for every build, relaunched when it has died, so a crash costs one build and not every one after it. */
+function sharedBrowser(launch: () => Promise<Browser>) {
+  let current: Promise<Browser> | undefined
+  return {
+    async get(): Promise<Browser> {
+      const seen = current
+      const browser = seen && (await seen.catch(() => undefined))
+      if (browser?.isConnected()) return browser
+      if (current === seen) {
+        void browser?.close().catch(() => {})
+        current = launch()
+      }
+      return current!
+    },
+    async close() {
+      const browser = current && (await current.catch(() => undefined))
+      await browser?.close().catch(() => {})
+    },
+  }
+}
+
+export async function runBench({ month, models, screens, generate, store, score = scoreHtml, log = () => {}, skillsDir = SKILLS_DIR, launch }: Options) {
+  checkSkills(skillsDir)
+  const doLaunch = launch ?? (score === scoreHtml ? () => chromium.launch() : undefined)
+  const browser = doLaunch ? sharedBrowser(doLaunch) : undefined
+  const limit = semaphore(SCORE_CONCURRENCY)
+  const scorer: Scorer = (html, screen) => limit(async () => score(html, screen.required, browser ? { browser: await browser.get() } : {}))
+  try {
+    // Every model at once, sharing the one paced Generate; each model's own builds stay in order.
+    const all = await Promise.all(models.map((model) => runModel({ month, model, screens, generate, store, scorer, log, skillsDir })))
+    return all.reduce((a, c) => ({ built: a.built + c.built, skipped: a.skipped + c.skipped, failed: a.failed + c.failed }), { built: 0, skipped: 0, failed: 0 })
+  } finally {
+    await browser?.close()
+  }
+}
+
+type ModelRun = { month: string; model: ModelEntry; screens: Screen[]; generate: Generate; store: Store; scorer: Scorer; log: (line: string) => void; skillsDir: string }
+
+async function runModel({ month, model, screens, generate, store, scorer, log, skillsDir }: ModelRun): Promise<Counts> {
+  let counts: Counts = { built: 0, skipped: 0, failed: 0 }
+  let streak: Streak = { key: null, n: 0 }
+  for (const screen of screens) for (const condition of CONDITIONS) for (let run = 1; run <= RUN.runs; run++) {
+    const key: BuildKey = { month, model: model.id, screen: screen.id, condition, run }
+    if (store.isDone(key)) { counts = { ...counts, skipped: counts.skipped + 1 }; continue }
+    if (streak.n >= LOCK_AFTER) continue
+    const rec = await build(key, model, screen, generate, scorer, skillsDir)
+    streak = nextStreak(streak, rec.record.ok ? null : rec.record.error)
+    store.write(rec.record, rec.html)
+    counts = rec.record.ok ? { ...counts, built: counts.built + 1 } : { ...counts, failed: counts.failed + 1 }
+    log(`${key.model} ${key.screen} ${key.condition} ${key.run}: ${rec.record.ok ? `${rec.record.rulesPassed} rules` : rec.record.error}`)
+  }
+  if (streak.n >= LOCK_AFTER) log(`${model.id}: skipped for this run after ${LOCK_AFTER} errors in a row that will not clear: ${streak.key}`)
   return counts
 }
 
-async function build(key: BuildKey, model: ModelEntry, screen: Screen, generate: Generate, score: typeof scoreHtml, skillsDir: string, browser?: Browser): Promise<{ record: BuildRecord; html: string | null }> {
+async function build(key: BuildKey, model: ModelEntry, screen: Screen, generate: Generate, scorer: Scorer, skillsDir: string): Promise<{ record: BuildRecord; html: string | null }> {
   const base = { ...key, at: new Date().toISOString() }
   const gen = await generate(model, { system: systemPrompt(key.condition, skillsDir), prompt: screen.prompt })
   if (!gen.ok) {
@@ -63,7 +120,7 @@ async function build(key: BuildKey, model: ModelEntry, screen: Screen, generate:
   const html = extractHtml(gen.text)
   if (html === null) return { record: { ...meta, ok: false, error: 'No HTML in the reply' }, html: null }
   try {
-    const s = await score(html, screen.required, browser ? { browser } : {})
+    const s = await scorer(html, screen)
     if (!s.ok) return { record: { ...meta, ok: false, error: `Render failed: ${s.error}` }, html }
     return { record: { ...meta, ok: true, rulesPassed: s.rulesPassed, score: s.score, missing: s.missing, findings: s.findings, unreadableStylesheets: s.unreadableStylesheets }, html }
   } catch (e) {

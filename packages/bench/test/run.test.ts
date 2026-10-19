@@ -1,11 +1,12 @@
 import { mkdirSync, mkdtempSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
+import type { Browser } from 'playwright'
 import { describe, expect, it } from 'vitest'
 import { BenchError, loadScreens, type ModelEntry } from '../src/config'
 import { fakeGenerate } from '../src/fake'
 import type { Generate } from '../src/providers'
-import { currentMonth, runBench } from '../src/run'
+import { currentMonth, runBench, SCORE_CONCURRENCY } from '../src/run'
 import { makeStore } from '../src/store'
 
 const model = (id: string): ModelEntry => ({ id, provider: 'openrouter', model: id, label: id, since: '2026-11' })
@@ -55,6 +56,60 @@ describe('runBench', () => {
     const boom = async () => { throw new Error('chromium died') }
     const out = await runBench({ month: '2026-11', models: [model('fake-good')], screens, generate: fakeGenerate, store, score: boom })
     expect(out.failed).toBe(6)
+  })
+})
+
+const tick = (ms = 2) => new Promise((r) => setTimeout(r, ms))
+
+describe('concurrency', () => {
+  it('runs models at once, while each model builds in model, screen, condition, run order', async () => {
+    let inFlight = 0, most = 0
+    const perModel = new Map<string, number>()
+    let mostPerModel = 0
+    const slow: Generate = async (m, r) => {
+      inFlight++; most = Math.max(most, inFlight)
+      perModel.set(m.id, (perModel.get(m.id) ?? 0) + 1); mostPerModel = Math.max(mostPerModel, perModel.get(m.id)!)
+      await tick()
+      inFlight--; perModel.set(m.id, perModel.get(m.id)! - 1)
+      return fakeGenerate({ ...m, id: 'fake-good' }, r)
+    }
+    const lines: string[] = []
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    const two = loadScreens().slice(0, 2)
+    const out = await runBench({ month: '2026-11', models: [model('a'), model('b'), model('c')], screens: two, generate: slow, store, score: fastScore, log: (l) => lines.push(l) })
+    expect(out).toMatchObject({ built: 36, failed: 0 })
+    expect(most).toBe(3)
+    expect(mostPerModel).toBe(1)
+    const expected = two.flatMap((s) => ['alone', 'dualkit'].flatMap((c) => [1, 2, 3].map((n) => `${s.id} ${c} ${n}`)))
+    for (const id of ['a', 'b', 'c']) expect(lines.filter((l) => l.startsWith(`${id} `)).map((l) => l.split(':')[0]!.slice(id.length + 1))).toEqual(expected)
+  })
+  it(`scores at most ${SCORE_CONCURRENCY} builds at once`, async () => {
+    expect(SCORE_CONCURRENCY).toBe(2)
+    let inFlight = 0, most = 0
+    const slowScore: typeof fastScore = async () => { inFlight++; most = Math.max(most, inFlight); await tick(5); inFlight--; return fastScore() }
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    await runBench({ month: '2026-11', models: ['a', 'b', 'c', 'd'].map(model), screens, generate: (m, r) => fakeGenerate({ ...m, id: 'fake-good' }, r), store, score: slowScore })
+    expect(most).toBe(2)
+  })
+  it('relaunches the shared browser when it has died, before the next build', async () => {
+    const launched: { alive: boolean }[] = []
+    const launch = async () => {
+      const b = { alive: true }
+      launched.push(b)
+      return { isConnected: () => b.alive, close: async () => { b.alive = false } } as unknown as Browser
+    }
+    const seen: unknown[] = []
+    const killer = async (_h: string, _r: unknown, opts: { browser?: Browser } = {}) => {
+      seen.push(opts.browser)
+      if (seen.length === 1) launched[0]!.alive = false // Chromium crashes during the first build
+      return fastScore()
+    }
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    const out = await runBench({ month: '2026-11', models: [model('fake-good')], screens, generate: fakeGenerate, store, score: killer, launch })
+    expect(out.built).toBe(6)
+    expect(launched).toHaveLength(2)
+    expect(new Set(seen.slice(1)).size).toBe(1)
+    expect(seen[1]).not.toBe(seen[0])
   })
 })
 
