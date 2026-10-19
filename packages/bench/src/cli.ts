@@ -1,4 +1,4 @@
-import { parseArgs } from 'node:util'
+import { parseCli } from './args'
 import { BenchError, loadModels, loadScreens, type ModelEntry } from './config'
 import { fakeGenerate } from './fake'
 import { makeGenerate } from './providers'
@@ -12,20 +12,26 @@ const FAKE_MODELS: ModelEntry[] = ['fake-good', 'fake-buggy', 'fake-incomplete',
   .map((id) => ({ id, provider: 'openrouter' as const, model: id, label: id, since: '2026-11' }))
 
 async function main(): Promise<number> {
-  const { values } = parseArgs({ options: { month: { type: 'string' }, model: { type: 'string' }, fake: { type: 'boolean' }, 'summary-only': { type: 'boolean' } } })
-  const month = resolveMonth({ month: values.month, fake: values.fake })
-  const all = values.fake ? FAKE_MODELS : loadModels()
-  const models = values.model ? all.filter((m) => m.id === values.model) : all
-  if (models.length === 0) throw new BenchError(`No model with id "${values.model}". Ids: ${all.map((m) => m.id).join(', ')}`)
+  const args = parseCli(process.argv.slice(2))
+  const month = resolveMonth({ month: args.month, fake: args.fake })
+  const all = args.fake ? FAKE_MODELS : loadModels()
+  const models = args.model ? all.filter((m) => m.id === args.model) : all
+  if (models.length === 0) throw new BenchError(`No model with id "${args.model}". Ids: ${all.map((m) => m.id).join(', ')}`)
   const store = makeStore()
-  if (!values['summary-only']) {
-    const generate = values.fake ? fakeGenerate : makeGenerate({ env: process.env })
-    const out = await runBench({ month, models, screens: loadScreens(), generate, store, log: (l) => console.log(l) })
-    console.log(`Built ${out.built}, skipped ${out.skipped}, failed ${out.failed}.`)
+  if (!args.summaryOnly) {
+    const generate = args.fake ? fakeGenerate : makeGenerate({ env: process.env })
+    const screens = loadScreens().filter((s) => !args.screen || s.id === args.screen)
+    const out = await runBench({
+      month, models, screens, generate, store, log: (l) => console.log(l),
+      ...(args.deadline !== undefined ? { deadline: args.deadline } : {}),
+      ...(args.runs !== undefined ? { runs: args.runs } : {}),
+    })
+    console.log(`Built ${out.built}, skipped ${out.skipped}, failed ${out.failed}.${out.stoppedEarly ? ' Stopped at the deadline; a rerun finishes the rest.' : ''}`)
     if (out.built === 0 && out.skipped === 0) return 1
   }
-  // The summary always covers every model (fake ones under --fake), even when --model reran just one.
-  const summary = await buildSummary({ month, models: values.fake ? FAKE_MODELS : loadModels(), screens: loadScreens(), store })
+  if (args.noSummary) return 0
+  // The summary always covers every model and screen (fake models under --fake), whatever --model, --screen or --runs limited.
+  const summary = await buildSummary({ month, models: args.fake ? FAKE_MODELS : loadModels(), screens: loadScreens(), store })
   parseBenchMonth(JSON.parse(JSON.stringify(summary)))
   console.log(`Summary written to ${writeSummary(summary)}`)
   return 0

@@ -35,6 +35,8 @@ type Options = {
   /** Epoch ms. Once it passes no new build starts; builds already in flight finish. */
   deadline?: number
   now?: () => number
+  /** Runs per model, screen and condition; fewer than RUN.runs only for a live probe. */
+  runs?: number
 }
 type Counts = { built: number; skipped: number; failed: number; stoppedEarly: boolean }
 type Limit = <T>(fn: () => Promise<T>) => Promise<T>
@@ -78,7 +80,7 @@ function sharedBrowser(launch: () => Promise<Browser>) {
   }
 }
 
-export async function runBench({ month, models, screens, generate, store, score = scoreHtml, log = () => {}, skillsDir = SKILLS_DIR, launch, deadline = Infinity, now = Date.now }: Options): Promise<Counts> {
+export async function runBench({ month, models, screens, generate, store, score = scoreHtml, log = () => {}, skillsDir = SKILLS_DIR, launch, deadline = Infinity, now = Date.now, runs = RUN.runs }: Options): Promise<Counts> {
   checkSkills(skillsDir)
   const doLaunch = launch ?? (score === scoreHtml ? () => chromium.launch() : undefined)
   const browser = doLaunch ? sharedBrowser(doLaunch) : undefined
@@ -86,20 +88,20 @@ export async function runBench({ month, models, screens, generate, store, score 
   const scorer: Scorer = (html, screen) => limit(async () => score(html, screen.required, browser ? { browser: await browser.get() } : {}))
   try {
     // Every model at once, sharing the one paced Generate; each model's own builds stay in order.
-    const all = await Promise.all(models.map((model) => runModel({ month, model, screens, generate, store, scorer, log, skillsDir, late: () => now() >= deadline })))
+    const all = await Promise.all(models.map((model) => runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, late: () => now() >= deadline })))
     return all.reduce((a, c) => ({ built: a.built + c.built, skipped: a.skipped + c.skipped, failed: a.failed + c.failed, stoppedEarly: a.stoppedEarly || c.stoppedEarly }), NONE)
   } finally {
     await browser?.close()
   }
 }
 
-type ModelRun = { month: string; model: ModelEntry; screens: Screen[]; generate: Generate; store: Store; scorer: Scorer; log: (line: string) => void; skillsDir: string; late: () => boolean }
+type ModelRun = { month: string; model: ModelEntry; screens: Screen[]; generate: Generate; store: Store; scorer: Scorer; log: (line: string) => void; skillsDir: string; runs: number; late: () => boolean }
 const NONE: Counts = { built: 0, skipped: 0, failed: 0, stoppedEarly: false }
 
-async function runModel({ month, model, screens, generate, store, scorer, log, skillsDir, late }: ModelRun): Promise<Counts> {
+async function runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, late }: ModelRun): Promise<Counts> {
   let counts = NONE
   let streak: Streak = { key: null, n: 0 }
-  for (const screen of screens) for (const condition of CONDITIONS) for (let run = 1; run <= RUN.runs; run++) {
+  for (const screen of screens) for (const condition of CONDITIONS) for (let run = 1; run <= runs; run++) {
     const key: BuildKey = { month, model: model.id, screen: screen.id, condition, run }
     if (store.isDone(key)) { counts = { ...counts, skipped: counts.skipped + 1 }; continue }
     if (streak.n >= LOCK_AFTER) continue

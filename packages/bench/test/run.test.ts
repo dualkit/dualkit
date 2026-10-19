@@ -23,6 +23,11 @@ describe('runBench', () => {
     expect(await runBench(opts)).toEqual({ built: 6, skipped: 0, failed: 0, stoppedEarly: false })
     expect(await runBench(opts)).toEqual({ built: 0, skipped: 6, failed: 0, stoppedEarly: false })
   })
+  it('builds only the first n runs when asked, for a live probe', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    expect(await runBench({ month: '2026-11', models: [model('fake-good')], screens, generate: fakeGenerate, store, score: fastScore, runs: 1 })).toMatchObject({ built: 2 })
+    expect(store.list('2026-11').map((r) => `${r.condition}-${r.run}`)).toEqual(['alone-1', 'dualkit-1'])
+  })
   it('records garbage replies as failed builds and redoes them next time', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
     const out = await runBench({ month: '2026-11', models: [model('fake-garbage')], screens, generate: fakeGenerate, store, score: fastScore })
