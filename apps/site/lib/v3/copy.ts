@@ -11,6 +11,8 @@ export const V3 = {
       ['05', 'Bench', 'How free AI models build Arabic, every month', 'Monthly'],
     ],
     command: '/plugin install dualkit@dualkit',
+    installLabel: 'Install the skills',
+    startLabel: 'Start here',
     start: ['Quick start', 'Docs', 'Updates', 'Status'],
     latest: ['Latest', 'dualkit check, beta', '18 Oct'],
     bench: ['The Bench', 'Next run in 12 days'],
