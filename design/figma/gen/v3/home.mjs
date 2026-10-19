@@ -5,6 +5,7 @@ import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { V3 } from './copy.mjs'
 import { heroGraphic } from './hero-graphic.mjs'
+import { footerGrand, numbers, region, statement, video } from './sections.mjs'
 import { LINE, GLASS_LINE, band, button, col, frame, glass, gsoft, gtext, header, hline, icon, label, mark, meter, painting, row, square, text, vline } from './parts.mjs'
 
 const SPECS = resolve(import.meta.dirname, '../../specs')
@@ -246,7 +247,7 @@ export function homeV3() {
   return {
     screen: 'Dualkit · Home · Desktop · v3',
     size: ['size.desktop', 'hug'], direction: 'ltr', lang: 'en', fill: 'color.v3.ground', textColor: 'color.text.primary',
-    children: [nav(), hero(), how(), kit(), works(), mirror(), bench(), closing(), footer()],
+    children: [nav(), hero(), statement(), how(), region(), kit(), works(), video(), mirror(), bench(), numbers(), closing(), footerGrand()],
   }
 }
 
