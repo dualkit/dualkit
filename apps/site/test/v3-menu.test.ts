@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { V3 } from '../lib/v3/copy'
 import { checkFamilies, parsedFormatLines } from '../lib/v3/kit-data'
-import { MENU_CLOSED, benchCountdown, daysUntil, menuReducer, nextBenchRun, type MenuState } from '../lib/v3/menu'
+import { LEAVE_MS, MENU_CLOSED, benchCountdown, daysUntil, insideAny, menuReducer, nextBenchRun, type MenuState } from '../lib/v3/menu'
 
-const open = (active = 0, via: MenuState['via'] = 'pointer'): MenuState => ({ open: true, active, via })
+const open = (active = 0, via: MenuState['via'] = 'pointer', away = false): MenuState => ({ open: true, active, via, away })
 
 describe('menuReducer', () => {
   it('wraps a move down from the last part to the first', () => {
@@ -24,7 +24,7 @@ describe('menuReducer', () => {
     expect(menuReducer(s, { type: 'hover', index: -1 })).toBe(s)
   })
   it('records a keyboard toggle', () => {
-    expect(menuReducer(MENU_CLOSED, { type: 'toggle', via: 'keyboard' })).toEqual({ open: true, active: 0, via: 'keyboard' })
+    expect(menuReducer(MENU_CLOSED, { type: 'toggle', via: 'keyboard' })).toEqual({ open: true, active: 0, via: 'keyboard', away: false })
   })
   it('records a pointer toggle', () => {
     expect(menuReducer(MENU_CLOSED, { type: 'toggle', via: 'pointer' }).via).toBe('pointer')
@@ -84,5 +84,40 @@ describe('kit data', () => {
   })
   it('counts the Check families from the rules package', () => {
     expect(checkFamilies()).toEqual(V3.kit.previews.check.families.map(([name, n]) => [name, n]))
+  })
+})
+
+describe('menu close intent', () => {
+  it('marks a pointer-opened menu as left when the mouse goes away', () => {
+    expect(menuReducer(open(2), { type: 'away' })).toEqual(open(2, 'pointer', true))
+  })
+  it('ignores the mouse for a menu opened from the keyboard, and for a closed menu', () => {
+    expect(menuReducer(open(0, 'keyboard'), { type: 'away' })).toEqual(open(0, 'keyboard'))
+    expect(menuReducer(MENU_CLOSED, { type: 'away' })).toBe(MENU_CLOSED)
+  })
+  it('cancels the intent when the pointer comes back', () => {
+    expect(menuReducer(open(1, 'pointer', true), { type: 'back' })).toEqual(open(1))
+    const s = open(1)
+    expect(menuReducer(s, { type: 'back' })).toBe(s)
+  })
+  it('closes once the leave delay runs out, only if the pointer is still away', () => {
+    expect(menuReducer(open(1, 'pointer', true), { type: 'away-elapsed' })).toEqual({ ...MENU_CLOSED, via: 'pointer' })
+    const s = open(1)
+    expect(menuReducer(s, { type: 'away-elapsed' })).toBe(s)
+  })
+  it('clears the intent on toggle and close', () => {
+    expect(menuReducer(open(0, 'pointer', true), { type: 'close' }).away).toBe(false)
+    expect(menuReducer(open(0, 'pointer', true), { type: 'toggle', via: 'pointer' }).away).toBe(false)
+  })
+  it('waits about 300ms', () => {
+    expect(LEAVE_MS).toBe(300)
+  })
+  it('tests a point against the nav and drawer boxes, edges included', () => {
+    const boxes = [{ left: 0, top: 0, right: 100, bottom: 70 }, { left: 20, top: 70, right: 80, bottom: 300 }]
+    expect(insideAny(50, 10, boxes)).toBe(true)
+    expect(insideAny(80, 300, boxes)).toBe(true)
+    expect(insideAny(10, 200, boxes)).toBe(false)
+    expect(insideAny(50, 301, boxes)).toBe(false)
+    expect(insideAny(50, 10, [])).toBe(false)
   })
 })

@@ -4,28 +4,48 @@ import { V3 } from './copy'
 export const PART_COUNT = V3.menu.parts.length
 
 export type MenuVia = 'pointer' | 'keyboard'
-export type MenuState = { open: boolean; active: number; via: MenuVia | null }
+/** `away`: the mouse has left the nav and the drawer; the menu closes if it stays away for LEAVE_MS. */
+export type MenuState = { open: boolean; active: number; via: MenuVia | null; away: boolean }
 export type MenuEvent =
   | { type: 'toggle'; via: MenuVia }
   | { type: 'close' }
   | { type: 'move'; dir: 1 | -1 }
   | { type: 'hover'; index: number }
+  | { type: 'away' }
+  | { type: 'back' }
+  | { type: 'away-elapsed' }
 
-export const MENU_CLOSED: MenuState = { open: false, active: 0, via: null }
+export const MENU_CLOSED: MenuState = { open: false, active: 0, via: null, away: false }
+
+/** How long the mouse may be outside the nav and the drawer before a pointer-opened menu closes. */
+export const LEAVE_MS = 300
 
 /** Close keeps `via`, so a menu opened from the keyboard also closes without animation. */
 export function menuReducer(state: MenuState, e: MenuEvent): MenuState {
   switch (e.type) {
     case 'toggle':
-      return state.open ? { ...MENU_CLOSED, via: e.via } : { open: true, active: 0, via: e.via }
+      return state.open ? { ...MENU_CLOSED, via: e.via } : { open: true, active: 0, via: e.via, away: false }
     case 'close':
       return state.open || state.active !== 0 ? { ...MENU_CLOSED, via: state.via } : state
+    // Leaving only counts for a menu the pointer opened; a keyboard-opened menu stays until Escape, a click or a scroll.
+    case 'away':
+      return state.open && state.via === 'pointer' && !state.away ? { ...state, away: true } : state
+    case 'back':
+      return state.away ? { ...state, away: false } : state
+    case 'away-elapsed':
+      return state.open && state.away ? { ...MENU_CLOSED, via: state.via } : state
     case 'move':
       return { ...state, active: (state.active + e.dir + PART_COUNT) % PART_COUNT }
     case 'hover':
       return e.index >= 0 && e.index < PART_COUNT && e.index !== state.active ? { ...state, active: e.index } : state
   }
 }
+
+export type Box = { left: number; top: number; right: number; bottom: number }
+
+/** Whether a point (viewport px) is inside any of the boxes, edges included. */
+export const insideAny = (x: number, y: number, boxes: readonly Box[]): boolean =>
+  boxes.some((b) => x >= b.left && x <= b.right && y >= b.top && y <= b.bottom)
 
 /** The Bench runs at 04:17 UTC on the 1st of each month (.github/workflows/bench.yml; the 2nd and 3rd are retries). */
 const RUN_HOUR = 4

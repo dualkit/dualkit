@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useReducer, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react'
 import { V3 } from '@/lib/v3/copy'
-import { MENU_CLOSED, PART_COUNT, benchCountdown, daysUntil, menuReducer, nextBenchRun, type MenuVia } from '@/lib/v3/menu'
+import { LEAVE_MS, MENU_CLOSED, PART_COUNT, benchCountdown, daysUntil, insideAny, menuReducer, nextBenchRun, type Box, type MenuVia } from '@/lib/v3/menu'
 import { CopyIcon, Mark } from '../icons'
 import { GlassLayer } from './GlassLayer'
 import { Frame } from './primitives'
@@ -21,6 +21,19 @@ const ARROW = <svg viewBox="0 0 16 16" width="14" height="14" fill="none" aria-h
 const GLYPH = {
   open: <svg viewBox="0 0 21 21" width="21" height="21" fill="none" aria-hidden="true"><path d="M3 7.5H18M3 13.5H18" stroke="currentColor" strokeWidth="1.5" /></svg>,
   close: <svg viewBox="0 0 21 21" width="21" height="21" fill="none" aria-hidden="true"><path d="M5 5L16 16M16 5L5 16" stroke="currentColor" strokeWidth="1.5" /></svg>,
+}
+
+/** The press that closed the menu from the scrim must not become a click on whatever lies under the scrim once it lifts. */
+const SWALLOW_MS = 800
+function swallowNextClick() {
+  const swallow = (e: globalThis.MouseEvent) => { e.preventDefault(); e.stopPropagation() }
+  addEventListener('click', swallow, { capture: true, once: true })
+  setTimeout(() => removeEventListener('click', swallow, { capture: true }), SWALLOW_MS)
+}
+const boxOf = (el: Element | null | undefined): Box[] => {
+  if (!el) return []
+  const r = el.getBoundingClientRect()
+  return r.width && r.height ? [{ left: r.left, top: r.top, right: r.right, bottom: r.bottom }] : []
 }
 
 /** A click with detail 0 came from Enter or Space, so it opens without animation. */
@@ -68,15 +81,19 @@ export function ProductsMenu({ parts, previews, latest, benchDays, end }: {
   const phoneButton = useRef<HTMLButtonElement>(null)
   const trigger = useRef<HTMLButtonElement | null>(null)
   const rows = useRef<Array<HTMLAnchorElement | null>>([])
+  const navRow = useRef<HTMLDivElement>(null)
   const path = usePathname()
   const close = useCallback(() => dispatch({ type: 'close' }), [])
 
   useEffect(close, [path, close])
 
-  // Closing rules, as in the v2 NavMenu: Escape, a pointer outside, a scroll past 24px.
+  // Closing rules: Escape, a press anywhere outside the drawer's content (its empty band, the scrim, the rest of the
+  // page), Products again, a scroll past 24px, and, for a menu the mouse opened, the mouse leaving the nav and the
+  // drawer for LEAVE_MS.
   useEffect(() => {
     if (!state.open) return
     const openedAt = scrollY
+    const content = () => drawer.current?.querySelector('.v3-menu-frame')
     const onKey = (e: globalThis.KeyboardEvent) => {
       if (e.key !== 'Escape') return
       close()
@@ -84,15 +101,34 @@ export function ProductsMenu({ parts, previews, latest, benchDays, end }: {
     }
     const onDown = (e: PointerEvent) => {
       const t = e.target as Node
-      const inside = [drawer.current, desktopButton.current, phoneButton.current].some((el) => el?.contains(t))
-      if (!inside) close()
+      const inside = [content(), desktopButton.current, phoneButton.current].some((el) => el?.contains(t))
+      if (inside) return
+      close()
+      if (!navRow.current?.contains(t)) swallowNextClick()
     }
     const onScroll = () => { if (Math.abs(scrollY - openedAt) > SCROLL_CLOSE_PX) close() }
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== 'mouse') return
+      dispatch({ type: insideAny(e.clientX, e.clientY, [...boxOf(navRow.current), ...boxOf(content())]) ? 'back' : 'away' })
+    }
+    const onWindowOut = (e: globalThis.MouseEvent) => { if (!e.relatedTarget) dispatch({ type: 'away' }) }
     addEventListener('keydown', onKey)
     addEventListener('pointerdown', onDown)
     addEventListener('scroll', onScroll, { passive: true })
-    return () => { removeEventListener('keydown', onKey); removeEventListener('pointerdown', onDown); removeEventListener('scroll', onScroll) }
+    addEventListener('pointermove', onMove, { passive: true })
+    document.addEventListener('mouseout', onWindowOut)
+    return () => {
+      removeEventListener('keydown', onKey); removeEventListener('pointerdown', onDown); removeEventListener('scroll', onScroll)
+      removeEventListener('pointermove', onMove); document.removeEventListener('mouseout', onWindowOut)
+    }
   }, [state.open, close])
+
+  // The leave delay: any move back over the nav or the drawer clears `away` and so cancels this timer.
+  useEffect(() => {
+    if (!state.away) return
+    const id = setTimeout(() => dispatch({ type: 'away-elapsed' }), LEAVE_MS)
+    return () => clearTimeout(id)
+  }, [state.away])
 
   // Keyboard open: focus moves into the list. Any close with focus inside: focus goes back to the button.
   useEffect(() => {
@@ -129,7 +165,7 @@ export function ProductsMenu({ parts, previews, latest, benchDays, end }: {
 
   return (
     <header className="v3-nav" data-open={state.open || undefined}>
-      <div className="v3-wrap v3-nav-row">
+      <div ref={navRow} className="v3-wrap v3-nav-row">
         <Link className="v3-nav-brand" href="/"><Mark />Dualkit</Link>
         <nav className="v3-nav-links" aria-label="Main">
           <button ref={desktopButton} type="button" className="v3-nav-link" aria-expanded={state.open} aria-controls={DRAWER_ID} onClick={toggle} onKeyDown={openFromKey}>
