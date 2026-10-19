@@ -74,6 +74,19 @@ describe('bench workflow', () => {
     expect(run).toContain('npm run bench -w @dualkit/bench -- --no-summary "${args[@]}"')
     expect(run).toMatch(/Vercel/)
   })
+  it('pushes the final progress once after the pusher stops, before the step exits', () => {
+    const run = yml.slice(yml.indexOf('name: Run the bench'), yml.indexOf('name: Build the summary'))
+    const waited = run.indexOf('wait "$pusher"')
+    const exited = run.indexOf('exit $status')
+    const finalPush = run.indexOf('refs/heads/bench-progress', waited)
+    expect(waited).toBeGreaterThan(-1)
+    expect(finalPush).toBeGreaterThan(waited)
+    expect(finalPush).toBeLessThan(exited)
+    const tail = run.slice(waited, exited)
+    for (const cmd of ['git add -A -- bench/runs', 'git write-tree', 'git commit-tree "$tree" -p HEAD', '|| true', 'git reset -q']) {
+      expect(tail).toContain(cmd)
+    }
+  })
   it('ignores stray temp files under bench/runs', () => {
     const ignore = readFileSync(join(ROOT, '..', '..', '.gitignore'), 'utf8').split('\n').map((l) => l.trim())
     expect(ignore).toContain('bench/runs/**/*.tmp')

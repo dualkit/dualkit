@@ -68,6 +68,11 @@ jobs:
           pkill -P "$pusher" 2>/dev/null
           kill "$pusher" 2>/dev/null
           wait "$pusher" 2>/dev/null
+          git add -A -- bench/runs 2>/dev/null
+          tree=$(git write-tree)
+          commit=$(git commit-tree "$tree" -p HEAD -m "bench progress $BENCH_MONTH")
+          git push -q -f origin "$commit:refs/heads/bench-progress" || true
+          git reset -q
           exit $status
       - name: Build the summary
         if: ${{ !cancelled() }}
