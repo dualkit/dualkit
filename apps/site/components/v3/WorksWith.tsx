@@ -1,5 +1,6 @@
 'use client'
 import { useRef, type CSSProperties } from 'react'
+import { FEEDBACK_OPEN_EVENT } from '@/components/Feedback'
 import { WORKS_WITH } from '@/lib/marks'
 import { V3 } from '@/lib/v3/copy'
 import { useSequence } from '@/lib/v3/inview'
@@ -18,10 +19,9 @@ function Mark({ path, className }: { path: string; className: string }) {
   return <svg className={className} viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d={path} /></svg>
 }
 
-/** Opens the site feedback panel by pressing its trigger (Feedback has no other way in); a panel that is already open stays open. */
+/** Opens the site feedback panel; a panel that is already open stays open. */
 function openFeedback() {
-  const trigger = document.querySelector<HTMLButtonElement>('.fb-trigger')
-  if (trigger && trigger.getAttribute('aria-expanded') !== 'true') trigger.click()
+  window.dispatchEvent(new Event(FEEDBACK_OPEN_EVENT))
 }
 
 /** Works with: five tools that Dualkit installs into and a dashed tile that opens the feedback panel. The glyph boxes flip to ink in a diagonal wave once the frame is 35% in view. */

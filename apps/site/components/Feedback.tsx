@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from 'react'
 import { COPY } from '../lib/copy'
 import { CheckIcon, FeedbackIcon } from './icons'
 
+/** Window event that opens the feedback panel from anywhere on the page. */
+export const FEEDBACK_OPEN_EVENT = 'dualkit:feedback-open'
+
 type State = { kind: 'idle' } | { kind: 'sending' } | { kind: 'sent' } | { kind: 'error'; message: string }
 
 async function submit(form: HTMLFormElement): Promise<State> {
@@ -50,6 +53,13 @@ export function Feedback() {
   const field = useRef<HTMLTextAreaElement>(null)
   const trigger = useRef<HTMLButtonElement>(null)
   const tucked = useTucked()
+
+  // Other parts of the page (the Works with "ask" tile) open the panel with a window event instead of clicking the trigger.
+  useEffect(() => {
+    const onOpen = () => { setOpen(true); setState((s) => (s.kind === 'sent' || s.kind === 'error' ? { kind: 'idle' } : s)) }
+    window.addEventListener(FEEDBACK_OPEN_EVENT, onOpen)
+    return () => window.removeEventListener(FEEDBACK_OPEN_EVENT, onOpen)
+  }, [])
 
   useEffect(() => {
     if (!open) return
