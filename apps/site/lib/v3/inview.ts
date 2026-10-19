@@ -2,6 +2,13 @@
 import { useEffect, useState, type RefObject } from 'react'
 import { prefersReducedMotion } from '../motion'
 
+/** Pure decision: enough of the element is in view and the tab is shown. Tall elements pass when their visible height fills the threshold share of the viewport. */
+export function isSequenceVisible(ratio: number, threshold: number, hidden: boolean, tall?: { rectH: number; viewH: number }): boolean {
+  if (hidden) return false
+  if (ratio >= threshold) return true
+  return !!tall && tall.viewH > 0 && tall.rectH >= threshold * tall.viewH
+}
+
 /** visible = intersecting at threshold and tab not hidden; reduced tracks the media query live. */
 export function useSequence(ref: RefObject<Element | null>, { threshold = 0.35 }: { threshold?: number } = {}) {
   const [intersecting, setIntersecting] = useState(false)
@@ -11,7 +18,16 @@ export function useSequence(ref: RefObject<Element | null>, { threshold = 0.35 }
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    const io = new IntersectionObserver(([entry]) => setIntersecting(entry?.isIntersecting ?? false), { threshold })
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return setIntersecting(false)
+        setIntersecting(
+          entry.isIntersecting &&
+            isSequenceVisible(entry.intersectionRatio, threshold, false, { rectH: entry.intersectionRect.height, viewH: window.innerHeight }),
+        )
+      },
+      { threshold: [0, threshold] },
+    )
     io.observe(el)
     return () => io.disconnect()
   }, [ref, threshold])

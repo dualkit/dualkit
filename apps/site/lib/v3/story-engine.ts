@@ -510,6 +510,10 @@ export function startStory(root: HTMLElement): StoryHandle {
     qa<Odo>('.od', rno).forEach((o) => { o.dataset.d = '0' }); snapOdos(rno)
     qa('[data-tick] b', rail).forEach((b) => (b.style.transform = 'scale(0)'))
     root.dataset.live = ''
+  }).catch((err: unknown) => {
+    console.error('[hero]', err)
+    rail.style.opacity = ''
+    root.dataset.live = ''
   })
 
   return {
@@ -555,7 +559,10 @@ export function settleStory(root: HTMLElement): () => void {
     cam.style.width = `${w}px`; cam.style.height = `${h}px`
     cam.style.transform = `translate(${c.x.toFixed(2)}px, ${c.y.toFixed(2)}px) scale(${c.scale.toFixed(4)})`
   }
-  void (document.fonts?.ready ?? Promise.resolve()).then(place)
+  void (document.fonts?.ready ?? Promise.resolve()).then(place).catch((err: unknown) => {
+    console.error('[hero]', err)
+    root.dataset.live = ''
+  })
   window.addEventListener('resize', place)
   return () => { dead = true; window.removeEventListener('resize', place) }
 }

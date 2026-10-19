@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { createClock } from '../lib/v3/clock'
+import { isSequenceVisible } from '../lib/v3/inview'
 import { odometerColumns } from '../lib/v3/odometer'
 import { springKeyframes } from '../lib/v3/spring'
 
@@ -104,4 +105,12 @@ describe('createClock', () => {
     f.advance(16)
     expect(n).toBe(1)
   })
+})
+
+describe('isSequenceVisible', () => {
+  it('false below the threshold', () => expect(isSequenceVisible(0.2, 0.35, false)).toBe(false))
+  it('true at the threshold', () => expect(isSequenceVisible(0.35, 0.35, false)).toBe(true))
+  it('false when the tab is hidden', () => expect(isSequenceVisible(0.9, 0.35, true)).toBe(false))
+  it('true for a tall element filling enough of the viewport', () => expect(isSequenceVisible(0.2, 0.35, false, { rectH: 400, viewH: 900 })).toBe(true))
+  it('false for a tall element below the viewport share', () => expect(isSequenceVisible(0.2, 0.35, false, { rectH: 300, viewH: 900 })).toBe(false))
 })
