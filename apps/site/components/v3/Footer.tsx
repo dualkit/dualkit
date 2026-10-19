@@ -20,10 +20,13 @@ const SOCIALS = [
 
 const isExternal = (href: string) => href.startsWith('http')
 
+/** A file such as /r/registry.json is not a page, so it gets a plain link (no client routing, no prefetch). */
+const isFile = (href: string) => /\.[a-z0-9]+$/i.test(href)
+
 function FooterLink({ href, children }: { href: string; children: string }) {
-  return isExternal(href)
-    ? <a href={href} rel="noopener noreferrer">{children}</a>
-    : <Link href={href}>{children}</Link>
+  if (isExternal(href)) return <a href={href} rel="noopener noreferrer">{children}</a>
+  if (isFile(href)) return <a href={href}>{children}</a>
+  return <Link href={href}>{children}</Link>
 }
 
 /** One footer: brand, link columns, seals and legal row on the ground, the grainy painting rising behind them out of the
