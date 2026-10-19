@@ -581,6 +581,9 @@ export function settleStory(root: HTMLElement): () => void {
     rail.querySelectorAll<HTMLElement>(':scope > *').forEach((el) => { el.style.opacity = ''; el.style.transform = ''; el.style.clipPath = '' })
     sky.style.transform = ''
     all(rail, '[data-tick] b').forEach((b) => (b.style.transform = 'scale(1)'))
+    // Settled, the ticks seek nothing, so they leave the tab order and the accessibility tree (set after mount, so the
+    // server and client markup stay identical).
+    all(rail, '[data-tick]').forEach((t) => { t.tabIndex = -1; t.setAttribute('aria-hidden', 'true') })
     sizePanelRings(group)
     const w = painting.clientWidth, h = painting.clientHeight, mobile = matchMedia(MOBILE).matches
     const panel = q('[data-k="panel"]'), pin = mobile ? 4 : 32, inset = mobile ? { x: 2, y: 16 } : 32
