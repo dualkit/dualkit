@@ -103,3 +103,15 @@ export function writeSummary(month: BenchMonth, siteRoot = SITE_ROOT): string {
   writeFileSync(file, `${JSON.stringify(month, null, 2)}\n`)
   return file
 }
+
+export type Published = { ok: true; file: string } | { ok: false; message: string }
+
+/** Builds and writes the month, but never a month that did not run: with no successful build there is nothing to publish. */
+export async function publishSummary(opts: SummaryOptions): Promise<Published> {
+  const siteRoot = opts.siteRoot ?? SITE_ROOT
+  if (!opts.store.list(opts.month).some((r) => r.ok))
+    return { ok: false, message: `No successful build for ${opts.month}, so no summary was written. Run the bench for that month first.` }
+  const summary = await buildSummary({ ...opts, siteRoot })
+  parseBenchMonth(JSON.parse(JSON.stringify(summary)))
+  return { ok: true, file: writeSummary(summary, siteRoot) }
+}

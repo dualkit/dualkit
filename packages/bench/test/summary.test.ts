@@ -1,11 +1,11 @@
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
 import { parseBenchMonth } from '../../../apps/site/lib/bench-schema'
 import { loadScreens, type ModelEntry } from '../src/config'
 import { makeStore, type BuildKey, type Condition } from '../src/store'
-import { buildSummary, writeSummary } from '../src/summary'
+import { buildSummary, publishSummary, writeSummary } from '../src/summary'
 
 const screens = loadScreens()
 const model = (id: string, since = '2026-10'): ModelEntry => ({ id, provider: 'openrouter', model: id, label: id.toUpperCase(), since, by: 'Fake', mark: 'google' })
@@ -189,5 +189,34 @@ describe('rank and previousRank', () => {
     expect(out.models.every((m) => m.previousRank === null)).toBe(true)
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('2026-10'))
     warn.mockRestore()
+  })
+})
+
+describe('publishSummary', () => {
+  const failed = (store: ReturnType<typeof makeStore>, month: string) =>
+    store.write({ month, model: 'a', screen: 'otp', condition: 'alone', run: 1, at: `${month}-01T04:30:00.000Z`, reply: null, usage: null, ms: 1, finish: null, reasoningTokens: null, servedModel: null, ok: false, error: 'HTTP 500' }, null)
+  it('writes nothing and says why when the month has no builds at all', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    const out = await publishSummary({ month: '2026-11', models: [model('a')], screens, store, siteRoot: site, shots: async () => null })
+    expect(out).toEqual({ ok: false, message: expect.stringContaining('2026-11') })
+    expect(existsSync(join(site, 'content', 'bench', '2026-11.json'))).toBe(false)
+  })
+  it('writes nothing when every build of the month failed', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    failed(store, '2026-11')
+    const out = await publishSummary({ month: '2026-11', models: [model('a')], screens, store, siteRoot: site, shots: async () => null })
+    expect(out.ok).toBe(false)
+    expect(existsSync(join(site, 'content', 'bench', '2026-11.json'))).toBe(false)
+  })
+  it('writes the month as before once one build succeeded', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    seed(store, 'a', { alone: 8, dualkit: 18 }, screens.filter((x) => x.id !== 'otp').flatMap((x) => [`${x.id}/alone`, `${x.id}/dualkit`]).concat('otp/dualkit'))
+    failed(store, '2026-11')
+    const out = await publishSummary({ month: '2026-11', models: [model('a')], screens, store, siteRoot: site, shots: async () => null })
+    expect(out).toEqual({ ok: true, file: join(site, 'content', 'bench', '2026-11.json') })
+    expect(parseBenchMonth(JSON.parse(readFileSync(join(site, 'content', 'bench', '2026-11.json'), 'utf8'))).month).toBe('2026-11')
   })
 })

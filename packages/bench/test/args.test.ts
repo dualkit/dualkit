@@ -16,6 +16,10 @@ describe('parseCli', () => {
     expect(parseCli(['--summary-only', '--month', '2026-11'], 0)).toMatchObject({ summaryOnly: true, month: '2026-11' })
     expect(() => parseCli(['--summary-only', '--no-summary'], 0)).toThrow(BenchError)
   })
+  it('reads --print-month', () => {
+    expect(parseCli([], 0).printMonth).toBe(false)
+    expect(parseCli(['--print-month', '--month', '2026-11'], 0)).toMatchObject({ printMonth: true, month: '2026-11' })
+  })
   it('limits a live probe to one screen and a number of runs', () => {
     expect(parseCli(['--screen', 'otp', '--runs', '1'], 0)).toMatchObject({ screen: 'otp', runs: 1 })
     expect(parseCli([], 0)).toMatchObject({ screen: undefined, runs: undefined })

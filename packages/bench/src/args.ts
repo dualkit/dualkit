@@ -7,6 +7,8 @@ export const DEADLINE_MS = 140 * 60_000
 export type CliOptions = {
   month: string | undefined; model: string | undefined; fake: boolean
   summaryOnly: boolean; noSummary: boolean
+  /** Print the resolved month and exit, for the workflow. */
+  printMonth: boolean
   /** Epoch ms after which no new build starts, or undefined for none. */
   deadline: number | undefined
   /** Limits a live probe; the summary ignores both. */
@@ -15,7 +17,7 @@ export type CliOptions = {
 
 const OPTIONS = {
   month: { type: 'string' }, model: { type: 'string' }, fake: { type: 'boolean' },
-  'summary-only': { type: 'boolean' }, 'no-summary': { type: 'boolean' }, 'no-deadline': { type: 'boolean' },
+  'summary-only': { type: 'boolean' }, 'no-summary': { type: 'boolean' }, 'no-deadline': { type: 'boolean' }, 'print-month': { type: 'boolean' },
   screen: { type: 'string' }, runs: { type: 'string' },
 } as const
 
@@ -38,7 +40,7 @@ export function parseCli(argv: string[], now = Date.now()): CliOptions {
     throw new BenchError(`No screen "${values.screen}". Screens: ${SCREENS.join(', ')}`)
   return {
     month: values.month, model: values.model, fake: values.fake ?? false,
-    summaryOnly: values['summary-only'] ?? false, noSummary: values['no-summary'] ?? false,
+    summaryOnly: values['summary-only'] ?? false, noSummary: values['no-summary'] ?? false, printMonth: values['print-month'] ?? false,
     deadline: values['no-deadline'] ? undefined : now + DEADLINE_MS,
     screen: values.screen, runs: parseRuns(values.runs),
   }
