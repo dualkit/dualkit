@@ -4,13 +4,14 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "npm run build -w @dualkit/format && next build",
+    "build": "npm run build -w @dualkit/format && npm run build -w @dualkit/rules && next build",
     "start": "next start",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@dualkit/format": "*",
+    "@dualkit/rules": "*",
     "@dualkit/starter": "*",
     "next": "15.5.27",
     "react": "19.1.1",
