@@ -4,6 +4,8 @@ import { fakeGenerate } from './fake'
 import { makeGenerate } from './providers'
 import { currentMonth, runBench } from './run'
 import { makeStore } from './store'
+import { buildSummary, writeSummary } from './summary'
+import { parseBenchMonth } from '../../../apps/site/lib/bench-schema'
 
 const MONTH = /^\d{4}-(0[1-9]|1[0-2])$/
 const FAKE_MODELS: ModelEntry[] = ['fake-good', 'fake-buggy', 'fake-incomplete', 'fake-garbage']
@@ -23,6 +25,10 @@ async function main(): Promise<number> {
     console.log(`Built ${out.built}, skipped ${out.skipped}, failed ${out.failed}.`)
     if (out.built === 0 && out.skipped === 0) return 1
   }
+  // The summary always covers every model (fake ones under --fake), even when --model reran just one.
+  const summary = await buildSummary({ month, models: values.fake ? FAKE_MODELS : loadModels(), screens: loadScreens(), store })
+  parseBenchMonth(JSON.parse(JSON.stringify(summary)))
+  console.log(`Summary written to ${writeSummary(summary)}`)
   return 0
 }
 
