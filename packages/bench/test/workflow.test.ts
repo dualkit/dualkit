@@ -22,4 +22,23 @@ describe('bench workflow', () => {
   it('commits only when something changed', () => {
     expect(yml).toContain('git diff --cached --quiet ||')
   })
+  it('rebases over a dirty tree with autostash', () => {
+    expect(yml).toContain('git pull --rebase --autostash')
+  })
+  it('gives the bench step its own timeout under the job timeout', () => {
+    expect(yml).toMatch(/name: Run the bench\n\s+timeout-minutes: 165\n/)
+    expect(yml).toContain('timeout-minutes: 180')
+  })
+  it('retries the pull and push three times and fails when all attempts fail', () => {
+    expect(yml).toContain('for i in 1 2 3; do')
+    expect(yml).toContain('if git pull --rebase --autostash && git push; then pushed=1; break; fi')
+    expect(yml).toContain('[ "$pushed" -eq 1 ] || exit 1')
+  })
+  it('passes workflow inputs to run blocks only through env keys', () => {
+    const lines = yml.split('\n').filter((line) => line.includes('${{ inputs.'))
+    expect(lines.length).toBeGreaterThan(0)
+    for (const line of lines) {
+      expect(line).toMatch(/^\s*(MONTH|MODEL): \$\{\{ inputs\.(month|model) \}\}$/)
+    }
+  })
 })

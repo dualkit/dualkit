@@ -29,6 +29,7 @@ jobs:
       - run: npm run build -w @dualkit/rules
       - run: npx playwright@1.55.0 install --with-deps chromium
       - name: Run the bench
+        timeout-minutes: 165
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -50,7 +51,11 @@ jobs:
           done
           if [ ${#paths[@]} -gt 0 ]; then git add -A -- "${paths[@]}"; fi
           git diff --cached --quiet || git commit -m "chore(bench): results for ${MONTH:-$(date -u +%Y-%m)}"
-          git pull --rebase
-          git push
+          pushed=0
+          for i in 1 2 3; do
+            if git pull --rebase --autostash && git push; then pushed=1; break; fi
+            sleep 5
+          done
+          [ "$pushed" -eq 1 ] || exit 1
         env:
           MONTH: ${{ inputs.month }}
