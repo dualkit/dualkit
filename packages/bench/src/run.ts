@@ -9,6 +9,7 @@ import { systemPrompt } from './system'
 const CONDITIONS: readonly Condition[] = ['alone', 'dualkit']
 const LOCKED = /^No [A-Z_]+_API_KEY$|^HTTP (401|403|404)\b/
 const LOCK_AFTER = 3
+const NO_REPLY = { reply: null, usage: null, finish: null, reasoningTokens: null, servedModel: null } as const
 
 export const currentMonth = (now = new Date()) => now.toISOString().slice(0, 7)
 
@@ -42,14 +43,18 @@ export async function runBench({ month, models, screens, generate, store, score 
 async function build(key: BuildKey, model: ModelEntry, screen: Screen, generate: Generate, score: typeof scoreHtml, browser?: Browser): Promise<{ record: BuildRecord; html: string | null }> {
   const base = { ...key, at: new Date().toISOString() }
   const gen = await generate(model, { system: systemPrompt(key.condition), prompt: screen.prompt })
-  if (!gen.ok) return { record: { ...base, reply: null, usage: null, ms: gen.ms, ok: false, error: gen.error }, html: null }
-  const meta = { ...base, reply: gen.text, usage: gen.usage, ms: gen.ms }
+  if (!gen.ok) {
+    const r = gen.reply
+    const reply = r ? { reply: r.text, usage: r.usage, finish: r.finish, reasoningTokens: r.reasoningTokens, servedModel: r.servedModel } : NO_REPLY
+    return { record: { ...base, ...reply, ms: gen.ms, ok: false, error: gen.error }, html: null }
+  }
+  const meta = { ...base, reply: gen.text, usage: gen.usage, ms: gen.ms, finish: gen.finish, reasoningTokens: gen.reasoningTokens, servedModel: gen.servedModel }
   const html = extractHtml(gen.text)
   if (html === null) return { record: { ...meta, ok: false, error: 'No HTML in the reply' }, html: null }
   try {
     const s = await score(html, screen.required, browser ? { browser } : {})
     if (!s.ok) return { record: { ...meta, ok: false, error: `Render failed: ${s.error}` }, html }
-    return { record: { ...meta, ok: true, rulesPassed: s.rulesPassed, score: s.score, missing: s.missing, findings: s.findings }, html }
+    return { record: { ...meta, ok: true, rulesPassed: s.rulesPassed, score: s.score, missing: s.missing, findings: s.findings, unreadableStylesheets: s.unreadableStylesheets }, html }
   } catch (e) {
     return { record: { ...meta, ok: false, error: `Render failed: ${e instanceof Error ? e.message : String(e)}` }, html }
   }

@@ -10,7 +10,7 @@ import { RUN, type RequiredPart } from './config'
 
 export type SlimFinding = { rule: string; title: string; severity: 'error' | 'warning' | 'note'; box: { x: number; y: number; width: number; height: number } | null }
 export type Scored =
-  | { ok: true; rulesPassed: number; score: number; missing: string[]; findings: SlimFinding[]; screenshot: string; pageHeight: number }
+  | { ok: true; rulesPassed: number; score: number; missing: string[]; findings: SlimFinding[]; screenshot: string; pageHeight: number; unreadableStylesheets: number }
   | { ok: false; error: string }
 
 export const RULE_COUNT = RULES.length
@@ -74,7 +74,7 @@ export async function scoreHtml(html: string, required: readonly RequiredPart[],
       }))
       return {
         ok: true, rulesPassed: RULE_COUNT - new Set(findings.map((f) => f.rule)).size, score: result.score,
-        missing, findings, screenshot: result.screenshot, pageHeight: result.pageHeight,
+        missing, findings, screenshot: result.screenshot, pageHeight: result.pageHeight, unreadableStylesheets: result.unreadableStylesheets,
       }
     })()
     const deadline = new Promise<typeof TIMED_OUT>((resolve) => { timer = setTimeout(() => resolve(TIMED_OUT), opts.deadlineMs ?? SCORE_DEADLINE_MS) })

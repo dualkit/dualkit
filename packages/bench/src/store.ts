@@ -6,8 +6,9 @@ import type { SlimFinding } from './score'
 
 export type Condition = 'alone' | 'dualkit'
 export type BuildKey = { month: string; model: string; screen: string; condition: Condition; run: number }
-export type BuildRecord = BuildKey & { at: string; reply: string | null; usage: Usage | null; ms: number }
-  & ({ ok: true; rulesPassed: number; score: number; missing: string[]; findings: SlimFinding[] } | { ok: false; error: string })
+/** finish, reasoningTokens and servedModel come from the provider, and are null when a failure left no reply. */
+export type BuildRecord = BuildKey & { at: string; reply: string | null; usage: Usage | null; ms: number; finish: string | null; reasoningTokens: number | null; servedModel: string | null }
+  & ({ ok: true; rulesPassed: number; score: number; missing: string[]; findings: SlimFinding[]; unreadableStylesheets: number } | { ok: false; error: string })
 
 export const RUNS_ROOT = join(ROOT, '..', '..', 'bench', 'runs')
 const FILE = /^(alone|dualkit)-(\d+)\.json$/

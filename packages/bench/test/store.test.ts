@@ -5,8 +5,8 @@ import { describe, expect, it } from 'vitest'
 import { makeStore, type BuildKey, type BuildRecord } from '../src/store'
 
 const key: BuildKey = { month: '2026-11', model: 'gemma-4-31b', screen: 'otp', condition: 'alone', run: 1 }
-const okRec = (k: BuildKey): BuildRecord => ({ ...k, at: '2026-11-01T04:20:00Z', reply: 'r', usage: { input: 1, output: 2 }, ms: 5, ok: true, rulesPassed: 12, score: 30, missing: [], findings: [] })
-const failRec = (k: BuildKey): BuildRecord => ({ ...k, at: '2026-11-01T04:20:00Z', reply: null, usage: null, ms: 5, ok: false, error: 'HTTP 429' })
+const okRec = (k: BuildKey): BuildRecord => ({ ...k, at: '2026-11-01T04:20:00Z', reply: 'r', usage: { input: 1, output: 2 }, ms: 5, finish: 'stop', reasoningTokens: 0, servedModel: 'm', ok: true, rulesPassed: 12, score: 30, missing: [], findings: [], unreadableStylesheets: 0 })
+const failRec = (k: BuildKey): BuildRecord => ({ ...k, at: '2026-11-01T04:20:00Z', reply: null, usage: null, ms: 5, finish: null, reasoningTokens: null, servedModel: null, ok: false, error: 'HTTP 429' })
 
 describe('store', () => {
   it('lays builds out by month, model, screen and condition', () => {

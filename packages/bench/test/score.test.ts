@@ -19,6 +19,7 @@ describe('scoreHtml', () => {
     expect(out.missing).toEqual([])
     expect(out.rulesPassed).toBeGreaterThanOrEqual(RULE_COUNT - 2)
     expect(out.screenshot.length).toBeGreaterThan(1000)
+    expect(out.unreadableStylesheets).toBe(0)
   })
   it('scores a buggy build lower than the good one', async () => {
     const good = await scoreHtml(fixture('good'), payment.required, { browser })
