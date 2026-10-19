@@ -4,7 +4,8 @@ import { MAKER_MARKS } from '../lib/marks'
 import { factsLine, factsOf, makerInitial, monthLabel, movementOf, pinSide, rawUrl, shotMarks, sideLine, tickFill, trackOf, unrankedReason } from '../lib/bench-view'
 
 const total = (rulesPassed: number) => ({ rulesPassed, outOf: 100, score: rulesPassed })
-const ranCell = (over: Partial<Extract<BenchCell, { ran: true }>> = {}): BenchCell => ({ ran: true, runs: 3, rulesPassed: 14, score: 30, missing: [], findings: [], shot: null, pageHeight: 844, raw: 'bench/runs/2026-11/a/b/alone-2.json', ...over })
+type Ran = Extract<BenchCell, { ran: true }>
+const ranCell = (over: Partial<Ran> = {}): Ran => ({ ran: true, runs: 3, rulesPassed: 14, score: 30, missing: [], findings: [], shot: null, pageHeight: 844, raw: 'bench/runs/2026-11/a/b/alone-2.json', ...over })
 const model = (over: Partial<BenchModel> = {}): BenchModel => ({
   id: 'm', label: 'M', provider: 'gemini', by: 'Google', mark: 'google', rank: 2, previousRank: 3, isNew: false,
   alone: total(61), dualkit: total(92), lift: 31, screens: [{ id: 's', title: 'S', alone: ranCell(), dualkit: ranCell() }], ...over,
