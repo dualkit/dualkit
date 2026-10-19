@@ -42,6 +42,8 @@
   .v3-region-ex { transition: grid-template-columns 240ms var(--ease-out), grid-template-rows 240ms var(--ease-out); }
   .v3-region-arc { stroke-dasharray: 1; animation: v3-region-arc 420ms var(--ease-out) both; }
 }
+/* A pick from the keyboard (Tab through the tags) shows at once: no widen, no arc draw. */
+.v3-region[data-via='keyboard'] :is(.v3-region-ex, .v3-region-arc) { transition: none; animation: none; }
 @keyframes v3-region-arc { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
 
 @media (max-width: 899px) {

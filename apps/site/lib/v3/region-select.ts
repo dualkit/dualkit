@@ -21,6 +21,24 @@ export function selectReducer(current: string | null, e: SelectEvent): string | 
   }
 }
 
+export type PickVia = 'pointer' | 'keyboard'
+
+/**
+ * How a pick came about, so the map can show a keyboard pick at once. Focus reaches the reducer only when no pointer
+ * pressed first (GulfMapView skips focus that a press caused), so focus is the keyboard. Letting go changes nothing.
+ */
+export function pickVia(e: SelectEvent): PickVia | null {
+  switch (e.type) {
+    case 'focus':
+      return 'keyboard'
+    case 'enter':
+    case 'tap':
+      return 'pointer'
+    default:
+      return null
+  }
+}
+
 /** Dots within this many css px of the pointer darken. */
 export const NEAR_RADIUS = 60
 export const PROXIMITY_ALPHA = 0.9

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { formatMoney } from '@dualkit/format'
 import { cityExamples, runDir } from '../lib/v3/region-examples'
-import { NEAR_RADIUS, PROXIMITY_ALPHA, arcPath, proximityAlpha, selectReducer } from '../lib/v3/region-select'
+import { NEAR_RADIUS, PROXIMITY_ALPHA, arcPath, pickVia, proximityAlpha, selectReducer } from '../lib/v3/region-select'
 
 const CITIES = ['Kuwait City', 'Riyadh', 'Manama', 'Doha', 'Abu Dhabi', 'Dubai', 'Muscat']
 
@@ -79,5 +79,20 @@ describe('run direction', () => {
     expect(runDir(ex.Dubai!.from)).toBe('ltr')
     expect(runDir(ex['Abu Dhabi']!.to)).toBe('rtl')
     expect(runDir(ex.Riyadh!.to)).toBe('rtl')
+  })
+})
+
+describe('pickVia', () => {
+  it('reads focus as the keyboard, so a tabbed pick shows at once', () => {
+    expect(pickVia({ type: 'focus', city: 'Doha' })).toBe('keyboard')
+  })
+  it('reads hover and tap as the pointer, so they keep their motion', () => {
+    expect(pickVia({ type: 'enter', city: 'Doha' })).toBe('pointer')
+    expect(pickVia({ type: 'tap', city: 'Doha' })).toBe('pointer')
+  })
+  it('leaves the last kind alone when a city is let go', () => {
+    expect(pickVia({ type: 'leave', city: 'Doha' })).toBeNull()
+    expect(pickVia({ type: 'blur', city: 'Doha' })).toBeNull()
+    expect(pickVia({ type: 'clear' })).toBeNull()
   })
 })

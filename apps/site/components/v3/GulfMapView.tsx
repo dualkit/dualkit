@@ -1,11 +1,11 @@
 'use client'
-import { useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react'
 import { V3 } from '@/lib/v3/copy'
 import { DESIGN_H, DESIGN_W, ORIGIN_CITY, phoneCrop } from '@/lib/v3/grid'
 import { useSequence } from '@/lib/v3/inview'
 import { runDir, type CityExample } from '@/lib/v3/region-examples'
 import { GRID } from '@/lib/v3/region-grid'
-import { arcPath, selectReducer } from '@/lib/v3/region-select'
+import { arcPath, pickVia, selectReducer, type PickVia, type SelectEvent } from '@/lib/v3/region-select'
 import { createGulfEngine, ARC_LIFT, PHONE_QUERY, type Engine } from './gulf-engine'
 import { Label } from './primitives'
 import './region.css'
@@ -52,7 +52,7 @@ function Example({ ex }: { ex: CityExample }) {
  * Hover (a mouse) or focus picks a city, and leaving or blurring lets it go; a touch taps it on and off. A press also
  * focuses, so focus that comes from a pointer is skipped and the click decides.
  */
-function useCityHandlers(dispatch: (e: Parameters<typeof selectReducer>[1]) => void) {
+function useCityHandlers(dispatch: (e: SelectEvent) => void) {
   const pointing = useRef<string | null>(null)
   return (city: string) => ({
     onPointerEnter: (e: React.PointerEvent) => { if (e.pointerType === 'mouse') dispatch({ type: 'enter', city }) },
@@ -101,7 +101,14 @@ export function GulfMapView({ examples }: { examples: Record<string, CityExample
   const canvas = useRef<HTMLCanvasElement>(null)
   const engine = useRef<Engine | null>(null)
   const { visible, reduced } = useSequence(map)
-  const [selected, dispatch] = useReducer(selectReducer, null)
+  const [selected, select] = useReducer(selectReducer, null)
+  // A keyboard pick (Tab onto a tag) shows its open tag and arc at once; hover and tap keep their motion.
+  const [via, setVia] = useState<PickVia>('pointer')
+  const dispatch = useCallback((e: SelectEvent) => {
+    const how = pickVia(e)
+    if (how) setVia(how)
+    select(e)
+  }, [])
   const [frame, setFrame] = useState<Frame | null>(null)
   const [flips, setFlips] = useState<string[]>([])
   const handlers = useCityHandlers(dispatch)
@@ -157,7 +164,7 @@ export function GulfMapView({ examples }: { examples: Record<string, CityExample
   const arc = frame && home && target ? arcPath(spot(home, frame), spot(target, frame), ARC_LIFT) : null
 
   return (
-    <section className="v3-region" aria-labelledby="v3-region-title">
+    <section className="v3-region" aria-labelledby="v3-region-title" data-via={via}>
       <div className="v3-wrap">
         <div className="v3-region-head">
           <div className="v3-region-heading">
