@@ -17,7 +17,16 @@ function stepResponse(zeta: number, omega: number, t: number): number {
 }
 
 /** Time in seconds after which the response stays within 2% of the target, for omega = 1. */
+const settleCache = new Map<number, number>()
 function unitSettleSeconds(zeta: number): number {
+  const hit = settleCache.get(zeta)
+  if (hit !== undefined) return hit
+  const v = solveUnitSettle(zeta)
+  settleCache.set(zeta, v)
+  return v
+}
+
+function solveUnitSettle(zeta: number): number {
   const dt = 0.001
   let settled = 0
   for (let t = 0; t < 400; t += dt) {
@@ -35,4 +44,11 @@ export function springKeyframes(from: number, to: number, { zeta, settleMs, fps 
   for (let i = 0; i < frames; i++) out.push(from + (to - from) * stepResponse(zeta, omega, i / fps))
   out.push(to)
   return out
+}
+
+/** The same spring as a function of elapsed ms (0 to 1, overshooting), for sampling past the settle time or at any offset. */
+export function springAt({ zeta, settleMs }: Omit<SpringOptions, 'fps'>): (ms: number) => number {
+  if (!(zeta > 0) || !(settleMs > 0)) throw new RangeError('springAt: zeta and settleMs must be positive')
+  const omega = unitSettleSeconds(zeta) / (settleMs / 1000)
+  return (ms) => (ms <= 0 ? 0 : stepResponse(zeta, omega, ms / 1000))
 }

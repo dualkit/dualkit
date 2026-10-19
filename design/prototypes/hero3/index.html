@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dualkit hero, story prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=IBM+Plex+Sans+Arabic:wght@400;500&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: Switzer; src: url(fonts/Switzer-Regular.woff2) format('woff2'); font-weight: 400; font-display: block; }
+@font-face { font-family: Switzer; src: url(fonts/Switzer-Medium.woff2) format('woff2'); font-weight: 500; font-display: block; }
+@font-face { font-family: 'Berkeley Mono'; src: url(BerkeleyMono-Regular.otf) format('opentype'); font-weight: 400; font-display: block; }
+:root {
+  --ground: #efece4; --ink: #09090b; --soft: rgba(9,9,11,.6); --faint: rgba(9,9,11,.45); --line: rgba(0,0,0,.12);
+  --glass: rgba(11,10,9,.46); --glass-line: rgba(255,255,255,.14); --g-text: #fff; --g-soft: rgba(255,255,255,.64); --g-faint: rgba(255,255,255,.42);
+  --green: #3ecf6e;
+  --mono: 'Berkeley Mono', 'IBM Plex Mono', ui-monospace, monospace;
+  --ar: 'IBM Plex Sans Arabic', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--ground); color: var(--ink); font-family: Switzer, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+body { overflow-x: hidden; }
+.wrap { width: min(1200px, calc(100% - 32px)); margin: 0 auto; }
+
+nav { border-bottom: 1px solid var(--line); }
+nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 76px; }
+.brand { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; width: 240px; }
+.links { display: flex; gap: 32px; font-size: 14px; font-weight: 500; color: var(--soft); }
+.nav-end { display: flex; gap: 8px; justify-content: flex-end; width: 240px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 22px; font: 500 14px Switzer, sans-serif; border: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; }
+.btn.ink { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+.head { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 160px; gap: 40px; }
+.label { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; margin-bottom: 40px; }
+.sq { width: 7px; height: 7px; background: var(--ink); flex: none; }
+h1 { font-weight: 400; font-size: 64px; line-height: 1.02; letter-spacing: -0.032em; }
+h1 .w { display: inline-block; }
+.side { width: 400px; flex: none; }
+.side p { font-size: 17px; line-height: 1.5; color: var(--soft); margin-bottom: 40px; }
+.actions { display: flex; gap: 8px; }
+
+.frame { position: relative; margin-top: 80px; border: 1px solid var(--line); padding: 40px; }
+.tick { position: absolute; width: 7px; height: 7px; background: var(--ink); }
+.tick.ts { left: -4px; top: -4px; } .tick.te { right: -4px; top: -4px; } .tick.bs { left: -4px; bottom: -4px; } .tick.be { right: -4px; bottom: -4px; }
+.pwrap { position: relative; }
+.painting { position: relative; height: 640px; overflow: hidden; }
+.sky { position: absolute; inset: -10%; background: url(dusk.webp) center / cover; transform-origin: center; will-change: transform; }
+.cam { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.cam.moving { will-change: transform; }
+.group { position: absolute; left: 0; top: 0; width: 520px; display: flex; flex-direction: column; gap: 16px; }
+
+/* panel */
+.panel { position: relative; width: 520px; color: var(--g-text); }
+.bg, .ringbox, .scanclip { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transform-origin: top center; }
+.bg { background: var(--glass); backdrop-filter: blur(24px) saturate(140%); -webkit-backdrop-filter: blur(24px) saturate(140%); }
+.ringbox { pointer-events: none; overflow: visible; }
+.ringbox rect { fill: none; stroke: #fff; stroke-width: 1; vector-effect: non-scaling-stroke; stroke-dasharray: 1; }
+.scanclip { overflow: hidden; pointer-events: none; }
+.sweep { position: absolute; top: 0; left: 0; width: 160px; height: 100%; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.2), rgba(255,255,255,0)); transform: translateX(-200px); }
+.scan { position: absolute; left: 0; top: 0; width: 100%; height: 90px; background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.14), rgba(255,255,255,0)); transform: translateY(-120px); }
+.spec { position: absolute; left: 0; top: 0; width: 460px; height: 460px; margin: -230px 0 0 -230px; background: radial-gradient(closest-side, rgba(255,255,255,.10), rgba(255,255,255,0)); opacity: 0; transition: opacity 300ms ease; }
+.content { position: relative; }
+.row { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 40px; }
+.row + .row::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: var(--glass-line); }
+.row.h { height: 48px; }
+.row.c { height: 40px; }
+.row.c::before { display: none; }
+.row.b { height: 72px; justify-content: center; }
+.panel.typeset .row:not(.h):not(.c):not(.b) { height: 48px; }
+.panel.typeset .row.h { height: 56px; }
+
+.cell { display: inline-grid; align-items: center; }
+.cell > .face { grid-area: 1 / 1; display: inline-flex; align-items: center; white-space: nowrap; }
+.face > [dir] { unicode-bidi: isolate; }
+.cell.s { justify-items: start; } .cell.e { justify-items: end; } .cell.m { justify-items: center; }
+.w2 { display: inline-block; white-space: pre; }
+
+/* type: broken and fixed */
+.bk { font-family: Arial, 'Geeza Pro', sans-serif; letter-spacing: .22em; line-height: 1.1; }
+.t.bk { font-size: 16px; } .k.bk { font-size: 13px; color: var(--g-soft); }
+.t.fx { font-family: var(--ar); font-size: 18px; font-weight: 500; line-height: 1.7; }
+.k.fx { font-family: var(--ar); font-size: 14px; color: var(--g-soft); line-height: 1.7; }
+.t.en { font-size: 16px; font-weight: 500; }
+.k.en { font-size: 13px; color: var(--g-soft); }
+.v { font-size: 14.5px; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.2; }
+.va { font-family: var(--ar); font-size: 15px; font-weight: 500; line-height: 1.4; }
+.mono { font-family: var(--mono); font-size: 12px; line-height: 1.2; }
+
+.badge { display: inline-flex; align-items: center; gap: 8px; height: 24px; padding: 0 8px; font-family: var(--mono); font-size: 11px; border: 1px solid var(--glass-line); color: var(--g-soft); direction: ltr; }
+.roll { display: inline-block; height: 14px; line-height: 14px; overflow: hidden; color: #fff; }
+.roll > span { display: block; }
+.grp { display: inline-flex; align-items: center; gap: 8px; color: var(--g-soft); }
+.state { width: 7px; height: 7px; border: 1px solid #fff; flex: none; }
+.track { display: inline-block; width: 84px; height: 3px; background: var(--glass-line); position: relative; overflow: hidden; }
+.track b { position: absolute; inset: 0; background: #fff; transform-origin: left center; }
+.odo { display: inline-block; height: 1.2em; line-height: 1.2em; overflow: hidden; vertical-align: top; contain: paint; }
+.odo > span { display: block; }
+.odo i { display: block; font-style: normal; height: 1.2em; }
+.dg { display: inline-block; height: 1.2em; line-height: 1.2em; overflow: hidden; vertical-align: top; contain: paint; }
+.dg i { display: block; font-style: normal; }
+
+.amt { display: inline-flex; align-items: center; }
+.num { display: inline-flex; direction: ltr; unicode-bidi: isolate; }
+.ch { display: inline-block; white-space: pre; }
+.num .hide { display: none; }
+.cur { margin-inline-start: .35em; }
+.cur .face { font-family: inherit; }
+.ph { position: relative; display: inline-flex; direction: ltr; unicode-bidi: isolate; }
+.phring { position: absolute; left: -7px; top: -5px; overflow: visible; pointer-events: none; }
+.phring rect { fill: none; stroke: #fff; stroke-width: 1; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.chip { position: absolute; top: 50%; margin-top: -10px; height: 20px; padding: 0 8px; display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 10px; color: var(--ink); background: #fff; white-space: nowrap; opacity: 0; }
+.ph .chip { left: calc(100% + 16px); }
+.ib { position: relative; display: inline-flex; direction: ltr; unicode-bidi: isolate; color: var(--g-soft); }
+.ib.grouped .ch.g0 { margin-left: .5em; }
+.ib .chip { left: calc(100% + 16px); background: transparent; color: #fff; border: 1px solid var(--glass-line); }
+.ib .chip i { width: 6px; height: 6px; background: var(--green); display: inline-block; }
+.panel[dir="ltr"] .ph .chip, .panel[dir="ltr"] .ib .chip { left: auto; right: calc(100% + 16px); }
+.gl { position: absolute; top: -3px; bottom: -3px; background: rgba(255,255,255,.18); opacity: 0; pointer-events: none; }
+
+.btnface { position: absolute; left: 24px; right: 24px; top: 16px; bottom: 16px; background: rgba(255,255,255,.14); }
+.paylabel { position: relative; }
+.pay.bk { font-size: 14px; color: #fff; }
+.pay.fx { font-family: var(--ar); font-size: 15px; font-weight: 500; color: #fff; }
+.pay.en { font-size: 14px; font-weight: 500; color: #fff; }
+.arw { position: absolute; top: 50%; margin-top: -7px; inset-inline-end: 40px; width: 14px; height: 14px; }
+.arw svg { display: block; width: 14px; height: 14px; color: #fff; }
+
+/* pins */
+.pin { position: absolute; top: 50%; margin-top: -12px; display: flex; align-items: center; pointer-events: none; }
+.pin.l { right: calc(100% + 8px); } .pin.r { left: calc(100% + 8px); flex-direction: row-reverse; }
+.pin .pq { position: relative; width: 24px; height: 24px; background: var(--ink); color: #fff; font-family: var(--mono); font-size: 11px; display: grid; place-items: center; }
+.pin .pq > * { grid-area: 1 / 1; }
+.pin .pq svg { width: 12px; height: 12px; opacity: 0; }
+.pin .ld { display: none; }
+.pin.l .ld { transform-origin: right center; } .pin.r .ld { transform-origin: left center; }
+
+/* install strip */
+.strip { position: relative; height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; color: #fff; opacity: 0; }
+.strip .bg { position: absolute; inset: 0; width: auto; height: auto; border: 1px solid var(--glass-line); }
+.strip .cmd { position: relative; font-family: var(--mono); font-size: 12px; white-space: pre; }
+.strip .cmd .p { color: var(--g-faint); }
+.caret { display: inline-block; width: 7px; height: 13px; background: #fff; vertical-align: -2px; margin-left: 1px; }
+.strip .ld4 { position: relative; display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--g-soft); opacity: 0; }
+.strip .sq4 { display: inline-flex; gap: 4px; }
+.strip .sq4 i { width: 7px; height: 7px; border: 1px solid rgba(255,255,255,.6); display: inline-block; }
+.strip .sq4 i b { display: block; width: 100%; height: 100%; background: #fff; transform: scale(0); }
+
+/* caption rail */
+.rail { position: absolute; left: 24px; bottom: 24px; width: 320px; min-height: 140px; padding: 16px 24px; color: #fff; z-index: 3; }
+.rail .bg { position: absolute; inset: 0; width: auto; height: auto; border: 1px solid var(--glass-line); }
+.rail > *:not(.bg) { position: relative; }
+.rhead { display: flex; align-items: baseline; gap: 12px; }
+.rno { font-family: var(--mono); font-size: 12px; color: var(--g-soft); display: inline-flex; }
+.rtitle { font-size: 17px; font-weight: 400; letter-spacing: -0.01em; display: inline-grid; }
+.rline { font-size: 13px; line-height: 1.5; color: var(--g-soft); margin-top: 8px; min-height: 40px; display: grid; }
+.rtitle > .face, .rline > .face { grid-area: 1 / 1; }
+.ticks { display: flex; gap: 8px; margin-top: 16px; margin-left: -5px; }
+.ticks button { width: 18px; height: 18px; display: grid; place-items: center; background: none; border: 0; cursor: pointer; padding: 0; }
+.ticks button i { width: 8px; height: 8px; border: 1px solid rgba(255,255,255,.7); display: block; position: relative; }
+.ticks button i b { position: absolute; inset: -1px; background: #fff; transform: scale(0); }
+.ticks button:focus-visible { outline: 1px solid #fff; outline-offset: 1px; }
+.rlist { display: none; margin-top: 10px; font-size: 12.5px; line-height: 1.5; color: var(--g-soft); list-style: none; }
+.rlist li + li { margin-top: 4px; }
+.rlist b { font-weight: 500; color: #fff; }
+
+@media (max-width: 760px) {
+  nav .links { display: none; }
+  .brand, .nav-end { width: auto; }
+  .nav-end .btn:first-child { display: none; }
+  .head { flex-direction: column; align-items: flex-start; padding-top: 72px; }
+  h1 { font-size: 40px; }
+  .side { width: 100%; }
+  .frame { padding: 12px; margin-top: 48px; }
+  .painting { height: 440px; }
+  .rail { position: relative; left: 0; bottom: 0; width: 100%; min-height: 0; margin-top: 16px; color: var(--ink); padding: 0; }
+  .pin.l { right: auto; left: -4px; } .pin.r { left: auto; right: -4px; } .pin .ld { display: none; }
+  .rail .bg { display: none; }
+  .rno, .rline, .rlist { color: var(--soft); }
+  .rlist b { color: var(--ink); }
+  .ticks button i { border-color: var(--ink); }
+  .ticks button i b { background: var(--ink); }
+}
+@media (prefers-reduced-motion: reduce) { .spec { display: none; } .rlist { display: block; } .rline { min-height: 0; } }
+</style>
+</head>
+<body>
+<nav><div class="wrap">
+  <div class="brand"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path fill="#09090b" d="M 8.9855 18.5469 C 8.9855 19.4675 8.2087 20.1961 7.3483 19.9526 C 3.1124 18.7535 0 14.7519 0 10 C 0 5.2481 3.1124 1.2465 7.3483 0.0474 C 8.2087 -0.1961 8.9855 0.5325 8.9855 1.4531 L 8.9855 18.5469 Z"/><path fill="#c9c9cf" d="M 11.0145 1.4531 C 11.0145 0.5325 11.7913 -0.1961 12.6517 0.0474 C 16.8876 1.2465 20 5.2481 20 10 C 20 14.7519 16.8876 18.7535 12.6517 19.9526 C 11.7913 20.1961 11.0145 19.4675 11.0145 18.5469 L 11.0145 1.4531 Z"/></svg>Dualkit</div>
+  <div class="links"><span>Products</span><span>Docs</span><span>Bench</span><span>Updates</span></div>
+  <div class="nav-end"><button class="btn">GitHub</button><button class="btn ink">Get started</button></div>
+</div></nav>
+
+<main class="wrap">
+  <div class="head">
+    <div>
+      <div class="label"><span class="sq"></span><span>Arabic and English, one codebase</span></div>
+      <h1 id="h1" aria-label="Build for the Gulf. In both directions.">Build for the Gulf.<br>In both directions.</h1>
+    </div>
+    <div class="side" id="side">
+      <p>Skills, formats and checks that teach your coding agent to ship Arabic right the first time.</p>
+      <div class="actions"><button class="btn ink">Get started <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"/></svg></button><button class="btn">View on GitHub</button></div>
+    </div>
+  </div>
+
+  <div class="frame">
+    <span class="tick ts"></span><span class="tick te"></span><span class="tick bs"></span><span class="tick be"></span>
+    <div class="pwrap">
+      <div class="painting" id="painting">
+        <div class="sky" id="sky"></div>
+        <div class="cam" id="cam"><div class="group" id="group"></div></div>
+      </div>
+      <div class="rail" id="rail" aria-live="polite">
+        <div class="bg"></div>
+        <div class="rhead"><span class="rno" id="rno"></span><span class="rtitle" id="rtitle"><span class="face"></span></span></div>
+        <div class="rline" id="rline"><span class="face"></span></div>
+        <ol class="rlist" id="rlist"></ol>
+        <div class="ticks" id="ticks"></div>
+      </div>
+    </div>
+  </div>
+  <div style="height:120px"></div>
+</main>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)', EASE_IO = 'cubic-bezier(0.77, 0, 0.175, 1)';
+  const EASE_EXPO = 'cubic-bezier(.16, 1, .3, 1)', EASE_ODO = 'cubic-bezier(.22, 1, .36, 1)';
+  const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+  // Damped spring, zeta 0.75, settling (2%) in about 550 ms. Sampled into keyframes so x can carry a small arc in y.
+  const ZETA = 0.75, WN = 4 / (ZETA * 0.55), WD = WN * Math.sqrt(1 - ZETA * ZETA);
+  const springAt = (t) => 1 - Math.exp(-ZETA * WN * t) * (Math.cos(WD * t) + (ZETA / Math.sqrt(1 - ZETA * ZETA)) * Math.sin(WD * t));
+  const SPRING_MS = 760;
+  let SPRING_MID = 0; for (let i = 0; i <= 400; i++) { if (springAt(i / 1000) >= 0.5) { SPRING_MID = i; break; } }
+  function springKF(dx, dy, arc, n = 44) {
+    const out = [];
+    for (let i = 0; i <= n; i++) {
+      const p = i / n, k = i === n ? 1 : springAt(p * SPRING_MS / 1000);
+      const y = dy * (1 - k) + arc * Math.sin(Math.PI * Math.min(1, p * 1.7));
+      out.push({ transform: `translate(${(dx * (1 - k)).toFixed(2)}px, ${(i === n ? 0 : y).toFixed(2)}px)`, offset: p });
+    }
+    return out;
+  }
+
+  // ---------- content ----------
+  const ZW = '‌';
+  const broken = (s) => s.split(' ').map((w) => [...w].join(ZW)).join(' ');
+  const AR = { title: 'ملخص الدفع', amount: 'المبلغ', date: 'الاستحقاق', phone: 'الجوال', iban: 'الآيبان', pay: 'إتمام الدفع' };
+  const EN = { title: 'Payment summary', amount: 'Amount due', date: 'Due', phone: 'Mobile', iban: 'IBAN', pay: 'Pay now' };
+  const PHONE = '+971 50 123 4567';
+  const IBAN = 'AE070331234567890123456';
+  const ARROW = '<svg viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5"/></svg>';
+  const CHECK = '<svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2l2.3 2.3 4.7-4.9" stroke="#fff" stroke-width="1.5"/></svg>';
+  const odoHTML = (str) => [...str].map((c) => /\d/.test(c) ? `<span class="odo" data-d="${c}"><span>${Array.from({ length: 30 }, (_, i) => `<i>${i % 10}</i>`).join('')}</span></span>` : `<span>${c}</span>`).join('');
+  // A digit in its own clipped slot: it rises in from below once, it never spins through other digits.
+  const digHTML = (str) => [...str].map((c) => `<span class="dg"><i>${c}</i></span>`).join('');
+  const words = (html) => html.replace(/>([^<]+)</g, (_, txt) => '>' + txt.split(/( +)/).map((w) => w.trim() ? `<span class="w2">${w}</span>` : w).join('') + '<');
+  const face = (html) => `<span class="face">${html}</span>`;
+
+  const keyFace = { bk: (k) => `<span class="k bk">${broken(AR[k])}</span>`, fx: (k) => `<span class="k fx" dir="rtl">${words('<i>' + AR[k] + '</i>').replace(/<\/?i>/g, '')}</span>`, en: (k) => `<span class="k en" dir="ltr">${words('<i>' + EN[k] + '</i>').replace(/<\/?i>/g, '')}</span>` };
+  const W = (txt) => words('<i>' + txt + '</i>').replace(/<\/?i>/g, '');
+  const TITLE = { bk: `<span class="t bk">${broken(AR.title)}</span>`, fx: `<span class="t fx" dir="rtl">${W(AR.title)}</span>`, en: `<span class="t en" dir="ltr">${W(EN.title)}</span>` };
+  const PAY = { bk: `<span class="pay bk">${broken(AR.pay)}</span>`, fx: `<span class="pay fx" dir="rtl">${W(AR.pay)}</span>`, en: `<span class="pay en" dir="ltr">${W(EN.pay)}</span>` };
+  const DATE = {
+    bk: '<span class="v">18/02/2026</span>',
+    fx: `<span class="va" dir="rtl"><span class="w2"><bdi class="v" dir="ltr">${digHTML('1')}</bdi></span> <span class="w2">رمضان</span> <span class="w2"><bdi class="v" dir="ltr">${digHTML('1447')}</bdi></span> <span class="w2">هـ</span></span>`,
+    en: `<span class="v" dir="ltr">${W('1 Ramadan 1447 AH')}</span>`,
+  };
+  const amountChars = ['1', ',', '2', '3', '4', '.', '5', '0'];
+  const AMOUNT_BK = `<span class="amt" dir="ltr"><span class="num v">${amountChars.map((c, i) => `<span class="ch${i === 1 ? ' sep hide' : ''}${i === 7 ? ' z0 hide' : ''}">${i === 7 ? odoHTML('0') : c}</span>`).join('')}</span><span class="cur cell e"><span class="face"><span class="v">AED</span></span></span></span>`;
+  const AMOUNT_FX = `<span class="amt" dir="rtl"><span class="num v">${amountChars.map((c) => `<span class="ch">${c}</span>`).join('')}</span><span class="cur cell e"><span class="face"><span class="va">د.إ</span></span></span></span>`;
+  const AMOUNT_EN = `<span class="v" dir="ltr">${W('AED 1,234.50')}</span>`;
+  const phoneChars = [...PHONE];
+  const PHONE_HTML = `<span class="ph v">${[...phoneChars].reverse().map((c) => `<span class="ch">${c === ' ' ? ' ' : c}</span>`).join('')}<svg class="phring"><rect x="0.5" y="0.5" pathLength="1"/></svg><span class="chip">&lt;bdi&gt;</span></span>`;
+  const IBAN_HTML = `<span class="ib v">${[...IBAN].map((c, i) => `<span class="ch${i && i % 4 === 0 ? ' g0' : ''}" data-g="${Math.floor(i / 4)}">${c}</span>`).join('')}<span class="chip"><i></i>valid, UAE</span></span>`;
+
+  const PINS = [
+    // [chapter index, row, side, rail title, rail line]
+    [0, 'h', 'l', 'Direction', 'Sets dir and lang, so the whole screen reads right to left.'],
+    [1, 'phone', 'r', 'Bidi isolation', 'Isolates the phone number, so its digits keep their order.'],
+    [2, 'h', 'r', 'Arabic type', 'Pairs an Arabic face and clears the tracking, so letters join.'],
+    [3, 'date', 'l', 'Hijri date', 'Formats the date in Umm al-Qura, pinned to the Gulf time zone.'],
+    [4, 'amount', 'l', 'Money', 'Formats AED with two decimals and the Arabic symbol after the amount.'],
+    [5, 'iban', 'r', 'IBAN', 'Groups and validates the IBAN, even when it is typed in Arabic digits.'],
+  ];
+  const RAIL = {
+    build: ['00', 'Without Dualkit', 'An agent builds the screen with no Arabic rules. Six of them fail.'],
+    install: ['00', 'Install', 'One command adds four skills. They load when a task touches Arabic.'],
+    checked: ['06', 'Checked', 'Every rule passes. Same screen, both directions.'],
+  };
+  const pinHTML = ([i, , side]) => `<span class="pin ${side}" data-pin="${i}"><span class="pq"><span class="pn">${i + 1}</span>${CHECK}</span><span class="ld"></span></span>`;
+  const pinsFor = (row) => PINS.filter((p) => p[1] === row).map(pinHTML).join('');
+
+  function panelHTML() {
+    const kc = (k) => `<span class="cell s" data-c="${k}K">${face(keyFace.bk(k))}</span>`;
+    return `
+    <div class="panel" id="panel" dir="ltr" lang="ar">
+      <div class="bg" id="bg"></div>
+      <div class="scanclip"><div class="spec" id="spec"></div></div>
+      <svg class="ringbox" id="ringbox"><rect id="ringRect" x="0.5" y="0.5" pathLength="1"/></svg>
+      <div class="scanclip" id="sweepclip"><div class="sweep" id="sweep"></div><div class="scan" id="scan"></div></div>
+      <div class="content" id="content">
+        <div class="row h" data-row="h"><span class="cell s" data-c="title">${face(TITLE.bk)}</span><span class="badge" id="badge">dir <span class="roll"><span>ltr</span><span>rtl</span><span>ltr</span></span></span>${pinsFor('h')}</div>
+        <div class="row c" data-row="c">
+          <span class="grp" dir="ltr" id="grpA"><i class="state" id="state"></i><span class="mono">dualkit check</span><span class="mono">·</span><span class="mono" id="failN">${odoHTML('6')}</span><span class="mono cell s" id="failW">${face('rules failing')}</span></span>
+          <span class="grp" dir="ltr" id="grpB"><span class="track"><b id="bar"></b></span><span class="mono" id="score">${odoHTML('14')}</span><span class="mono">of 20</span></span>
+        </div>
+        <div class="row" data-row="amount">${kc('amount')}<span class="cell e" data-c="amountV">${face(AMOUNT_BK)}</span>${pinsFor('amount')}</div>
+        <div class="row" data-row="date">${kc('date')}<span class="cell e" data-c="dateV">${face(DATE.bk)}</span>${pinsFor('date')}</div>
+        <div class="row" data-row="phone">${kc('phone')}<span class="cell e" data-c="phoneV">${face(PHONE_HTML)}</span>${pinsFor('phone')}</div>
+        <div class="row" data-row="iban">${kc('iban')}<span class="cell e" data-c="ibanV">${face(IBAN_HTML)}</span>${pinsFor('iban')}</div>
+        <div class="row b" data-row="pay"><div class="btnface" id="btnface"></div><span class="cell m paylabel" data-c="pay">${face(PAY.bk)}</span><span class="arw" id="arw"><span class="rot" style="display:block">${ARROW}</span></span></div>
+      </div>
+    </div>
+    <div class="strip" id="strip"><div class="bg"></div><span class="cmd"><span class="p">$ </span><span id="typed"></span><span class="caret" id="caret"></span></span><span class="ld4" id="ld4"><span class="sq4">${'<i><b></b></i>'.repeat(4)}</span><span>4 skills loaded</span></span></div>`;
+  }
+
+  // ---------- helpers ----------
+  const group = $('#group'), cam = $('#cam'), sky = $('#sky'), painting = $('#painting');
+  const C = (k) => $(`[data-c="${k}"]`);
+  const owned = (el, id) => el.getAnimations().filter((a) => a.id === id);
+  function tween(el, id, frames, opts) {
+    owned(el, id).forEach((a) => a.cancel());
+    const { offset, easing, composite, ...last } = frames[frames.length - 1]; Object.assign(el.style, last);
+    if (reduce) return null;
+    const a = el.animate(frames, { fill: 'backwards', ...opts }); a.id = id; return a;
+  }
+  const fadeIn = (el, delay, dur = 300, blur = 6, dy = 6) => tween(el, 'f', [{ opacity: 0, filter: `blur(${blur}px)`, transform: `translateY(${dy}px)` }, { opacity: 1, filter: 'blur(0px)', transform: 'translateY(0px)' }], { duration: dur, delay, easing: EASE_EXPO });
+  const camScale = () => { const r = group.getBoundingClientRect(); return r.width / group.offsetWidth || 1; };
+  function localRect(el) { const g = group.getBoundingClientRect(), s = camScale(), r = el.getBoundingClientRect(); return { x: (r.left - g.left) / s, y: (r.top - g.top) / s, w: r.width / s, h: r.height / s }; }
+
+  // Swap a cell's face: the old face blurs out word by word, the new one blurs in. Grid stacking keeps the cell anchored.
+  // Out first, then a 60 ms gap, then in: the two faces never share the cell, so nothing smudges.
+  function swapFace(cell, html, delay = 0, { out = 180, inn = 240, stagger = 40, gap = 60, blur = 3, after } = {}) {
+    const old = [...cell.children].filter((c) => c.classList.contains('face') && !c.dataset.leaving);
+    const nf = document.createElement('span'); nf.className = 'face'; nf.innerHTML = html; cell.appendChild(nf);
+    if (reduce) { old.forEach((o) => o.remove()); return nf; }
+    let outEnd = delay;
+    old.forEach((o) => {
+      o.dataset.leaving = '1';
+      const ws = $$('.w2', o).length ? $$('.w2', o) : [o];
+      ws.forEach((w, i) => tween(w, 'f', [{ opacity: 1, filter: 'blur(0px)' }, { opacity: 0, filter: 'blur(3px)' }], { duration: out, delay: delay + i * stagger, easing: EASE_OUT }));
+      outEnd = Math.max(outEnd, delay + out + (ws.length - 1) * stagger);
+      later(outEnd + 10, () => o.isConnected && o.remove());
+    });
+    const inAt = old.length ? outEnd + gap : delay;
+    const ws = $$('.w2', nf).length ? $$('.w2', nf) : [nf];
+    ws.forEach((w, i) => tween(w, 'f', blur ? [{ opacity: 0, filter: `blur(${blur}px)`, transform: 'translateY(3px)' }, { opacity: 1, filter: 'none', transform: 'none' }] : [{ opacity: 0 }, { opacity: 1 }], { duration: inn, delay: inAt + i * stagger, easing: EASE_OUT }));
+    if (after) after(nf, inAt);
+    return nf;
+  }
+  // Instant swap, for a cell that is invisible at that moment (mid-crossing in a mirror).
+  function hardSwap(cell, html) { [...cell.children].filter((c) => c.classList.contains('face')).forEach((o) => o.remove()); const nf = document.createElement('span'); nf.className = 'face'; nf.innerHTML = html; cell.appendChild(nf); snapOdos(nf); return nf; }
+
+  // Odometers: strips of 0-9 three times; the index only moves forward or back to the nearest copy.
+  function setOdo(el, d, delay = 0, dur = 520, dirn = 0) {
+    const strip = el.firstElementChild; const cur = el._i ?? 10 + +el.dataset.d; let to = 10 + d;
+    if (dirn > 0 && to <= cur) to += 10; if (dirn < 0 && to >= cur) to -= 10;
+    el._i = to; el.dataset.d = d;
+    const pct = (i) => `translateY(${-(i / 30) * 100}%)`;
+    tween(strip, 'r', [{ transform: pct(cur) }, { transform: pct(to) }], { duration: dur, delay, easing: EASE_OUT });
+    later(delay + dur + 20, () => { if (el._i === to) { el._i = 10 + d; owned(strip, 'r').forEach((a) => a.cancel()); strip.style.transform = pct(10 + d); } });
+  }
+  function rollIn(scope, delay, step = 30) { $$('.odo', scope).forEach((o, i) => { const d = +o.dataset.d; o._i = (d + 3) % 10; setOdo(o, d, delay + i * step, 700, 1); }); }
+  function snapOdos(scope) { $$('.odo', scope).forEach((o) => { o._i = 10 + +o.dataset.d; o.firstElementChild.style.transform = `translateY(${-(o._i / 30) * 100}%)`; }); }
+  function setNumber(container, value, delay, dirn) { const ods = $$('.odo', container), s = String(value).padStart(ods.length, '0'); ods.forEach((o, i) => { if (+o.dataset.d !== +s[i]) setOdo(o, +s[i], delay + i * 40, 520, dirn); }); }
+
+  // ---------- the clock: everything is scheduled on it, so pausing it pauses the story ----------
+  let t = 0, playing = false, lastNow = 0; let queue = [];
+  function later(ms, fn) { const job = { when: t + ms, fn }; queue.push(job); queue.sort((a, b) => a.when - b.when); return job; }
+  let specTick = null;
+  function frame(now) {
+    if (playing) { t += Math.min(64, now - lastNow); while (queue.length && queue[0].when <= t) queue.shift().fn(); }
+    if (specTick) specTick();
+    lastNow = now; requestAnimationFrame(frame);
+  }
+  const anims = () => painting.getAnimations({ subtree: true }).concat($('#rail').getAnimations({ subtree: true }));
+  let hoverPause = false, visible = false;
+  function syncPlay() { const p = visible && !hoverPause; if (p === playing) return; playing = p; lastNow = performance.now(); anims().forEach((a) => { if (p && a.playState === 'paused') a.play(); else if (!p && a.playState === 'running') a.pause(); }); }
+
+  // ---------- camera ----------
+  let base = { s: 1, pin: 48, maxZoom: 1.3 };
+  let camNow = { s: 1, tx: 0, ty: 0 }, camRest = { s: 1, tx: 0, ty: 0 }, regions = [], stripShown = false;
+  // What must stay in view: the panel, its pins either side, the room the type fix will add, and the install strip while it shows.
+  function bounds() {
+    const panel = $('#panel'), strip = $('#strip');
+    const grow = panel.classList.contains('typeset') ? 0 : 40;
+    const y1 = stripShown ? strip.offsetTop + strip.offsetHeight + grow : panel.offsetHeight + grow;
+    return { x0: -base.pin, y0: 0, x1: panel.offsetWidth + base.pin, y1 };
+  }
+  // Dolly towards a target, but frame a box: pick the safe region that allows the most zoom, then clamp so nothing leaves it.
+  function camFor(target, zoom) {
+    const B = bounds(), bw = B.x1 - B.x0, bh = B.y1 - B.y0, panel = $('#panel');
+    let best = null;
+    for (const R of regions) { const fit = Math.min((R.x1 - R.x0) / bw, (R.y1 - R.y0) / bh); if (!best || fit > best.fit) best = { R, fit }; }
+    const { R, fit } = best;
+    const s = Math.min(base.s * Math.min(zoom, base.maxZoom), fit);
+    const r = target ? localRect(target) : { x: B.x0, y: B.y0, w: bw, h: bh };
+    const fx = (R.x0 + R.x1) / 2, fy = (R.y0 + R.y1) / 2;
+    const clamp = (v, lo, hi) => (lo > hi ? (lo + hi) / 2 : Math.max(lo, Math.min(hi, v)));
+    const tx = clamp(fx - s * (r.x + r.w / 2), R.x0 - s * B.x0, R.x1 - s * B.x1);
+    const ty = clamp(fy - s * (r.y + r.h / 2), R.y0 - s * B.y0, R.y1 - s * B.y1);
+    return { s, tx, ty };
+  }
+  const camCSS = (c) => `translate(${c.tx.toFixed(2)}px, ${c.ty.toFixed(2)}px) scale(${c.s.toFixed(4)})`;
+  const skyCSS = (c) => `translate(${((c.tx - camRest.tx) * 0.15).toFixed(2)}px, ${((c.ty - camRest.ty) * 0.15).toFixed(2)}px) scale(${(1 + (c.s / base.s - 1) * 0.15).toFixed(4)})`;
+  function moveCam(c, dur = 800, delay = 0) {
+    const from = getComputedStyle(cam).transform, fromSky = getComputedStyle(sky).transform;
+    camNow = c; cam.classList.add('moving'); const job = later(delay + dur + 20, () => { if (camJob === job) cam.classList.remove('moving'); }); camJob = job;
+    tween(cam, 'cam', [{ transform: from === 'none' ? camCSS(camRest) : from }, { transform: camCSS(c) }], { duration: dur, delay, easing: EASE_IO });
+    tween(sky, 'cam', [{ transform: fromSky === 'none' ? 'none' : fromSky }, { transform: skyCSS(c) }], { duration: dur, delay, easing: EASE_IO });
+  }
+  let camJob = null;
+  function setCam(c) { owned(cam, 'cam').forEach((a) => a.cancel()); owned(sky, 'cam').forEach((a) => a.cancel()); camNow = c; cam.style.transform = camCSS(c); sky.style.transform = skyCSS(c); }
+
+  function layout() {
+    const w = painting.clientWidth, h = painting.clientHeight, mobile = innerWidth <= 760;
+    cam.style.width = w + 'px'; cam.style.height = h + 'px';
+    base.pin = mobile ? 4 : 32; base.maxZoom = mobile ? 1.15 : 1.3;
+    const mx = mobile ? 2 : 32, my = mobile ? 16 : 32;
+    if (mobile) regions = [{ x0: mx, y0: my, x1: w - mx, y1: h - my }];
+    else {
+      const pr = painting.getBoundingClientRect(), rr = rail.getBoundingClientRect(), rx1 = rr.right - pr.left, ry0 = rr.top - pr.top;
+      regions = [{ x0: rx1 + 24, y0: my, x1: w - mx, y1: h - my }, { x0: mx, y0: my, x1: w - mx, y1: ry0 - 24 }];
+    }
+    base.s = 1; const fitAll = camFor(null, 1).s; base.s = Math.min(1, fitAll);
+    camRest = camFor(null, 1);
+  }
+  function sizeRings() {
+    const panel = $('#panel'); const W = panel.offsetWidth, H = panel.offsetHeight;
+    const rb = $('#ringbox'); rb.setAttribute('width', W); rb.setAttribute('height', H); $('#ringRect').setAttribute('width', W - 1); $('#ringRect').setAttribute('height', H - 1);
+    const ph = $('.ph'); const svg = $('.phring', ph); const pw = [...ph.children].filter((c) => c.classList.contains('ch')).reduce((a, c) => a + c.offsetWidth, 0) + 14, phh = ph.offsetHeight + 10;
+    svg.setAttribute('width', pw); svg.setAttribute('height', phh); $('rect', svg).setAttribute('width', pw - 1); $('rect', svg).setAttribute('height', phh - 1);
+  }
+
+  // ---------- rail ----------
+  const rail = $('#rail'), rno = $('#rno');
+  rno.innerHTML = `${odoHTML('00')}<span>&nbsp;/ 06</span>`;
+  $('#rlist').innerHTML = PINS.map((p) => `<li><b>${p[3]}.</b> ${p[4]}</li>`).join('');
+  $('#ticks').innerHTML = PINS.map((p, i) => `<button type="button" aria-label="Show ${p[3].toLowerCase()}" data-tick="${i}"><i><b></b></i></button>`).join('');
+  function railTo([no, title, line], delay = 80, instant = false) {
+    if (instant || reduce) { $('#rtitle').innerHTML = face(title); $('#rline').innerHTML = face(line); $$('.odo', rno).forEach((o, i) => { o.dataset.d = no[i]; }); snapOdos(rno); return; }
+    setNumber(rno, +no, delay, 1);
+    swapFace($('#rtitle'), W(title), delay, { stagger: 30 });
+    swapFace($('#rline'), W(line), delay + 60, { stagger: 12, out: 180, inn: 240 });
+  }
+  function tickFill(i, on, delay = 0) { const b = $(`[data-tick="${i}"] b`); if (on) tween(b, 's', [{ transform: 'scale(0)' }, { transform: 'scale(1)' }], { duration: 260, delay, easing: EASE_EXPO }); else { owned(b, 's').forEach((a) => a.cancel()); b.style.transform = 'scale(0)'; } }
+
+  // ---------- state ----------
+  let fixed = 0; // number of fixes applied
+  let failing = 6, passing = 14, lang = 'ar';
+  function render() {
+    group.innerHTML = panelHTML();
+    fixed = 0; failing = 6; passing = 14; lang = 'ar'; hoverPause = false; stripShown = false;
+    snapOdos(group);
+    $('#bar').style.transform = `scaleX(${14 / 20})`;
+    sizeRings();
+    // spec highlight
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduce) bindSpec();
+    const panel = $('#panel');
+    panel.addEventListener('pointerenter', () => { hoverPause = true; syncPlay(); });
+    panel.addEventListener('pointerleave', () => { hoverPause = false; syncPlay(); });
+  }
+  function bindSpec() {
+    const panel = $('#panel'), spec = $('#spec'); let tx = 260, ty = 0, x = 260, y = 0, over = false;
+    panel.addEventListener('pointerenter', () => { over = true; spec.style.opacity = '1'; });
+    panel.addEventListener('pointerleave', () => { over = false; spec.style.opacity = '0'; });
+    panel.addEventListener('pointermove', (e) => { const r = panel.getBoundingClientRect(), s = r.width / panel.offsetWidth; tx = (e.clientX - r.left) / s; ty = (e.clientY - r.top) / s; });
+    specTick = () => { if (!spec.isConnected || !over) return; x += (tx - x) * 0.18; y += (ty - y) * 0.18; spec.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`; };
+  }
+  function showStatic() { // everything visible, no build
+    for (const el of [$('#bg'), ...$$('.row', group)]) el.style.opacity = '1';
+    $('#ringRect').style.strokeDashoffset = '0'; $('#ringRect').style.strokeOpacity = '.14';
+  }
+
+  // ---------- 1. build, broken ----------
+  function build() {
+    const ring = $('#ringRect'), rows = $$('.row', group);
+    rows.forEach((r) => (r.style.opacity = '0')); $$('.pin', group).forEach((p) => (p.style.opacity = '0'));
+    tween(ring, 'd', [{ strokeDashoffset: 1, strokeOpacity: .55 }, { strokeDashoffset: 0, strokeOpacity: .55, offset: .8 }, { strokeDashoffset: 0, strokeOpacity: .14 }], { duration: 900, easing: EASE_IO });
+    tween($('#bg'), 'o', [{ opacity: 0 }, { opacity: 1 }], { duration: 500, delay: 100, easing: EASE_OUT });
+    rows.forEach((r, i) => fadeIn(r, 300 + i * 160));
+    rollIn($('[data-c="amountV"]'), 460);
+    tween($('#bar'), 'b', [{ transform: 'scaleX(0)' }, { transform: `scaleX(${14 / 20})` }], { duration: 600, delay: 460, easing: EASE_ODO });
+    $$('.odo', $('#failN')).forEach((o) => { o._i = 10; o.dataset.d = 0; o.firstElementChild.style.transform = `translateY(${-(10 / 30) * 100}%)`; });
+    rollIn($('#score'), 460);
+    // pins, one by one, counting up the failures
+    PINS.forEach((p, i) => {
+      const pin = $(`[data-pin="${p[0]}"]`), d = 1300 + i * 130;
+      tween(pin, 'f', [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 320, delay: d, easing: EASE_EXPO });
+      tween($('.ld', pin), 's', [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 240, delay: d + 80, easing: EASE_OUT });
+      later(d, () => setNumber($('#failN'), i + 1, 0, 1));
+    });
+    rail.style.opacity = '0'; railTo(RAIL.build, 1200); tween(rail, 'o', [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'translateY(0px)' }], { duration: 420, delay: 1150, easing: EASE_EXPO });
+  }
+
+  // ---------- 2. install ----------
+  function install() {
+    const strip = $('#strip');
+    stripShown = true;
+    moveCam(camFor(strip, 1.2), 800);
+    railTo(RAIL.install, 80);
+    tween(strip, 'f', [{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'translateY(0px)' }], { duration: 420, delay: 300, easing: EASE_EXPO });
+    const cmd = '/plugin install dualkit@dualkit', typed = $('#typed');
+    [...cmd].forEach((c, i) => later(700 + i * 22, () => { typed.textContent = cmd.slice(0, i + 1); }));
+    const caret = $('#caret'); tween(caret, 'b', [{ opacity: 1 }, { opacity: 1, offset: .5 }, { opacity: 0, offset: .51 }, { opacity: 0 }], { duration: 900, iterations: 3, delay: 700 + cmd.length * 22 });
+    later(1480, () => {
+      fadeIn($('#ld4'), 0, 300, 4, 0);
+      $$('#ld4 b').forEach((b, i) => tween(b, 's', [{ transform: 'scale(0)' }, { transform: 'scale(1)' }], { duration: 240, delay: 120 + i * 110, easing: EASE_EXPO }));
+    });
+  }
+  function stripAway(delay = 0) { stripShown = false; const s = $('#strip'); tween(s, 'f', [{ opacity: 1, transform: 'translateY(0px)' }, { opacity: 0, transform: 'translateY(8px)' }], { duration: 300, delay, easing: EASE_OUT }); }
+
+  // ---------- 3. the six fixes ----------
+  // Mirror every row with springs. Things that cross in a row (key and value, title and badge, label and arrow)
+  // fade and blur as they close on each other and come back once they have passed, so text never overlaps.
+  // Returns, for each mover, the moment it is invisible, so a language swap can happen there unseen.
+  function flipDir(toRtl, delay = 0) {
+    const panel = $('#panel'), rows = $$('.row', group);
+    const byRow = rows.map((row) => [...row.children].filter((el) => !el.classList.contains('pin') && !el.classList.contains('btnface')));
+    const before = byRow.map((els) => els.map((el) => el.getBoundingClientRect()));
+    panel.dir = toRtl ? 'rtl' : 'ltr';
+    const s = camScale(), after = byRow.map((els) => els.map((el) => el.getBoundingClientRect()));
+    const sweep = $('#sweep'), Wd = panel.offsetWidth;
+    tween(sweep, 's', [{ transform: `translateX(${toRtl ? Wd : -200}px)` }, { transform: `translateX(${toRtl ? -200 : Wd}px)` }], { duration: 440, delay, easing: EASE_IO });
+    const roll = $$('#badge .roll > span'); roll.forEach((sp) => tween(sp, 'r', [{ transform: `translateY(${toRtl ? 0 : -100}%)` }, { transform: `translateY(${toRtl ? -100 : -200}%)` }], { duration: 380, delay: delay + 60, easing: EASE_OUT }));
+    later(delay + 500, () => roll.forEach((sp) => { owned(sp, 'r').forEach((a) => a.cancel()); sp.style.transform = `translateY(${toRtl ? -100 : 0}%)`; }));
+    const swapAt = new Map(), D = 60 + SPRING_MS, N = 64;
+    byRow.forEach((els, ri) => {
+      const rowStart = delay + 150 + ri * 45;
+      const m = els.map((el, i) => {
+        const isKey = el.classList.contains('s') || el.id === 'grpA';
+        return { el, x0: before[ri][i].left / s, x1: after[ri][i].left / s, w: after[ri][i].width / s, off: isKey ? 0 : 60, arc: isKey ? -4 : 4 };
+      });
+      const xAt = (o, tt) => { const u = tt - o.off; if (u <= 0) return o.x0; if (u >= SPRING_MS) return o.x1; return o.x1 + (o.x0 - o.x1) * (1 - springAt(u / 1000)); };
+      m.forEach((o) => {
+        if (Math.abs(o.x0 - o.x1) < 0.5) return;
+        const frames = []; let minOp = 1, minT = 0;
+        for (let i = 0; i <= N; i++) {
+          const tt = (i / N) * D, x = xAt(o, tt), u = Math.max(0, Math.min(1, (tt - o.off) / SPRING_MS));
+          let gap = Infinity;
+          for (const q of m) { if (q === o) continue; const qx = xAt(q, tt); gap = Math.min(gap, Math.max(qx - (x + o.w), x - (qx + q.w))); }
+          const op = i === N ? 1 : Math.max(0, Math.min(1, (gap - 6) / 30));
+          if (op < minOp) { minOp = op; minT = tt; }
+          const y = o.arc * Math.sin(Math.PI * Math.min(1, u * 1.7));
+          frames.push({ offset: i / N, transform: i === N ? 'none' : `translate(${(x - o.x1).toFixed(2)}px, ${y.toFixed(2)}px)`, opacity: +op.toFixed(3), filter: op > 0.99 ? 'none' : `blur(${((1 - op) * 3).toFixed(2)}px)` });
+        }
+        tween(o.el, 'x', frames, { duration: D, delay: rowStart, easing: 'linear' });
+        if (minOp < 0.02) swapAt.set(o.el, rowStart + minT);
+      });
+    });
+    const rot = $('#arw .rot'); tween(rot, 't', [{ transform: `rotate(${toRtl ? 0 : 180}deg)` }, { transform: `rotate(${toRtl ? 180 : 0}deg)` }], { duration: 640, delay: delay + 150 + 6 * 45, easing: EASE_IO });
+    return swapAt;
+  }
+
+  const FIX = [
+    { target: () => null, zoom: 1.04, run(d) { flipDir(true, d); }, instant() { $('#panel').dir = 'rtl'; $$('#badge .roll > span').forEach((sp) => (sp.style.transform = 'translateY(-100%)')); $('#arw .rot').style.transform = 'rotate(180deg)'; } },
+    { target: () => $('[data-row="phone"]'), zoom: 1.3, run(d) {
+        // The reversed digits lift away from the end back, then the number writes itself again in order from its start.
+        const ph = $('.ph'), chars = $$('.ch', ph), n = chars.length;
+        chars.forEach((c, i) => tween(c, 'f', [{ opacity: 1, transform: 'none', filter: 'none' }, { opacity: 0, transform: 'translateY(-6px)', filter: 'blur(2px)' }], { duration: 200, delay: d + (n - 1 - i) * 18, easing: EASE_OUT }));
+        const outEnd = d + (n - 1) * 18 + 200;
+        later(outEnd, () => {
+          chars.slice().reverse().forEach((c) => ph.insertBefore(c, $('.phring', ph)));
+          chars.forEach((c, i) => tween(c, 'f', [{ opacity: 0, transform: 'translateY(6px)', filter: 'blur(2px)' }, { opacity: 1, transform: 'none', filter: 'none' }], { duration: 260, delay: 40 + (n - 1 - i) * 24, easing: EASE_OUT }));
+        });
+        tween($('.phring rect'), 'd', [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 420, delay: d + 1080, easing: EASE_IO });
+        tween($('.ph .chip'), 'f', [{ opacity: 0, transform: 'translateX(-4px)' }, { opacity: 1, transform: 'translateX(0px)' }], { duration: 300, delay: d + 1260, easing: EASE_EXPO });
+      }, instant() { const ph = $('.ph'); $$('.ch', ph).reverse().forEach((c) => ph.insertBefore(c, $('.phring', ph))); $('.phring rect').style.strokeDashoffset = '0'; $('.ph .chip').style.opacity = '1'; } },
+    { target: () => $('[data-row="h"]'), zoom: 1.3, run(d) {
+        const panel = $('#panel'), rows = $$('.row', group), H0 = panel.offsetHeight, tops = rows.map((r) => r.offsetTop);
+        panel.classList.add('typeset');
+        const H1 = panel.offsetHeight;
+        ['title', 'amountK', 'dateK', 'phoneK', 'ibanK', 'pay'].forEach((k, i) => swapFace(C(k), k === 'title' ? TITLE.fx : k === 'pay' ? PAY.fx : keyFace.fx(k.replace('K', '')), d + i * 70, { stagger: 50 }));
+        rows.forEach((r, i) => { const dy = tops[i] - r.offsetTop; if (dy) tween(r, 'y', [{ transform: `translateY(${dy}px)` }, { transform: 'translateY(0px)' }], { duration: 640, delay: d + 120, easing: EASE_EXPO }); });
+        for (const el of [$('#bg'), $('#ringbox'), $('#sweepclip')]) tween(el, 'h', [{ transform: `scaleY(${H0 / H1})` }, { transform: 'scaleY(1)' }], { duration: 640, delay: d + 120, easing: EASE_EXPO });
+        sizeRings();
+      }, instant() { $('#panel').classList.add('typeset'); ['title', 'amountK', 'dateK', 'phoneK', 'ibanK', 'pay'].forEach((k) => { C(k).innerHTML = face(k === 'title' ? TITLE.fx : k === 'pay' ? PAY.fx : keyFace.fx(k.replace('K', ''))); }); sizeRings(); } },
+    { target: () => $('[data-row="date"]'), zoom: 1.3, run(d) {
+        swapFace(C('dateV'), DATE.fx, d, { stagger: 60, blur: 0, after: (nf, inAt) => { $$('.dg i', nf).forEach((g, k) => tween(g, 'y', [{ transform: 'translateY(110%)' }, { transform: 'none' }], { duration: 420, delay: inAt + 40 + k * 45, easing: EASE_OUT })); } });
+      }, instant() { C('dateV').innerHTML = face(DATE.fx); snapOdos(C('dateV')); } },
+    { target: () => $('[data-row="amount"]'), zoom: 1.3, run(d) {
+        const amt = $('.amt', C('amountV')), num = $('.num', amt), cur = $('.cur', amt), chars = $$('.ch', num);
+        const old = [...chars, cur], before = old.map((c) => c.getBoundingClientRect());
+        amt.dir = 'rtl'; $$('.hide', num).forEach((h) => { h.classList.remove('hide'); h.style.opacity = '0'; });
+        const s = camScale(), after = old.map((c) => c.getBoundingClientRect());
+        old.forEach((c, i) => { if (c.style.opacity === '0') return; const dx = (before[i].left - after[i].left) / s; if (Math.abs(dx) > .5) tween(c, 'x', springKF(dx, 0, c === cur ? -6 : 0), { duration: SPRING_MS, delay: d + (c === cur ? 0 : 60 + i * 15), easing: 'linear' }); });
+        tween($('.sep', num), 'f', [{ opacity: 0, transform: 'translateY(-12px)' }, { opacity: 1, transform: 'translateY(0px)' }], { duration: 420, delay: d + 380, easing: EASE_EXPO });
+        const z = $('.z0', num); tween(z, 'f', [{ opacity: 0 }, { opacity: 1 }], { duration: 200, delay: d + 480, easing: EASE_OUT }); const zo = $('.odo', z); zo._i = 7; zo.firstElementChild.style.transform = `translateY(${-(7 / 30) * 100}%)`; setOdo(zo, 0, d + 480, 700, 1);
+        swapFace(cur, '<span class="va">د.إ</span>', d + 150 + SPRING_MID - 140);
+      }, instant() { C('amountV').innerHTML = face(AMOUNT_FX); } },
+    { target: () => $('[data-row="iban"]'), zoom: 1.3, run(d) {
+        const ib = $('.ib'), chars = $$('.ch', ib), before = chars.map((c) => c.getBoundingClientRect());
+        ib.classList.add('grouped');
+        const s = camScale(), after = chars.map((c) => c.getBoundingClientRect());
+        chars.forEach((c, i) => { const dx = (before[i].left - after[i].left) / s; if (Math.abs(dx) > .5) tween(c, 'x', springKF(dx, 0, 0), { duration: SPRING_MS, delay: d + +c.dataset.g * 35, easing: 'linear' }); });
+        later(d + 560, () => {
+          const groups = [...new Set(chars.map((c) => +c.dataset.g))];
+          groups.forEach((g, gi) => {
+            const gc = chars.filter((c) => +c.dataset.g === g), x0 = gc[0].offsetLeft, x1 = gc[gc.length - 1].offsetLeft + gc[gc.length - 1].offsetWidth;
+            const hl = document.createElement('span'); hl.className = 'gl'; hl.style.left = (x0 - 3) + 'px'; hl.style.width = (x1 - x0 + 6) + 'px'; ib.appendChild(hl);
+            tween(hl, 'f', [{ opacity: 0 }, { opacity: 1, offset: .25 }, { opacity: 0 }], { duration: 520, delay: gi * 80, easing: 'linear' });
+            gc.forEach((c) => tween(c, 'c', [{ color: 'rgba(255,255,255,.64)' }, { color: '#fff' }], { duration: 200, delay: gi * 80 + 60, easing: EASE_OUT }));
+            later(gi * 80 + 600, () => hl.remove());
+          });
+          tween($('.ib .chip'), 'f', [{ opacity: 0, transform: 'translateX(-4px)' }, { opacity: 1, transform: 'translateX(0px)' }], { duration: 300, delay: groups.length * 80 + 60, easing: EASE_EXPO });
+        });
+      }, instant() { const ib = $('.ib'); ib.classList.add('grouped'); $$('.ch', ib).forEach((c) => (c.style.color = '#fff')); $('.ib .chip').style.opacity = '1'; } },
+  ];
+
+  function resolvePin(i, d) {
+    const pin = $(`[data-pin="${i}"]`);
+    tween($('.pn', pin), 'f', [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.6)' }], { duration: 160, delay: d, easing: EASE_OUT });
+    tween($('svg', pin), 'f', [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 240, delay: d + 80, easing: EASE_EXPO });
+    tween($('.pq', pin), 'c', [{ backgroundColor: '#09090b' }, { backgroundColor: '#1f8f4a' }], { duration: 240, delay: d + 40, easing: EASE_OUT });
+    tween(pin, 'f', [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(.85)' }], { duration: 280, delay: d + 620, easing: EASE_OUT });
+    failing -= 1; passing += 1;
+    later(d + 140, () => {
+      setNumber($('#failN'), failing, 0, -1); setNumber($('#score'), passing, 0, 1);
+      tween($('#bar'), 'b', [{ transform: `scaleX(${(passing - 1) / 20})` }, { transform: `scaleX(${passing / 20})` }], { duration: 520, easing: EASE_ODO });
+      if (failing === 1) swapFace($('#failW'), 'rule failing', 0, { out: 160, inn: 200 });
+      if (failing === 0) { swapFace($('#failW'), 'rules failing', 0, { out: 160, inn: 200 }); tween($('#state'), 'c', [{ backgroundColor: 'rgba(0,0,0,0)', borderColor: '#fff' }, { backgroundColor: '#3ecf6e', borderColor: '#3ecf6e' }], { duration: 300, easing: EASE_OUT }); }
+      tickFill(i, true, 100);
+    });
+  }
+  function resolveInstant(i) { const pin = $(`[data-pin="${i}"]`); pin.style.opacity = '0'; failing -= 1; passing += 1; tickFill(i, true); }
+  function countersInstant() {
+    $$('.odo', $('#failN')).forEach((o) => { o.dataset.d = failing; }); const sc = String(passing).padStart(2, '0'); $$('.odo', $('#score')).forEach((o, i) => { o.dataset.d = sc[i]; }); snapOdos($('#content'));
+    $('#bar').style.transform = `scaleX(${passing / 20})`;
+    $('#failW').innerHTML = face(failing === 1 ? 'rule failing' : 'rules failing');
+    if (failing === 0) { $('#state').style.background = '#3ecf6e'; $('#state').style.borderColor = '#3ecf6e'; }
+  }
+
+  // ---------- 4. checked, then both directions ----------
+  const AR_FACES = () => ({ title: TITLE.fx, amountK: keyFace.fx('amount'), dateK: keyFace.fx('date'), phoneK: keyFace.fx('phone'), ibanK: keyFace.fx('iban'), pay: PAY.fx, amountV: AMOUNT_FX, dateV: DATE.fx });
+  const EN_FACES = () => ({ title: TITLE.en, amountK: keyFace.en('amount'), dateK: keyFace.en('date'), phoneK: keyFace.en('phone'), ibanK: keyFace.en('iban'), pay: PAY.en, amountV: AMOUNT_EN, dateV: DATE.en });
+  function mirrorTo(toEn, d) {
+    $$('.chip', group).forEach((c) => tween(c, 'f', [{ opacity: 1 }, { opacity: 0, offset: .12 }, { opacity: 0, offset: .8 }, { opacity: 1 }], { duration: 1200, delay: d, easing: 'linear' }));
+    const swapAt = flipDir(!toEn, d), f = toEn ? EN_FACES() : AR_FACES();
+    Object.entries(f).forEach(([k, html]) => {
+      const cell = C(k);
+      if (swapAt.has(cell)) later(swapAt.get(cell), () => hardSwap(cell, html));
+      else swapFace(cell, html, d + 300, { stagger: 30, after: (nf) => snapOdos(nf) });
+    });
+    $('#panel').lang = toEn ? 'en' : 'ar';
+  }
+  function checked() {
+    moveCam(camFor(null, 0.96), 900);
+    railTo(RAIL.checked, 80);
+    const scan = $('#scan'), H = $('#panel').offsetHeight;
+    tween(scan, 's', [{ transform: 'translateY(-120px)' }, { transform: `translateY(${H + 30}px)` }], { duration: 900, delay: 500, easing: EASE_IO });
+    tween($('#btnface'), 'c', [{ backgroundColor: 'rgba(255,255,255,.14)' }, { backgroundColor: '#ffffff' }], { duration: 320, delay: 1100, easing: EASE_OUT });
+    later(1100, () => { for (const el of [...$$('.pay', group), $('#arw svg')]) tween(el, 'c', [{ color: '#fff' }, { color: '#09090b' }], { duration: 320, easing: EASE_OUT }); $('#panel').classList.add('paid'); });
+    later(1600, () => mirrorTo(true, 0));
+    later(3100, () => mirrorTo(false, 0));
+  }
+  function payInstant() { $('#btnface').style.backgroundColor = '#fff'; for (const el of [...$$('.pay', group), $('#arw svg')]) el.style.color = '#09090b'; $('#panel').classList.add('paid'); }
+  const payStyle = document.createElement('style'); payStyle.textContent = '.panel.paid .pay { color: #09090b !important; }'; document.head.appendChild(payStyle);
+
+  // ---------- the master timeline ----------
+  // Chapters are 2.05 s; the IBAN gets 2.8 s so its result has a beat. The loop is about 22.6 s.
+  const T_INSTALL = 2400, T_CH = 4200, CHS = [2050, 2050, 2050, 2050, 2050, 2800];
+  const CH_AT = CHS.map((_, i) => T_CH + CHS.slice(0, i).reduce((a, b) => a + b, 0));
+  const T_CHECK = T_CH + CHS.reduce((a, b) => a + b, 0), T_END = T_CHECK + 5400, CH = CHS[0];
+  function chapter(i) {
+    const f = FIX[i];
+    if (i === 0) stripAway(0);
+    moveCam(camFor(f.target(), f.zoom), 800);
+    railTo([String(i + 1).padStart(2, '0'), PINS[i][3], PINS[i][4]], 80);
+    f.run(700);
+    resolvePin(i, [1500, 1800, 1500, 1500, 1600, 1950][i]);
+    later(1600, () => { fixed = i + 1; });
+  }
+  function startAt(phase) { // phase: 'build' | 0..5 | 'checked'
+    queue = []; anims().forEach((a) => a.cancel());
+    render(); $$('[data-tick] b').forEach((b) => (b.style.transform = 'scale(0)'));
+    let t0 = 0;
+    if (phase === 'build') { setCam(camRest); build(); later(T_INSTALL, install); t0 = 0; }
+    else {
+      showStatic(); const upto = phase === 'checked' ? 6 : phase;
+      for (let k = 0; k < upto; k++) { FIX[k].instant(); resolveInstant(k); }
+      countersInstant();
+      t0 = phase === 'checked' ? T_CHECK : CH_AT[phase];
+      railTo(phase === 'checked' ? RAIL.checked : [String(phase).padStart(2, '0'), phase ? PINS[phase - 1][3] : RAIL.install[1], phase ? PINS[phase - 1][4] : RAIL.install[2]], 0, true);
+      $('#strip').style.opacity = '0';
+      fadeContent();
+    }
+    for (let k = 0; k < 6; k++) { const at = CH_AT[k]; if (at >= t0) later(at - t0, () => chapter(k)); }
+    if (T_CHECK >= t0) later(T_CHECK - t0, checked);
+    later(T_END - t0 - 500, () => tween($('#content'), 'o', [{ opacity: 1 }, { opacity: 0 }], { duration: 360, easing: EASE_OUT }));
+    later(T_END - t0 - 100, () => { tween($('#bg'), 'o', [{ opacity: 1 }, { opacity: 0 }], { duration: 300, easing: EASE_OUT }); tween($('#ringRect'), 'd', [{ strokeDashoffset: 0 }, { strokeDashoffset: 1 }], { duration: 300, easing: EASE_OUT }); });
+    later(T_END - t0 + 300, () => { moveCam(camRest, 700); later(700, () => startAt('build')); });
+  }
+  function fadeContent() { tween($('#content'), 'o', [{ opacity: 0 }, { opacity: 1 }], { duration: 240, easing: EASE_OUT }); }
+  $('#ticks').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-tick]'); if (!b || reduce) return;
+    const i = +b.dataset.tick;
+    // keep the camera where it is, rebuild state underneath with a short dissolve, then play from the chapter
+    const keep = getComputedStyle(cam).transform, keepSky = getComputedStyle(sky).transform;
+    $$('.ghost', cam).forEach((g) => g.remove());
+    group.getAnimations({ subtree: true }).forEach((a) => { try { a.commitStyles(); } catch (_) {} });
+    const ghost = group.cloneNode(true); ghost.removeAttribute('id'); ghost.classList.add('ghost'); $$('[id]', ghost).forEach((el) => el.removeAttribute('id'));
+    ghost.style.pointerEvents = 'none'; cam.appendChild(ghost);
+    startAt(i);
+    cam.style.transform = keep; sky.style.transform = keepSky;
+    const ga = ghost.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 240, easing: EASE_OUT, fill: 'forwards' }); ga.finished.then(() => ghost.remove());
+  });
+
+  // ---------- headline: simple, once ----------
+  function headline() {
+    const h1 = $('#h1');
+    h1.innerHTML = h1.innerHTML.split('<br>').map((line) => line.split(' ').map((w) => `<span class="w">${w}</span>`).join(' ')).join('<br>');
+    if (reduce) return;
+    const targets = [...h1.querySelectorAll('.w'), $('.label'), ...$('#side').children];
+    targets.forEach((el, i) => el.animate([{ opacity: 0, filter: 'blur(6px)', transform: 'translateY(.12em)' }, { opacity: 1, filter: 'blur(0px)', transform: 'translateY(0)' }], { duration: 520, delay: i * 60, easing: EASE_OUT, fill: 'backwards' }));
+  }
+
+  function finalStatic() {
+    render(); showStatic();
+    for (let k = 0; k < 6; k++) { FIX[k].instant(); resolveInstant(k); }
+    countersInstant(); payInstant(); railTo(RAIL.checked, 0, true); $('#strip').style.opacity = '0';
+    layout(); setCam(camRest);
+  }
+
+  document.fonts.ready.then(() => {
+    headline();
+    if (reduce) { finalStatic(); return; }
+    render(); layout(); setCam(camRest);
+    $$('.row', group).forEach((r) => (r.style.opacity = '0')); $('#bg').style.opacity = '0';
+    let started = false;
+    const io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting && !document.hidden;
+      if (visible && !started) { started = true; startAt('build'); }
+      syncPlay();
+    }, { threshold: 0.2 });
+    io.observe(painting);
+    document.addEventListener('visibilitychange', () => { visible = !document.hidden && started; syncPlay(); });
+    requestAnimationFrame((n) => { lastNow = n; frame(n); });
+    let lastW = innerWidth;
+    addEventListener('resize', () => { if (Math.abs(innerWidth - lastW) < 40) return; lastW = innerWidth; layout(); startAt(Math.max(0, Math.min(5, fixed))); });
+  });
+
+  window.__dk = { t: () => t, fixed: () => fixed, jump: (i) => $(`[data-tick="${i}"]`).click(), T: { T_INSTALL, T_CH, CH, CH_AT, T_CHECK, T_END } };
+})();
+</script>
+</body>
+</html>
