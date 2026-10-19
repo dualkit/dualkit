@@ -29,6 +29,10 @@ jobs:
       - run: npm ci
       - run: npm run build -w @dualkit/rules
       - run: npx playwright@1.55.0 install --with-deps chromium
+      - name: Set the bot identity
+        run: |
+          git config user.name 'dualkit-bench[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
       - name: Run the bench
         timeout-minutes: 165
         env:
@@ -40,7 +44,20 @@ jobs:
           args=()
           [ -n "$MONTH" ] && args+=(--month "$MONTH")
           [ -n "$MODEL" ] && args+=(--model "$MODEL")
+          # Push progress every 15 minutes so the live page can follow the run. These commits touch only
+          # bench/runs/, which Vercel skips (only apps/site and packages/format trigger a deploy), so the
+          # site does not redeploy each time.
+          ( while sleep 900; do
+              git add -A -- bench/runs 2>/dev/null
+              git diff --cached --quiet || git commit -qm "chore(bench): progress for ${MONTH:-$(date -u +%Y-%m)}"
+              git pull --rebase --autostash -q && git push -q || true
+            done ) &
+          pusher=$!
+          set +e
           npm run bench -w @dualkit/bench -- --no-summary "${args[@]}"
+          status=$?
+          kill "$pusher" 2>/dev/null
+          exit $status
       - name: Build the summary
         if: always()
         timeout-minutes: 20
@@ -53,8 +70,6 @@ jobs:
       - name: Commit the results
         if: always()
         run: |
-          git config user.name 'dualkit-bench[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           paths=()
           for p in bench apps/site/content/bench apps/site/public/bench; do
             if [ -e "$p" ]; then paths+=("$p"); fi
