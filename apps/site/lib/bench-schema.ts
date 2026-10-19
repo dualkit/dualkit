@@ -1,6 +1,6 @@
 export type BenchFinding = { rule: string; title: string; severity: 'error' | 'warning' | 'note'; box: { x: number; y: number; width: number; height: number } | null }
 export type BenchCell =
-  | { ran: false; runs: number }
+  | { ran: false; runs: number; reasons: string[] }
   | { ran: true; runs: number; rulesPassed: number; score: number; missing: string[]; findings: BenchFinding[]; shot: string | null; pageHeight: number; raw: string }
 export type BenchTotal = { rulesPassed: number; outOf: number; score: number }
 export type BenchModel = { id: string; label: string; provider: 'openrouter' | 'gemini'; isNew: boolean; alone: BenchTotal | null; dualkit: BenchTotal | null; lift: number | null; screens: { id: string; title: string; alone: BenchCell; dualkit: BenchCell }[] }
@@ -34,7 +34,7 @@ function finding(v: unknown, path: string): BenchFinding {
 function cell(v: unknown, path: string): BenchCell {
   const o = obj(v, path)
   const runs = num(o.runs, `${path}.runs`)
-  if (!bool(o.ran, `${path}.ran`)) return { ran: false, runs }
+  if (!bool(o.ran, `${path}.ran`)) return { ran: false, runs, reasons: list(o.reasons, `${path}.reasons`).map((r, i) => str(r, `${path}.reasons.${i}`)) }
   return {
     ran: true, runs, rulesPassed: num(o.rulesPassed, `${path}.rulesPassed`), score: num(o.score, `${path}.score`),
     missing: list(o.missing, `${path}.missing`).map((m, i) => str(m, `${path}.missing.${i}`)),

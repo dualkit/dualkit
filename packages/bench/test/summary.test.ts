@@ -43,6 +43,23 @@ describe('default shots', () => {
   })
 })
 
+describe('reasons', () => {
+  it('gives a cell that did not run the distinct errors of its failed builds, at most 3, clipped to 120 characters', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    const fail = (screen: string, run: number, error: string) =>
+      store.write({ month: '2026-11', model: 'a', screen, condition: 'alone', run, at: '2026-11-01T04:30:00.000Z', reply: null, usage: null, ms: 1, finish: null, reasoningTokens: null, servedModel: null, ok: false, error }, null)
+    fail('otp', 1, 'Hit the token cap')
+    fail('otp', 2, 'Hit the token cap')
+    fail('otp', 3, `HTTP 400: ${'z'.repeat(300)}`)
+    for (const [run, error] of ['one', 'two', 'three', 'four'].entries()) fail('profile', run + 1, error)
+    const out = await buildSummary({ month: '2026-11', models: [model('a')], screens, store, shots: async () => null })
+    const row = (id: string) => out.models[0]!.screens.find((s) => s.id === id)!.alone
+    expect(row('otp')).toEqual({ ran: false, runs: 0, reasons: ['Hit the token cap', `HTTP 400: ${'z'.repeat(110)}`] })
+    expect(row('profile')).toEqual({ ran: false, runs: 0, reasons: ['one', 'two', 'three'] })
+    expect(parseBenchMonth(JSON.parse(JSON.stringify(out)))).toEqual(out)
+  })
+})
+
 describe('generatedAt', () => {
   it('is the newest build time of the month, so a rerun with nothing new writes the same bytes', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
@@ -94,7 +111,7 @@ describe('buildSummary', () => {
     const out = await buildSummary({ month: '2026-11', models: [model('a'), model('b')], screens, store, shots: async () => null })
     expect(out.models.map((m) => m.id)).toEqual(['b', 'a'])
     expect(out.models[1]).toMatchObject({ dualkit: null, lift: null })
-    expect(out.models[1]!.screens.find((s) => s.id === 'otp')!.dualkit).toEqual({ ran: false, runs: 0 })
+    expect(out.models[1]!.screens.find((s) => s.id === 'otp')!.dualkit).toEqual({ ran: false, runs: 0, reasons: [] })
   })
   it('lists a model that never ran, so the page can say so', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))

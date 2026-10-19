@@ -28,10 +28,16 @@ export const copyShots = (store: Store, siteRoot = SITE_ROOT): Shots => async (r
 // The raw path is always the repo layout, so the page can link to it whatever root the store was given.
 const rawPath = (r: BuildRecord) => `bench/runs/${r.month}/${r.model}/${r.screen}/${r.condition}-${r.run}.json`
 
+const MAX_REASONS = 3
+const REASON_CHARS = 120
+/** Why a cell did not run: the distinct errors of its failed builds, in run order. */
+const reasons = (records: BuildRecord[]) =>
+  [...new Set(records.flatMap((r) => (r.ok ? [] : [r.error.slice(0, REASON_CHARS)])))].slice(0, MAX_REASONS)
+
 async function benchCell(records: BuildRecord[], shots: Shots): Promise<BenchCell> {
   const ok = records.filter((r): r is Ok => r.ok)
   const c = cell(ok.map((r): BuildScore => ({ run: r.run, rulesPassed: r.rulesPassed, score: r.score, missing: r.missing })))
-  if (!c.ran) return { ran: false, runs: c.runs }
+  if (!c.ran) return { ran: false, runs: c.runs, reasons: reasons(records) }
   const rec = ok.find((r) => r.run === c.median.run)!
   let shot: string | null = null
   try {
