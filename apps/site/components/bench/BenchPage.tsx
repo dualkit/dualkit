@@ -6,7 +6,7 @@ import { Reveal } from '@/components/Reveal'
 import type { BenchMonth } from '@/lib/bench-schema'
 import { BENCH_COPY } from '@/lib/bench-copy'
 import { lastRunLabel, nextRunAt, runDayLabel } from '@/lib/bench-live'
-import { factsLine, factsOf } from '@/lib/bench-view'
+import { benchOutOf, factsLine, factsOf } from '@/lib/bench-view'
 import { liveData } from '@/lib/live'
 import { BenchStatus } from './BenchStatus'
 import { Board } from './Board'
@@ -32,12 +32,12 @@ function Hero({ month, months, facts }: { month: string; months: readonly string
   )
 }
 
-function Legend() {
+function Legend({ outOf }: { outOf: number }) {
   return (
     <div className="bx-legend small">
       <span className="bx-key"><i className="bx-key-ring" aria-hidden="true" /><span className="soft">{C.legend.alone}</span></span>
       <span className="bx-key"><i className="bx-key-dot" aria-hidden="true" /><span className="soft">{C.legend.dualkit}</span></span>
-      <span className="faint">{C.legend.caption}</span>
+      <span className="faint">{C.legend.caption(outOf)}</span>
     </div>
   )
 }
@@ -87,14 +87,17 @@ export async function BenchPage({ data, latest, months, planned }: { data: Bench
             <Hero month={data.month} months={months} facts={factsLine(factsOf(data))} />
             <section className="bx-board-band" aria-label="Leaderboard">
               <BenchStatus lastRun={latest ? lastRunLabel(latest.generatedAt) : null} ruleCount={RULE_COUNT} />
-              <Legend />
-              <Board models={data.models} ruleCount={data.ruleCount} fixes={FIXES} />
+              <Legend outOf={benchOutOf(data)} />
+              <Board models={data.models} ruleCount={data.ruleCount} fixes={FIXES} outOf={benchOutOf(data)} />
             </section>
           </>
         ) : (
           <>
             <Hero month={next.toISOString().slice(0, 7)} months={[]} facts={planned && factsLine(planned)} />
-            <Empty day={runDayLabel(next)} />
+            <section className="bx-board-band bx-empty-band" aria-label="Next run">
+              <BenchStatus lastRun={null} ruleCount={RULE_COUNT} />
+              <Empty day={runDayLabel(next)} />
+            </section>
           </>
         )}
         <How />

@@ -2,7 +2,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import type { BenchModel } from '@/lib/bench-schema'
 import { BENCH_COPY } from '@/lib/bench-copy'
-import { movementOf, trackOf, unrankedReason } from '@/lib/bench-view'
+import { movementOf, scaleLabels, trackOf, unrankedReason } from '@/lib/bench-view'
 import { MakerMark } from './MakerMark'
 import { ModelScreens } from './ModelScreens'
 
@@ -72,7 +72,7 @@ function Row({ model, open, onToggle, panelId, ruleCount, fixes }: { model: Benc
  * The leaderboard. On first view each track draws from 0 to its two scores, a row at a time.
  * Rows open their five screens beneath them, one model at a time.
  */
-export function Board({ models, ruleCount, fixes }: { models: readonly BenchModel[]; ruleCount: number; fixes: Record<string, string> }) {
+export function Board({ models, ruleCount, fixes, outOf }: { models: readonly BenchModel[]; ruleCount: number; fixes: Record<string, string>; outOf: number }) {
   const [openId, setOpenId] = useState<string | null>(null)
   const ref = useRef<HTMLDivElement>(null)
   const base = useId()
@@ -98,7 +98,7 @@ export function Board({ models, ruleCount, fixes }: { models: readonly BenchMode
       <div className="bx-row bx-header small faint" aria-hidden="true">
         <span>{C.columns.rank}</span>
         <span>{C.columns.model}</span>
-        <span className="bx-scale">{C.scale.map((s) => <span key={s}>{s}</span>)}</span>
+        <span className="bx-scale">{scaleLabels(outOf).map((s, k) => <span key={k}>{s}</span>)}</span>
         <span>{C.columns.pair}</span>
         <span>{C.columns.lift}</span>
       </div>

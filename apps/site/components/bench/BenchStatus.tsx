@@ -17,6 +17,7 @@ function useProgress(): Progress | null {
   useEffect(() => {
     let live = true
     const load = async () => {
+      if (document.visibilityState === 'hidden') return
       try {
         const res = await fetch(progressUrl(new Date(), OVERRIDE), { cache: 'no-store' })
         const next = res.ok ? parseProgress(await res.json()) : null
@@ -25,9 +26,11 @@ function useProgress(): Progress | null {
         if (live) setProgress(null)
       }
     }
+    const onVisible = () => { if (document.visibilityState === 'visible') void load() }
     void load()
     const t = setInterval(load, POLL_MS)
-    return () => { live = false; clearInterval(t) }
+    document.addEventListener('visibilitychange', onVisible)
+    return () => { live = false; clearInterval(t); document.removeEventListener('visibilitychange', onVisible) }
   }, [])
   return progress
 }
@@ -82,7 +85,7 @@ function Ticker({ builds, ruleCount }: { builds: readonly RecentBuild[]; ruleCou
   }
 
   return (
-    <div className="bx-ticker" ref={ref} aria-label="Latest builds">
+    <div className="bx-ticker" ref={ref} role="group" aria-label="Latest builds">
       {builds.map((b) => (
         <div className="bx-build" key={keyOf(b)} data-k={keyOf(b)}>
           <span className="bx-build-at mono faint">{clockUtc(b.at)}</span>
@@ -123,16 +126,21 @@ export function BenchStatus({ lastRun, ruleCount }: { lastRun: string | null; ru
   }
 
   const countdown = now ? formatCountdown(nextRunAt(now).getTime() - now.getTime()) : '00d 00:00:00'
+  const next = (
+    <>
+      <span className="small soft">{C.nextRun}</span>
+      <span className="mono bx-mono tnum" style={{ visibility: now ? 'visible' : 'hidden' }} aria-live="off">{countdown}</span>
+    </>
+  )
+  // Before the first run there is no last run to name, so the line is only the countdown.
+  if (!lastRun) return <div className="bx-status"><div className="bx-status-start"><span className="bx-dot" aria-hidden="true" />{next}</div></div>
   return (
     <div className="bx-status">
       <div className="bx-status-start">
         <span className="bx-dot" aria-hidden="true" />
-        {lastRun && <span className="small soft">{C.lastRun} {lastRun}</span>}
+        <span className="small soft">{C.lastRun} {lastRun}</span>
       </div>
-      <div className="bx-status-end">
-        <span className="small soft">{C.nextRun}</span>
-        <span className="mono bx-mono tnum" style={{ visibility: now ? 'visible' : 'hidden' }} aria-live="off">{countdown}</span>
-      </div>
+      <div className="bx-status-end">{next}</div>
     </div>
   )
 }
