@@ -6,6 +6,20 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'a-new-dualkit-dev',
+    date: '2026-10-19',
+    version: 'Site',
+    tags: ['Site'],
+    title: 'A new dualkit.dev',
+    body: [
+      'The site has a new design. The home page opens on a painting of a Gulf dusk with a bilingual checkout on it, and steps through what each part of the kit fixes.',
+      'Skills, Format, Starter, Check and the Bench each get a preview before you install anything, and a slider shows every component flipping between left to right and right to left.',
+    ],
+    shipped: [
+      { name: 'dualkit.dev', line: 'A new home page, with a preview of each part of the kit' },
+    ],
+  },
+  {
     slug: 'check-v0-1-0-beta',
     date: '2026-10-19',
     version: 'Check v0.1.0-beta',
