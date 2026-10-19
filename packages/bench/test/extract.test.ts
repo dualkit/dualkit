@@ -32,3 +32,27 @@ describe('extractHtml', () => {
     expect(extractHtml('```html\n' + page)).toBe(page)
   })
 })
+
+const nested = '<!doctype html><html><body><pre>\n```js\nx\n```\n</pre></body></html>'
+const draft = '<!doctype html><html><body>' + 'draft '.repeat(40) + '</body></html>'
+
+describe('extractHtml fence edges', () => {
+  it('keeps a page that holds a nested fence, through its closing html tag', () => {
+    expect(extractHtml(fence('html', nested))).toBe(nested)
+  })
+  it('takes a four-backtick html block whose body holds three-backtick lines', () => {
+    expect(extractHtml('````html\n' + nested + '\n````')).toBe(nested)
+  })
+  it('does not start a block at an inline triple backtick in prose', () => {
+    expect(extractHtml('Wrap the code in ``` fences, then:\n' + fence('html', page))).toBe(page)
+  })
+})
+
+describe('extractHtml reasoning edges', () => {
+  it('returns null for an unclosed think block holding a draft', () => {
+    expect(extractHtml(`<think>\n${fence('html', draft)}`)).toBeNull()
+  })
+  it('drops everything up to a lone closing think tag', () => {
+    expect(extractHtml(`reasoning\n${fence('html', draft)}\n</think>\n${fence('html', page)}`)).toBe(page)
+  })
+})
