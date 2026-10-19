@@ -17,7 +17,27 @@ async function submit(form: HTMLFormElement): Promise<State> {
   }
 }
 
-/** A round icon button pinned to the reading-end corner; it opens a small panel that mails Sam. */
+/** Covers that the trigger steps aside for on phones: the hero story and the footer painting. */
+const AVOID = '.v3-hero-frame, .v3-foot-art'
+
+/** True while an AVOID element reaches the bottom tenth of the viewport, where the trigger sits. CSS acts on it only on phones. */
+function useTucked(): boolean {
+  const [tucked, setTucked] = useState(false)
+  useEffect(() => {
+    const targets = document.querySelectorAll(AVOID)
+    if (!targets.length || typeof IntersectionObserver === 'undefined') return
+    const hits = new Set<Element>()
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) { if (e.isIntersecting) hits.add(e.target); else hits.delete(e.target) }
+      setTucked(hits.size > 0)
+    }, { rootMargin: '-90% 0px 0px 0px' })
+    targets.forEach((t) => io.observe(t))
+    return () => io.disconnect()
+  }, [])
+  return tucked
+}
+
+/** A square icon button pinned to the reading-end corner; it opens a small panel that mails Sam. */
 export function Feedback() {
   const f = COPY.feedback
   const [open, setOpen] = useState(false)
@@ -25,6 +45,7 @@ export function Feedback() {
   const root = useRef<HTMLDivElement>(null)
   const field = useRef<HTMLTextAreaElement>(null)
   const trigger = useRef<HTMLButtonElement>(null)
+  const tucked = useTucked()
 
   useEffect(() => {
     if (!open) return
@@ -48,7 +69,7 @@ export function Feedback() {
   }
 
   return (
-    <div className="fb" ref={root}>
+    <div className="fb" ref={root} data-tucked={tucked}>
       <div className="fb-panel" id="feedback-panel" role="dialog" aria-label={f.heading} data-open={open} inert={!open}>
         {state.kind === 'sent' ? (
           <p className="fb-sent swap-in"><CheckIcon /> {f.sent}</p>

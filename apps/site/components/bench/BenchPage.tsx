@@ -1,7 +1,7 @@
 import { RULES } from '@dualkit/rules'
-import { Footer } from '@/components/Footer'
+import { Footer } from '@/components/v3/Footer'
 import { ArrowIcon } from '@/components/icons'
-import { Nav } from '@/components/Nav'
+import { Nav } from '@/components/v3/Nav'
 import { Reveal } from '@/components/Reveal'
 import type { BenchMonth } from '@/lib/bench-schema'
 import { BENCH_COPY } from '@/lib/bench-copy'
@@ -95,7 +95,7 @@ export async function BenchPage({ data, latest, months, planned }: { data: Bench
         )}
         <How />
       </main>
-      <Footer status={live.status} downloads={live.downloads} />
+      <Footer status={live.status} />
       <Reveal />
     </>
   )

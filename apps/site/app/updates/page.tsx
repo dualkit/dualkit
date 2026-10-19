@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import { Footer } from '@/components/Footer'
+import { Footer } from '@/components/v3/Footer'
 import { CheckIcon, RssIcon, StarIcon } from '@/components/icons'
-import { Nav } from '@/components/Nav'
+import { Nav } from '@/components/v3/Nav'
 import { Reveal } from '@/components/Reveal'
 import { liveData } from '@/lib/live'
 import { RELEASES, UP_NEXT, displayDate, progress } from '@/lib/updates'
@@ -58,7 +58,7 @@ export default async function Updates() {
           </div>
         </section>
       </main>
-      <Footer status={live.status} downloads={live.downloads} />
+      <Footer status={live.status} />
       <Reveal />
     </>
   )

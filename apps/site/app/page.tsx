@@ -1,16 +1,16 @@
-import { CheckSection } from '@/components/CheckSection'
-import { Closing } from '@/components/Closing'
-import { Footer } from '@/components/Footer'
-import { FormatSection } from '@/components/FormatSection'
-import { Hero } from '@/components/Hero'
-import { MirrorSection } from '@/components/MirrorSection'
-import { Nav } from '@/components/Nav'
-import { Reveal } from '@/components/Reveal'
-import { SkillsSection } from '@/components/SkillsSection'
-import { Stage } from '@/components/Stage'
-import { StarterSection } from '@/components/StarterSection'
-import { Strip } from '@/components/Strip'
-import { WorksWith } from '@/components/WorksWith'
+import { BenchTeaser } from '@/components/v3/BenchTeaser'
+import { Closing } from '@/components/v3/Closing'
+import { Footer } from '@/components/v3/Footer'
+import { GulfMap } from '@/components/v3/GulfMap'
+import { Hero } from '@/components/v3/Hero'
+import { HowItWorks } from '@/components/v3/HowItWorks'
+import { Kit } from '@/components/v3/Kit'
+import { Mirror } from '@/components/v3/Mirror'
+import { Nav } from '@/components/v3/Nav'
+import { Numbers } from '@/components/v3/Numbers'
+import { RegionVideo } from '@/components/v3/RegionVideo'
+import { Statement } from '@/components/v3/Statement'
+import { WorksWith } from '@/components/v3/WorksWith'
 import { liveData } from '@/lib/live'
 
 export const revalidate = 300
@@ -20,20 +20,20 @@ export default async function Home() {
   return (
     <>
       <Nav stars={live.stars} />
-      <main id="top" className="wrap">
-        <Hero />
-        <Stage />
+      <main id="top" className="v3">
+        <div className="v3-wrap"><Hero /></div>
+        <Statement />
+        <HowItWorks />
+        <GulfMap />
+        <Kit />
         <WorksWith />
-        <SkillsSection />
-        <FormatSection />
-        <StarterSection />
-        <CheckSection />
-        <MirrorSection />
-        <Strip />
+        <RegionVideo />
+        <Mirror />
+        <BenchTeaser />
+        <Numbers />
         <Closing />
       </main>
-      <Footer status={live.status} downloads={live.downloads} />
-      <Reveal />
+      <Footer status={live.status} />
     </>
   )
 }

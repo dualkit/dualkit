@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { CopyCommand } from '@/components/CopyCommand'
-import { Footer } from '@/components/Footer'
-import { Nav } from '@/components/Nav'
+import { Footer } from '@/components/v3/Footer'
+import { Nav } from '@/components/v3/Nav'
 import { ACTION_URL, CHECK_COMMAND, FORMAT_COMMAND, SKILLS_COMMAND } from '@/lib/copy'
 import { liveData } from '@/lib/live'
 
@@ -64,7 +64,7 @@ export default async function Docs() {
           <p className="soft">Everything is MIT licensed and lives at <a href="https://github.com/dualkit/dualkit">github.com/dualkit/dualkit</a>. Open an issue if any Arabic reads wrong.</p>
         </section>
       </main>
-      <Footer status={live.status} downloads={live.downloads} />
+      <Footer status={live.status} />
     </>
   )
 }
