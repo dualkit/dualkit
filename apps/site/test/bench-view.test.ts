@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { BenchCell, BenchFinding, BenchModel, BenchMonth } from '../lib/bench-schema'
 import { MAKER_MARKS } from '../lib/marks'
-import { benchOutOf, factsLine, factsOf, makerInitial, makerMarkOf, monthLabel, movementOf, placePins, rawUrl, scaleLabels, shotMarks, sideLine, tickFill, trackOf, unrankedReason } from '../lib/bench-view'
+import { benchOutOf, monthAlternates, factsLine, factsOf, makerInitial, makerMarkOf, monthLabel, movementOf, placePins, rawUrl, scaleLabels, shotMarks, sideLine, tickFill, trackOf, unrankedReason } from '../lib/bench-view'
 
 const total = (rulesPassed: number) => ({ rulesPassed, outOf: 100, score: rulesPassed })
 type Ran = Extract<BenchCell, { ran: true }>
@@ -221,5 +221,15 @@ describe('maker marks', () => {
   it('falls back to the maker initial', () => {
     expect(makerInitial('Thinking Machines')).toBe('T')
     expect(makerInitial('  ')).toBe('?')
+  })
+})
+
+describe('monthAlternates', () => {
+  it('points the latest month at /bench, which shows the same board', () => {
+    expect(monthAlternates('2026-12', '2026-12')).toEqual({ canonical: '/bench' })
+  })
+  it('leaves older months as their own page', () => {
+    expect(monthAlternates('2026-11', '2026-12')).toBeUndefined()
+    expect(monthAlternates('2026-11', null)).toBeUndefined()
   })
 })

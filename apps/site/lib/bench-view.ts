@@ -35,6 +35,9 @@ export const factsLine = ({ models, screens }: { models: number; screens: number
   `${plural(models, 'model')} · ${plural(screens, 'screen')} · ${plural(models * screens * CONDITIONS * RUNS, 'build')}`
 export const factsOf = (m: BenchMonth) => ({ models: m.models.length, screens: new Set(m.models.flatMap((x) => x.screens.map((s) => s.id))).size })
 
+/** The latest month's own page duplicates /bench, so it names /bench as canonical; older months stand alone. */
+export const monthAlternates = (month: string, latest: string | null) => (latest !== null && month === latest ? { canonical: '/bench' } : undefined)
+
 export type Movement = { kind: 'new' } | { kind: 'level' } | { kind: 'up' | 'down'; n: number }
 /** From the summary's move, not previousRank: a model removed or added between months would shift every rank below it. */
 export function movementOf(m: BenchModel): Movement {
