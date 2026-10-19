@@ -6,7 +6,7 @@ Four agent skills for building bilingual Arabic and English products for the Gul
 | --- | --- |
 | `dualkit-rtl-layout` | Mirroring, icons, phone numbers and codes inside Arabic text, input direction, punctuation and brackets, CSS logical properties first and Tailwind last, bidi bugs |
 | `dualkit-type-pairing` | Arabic and Latin font stacks, Arabic size floor, line height, letter-spacing, bold and italic Arabic, Arabic inside Latin text |
-| `dualkit-gulf-formats` | All six Gulf currencies, Arabic-Indic digits, currency signs, Hijri dates, UAE and Saudi phones, Emirates ID, IBAN, weekends |
+| `dualkit-gulf-formats` | All six Gulf currencies, Arabic-Indic digits, currency signs, Hijri dates, phones and IBANs for all six GCC countries, Emirates ID, Saudi VAT number, weekends |
 | `dualkit-bilingual-copy` | Plurals, interpolation, gendered Arabic, punctuation, stacked two-language labels, language switchers, translation files |
 
 ## Install

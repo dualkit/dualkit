@@ -1,5 +1,5 @@
 ---
-description: Use when showing or accepting money in AED, SAR, QAR, KWD, BHD or OMR, Arabic-Indic or Western digits, Hijri or Umm al-Qura dates, UAE or Saudi phone numbers, Emirates ID, IBANs, or weekends and working days, in a product for the UAE, Saudi Arabia or the wider Gulf
+description: Use when showing or accepting money in AED, SAR, QAR, KWD, BHD or OMR, Arabic-Indic or Western digits, Hijri or Umm al-Qura dates, GCC phone numbers, Emirates ID, IBANs, or weekends and working days, in a product for the UAE, Saudi Arabia or the wider Gulf
 globs:
 alwaysApply: false
 ---
@@ -12,10 +12,10 @@ Make every format decision explicit. Intl defaults change by locale and by brows
 
 `@dualkit/format` implements every rule below, with tests.
 
-Coverage today: `@dualkit/format` parses UAE and Saudi phones and Emirates ID, and checks IBANs for AE, SA, BH, KW and QA. Other Gulf phones, national IDs and Omani IBANs are coming.
+Coverage: `@dualkit/format` parses phones and checks IBANs for all six GCC countries, and `parseGulfPhone` reads a number from any of them. It also handles the Emirates ID, the Saudi VAT number, weekends (`gulfWeek`, `isGulfWeekend`) and currency signs (`currencySign`).
 
 ```ts
-import { formatMoney, formatHijri, parseUaePhone, parseSaudiPhone, parseEmiratesId, parseIban, toWesternDigits } from '@dualkit/format'
+import { formatMoney, formatHijri, gulfWeek, parseGulfPhone, parseUaePhone, parseSaudiPhone, parseEmiratesId, parseIban, parseSaudiVatNumber, toWesternDigits } from '@dualkit/format'
 ```
 
 ## Digits
@@ -44,22 +44,27 @@ formatMoney(1.5, { currency: 'KWD', locale: 'ar' })                       // 1.5
 ```ts
 formatHijri(dueDate, { timeZone: 'Asia/Dubai' })                                   // 1 Ramadan 1447 AH
 formatHijri(dueDate, { locale: 'ar', numerals: 'arab', timeZone: 'Asia/Riyadh' })  // ١ رمضان ١٤٤٧ هـ
+gulfWeek('AE')  // { weekend: [6, 7], firstWorkday: 1 }  ISO days, 7 is Sunday
+gulfWeek('SA')  // { weekend: [5, 6], firstWorkday: 7 }
 ```
 
 - **Always pass `timeZone`** (`Asia/Dubai` is UTC+4, `Asia/Riyadh` is UTC+3), for Gregorian dates too. If you don't, the server and the browser can render different days, and you get hydration mismatches.
 - Use `islamic-umalqura`, not plain `islamic`. Umm al-Qura is Saudi Arabia's official calendar.
 - Ramadan and Eid begin on a moon sighting and can differ from any computed calendar by a day. Never promise those dates from a calculation. Label them as expected dates.
-- Weekends: the UAE federal government and most private companies take Saturday and Sunday (since 2022), with a short Friday for federal staff. Sharjah government takes Friday to Sunday. Saudi Arabia is Friday and Saturday. Make the weekend configurable per market and per customer.
+- Weekends: the UAE federal government and most private companies take Saturday and Sunday (since 2022), with a short Friday for federal staff. Sharjah government takes Friday to Sunday. Saudi Arabia, Qatar, Kuwait, Bahrain and Oman are Friday and Saturday, and their week starts on Sunday. Make the weekend configurable per market and per customer. `gulfWeek` gives the official one.
 
 ## Phone, Emirates ID, IBAN
 
 ```ts
 parseUaePhone('٠٥٠ ١٢٣ ٤٥٦٧')  // { ok: true, value: { e164: '+971501234567', type: 'mobile' } }
 parseSaudiPhone('055 123 4567')  // { ok: true, value: { e164: '+966551234567', type: 'mobile' } }
+parseGulfPhone('+974 3312 3456')  // { ok: true, value: { country: 'QA', e164: '+97433123456', type: 'mobile' } }
+parseSaudiVatNumber(value)      // 15 digits, starting and ending with 3
 parseEmiratesId(value)          // checks the 784 prefix and the Luhn check digit
 parseIban(value, { country: 'AE' })  // checks the length per country and mod 97
 ```
 
+- Eight-digit numbers fit four countries, so `parseGulfPhone` needs a `+` or `00` and the country code. Qatar, Kuwait, Bahrain and Oman also have `parseQatarPhone` and the like.
 - Accept every common way of writing a number: `050…`, `+971 50…`, `00971…`, `+971 (0) 50…`, with spaces and dashes. Store E.164.
 - Use `inputMode="tel"` for phones, `inputMode="numeric"` for Emirates ID, and `dir="ltr"` on all three fields (see dualkit-rtl-layout).
 - Treat the Emirates ID as sensitive personal data. Mask it in the UI (`784-****-*******-6`), and never log it or put it in analytics.

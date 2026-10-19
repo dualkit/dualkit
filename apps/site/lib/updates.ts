@@ -6,6 +6,22 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'format-0-2-0',
+    date: '2026-10-20',
+    version: '@dualkit/format 0.2.0-beta.0',
+    tags: ['Format'],
+    title: 'Phones and IBANs for all six GCC countries',
+    body: [
+      'Format now reads phone numbers from Qatar, Kuwait, Bahrain and Oman, next to the UAE and Saudi Arabia. parseGulfPhone reads a number from any of the six, as long as it starts with a + or 00 and the country code.',
+      'IBAN checks now cover Oman. There is also a Saudi VAT number parser, a weekend table for every country with the Sharjah government week, and currencySign for the three new Unicode signs.',
+      'One breaking change: toHijri and formatHijri now need a timeZone. It was optional before, and leaving it out could show the wrong day.',
+    ],
+    shipped: [
+      { name: '@dualkit/format 0.2.0-beta.0', line: 'Phones for QA, KW, BH and OM, parseGulfPhone, Omani IBANs, parseSaudiVatNumber, gulfWeek, isGulfWeekend and currencySign' },
+      { name: 'dualkit-gulf-formats', line: 'The skill now states the new coverage and its weekend facts match gulfWeek' },
+    ],
+  },
+  {
     slug: 'a-new-dualkit-dev',
     date: '2026-10-19',
     version: 'Site',
@@ -115,7 +131,7 @@ export const UP_NEXT: readonly RoadmapItem[] = [
   { title: 'A home for Gulf designers', line: 'Inspiration, patterns and resources, in one place.', state: 'Coming',
     steps: [['Design', true], ['Patterns', false], ['Gallery', false], ['Resources', false], ['Monthly note', false]] },
   { title: 'More of the Gulf', line: 'More countries, more formats.', state: 'Coming',
-    steps: [['Tests', false], ['Parser', false], ['Released', false]] },
+    steps: [['Tests', true], ['Parser', true], ['Released', false]] },
   { title: 'Arabic, written with you', line: 'Native Arabic designers, credited by name. Want in?', state: 'Coming',
     steps: [['Co-authors found', false], ['First 100 strings', false], ['Released', false]] },
 ]

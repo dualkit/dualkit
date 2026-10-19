@@ -8,6 +8,19 @@ npm i @dualkit/format
 
 No dependencies. It runs in any modern browser, in Node 18 and later, and at the edge.
 
+## Coverage
+
+| Country | Phone | IBAN | Other |
+| --- | --- | --- | --- |
+| UAE | Yes | Yes | Emirates ID, weekend, Sharjah weekend |
+| Saudi Arabia | Yes | Yes | VAT number, weekend |
+| Qatar | Yes | Yes | Weekend |
+| Kuwait | Yes | Yes | Weekend |
+| Bahrain | Yes | Yes | Weekend |
+| Oman | Yes | Yes | Weekend |
+
+Every country also has its currency in `formatMoney`. `parseGulfPhone` reads a number from any of the six.
+
 ## Money
 
 ```ts
@@ -38,7 +51,7 @@ formatHijri(date, { locale: 'ar', numerals: 'arab', timeZone: 'Asia/Dubai' })   
 toHijri(date, { timeZone: 'Asia/Dubai' })                                        // { year: 1447, month: 9, day: 1 }
 ```
 
-Dates use the Umm al-Qura calendar. Always pass a `timeZone`, because the Hijri day follows the person's local day. If a runtime has no Umm al-Qura calendar, the functions throw instead of quietly returning a Gregorian date.
+Dates use the Umm al-Qura calendar. `timeZone` is now required for `toHijri` and `formatHijri`. In 0.1 it was optional, so add it to every call. Always pass a `timeZone`, because the Hijri day follows the person's local day. If a runtime has no Umm al-Qura calendar, the functions throw instead of quietly returning a Gregorian date.
 
 ## UAE phone numbers
 
@@ -62,6 +75,29 @@ isValidSaudiPhone('0521234567')                             // false, 052 is not
 
 It reads the same shapes as the UAE parser. It covers mobiles (50, 51, 53 to 59) and landlines (11, 12, 13, 14, 16, 17).
 
+## Phone numbers for Qatar, Kuwait, Bahrain and Oman
+
+```ts
+parseQatarPhone('+974 3312 3456')   // { ok: true, value: { e164: '+97433123456', type: 'mobile' } }
+parseKuwaitPhone('+965 5012 3456')  // { ok: true, value: { e164: '+96550123456', type: 'mobile' } }
+parseBahrainPhone('3912 3456')      // { ok: true, value: { e164: '+97339123456', type: 'mobile' } }
+parseOmanPhone('9212 3456')         // { ok: true, value: { e164: '+96892123456', type: 'mobile' } }
+formatOmanPhone('92123456', { style: 'international' })  // +968 9212 3456
+isValidKuwaitPhone('50123456')      // true
+```
+
+Each country has `parse`, `format` and `isValid` functions, named like the UAE and Saudi ones.
+
+## Any Gulf phone number
+
+```ts
+parseGulfPhone('+974 3312 3456')  // { ok: true, value: { country: 'QA', e164: '+97433123456', type: 'mobile' } }
+parseGulfPhone('3312 3456')       // { ok: false, error: { code: 'needs_country_code', … } }
+isValidGulfPhone('00966551234567') // true
+```
+
+Four countries use eight-digit numbers, so a bare number can belong to any of them. `parseGulfPhone` needs a `+` or `00` and the country code.
+
 ## Emirates ID
 
 ```ts
@@ -77,7 +113,31 @@ parseIban(input, { country: 'SA' })          // accept Saudi IBANs only
 formatIban('SA0380000000608010167519')      // SA03 8000 0000 6080 1016 7519
 ```
 
-It supports the UAE, Saudi Arabia, Bahrain, Kuwait and Qatar.
+It supports all six countries: AE, SA, QA, KW, BH and OM.
+
+## Saudi VAT number
+
+```ts
+parseSaudiVatNumber('310 1223 9350 0003')  // { ok: true, value: '310122393500003' }
+isValidSaudiVatNumber('210122393500003')   // false, it must start with 3
+formatSaudiVatNumber('310 1223 9350 0003') // 310122393500003
+```
+
+It checks for 15 digits that start and end with 3, the rule ZATCA uses. It does not check that the number is registered.
+
+## Weekends and currency signs
+
+```ts
+gulfWeek('AE')     // { weekend: [6, 7], firstWorkday: 1 }
+gulfWeek('SA')     // { weekend: [5, 6], firstWorkday: 7 }
+isGulfWeekend(new Date('2026-10-23T12:00:00Z'), 'SA', { timeZone: 'Asia/Riyadh' })  // true
+currencySign('SAR')  // the U+20C1 sign
+currencySign('QAR')  // null, there is no sign
+```
+
+Days are ISO weekdays, so 1 is Monday and 7 is Sunday. The UAE weekend is Saturday and Sunday. `AE-SH` is Sharjah government, Friday to Sunday. The other countries take Friday and Saturday and start the week on Sunday. This is the official calendar. Private employers set their own. `timeZone` is required.
+
+`currencySign` returns a sign for SAR, AED and OMR and `null` for the rest. Most fonts do not draw these signs yet, so fall back to the code.
 
 ## Errors
 
@@ -85,6 +145,6 @@ The `parse*` functions never throw. They return `{ ok: true, value }` or `{ ok: 
 
 ## Status
 
-This is v0.1 beta. A native Arabic reviewer has not yet checked the Arabic month names, currency abbreviations or the Arabic layout of the output. Please open an issue if anything reads wrong.
+This is a beta. A native Arabic reviewer has not yet checked the Arabic month names, currency abbreviations or the Arabic layout of the output. Please open an issue if anything reads wrong.
 
 MIT
