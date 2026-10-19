@@ -126,7 +126,7 @@ The most useful help right now:
 
 - **Read Arabic?** Review the skill rules in [`plugin/skills/`](plugin/skills/) and comment wherever something reads wrong. See [#6](https://github.com/dualkit/dualkit/issues/6).
 - **Shipping in the Gulf?** Tell us where it breaks in [Discussions](https://github.com/dualkit/dualkit/discussions).
-- **Want a first PR?** Saudi phone numbers ([#2](https://github.com/dualkit/dualkit/issues/2)) and the other Gulf currencies ([#3](https://github.com/dualkit/dualkit/issues/3)) are small and well scoped.
+- **Want a first PR?** Issues labelled [help wanted](https://github.com/dualkit/dualkit/labels/help%20wanted) are small and well scoped.
 
 ## Repo
 
