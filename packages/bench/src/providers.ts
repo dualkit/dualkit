@@ -10,10 +10,11 @@ type Options = { env: Record<string, string | undefined>; fetch?: typeof fetch; 
   /** Epoch ms. Once it passes no retry starts; the call returns its last error. */
   deadline?: number }
 
-export const MAX_RETRIES = 2
+/** Free models are often "temporarily rate-limited upstream"; four retries give a busy upstream about four minutes to clear. */
+export const MAX_RETRIES = 4
 /** 20 a minute is the free-model cap; a little over 3 s apart stays under it. */
 export const MIN_GAP_MS = 3100
-const BACKOFF_MS = [10_000, 30_000]
+export const BACKOFF_MS = [15_000, 30_000, 60_000, 120_000]
 /** The whole request, body included. Reasoning models can take minutes, and a timeout is not retried. */
 export const REQUEST_TIMEOUT_MS = 600_000
 /** A server asking for longer than this is capped, so one reply cannot stall the run for an hour. */
@@ -94,7 +95,7 @@ export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promis
       } catch (e) {
         if (signal.aborted) return timedOut()
         error = `Network error: ${clipBody(e instanceof Error ? e.message : String(e), key)}`
-        if (attempt < MAX_RETRIES && now() < deadline) await sleep(BACKOFF_MS[attempt] ?? 30_000)
+        if (attempt < MAX_RETRIES && now() < deadline) await sleep(BACKOFF_MS[attempt] ?? 120_000)
         continue
       }
       if (res.ok) {
@@ -106,7 +107,7 @@ export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promis
       error = `HTTP ${res.status}: ${clipBody(text, key)}`
       if (!retryable(res.status)) break
       const after = Math.min(Number(res.headers.get('retry-after')), MAX_RETRY_AFTER_S)
-      if (attempt < MAX_RETRIES && now() < deadline) await sleep(after > 0 ? after * 1000 : BACKOFF_MS[attempt] ?? 30_000)
+      if (attempt < MAX_RETRIES && now() < deadline) await sleep(after > 0 ? after * 1000 : BACKOFF_MS[attempt] ?? 120_000)
     }
     return { ok: false, error, ms: now() - started }
   }

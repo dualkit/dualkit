@@ -212,7 +212,7 @@ describe('rawUrl', () => {
 
 describe('maker marks', () => {
   it('has a mark for every maker file', () => {
-    expect(Object.keys(MAKER_MARKS).sort()).toEqual(['cohere', 'google', 'nvidia', 'poolside', 'thinking-machines'])
+    expect(Object.keys(MAKER_MARKS).sort()).toEqual(['cohere', 'dots-studio', 'google', 'nvidia', 'poolside', 'thinking-machines'])
     for (const m of Object.values(MAKER_MARKS)) {
       expect(m.viewBox).toMatch(/^0 0 \d+ \d+$/)
       expect(m.paths.length).toBeGreaterThan(0)

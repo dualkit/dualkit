@@ -22,7 +22,7 @@ describe('loadModels', () => {
     const by = Object.fromEntries(loadModels().map((m) => [m.id, `${m.by}/${m.mark}`]))
     expect(by).toEqual({
       'gemini-flash': 'Google/google', 'gemma-4-31b': 'Google/google', 'nemotron-3-ultra': 'NVIDIA/nvidia',
-      inkling: 'Thinking Machines/thinking-machines', 'laguna-s': 'Poolside/poolside', 'north-mini-code': 'Cohere/cohere',
+      'dots-3-note': 'Dots Studio/dots-studio', 'laguna-s': 'Poolside/poolside', 'north-mini-code': 'Cohere/cohere',
     })
   })
   it('rejects a model without by, or with a mark that is not a file in design/assets/marks', () => {
