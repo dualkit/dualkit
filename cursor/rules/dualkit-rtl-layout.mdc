@@ -8,7 +8,7 @@ alwaysApply: false
 
 ## Overview
 
-Direction is set once, on the root, and everything else follows it. The hard bugs are not margins. They are left-to-right runs (phone numbers, IBANs, codes, emails) inside Arabic text, which the bidi algorithm reorders.
+Direction is set once, on the root, and everything else follows it. The hard bugs are not margins. They are left-to-right runs (phone numbers, IBANs, codes, emails) inside Arabic text, which the bidi algorithm reorders. This skill sets no font. For fonts, sizes and leading, use dualkit-type-pairing.
 
 ## Set direction on the document
 
@@ -20,16 +20,20 @@ Use the `dir` attribute, never `direction` in CSS. Flex, grid, text alignment an
 
 ## Logical properties, always
 
-| Physical (never) | Logical (always) | Tailwind |
-|---|---|---|
-| `margin-left` | `margin-inline-start` | `ms-4` |
-| `padding-right` | `padding-inline-end` | `pe-4` |
-| `left: 0` | `inset-inline-start: 0` | `inset-s-0` (v4.3+), `start-0` before |
-| `text-align: left` | `text-align: start` | `text-start` |
-| `border-left` | `border-inline-start` | `border-s` |
-| `border-top-left-radius` | `border-start-start-radius` | `rounded-ss-lg` |
+| Physical (never) | Logical (always) |
+|---|---|
+| `margin-left` | `margin-inline-start` |
+| `padding-right` | `padding-inline-end` |
+| `left: 0` | `inset-inline-start: 0` |
+| `text-align: left` | `text-align: start` |
+| `border-left` | `border-inline-start` |
+| `border-top-left-radius` | `border-start-start-radius` |
 
-`transform: translateX()`, `background-position`, SVG coordinates and animation keyframes do **not** flip. Negate them under `[dir="rtl"]` or the `rtl:` variant (`rtl:-translate-x-full`).
+`transform: translateX()`, `background-position`, SVG coordinates and animation keyframes do **not** flip. Negate them for right to left:
+
+```css
+[dir="rtl"] .x { transform: translateX(100%) }
+```
 
 ## Left-to-right runs inside Arabic text (the bug every model ships)
 
@@ -49,12 +53,37 @@ const hint = `مثال ⁦050 123 4567⁩`
 
 `dir="ltr"` is only for runs with no Arabic letters in them. A formatted Arabic amount (`1,234.50 د.إ`) or an Arabic date contains Arabic, so give it a plain `<bdi>` with no `dir`. Forcing it to LTR moves the currency to the wrong side. The same goes for user-supplied names and values: plain `<bdi>`, so each one picks its own direction.
 
-## Inputs that are always left to right
+## Punctuation and brackets
 
-Phone, IBAN, Emirates ID, email, URL, card and OTP fields stay `dir="ltr"` in Arabic. Keep the label and the error message in the page direction.
+A block with no Arabic in it still runs right to left on an Arabic page, so its last mark moves to the start. `Gregorian:` shows as `:Gregorian`, and `Great service, thank you!` shows as `!Great service, thank you`.
 
-```tsx
-<input dir="ltr" inputMode="tel" autoComplete="tel" className="text-start" />
+A Latin label in Arabic UI: translate it. If the Latin word must stay, isolate the word and its mark together. An isolate around the word alone leaves the colon at the wrong end.
+
+```html
+<label>ميلادي:</label>
+<label><bdi>Gregorian:</bdi></label>
+```
+
+A bracketed code next to a number, in a cell or badge with no Arabic: `1,234.50 (AED)` shows as `(AED) 1,234.50`. Put the whole amount, brackets included, inside the isolate, or use the Arabic abbreviation.
+
+```html
+<td><bdi>1,234.50 (AED)</bdi></td>
+<td><bdi>1,234.50 د.إ</bdi></td>
+```
+
+User content in either script (reviews, comments): give the block `dir="auto"`, so it takes the direction of its first letter.
+
+```html
+<p dir="auto">Great service, thank you!</p>
+```
+
+## Inputs: direction by what people type
+
+Fixed formats (phone, IBAN, Emirates ID, card, OTP), email and URL use `dir="ltr"`. Fields where people may type either script (names, search, addresses, free text) use `dir="auto"`. The Dualkit starter Field uses `dir="auto"` on every input, which also works, because a value with no Arabic letters resolves to left to right. Keep the label and the error message in the page direction.
+
+```html
+<input type="tel" dir="ltr" inputmode="tel" autocomplete="tel">
+<input type="text" dir="auto" autocomplete="name">
 ```
 
 A `+971` prefix chip sits inside the same `dir="ltr"` wrapper as the input, so it stays on the left.
@@ -69,13 +98,26 @@ A `+971` prefix chip sits inside the same `dir="ltr"` wrapper as the input, so i
 | Carousels and swipe direction | Phone numbers, numerals, Latin text, code |
 | Drawers (open from the start edge) | Media timelines |
 
-Use `rtl:-scale-x-100` (or `rtl:rotate-180` for a symmetric arrow) on the icon, never a separate icon set.
+Flip the icon you already have, never a separate icon set:
+
+```css
+[dir="rtl"] .icon-directional { transform: scaleX(-1) }
+```
+
+Do not mirror with `rotate(180deg)`. It turns an icon that is not vertically symmetric upside down.
 
 ## Common mistakes
 
-- `left-0` or `ml-2` on anything that should follow the reading edge.
-- Mirroring with `rotate-180` on an icon that is not vertically symmetric, so it ends up upside down. Use `-scale-x-100`.
+- `left: 0` or `margin-left` on anything that should follow the reading edge.
+- Mirroring an icon with a 180 degree rotate. Use `scaleX(-1)`.
 - A phone number or IBAN example in an Arabic hint or error, with no isolate.
 - Forcing `dir="ltr"` on the whole field group, which flips the label too.
 - `<bdi dir="ltr">` around a formatted Arabic amount or date. Use `<bdi>` with no `dir`.
+- A Latin word leading an Arabic label, like `الgregorian:`. Translate the label.
+- A bare `(AED)` next to a number in RTL, with no isolate.
+- `text-xs` badges in Arabic. They are 12px, under the 14px floor.
 - Testing RTL only with Lorem ipsum. Test with real Arabic copy and real numbers mixed in.
+
+## In Tailwind
+
+Use the logical classes: `ms-4`, `pe-4`, `text-start`, `border-s`, `rounded-ss-lg`, and `inset-s-0` for `inset-inline-start` (v4.2+; `start-0` before, deprecated since). Negate transforms with the `rtl:` variant, as in `rtl:-translate-x-full`. Mirror directional icons with `rtl:-scale-x-100`. In Arabic, `text-sm` (14px) is the smallest size. Never `text-xs` or an arbitrary size under 14px.

@@ -63,9 +63,42 @@ body { font-family: 'Brand', 'IBM Plex Sans Arabic', sans-serif; }`,
   },
   {
     skill: 'dualkit-rtl-layout',
-    quote: '<input dir="ltr" inputMode="tel" autoComplete="tel" className="text-start" />',
-    css: '.text-start { text-align: start; }',
-    html: '<input dir="ltr" inputmode="tel" autocomplete="tel" class="text-start">',
+    quote: '[dir="rtl"] .x { transform: translateX(100%) }',
+    cssFromQuote: true,
+    html: '<div class="x">القائمة</div>',
+  },
+  {
+    skill: 'dualkit-rtl-layout',
+    quote: `<label>ميلادي:</label>
+<label><bdi>Gregorian:</bdi></label>`,
+    html: `<label>ميلادي:</label>
+<label><bdi>Gregorian:</bdi></label>`,
+  },
+  {
+    skill: 'dualkit-rtl-layout',
+    quote: `<td><bdi>1,234.50 (AED)</bdi></td>
+<td><bdi>1,234.50 د.إ</bdi></td>`,
+    // <td> only parses inside a table.
+    html: `<table><tr><td><bdi>1,234.50 (AED)</bdi></td>
+<td><bdi>1,234.50 د.إ</bdi></td></tr></table>`,
+  },
+  {
+    skill: 'dualkit-rtl-layout',
+    quote: '<p dir="auto">Great service, thank you!</p>',
+    html: '<p dir="auto">Great service, thank you!</p>',
+  },
+  {
+    skill: 'dualkit-rtl-layout',
+    quote: `<input type="tel" dir="ltr" inputmode="tel" autocomplete="tel">
+<input type="text" dir="auto" autocomplete="name">`,
+    html: `<label for="phone">رقم الجوال</label> <input id="phone" type="tel" dir="ltr" inputmode="tel" autocomplete="tel">
+<label for="name">الاسم</label> <input id="name" type="text" dir="auto" autocomplete="name">`,
+  },
+  {
+    skill: 'dualkit-rtl-layout',
+    quote: '[dir="rtl"] .icon-directional { transform: scaleX(-1) }',
+    cssFromQuote: true,
+    html: '<button aria-label="التالي"><svg class="icon-directional" data-icon="chevron-right" width="16" height="16" viewBox="0 0 16 16"><path d="M6 3l5 5-5 5" fill="none" stroke="currentColor"/></svg></button>',
   },
   {
     skill: 'dualkit-bilingual-copy',
@@ -87,7 +120,7 @@ const line = items[new Intl.PluralRules('ar').select(count)].replace('{count}', 
 export const UNRENDERED: { skill: string; index: number; quote: string; reason: string }[] = [
   {
     skill: 'dualkit-rtl-layout',
-    index: 2,
+    index: 3,
     quote: 'const hint = `مثال ⁦050 123 4567⁩`',
     reason: 'rules reader counts only <bdi>/dir/unicode-bidi as isolation; LRI/PDI false positive, fixed in project 3',
   },
