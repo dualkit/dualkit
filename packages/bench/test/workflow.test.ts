@@ -75,4 +75,18 @@ describe('bench workflow', () => {
     expect(run).toContain('npm run bench -w @dualkit/bench -- --no-summary "${args[@]}"')
     expect(run).toMatch(/Vercel/)
   })
+  it('ignores stray temp files under bench/runs', () => {
+    const ignore = readFileSync(join(ROOT, '..', '..', '.gitignore'), 'utf8').split('\n').map((l) => l.trim())
+    expect(ignore).toContain('bench/runs/**/*.tmp')
+  })
+  it('keeps the pusher from racing the bench: no pull, a plain push of HEAD, set +e inside, and a clean stop', () => {
+    const run = yml.slice(yml.indexOf('name: Run the bench'), yml.indexOf('name: Build the summary'))
+    const pusher = run.slice(run.indexOf('( set +e'), run.indexOf('pusher=$!'))
+    expect(pusher).toContain('set +e')
+    expect(pusher).toContain('git push -q origin HEAD:${GITHUB_REF_NAME} || true')
+    expect(pusher).not.toContain('--autostash')
+    expect(pusher).not.toContain('git pull')
+    expect(run).toContain('wait "$pusher"')
+    expect(run).toContain('pkill -P "$pusher"')
+  })
 })

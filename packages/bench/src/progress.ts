@@ -20,7 +20,11 @@ export const progressOf = ({ finished, ...rest }: Input): Progress => ({
 /** Writes snapshots one at a time, in the order they were handed over, each through a temp file and a rename so a reader never sees half a file. A failed write is reported, not thrown. */
 export function makeProgressWriter(file: string, onError: (message: string) => void = () => {}) {
   let queue: Promise<void> = Promise.resolve()
+  let closed = false
   return (snapshot: Progress): Promise<void> => {
+    // Once the final (not running) snapshot is queued, nothing may flip the file back to running.
+    if (closed) return queue
+    if (!snapshot.running) closed = true
     const body = `${JSON.stringify(snapshot, null, 2)}\n`
     queue = queue.then(() => {
       try {

@@ -47,16 +47,21 @@ jobs:
           # Push progress every 15 minutes so the live page can follow the run. These commits touch only
           # bench/runs/, which Vercel skips (only apps/site and packages/format trigger a deploy), so the
           # site does not redeploy each time.
-          ( while sleep 900; do
+          # It never pulls while the bench writes: if the branch moved the push just fails, and the commit step
+          # at the end reconciles on a quiet tree.
+          ( set +e
+            while sleep 900; do
               git add -A -- bench/runs 2>/dev/null
               git diff --cached --quiet || git commit -qm "chore(bench): progress for ${MONTH:-$(date -u +%Y-%m)}"
-              git pull --rebase --autostash -q && git push -q || true
+              git push -q origin HEAD:${GITHUB_REF_NAME} || true
             done ) &
           pusher=$!
           set +e
           npm run bench -w @dualkit/bench -- --no-summary "${args[@]}"
           status=$?
+          pkill -P "$pusher" 2>/dev/null
           kill "$pusher" 2>/dev/null
+          wait "$pusher" 2>/dev/null
           exit $status
       - name: Build the summary
         if: always()

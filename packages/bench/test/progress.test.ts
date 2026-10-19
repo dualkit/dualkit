@@ -51,6 +51,13 @@ describe('makeProgressWriter', () => {
     expect(existsSync(`${file}.tmp`)).toBe(false)
     expect(readdirSync(join(dir, 'x'))).toEqual(['progress.json'])
   })
+  it('ignores any publish after the final running false one', async () => {
+    const file = join(mkdtempSync(join(tmpdir(), 'prog-')), 'progress.json')
+    const write = makeProgressWriter(file)
+    await write(progressOf({ month: '2026-11', running: false, total: 2, done: 2, updatedAt: at, finished: [] }))
+    await write(progressOf({ month: '2026-11', running: true, total: 2, done: 1, updatedAt: at, finished: [] }))
+    expect(JSON.parse(readFileSync(file, 'utf8'))).toMatchObject({ running: false, done: 2 })
+  })
   it('reports a failed write to onError and keeps going', async () => {
     const errors: string[] = []
     const write = makeProgressWriter('/dev/null/nope/progress.json', (m) => errors.push(m))
