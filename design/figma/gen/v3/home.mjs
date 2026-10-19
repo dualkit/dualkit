@@ -17,12 +17,14 @@ const toolPath = (name) => marksTs.match(new RegExp(`name: '${name.replace('.', 
 const toolSvg = (name) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#000" d="${toolPath(name)}"/></svg>`
 const makerSvg = (file) => readFileSync(resolve(MARKS, `${file}.svg`), 'utf8').replace(/<title>.*?<\/title>/, '')
 
-function nav() {
+export function nav(active) {
   const n = V3.nav
   return col('Nav', [
     band('Nav', [row('Nav row', [
       row('Brand', [mark(), text('Dualkit', 'V3Label')], { w: 240, gap: 'space.tight', align: 'center' }),
-      row('Links', n.links.map((l) => text(l, 'V3Label', { color: 'color.text.soft', name: l })), { gap: 'space.block', align: 'center' }),
+      row('Links', n.links.map((l) => l === active
+        ? col(`${l} active`, [text(l, 'V3Label', { name: l }), row('Active tick', [], { w: 'fill', h: 2, fill: 'color.v3.tick' })], { gap: 'space.hair' })
+        : text(l, 'V3Label', { color: 'color.text.soft', name: l })), { gap: 'space.block', align: 'center' }),
       row('Nav end', [button(n.github, 'outline'), button(n.cta)], { w: 240, justify: 'end', gap: 'space.tight', align: 'center' }),
     ], { w: 'fill', justify: 'between', align: 'center' })], { pad: { block: 'space.item' } }),
     hline('Nav rule'),
@@ -30,7 +32,7 @@ function nav() {
 }
 
 // The hero product: Claude Code in glass on the left, the Arabic checkout it built as a solid card on the right.
-function claudePanel() {
+export function claudePanel() {
   const w = V3.window
   const step = ([verb, what], k) => row(`Step ${k + 1}`, [gsoft(verb, 'V3Small', { name: 'Verb' }), text(what, 'V3Mono', { color: 'color.v3.glassText', name: 'Target' })], { gap: 'space.tight', align: 'center' })
   return glass('Claude Code panel', [
@@ -59,7 +61,7 @@ function checkoutCard() {
   ], { w: 320, gap: 'space.item', align: 'end', pad: 'space.card', fill: 'color.surface.page' })
 }
 
-function hero(ground) {
+export function hero(ground) {
   const h = V3.hero
   return col('Hero', [
     band('Hero head', [row('Hero row', [
