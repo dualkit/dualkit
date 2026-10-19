@@ -1,0 +1,56 @@
+name: Bench
+on:
+  schedule:
+    - cron: '17 4 1 * *'
+  workflow_dispatch:
+    inputs:
+      month:
+        description: 'Month to run, YYYY-MM (default: this month, UTC)'
+        required: false
+      model:
+        description: 'Only this model id from packages/bench/models.json'
+        required: false
+permissions:
+  contents: write
+concurrency:
+  group: bench
+  cancel-in-progress: false
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build -w @dualkit/rules
+      - run: npx playwright@1.55.0 install --with-deps chromium
+      - name: Run the bench
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          MONTH: ${{ inputs.month }}
+          MODEL: ${{ inputs.model }}
+        run: |
+          args=()
+          [ -n "$MONTH" ] && args+=(--month "$MONTH")
+          [ -n "$MODEL" ] && args+=(--model "$MODEL")
+          npm run bench -w @dualkit/bench -- "${args[@]}"
+      - name: Commit the results
+        if: always()
+        run: |
+          git config user.name 'dualkit-bench[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          paths=()
+          for p in bench apps/site/content/bench apps/site/public/bench; do
+            if [ -e "$p" ]; then paths+=("$p"); fi
+          done
+          if [ ${#paths[@]} -gt 0 ]; then git add -A -- "${paths[@]}"; fi
+          git diff --cached --quiet || git commit -m "chore(bench): results for ${MONTH:-$(date -u +%Y-%m)}"
+          git pull --rebase
+          git push
+        env:
+          MONTH: ${{ inputs.month }}
