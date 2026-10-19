@@ -14,7 +14,7 @@
 
 - Playwright is pinned to `1.55.0` everywhere (`npx playwright@1.55.0 install chromium`).
 - Node 22 in CI. Workspaces use the repo tsconfig style: `strict`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`.
-- Every model call: temperature `0.4`, max output `8000` tokens.
+- Every model call: temperature `0.4`, max output 12000 tokens, of which reasoning at most 4000.
 - Every build is scored at `390` by `844` CSS px, network on.
 - `3` runs per model, screen and condition. A cell needs at least `2` successful runs.
 - Retries: at most `2` retries per call. Calls spaced to stay under `20` a minute.

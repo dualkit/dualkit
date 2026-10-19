@@ -12,7 +12,8 @@ export class BenchError extends Error {}
 
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 export const SCREENS = ['payment-summary', 'otp', 'address-form', 'profile', 'order-history'] as const
-export const RUN = { temperature: 0.4, maxTokens: 8000, runs: 3, minRuns: 2, width: 390, height: 844 } as const
+/** maxTokens is the whole reply; reasoning models may spend at most reasoningTokens of it thinking, so the page keeps about 8000. */
+export const RUN = { temperature: 0.4, maxTokens: 12000, reasoningTokens: 4000, runs: 3, minRuns: 2, width: 390, height: 844 } as const
 const PROVIDERS: readonly string[] = ['openrouter', 'gemini']
 const MONTH = /^\d{4}-(0[1-9]|1[0-2])$/
 

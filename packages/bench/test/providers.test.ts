@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ModelEntry } from '../src/config'
+import { RUN, type ModelEntry } from '../src/config'
 import { makeGenerate, MAX_RETRIES } from '../src/providers'
 
 const or: ModelEntry = { id: 'g', provider: 'openrouter', model: 'google/gemma-4-31b-it:free', label: 'G', since: '2026-11' }
@@ -22,12 +22,15 @@ const noSleep = { sleep: async () => {}, now: () => 0 }
 const req = { system: 'sys', prompt: 'build it' }
 
 describe('openrouter', () => {
+  it('takes the caps from RUN', () => {
+    expect(RUN).toMatchObject({ maxTokens: 12000, reasoningTokens: 4000 })
+  })
   it('sends the model, messages, temperature and token cap, and reads the reply', async () => {
     const { f, calls } = fakeFetch([json(200, { choices: [{ message: { content: 'hi' } }], usage: { prompt_tokens: 5, completion_tokens: 7 } })])
     const out = await makeGenerate({ env, fetch: f, ...noSleep })(or, req)
     expect(out).toMatchObject({ ok: true, text: 'hi', usage: { input: 5, output: 7 } })
     const body = JSON.parse(String(calls[0]!.init.body))
-    expect(body).toMatchObject({ model: or.model, temperature: 0.4, max_tokens: 8000, messages: [{ role: 'system', content: 'sys' }, { role: 'user', content: 'build it' }] })
+    expect(body).toMatchObject({ model: or.model, temperature: 0.4, max_tokens: 12000, reasoning: { max_tokens: 4000 }, messages: [{ role: 'system', content: 'sys' }, { role: 'user', content: 'build it' }] })
     expect(calls[0]!.url).toBe('https://openrouter.ai/api/v1/chat/completions')
   })
 })
@@ -38,7 +41,7 @@ describe('gemini', () => {
     const out = await makeGenerate({ env, fetch: f, ...noSleep })(gm, req)
     expect(out).toMatchObject({ ok: true, text: 'ab', usage: { input: 1, output: 2 } })
     expect(calls[0]!.url).toBe('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent')
-    expect(JSON.parse(String(calls[0]!.init.body))).toMatchObject({ systemInstruction: { parts: [{ text: 'sys' }] }, generationConfig: { temperature: 0.4, maxOutputTokens: 8000 } })
+    expect(JSON.parse(String(calls[0]!.init.body))).toMatchObject({ systemInstruction: { parts: [{ text: 'sys' }] }, generationConfig: { temperature: 0.4, maxOutputTokens: 12000, thinkingConfig: { thinkingBudget: 4000 } } })
   })
 })
 

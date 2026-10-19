@@ -21,13 +21,13 @@ function request(model: ModelEntry, key: string, { system, prompt }: { system: s
   if (model.provider === 'openrouter') return {
     url: 'https://openrouter.ai/api/v1/chat/completions',
     init: { method: 'POST', headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json', 'x-title': 'Dualkit Bench', 'http-referer': 'https://dualkit.dev/bench' },
-      body: JSON.stringify({ model: model.model, temperature: RUN.temperature, max_tokens: RUN.maxTokens, messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }] }) },
+      body: JSON.stringify({ model: model.model, temperature: RUN.temperature, max_tokens: RUN.maxTokens, reasoning: { max_tokens: RUN.reasoningTokens }, messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }] }) },
     read: (b) => ({ text: String(b?.choices?.[0]?.message?.content ?? ''), usage: { input: Number(b?.usage?.prompt_tokens ?? 0), output: Number(b?.usage?.completion_tokens ?? 0) } }),
   }
   return {
     url: `https://generativelanguage.googleapis.com/v1beta/models/${model.model}:generateContent`,
     init: { method: 'POST', headers: { 'x-goog-api-key': key, 'content-type': 'application/json' },
-      body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: RUN.temperature, maxOutputTokens: RUN.maxTokens } }) },
+      body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: RUN.temperature, maxOutputTokens: RUN.maxTokens, thinkingConfig: { thinkingBudget: RUN.reasoningTokens } } }) },
     read: (b) => ({
       text: (b?.candidates?.[0]?.content?.parts ?? []).map((p: { text?: string }) => p.text ?? '').join(''),
       usage: { input: Number(b?.usageMetadata?.promptTokenCount ?? 0), output: Number(b?.usageMetadata?.candidatesTokenCount ?? 0) },
