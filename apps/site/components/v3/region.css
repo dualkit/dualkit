@@ -14,12 +14,12 @@
 .v3-region-list { display: none; list-style: none; margin: 0; padding: 0; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .v3-region-map[data-armed] .v3-region-pt { opacity: 0; }
-  .v3-region-map[data-armed] .v3-region-pt, .v3-region-map[data-armed] .v3-region-no { transition: opacity 200ms var(--ease-out); }
-  .v3-region-map[data-armed] .v3-region-no { opacity: 0; }
-  .v3-region-map[data-armed] .v3-region-tag { opacity: 0; transform: translateY(-6px); transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out); }
-  .v3-region-map[data-armed] .is-point .v3-region-pt, .v3-region-map[data-armed] .is-in .v3-region-no { opacity: 1; }
-  .v3-region-map[data-armed] .is-in .v3-region-tag { opacity: 1; transform: none; }
+  .v3-region-map .v3-region-pt { opacity: 0; }
+  .v3-region-map .v3-region-pt, .v3-region-map .v3-region-no { transition: opacity 200ms var(--ease-out); }
+  .v3-region-map .v3-region-no { opacity: 0; }
+  .v3-region-map .v3-region-tag { opacity: 0; transform: translateY(-6px); transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out); }
+  .v3-region-map .is-point .v3-region-pt, .v3-region-map .is-in .v3-region-no { opacity: 1; }
+  .v3-region-map .is-in .v3-region-tag { opacity: 1; transform: none; }
 }
 
 @media (max-width: 899px) {

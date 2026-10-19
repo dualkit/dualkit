@@ -11,12 +11,14 @@ import './kit.css'
 const K = V3.kit
 const PREVIEWS = [<SkillsDiffPreview key="s" />, <FormatPreview key="f" />, <StarterPreview key="t" />, <CheckPreview key="c" />, <BenchPreview key="b" />]
 
+const PART_LINES = new Map<string, string>(V3.menu.parts.map(([, name, line]) => [name, line]))
+
 /** Names and details come from the copy: the open Skills item has its own title, body and points; the others use the Products menu line. */
 const ITEMS: readonly KitItem[] = [K.open.name, ...K.rest].map((name, k) => ({
   name,
   no: `0${k + 1}`,
   title: k === 0 ? K.open.title : null,
-  body: k === 0 ? K.open.body : V3.menu.parts[k]?.[2] ?? '',
+  body: k === 0 ? K.open.body : PART_LINES.get(name) ?? '',
   points: k === 0 ? K.open.points : [],
 }))
 

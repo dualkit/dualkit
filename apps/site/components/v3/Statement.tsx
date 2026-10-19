@@ -18,9 +18,12 @@ export function Statement() {
     const root = track.current
     if (!root || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
     const words = Array.from(root.querySelectorAll<HTMLElement>('[data-w]'))
+    // The sticky block's height only changes with the viewport, so it is measured on resize, not on every tick.
+    let stickH = stick.current?.offsetHeight ?? 0
+    const measure = () => { stickH = stick.current?.offsetHeight ?? 0; write() }
     const write = () => {
       const t = root.getBoundingClientRect()
-      const p = trackProgress(t.top, t.height, stick.current?.offsetHeight ?? 0)
+      const p = trackProgress(t.top, t.height, stickH)
       words.forEach((w, i) => w.style.setProperty('--o', wordOpacity(p, i, COUNT).toFixed(3)))
     }
     write()
@@ -40,7 +43,9 @@ export function Statement() {
       sync()
     }
     document.addEventListener('visibilitychange', onVis)
+    window.addEventListener('resize', measure)
     return () => {
+      window.removeEventListener('resize', measure)
       io.disconnect()
       document.removeEventListener('visibilitychange', onVis)
       off()

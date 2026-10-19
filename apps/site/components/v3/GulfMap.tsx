@@ -26,8 +26,6 @@ export function GulfMap() {
     const root = map.current
     const el = canvas.current
     if (!root || !el) return
-    if (!reduced) root.dataset.armed = ''
-    else delete root.dataset.armed
     engine.current = createGulfEngine(root, el, GRID, reduced)
     return () => {
       engine.current?.destroy()

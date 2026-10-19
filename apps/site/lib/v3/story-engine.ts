@@ -18,6 +18,8 @@ const EASE_ODO = 'cubic-bezier(.22, 1, .36, 1)'
 const HOVER = '(hover: hover) and (pointer: fine)'
 const MOBILE = '(max-width: 760px)'
 const GREEN = '#3ecf6e'
+/** Width change below which a resize is the phone toolbar, not a new layout. */
+const RESIZE_GUARD_PX = 40
 const KEYS: readonly KeyName[] = ['amount', 'date', 'phone', 'iban']
 
 const SPRING_MS = MIRROR_SPRING.sampleMs
@@ -203,6 +205,9 @@ export function startStory(root: HTMLElement): StoryHandle {
     snapOdos(group)
     g('bar').style.transform = `scaleX(${passing / 20})`
     sizeRings()
+    // render() clears hoverPause (a rebuilt panel starts un-hovered), so the play state is re-derived here; otherwise a
+    // resize or restart under the pointer would leave the story frozen until the next hover.
+    syncPlay()
     // Hover pauses the story and lights the glass, only for a fine pointer that can hover.
     if (!matchMedia(HOVER).matches) return
     const panel = g('panel'), spec = g('spec'), signal = panelEvents.signal
@@ -496,7 +501,7 @@ export function startStory(root: HTMLElement): StoryHandle {
   // ---------- boot ----------
   let lastW = window.innerWidth
   on(window, 'resize', () => {
-    if (Math.abs(window.innerWidth - lastW) < 40) return
+    if (Math.abs(window.innerWidth - lastW) < RESIZE_GUARD_PX) return
     lastW = window.innerWidth; layout()
     if (started) startAt(Math.max(0, Math.min(5, fixed))); else setCam(camRest)
   })
@@ -563,8 +568,14 @@ export function settleStory(root: HTMLElement): () => void {
     console.error('[hero]', err)
     root.dataset.live = ''
   })
-  window.addEventListener('resize', place)
-  return () => { dead = true; window.removeEventListener('resize', place) }
+  // Phones fire resize when the toolbar shows or hides; only a real width change re-frames the panel.
+  let lastW = window.innerWidth
+  const onResize = () => {
+    if (Math.abs(window.innerWidth - lastW) < RESIZE_GUARD_PX) return
+    lastW = window.innerWidth; place()
+  }
+  window.addEventListener('resize', onResize)
+  return () => { dead = true; window.removeEventListener('resize', onResize) }
 }
 
 const all = (r: ParentNode, sel: string) => [...r.querySelectorAll<HTMLElement>(sel)]
