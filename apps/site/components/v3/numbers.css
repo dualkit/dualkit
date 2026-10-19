@@ -1,0 +1,26 @@
+.v3-num-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.v3-num-cell { display: flex; flex-direction: column; gap: 8px; padding: 16px; min-width: 0; }
+.v3-num-cell:nth-child(even) { border-left: 1px solid var(--v3-line); }
+.v3-num-cell:nth-child(n + 3) { border-top: 1px solid var(--v3-line); }
+.v3-num-value { position: relative; display: block; font-variant-numeric: tabular-nums; }
+.v3-num-what { color: var(--v3-soft); }
+@media (max-width: 899px) {
+  .v3-num-frame > .v3-tick:nth-child(5), .v3-num-frame > .v3-tick:nth-child(6), .v3-num-frame > .v3-tick:nth-child(9), .v3-num-frame > .v3-tick:nth-child(10) { display: none; }
+}
+@media (min-width: 900px) {
+  .v3-num-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .v3-num-cell { padding: 24px; }
+  .v3-num-cell:nth-child(n + 3) { border-top: 0; }
+  .v3-num-cell + .v3-num-cell { border-left: 1px solid var(--v3-line); }
+}
+
+/* Odometer: each digit column is a clipped strip of 0 to 9 that slides once. */
+.v3-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.v3-odo { display: inline-flex; }
+.v3-odo-col { display: inline-block; height: 1.02em; overflow: hidden; }
+.v3-odo-strip { display: flex; flex-direction: column; transform: translateY(calc(var(--t) * -1.02em)); }
+.v3-odo-strip > span { display: block; height: 1.02em; line-height: 1.02; }
+@media (prefers-reduced-motion: no-preference) {
+  .v3-odo-strip { animation: v3-odo-roll 1400ms var(--ease-odo) var(--d) backwards; }
+}
+@keyframes v3-odo-roll { from { transform: translateY(calc(var(--f) * -1.02em)); } }

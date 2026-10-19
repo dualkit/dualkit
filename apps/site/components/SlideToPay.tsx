@@ -8,7 +8,9 @@ import { ArrowIcon, BackIcon, CheckIcon } from './icons'
 const COMMIT_AT = 0.75
 const RESET_MS = 1600
 
-export function SlideToPay({ label, done, rtl = false }: { label: string; done: string; rtl?: boolean }) {
+type Props = { label: string; done?: string; rtl?: boolean; /** 'glass' is the square v3 look inside a glass panel; the default is the v2 pill. */ variant?: 'pill' | 'glass' }
+
+export function SlideToPay({ label, done, rtl = false, variant = 'pill' }: Props) {
   const track = useRef<HTMLDivElement>(null)
   const thumb = useRef<HTMLButtonElement>(null)
   const fill = useRef<HTMLSpanElement>(null)
@@ -20,12 +22,14 @@ export function SlideToPay({ label, done, rtl = false }: { label: string; done: 
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
   useEffect(() => () => clearTimeout(timer.current), [])
 
-  const maxTravel = () => (track.current && thumb.current ? track.current.clientWidth - thumb.current.offsetWidth - 8 : 0)
+  /** The track's inline padding, so the thumb stops flush with the far edge whatever the variant. */
+  const inset = () => (track.current ? parseFloat(getComputedStyle(track.current).paddingLeft) || 0 : 0)
+  const maxTravel = () => (track.current && thumb.current ? track.current.clientWidth - thumb.current.offsetWidth - inset() * 2 : 0)
   const paint = (p: number) => {
     progress.current = p
     const max = maxTravel()
     if (thumb.current) thumb.current.style.transform = `translateX(${sign * p * max}px)`
-    if (fill.current) fill.current.style.width = `${p * max + (thumb.current?.offsetWidth ?? 0) / 2 + 4}px`
+    if (fill.current) fill.current.style.width = `${p * max + (thumb.current?.offsetWidth ?? 0) / 2 + inset()}px`
     if (text.current) text.current.style.opacity = String(1 - p * 0.6)
   }
   const animateTo = (to: number, ms: number, easing: string, after?: () => void) => {
@@ -72,9 +76,9 @@ export function SlideToPay({ label, done, rtl = false }: { label: string; done: 
   }
 
   return (
-    <div className={`slide${paid ? ' done' : ''}`} ref={track} dir={rtl ? 'rtl' : 'ltr'} lang={rtl ? 'ar' : 'en'}>
+    <div className={`slide${variant === 'glass' ? ' slide--glass' : ''}${paid ? ' done' : ''}`} ref={track} dir={rtl ? 'rtl' : 'ltr'} lang={rtl ? 'ar' : 'en'}>
       <span className="fill" ref={fill} />
-      <span className="label" ref={text}>{paid ? done : label}</span>
+      <span className="label" ref={text}>{paid && done ? done : label}</span>
       <button ref={thumb} type="button" className="thumb" aria-label={label}
         onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (!paid) finish() } }}>
