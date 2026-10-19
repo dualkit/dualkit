@@ -1,29 +1,32 @@
 // The /bench page: a monthly leaderboard of free AI models building Arabic screens, alone and with Dualkit.
 // Two leaderboard directions for Sam to pick from (A tick table, B range track), plus the open row and the empty state.
 // Run: node gen/v2/bench.mjs, which writes specs/bench-*.json. All numbers are sample data until the first run.
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { LINE, band, col, hline, icon, pill, row, text, vline } from './parts.mjs'
 import { footer, nav } from './home.mjs'
 
 const SPECS = resolve(import.meta.dirname, '../../specs')
+const MARKS = resolve(import.meta.dirname, '../../../assets/marks')
+const markSvg = (file) => readFileSync(resolve(MARKS, `${file}.svg`), 'utf8').replace(/<title>.*?<\/title>/, '')
+const mark = (m, size = 16) => ({ shape: `${m.by} mark`, kind: 'svg', size: [size, size], svg: markSvg(m.mark), tint: 'color.text.primary' })
 
 export const BENCH = {
   headline: 'How well does AI\nbuild Arabic?',
   lede: 'Every month, free AI models build five Arabic screens on their own, then again with Dualkit. dualkit check scores every build against 20 rules.',
-  month: 'October 2026',
+  month: 'November 2026',
   facts: '6 models · 5 screens · 180 builds',
   raw: 'Raw files on GitHub',
   prompts: 'Read the prompts',
   columns: ['Model', 'Alone', 'With Dualkit', 'Lift', 'Check score'],
   models: [
-    { label: 'Gemini Flash', by: 'Google', alone: 61, dualkit: 92, score: [18, 74] },
-    { label: 'Gemma 4 31B', by: 'Google', alone: 54, dualkit: 88, score: [9, 66] },
-    { label: 'Nemotron 3 Ultra', by: 'NVIDIA', alone: 58, dualkit: 85, score: [12, 61] },
-    { label: 'Inkling', by: 'Thinking Machines', alone: 49, dualkit: 81, score: [4, 55], isNew: true },
-    { label: 'Laguna S 2.1', by: 'Poolside', alone: 42, dualkit: 71, score: [0, 41] },
-    { label: 'North Mini Code', by: 'Cohere', missing: 'Fewer than two of three runs came back on three screens.' },
+    { label: 'Gemini Flash', by: 'Google', mark: 'google', alone: 61, dualkit: 92, score: [18, 74], move: 0 },
+    { label: 'Gemma 4 31B', by: 'Google', mark: 'google', alone: 54, dualkit: 88, score: [9, 66], move: 1 },
+    { label: 'Nemotron 3 Ultra', by: 'NVIDIA', mark: 'nvidia', alone: 58, dualkit: 85, score: [12, 61], move: -1 },
+    { label: 'Inkling', by: 'Thinking Machines', mark: 'thinking-machines', alone: 49, dualkit: 81, score: [4, 55], isNew: true },
+    { label: 'Laguna S 2.1', by: 'Poolside', mark: 'poolside', alone: 42, dualkit: 71, score: [0, 41], move: 0 },
+    { label: 'North Mini Code', by: 'Cohere', mark: 'cohere', missing: 'Fewer than two of three runs came back on three screens.' },
   ],
   how: {
     heading: 'How the Bench works',
@@ -70,17 +73,17 @@ function ticks(name, total, filled, on = 'color.surface.inverse') {
     fill: k < filled ? on : 'color.surface.panel' })), { w: 'fill', justify: 'between', align: 'center' })
 }
 
-const tag = (label) => row(`${label} tag`, [text(label, 'V2Small', { color: 'color.text.soft' })], { pad: { block: 0, inline: 'space.tight' }, radius: 'radius.pill', stroke: LINE })
 
 function modelCell(m, w = MODEL_W) {
-  return col(`${m.label} name`, [
-    row('Name row', [text(m.label, 'V2Label', { name: 'Model' }), ...(m.isNew ? [tag('New')] : [])], { gap: 'space.tight', align: 'center' }),
+  const names = col('Names', [
+    text(m.label, 'V2Label', { name: 'Model' }),
     text(m.by, 'V2Small', { color: 'color.text.faint', name: 'Maker' }),
-  ], { w })
+  ])
+  const badge = row('Mark tile', [mark(m)], { w: 32, h: 32, justify: 'center', align: 'center', ...box })
+  return row(`${m.label} name`, [badge, names], { w, gap: 'space.snug', align: 'center' })
 }
 
 const lift = (m) => text(`+${m.dualkit - m.alone}`, 'V2H2', { name: 'Lift' })
-const scorePair = (m) => col('Check score', [text(`${m.score[0]} → ${m.score[1]}`, 'V2Label', { name: 'Score' }), text('out of 100', 'V2Small', { color: 'color.text.faint' })], { w: SCORE_W })
 
 function monthPicker() {
   return row('Month picker', [text(BENCH.month, 'V2Label'), icon('chevron', 'color.text.soft', 12)],
@@ -103,27 +106,10 @@ function missingRow(m, rest) {
 
 const tableOf = (rows, name = 'Leaderboard') => col(name, rows.flatMap((r, k) => [...(k ? [hline(`${name} rule ${k}`)] : []), r]), { w: 'fill', ...box })
 
-// ---- A: tick table, the same ticks as the skills scores on the home page ----
-
-function barCell(name, value, on) {
-  return col(name, [ticks(`${name} ticks`, TICKS, Math.round(value / 4), on), text(`${value} of 100`, 'V2Small', { color: on === 'color.surface.inverse' ? 'color.text.primary' : 'color.text.soft', name: 'Value' })], { w: 'fill', gap: 'space.tight' })
-}
-
-function rowA(m) {
-  if (m.missing) return missingRow(m, [])
-  return row(`${m.label} row`, [modelCell(m), barCell('Alone', m.alone, 'color.border.select'), barCell('With Dualkit', m.dualkit, 'color.surface.inverse'),
-    col('Lift cell', [lift(m)], { w: LIFT_W }), scorePair(m)], { w: 'fill', gap: 'space.block', align: 'center', pad: { block: 'space.group', inline: 'space.group' } })
-}
-
-function headA() {
-  const [a, b, c, d, e] = BENCH.columns
-  const t = (s, w) => text(s, 'V2Small', { color: 'color.text.faint', ...(w ? { w } : { w: 'fill' }), name: s })
-  return row('Header', [t(a, MODEL_W), t(b), t(c), t(d, LIFT_W), t(e, SCORE_W)], { w: 'fill', gap: 'space.block', pad: { block: 'space.snug', inline: 'space.group' } })
-}
-
 // ---- B: range track, one line from the alone score to the Dualkit score ----
 
-const TRACK = 480
+const RANK_W = 40
+const TRACK = 420
 const ring = (name) => row(name, [], { w: 12, h: 12, radius: 'radius.pill', fill: 'color.surface.page', stroke: { color: 'color.surface.inverse', width: 2 } })
 
 function track(m, width = TRACK) {
@@ -138,16 +124,29 @@ function track(m, width = TRACK) {
 
 const pair = (m) => text(`${m.alone} → ${m.dualkit}`, 'V2Label', { w: SCORE_W, name: 'Pair' })
 
-function rowB(m) {
-  if (m.missing) return missingRow(m, [])
-  return row(`${m.label} row`, [modelCell(m), col('Track cell', [track(m)], { w: TRACK }), pair(m), col('Lift cell', [lift(m)], { w: LIFT_W })],
+// Movement since last month: up, down, level, or new this month.
+const UP = '<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"><path d="M4 1.5L7 6H1z" fill="#09090b"/></svg>'
+const DOWN = '<svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8"><path d="M4 6.5L1 2h6z" fill="#09090b"/></svg>'
+function movement(m) {
+  if (m.missing) return text('–', 'V2Small', { color: 'color.text.faint', name: 'Move' })
+  if (m.isNew) return text('New', 'V2Small', { color: 'color.text.faint', name: 'Move' })
+  if (!m.move) return text('–', 'V2Small', { color: 'color.text.faint', name: 'Move' })
+  const up = m.move > 0
+  return row('Move', [{ shape: up ? 'Up' : 'Down', kind: 'svg', size: [8, 8], svg: up ? UP : DOWN, tint: up ? 'color.text.primary' : 'color.text.faint' },
+    text(String(Math.abs(m.move)), 'V2Small', { color: up ? 'color.text.primary' : 'color.text.faint' })], { gap: 2, align: 'center' })
+}
+const rankCell = (m, k) => col('Rank', [text(m.missing ? '–' : String(k + 1), 'V2Label', { color: m.missing ? 'color.text.faint' : 'color.text.primary', name: 'Rank number' }), movement(m)], { w: RANK_W, gap: 2 })
+
+function rowB(m, k) {
+  if (m.missing) return row(`${m.label} row`, [rankCell(m, k), ...missingRow(m, []).children], { w: 'fill', gap: 'space.block', align: 'center', pad: { block: 'space.group', inline: 'space.group' } })
+  return row(`${m.label} row`, [rankCell(m, k), modelCell(m), col('Track cell', [track(m)], { w: TRACK }), pair(m), col('Lift cell', [lift(m)], { w: LIFT_W })],
     { w: 'fill', gap: 'space.block', align: 'center', pad: { block: 'space.group', inline: 'space.group' } })
 }
 
 function headB() {
   const scale = row('Scale', ['0', '25', '50', '75', '100'].map((s) => text(s, 'V2Small', { color: 'color.text.faint', name: `Scale ${s}` })), { w: TRACK, justify: 'between' })
   const t = (s, w) => text(s, 'V2Small', { color: 'color.text.faint', w, name: s })
-  return row('Header', [t('Model', MODEL_W), scale, t('Alone → with Dualkit', SCORE_W), t('Lift', LIFT_W)], { w: 'fill', gap: 'space.block', pad: { block: 'space.snug', inline: 'space.group' } })
+  return row('Header', [t('Rank', RANK_W), t('Model', MODEL_W), scale, t('Alone → with Dualkit', SCORE_W), t('Lift', LIFT_W)], { w: 'fill', gap: 'space.block', pad: { block: 'space.snug', inline: 'space.group' } })
 }
 
 function legendB() {
@@ -156,6 +155,47 @@ function legendB() {
     row('Legend dualkit', [{ shape: 'Legend dot', kind: 'ellipse', size: [12, 12], fill: 'color.surface.inverse' }, text('With Dualkit', 'V2Small', { color: 'color.text.soft' })], { gap: 'space.tight', align: 'center' }),
     text('Rules passed across five screens, out of 100', 'V2Small', { color: 'color.text.faint' }),
   ], { gap: 'space.group', align: 'center', wrap: true, w: 'fill' })
+}
+
+// ---- the live layer: a status line above the board, and a ticker of builds while a run is going ----
+
+const dot = (live) => ({ shape: live ? 'Live dot' : 'Idle dot', kind: 'ellipse', size: ['size.dot', 'size.dot'], fill: live ? 'color.signal.dot' : 'color.border.select' })
+
+function status(running, mobile = false) {
+  const left = running
+    ? row('Status left', [dot(true), text('Running now', 'V2Label'), text('112 of 180 builds', 'V2Small', { color: 'color.text.soft', name: 'Progress' })], { gap: 'space.tight', align: 'center', wrap: true })
+    : row('Status left', [dot(false), text('Last run 1 November, 04:17 UTC', 'V2Small', { color: 'color.text.soft', name: 'Last run' })], { gap: 'space.tight', align: 'center' })
+  const right = running
+    ? row('Status right', [ticks('Run progress', 30, 19), text('62%', 'V2Mono', { color: 'color.text.soft' })], { w: mobile ? 'fill' : 240, gap: 'space.snug', align: 'center' })
+    : row('Status right', [text('Next run in', 'V2Small', { color: 'color.text.soft' }), text('12d 04:12:33', 'V2Mono', { name: 'Countdown' })], { gap: 'space.tight', align: 'center' })
+  return mobile ? col('Status', [left, right], { w: 'fill', gap: 'space.snug' }) : row('Status', [left, right], { w: 'fill', justify: 'between', align: 'center' })
+}
+
+const FEED = [
+  ['06:41', 'Gemma 4 31B', 'google', 'Order history', 'with Dualkit', '18 of 20'],
+  ['06:40', 'Laguna S 2.1', 'poolside', 'Profile', 'alone', '9 of 20'],
+  ['06:39', 'Nemotron 3 Ultra', 'nvidia', 'Address form', 'with Dualkit', '17 of 20'],
+  ['06:39', 'Inkling', 'thinking-machines', 'One-time code', 'alone', '11 of 20'],
+  ['06:38', 'Gemini Flash', 'google', 'Order history', 'with Dualkit', '19 of 20'],
+  ['06:37', 'North Mini Code', 'cohere', 'Profile', 'alone', 'No page in the reply'],
+]
+
+function ticker(mobile = false) {
+  const item = ([at, model, file, screen, cond, result], k) => row(`Build ${k + 1}`, [
+    text(at, 'V2Mono', { color: 'color.text.faint', name: 'Time' }),
+    mark({ by: model, mark: file }, 12),
+    text(model, 'V2Small', { name: 'Model' }),
+    text(`${screen}, ${cond}`, 'V2Small', { color: 'color.text.soft', name: 'Build' }),
+    text(result, 'V2Small', { color: k === 5 ? 'color.text.faint' : 'color.text.primary', name: 'Result' }),
+  ], { gap: 'space.tight', align: 'center', pad: { block: 'space.snug', inline: 'space.item' } })
+  const items = FEED.map(item).flatMap((it, k) => [...(k ? [vline(`Feed rule ${k}`)] : []), it])
+  // On a phone each build takes two lines: who and when, then what it built and how it did.
+  const itemM = ([at, model, file, screen, cond, result], k) => col(`Build ${k + 1}`, [
+    row('Build top', [text(at, 'V2Mono', { color: 'color.text.faint', name: 'Time' }), mark({ by: model, mark: file }, 12), text(model, 'V2Small', { w: 'fill', name: 'Model' }), text(result, 'V2Small', { color: k === 5 ? 'color.text.faint' : 'color.text.primary', name: 'Result' })], { w: 'fill', gap: 'space.tight', align: 'center' }),
+    text(`${screen}, ${cond}`, 'V2Small', { color: 'color.text.soft', w: 'fill', name: 'Build' }),
+  ], { w: 'fill', gap: 2, pad: { block: 'space.snug', inline: 'space.item' } })
+  if (mobile) return col('Ticker', FEED.slice(0, 4).map(itemM).flatMap((it, k) => [...(k ? [hline(`Feed rule ${k}`)] : []), it]), { w: 'fill', ...box })
+  return row('Ticker', items, { w: 'fill', clip: true, ...box })
 }
 
 // ---- how it works ----
@@ -242,16 +282,12 @@ function openPanel(mobile = false) {
 
 // ---- pages ----
 
-function leaderboardA() {
-  return band('Leaderboard', [tableOf([headA(), ...BENCH.models.map(rowA)])], { gap: 'space.group' })
-}
-function leaderboardB() {
-  return band('Leaderboard', [legendB(), tableOf([headB(), ...BENCH.models.map(rowB)])], { gap: 'space.group' })
+function leaderboard(running) {
+  return band('Leaderboard', [status(running), ...(running ? [ticker()] : []), legendB(), tableOf([headB(), ...BENCH.models.map(rowB)])], { gap: 'space.group' })
 }
 function leaderboardOpen() {
   const [m, ...others] = BENCH.models
-  const rows = [headA(), rowA(m), openPanel(false), ...others.map(rowA)]
-  return band('Leaderboard', [tableOf(rows)], { gap: 'space.group' })
+  return band('Leaderboard', [status(false), legendB(), tableOf([headB(), rowB(m, 0), openPanel(false), ...others.map((o, k) => rowB(o, k + 1))])], { gap: 'space.group' })
 }
 
 const page = (name, children) => ({
@@ -261,20 +297,13 @@ const page = (name, children) => ({
 
 // ---- mobile ----
 
-function cardA(m) {
-  if (m.missing) return col(`${m.label} card`, [modelCell(m, 'fill'), text('Didn’t run this month', 'V2Label', { color: 'color.text.soft' }), text(m.missing, 'V2Small', { color: 'color.text.faint', w: 'fill' })], { w: 'fill', gap: 'space.tight', pad: 'space.item' })
-  const bar = (label, v, on) => col(label, [ticks(`${label} ticks`, TICKS, Math.round(v / 4), on), row(`${label} line`, [text(label, 'V2Small', { color: 'color.text.soft' }), text(`${v} of 100`, 'V2Small')], { w: 'fill', justify: 'between' })], { w: 'fill', gap: 'space.hair' })
-  return col(`${m.label} card`, [
-    row('Card head', [modelCell(m, 'fill'), lift(m)], { w: 'fill', align: 'center' }),
-    bar('Alone', m.alone, 'color.border.select'), bar('With Dualkit', m.dualkit, 'color.surface.inverse'),
-  ], { w: 'fill', gap: 'space.item', pad: 'space.item' })
-}
-
 const TRACK_M = 326
-function cardB(m) {
-  if (m.missing) return cardA(m)
+function cardB(m, k) {
+  const head = row('Card head', [col('Rank', [text(m.missing ? '–' : String(k + 1), 'V2Label', { color: m.missing ? 'color.text.faint' : 'color.text.primary', name: 'Rank number' }), movement(m)], { w: 28, gap: 2 }),
+    modelCell(m, 'fill'), ...(m.missing ? [] : [lift(m)])], { w: 'fill', gap: 'space.snug', align: 'center' })
+  if (m.missing) return col(`${m.label} card`, [head, text('Didn’t run this month', 'V2Label', { color: 'color.text.soft' }), text(m.missing, 'V2Small', { color: 'color.text.faint', w: 'fill' })], { w: 'fill', gap: 'space.tight', pad: 'space.item' })
   return col(`${m.label} card`, [
-    row('Card head', [modelCell(m, 'fill'), lift(m)], { w: 'fill', align: 'center' }),
+    head,
     track(m, TRACK_M),
     row('Card numbers', [text(`Alone ${m.alone}`, 'V2Small', { color: 'color.text.soft' }), text(`With Dualkit ${m.dualkit}`, 'V2Small')], { w: 'fill', justify: 'between' }),
   ], { w: 'fill', gap: 'space.snug', pad: 'space.item' })
@@ -285,16 +314,18 @@ const mobilePage = (name, children) => ({
   pad: { top: 'space.v2.inner', bottom: 'space.v2.inner', inline: 'space.item' }, gap: 'space.stack', children,
 })
 
+const mobileBoard = (running) => col('Board', [status(running, true), ...(running ? [ticker(true)] : []), legendB(), tableOf(BENCH.models.map(cardB))], { w: 'fill', gap: 'space.group' })
+
 export const FRAMES = {
-  'bench-a-desktop': () => page('Dualkit · Bench · A Tick table · Desktop · Sample data', [hero(), leaderboardA(), how()]),
-  'bench-b-desktop': () => page('Dualkit · Bench · B Range track · Desktop · Sample data', [hero(), leaderboardB(), how()]),
-  'bench-open-desktop': () => page('Dualkit · Bench · Row open · Desktop · Sample data', [hero(), leaderboardOpen(), how()]),
+  'bench-b-between-desktop': () => page('Dualkit · Bench · B · Between runs · Desktop · Sample data', [hero(), leaderboard(false), how()]),
+  'bench-b-running-desktop': () => page('Dualkit · Bench · B · Run in progress · Desktop · Sample data', [hero(), leaderboard(true), how()]),
+  'bench-b-open-desktop': () => page('Dualkit · Bench · B · Row open · Desktop · Sample data', [hero(), leaderboardOpen(), how()]),
   'bench-empty-desktop': () => page('Dualkit · Bench · Before the first run · Desktop', [hero(),
     band('Empty', [col('Empty box', [text(BENCH.empty.heading, 'V2H2', { align: 'center', name: 'Heading' }), text(BENCH.empty.lede, 'V2Lede', { color: 'color.text.soft', align: 'center', w: 588, name: 'Lede' }), pill(BENCH.prompts)],
       { w: 'fill', align: 'center', gap: 'space.group', pad: { block: 'space.v2.inner', inline: 'space.block' }, ...box })]), how()]),
-  'bench-a-mobile': () => mobilePage('Dualkit · Bench · A Tick table · Mobile · Sample data', [hero(true), tableOf(BENCH.models.map(cardA)), how(true)]),
-  'bench-b-mobile': () => mobilePage('Dualkit · Bench · B Range track · Mobile · Sample data', [hero(true), legendB(), tableOf(BENCH.models.map(cardB)), how(true)]),
-  'bench-open-mobile': () => mobilePage('Dualkit · Bench · Row open · Mobile · Sample data', [tableOf([cardA(BENCH.models[0]), openPanel(true), ...BENCH.models.slice(1, 3).map(cardA)])]),
+  'bench-b-between-mobile': () => mobilePage('Dualkit · Bench · B · Between runs · Mobile · Sample data', [hero(true), mobileBoard(false), how(true)]),
+  'bench-b-running-mobile': () => mobilePage('Dualkit · Bench · B · Run in progress · Mobile · Sample data', [hero(true), mobileBoard(true), how(true)]),
+  'bench-b-open-mobile': () => mobilePage('Dualkit · Bench · B · Row open · Mobile · Sample data', [tableOf([cardB(BENCH.models[0], 0), openPanel(true), ...BENCH.models.slice(1, 3).map((m, k) => cardB(m, k + 1))])]),
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
