@@ -119,3 +119,7 @@ Bump the plugin version (0.1.0 to 0.1.1), rebuild the Cursor rules (`packages/sk
 - The size rule ignores size-adjust, and it treats a lone ر.س like a paragraph.
 - punctuation-flip checks only the last run in a block.
 - The reader counts only `<bdi>`, `dir` and `unicode-bidi` as isolation, never the LRI/PDI characters (U+2066, U+2069), so a correctly isolated plain string fails `bidi/unisolated-number`.
+- `punctuation-flip` skips an isolated last run, so `1,234.50 <bdi>(AED)</bdi>` passes while still rendering reversed. For the same reason it misses `التاريخ <bdi>Gregorian:</bdi>`, where the colon lands between the words.
+- `punctuation-flip` false positive on a correct mixed label (`التاريخ <bdi>Gregorian</bdi>:`) when Latin letters outnumber Arabic, because the Arabic share counts letters, including isolated text.
+- No rule flags a Latin line with no `lang` inside an Arabic page.
+- `ARABIC_FONT` counts a family name but not whether it loads; type-pairing's `unicode-range` leaves out U+20C1 to U+20C4.
