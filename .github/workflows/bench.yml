@@ -49,15 +49,15 @@ jobs:
           echo "BENCH_MONTH=$BENCH_MONTH" >> "$GITHUB_ENV"
           args=(--month "$BENCH_MONTH")
           [ -n "$MODEL" ] && args+=(--model "$MODEL")
-          # Push progress every 15 minutes so the live page can follow the run. Each push is a snapshot commit
-          # (HEAD plus bench/runs) force-pushed to the bench-progress branch, so main never gets progress commits
+          # Push progress every 15 minutes so the live page can follow the run. Each push is a snapshot commit on top of HEAD
+          # (a small diff of bench/runs) force-pushed to the bench-progress branch, so main never gets progress commits
           # and HEAD never moves; the commit step at the end lands everything on main. bench-progress touches only
           # bench/runs, which Vercel skips (only apps/site and packages/format trigger a deploy).
           ( set +e
             while sleep 900; do
               git add -A -- bench/runs 2>/dev/null
               tree=$(git write-tree)
-              commit=$(git commit-tree "$tree" -m "bench progress $BENCH_MONTH")
+              commit=$(git commit-tree "$tree" -p HEAD -m "bench progress $BENCH_MONTH")
               git push -q -f origin "$commit:refs/heads/bench-progress" || true
               git reset -q
             done ) &
