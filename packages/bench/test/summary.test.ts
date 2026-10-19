@@ -74,6 +74,12 @@ describe('generatedAt', () => {
     writeSummary(await buildSummary({ month: '2026-11', models: [model('a')], screens, store, siteRoot: site }), site)
     expect(readFileSync(file, 'utf8')).toBe(bytes)
   })
+  it('is the newest build time even when the builds ran before the month began', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    store.write({ month: '2099-01', model: 'a', screen: 'otp', condition: 'alone', run: 1, at: '2026-10-19T08:00:00.000Z', reply: null, usage: null, ms: 1, finish: null, reasoningTokens: null, servedModel: null, ok: false, error: 'x' }, null)
+    const out = await buildSummary({ month: '2099-01', models: [model('a')], screens, store, shots: async () => null })
+    expect(out.generatedAt).toBe('2026-10-19T08:00:00.000Z')
+  })
   it('is the first day of the month when nothing ran', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
     const out = await buildSummary({ month: '2026-11', models: [model('gone')], screens, store, shots: async () => null })

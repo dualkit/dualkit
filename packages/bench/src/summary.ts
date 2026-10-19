@@ -53,7 +53,7 @@ async function benchCell(records: BuildRecord[], shots: Shots): Promise<BenchCel
 
 /** The time of the newest build, not now: a rerun with nothing new then writes the same bytes, and the workflow commits nothing. */
 const newestBuild = (records: BuildRecord[], month: string) =>
-  records.reduce((newest, r) => (r.at > newest ? r.at : newest), `${month}-01T00:00:00.000Z`)
+  records.length === 0 ? `${month}-01T00:00:00.000Z` : records.map((r) => r.at).reduce((newest, at) => (at > newest ? at : newest))
 
 const rank = (a: BenchModel, b: BenchModel) =>
   (b.dualkit?.rulesPassed ?? -1) - (a.dualkit?.rulesPassed ?? -1) || (b.alone?.rulesPassed ?? -1) - (a.alone?.rulesPassed ?? -1) || a.label.localeCompare(b.label)
