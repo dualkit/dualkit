@@ -16,5 +16,5 @@ export const fakeGenerate: Generate = async (model, req) => {
     'fake-garbage': 'Sorry, I cannot build that.',
   }
   const text = page[model.id]
-  return text ? { ok: true, text, usage: { input: 0, output: 0 }, ms: 0 } : { ok: false, error: `No fake page for ${model.id}`, ms: 0 }
+  return text ? { ok: true, text, usage: { input: 0, output: 0 }, finish: 'stop', reasoningTokens: 0, servedModel: model.model, ms: 0 } : { ok: false, error: `No fake page for ${model.id}`, ms: 0 }
 }

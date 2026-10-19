@@ -143,3 +143,50 @@ describe('key and length in errors', () => {
     expect(out).toMatchObject({ ok: false, error: `Network error: ${'x'.repeat(200)}` })
   })
 })
+
+describe('reply metadata', () => {
+  it('reads the finish reason, reasoning tokens and served model from OpenRouter', async () => {
+    const { f } = fakeFetch([json(200, { model: 'google/gemma-4-31b-it-20261001', choices: [{ message: { content: 'hi' }, finish_reason: 'stop' }], usage: { prompt_tokens: 5, completion_tokens: 7, completion_tokens_details: { reasoning_tokens: 3 } } })])
+    expect(await makeGenerate({ env, fetch: f, ...noSleep })(or, req)).toMatchObject({ ok: true, finish: 'stop', reasoningTokens: 3, servedModel: 'google/gemma-4-31b-it-20261001' })
+  })
+  it('reads the finish reason, thought tokens and model version from Gemini', async () => {
+    const { f } = fakeFetch([json(200, { modelVersion: 'gemini-2.5-flash-001', candidates: [{ content: { parts: [{ text: 'a' }] }, finishReason: 'STOP' }], usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 2, thoughtsTokenCount: 9 } })])
+    expect(await makeGenerate({ env, fetch: f, ...noSleep })(gm, req)).toMatchObject({ ok: true, finish: 'STOP', reasoningTokens: 9, servedModel: 'gemini-2.5-flash-001' })
+  })
+  it('defaults the metadata when the provider leaves it out', async () => {
+    const { f } = fakeFetch([json(200, { choices: [{ message: { content: 'hi' } }] })])
+    expect(await makeGenerate({ env, fetch: f, ...noSleep })(or, req)).toMatchObject({ ok: true, finish: null, reasoningTokens: 0, servedModel: null })
+  })
+})
+
+describe('token cap', () => {
+  it('fails an OpenRouter reply cut off at the cap, once, and keeps what came back', async () => {
+    const { f, calls } = fakeFetch([json(200, { model: 'm', choices: [{ message: { content: '<html><body>half' }, finish_reason: 'length' }], usage: { prompt_tokens: 1, completion_tokens: 12000, completion_tokens_details: { reasoning_tokens: 4000 } } }), json(200, {})])
+    const out = await makeGenerate({ env, fetch: f, ...noSleep })(or, req)
+    expect(out).toMatchObject({ ok: false, error: 'Hit the token cap', reply: { text: '<html><body>half', finish: 'length', reasoningTokens: 4000, servedModel: 'm' } })
+    expect(calls).toHaveLength(1)
+  })
+  it('fails a Gemini reply cut off at MAX_TOKENS', async () => {
+    const { f, calls } = fakeFetch([json(200, { candidates: [{ content: { parts: [{ text: 'half' }] }, finishReason: 'MAX_TOKENS' }] }), json(200, {})])
+    expect(await makeGenerate({ env, fetch: f, ...noSleep })(gm, req)).toMatchObject({ ok: false, error: 'Hit the token cap' })
+    expect(calls).toHaveLength(1)
+  })
+  it('calls an empty reply at the cap a token cap, not an empty reply', async () => {
+    const { f } = fakeFetch([json(200, { choices: [{ message: { content: '' }, finish_reason: 'length' }] })])
+    expect(await makeGenerate({ env, fetch: f, ...noSleep })(or, req)).toMatchObject({ ok: false, error: 'Hit the token cap' })
+    const g = fakeFetch([json(200, { candidates: [{ finishReason: 'MAX_TOKENS' }] })])
+    expect(await makeGenerate({ env, fetch: g.f, ...noSleep })(gm, req)).toMatchObject({ ok: false, error: 'Hit the token cap' })
+  })
+})
+
+describe('error inside a 200', () => {
+  it('keeps the provider message, without the key, clipped', async () => {
+    const { f } = fakeFetch([json(200, { error: { message: `Upstream rejected or-secret ${'y'.repeat(400)}`, code: 502 } })])
+    const out = await makeGenerate({ env, fetch: f, ...noSleep })(or, req)
+    expect(out.ok).toBe(false)
+    const error = out.ok ? '' : out.error
+    expect(error).toMatch(/^Provider error: Upstream rejected \*\*\* y+$/)
+    expect(error).not.toContain('or-secret')
+    expect(error.length).toBeLessThanOrEqual('Provider error: '.length + 200)
+  })
+})

@@ -1,7 +1,10 @@
 import { RUN, type ModelEntry, type Provider } from './config'
 
 export type Usage = { input: number; output: number }
-export type Generated = { ok: true; text: string; usage: Usage; ms: number } | { ok: false; error: string; ms: number }
+/** What the provider said about the reply: why it stopped, how much it spent thinking, and which model actually answered. */
+export type ReplyMeta = { finish: string | null; reasoningTokens: number; servedModel: string | null }
+export type Reply = { text: string; usage: Usage } & ReplyMeta
+export type Generated = ({ ok: true; ms: number } & Reply) | { ok: false; error: string; ms: number; reply?: Reply }
 export type Generate = (model: ModelEntry, req: { system: string; prompt: string }) => Promise<Generated>
 type Options = { env: Record<string, string | undefined>; fetch?: typeof fetch; sleep?: (ms: number) => Promise<void>; now?: () => number; timeoutMs?: number }
 
@@ -14,15 +17,22 @@ export const REQUEST_TIMEOUT_MS = 120_000
 export const MAX_RETRY_AFTER_S = 120
 const ERROR_BODY_CHARS = 200
 const KEY: Record<Provider, string> = { openrouter: 'OPENROUTER_API_KEY', gemini: 'GEMINI_API_KEY' }
+/** OpenRouter says length and Gemini says MAX_TOKENS when the reply ran into the output cap. */
+const CAPPED = ['length', 'MAX_TOKENS']
+const textOrNull = (v: unknown): string | null => (typeof v === 'string' && v.length > 0 ? v : null)
 
-type Call = { url: string; init: RequestInit; read: (body: any) => { text: string; usage: Usage } }
+type Call = { url: string; init: RequestInit; read: (body: any) => Reply }
 
 function request(model: ModelEntry, key: string, { system, prompt }: { system: string; prompt: string }): Call {
   if (model.provider === 'openrouter') return {
     url: 'https://openrouter.ai/api/v1/chat/completions',
     init: { method: 'POST', headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json', 'x-title': 'Dualkit Bench', 'http-referer': 'https://dualkit.dev/bench' },
       body: JSON.stringify({ model: model.model, temperature: RUN.temperature, max_tokens: RUN.maxTokens, reasoning: { max_tokens: RUN.reasoningTokens }, messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }] }) },
-    read: (b) => ({ text: String(b?.choices?.[0]?.message?.content ?? ''), usage: { input: Number(b?.usage?.prompt_tokens ?? 0), output: Number(b?.usage?.completion_tokens ?? 0) } }),
+    read: (b) => ({
+      text: String(b?.choices?.[0]?.message?.content ?? ''),
+      usage: { input: Number(b?.usage?.prompt_tokens ?? 0), output: Number(b?.usage?.completion_tokens ?? 0) },
+      finish: textOrNull(b?.choices?.[0]?.finish_reason), reasoningTokens: Number(b?.usage?.completion_tokens_details?.reasoning_tokens ?? 0), servedModel: textOrNull(b?.model),
+    }),
   }
   return {
     url: `https://generativelanguage.googleapis.com/v1beta/models/${model.model}:generateContent`,
@@ -31,6 +41,7 @@ function request(model: ModelEntry, key: string, { system, prompt }: { system: s
     read: (b) => ({
       text: (b?.candidates?.[0]?.content?.parts ?? []).map((p: { text?: string }) => p.text ?? '').join(''),
       usage: { input: Number(b?.usageMetadata?.promptTokenCount ?? 0), output: Number(b?.usageMetadata?.candidatesTokenCount ?? 0) },
+      finish: textOrNull(b?.candidates?.[0]?.finishReason), reasoningTokens: Number(b?.usageMetadata?.thoughtsTokenCount ?? 0), servedModel: textOrNull(b?.modelVersion),
     }),
   }
 }
@@ -38,6 +49,16 @@ function request(model: ModelEntry, key: string, { system, prompt }: { system: s
 const retryable = (status: number) => status === 429 || status >= 500
 /** Removes the key, then keeps at most ERROR_BODY_CHARS of the body. */
 const clipBody = (body: string, key: string) => body.split(key).join('***').slice(0, ERROR_BODY_CHARS)
+
+/** A 200 can still be a failure: a reply cut off at the cap is never scored, and an error object says why there is no reply. */
+function settle(body: any, call: Call, key: string, ms: number): Generated {
+  const reply = call.read(body)
+  if (reply.finish !== null && CAPPED.includes(reply.finish)) return { ok: false, error: 'Hit the token cap', ms, reply }
+  if (reply.text.trim()) return { ok: true, ms, ...reply }
+  const message = body?.error?.message
+  if (typeof message === 'string' && message) return { ok: false, error: `Provider error: ${clipBody(message, key)}`, ms }
+  return { ok: false, error: 'Empty reply', ms }
+}
 
 export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), now = Date.now, timeoutMs = REQUEST_TIMEOUT_MS }: Options): Generate {
   let last = -Infinity
@@ -62,10 +83,7 @@ export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promis
         if (attempt < MAX_RETRIES) await sleep(BACKOFF_MS[attempt] ?? 30_000)
         continue
       }
-      if (res.ok) {
-        const { text, usage } = call.read(await res.json().catch(() => null))
-        return text.trim() ? { ok: true, text, usage, ms: now() - started } : { ok: false, error: 'Empty reply', ms: now() - started }
-      }
+      if (res.ok) return settle(await res.json().catch(() => null), call, key, now() - started)
       error = `HTTP ${res.status}: ${clipBody(await res.text().catch(() => ''), key)}`
       if (!retryable(res.status)) break
       const after = Math.min(Number(res.headers.get('retry-after')), MAX_RETRY_AFTER_S)
