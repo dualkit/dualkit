@@ -84,7 +84,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .nav-end { display: flex; justify-content: flex-end; gap: 8px; }
 .drawer { position: absolute; inset-inline: 0; top: 100%; background: var(--page); box-shadow: inset 0 -1px 0 var(--grid); opacity: 0; transform: translateY(-12px); pointer-events: none; transition: opacity 200ms var(--ease-ui), transform 270ms var(--ease-expo); }
 .drawer.open { opacity: 1; transform: none; pointer-events: auto; }
-.drawer-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.drawer-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .drawer-grid a { display: flex; flex-direction: column; gap: 12px; padding: 40px 32px; transition: background-color 150ms var(--ease-ui); }
 .drawer-grid a + a { box-shadow: inset 1px 0 0 var(--grid); }
 @media (hover: hover) { .drawer-grid a:hover { background: var(--raised); } .drawer-grid a:hover .go { opacity: 1; transform: none; } }
@@ -439,3 +439,53 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .st-head .cmd { max-width: 100%; width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { .st-layer { translate: 0 0; filter: none; transition: opacity 120ms linear; } }
+
+/* Check: copy on a panel, and the real report in a window that runs off the panel's bottom edge.
+   The two pins sit over the report's own numbered pins; they pulse in turn once, then wait for a hover. */
+.ck-panel { display: flex; flex-direction: column; align-items: center; gap: 64px; padding: 104px 56px 0; border-radius: var(--r-media); background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.ck-copy { display: flex; flex-direction: column; align-items: center; gap: 32px; text-align: center; width: 100%; max-width: 640px; min-width: 0; }
+.ck-text { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+.ck-text .lede { max-width: 560px; }
+.ck-run { display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; }
+.ck-run .cmd { width: min(440px, 100%); background: var(--page); }
+@media (hover: hover) { .ck-run .cmd:hover { background: var(--raised); } }
+.ck-run p { margin: 0; }
+.ck-link { color: var(--ink); background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; transition: background-size 300ms var(--ease-expo); }
+@media (hover: hover) { .ck-link:hover { background-size: 0 1px; background-position: 100% 100%; } }
+.ck-win { margin: 0; width: min(1000px, 100%); min-width: 0; display: flex; flex-direction: column; border-radius: var(--r-window) var(--r-window) 0 0; background: var(--ground); box-shadow: 0 0 0 1px var(--line); }
+.ck-bar { cursor: default; background: var(--page); border-radius: var(--r-window) var(--r-window) 0 0; }
+.ck-view { height: 540px; overflow: hidden; }
+.ck-shot { position: relative; }
+.ck-shot img { display: block; width: 100%; height: auto; }
+.ck-pin { position: absolute; width: 22px; height: 22px; translate: -50% -50%; border-radius: 999px; -webkit-tap-highlight-color: transparent; }
+.ck-pin::before { content: ""; position: absolute; inset: -11px; }
+.ck-pin::after { content: ""; position: absolute; inset: -3px; border-radius: inherit; box-shadow: 0 0 0 1.5px #dc2626; opacity: 0; scale: .7; transition: opacity 200ms var(--ease-ui), scale 300ms var(--ease-expo); }
+.ck-win[data-seen="true"] .ck-pin::after { animation: ck-ping 1400ms var(--ease-odo) calc(500ms + var(--i) * 700ms) 2 backwards; }
+@keyframes ck-ping { 0% { opacity: .9; scale: .7; } 100% { opacity: 0; scale: 2.4; } }
+.ck-pin:focus-visible { outline: none; }
+.ck-pin:hover::after, .ck-pin:focus-visible::after { opacity: 1; scale: 1; animation: none; }
+.ck-tip { position: absolute; bottom: calc(100% + 14px); left: 50%; display: flex; flex-direction: column; gap: 2px; width: max-content; max-width: 260px; padding: 10px 14px; border-radius: var(--r-media); background: var(--ink); color: var(--inverse-fg); text-align: start; font-size: 13px; line-height: 1.4; opacity: 0; translate: -50% 4px; pointer-events: none; transition: opacity 160ms var(--ease-ui), translate 240ms var(--ease-expo); }
+.ck-tip code { font: 11px/1.5 var(--mono); color: rgba(255, 255, 255, .6); }
+.ck-pin.end .ck-tip { left: auto; right: -8px; translate: 0 4px; }
+.ck-pin:hover .ck-tip, .ck-pin:focus-visible .ck-tip { opacity: 1; translate: -50% 0; }
+.ck-pin.end:hover .ck-tip, .ck-pin.end:focus-visible .ck-tip { translate: 0 0; }
+@media (max-width: 960px) {
+  .ck-panel { gap: 48px; padding: 72px 24px 0; }
+  .ck-view { height: 360px; }
+  .ck-shot { width: 640px; }
+}
+@media (max-width: 560px) {
+  .ck-panel { padding: 56px 16px 0; gap: 40px; }
+  .ck-copy { align-items: stretch; text-align: start; }
+  .ck-text, .ck-run { align-items: flex-start; }
+  .ck-run .cmd { width: 100%; }
+  .ck-view { height: 340px; }
+  .ck-shot { width: 560px; }
+}
+@media (prefers-reduced-motion: reduce) { .ck-win[data-seen="true"] .ck-pin::after { animation: none; } }
+@media (max-width: 960px) {
+  .ck-pin.end { display: none; }
+  .ck-pin .ck-tip { left: auto; right: -8px; translate: 0 4px; }
+  .ck-pin:hover .ck-tip, .ck-pin:focus-visible .ck-tip { translate: 0 0; }
+}
+.docs .doc-block p a { color: var(--ink); background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; }

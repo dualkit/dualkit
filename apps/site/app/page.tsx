@@ -1,3 +1,4 @@
+import { CheckSection } from '@/components/CheckSection'
 import { Closing } from '@/components/Closing'
 import { Footer } from '@/components/Footer'
 import { FormatSection } from '@/components/FormatSection'
@@ -26,6 +27,7 @@ export default async function Home() {
         <SkillsSection />
         <FormatSection />
         <StarterSection />
+        <CheckSection />
         <MirrorSection />
         <Strip />
         <Closing />
