@@ -261,12 +261,17 @@ body { background: var(--v3-ground); }
 /* The open Products menu (a full-height sheet on phones) sits over the feedback button; both are z-index 40 otherwise. */
 :root:has(.v3-nav[data-open]) .fb { z-index: 39; }
 .fb-trigger, .fb-panel { border-radius: 0; background: var(--v3-ground); box-shadow: 0 0 0 1px var(--v3-line); }
-.fb-trigger { transition: background-color 150ms var(--ease-ui), scale 200ms ease-out, opacity 200ms var(--ease-out), translate 200ms var(--ease-out); }
+.fb-trigger { transition: background-color 150ms var(--ease-ui), scale 160ms var(--ease-out), opacity 200ms var(--ease-out), translate 200ms var(--ease-out); }
+.fb-trigger:active { scale: 0.97; }
 @media (hover: hover) and (pointer: fine) { .fb-trigger:hover { background: #e6e2d8; } }
 .fb-trigger[aria-expanded='true'] { background: #e6e2d8; }
 @media (max-width: 600px) {
   .fb[data-tucked='true'] .fb-trigger[aria-expanded='false'] { opacity: 0; translate: 0 8px; pointer-events: none; }
   .fb[data-tucked='true'] .fb-trigger:focus-visible { opacity: 1; translate: 0 0; pointer-events: auto; }
+}
+/* Reduced motion: the tuck keeps its fade and drops the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .fb[data-tucked='true'] .fb-trigger[aria-expanded='false'] { translate: 0 0; }
 }
 
 /* v2 inner pages (docs, updates, status, bench) on the v3 shell: their controls lose the pill shape so they sit with the
