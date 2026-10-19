@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync } from 'node:fs'
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it, vi } from 'vitest'
@@ -14,9 +14,34 @@ function seed(store: ReturnType<typeof makeStore>, id: string, passed: Record<Co
   for (const s of screens) for (const condition of ['alone', 'dualkit'] as const) for (const run of [1, 2, 3]) {
     if (skip.includes(`${s.id}/${condition}`)) continue
     const k: BuildKey = { month: '2026-11', model: id, screen: s.id, condition, run }
-    store.write({ ...k, at: 'now', reply: 'r', usage: null, ms: 1, finish: 'stop', reasoningTokens: 0, servedModel: id, ok: true, rulesPassed: passed[condition], score: passed[condition] * 4, missing: [], findings: [], unreadableStylesheets: 0, pageHeight: 900 }, '<html></html>')
+    store.write({ ...k, at: 'now', reply: 'r', usage: null, ms: 1, finish: 'stop', reasoningTokens: 0, servedModel: id, ok: true, rulesPassed: passed[condition], score: passed[condition] * 4, missing: [], findings: [], unreadableStylesheets: 0, pageHeight: 900 }, '<html></html>', Buffer.from(`${id}/${s.id}/${condition}-${run}`))
   }
 }
+
+describe('default shots', () => {
+  it('copies the median build\'s own WebP into the site, with no re-render', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    seed(store, 'a', { alone: 8, dualkit: 18 })
+    const out = await buildSummary({ month: '2026-11', models: [model('a')], screens, store, siteRoot: site })
+    const c = out.models[0]!.screens[0]!.alone
+    expect(c).toMatchObject({ ran: true, shot: '/bench/2026-11/a/payment-summary-alone.webp', pageHeight: 900 })
+    // The seeded bytes are not an image, so only a straight copy of the median build (run 2) can produce them.
+    expect(readFileSync(join(site, 'public', 'bench', '2026-11', 'a', 'payment-summary-alone.webp'), 'utf8')).toBe('a/payment-summary/alone-2')
+  })
+  it('leaves the shot null and warns when the build has no WebP', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    seed(store, 'a', { alone: 8, dualkit: 18 })
+    const rec = store.read({ month: '2026-11', model: 'a', screen: 'otp', condition: 'dualkit', run: 2 })!
+    rmSync(store.paths(rec).webp)
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const out = await buildSummary({ month: '2026-11', models: [model('a')], screens, store, siteRoot: site })
+    expect(out.models[0]!.screens.find((x) => x.id === 'otp')!.dualkit).toMatchObject({ ran: true, shot: null, pageHeight: 900 })
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('a/otp/dualkit'))
+    warn.mockRestore()
+  })
+})
 
 describe('buildSummary', () => {
   it('totals, lifts, ranks and marks new models, and validates against the site schema', async () => {
