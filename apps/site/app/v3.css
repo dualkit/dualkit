@@ -256,6 +256,8 @@ body { background: var(--v3-ground); }
 .v3-pv-pin.is-on { background: var(--v3-glass-text); }
 
 /* Feedback (mounted in layout): square and on the warm ground; on phones it steps aside while the hero story or the footer painting sits under it. */
+/* The open Products menu (a full-height sheet on phones) sits over the feedback button; both are z-index 40 otherwise. */
+:root:has(.v3-nav[data-open]) .fb { z-index: 39; }
 .fb-trigger, .fb-panel { border-radius: 0; background: var(--v3-ground); box-shadow: 0 0 0 1px var(--v3-line); }
 .fb-trigger { transition: background-color 150ms var(--ease-ui), scale 200ms ease-out, opacity 200ms var(--ease-out), translate 200ms var(--ease-out); }
 @media (hover: hover) and (pointer: fine) { .fb-trigger:hover { background: #e6e2d8; } }
