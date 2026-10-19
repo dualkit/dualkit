@@ -35,11 +35,15 @@ const BASE_PX = 16
 const toPx = (n: string, unit: string): number => Number(n) * (unit === 'px' ? 1 : BASE_PX)
 const SIZE = String.raw`(\d*\.?\d+)(px|rem|em)`
 
-/** Banned type habits for Arabic: small sizes and tracking. Sizes under 14px, text-xs, tracking-* except tracking-normal. */
+const ZERO_SPACING = /^(?:normal|0(?:\.0+)?(?:[a-z]+)?)$/
+
+/** Banned type habits for Arabic: small sizes and tracking. Sizes under 14px, text-xs, tracking-* except tracking-normal, letter-spacing other than 0 or normal. */
 export function bannedIn(code: string): string[] {
   const hits: string[] = []
   for (const m of code.matchAll(/(?<![\w-])text-xs(?![\w-])/g)) hits.push(m[0])
   for (const m of code.matchAll(/(?<![\w-])tracking-(?!normal(?![\w-]))[\w[\].%-]+/g)) hits.push(m[0])
+  for (const m of code.matchAll(/(?<![\w-])letter-spacing\s*:\s*([^;}\n]+)/g))
+    if (!ZERO_SPACING.test(m[1]!.trim())) hits.push(m[0].trim())
   for (const m of code.matchAll(new RegExp(String.raw`text-\[${SIZE}\]`, 'g')))
     if (toPx(m[1]!, m[2]!) < MIN_PX) hits.push(m[0])
   for (const m of code.matchAll(new RegExp(String.raw`(?<![\w-])(font-size|--[\w-]*(?:text|font|size)[\w-]*)\s*:\s*${SIZE}`, 'g'))) {

@@ -20,6 +20,10 @@ describe('bannedIn', () => {
     expect(bannedIn(s)).not.toEqual([]))
   it.each(['text-sm', 'text-[14px]', 'tracking-normal', 'font-size: 14px', 'font-size: 1rem', '--text-small: 14px', 'size-adjust: 112%'])('allows %s', (s) =>
     expect(bannedIn(s)).toEqual([]))
+  it.each(['letter-spacing: 0.05em', 'letter-spacing: 1px', 'letter-spacing:-0.02em', 'h1 { letter-spacing: .1em }'])('bans %s', (s) =>
+    expect(bannedIn(s)).not.toEqual([]))
+  it.each(['letter-spacing: 0', 'letter-spacing: normal', 'letter-spacing: 0;', ':lang(ar) { letter-spacing: 0 }'])('allows %s', (s) =>
+    expect(bannedIn(s)).toEqual([]))
 })
 
 describe('undefinedCalls', () => {
