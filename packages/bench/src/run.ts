@@ -91,7 +91,9 @@ export async function runBench({ month, models, screens, generate, store, score 
   const writeFile = makeProgressWriter(store.progressFile(month), log)
   const keys: BuildKey[] = models.flatMap((m) => screens.flatMap((sc) => CONDITIONS.flatMap((condition) => Array.from({ length: runs }, (_, i) => ({ month, model: m.id, screen: sc.id, condition, run: i + 1 })))))
   const countDone = () => keys.filter((k) => store.read(k) !== null).length
-  const publish = (running: boolean) => writeFile(progressOf({ month, running, total, done: countDone(), updatedAt: new Date(now()).toISOString(), finished }))
+  // A catch-up run with nothing left to build writes no progress at all, so the file (and the commit) stays as it was.
+  const quiet = keys.every((k) => store.isDone(k))
+  const publish = (running: boolean) => (quiet ? Promise.resolve() : writeFile(progressOf({ month, running, total, done: countDone(), updatedAt: new Date(now()).toISOString(), finished })))
   const onFinish = (entry: RecentBuild) => { finished.push(entry); return publish(true) }
   await publish(true)
   const scorer: Scorer = (html, screen) => limit(async () => score(html, screen.required, browser ? { browser: await browser.get() } : {}))

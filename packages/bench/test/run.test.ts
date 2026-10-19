@@ -1,4 +1,4 @@
-import { mkdirSync, mkdtempSync, readFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import type { Browser } from 'playwright'
@@ -220,8 +220,25 @@ describe('progress.json', () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
     const opts = { month: '2026-11', models: [model('fake-good')], screens: two, generate: fakeGenerate, store, score: fastScore, runs: 1 }
     await runBench(opts)
+    // One build left to redo: the rest are skipped, counted as done, and only the redone build is recent.
+    rmSync(store.paths({ month: '2026-11', model: 'fake-good', screen: two[0]!.id, condition: 'alone', run: 1 }).json)
     await runBench(opts)
-    expect(progress(store)).toMatchObject({ running: false, total: 4, done: 4, recent: [] })
+    const p = progress(store)
+    expect(p).toMatchObject({ running: false, total: 4, done: 4 })
+    expect(p.recent.map((r: { screen: string; condition: string }) => `${r.screen} ${r.condition}`)).toEqual([`${two[0]!.id} alone`])
+  })
+  it('writes no progress file at all when every build of the run is already done', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    const opts = { month: '2026-11', models: [model('fake-good')], screens: two, generate: fakeGenerate, store, score: fastScore, runs: 1 }
+    await runBench(opts)
+    const bytes = readFileSync(store.progressFile('2026-11'), 'utf8')
+    await runBench(opts)
+    expect(readFileSync(store.progressFile('2026-11'), 'utf8')).toBe(bytes)
+    const fresh = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    for (const k of [two[0]!, two[1]!].flatMap((sc) => (['alone', 'dualkit'] as const).map((condition) => ({ month: '2026-11', model: 'fake-good', screen: sc.id, condition, run: 1 }))))
+      fresh.write({ ...k, at: '2026-11-01T04:30:00.000Z', reply: 'r', usage: null, ms: 1, finish: 'stop', reasoningTokens: 0, servedModel: 'x', ok: true, rulesPassed: 1, score: 1, missing: [], findings: [], unreadableStylesheets: 0, pageHeight: 1 }, '<html></html>')
+    await runBench({ ...opts, store: fresh })
+    expect(existsSync(fresh.progressFile('2026-11'))).toBe(false)
   })
   it('is running false when it stops early at the deadline, with done short of total', async () => {
     let clock = 0
