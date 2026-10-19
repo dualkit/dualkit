@@ -51,7 +51,7 @@ formatHijri(date, { locale: 'ar', numerals: 'arab', timeZone: 'Asia/Dubai' })   
 toHijri(date, { timeZone: 'Asia/Dubai' })                                        // { year: 1447, month: 9, day: 1 }
 ```
 
-Dates use the Umm al-Qura calendar. `timeZone` is now required for `toHijri` and `formatHijri`. In 0.1 it was optional, so add it to every call. Always pass a `timeZone`, because the Hijri day follows the person's local day. If a runtime has no Umm al-Qura calendar, the functions throw instead of quietly returning a Gregorian date.
+Dates use the Umm al-Qura calendar. `timeZone` is now required for `toHijri` and `formatHijri`, because the Hijri day follows the person's local day. In 0.1 it was optional. A call without it throws a `RangeError`, so add it to every call. If a runtime has no Umm al-Qura calendar, the functions throw instead of quietly returning a Gregorian date.
 
 ## UAE phone numbers
 
@@ -86,7 +86,7 @@ formatOmanPhone('92123456', { style: 'international' })  // +968 9212 3456
 isValidKuwaitPhone('50123456')      // true
 ```
 
-Each country has `parse`, `format` and `isValid` functions, named like the UAE and Saudi ones.
+Each country has `parse`, `format` and `isValid` functions, named like the UAE and Saudi ones. Bahrain numbers in the 6 and 77 blocks return type `unknown`, because those blocks mix mobile and landline.
 
 ## Any Gulf phone number
 
@@ -135,7 +135,7 @@ currencySign('SAR')  // the U+20C1 sign
 currencySign('QAR')  // null, there is no sign
 ```
 
-Days are ISO weekdays, so 1 is Monday and 7 is Sunday. The UAE weekend is Saturday and Sunday. `AE-SH` is Sharjah government, Friday to Sunday. The other countries take Friday and Saturday and start the week on Sunday. This is the official calendar. Private employers set their own. `timeZone` is required.
+Days are ISO weekdays, so 1 is Monday and 7 is Sunday. The UAE weekend is Saturday and Sunday. `AE-SH` is Sharjah government, Friday to Sunday. The other countries take Friday and Saturday and start the week on Sunday. The UAE weeks follow u.ae. The Friday and Saturday weekend for the other five is the usual working week and matches Unicode CLDR, but we have not checked it against a government page. Private employers set their own. `timeZone` is required.
 
 `currencySign` returns a sign for SAR, AED and OMR and `null` for the rest. Most fonts do not draw these signs yet, so fall back to the code.
 

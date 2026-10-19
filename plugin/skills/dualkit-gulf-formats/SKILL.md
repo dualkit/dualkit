@@ -50,7 +50,7 @@ gulfWeek('SA')  // { weekend: [5, 6], firstWorkday: 7 }
 - **Always pass `timeZone`** (`Asia/Dubai` is UTC+4, `Asia/Riyadh` is UTC+3), for Gregorian dates too. If you don't, the server and the browser can render different days, and you get hydration mismatches.
 - Use `islamic-umalqura`, not plain `islamic`. Umm al-Qura is Saudi Arabia's official calendar.
 - Ramadan and Eid begin on a moon sighting and can differ from any computed calendar by a day. Never promise those dates from a calculation. Label them as expected dates.
-- Weekends: the UAE federal government and most private companies take Saturday and Sunday (since 2022), with a short Friday for federal staff. Sharjah government takes Friday to Sunday. Saudi Arabia, Qatar, Kuwait, Bahrain and Oman are Friday and Saturday, and their week starts on Sunday. Make the weekend configurable per market and per customer. `gulfWeek` gives the official one.
+- Weekends: the UAE federal government takes Saturday and Sunday (since 2022), with a short Friday for federal staff, and private employers set their own week. Sharjah government takes Friday to Sunday. Saudi Arabia, Qatar, Kuwait, Bahrain and Oman are Friday and Saturday, and their week starts on Sunday (the usual week, matching CLDR). Make the weekend configurable per market and per customer. `gulfWeek` gives the usual government week.
 
 ## Phone, Emirates ID, IBAN
 
@@ -64,8 +64,8 @@ parseIban(value, { country: 'AE' })  // checks the length per country and mod 97
 ```
 
 - Eight-digit numbers fit four countries, so `parseGulfPhone` needs a `+` or `00` and the country code. Qatar, Kuwait, Bahrain and Oman also have `parseQatarPhone` and the like.
-- Accept every common way of writing a number: `050…`, `+971 50…`, `00971…`, `+971 (0) 50…`, with spaces and dashes. Store E.164.
-- Use `inputMode="tel"` for phones, `inputMode="numeric"` for Emirates ID, and `dir="ltr"` on all three fields (see dualkit-rtl-layout).
+- Accept every common way of writing a number: `050…`, `+971 50…`, `00971…`, `+971 (0) 50…`, with spaces and dashes. The `(0)` and the leading `0` apply to the UAE and Saudi Arabia only. The other four have no trunk 0. Store E.164.
+- Use `inputMode="tel"` for phones, `inputMode="numeric"` for Emirates ID, and `dir="ltr"` on the phone, Emirates ID and IBAN fields (see dualkit-rtl-layout).
 - Treat the Emirates ID as sensitive personal data. Mask it in the UI (`784-****-*******-6`), and never log it or put it in analytics.
 - Show IBANs in groups of four. Accept them pasted with spaces, in lower case, or with Arabic digits.
 

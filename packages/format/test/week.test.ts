@@ -50,3 +50,11 @@ describe('isGulfWeekend', () => {
     expect(() => isGulfWeekend(day(15), 'AE', { timeZone: 'Mars/Base' })).toThrow(RangeError)
   })
 })
+
+describe('unknown regions', () => {
+  it('throws a RangeError that names the region', () => {
+    expect(() => gulfWeek('EG' as GulfRegion)).toThrow(RangeError)
+    expect(() => gulfWeek('EG' as GulfRegion)).toThrow(/EG/)
+    expect(() => isGulfWeekend(new Date(), 'toString' as GulfRegion, { timeZone: 'Asia/Dubai' })).toThrow(/toString/)
+  })
+})

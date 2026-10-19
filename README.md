@@ -124,9 +124,9 @@ In CI, `uses: dualkit/dualkit/action@main` scores every pull request and uploads
 
 The most useful help right now:
 
-- **Read Arabic?** Review the skill rules in [`plugin/skills/`](plugin/skills/) and comment wherever something reads wrong. See [#6](https://github.com/dualkit/dualkit/issues/6).
+- **Read Arabic?** Review the skill rules in [`plugin/skills/`](plugin/skills/) and comment wherever something reads wrong.
 - **Shipping in the Gulf?** Tell us where it breaks in [Discussions](https://github.com/dualkit/dualkit/discussions).
-- **Want a first PR?** Issues labelled [help wanted](https://github.com/dualkit/dualkit/labels/help%20wanted) are small and well scoped.
+- **Want a first PR?** Say hello in [Discussions](https://github.com/dualkit/dualkit/discussions) and we'll find a small one.
 
 ## Repo
 

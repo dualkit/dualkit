@@ -31,7 +31,7 @@ export const COPY = {
     ],
   },
   format: {
-    heading: ['Gulf formats,', 'solved in 12 KB.'],
+    heading: ['Gulf formats,', 'solved in 20 KB.'],
     lede: 'One library for the formats Gulf products touch every day. Every parser reads Arabic digits the way people type them, with no dependencies.',
     points: [
       ['Money', 'All six Gulf currencies, in English or Arabic, with either digit system.'],
