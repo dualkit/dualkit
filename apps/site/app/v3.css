@@ -238,6 +238,9 @@ body { background: var(--v3-ground); }
 .v3-pv-bench { display: flex; flex-direction: column; gap: 4px; width: 380px; padding: 16px; }
 .v3-pv-bench .v3-pv-line { gap: 12px; }
 .v3-pv-bench-name, .v3-pv-bench-figures { display: inline-flex; align-items: center; gap: 8px; }
+/* Maker marks sit on glass here: white, and the initial tile for an unknown maker turns white with an ink letter. */
+.v3-pv .bx-mark { color: var(--v3-glass-text); }
+.v3-pv .bx-initial { border-radius: 0; background: var(--v3-glass-text); color: var(--v3-ink); }
 .v3-pv-bench-figures { gap: 12px; }
 .v3-pv-track { position: relative; display: block; width: 348px; height: 10px; background: linear-gradient(var(--v3-glass-ring), var(--v3-glass-ring)) 0 50% / 100% 1px no-repeat; }
 .v3-pv-lift { position: absolute; top: 4px; height: 2px; background: var(--v3-glass-text); }
