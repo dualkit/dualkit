@@ -89,7 +89,7 @@ export function panelHTML(settled: boolean): string {
 <div class="panel${f ? ' typeset paid' : ''}" data-k="panel" dir="${f ? 'rtl' : 'ltr'}" lang="ar">
   <div class="bg" data-k="bg"${st('opacity:1')}></div>
   <div class="scanclip"><div class="spec" data-k="spec"></div></div>
-  <svg class="ringbox" data-k="ringbox" aria-hidden="true"><rect data-k="ring" x="0.5" y="0.5" pathLength="1"${st('stroke-dashoffset:0;stroke-opacity:.14')}/></svg>
+  <svg class="ringbox" data-k="ringbox" aria-hidden="true"><rect data-k="ring" x="-0.5" y="-0.5" pathLength="1"${st('stroke-dashoffset:0;stroke-opacity:.14')}/></svg>
   <div class="scanclip" data-k="sweepclip"><div class="sweep" data-k="sweep"></div><div class="scan" data-k="scan"></div></div>
   <div class="content" data-k="content">
     <div class="row h" data-row="h"${st('opacity:1')}><span class="cell s" data-c="title">${face(f ? TITLE.fx : TITLE.bk)}</span><span class="badge">${S.direction.label} <span class="roll" data-k="roll">${[roll[0], roll[1], roll[0]].map((v) => `<span${st('transform:translateY(-100%)')}>${v}</span>`).join('')}</span></span>${pinsFor('h', f)}</div>

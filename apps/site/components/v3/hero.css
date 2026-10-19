@@ -42,7 +42,9 @@
 .v3-story .bg, .v3-story .ringbox, .v3-story .scanclip { position: absolute; left: 0; top: 0; width: 100%; height: 100%; transform-origin: top center; }
 .v3-story .bg { background: var(--v3-glass); -webkit-backdrop-filter: blur(24px) saturate(140%); backdrop-filter: blur(24px) saturate(140%); }
 .v3-story .ringbox { pointer-events: none; overflow: visible; }
-.v3-story .ringbox rect { fill: none; stroke: #fff; stroke-width: 1; vector-effect: non-scaling-stroke; stroke-dasharray: 1; width: calc(100% - 1px); height: calc(100% - 1px); }
+.v3-story .ringbox rect { fill: none; stroke: #fff; stroke-width: 1; vector-effect: non-scaling-stroke; stroke-dasharray: 1; width: calc(100% + 1px); height: calc(100% + 1px); }
+/* The ring sits just outside the glass, like every other glass ring (0 0 0 1px). Drawn inside, it left the backdrop's
+   outward-rounded last row showing below it as a dark sliver, which read as a line along the bottom edge. */
 .v3-story .scanclip { overflow: hidden; pointer-events: none; }
 .v3-story .sweep { position: absolute; top: 0; left: 0; width: 160px; height: 100%; background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.2), rgba(255,255,255,0)); transform: translateX(-200px); }
 .v3-story .scan { position: absolute; left: 0; top: 0; width: 100%; height: 90px; background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.14), rgba(255,255,255,0)); transform: translateY(-120px); }
@@ -129,7 +131,7 @@
 /* Off until the install beat: the glass is clipped away and the command is transparent (the strip itself never fades). */
 .v3-story .istrip > .bg { clip-path: inset(100% 0 0 0); }
 .v3-story .istrip > .icmd { opacity: 0; }
-.v3-story .istrip .bg { position: absolute; inset: 0; width: auto; height: auto; border: 1px solid var(--s-line); }
+.v3-story .istrip .bg { position: absolute; inset: 0; width: auto; height: auto; box-shadow: 0 0 0 1px var(--s-line); }
 .v3-story .icmd { position: relative; font-family: var(--font-mono); font-size: 12px; white-space: pre; }
 .v3-story .icmd .p { color: var(--s-faint); }
 .v3-story .caret { display: inline-block; width: 7px; height: 13px; background: #fff; vertical-align: -2px; margin-left: 1px; }
@@ -140,7 +142,7 @@
 
 /* Caption rail */
 .v3-story .rail { position: absolute; left: 24px; bottom: 24px; width: 320px; min-height: 140px; padding: 16px 24px; color: #fff; z-index: 3; }
-.v3-story .rail .bg { position: absolute; inset: 0; width: auto; height: auto; border: 1px solid var(--s-line); }
+.v3-story .rail .bg { position: absolute; inset: 0; width: auto; height: auto; box-shadow: 0 0 0 1px var(--s-line); }
 .v3-story .rail > *:not(.bg) { position: relative; }
 .v3-story .rhead { display: flex; align-items: baseline; gap: 12px; }
 .v3-story .rno { font-family: var(--font-mono); font-size: 12px; color: var(--s-soft); display: inline-flex; }

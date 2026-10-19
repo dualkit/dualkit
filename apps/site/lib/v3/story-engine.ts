@@ -619,7 +619,7 @@ function sizePanelRings(group: HTMLElement) {
   const q = (sel: string) => group.querySelector(sel) as HTMLElement
   const panel = q('[data-k="panel"]'), rb = q('[data-k="ringbox"]'), ring = q('[data-k="ring"]')
   rb.setAttribute('width', String(panel.offsetWidth)); rb.setAttribute('height', String(panel.offsetHeight))
-  ring.setAttribute('width', String(panel.offsetWidth - 1)); ring.setAttribute('height', String(panel.offsetHeight - 1))
+  ring.setAttribute('width', String(panel.offsetWidth + 1)); ring.setAttribute('height', String(panel.offsetHeight + 1))
   const ph = q('[data-k="ph"]'), svg = q('[data-k="phring"]'), rect = svg.querySelector('rect')!
   const pw = all(ph, ':scope > .ch').reduce((a, c) => a + c.offsetWidth, 0) + 14, phh = ph.offsetHeight + 10
   svg.setAttribute('width', String(pw)); svg.setAttribute('height', String(phh)); rect.setAttribute('width', String(pw - 1)); rect.setAttribute('height', String(phh - 1))
