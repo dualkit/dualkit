@@ -1,0 +1,40 @@
+import { mkdtempSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { describe, expect, it } from 'vitest'
+import { BenchError, loadModels, loadScreens, SCREENS } from '../src/config'
+
+const tmp = () => mkdtempSync(join(tmpdir(), 'bench-'))
+
+describe('loadModels', () => {
+  it('loads the committed list with unique ids', () => {
+    const models = loadModels()
+    expect(models.length).toBeGreaterThanOrEqual(5)
+    expect(new Set(models.map((m) => m.id)).size).toBe(models.length)
+  })
+  it('rejects an unknown provider', () => {
+    const file = join(tmp(), 'm.json')
+    writeFileSync(file, JSON.stringify([{ id: 'x', provider: 'openai', model: 'x', label: 'X', since: '2026-11' }]))
+    expect(() => loadModels(file)).toThrow(BenchError)
+  })
+  it('rejects a bad since month', () => {
+    const file = join(tmp(), 'm.json')
+    writeFileSync(file, JSON.stringify([{ id: 'x', provider: 'gemini', model: 'x', label: 'X', since: 'Nov' }]))
+    expect(() => loadModels(file)).toThrow(/since/)
+  })
+})
+
+describe('loadScreens', () => {
+  it('loads all five screens in order, each with a prompt and required parts', () => {
+    const screens = loadScreens()
+    expect(screens.map((s) => s.id)).toEqual([...SCREENS])
+    for (const s of screens) {
+      expect(s.prompt.length).toBeGreaterThan(100)
+      expect(s.required.length).toBeGreaterThan(0)
+      for (const r of s.required) expect(r.selector ?? r.text).toBeTruthy()
+    }
+  })
+  it('compiles every text pattern', () => {
+    for (const s of loadScreens()) for (const r of s.required) if (r.text) expect(() => new RegExp(r.text!)).not.toThrow()
+  })
+})
