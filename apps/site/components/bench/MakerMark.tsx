@@ -1,9 +1,8 @@
-import { MAKER_MARKS } from '@/lib/marks'
-import { makerInitial } from '@/lib/bench-view'
+import { makerInitial, makerMarkOf } from '@/lib/bench-view'
 
 /** The maker's mark in one colour, or a square tile with the maker's initial for an id we have no mark for. */
 export function MakerMark({ mark, by, size = 16 }: { mark: string; by: string; size?: number }) {
-  const m = MAKER_MARKS[mark]
+  const m = makerMarkOf(mark)
   if (!m) return <span className="bx-initial" style={{ width: size, height: size, fontSize: Math.round(size * 0.62) }} aria-hidden="true">{makerInitial(by)}</span>
   return (
     <svg className="bx-mark" width={size} height={size} viewBox={m.viewBox} aria-hidden="true">

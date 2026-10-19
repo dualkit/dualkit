@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { BenchCell, BenchFinding, BenchModel, BenchMonth } from '../lib/bench-schema'
 import { MAKER_MARKS } from '../lib/marks'
-import { factsLine, factsOf, makerInitial, monthLabel, movementOf, pinSide, rawUrl, shotMarks, sideLine, tickFill, trackOf, unrankedReason } from '../lib/bench-view'
+import { benchOutOf, factsLine, factsOf, makerInitial, makerMarkOf, monthLabel, movementOf, placePins, rawUrl, scaleLabels, shotMarks, sideLine, tickFill, trackOf, unrankedReason } from '../lib/bench-view'
 
 const total = (rulesPassed: number) => ({ rulesPassed, outOf: 100, score: rulesPassed })
 type Ran = Extract<BenchCell, { ran: true }>
@@ -98,12 +98,89 @@ describe('shotMarks', () => {
   })
 })
 
-describe('pinSide', () => {
-  it('puts pins past the inline end when there is room', () => {
-    expect(pinSide(b(24, 0, 151), 2)).toBe('end')
+describe('placePins', () => {
+  // A side 390 px wide shows the shot at 1:1, so ring boxes are the finding box padded by 4.
+  const ring = (box: ReturnType<typeof b>, numbers = [1]) => ({ box, numbers })
+  const groupW = (n: number) => n * 18 + (n - 1) * 2
+  const overlaps = (a: { left: number; top: number; width: number }, c: { left: number; top: number; width: number }) =>
+    a.left < c.left + c.width && c.left < a.left + a.width && a.top < c.top + 18 && c.top < a.top + 18
+
+  it('puts pins just past the ring\'s inline end when there is room', () => {
+    const [p] = placePins([ring(b(24, 100, 151, 14), [2, 3])], [], 390).rings
+    expect(p).toEqual({ left: 24 + 151 + 4 + 8, top: 100 + 7 - 9, width: groupW(2) })
   })
-  it('puts them before the ring when it runs to the edge', () => {
-    expect(pinSide(b(300, 0, 80), 1)).toBe('start')
+  it('scales with the side width', () => {
+    const [p] = placePins([ring(b(39, 100, 39, 20))], [], 195).rings
+    expect(p).toEqual({ left: 19.5 + 19.5 + 4 + 8, top: 50 + 5 - 9, width: 18 })
+  })
+  it('goes before the ring when the end runs off the image', () => {
+    const [p] = placePins([ring(b(300, 100, 80, 14))], [], 390).rings
+    expect(p?.left).toBe(300 - 4 - 8 - 18)
+  })
+  it('goes before the ring when the end would cover another finding\'s ring', () => {
+    const { rings } = placePins([ring(b(60, 100, 60, 14), [1]), ring(b(140, 100, 100, 14), [2])], [], 390)
+    expect(rings[0]?.left).toBe(60 - 4 - 8 - 18)
+  })
+  it('goes above the ring when neither side is free', () => {
+    const [p] = placePins([ring(b(10, 100, 370, 14))], [], 390).rings
+    expect(p).toEqual({ left: 10 - 4, top: 100 - 4 - 4 - 18, width: 18 })
+  })
+  it('takes the in-bounds spot that covers least of other rings when none is free', () => {
+    // From a real alone build at a 320 px phone: past the end clips the ring below by a pixel, above sits on the heading's ring.
+    const rings = [ring(b(24, 111.7, 150.6, 14), [2, 3, 4, 6]), ring(b(24, 44.1, 97.9, 27), [3]), ring(b(24, 86.5, 136, 14), [3, 6])]
+    const k = 256 / 390
+    expect(placePins(rings, [], 256).rings[2]?.left).toBeCloseTo((24 + 136) * k + 4 + 8, 5)
+  })
+  it('lets pins graze a ring or a pin by under 2px, so rounding never pushes them away', () => {
+    // At 256 px wide the [3, 6] pins past their ring touch the pins of the ring below by about a pixel.
+    const rings = [ring(b(24, 111.7, 150.6, 14), [2, 3, 4, 6]), ring(b(24, 86.5, 136, 14), [3, 6])]
+    const k = 256 / 390
+    expect(placePins(rings, [], 256).rings[1]?.top).toBeCloseTo((86.5 + 7) * k - 9, 5)
+  })
+  it('steps a pin down 20px at a time until it clears pins already placed', () => {
+    // Two rings stacked 4px apart: their pins would sit on top of each other.
+    const { rings } = placePins([ring(b(24, 100, 100, 10), [1]), ring(b(24, 104, 100, 10), [2])], [], 390)
+    expect(rings[1]?.top).toBe(104 + 5 - 9 + 20)
+    expect(overlaps(rings[0]!, rings[1]!)).toBe(false)
+  })
+  it('places the page-level pins in the top-end corner and keeps others clear of them', () => {
+    const r = placePins([ring(b(320, 6, 20, 14), [2])], [1], 390)
+    expect(r.corner).toEqual({ left: 390 - 12 - 18, top: 12, width: 18 })
+    expect(overlaps(r.corner!, r.rings[0]!)).toBe(false)
+  })
+  it('keeps every pin inside a 320 px phone\'s side', () => {
+    const width = 320 - 32 - 32
+    const { rings } = placePins([ring(b(24, 44, 340, 27), [1, 2, 3]), ring(b(200, 140, 150, 14), [4, 5])], [], width)
+    for (const p of rings) {
+      expect(p.left).toBeGreaterThanOrEqual(0)
+      expect(p.left + p.width).toBeLessThanOrEqual(width)
+    }
+  })
+})
+
+describe('makerMarkOf', () => {
+  it('finds a known mark', () => {
+    expect(makerMarkOf('google')?.viewBox).toBe('0 0 24 24')
+  })
+  it('ignores ids that only exist on the prototype', () => {
+    expect(makerMarkOf('constructor')).toBeNull()
+    expect(makerMarkOf('__proto__')).toBeNull()
+    expect(makerMarkOf('toString')).toBeNull()
+  })
+})
+
+describe('out of', () => {
+  const m = (outOf: number): BenchMonth => ({ month: '2026-11', generatedAt: 'x', ruleCount: 20, models: [model({ alone: null, dualkit: null }), model({ alone: { rulesPassed: 1, outOf, score: 1 } })] })
+  it('reads the total from the first model that has one', () => {
+    expect(benchOutOf(m(80))).toBe(80)
+  })
+  it('falls back to 100 with no totals', () => {
+    expect(benchOutOf({ ...m(80), models: [] })).toBe(100)
+  })
+  it('labels the scale in quarters of the total', () => {
+    expect(scaleLabels(100)).toEqual(['0', '25', '50', '75', '100'])
+    expect(scaleLabels(80)).toEqual(['0', '20', '40', '60', '80'])
+    expect(scaleLabels(90)).toEqual(['0', '23', '45', '68', '90'])
   })
 })
 

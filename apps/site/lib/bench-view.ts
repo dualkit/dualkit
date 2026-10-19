@@ -1,5 +1,6 @@
 // Pure helpers that turn a bench month into what the /bench page shows.
 import type { BenchCell, BenchFinding, BenchModel, BenchMonth } from './bench-schema'
+import { MAKER_MARKS, type MakerMark } from './marks'
 
 /** Every model builds every screen alone and with Dualkit, three times each (packages/bench RUN.runs). */
 const CONDITIONS = 2
@@ -8,12 +9,17 @@ export const PROGRESS_TICKS = 30
 /** Screenshots are taken at this many CSS px wide. */
 export const SHOT_W = 390
 const SAME_BOX_PX = 2
-const RING_PAD = 4
+/** Ring padding around a finding box, and the pin geometry, in screen px. */
+export const RING_PAD = 4
 const PIN_GAP = 8
 const PIN = 18
 const PIN_STEP = 2
-/** The narrowest side a shot is shown at, as a share of its 390 px, so pins placed past a ring always fit. */
-const MIN_ZOOM = 0.8
+const PIN_ABOVE = 4
+const NUDGE = 20
+const CORNER = 12
+const DEFAULT_OUT_OF = 100
+/** Pins may graze a ring or another pin by this much; sub-pixel scaling should not push them away. */
+const GRAZE = 2
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 const REPO_BLOB = 'https://github.com/dualkit/dualkit/blob/main'
@@ -81,11 +87,58 @@ export function shotMarks(findings: readonly BenchFinding[]): ShotMarks {
   return { items, rings, corner: items.filter((i) => i.wholePage).map((i) => i.n) }
 }
 
-/** Pins go just past the ring's inline end, or before its start when they would run off the image. */
-export function pinSide(box: Box, count: number): 'end' | 'start' {
-  const need = (RING_PAD + PIN_GAP + count * PIN + (count - 1) * PIN_STEP) / MIN_ZOOM
-  return SHOT_W - (box.x + box.width) >= need ? 'end' : 'start'
+export type PinSpot = { left: number; top: number; width: number }
+type Rect = { x: number; y: number; w: number; h: number }
+const overlapArea = (a: Rect, b: Rect) => Math.max(0, Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y))
+const hits = (a: Rect, b: Rect) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h
+const shrink = (r: Rect): Rect => ({ x: r.x + GRAZE / 2, y: r.y + GRAZE / 2, w: r.w - GRAZE, h: r.h - GRAZE })
+/** A pin group's box, shrunk by half the graze allowance on every side. */
+const spotRect = (p: PinSpot): Rect => ({ x: p.left + GRAZE / 2, y: p.top + GRAZE / 2, w: p.width - GRAZE, h: PIN - GRAZE })
+const groupWidth = (n: number) => n * PIN + Math.max(0, n - 1) * PIN_STEP
+
+/**
+ * Where each ring's pins go on a shot shown `width` px wide, in px from the shot's top-start corner.
+ * Past the ring's inline end when that is free and inside the image; else before its start; else above it;
+ * and when no spot is free, the one that covers least of the other rings.
+ * Then any pin that would sit on a pin already placed steps down 20px at a time.
+ */
+export function placePins(rings: ShotMarks['rings'], corner: readonly number[], width: number): { rings: PinSpot[]; corner: PinSpot | null } {
+  const k = width / SHOT_W
+  const rects: Rect[] = rings.map(({ box }) => ({ x: box.x * k - RING_PAD, y: box.y * k - RING_PAD, w: box.width * k + RING_PAD * 2, h: box.height * k + RING_PAD * 2 }))
+  const cornerSpot = corner.length ? { left: width - CORNER - groupWidth(corner.length), top: CORNER, width: groupWidth(corner.length) } : null
+  const placed: Rect[] = cornerSpot ? [spotRect(cornerSpot)] : []
+  const spots = rings.map((r, i) => {
+    const R = rects[i]!
+    const w = groupWidth(r.numbers.length)
+    const mid = R.y + R.h / 2 - PIN / 2
+    const clampX = (x: number) => Math.min(Math.max(x, 0), Math.max(0, width - w))
+    // In order of preference: past the end, before the start, above. Each must sit inside the image.
+    const candidates: PinSpot[] = [
+      { left: R.x + R.w + PIN_GAP, top: mid, width: w },
+      { left: R.x - PIN_GAP - w, top: mid, width: w },
+      { left: clampX(R.x), top: Math.max(0, R.y - PIN_ABOVE - PIN), width: w },
+    ].filter((c) => c.left >= 0 && c.left + w <= width)
+    const covered = (c: PinSpot) => rects.reduce((sum, o, j) => sum + (j === i ? 0 : overlapArea(spotRect(c), shrink(o))), 0)
+    // The first free spot wins; failing that, the one that covers least of the other rings.
+    let spot = candidates.find((c) => covered(c) === 0)
+      ?? candidates.reduce<PinSpot | null>((best, c) => (!best || covered(c) < covered(best) ? c : best), null)
+      ?? { left: clampX(R.x), top: Math.max(0, R.y - PIN_ABOVE - PIN), width: w }
+    while (placed.some((p) => hits(spotRect(spot), p))) spot = { ...spot, top: spot.top + NUDGE }
+    placed.push(spotRect(spot))
+    return spot
+  })
+  return { rings: spots, corner: cornerSpot }
 }
+
+/** A maker's mark by id, ignoring anything that only exists on Object.prototype (ids come from fetched files). */
+export const makerMarkOf = (id: string): MakerMark | null => (Object.hasOwn(MAKER_MARKS, id) ? MAKER_MARKS[id]! : null)
+
+/** What the totals are out of, from the first model that has one. */
+export function benchOutOf(m: BenchMonth): number {
+  for (const x of m.models) { const t = x.alone ?? x.dualkit; if (t) return t.outOf }
+  return DEFAULT_OUT_OF
+}
+export const scaleLabels = (outOf: number) => [0, 1, 2, 3, 4].map((q) => String(Math.round((outOf * q) / 4)))
 
 export const sideLine = (c: Extract<BenchCell, { ran: true }>, ruleCount: number) => `${c.rulesPassed} of ${ruleCount} rules · score ${c.score}`
 
