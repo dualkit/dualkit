@@ -1,0 +1,40 @@
+// The /bench copy, verbatim from BENCH in design/figma/gen/v2/bench.mjs (approved 19 Oct 2026).
+// The rule count in the lede and the how-it-works items follows the real rule list, never a typed number.
+export const BENCH_COPY = {
+  title: 'The Bench',
+  headline: ['How well does AI', 'build Arabic?'],
+  lede: (rules: number) => `Every month, free AI models build five Arabic screens on their own, then again with Dualkit. dualkit check scores every build against ${rules} rules.`,
+  raw: 'Raw files on GitHub',
+  prompts: 'Read the prompts',
+  promptsUrl: 'https://github.com/dualkit/dualkit/tree/main/packages/bench/prompts',
+  rawUrl: 'https://github.com/dualkit/dualkit/tree/main/bench/runs',
+  how: {
+    heading: 'How the Bench works',
+    items: (rules: number): readonly (readonly [string, string])[] => [
+      ['Five screens', 'A payment summary, a one-time code, an address form, a profile and an order history. Every prompt is public.'],
+      ['Three runs, two ways', 'Each model builds each screen three times on its own, then three times with the Dualkit skills loaded. The middle run counts.'],
+      ['Scored by dualkit check', `The same ${rules} rules you can run with npx dualkit check. A build that leaves out a part the prompt asked for scores 0.`],
+      ['A small sample', 'Free models only, run once a month. A model that fails shows as didn’t run, never as a guess.'],
+    ],
+  },
+  empty: {
+    heading: (day: string) => `The first run lands on ${day}.`,
+    running: 'The first run is under way.',
+    lede: 'Six free models, five screens, three runs each. The results and every raw file go up here the same day.',
+  },
+  legend: { alone: 'Alone', dualkit: 'With Dualkit', caption: (outOf: number) => `Rules passed across five screens, out of ${outOf}` },
+  columns: { rank: 'Rank', model: 'Model', pair: 'Alone → with Dualkit', lift: 'Lift' },
+  didntRun: 'Didn’t run this month',
+  newModel: 'New',
+  level: '–',
+  wholePage: 'Whole page.',
+  leftOut: 'Left out:',
+  passes: (rules: number) => `Passes all ${rules} rules.`,
+  openRaw: 'Open the raw build',
+  showWhole: 'Show the whole screen',
+  showLess: 'Show less',
+  noShot: 'No screenshot for this build.',
+  alone: 'Alone',
+  dualkit: 'With Dualkit',
+  status: { lastRun: 'Last run', nextRun: 'Next run in', running: 'Running now', builds: (done: number, total: number) => `${done} of ${total} builds` },
+} as const

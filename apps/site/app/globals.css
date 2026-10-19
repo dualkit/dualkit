@@ -489,3 +489,161 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .ck-pin:hover .ck-tip, .ck-pin:focus-visible .ck-tip { translate: 0 0; }
 }
 .docs .doc-block p a { color: var(--ink); background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat; }
+
+/* The Bench: a monthly leaderboard, matching the approved frames "Dualkit · Bench · B" (19 Oct 2026). */
+.bx-label { font-size: 14px; font-weight: 500; line-height: 1.55; }
+.bx-mono { font-size: 12px; line-height: 1.55; }
+.bx-h2 { font-size: 48px; text-wrap: wrap; }
+.bx-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+.bx-month { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; font-size: 14px; font-weight: 500; line-height: 1.55; background: var(--page); box-shadow: inset 0 0 0 1px var(--line); white-space: nowrap; }
+button.bx-month { transition: background-color 150ms var(--ease-ui), scale 200ms ease-out; }
+@media (hover: hover) { button.bx-month:hover { background: var(--panel); } }
+button.bx-month:active { scale: 0.97; }
+.bx-chev { flex: none; color: var(--soft); transition: transform 270ms var(--ease-expo); }
+[aria-expanded="true"] > .bx-chev { transform: rotate(180deg); }
+.bx-picker { position: relative; }
+.bx-months { position: absolute; z-index: 5; top: calc(100% + 8px); inset-inline-end: 0; min-width: 100%; margin: 0; padding: 4px; list-style: none; border-radius: var(--r-media); background: var(--page); box-shadow: inset 0 0 0 1px var(--line); opacity: 0; translate: 0 -4px; pointer-events: none; transition: opacity 160ms var(--ease-ui), translate 240ms var(--ease-expo); }
+.bx-months[data-open="true"] { opacity: 1; translate: 0 0; pointer-events: auto; }
+.bx-months a { display: block; padding: 8px 12px; border-radius: var(--r-media); font-size: 14px; color: var(--soft); white-space: nowrap; transition: background-color 150ms var(--ease-ui), color 150ms var(--ease-ui); }
+.bx-months a[aria-current="page"] { color: var(--ink); font-weight: 500; }
+@media (hover: hover) { .bx-months a:hover { background: var(--panel); color: var(--ink); } }
+
+/* Status line and the build ticker */
+.bx-board-band { display: flex; flex-direction: column; gap: 24px; }
+.bx-live { display: flex; flex-direction: column; gap: 24px; }
+.bx-status { display: flex; justify-content: space-between; align-items: center; gap: 12px 24px; min-height: 21px; }
+.bx-status-start, .bx-status-end { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.bx-progress { width: 240px; flex-wrap: nowrap; gap: 12px; }
+.bx-progress .ticks { flex: 1; }
+.bx-dot { width: 8px; height: 8px; flex: none; border-radius: 999px; background: var(--select); }
+.bx-dot.on { background: var(--green); animation: bx-pulse 2000ms ease-in-out infinite; }
+@keyframes bx-pulse { 50% { opacity: 0.4; } }
+.bx-ticker { display: flex; overflow: hidden; border-radius: var(--r-media); background: var(--page); box-shadow: inset 0 0 0 1px var(--line); font-size: 13px; line-height: 1.55; }
+.bx-build { display: flex; flex: none; align-items: center; gap: 8px; padding: 12px 16px; white-space: nowrap; }
+.bx-build + .bx-build { box-shadow: inset 1px 0 0 var(--grid); }
+.bx-build-at { font-size: 12px; }
+.bx-mark, .bx-initial { flex: none; color: var(--ink); }
+.bx-initial { display: inline-grid; place-items: center; border-radius: 2px; background: var(--ink); color: var(--inverse-fg); font-weight: 500; line-height: 1; }
+
+/* Legend and board */
+.bx-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; }
+.bx-key { display: inline-flex; align-items: center; gap: 8px; }
+.bx-key-ring, .bx-key-dot { width: 12px; height: 12px; border-radius: 999px; }
+.bx-key-ring { background: var(--page); box-shadow: inset 0 0 0 2px var(--ink); }
+.bx-key-dot { background: var(--ink); }
+.bx-board { border-radius: var(--r-media); background: var(--page); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }
+.bx-board > * + * { box-shadow: inset 0 1px 0 var(--grid); }
+.bx-row { display: grid; grid-template-columns: 40px minmax(160px, 280px) minmax(200px, 420px) minmax(112px, 160px) minmax(72px, 120px); column-gap: 32px; align-items: center; width: 100%; padding: 24px; text-align: start; transition: background-color 200ms var(--ease-ui); }
+.bx-header { padding-block: 12px; }
+button.bx-row { border-radius: 0; }
+@media (hover: hover) { button.bx-row:hover { background: var(--raised); } }
+button.bx-row:focus-visible, .bx-screen-head:focus-visible { outline-offset: -2px; border-radius: var(--r-media); }
+.bx-scale { display: flex; justify-content: space-between; }
+.bx-rank { display: flex; flex-direction: column; gap: 2px; }
+.bx-move { display: inline-flex; align-items: center; gap: 2px; font-size: 13px; line-height: 1.55; }
+.bx-model { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.bx-tile { width: 32px; height: 32px; flex: none; display: grid; place-items: center; border-radius: var(--r-media); background: var(--page); box-shadow: inset 0 0 0 1px var(--line); }
+.bx-names { display: flex; flex-direction: column; min-width: 0; }
+.bx-names > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bx-missing { grid-column: 3 / -1; display: flex; flex-direction: column; gap: 4px; }
+.bx-lift { font-size: 48px; line-height: 1.05; }
+.bx-nums { display: none; }
+
+/* The range track: a hollow ring at the alone score, a line, a filled dot at the Dualkit score. Positions are cqw of the track. */
+.bx-track { position: relative; display: block; height: 16px; border-radius: 999px; background: var(--panel); container-type: inline-size; }
+.bx-track > i { position: absolute; top: 50%; left: 0; transition: transform 600ms var(--ease-expo) var(--delay, 0ms); }
+.bx-ring, .bx-point { width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 999px; }
+.bx-ring { z-index: 1; background: var(--page); box-shadow: inset 0 0 0 2px var(--ink); transform: translateX(calc(var(--a) * 1cqw)); }
+.bx-point { z-index: 1; background: var(--ink); transform: translateX(calc(var(--d) * 1cqw)); }
+.bx-line { width: 100%; height: 2px; margin-top: -1px; background: var(--ink); transform-origin: 0 50%; transform: translateX(calc(var(--a) * 1cqw)) scaleX(calc((var(--d) - var(--a)) / 100)); }
+@media (prefers-reduced-motion: no-preference) {
+  .bx-board[data-anim] .bx-track:not([data-seen]) > .bx-ring, .bx-board[data-anim] .bx-track:not([data-seen]) > .bx-point { transform: translateX(0); }
+  .bx-board[data-anim] .bx-track:not([data-seen]) > .bx-line { transform: translateX(0) scaleX(0); }
+}
+
+/* Open rows: the model's screens, then each screen's two sides */
+.bx-collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 300ms var(--ease-ui); }
+.bx-collapse[data-open="true"] { grid-template-rows: 1fr; }
+.bx-collapse-inner { min-height: 0; overflow: hidden; }
+.bx-screens { background: var(--ground); }
+.bx-screen + .bx-screen { box-shadow: inset 0 1px 0 var(--grid); }
+.bx-screen-head { display: flex; align-items: center; gap: 24px; width: 100%; padding: 16px 24px; text-align: start; transition: background-color 200ms var(--ease-ui); }
+@media (hover: hover) { .bx-screen-head:hover { background: var(--panel); } }
+.bx-screen-title { flex: 1; min-width: 0; font-size: 20px; font-weight: 500; letter-spacing: -0.01em; line-height: 1.2; }
+.bx-screen-results { display: none; }
+.bx-compare { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); box-shadow: inset 0 1px 0 var(--grid); }
+.bx-side { display: flex; flex-direction: column; gap: 16px; padding: 24px; min-width: 0; }
+.bx-side + .bx-side { box-shadow: inset 1px 0 0 var(--grid); }
+.bx-side-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.bx-side-body { display: flex; flex-direction: column; gap: 24px; }
+.bx-side-body > .bx-label + .small { margin-top: -20px; }
+.bx-shot-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; container-type: inline-size; }
+.bx-shot { position: relative; width: 100%; overflow: hidden; border-radius: var(--r-media); background: var(--page); transition: height 500ms var(--ease-expo); }
+.bx-shot::after { content: ""; position: absolute; inset: 0; z-index: 2; border-radius: inherit; box-shadow: inset 0 0 0 1px var(--line); pointer-events: none; }
+.bx-shot img { display: block; width: 100%; height: auto; }
+.bx-ring-box { position: absolute; border-radius: 3px; background: var(--highlight); box-shadow: inset 0 0 0 1px var(--ink); }
+.bx-pins { position: absolute; z-index: 1; display: flex; gap: 2px; }
+.bx-pin { width: 18px; height: 18px; flex: none; display: grid; place-items: center; border-radius: 999px; background: var(--ink); color: var(--inverse-fg); font-size: 11px; line-height: 1; font-variant-numeric: tabular-nums; box-shadow: 0 0 0 2px var(--page); }
+.bx-noshot { padding: 24px; border-radius: var(--r-media); background: var(--page); box-shadow: inset 0 0 0 1px var(--line); }
+.bx-text-btn { padding: 2px 0; transition: color 150ms var(--ease-ui); }
+@media (hover: hover) { .bx-text-btn:hover, .bx-raw:hover { color: var(--ink); } }
+.bx-raw { width: fit-content; transition: color 150ms var(--ease-ui); }
+.bx-left-out { margin: 0; }
+.bx-findings { display: flex; flex-direction: column; gap: 16px; margin: 0; padding: 0; list-style: none; }
+.bx-findings li { display: flex; align-items: flex-start; gap: 12px; }
+.bx-findings .bx-pin { margin-top: 2px; }
+.bx-finding-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.bx-pass { display: flex; align-items: center; gap: 8px; margin: 0; }
+
+/* How it works, and the state before the first run */
+.bx-how { display: flex; justify-content: space-between; gap: 48px; padding-block: var(--section); }
+.bx-how-side { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; width: 440px; flex: none; }
+.bx-how-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px; width: 588px; }
+.bx-how-item { display: flex; flex-direction: column; gap: 8px; }
+.bx-how-item h3, .bx-how-item p { margin: 0; }
+.bx-empty { display: flex; flex-direction: column; align-items: center; gap: 24px; padding: 80px 32px; text-align: center; border-radius: var(--r-media); background: var(--page); box-shadow: inset 0 0 0 1px var(--line); }
+.bx-empty .lede { max-width: 588px; }
+
+@media (max-width: 1100px) {
+  .bx-how { flex-direction: column; }
+  .bx-how-side, .bx-how-items { width: auto; }
+}
+@media (max-width: 960px) {
+  .bx-status { flex-direction: column; align-items: flex-start; }
+  .bx-progress { width: 100%; }
+  .bx-ticker { flex-direction: column; }
+  .bx-build { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; gap: 2px 8px; }
+  .bx-build:nth-child(n + 5) { display: none; }
+  .bx-build + .bx-build { box-shadow: inset 0 1px 0 var(--grid); }
+  .bx-build-what { grid-column: 1 / -1; grid-row: 2; white-space: normal; }
+  .bx-build-model { overflow: hidden; text-overflow: ellipsis; }
+  .bx-header { display: none; }
+  .bx-row { grid-template-columns: 28px minmax(0, 1fr) auto; gap: 12px; padding: 16px; }
+  .bx-rank { grid-area: 1 / 1; }
+  .bx-model { grid-area: 1 / 2; }
+  .bx-lift { grid-area: 1 / 3; }
+  .bx-track-cell { grid-area: 2 / 1 / 3 / -1; }
+  .bx-nums { grid-area: 3 / 1 / 4 / -1; }
+  .bx-missing { grid-area: 2 / 1 / 3 / -1; }
+  .bx-nums { display: flex; justify-content: space-between; }
+  .bx-pair { display: none; }
+  .bx-missing { gap: 8px; }
+  .bx-screen-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 16px; }
+  .bx-screen-result { display: none; }
+  .bx-screen-results { display: block; grid-row: 2; }
+  .bx-screen-head .bx-chev { grid-column: 2; grid-row: 1; }
+  .bx-compare { grid-template-columns: minmax(0, 1fr); }
+  .bx-side { padding: 16px; }
+  .bx-side + .bx-side { box-shadow: inset 0 1px 0 var(--grid); }
+}
+@media (max-width: 560px) {
+  .bx-hero { padding-top: 80px; padding-bottom: 48px; gap: 24px; }
+  .bx-hero .h-hero { font-size: 48px; line-height: 1.05; letter-spacing: -0.035em; }
+  .bx-hero .hero-row { flex-direction: column; align-items: flex-start; }
+  .bx-meta { align-items: flex-start; }
+  .bx-how { gap: 32px; padding-block: 48px 80px; }
+  .bx-how-items { grid-template-columns: minmax(0, 1fr); }
+  .bx-how .actions { flex-direction: column; align-items: flex-start; }
+  .bx-empty { padding: 48px 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .bx-dot.on { animation: none; } }
