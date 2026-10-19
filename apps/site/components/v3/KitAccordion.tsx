@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useReducer, useRef, type KeyboardEvent, type ReactNode } from 'react'
+import { clickVia } from '@/lib/v3/menu'
 import { kitInitial, kitKeyEvent, kitReducer, type KitEvent } from '@/lib/v3/kit-accordion'
 import { GlassLayer } from './GlassLayer'
 import { Frame, Painting } from './primitives'
@@ -33,7 +34,7 @@ export function KitAccordion({ items, previews }: { items: readonly KitItem[]; p
   }
 
   return (
-    <Frame className="v3-kit-frame" joins={[560]}>
+    <Frame className="v3-kit-frame" joins={[560]} data-via={state.via}>
       <div className="v3-kit-list">
         {items.map((item, k) => {
           const open = state.open === k
@@ -47,7 +48,7 @@ export function KitAccordion({ items, previews }: { items: readonly KitItem[]; p
                   id={`v3-kit-btn-${k}`}
                   aria-expanded={open}
                   aria-controls={`v3-kit-panel-${k}`}
-                  onClick={() => dispatch({ type: 'open', index: k })}
+                  onClick={(e) => dispatch({ type: 'open', index: k, via: clickVia(e.detail) })}
                   onFocus={() => dispatch({ type: 'focus', index: k })}
                   onKeyDown={onKey}
                 >
@@ -74,7 +75,7 @@ export function KitAccordion({ items, previews }: { items: readonly KitItem[]; p
         })}
       </div>
       <Painting className="v3-kit-pane">
-        <GlassLayer active={state.open} />
+        <GlassLayer active={state.open} animate={state.via !== 'keyboard'} />
         {previews.map((preview, k) => (
           <div key={items[k]?.name ?? k} className="v3-kit-shot" data-on={state.open === k ? '' : undefined} inert={state.open !== k} aria-hidden={state.open !== k}>{preview}</div>
         ))}

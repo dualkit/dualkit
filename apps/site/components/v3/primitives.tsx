@@ -11,13 +11,13 @@ const ARROW = (
 )
 
 /** Hairline box with 7px ink ticks on its corners and at each `joins` x (px from the left edge, or any CSS length, on top and bottom). */
-export function Frame({ joins = [], children, className }: { joins?: Array<number | string>; children?: ReactNode; className?: string }) {
+export function Frame({ joins = [], children, className, 'data-via': via }: { joins?: Array<number | string>; children?: ReactNode; className?: string; /** How the last change came about, for CSS that skips motion on keyboard changes. */ 'data-via'?: string }) {
   const spot = (left: string, top: string): CSSProperties => ({ left, top })
   const corners = [spot(TICK_HALF, TICK_HALF), spot('calc(100% - var(--v3-tick) / 2 - 0.5px)', TICK_HALF), spot(TICK_HALF, 'calc(100% - var(--v3-tick) / 2 - 0.5px)'), spot('calc(100% - var(--v3-tick) / 2 - 0.5px)', 'calc(100% - var(--v3-tick) / 2 - 0.5px)')]
   const at = (x: number | string) => `calc(${typeof x === 'number' ? `${x}px` : x} - var(--v3-tick) / 2)`
   const edges = joins.flatMap((x) => [spot(at(x), TICK_HALF), spot(at(x), 'calc(100% - var(--v3-tick) / 2 - 0.5px)')])
   return (
-    <div className={cx('v3-frame', className)}>
+    <div className={cx('v3-frame', className)} data-via={via}>
       {[...corners, ...edges].map((style, i) => <span key={i} className="v3-tick" style={style} aria-hidden="true" />)}
       {children}
     </div>

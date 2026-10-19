@@ -19,6 +19,9 @@ export type MenuEvent =
   | { type: 'back' }
   | { type: 'away-elapsed' }
 
+/** A click with detail 0 came from Enter or Space on a focused button, any other click from a pointer. */
+export const clickVia = (detail: number): MenuVia => (detail === 0 ? 'keyboard' : 'pointer')
+
 export const MENU_CLOSED: MenuState = { open: false, active: 0, via: null, step: 'pointer', away: false }
 
 /** How long the mouse may be outside the nav and the drawer before a pointer-opened menu closes. */

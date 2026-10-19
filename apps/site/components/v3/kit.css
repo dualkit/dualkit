@@ -3,7 +3,7 @@
 .v3-kit-heading { display: flex; flex-direction: column; gap: 20px; }
 .v3-kit-lede { width: 400px; flex: none; }
 .v3-kit-frame { margin-top: 80px; display: grid; grid-template-columns: minmax(0, 1fr); }
-.v3-kit-list { min-width: 0; }
+.v3-kit-list { min-width: 0; contain: layout; }
 .v3-kit-item + .v3-kit-item { border-top: 1px solid var(--v3-line); }
 .v3-kit-h { margin: 0; font: inherit; }
 .v3-kit-btn { display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 16px; padding: 16px; border: 0; background: none; color: inherit; font: inherit; text-align: start; cursor: pointer; }
@@ -13,10 +13,12 @@
 .v3-kit-square { width: 8px; height: 8px; flex: none; border: 1px solid var(--v3-line); box-sizing: border-box; }
 .v3-kit-item[data-open] .v3-kit-square { background: var(--v3-ink); border-color: var(--v3-ink); }
 
-/* Open height: grid rows 0fr to 1fr. It is a layout property, kept because the open height is not known up front. */
+/* Open height: grid rows 0fr to 1fr. It is a layout property, kept because the open height is not known up front; the
+   list's layout containment keeps the reflow inside it. An open from Enter or Space shows at once, like the menu. */
 .v3-kit-collapse { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 250ms var(--ease-ui); }
 .v3-kit-item[data-open] .v3-kit-collapse { grid-template-rows: 1fr; }
 .v3-kit-clip { overflow: hidden; min-height: 0; }
+.v3-kit-frame[data-via='keyboard'] :is(.v3-kit-collapse, .v3-kit-shot, .v3-gl-pane) { transition: none; }
 .v3-kit-detail { display: flex; flex-direction: column; gap: 12px; padding: 0 16px 16px 16px; }
 .v3-kit-body { color: var(--v3-soft); }
 .v3-kit-points { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }

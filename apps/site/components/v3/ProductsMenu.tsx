@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useReducer, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react'
 import { V3 } from '@/lib/v3/copy'
-import { LEAVE_MS, MENU_CLOSED, PART_COUNT, benchCountdown, daysUntil, insideAny, menuReducer, nextBenchRun, type Box, type MenuVia } from '@/lib/v3/menu'
+import { LEAVE_MS, clickVia, MENU_CLOSED, PART_COUNT, benchCountdown, daysUntil, insideAny, menuReducer, nextBenchRun, type Box, type MenuVia } from '@/lib/v3/menu'
 import { CopyIcon, Mark } from '../icons'
 import { GlassLayer } from './GlassLayer'
 import { Frame } from './primitives'
@@ -37,7 +37,7 @@ const boxOf = (el: Element | null | undefined): Box[] => {
 }
 
 /** A click with detail 0 came from Enter or Space, so it opens without animation. */
-const viaOf = (e: MouseEvent): MenuVia => (e.detail === 0 ? 'keyboard' : 'pointer')
+const viaOf = (e: MouseEvent): MenuVia => clickVia(e.detail)
 
 function CopyLine({ command }: { command: string }) {
   const [copied, setCopied] = useState(false)
