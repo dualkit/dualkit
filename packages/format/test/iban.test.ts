@@ -25,6 +25,9 @@ describe('parseIban', () => {
     'BH67BMAG00001299123456',
     'KW81CBKU0000000000001234560101',
     'QA58DOHB00001234567890ABCDEFG',
+    'OM810180000001299123456',
+    'OM840270000000000000001',
+    'OM7801800000000TEST0001',
   ])('reads the Gulf IBAN %s', (input) => {
     expect(parseIban(input).ok).toBe(true)
   })
@@ -75,5 +78,12 @@ describe('isValidIban', () => {
   it('answers yes or no', () => {
     expect(isValidIban('AE070331234567890123456')).toBe(true)
     expect(isValidIban('AE070331234567890123457')).toBe(false)
+  })
+})
+
+describe('Oman IBAN', () => {
+  it('reads the bank code and rejects a wrong length', () => {
+    expect(parseIban('OM81 0180 0000 0129 9123 456')).toMatchObject({ ok: true, value: { country: 'OM', bankCode: '018' } })
+    expect(parseIban('OM8101800000012991234')).toMatchObject({ ok: false, error: { code: 'invalid_length' } })
   })
 })

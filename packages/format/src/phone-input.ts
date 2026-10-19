@@ -19,20 +19,23 @@ export type NationalNumberRule<C extends string> = {
   /** The shortest national number, so "971…" typed without a plus is only read as a country code when it fits. */
   readonly minLength: number
   readonly otherCountry: Err<C>
+  /** Whether a leading 0 is a trunk prefix to drop. Defaults to true; Qatar, Kuwait, Bahrain and Oman have none. */
+  readonly trunkZero?: boolean
 }
 
 /** Strips the country code or trunk 0, leaving the national significant number. */
 export function nationalNumber<C extends string>(raw: string, rule: NationalNumberRule<C>): Result<string, C> {
-  const { countryCode, minLength, otherCountry } = rule
+  const { countryCode, minLength, otherCountry, trunkZero = true } = rule
+  const strip = (value: string): string => (trunkZero ? dropTrunkZero(value) : value)
   const plus = raw.startsWith('+')
   const digits = raw.replace(/\D/g, '')
   if (plus || digits.startsWith('00')) {
     const international = plus ? digits : digits.slice(2)
     if (!international.startsWith(countryCode)) return otherCountry
-    return ok(dropTrunkZero(international.slice(countryCode.length)))
+    return ok(strip(international.slice(countryCode.length)))
   }
   if (digits.startsWith(countryCode) && digits.length >= countryCode.length + minLength) {
     return ok(digits.slice(countryCode.length))
   }
-  return ok(dropTrunkZero(digits))
+  return ok(strip(digits))
 }

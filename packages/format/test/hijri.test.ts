@@ -47,3 +47,12 @@ describe('formatHijri', () => {
     expect(names.size).toBe(12)
   })
 })
+
+describe('timeZone is required', () => {
+  it('is a type error to leave it out', () => {
+    // @ts-expect-error timeZone is required
+    expect(() => toHijri(new Date('2026-02-18T12:00:00Z'), {})).not.toThrow()
+    // @ts-expect-error options are required
+    expect(() => formatHijri(new Date('2026-02-18T12:00:00Z'))).toThrow()
+  })
+})

@@ -1,7 +1,7 @@
 import { toWesternDigits } from './numerals'
 import { err, ok, type Result } from './result'
 
-export type GulfIbanCountry = 'AE' | 'SA' | 'BH' | 'KW' | 'QA'
+export type GulfIbanCountry = 'AE' | 'SA' | 'BH' | 'KW' | 'QA' | 'OM'
 export type Iban = {
   readonly country: GulfIbanCountry
   readonly electronic: string
@@ -18,6 +18,7 @@ const COUNTRIES: Record<GulfIbanCountry, { readonly length: number; readonly ban
   BH: { length: 22, bankCode: 4 },
   KW: { length: 30, bankCode: 4 },
   QA: { length: 29, bankCode: 4 },
+  OM: { length: 23, bankCode: 3 },
 }
 
 const isGulfCountry = (code: string): code is GulfIbanCountry => Object.hasOwn(COUNTRIES, code)
