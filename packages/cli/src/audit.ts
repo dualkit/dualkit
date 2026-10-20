@@ -10,7 +10,7 @@ export type AuditResult = {
 }
 
 // Browser-side globals: the CLI tsconfig has no DOM lib, and these only run inside the page.
-declare const document: { documentElement: { scrollHeight: number } }
+declare const document: { documentElement: { scrollHeight: number }; fonts: { ready: Promise<unknown> } }
 type PageReader = { readScreen: (d: unknown, o: { exclude: string[] }) => ScreenModel }
 
 const READER = createRequire(import.meta.url).resolve('@dualkit/rules/reader')
