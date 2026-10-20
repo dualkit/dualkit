@@ -72,6 +72,26 @@ describe('source/physical-css', () => {
       expect(physical(`.a { ${body} }`), body).toEqual([])
     }
   })
+  it('treats a zero with any unit as the same zero', () => {
+    for (const body of ['left: 0; right: 0px', 'left: 0em; right: 0', 'left: 0; right: 0%', 'margin-left: 0.0rem; margin-right: -0', 'left: 0; right: 0px !important']) {
+      expect(physical(`.a { ${body} }`), body).toEqual([])
+    }
+    expect(physical('.a { left: 0; right: 10px }')).toHaveLength(2)
+    expect(physical('.a { left: 0; right: 0.5px }')).toHaveLength(2)
+  })
+  it('exempts the centring idiom only with an x translate of 50%', () => {
+    expect(physical('.a { left: 50% }')).toHaveLength(1)
+    expect(physical('.a { left: 50%; transform: rotate(5deg) }')).toHaveLength(1)
+    expect(physical('.a { left: 50%; transform: translateY(-50%) }')).toHaveLength(1)
+    for (const t of ['transform: translateX(-50%)', 'transform: translate(-50%, -50%)', 'transform: translate3d(-50%, 0, 0)', 'translate: -50% -50%']) {
+      expect(physical(`.a { left: 50%; ${t} }`), t).toEqual([])
+      expect(physical(`.a { ${t}; right: 50% }`), t).toEqual([])
+    }
+    expect(physical('.a { left: 40%; transform: translateX(-50%) }')).toHaveLength(1)
+  })
+  it('treats a :not([dir=rtl]) selector as a deliberate direction scope', () => {
+    expect(physical('body:not([dir=rtl]) .a { left: 1px }')).toEqual([])
+  })
   it('stays quiet on correct code', () => {
     for (const body of ['text-align: center', 'text-align: start', 'margin-inline-start: 1px', 'float: inline-start', 'inset-inline-start: 0',
       'margin: 0 auto', 'inset: 0', 'padding: 0 1rem', '--left: 1px', '-webkit-margin-left: 1px', 'border-start-start-radius: 4px']) {

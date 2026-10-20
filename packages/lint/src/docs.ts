@@ -12,6 +12,7 @@ export const LINT_KNOWN_LIMITS: readonly string[] = [
   'A file that does not parse is listed as skipped with the parser message, and none of its lines are checked.',
   'One inline <script> or <style> that does not parse, for example one holding template syntax, skips the whole HTML file.',
   'physical-css skips left and right set to a negative offset of 999 or more, such as left: -9999px in a visually-hidden block, and a pair of sides set to the same value, such as left: 0 with right: 0.',
+  'physical-css skips left: 50% or right: 50% when the same block translates 50% on x, the centring idiom, because it looks the same in both directions.',
   'physical-css and arabic-letter-spacing read only the selectors in the file. A direction set by a parent selector in another file, or by a class, is not known.',
   'A file named directly on the command line is linted even when a .gitignore would skip it. Only directory walks honour .gitignore.',
 ]

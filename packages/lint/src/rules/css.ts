@@ -17,7 +17,11 @@ function eachDeclaration(file: SourceFile, visit: (decl: Declaration, offset: nu
   }
 }
 
-const normalise = (value: string): string => value.replace(/!\s*important/i, '').trim().replace(/\s+/g, ' ').toLowerCase()
+const ZERO_WITH_UNIT = /(^|[\s(,])[+-]?0*\.?0+[a-z%]*(?=$|[\s),])/g
+
+/** Lower case, one space between tokens, no !important, and every zero with any unit written as 0. */
+const normalise = (value: string): string =>
+  value.replace(/!\s*important/i, '').trim().replace(/\s+/g, ' ').toLowerCase().replace(ZERO_WITH_UNIT, '$10')
 
 const PHYSICAL_PROPS: Readonly<Record<string, string>> = {
   'margin-left': 'margin-inline-start', 'margin-right': 'margin-inline-end',
@@ -54,6 +58,20 @@ const isOffscreen = (prop: string, value: string): boolean => {
   return match !== null && Number(match[1]) >= OFFSCREEN_MIN
 }
 
+const CENTRING_TRANSFORM = /translate(?:x|3d)?\(\s*[+-]?50%/
+const CENTRING_TRANSLATE = /^[+-]?50%/
+
+/** left: 50% with a 50% x translate in the same block centres a box in either direction. */
+function isCentring(decl: Declaration, prop: string, value: string): boolean {
+  if ((prop !== 'left' && prop !== 'right') || value !== '50%') return false
+  return (decl.parent?.nodes ?? []).some((n) => {
+    if (n.type !== 'decl') return false
+    const p = n.prop.toLowerCase()
+    const v = normalise(n.value)
+    return (p === 'transform' && CENTRING_TRANSFORM.test(v)) || (p === 'translate' && CENTRING_TRANSLATE.test(v))
+  })
+}
+
 function hasSymmetricSibling(decl: Declaration, prop: string, value: string): boolean {
   const opposite = OPPOSITE[prop]
   const parent = decl.parent
@@ -83,7 +101,7 @@ const physicalCss: LintRule = {
       const value = normalise(decl.value)
       const logical = physicalFix(prop, value)
       if (!logical) return
-      if (PHYSICAL_PROPS[prop] ? hasSymmetricSibling(decl, prop, value) || isOffscreen(prop, value) : false) return
+      if (PHYSICAL_PROPS[prop] ? hasSymmetricSibling(decl, prop, value) || isOffscreen(prop, value) || isCentring(decl, prop, value) : false) return
       if (rule && fullSelectors(rule).every(directionScoped)) return
       hits.push({ offset, message: `\`${prop}: ${normalise(decl.value)}\` is tied to one side. Use \`${logical}\`.` })
     })
