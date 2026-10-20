@@ -9,7 +9,7 @@ import './region-video.css'
 const T = V3.video
 const PAUSE = <svg viewBox="0 0 8 8" width="8" height="8" aria-hidden="true" shapeRendering="crispEdges"><path fill="currentColor" d="M1 0h2v8H1zM5 0h2v8H5z" /></svg>
 const PLAY = <svg viewBox="0 0 8 8" width="8" height="8" aria-hidden="true"><path fill="currentColor" d="M1 0l7 4-7 4z" /></svg>
-const SOURCES = [['/v3/video/region.webm', 'video/webm'], ['/v3/video/region.mp4', 'video/mp4']] as const
+const SOURCES = [['/v3/video/region.mp4', 'video/mp4; codecs="avc1.64002A"'], ['/v3/video/region.webm', 'video/webm; codecs="vp9"']] as const
 
 /** Adds the WebM and MP4 sources the first time the video is wanted, so reduced-motion visitors never download it. */
 function attachSources(video: HTMLVideoElement) {
