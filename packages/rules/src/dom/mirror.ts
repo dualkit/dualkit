@@ -74,7 +74,8 @@ export function mirrorRoot(el: Element, style: Style): Element | null {
     const s = style(node)
     chain.push({ node, sign: flipSign(s), hidesBack: s.backfaceVisibility === 'hidden' })
   }
-  const farthest = chain.findLastIndex((c) => c.sign < 0)
+  let farthest = -1
+  chain.forEach((c, i) => { if (c.sign < 0) farthest = i })
   if (farthest < 0) return null
   // net[i] is the sign of the transform at chain[i]: its own flip times every flip above it.
   const net = chain.map((_, i) => chain.slice(i).reduce((p, c) => p * c.sign, 1))
