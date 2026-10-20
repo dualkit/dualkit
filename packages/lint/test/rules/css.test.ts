@@ -218,3 +218,16 @@ describe('withoutDirection', () => {
       .toEqual(['.n', '.n', '.n', '.n', '.n:hover', '.n:hover'])
   })
 })
+
+describe('arabic-letter-spacing on code', () => {
+  it('skips a selector whose subject is code, pre, kbd or samp', () => {
+    expect(spacing(':lang(ar) code { letter-spacing: 0.02em }')).toEqual([])
+    expect(spacing('[dir=rtl] .doc pre.block { letter-spacing: 1px }')).toEqual([])
+    expect(spacing(':lang(ar) p > kbd, :lang(ar) samp:hover { letter-spacing: 1px }')).toEqual([])
+  })
+  it('still fires when code is not the subject, or another selector is Arabic text', () => {
+    expect(spacing(':lang(ar) code span { letter-spacing: 1px }')).toHaveLength(1)
+    expect(spacing(':lang(ar) .codex { letter-spacing: 1px }')).toHaveLength(1)
+    expect(spacing(':lang(ar) code, :lang(ar) p { letter-spacing: 1px }')).toHaveLength(1)
+  })
+})

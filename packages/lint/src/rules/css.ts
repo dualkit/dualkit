@@ -147,6 +147,24 @@ const physicalCss: LintRule = {
 const NEUTRAL_SPACING = /^(?:[+-]?(?:0+\.?0*|\.0+)[a-z%]*|normal|initial|inherit|unset|revert|revert-layer)$/
 const UNKNOWN_VALUE = /var\(|\$|#\{|@|env\(|calc\(/
 
+const CODE_SUBJECT = /^(?:code|pre|kbd|samp)(?![\w-])/i
+
+/** The last compound of a selector, outside brackets and parentheses. */
+function subject(selector: string): string {
+  let depth = 0
+  let from = 0
+  for (let i = 0; i < selector.length; i++) {
+    const ch = selector[i]!
+    if (ch === '(' || ch === '[') depth++
+    else if ((ch === ')' || ch === ']') && depth > 0) depth--
+    else if (depth === 0 && /[\s>+~]/.test(ch)) from = i + 1
+  }
+  return selector.slice(from)
+}
+
+/** Latin code set in an Arabic page: code, pre, kbd or samp as the selector's subject. */
+const codeSubject = (selector: string): boolean => CODE_SUBJECT.test(subject(selector.trim()))
+
 const arabicLetterSpacing: LintRule = {
   id: 'source/arabic-letter-spacing',
   severity: 'error',
@@ -160,7 +178,7 @@ const arabicLetterSpacing: LintRule = {
       if (decl.prop.toLowerCase() !== 'letter-spacing' || !rule) return
       const value = normalise(decl.value)
       if (NEUTRAL_SPACING.test(value) || UNKNOWN_VALUE.test(value)) return
-      const arabic = fullSelectors(rule).find(targetsArabic)
+      const arabic = fullSelectors(rule).find((s) => targetsArabic(s) && !codeSubject(s))
       if (arabic === undefined) return
       hits.push({ offset, message: `\`letter-spacing: ${value}\` on \`${arabic.trim()}\` breaks the joins between Arabic letters.` })
     })
