@@ -15,6 +15,9 @@ export type Font = {
   weight: number
 }
 
+/** Whether the run's own webfont family draws a new currency sign (U+20C1, U+20C3, U+20C4), measured in the page. */
+export type SignProbe = { codePoint: number; drawnByWebfont: boolean }
+
 export type TextRun = NodeRef & {
   text: string
   /** The nearest block ancestor: the bidi paragraph this text belongs to. */
@@ -35,6 +38,8 @@ export type TextRun = NodeRef & {
   endsLine: boolean
   font: Font
   lines: number
+  /** One entry per new currency sign in the text; empty for every other run. */
+  signs: SignProbe[]
   /** Net horizontal flip: the product of scale signs over the element and up to 4 ancestors. */
   mirrored: boolean
 }

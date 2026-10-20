@@ -4,7 +4,7 @@ import { afterAll, describe, expect, it } from 'vitest'
 import { RULES } from '../src/rules'
 import { runRules } from '../src/run'
 import { page } from './fixtures'
-import { closeBrowser, modelOf, withPage } from './helpers/browser'
+import { closeBrowser, modelOf, readerSource, withPage } from './helpers/browser'
 import { charBoxes, inkExtent, markEdge, visualText } from './helpers/visual'
 
 afterAll(closeBrowser)
@@ -565,5 +565,41 @@ describe('currency signs in IBM Plex Sans Arabic', () => {
     // A machine with no system font for it paints the face's box instead, so either result proves the face has no glyph.
     const riyal = (await draw('\u20C1', PLEX)).width
     expect([unassigned, (await draw('\u20C1', 'sans-serif')).width]).toContain(riyal)
+  })
+})
+
+// R-currency (measured): the reader records whether the run's own webfont draws each new currency sign.
+describe('content/currency-sign-font measures the webfont', () => {
+  const signFace = (css = '') =>
+    `@font-face{font-family:"Test Currency Signs";${css}src:url(data:font/woff;base64,${readFileSync(new URL('./fonts/CurrencySigns.woff', import.meta.url)).toString('base64')}) format("woff")}`
+  const sign = (family: string, css = '') => page('<p>\u20C1 100 \u20C3</p>', { css: `${signFace()}${css}p{font-family:${family}}` })
+  const signsOf = async (html: string) => (await modelOf(html)).texts.flatMap((t) => t.signs)
+
+  it('records false for the fixture face, which lacks the signs, and the rule fires', async () => {
+    const html = page('<p>\u20C1 100 \u20C3</p>')
+    expect(await signsOf(html)).toEqual([{ codePoint: 0x20c1, drawnByWebfont: false }, { codePoint: 0x20c3, drawnByWebfont: false }])
+    expect(await found(html, 'content/currency-sign-font')).toEqual(['content/currency-sign-font'])
+  })
+  it('records true for a face that has the glyphs, with no unicode-range, and the rule stays quiet', async () => {
+    const html = sign('"Test Currency Signs","IBM Plex Sans Arabic",sans-serif')
+    expect(await signsOf(html)).toEqual([{ codePoint: 0x20c1, drawnByWebfont: true }, { codePoint: 0x20c3, drawnByWebfont: true }])
+    expect(await found(html, 'content/currency-sign-font')).toEqual([])
+  })
+  it('records true for U+20C4 in the glyph font and false for a declared family with no glyph', async () => {
+    const html = page('<p>\u20C4</p>', { css: `${signFace()}p{font-family:"Test Currency Signs"}` })
+    expect((await signsOf(html))[0]?.drawnByWebfont).toBe(true)
+    const noGlyph = page('<p>\u20C3</p>', { css: '@font-face{font-family:"Empty";src:local("Arial")}p{font-family:"Empty",sans-serif}' })
+    expect((await signsOf(noGlyph))[0]?.drawnByWebfont).toBe(false)
+  })
+  it('leaves signs empty for runs without a sign and removes its probe', async () => {
+    const html = page('<p>مرحبا</p>')
+    const m = await modelOf(html)
+    expect(m.texts.every((t) => t.signs.length === 0)).toBe(true)
+    const withSign = await withPage(sign('"Test Currency Signs"'), async (p) => {
+      await p.addScriptTag({ content: await readerSource() })
+      await p.evaluate(() => (globalThis as unknown as { dualkitReader: { readScreen: (d: Document) => unknown } }).dualkitReader.readScreen(document))
+      return p.evaluate(() => document.body.children.length)
+    })
+    expect(withSign).toBe(1)
   })
 })

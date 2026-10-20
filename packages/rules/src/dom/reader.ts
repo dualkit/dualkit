@@ -1,7 +1,8 @@
-import type { FieldKind, FieldNode, Font, LayoutNode, NodeRef, Rect, ScreenModel, TextRun } from '../model'
+import type { LoadedFace, FieldKind, FieldNode, Font, LayoutNode, NodeRef, Rect, ScreenModel, TextRun } from '../model'
 import { readClips } from './clips'
 import { readFonts } from './fonts'
 import { readIcons } from './icons'
+import { readSigns } from './signs'
 import { readLabels } from './labels'
 import { netMirrored } from './mirror'
 import { makePathOf } from './path'
@@ -37,6 +38,7 @@ export function readScreen(doc: Document, options: ReadOptions = {}): ScreenMode
   const ref: Ref = (el, box = rect(el.getBoundingClientRect())): NodeRef => ({ id: pathOf(el), snippet: el.outerHTML.slice(0, 160), box })
 
   const { authored, unreadable } = authoredPhysical(doc, win)
+  const fonts = readFonts(doc)
   return {
     root: {
       lang: doc.documentElement.getAttribute('lang') || null,
@@ -44,11 +46,11 @@ export function readScreen(doc: Document, options: ReadOptions = {}): ScreenMode
       // The body inherits from <html> unless it sets its own dir, so it is where the page's direction lands.
       computedDir: dirOf(style(doc.body ?? doc.documentElement)),
     },
-    texts: readTexts(doc, style, skipped, visible, ref, rect, pathOf),
+    texts: readTexts(doc, style, skipped, visible, ref, rect, pathOf, fonts),
     layouts: readLayouts(doc, style, skipped, visible, ref, authored),
     icons: readIcons(doc, style, skipped, visible, ref),
     fields: readFields(doc, style, skipped, visible, ref),
-    fonts: readFonts(doc),
+    fonts,
     labels: readLabels(doc, skipped, visible, ref),
     clips: readClips(doc, style, skipped, visible, ref, screenReaderOnly),
     unreadableStylesheets: unreadable,
@@ -114,7 +116,7 @@ function screenReaderOnly(el: Element, s: CSSStyleDeclaration): boolean {
   return CLIPPED.test(s.clip) || /^inset\(\s*50%/.test(s.clipPath)
 }
 
-function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, ref: Ref, rect: (r: DOMRect) => Rect, pathOf: (el: Element) => string): TextRun[] {
+function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, ref: Ref, rect: (r: DOMRect) => Rect, pathOf: (el: Element) => string, fonts: LoadedFace[]): TextRun[] {
   const runs: TextRun[] = []
   type BlockInfo = { block: Element; id: string; full: string; text: string; dir: ReturnType<typeof dirOf>; facts: Pick<TextRun, 'blockArabicShare' | 'blockHasArabic' | 'blockArabicWords'> }
   const blockCache = new Map<Element, BlockInfo>()
@@ -151,12 +153,13 @@ function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, re
     const lines = new Set(Array.from(range.getClientRects()).map((r) => Math.round(r.top))).size
     const { block, id, full, text: blockText, dir: blockDir, facts } = blockInfo(parent)
     const s = style(parent)
+    const font = fontOf(s)
     runs.push({
       ...ref(parent, rect(range.getBoundingClientRect())),
       text, blockId: id, blockText, ...facts, blockDir, dir: dirOf(s),
       lang: parent.closest('[lang]')?.getAttribute('lang') || null,
       isolated: isolatedBelow(parent, block, style), isLastInBlock: full.endsWith(text), endsLine: endsLine(node, block),
-      font: fontOf(s), lines: Math.max(1, lines), mirrored: netMirrored(parent, style),
+      font, signs: readSigns(doc, text, font, fonts), lines: Math.max(1, lines), mirrored: netMirrored(parent, style),
     })
   }
   return runs

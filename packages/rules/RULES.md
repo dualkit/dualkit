@@ -174,11 +174,11 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 **Fix:** Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.
 
 <a id="content-currency-sign-font"></a>
-### `content/currency-sign-font` A new currency sign no loaded font declares
+### `content/currency-sign-font` A new currency sign no loaded font draws
 
-**warning.** The Saudi riyal, UAE dirham and Omani rial signs are new to Unicode, so a font that does not declare them draws a blank box, or whatever the visitor's device happens to have.
+**warning.** The Saudi riyal, UAE dirham and Omani rial signs are new to Unicode, so a font without them draws a blank box, or whatever the visitor's device happens to have.
 
-**Fix:** Load a font whose unicode-range includes the sign, or write the currency code instead.
+**Fix:** Load a font that has the sign, or write the currency code instead.
 
 <a id="content-dirham-sign-with-code"></a>
 ### `content/dirham-sign-with-code` The dirham sign next to the code AED
@@ -200,6 +200,6 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 - Emails, links and codes are flagged only where Chromium paints them differently once isolated: with a leading #, a trailing slash, or a Western digit beside them. In the middle of a sentence, at either end of a block, or before a full stop or bracket they paint the same, so they are not flagged.
 - An email, link or code beside a Latin word is not flagged: isolating it only splits one left-to-right phrase that already reads in order.
 - Groups of Arabic-Indic digits paint the same with or without `<bdi>`, so they are not flagged.
-- A font loaded with the default unicode-range does not count as covering the new currency signs, because a range says nothing about glyphs and IBM Plex Sans Arabic draws them as missing-glyph boxes. Declare the range your font really covers.
+- A new currency sign counts as drawn when a loaded font declares it in an explicit unicode-range, or when the page's own webfont draws it at a different width from both its missing-glyph box and plain sans-serif. A font that has the sign at exactly the width of the system fallback glyph would be missed.
 - Only the pairing of the dirham sign with AED is flagged, because that is the one the Central Bank of the UAE guideline forbids. Dh and the Arabic word are not in the guideline, so they are left alone.
 - A label is flagged only when it is wholly in the other script, such as a Latin sentence on an Arabic page. Labels that mix scripts, and one-word names like Visa, are left alone.

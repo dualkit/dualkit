@@ -100,6 +100,14 @@ describe('content/currency-sign-font', () => {
       expect(run(screen({ texts: [text({ text: '\u20C1 100' })], fonts: [face({ unicodeRange })] }), id), unicodeRange).toEqual([])
     }
   })
+  it('stays quiet when the reader measured the webfont drawing the sign, whatever its unicode-range', () => {
+    const m = screen({ texts: [text({ text: '\u20C1 100', signs: [{ codePoint: 0x20c1, drawnByWebfont: true }] })] })
+    expect(run(m, id)).toEqual([])
+  })
+  it('judges each sign on its own', () => {
+    const t = text({ text: '\u20C1 \u20C3', signs: [{ codePoint: 0x20c1, drawnByWebfont: true }, { codePoint: 0x20c3, drawnByWebfont: false }] })
+    expect(run(screen({ texts: [t] }), id).map((f) => f.message)).toEqual([expect.stringContaining('U+20C3')])
+  })
   it('stays quiet on a page with no new currency sign', () => {
     expect(run(screen({ texts: [text({ text: '100 ر.س' })] }), id)).toEqual([])
   })

@@ -85,14 +85,17 @@ const loadedIn = (families: string[], fonts: LoadedFace[]): LoadedFace[] =>
 
 export const currencySignFont = defineRule({
   id: 'content/currency-sign-font', group: 'content', severity: 'warning',
-  title: 'A new currency sign no loaded font declares',
-  why: 'The Saudi riyal, UAE dirham and Omani rial signs are new to Unicode, so a font that does not declare them draws a blank box, or whatever the visitor\'s device happens to have.',
-  fix: 'Load a font whose unicode-range includes the sign, or write the currency code instead.',
-  // A face with the default range is not counted: IBM Plex Sans Arabic has it and still draws these as missing glyphs.
+  title: 'A new currency sign no loaded font draws',
+  why: 'The Saudi riyal, UAE dirham and Omani rial signs are new to Unicode, so a font without them draws a blank box, or whatever the visitor\'s device happens to have.',
+  fix: 'Load a font that has the sign, or write the currency code instead.',
+  // A loaded face in the stack counts when its explicit unicode-range includes the sign (fast path), or when the reader
+  // measured the run's webfont drawing it. A default-range face alone proves nothing: IBM Plex Sans Arabic has that
+  // range and draws these as missing-glyph boxes, while a face that does have the glyph shows up in `signs`.
   check: (m) => m.texts.flatMap((t) => {
     const faces = loadedIn(t.font.families, m.fonts)
-    const missing = NEW_SIGNS.filter((cp) => t.text.includes(String.fromCodePoint(cp)) && !faces.some((f) => coversCodePoint(f, cp)))
-    return missing.length === 0 ? [] : [{ node: pick(t), message: `${missing.map(hex).join(' and ')} in "${excerpt(t.text)}" is not declared by any loaded font in this text's font stack.` }]
+    const drawn = (cp: number): boolean => t.signs.some((s) => s.codePoint === cp && s.drawnByWebfont)
+    const missing = NEW_SIGNS.filter((cp) => t.text.includes(String.fromCodePoint(cp)) && !faces.some((f) => coversCodePoint(f, cp)) && !drawn(cp))
+    return missing.length === 0 ? [] : [{ node: pick(t), message: `${missing.map(hex).join(' and ')} in "${excerpt(t.text)}" is not drawn by any loaded font in this text's font stack.` }]
   }),
 })
 

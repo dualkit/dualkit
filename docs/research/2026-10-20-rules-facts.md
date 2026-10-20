@@ -205,6 +205,19 @@ Each row is a probe in `packages/rules/test/verify.test.ts`, measured per charac
 | An Arabic placeholder in an ltr (or tel) input paints flush left | Ink spans 0.3% to 28% of the input width | `bidi/field-placeholder: an Arabic placeholder in a left-to-right field` | VERIFIED (Chromium 140.0.7339.16 probe) |
 | `input:placeholder-shown { direction: rtl }` right-aligns the hint and leaves typed text ltr | Hint ink spans 71% to 99.7%; computed direction is rtl while empty and ltr after typing; a prefilled value paints flush left | `same describe` | VERIFIED (Chromium 140.0.7339.16 probe) |
 
+## 6. Currency signs in webfonts (Task 5 fix round)
+
+Probes in `packages/rules/test/verify.test.ts`, Chromium via Playwright, widths at 48px.
+
+| Claim | Measurement | Test | Verdict |
+|---|---|---|---|
+| IBM Plex Sans Arabic 1.1.0 (default unicode-range) has no glyph for U+20C1, U+20C3 or U+20C4 | U+20C3 and U+20C4 advance 22.66, the same as unassigned U+0378 (the face's missing-glyph box). U+20C1 advances 25.86, equal to a plain sans-serif stack: a system font drew it, not the face | `currency signs in IBM Plex Sans Arabic` | VERIFIED (Chromium probe) |
+| A default unicode-range says nothing about glyphs | The Plex face declares `U+0-10FFFF` and still lacks the signs | same test | VERIFIED |
+| A webfont that has the sign is told apart by width: the sign in the family alone differs from U+0378 in that family and from the sign in plain sans-serif (0.5px tolerance) | Test font `CurrencySigns.woff` (glyph 700 units, .notdef 500) records true for U+20C1, U+20C3, U+20C4 with no unicode-range; Plex records false | `content/currency-sign-font measures the webfont` | VERIFIED (Chromium probe) |
+| No OFL font had U+20C1 on 20 Oct 2026 | Google Fonts repository files checked with fontTools: Noto Sans 2.015 has U+20C0 only; Noto Sans Arabic 2.012, Noto Sans Symbols 2.003 and Noto Sans Symbols 2 2.008 have none of U+20C1 to U+20C4. Apple system fonts (SF) have U+20C1 but are not redistributable | `test/fonts/build-currency-font.py` | VERIFIED (checked files) |
+
+Known blind spot: a webfont whose sign is exactly as wide as the system fallback glyph would read as not drawn.
+
 ---
 
 ## Tally
@@ -220,3 +233,4 @@ Each row is a probe in `packages/rules/test/verify.test.ts`, measured per charac
 | 3 Unicode | VERIFIED. One correction (U+FDFC age 3.2, not 4.0) |
 | 4 Screen readers and `lang` | Language drives pronunciation: VERIFIED. English `aria-label` in `lang="ar"` case: SECONDARY, with a VERIFIED caveat against it |
 | 5 Chromium bidi paint (Task 4) | VERIFIED, see the probes in `verify.test.ts` |
+| 6 Currency signs in webfonts (fix round) | VERIFIED, see the probes in `verify.test.ts` |
