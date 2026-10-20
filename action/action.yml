@@ -18,6 +18,11 @@ outputs:
 runs:
   using: composite
   steps:
+    - shell: bash
+      env:
+        MODE: ${{ inputs.mode }}
+      run: |
+        if [ "$MODE" != check ] && [ "$MODE" != lint ]; then echo "The mode input must be check or lint, got \"$MODE\"." >&2; exit 2; fi
     - uses: actions/setup-node@v4
       with: { node-version: 22 }
     - if: inputs.mode == 'check'
@@ -54,13 +59,6 @@ runs:
     - if: inputs.mode == 'check'
       uses: actions/upload-artifact@v4
       with: { name: dualkit-report, path: dualkit-report.html }
-    - if: inputs.comment == 'true' && github.event_name == 'pull_request'
-      shell: bash
-      env:
-        GH_TOKEN: ${{ inputs.github-token }}
-        PR: ${{ github.event.pull_request.number }}
-      run: |
-        gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --edit-last --body-file dualkit-summary.md || gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file dualkit-summary.md || echo "Could not comment; grant pull-requests write to enable it."
     - id: lint
       if: inputs.mode == 'lint'
       shell: bash
@@ -78,6 +76,11 @@ runs:
         CODE=$?
         set -e
         if [ "$CODE" = 2 ]; then cat dualkit-lint.json; exit 2; fi
+        if ! node -e "JSON.parse(require('fs').readFileSync('dualkit-lint.json', 'utf8'))" 2>/dev/null; then
+          cat dualkit-lint.json
+          echo "Dualkit lint did not print valid JSON (exit code $CODE)." >&2
+          exit $((CODE == 0 ? 2 : CODE))
+        fi
         node -e "
           const r = require('./dualkit-lint.json');
           const n = (s) => r.findings.filter(f => f.severity === s).length;
@@ -88,6 +91,13 @@ runs:
         "
         cat dualkit-summary.md >> "$GITHUB_STEP_SUMMARY"
         echo "code=$CODE" >> "$GITHUB_OUTPUT"
+    - if: inputs.comment == 'true' && github.event_name == 'pull_request'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PR: ${{ github.event.pull_request.number }}
+      run: |
+        gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --edit-last --body-file dualkit-summary.md || gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file dualkit-summary.md || echo "Could not comment; grant pull-requests write to enable it."
     - if: steps.check.outputs.code == '1'
       shell: bash
       env:
