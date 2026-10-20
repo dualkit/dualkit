@@ -47,7 +47,7 @@ The action installs Node 22 in the job with `actions/setup-node`, then Chromium 
 
 ## Permissions
 
-Commenting needs `pull-requests: write`. Without it the check still runs, writes the job summary and uploads the report, and the comment step logs that it could not post. On a later push the action edits its last comment instead of adding a new one.
+Commenting needs `pull-requests: write`. Without it the check still runs, writes the job summary and uploads the report, and the comment step logs that it could not post. On a later push the action edits its earlier comment instead of adding a new one. Check and lint each keep their own comment, marked with a hidden `<!-- dualkit:check -->` or `<!-- dualkit:lint -->` line, so a workflow that runs both never overwrites one with the other.
 
 ## Checking a preview deployment
 

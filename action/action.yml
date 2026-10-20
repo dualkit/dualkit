@@ -51,7 +51,7 @@ runs:
         node -e "
           const r = require('./dualkit.json');
           const rules = [...new Set(r.findings.map(f => f.rule))];
-          const lines = ['### Dualkit check: ' + r.score + '/100', '', r.url, '', ...rules.map(id => '- ' + id + ' (' + r.findings.filter(f => f.rule === id).length + ')'), '', 'Full report in the dualkit-report artifact.'];
+          const lines = ['<!-- dualkit:check -->', '### Dualkit check: ' + r.score + '/100', '', r.url, '', ...rules.map(id => '- ' + id + ' (' + r.findings.filter(f => f.rule === id).length + ')'), '', 'Full report in the dualkit-report artifact.'];
           require('fs').writeFileSync('dualkit-summary.md', lines.join('\n'));
         "
         cat dualkit-summary.md >> "$GITHUB_STEP_SUMMARY"
@@ -85,7 +85,7 @@ runs:
           const r = require('./dualkit-lint.json');
           const n = (s) => r.findings.filter(f => f.severity === s).length;
           const rules = [...new Set(r.findings.map(f => f.rule))];
-          const lines = ['### Dualkit lint: ' + n('error') + ' errors, ' + n('warning') + ' warnings, ' + n('note') + ' notes in ' + r.files + ' files', '', ...rules.map(id => '- ' + id + ' (' + r.findings.filter(f => f.rule === id).length + ')')];
+          const lines = ['<!-- dualkit:lint -->', '### Dualkit lint: ' + n('error') + ' errors, ' + n('warning') + ' warnings, ' + n('note') + ' notes in ' + r.files + ' files', '', ...rules.map(id => '- ' + id + ' (' + r.findings.filter(f => f.rule === id).length + ')')];
           require('fs').writeFileSync('dualkit-summary.md', lines.join('\n'));
           require('fs').appendFileSync(process.env.GITHUB_OUTPUT, 'findings=' + r.findings.length + '\n');
         "
@@ -96,8 +96,20 @@ runs:
       env:
         GH_TOKEN: ${{ inputs.github-token }}
         PR: ${{ github.event.pull_request.number }}
+        MODE: ${{ inputs.mode }}
       run: |
-        gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --edit-last --body-file dualkit-summary.md || gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file dualkit-summary.md || echo "Could not comment; grant pull-requests write to enable it."
+        # Each mode edits only its own comment, found by the hidden marker on the summary's first line.
+        MARKER="<!-- dualkit:$MODE -->"
+        upsert() {
+          ME=$(gh api user --jq .login 2>/dev/null) || ME='github-actions[bot]'
+          ID=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate --jq ".[] | select(.user.login == \"$ME\" and (.body | contains(\"$MARKER\"))) | .id" | tail -n 1)
+          if [ -n "$ID" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$ID" -F body=@dualkit-summary.md > /dev/null
+          else
+            gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file dualkit-summary.md
+          fi
+        }
+        upsert || echo "Could not comment; grant pull-requests write to enable it."
     - if: steps.check.outputs.code == '1'
       shell: bash
       env:
