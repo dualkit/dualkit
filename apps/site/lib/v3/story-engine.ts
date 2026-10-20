@@ -17,6 +17,8 @@ const EASE_EXPO = 'cubic-bezier(.16, 1, .3, 1)'
 const EASE_ODO = 'cubic-bezier(.22, 1, .36, 1)'
 const HOVER = '(hover: hover) and (pointer: fine)'
 const MOBILE = '(max-width: 760px)'
+// Room kept clear around the panel on a phone, so the glass never runs edge to edge.
+const MOBILE_INSET = { x: 24, y: 24 }
 const GREEN = '#3ecf6e'
 /** Width change below which a resize is the phone toolbar, not a new layout. */
 const RESIZE_GUARD_PX = 40
@@ -184,7 +186,7 @@ export function startStory(root: HTMLElement): StoryHandle {
   function layout() {
     const w = painting.clientWidth, h = painting.clientHeight, mobile = matchMedia(MOBILE).matches
     cam.style.width = `${w}px`; cam.style.height = `${h}px`
-    base.pin = mobile ? 4 : 32; base.maxZoom = mobile ? 1.15 : 1.3; base.inset = mobile ? { x: 2, y: 16 } : 32
+    base.pin = mobile ? 4 : 32; base.maxZoom = mobile ? 1.15 : 1.3; base.inset = mobile ? MOBILE_INSET : 32
     regions = safeRegions(painting, rail, mobile)
     base.s = 1; base.s = Math.min(1, camFor(null, 1).s)
     camRest = camFor(null, 1)
@@ -605,7 +607,7 @@ export function settleStory(root: HTMLElement): () => void {
     all(rail, '[data-tick], [data-k="pp"]').forEach((t) => { t.tabIndex = -1; t.setAttribute('aria-hidden', 'true') })
     sizePanelRings(group)
     const w = painting.clientWidth, h = painting.clientHeight, mobile = matchMedia(MOBILE).matches
-    const panel = q('[data-k="panel"]'), pin = mobile ? 4 : 32, inset = mobile ? { x: 2, y: 16 } : 32
+    const panel = q('[data-k="panel"]'), pin = mobile ? 4 : 32, inset = mobile ? MOBILE_INSET : 32
     const B: Rect = { x: -pin, y: 0, w: panel.offsetWidth + 2 * pin, h: panel.offsetHeight }
     const best = safeRegions(painting, rail, mobile).reduce((a, r) => (fitScale(B, r, inset) > fitScale(B, a, inset) ? r : a))
     const c = frameCamera(B, best, Math.min(1, fitScale(B, best, inset)), { bounds: B, inset })
