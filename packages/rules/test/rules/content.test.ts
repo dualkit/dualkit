@@ -57,9 +57,9 @@ describe('content rules', () => {
 })
 
 describe('RULES', () => {
-  it('ships twenty rules with unique ids, in five groups', () => {
-    expect(RULES).toHaveLength(21)
-    expect(new Set(RULES.map((r) => r.id)).size).toBe(21)
+  it('ships twenty-two rules with unique ids, in five groups', () => {
+    expect(RULES).toHaveLength(22)
+    expect(new Set(RULES.map((r) => r.id)).size).toBe(22)
     expect(new Set(RULES.map((r) => r.group))).toEqual(new Set(['bidi', 'layout', 'icons', 'type', 'content']))
   })
   it('gives every rule a why and a fix with no em dash', () => {

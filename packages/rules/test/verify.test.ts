@@ -5,7 +5,7 @@ import { RULES } from '../src/rules'
 import { runRules } from '../src/run'
 import { page } from './fixtures'
 import { closeBrowser, modelOf, withPage } from './helpers/browser'
-import { charBoxes, markEdge, visualText } from './helpers/visual'
+import { charBoxes, inkExtent, markEdge, visualText } from './helpers/visual'
 
 afterAll(closeBrowser)
 
@@ -315,5 +315,140 @@ describe('type/arabic-faux-bold and font reads in Chromium', () => {
     const arabic = model.fonts.find((f) => f.family === 'Brand' && /U\+0*600/.test(f.unicodeRange))
     expect(arabic?.status).toBe('loaded')
     expect(runRules(model, { rules: rule('type/arabic-font') })).toEqual([])
+  })
+})
+
+// Task 4 probes: which blind spots in the bidi rules Chromium paints a difference for.
+describe('bidi/unisolated-number and three groups of Arabic-Indic digits', () => {
+  const digits = (html: string) => withPage(html, async (p) => visualText(await charBoxes(p, '#n')).replace(/[^\u0660-\u0669]/g, ''))
+  it('paints رقم ٠٥٠ ١٢٣ ٤٥٦٧ identically with and without <bdi>, so the rule leaves it alone', async () => {
+    const AI = '\u0660\u0665\u0660 \u0661\u0662\u0663 \u0664\u0665\u0666\u0667'
+    const bare = await digits(page(`<p id="n">رقم ${AI}</p>`))
+    const isolated = await digits(page(`<p id="n">رقم <bdi>${AI}</bdi></p>`))
+    expect(bare).toBe('\u0664\u0665\u0666\u0667\u0661\u0662\u0663\u0660\u0665\u0660')
+    expect(isolated).toBe(bare)
+    expect(await found(page(`<p>رقم ${AI}</p>`), 'bidi/unisolated-number')).toEqual([])
+  })
+})
+
+describe('bidi/unisolated-latin and order codes', () => {
+  const CONTEXTS = ['رقم الطلب {} تم', 'الطلب ({}) تم', 'رقم الطلب: {}', 'الطلب رقم {}.']
+  const paint = (code: string, ctx: string, isolate: boolean) =>
+    withPage(page(`<p id="n">${ctx.replace('{}', isolate ? `<bdi>${code}</bdi>` : code)}</p>`), async (p) => visualText(await charBoxes(p, '#n')))
+
+  it.each(['#A-10293', '#A10293'])('isolation changes how %s paints in every context, so the rule flags it', async (code) => {
+    for (const ctx of CONTEXTS) expect(await paint(code, ctx, false), ctx).not.toBe(await paint(code, ctx, true))
+    expect(await found(page(`<p>رقم الطلب ${code} تم</p>`), 'bidi/unisolated-latin')).toEqual(['bidi/unisolated-latin'])
+    expect(await found(page(`<p>رقم الطلب <bdi>${code}</bdi> تم</p>`), 'bidi/unisolated-latin')).toEqual([])
+  })
+
+  // Measured: a code without a leading # is one left-to-right run, so Arabic around it cannot move any of it.
+  // Isolation only matters when a digit follows or precedes the code directly. Dropped: A10293, A-10293.
+  // A bare #10293 does scramble (to 10293#), but it is a number, not a Latin token: out of scope here.
+  it.each(['A10293', 'A-10293'])('paints %s the same with and without isolation, so the rule leaves it alone', async (code) => {
+    for (const ctx of CONTEXTS) expect(await paint(code, ctx, false), ctx).toBe(await paint(code, ctx, true))
+    expect(await found(page(`<p>رقم الطلب ${code} تم</p>`), 'bidi/unisolated-latin')).toEqual([])
+  })
+})
+
+describe('bidi/punctuation-flip beyond the last run', () => {
+  const SHAPES: Array<{ name: string; body: string; dir: Dir; reads: Dir }> = [
+    { name: 'English line before a <br> in an rtl block', body: 'Hello world!<br>مرحبا بكم', dir: 'rtl', reads: 'ltr' },
+    { name: 'English line in <b> before a <br> in an rtl block', body: '<b>Hello world!</b><br>مرحبا بكم', dir: 'rtl', reads: 'ltr' },
+    { name: 'Arabic line before a <br> in an ltr block', body: 'مرحبا بكم في المتجر.<br>Hello there', dir: 'ltr', reads: 'rtl' },
+    { name: 'Arabic line before a <br> in an rtl block', body: 'مرحبا بكم في المتجر.<br>Hello there', dir: 'rtl', reads: 'rtl' },
+    { name: 'English line before a <br> in an ltr block', body: 'Hello world!<br>مرحبا بكم', dir: 'ltr', reads: 'ltr' },
+  ]
+  it.each(SHAPES)('$name: the rule reports exactly when the mark lands at the line start', async ({ body, dir, reads }) => {
+    const html = page(`<p id="n">${body}</p>`, { lang: dir === 'rtl' ? 'ar' : 'en', dir })
+    // The mark is the last typed character of the first line, which charBoxes returns in typed order.
+    const edge = await withPage(html, async (p) => {
+      const all = (await charBoxes(p, '#n')).filter((b) => b.ch.trim() !== '' && b.right > b.left)
+      const line = all.filter((b) => b.top === all[0]!.top)
+      return markEdge(line)
+    })
+    const flipped = edge === (reads === 'ltr' ? 'left' : 'right')
+    expect(edge).toBe(dir === 'rtl' ? 'left' : 'right')
+    expect((await found(html, 'bidi/punctuation-flip')).length > 0).toBe(flipped)
+  })
+
+  it('leaves a line alone when an Arabic-majority line merely ends in an English tag before the <br>', async () => {
+    const html = page('<p id="n">مرحبا بكم في المتجر <b>Pro.</b><br>سطر ثان</p>')
+    const edge = await withPage(html, async (p) => {
+      const all = (await charBoxes(p, '#n')).filter((b) => b.ch.trim() !== '' && b.right > b.left)
+      return markEdge(all.filter((b) => b.top === all[0]!.top))
+    })
+    expect(edge).toBe('left')
+    expect(await found(html, 'bidi/punctuation-flip')).toEqual([])
+  })
+
+  it('does not move a closing parenthesis inside an inline run: السعر (AED) <b>١٠٠</b> paints correctly', async () => {
+    const html = page('<p id="n">السعر (AED) <b>١٠٠</b></p>')
+    const v = await withPage(html, async (p) => visualText(await charBoxes(p, '#n')))
+    expect(v.indexOf(')')).toBeLessThan(v.indexOf('A'))
+    expect(v.indexOf('(')).toBeGreaterThan(v.indexOf('D'))
+    expect(await found(html, 'bidi/punctuation-flip')).toEqual([])
+  })
+
+  // Dropped: a mark ending an inline run in the middle of a line. It flips only when the next text runs the
+  // paragraph's way, which is the ordinary behaviour of any Latin phrase followed by Arabic, tagged or not.
+  it('paints "!" at the start of an English phrase followed by Arabic, tagged or not, and the rule leaves both alone', async () => {
+    for (const body of ['<b>Hello world!</b> مرحبا', 'Hello world! مرحبا']) {
+      const html = page(`<p id="n">${body}</p>`)
+      const v = await withPage(html, async (p) => visualText(await charBoxes(p, '#n')))
+      expect(v.indexOf('!')).toBeLessThan(v.indexOf('H'))
+      expect(await found(html, 'bidi/punctuation-flip')).toEqual([])
+    }
+  })
+})
+
+describe('bidi/field-placeholder: an Arabic placeholder in a left-to-right field', () => {
+  const HINT = 'البريد الإلكتروني'
+  const CSS = 'input{width:300px;border:0;padding:0;background:#fff;color:#000;font:16px "IBM Plex Sans Arabic"}::placeholder{color:#000;opacity:1}'
+  const input = (attrs: string, css = '') => page(`<input id="n" ${attrs} placeholder="${HINT}">`, { css: CSS + css })
+  const FIX = 'input:placeholder-shown{direction:rtl}'
+  const ink = (html: string) => withPage(html, (p) => inkExtent(p, '#n'))
+
+  it('paints the placeholder flush left in an ltr email field and flush right in an rtl one', async () => {
+    const ltr = await ink(input('type="email" dir="ltr"'))
+    expect(ltr.left).toBeLessThan(0.05)
+    expect(ltr.right).toBeLessThan(0.5)
+    const rtl = await ink(input('type="text"'))
+    expect(rtl.right).toBeGreaterThan(0.95)
+    expect(rtl.left).toBeGreaterThan(0.5)
+  })
+
+  it('paints it flush left in a tel field, which Chromium lays out ltr on its own', async () => {
+    const tel = await ink(input('type="tel"'))
+    expect(tel.left).toBeLessThan(0.05)
+  })
+
+  it('input:placeholder-shown { direction: rtl } puts the hint flush right and leaves the typed value ltr', async () => {
+    const html = input('type="email" dir="ltr"', FIX)
+    const hint = await ink(html)
+    expect(hint.right).toBeGreaterThan(0.95)
+    expect(hint.left).toBeGreaterThan(0.5)
+    const dirs = await withPage(html, async (p) => {
+      const direction = () => p.evaluate(() => getComputedStyle(document.querySelector('#n')!).direction)
+      const empty = await direction()
+      await p.fill('#n', 'sara@example.com')
+      return { empty, typed: await direction() }
+    })
+    expect(dirs).toEqual({ empty: 'rtl', typed: 'ltr' })
+    const typed = await ink(page(`<input id="n" type="email" dir="ltr" value="sara@example.com" placeholder="${HINT}">`, { css: CSS + FIX }))
+    expect(typed.left).toBeLessThan(0.05)
+  })
+
+  it('flags the ltr field, and stays quiet for a Latin hint, an rtl text field and the fixed field', async () => {
+    expect(await found(input('type="email" dir="ltr"'), 'bidi/field-placeholder')).toEqual(['bidi/field-placeholder'])
+    expect(await found(input('type="tel"'), 'bidi/field-placeholder')).toEqual(['bidi/field-placeholder'])
+    expect(await found(page('<input type="email" dir="ltr" placeholder="name@example.com">'), 'bidi/field-placeholder')).toEqual([])
+    expect(await found(input('type="text"'), 'bidi/field-placeholder')).toEqual([])
+  })
+
+  it('stays quiet once the hint is fixed with :placeholder-shown, and while a typed value hides the hint', async () => {
+    expect(await found(input('type="email" dir="ltr"', FIX), 'bidi/field-placeholder')).toEqual([])
+    const prefilled = page(`<input type="email" dir="ltr" value="sara@example.com" placeholder="${HINT}">`)
+    expect(await found(prefilled, 'bidi/field-placeholder')).toEqual([])
   })
 })

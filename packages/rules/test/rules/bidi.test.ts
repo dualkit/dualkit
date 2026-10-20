@@ -24,6 +24,18 @@ describe('bidi/unisolated-latin', () => {
   })
 })
 
+describe('bidi/unisolated-latin: order codes', () => {
+  const flagged = (t: string) => ids(screen({ texts: [text({ text: t, blockText: `رقم الطلب ${t} تم` })] }))
+  it('flags a hash-prefixed code, which Chromium scrambles', () => {
+    expect(flagged('#A-10293')).toEqual(['bidi/unisolated-latin'])
+    expect(flagged('#A10293')).toEqual(['bidi/unisolated-latin'])
+  })
+  it('passes the near misses, and an isolated code', () => {
+    for (const t of ['Visa', 'A1', 'iPhone 15', 'A10293', 'في عام 2026']) expect(flagged(t), t).toEqual([])
+    expect(ids(screen({ texts: [text({ text: '#A-10293', isolated: true })] }))).toEqual([])
+  })
+})
+
 describe('bidi/punctuation-flip', () => {
   it('flags English ending in punctuation inside an RTL block', () => {
     expect(ids(screen({ texts: [text({ text: 'Hello world!', blockText: 'Hello world!' })] }))).toEqual(['bidi/punctuation-flip'])
@@ -43,11 +55,41 @@ describe('bidi/punctuation-flip', () => {
   })
 })
 
+describe('bidi/punctuation-flip: a mark that closes a line before a <br>', () => {
+  const line = (p: Parameters<typeof text>[0]) => ids(screen({ texts: [text({ isLastInBlock: false, endsLine: true, ...p })] }))
+  it('flags English closing a line in an RTL block, and Arabic closing a line in an LTR block', () => {
+    expect(line({ text: 'Hello world!', blockText: 'Hello world! مرحبا بكم' })).toEqual(['bidi/punctuation-flip'])
+    expect(line({ text: 'مرحبا بكم في المتجر.', blockText: 'مرحبا بكم في المتجر. Hello there', blockDir: 'ltr' })).toEqual(['bidi/punctuation-flip'])
+  })
+  it('passes a line that matches its block, no closing mark, or an isolated run', () => {
+    expect(line({ text: 'مرحبا بكم في المتجر.', blockText: 'مرحبا بكم في المتجر. Hello there' })).toEqual([])
+    expect(line({ text: 'Hello world', blockText: 'Hello world مرحبا بكم' })).toEqual([])
+    expect(line({ text: 'Hello world!', blockText: 'Hello world! مرحبا بكم', isolated: true })).toEqual([])
+  })
+  it('passes a run that is neither last nor line-ending', () => {
+    expect(line({ text: 'Hello world!', blockText: 'Hello world! مرحبا بكم', endsLine: false })).toEqual([])
+  })
+})
+
 describe('bidi/field-direction', () => {
   it('flags an email field that inherits RTL', () => {
     expect(ids(screen({ fields: [field()] }))).toEqual(['bidi/field-direction'])
   })
   it('passes with a dir attribute, LTR direction, or a free-text field', () => {
     expect(ids(screen({ fields: [field({ dirAttr: 'auto' }), field({ dir: 'ltr' }), field({ kind: 'text' })] }))).toEqual([])
+  })
+})
+
+describe('bidi/field-placeholder', () => {
+  const hint = { placeholder: 'البريد الإلكتروني' }
+  it('flags an Arabic placeholder in a left-to-right field', () => {
+    expect(ids(screen({ fields: [field({ dir: 'ltr', dirAttr: 'ltr', ...hint })] }))).toEqual(['bidi/field-placeholder'])
+    expect(ids(screen({ fields: [field({ dir: 'ltr', kind: 'tel', ...hint })] }))).toEqual(['bidi/field-placeholder'])
+  })
+  it('passes a Latin placeholder, an RTL field, no placeholder, and a placeholder a value hides', () => {
+    expect(ids(screen({ fields: [field({ dir: 'ltr', placeholder: 'name@example.com' })] }))).toEqual([])
+    expect(ids(screen({ fields: [field({ dir: 'rtl', kind: 'text', ...hint })] }))).toEqual([])
+    expect(ids(screen({ fields: [field({ dir: 'ltr' })] }))).toEqual([])
+    expect(ids(screen({ fields: [field({ dir: 'ltr', placeholderShown: false, ...hint })] }))).toEqual([])
   })
 })

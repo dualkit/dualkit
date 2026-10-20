@@ -1,5 +1,5 @@
 import { defineRule, pick } from '../rule'
-import { ENDS_WITH_ARABIC_MARK, ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, LATIN_TOKEN, excerpt, firstStrong, lastStrong } from '../text'
+import { ENDS_WITH_ARABIC_MARK, ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, LATIN_TOKEN, arabicShare, excerpt, hasArabic, firstStrong, lastStrong } from '../text'
 
 const LATIN_LETTER = /[A-Za-zÀ-ɏ]/
 
@@ -30,21 +30,28 @@ export const unisolatedLatin = defineRule({
     .map((t) => ({ node: pick(t), message: `"${excerpt(t.text)}" sits in right-to-left text without isolation.` })),
 })
 
+/**
+ * Whether the closing mark of this text lands at the far end of its line, against the way it reads.
+ * The text is the whole block for the block's last run, or just the run for one that ends a line before a <br>.
+ */
+function flips(text: string, share: number, blockDir: 'ltr' | 'rtl'): boolean {
+  const neutral = ENDS_WITH_PUNCTUATION.test(text)
+  const arabicMark = ENDS_WITH_ARABIC_MARK.test(text) && (blockDir === 'rtl' || lastStrong(text.replace(ENDS_WITH_ARABIC_MARK, '')) !== 'rtl')
+  if (!neutral && !arabicMark) return false
+  const natural = naturalDirection(text, share)
+  return natural !== null && natural !== blockDir
+}
+
 export const punctuationFlip = defineRule({
   id: 'bidi/punctuation-flip', group: 'bidi', severity: 'warning',
   title: 'Punctuation at the wrong end',
   why: 'When a paragraph runs in the opposite direction to its words, the closing mark shows at the start: "Hello world!" becomes "!Hello world".',
   fix: 'Give the block the direction of its own text, with dir="ltr", dir="rtl" or dir="auto".',
   check: (m) => m.texts
-    .filter((t) => {
-      if (!t.isLastInBlock || t.isolated) return false
-      const neutral = ENDS_WITH_PUNCTUATION.test(t.blockText)
-      const arabicMark = ENDS_WITH_ARABIC_MARK.test(t.blockText) && (t.blockDir === 'rtl' || lastStrong(t.blockText.replace(ENDS_WITH_ARABIC_MARK, '')) !== 'rtl')
-      if (!neutral && !arabicMark) return false
-      const natural = naturalDirection(t.blockText, t.blockArabicShare)
-      return natural !== null && natural !== t.blockDir
-    })
-    .map((t) => ({ node: pick(t), message: `"${excerpt(t.blockText)}" runs ${t.blockDir === 'rtl' ? 'right to left' : 'left to right'}, so its last mark moves to the start.` })),
+    .filter((t) => !t.isolated && (t.isLastInBlock || t.endsLine))
+    .map((t) => ({ t, closing: t.isLastInBlock ? { text: t.blockText, share: t.blockArabicShare } : { text: t.text, share: arabicShare(t.text) } }))
+    .filter(({ t, closing }) => flips(closing.text, closing.share, t.blockDir))
+    .map(({ t, closing }) => ({ node: pick(t), message: `"${excerpt(closing.text)}" runs ${t.blockDir === 'rtl' ? 'right to left' : 'left to right'}, so its last mark moves to the start.` })),
 })
 
 export const fieldDirection = defineRule({
@@ -57,4 +64,14 @@ export const fieldDirection = defineRule({
     .map((f) => ({ node: pick(f), message: `This ${f.kind} field inherits right to left.` })),
 })
 
-export const bidiRules = [unisolatedNumber, unisolatedLatin, punctuationFlip, fieldDirection]
+export const fieldPlaceholder = defineRule({
+  id: 'bidi/field-placeholder', group: 'bidi', severity: 'warning',
+  title: 'An Arabic hint on the wrong side of the field',
+  why: 'A field that runs left to right paints its placeholder at the left edge, so an Arabic hint sits where Arabic readers look last.',
+  fix: 'Keep dir="ltr" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl }.',
+  check: (m) => m.fields
+    .filter((f) => f.dir === 'ltr' && f.placeholderShown && hasArabic(f.placeholder))
+    .map((f) => ({ node: pick(f), message: `The placeholder "${excerpt(f.placeholder)}" is Arabic in a left-to-right field.` })),
+})
+
+export const bidiRules = [unisolatedNumber, unisolatedLatin, punctuationFlip, fieldDirection, fieldPlaceholder]

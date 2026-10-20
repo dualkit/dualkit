@@ -31,6 +31,8 @@ export type TextRun = NodeRef & {
   /** Inside <bdi>, an element with a dir attribute, or unicode-bidi isolate or plaintext, below its block. */
   isolated: boolean
   isLastInBlock: boolean
+  /** The run is a whole line closed by a <br>, with nothing else on that line. */
+  endsLine: boolean
   font: Font
   lines: number
   /** Net horizontal flip: the product of scale signs over the element and up to 4 ancestors. */
@@ -52,7 +54,7 @@ export type LayoutNode = NodeRef & {
 export type IconNode = NodeRef & { name: string | null; dir: Direction; mirrored: boolean }
 
 export type FieldKind = 'email' | 'tel' | 'url' | 'number' | 'code' | 'text'
-export type FieldNode = NodeRef & { kind: FieldKind; dir: Direction; dirAttr: string | null; placeholder: string }
+export type FieldNode = NodeRef & { kind: FieldKind; dir: Direction; dirAttr: string | null; placeholder: string; placeholderShown: boolean }
 
 export type LoadedFace = {
   /** No quotes. */

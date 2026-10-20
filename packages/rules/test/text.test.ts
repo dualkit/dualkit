@@ -42,8 +42,12 @@ describe('patterns', () => {
     expect(LATIN_TOKEN.test(s)).toBe(true)
   })
 
-  it('does not treat ordinary words as tokens', () => {
-    expect(LATIN_TOKEN.test('React')).toBe(false)
+  it.each(['#A-10293', '#A10293', '#ORDER-2041'])('flags the hash-prefixed code %s, which Chromium scrambles without isolation', (s) => {
+    expect(LATIN_TOKEN.test(s)).toBe(true)
+  })
+
+  it.each(['React', 'Visa', 'A1', 'iPhone 15', 'رقم الطلب في 2026 كان ممتازا', 'A10293'])('does not treat %s as a token', (s) => {
+    expect(LATIN_TOKEN.test(s)).toBe(false)
   })
 
   it('spots trailing punctuation, digit systems, placeholders and Arabic fonts', () => {

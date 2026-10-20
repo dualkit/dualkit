@@ -11,13 +11,13 @@ export const text = (p: Partial<TextRun> = {}): TextRun => {
 }
 const run = (p: Partial<TextRun>): TextRun => ({
   ...base, text: 'مرحبا', blockId: 'p', blockText: 'مرحبا', blockArabicShare: 1, blockHasArabic: true, blockArabicWords: 1, blockDir: 'rtl', dir: 'rtl', lang: 'ar',
-  isolated: false, isLastInBlock: true,
+  isolated: false, isLastInBlock: true, endsLine: false,
   font: { families: ['IBM Plex Sans Arabic', 'sans-serif'], size: 16, lineHeight: 27, letterSpacing: 0, style: 'normal', weight: 400 },
   lines: 1, mirrored: false, ...p,
 })
 export const layout = (p: Partial<LayoutNode> = {}): LayoutNode => ({ ...base, dir: 'rtl', textAlign: 'start', hasOwnText: true, hasArabicText: true, physical: [], ...p })
 export const icon = (p: Partial<IconNode> = {}): IconNode => ({ ...base, name: 'arrow-right', dir: 'rtl', mirrored: false, ...p })
-export const field = (p: Partial<FieldNode> = {}): FieldNode => ({ ...base, kind: 'email', dir: 'rtl', dirAttr: null, placeholder: '', ...p })
+export const field = (p: Partial<FieldNode> = {}): FieldNode => ({ ...base, kind: 'email', dir: 'rtl', dirAttr: null, placeholder: '', placeholderShown: true, ...p })
 /** A loaded face, defaulting to IBM Plex Sans Arabic at 400 with the default unicode-range. */
 export const face = (p: Partial<LoadedFace> = {}): LoadedFace => ({
   family: 'IBM Plex Sans Arabic', weight: [400, 400], style: 'normal', unicodeRange: 'U+0-10FFFF', sizeAdjust: 1, status: 'loaded', ...p,

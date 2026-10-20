@@ -185,6 +185,22 @@ Sources:
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/lang
 - WCAG 2.2 normative 3.1.2 text (`https://www.w3.org/TR/WCAG22/#language-of-parts`) was not readable in the fetch window, so the SC wording itself is not quoted here.
 
+## 5. Chromium paint measurements for the bidi rules (Task 4)
+
+Each row is a probe in `packages/rules/test/verify.test.ts`, measured per character in Chromium (Playwright) with and without `<bdi>`.
+
+| Claim | Measurement | Verdict |
+|---|---|---|
+| Three groups of Arabic-Indic digits are unchanged by isolation | `رقم ٠٥٠ ١٢٣ ٤٥٦٧` paints ٤٥٦٧ ١٢٣ ٠٥٠ left to right, bare and in `<bdi>` | VERIFIED |
+| `#A-10293` and `#A10293` are scrambled without isolation | The `#` lands on the wrong side of the code in all four test sentences; `<bdi>` fixes it | VERIFIED |
+| `A10293` and `A-10293` are not scrambled | Same paint with and without `<bdi>` in all four sentences (they differ only next to a digit) | VERIFIED |
+| A bare `#10293` is reversed to `10293#` | Differs with `<bdi>` in all four sentences, so it is a number problem, not a Latin token | VERIFIED |
+| A closing mark before a `<br>` flips like the end of a paragraph | English line in an rtl block, and Arabic line in an ltr block, paint the mark at the line start; matching directions do not | VERIFIED |
+| A mark inside `(AED)` before an inline `<b>` does not move | Parentheses paint around AED in order | VERIFIED |
+| A mark ending an English phrase before Arabic flips mid-line, tagged or not | `<b>Hello world!</b> مرحبا` and `Hello world! مرحبا` both paint `!` left of Hello in an rtl block | VERIFIED |
+| An Arabic placeholder in an ltr (or tel) input paints flush left | Ink spans 0.3% to 28% of the input width | VERIFIED |
+| `input:placeholder-shown { direction: rtl }` right-aligns the hint and leaves typed text ltr | Hint ink spans 71% to 99.7%; computed direction is rtl while empty and ltr after typing; a prefilled value paints flush left | VERIFIED |
+
 ---
 
 ## Tally
@@ -199,3 +215,4 @@ Sources:
 | 2 CBUAE | VERIFIED, quoted from the PDF. "Dh" and Arabic word pairing: VERIFIED absent |
 | 3 Unicode | VERIFIED. One correction (U+FDFC age 3.2, not 4.0) |
 | 4 Screen readers and `lang` | Language drives pronunciation: VERIFIED. English `aria-label` in `lang="ar"` case: SECONDARY, with a VERIFIED caveat against it |
+| 5 Chromium bidi paint (Task 4) | VERIFIED, see the probes in `verify.test.ts` |

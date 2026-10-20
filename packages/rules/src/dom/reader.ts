@@ -74,6 +74,23 @@ function isolatedBelow(el: Element, block: Element, style: Style): boolean {
   return false
 }
 
+/** What touches this text on one side, climbing out of inline tags up to the block: a <br>, the block's edge, or other content. */
+function edgeOf(node: Node, block: Element, side: 'previousSibling' | 'nextSibling'): 'br' | 'edge' | 'content' {
+  let at: Node | null = node
+  while (at && at !== block) {
+    let near = at[side]
+    while (near && near.nodeType === 3 && clean(near.textContent ?? '') === '') near = near[side]
+    if (near) return near.nodeName === 'BR' ? 'br' : 'content'
+    at = at.parentNode
+  }
+  return 'edge'
+}
+
+/** True for a run that is a whole line closed by a <br>: nothing else on its line, so the run alone decides how the line reads. */
+function endsLine(node: Node, block: Element): boolean {
+  return edgeOf(node, block, 'nextSibling') === 'br' && edgeOf(node, block, 'previousSibling') !== 'content'
+}
+
 /** Long blocks keep their first and last 300 characters, so the model stays small however many runs share a block. */
 function capBlockText(full: string): string {
   return full.length <= BLOCK_TEXT_CAP ? full : `${full.slice(0, BLOCK_TEXT_KEEP)}…${full.slice(-BLOCK_TEXT_KEEP)}`
@@ -138,7 +155,7 @@ function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, re
       ...ref(parent, rect(range.getBoundingClientRect())),
       text, blockId: id, blockText, ...facts, blockDir, dir: dirOf(s),
       lang: parent.closest('[lang]')?.getAttribute('lang') || null,
-      isolated: isolatedBelow(parent, block, style), isLastInBlock: full.endsWith(text),
+      isolated: isolatedBelow(parent, block, style), isLastInBlock: full.endsWith(text), endsLine: endsLine(node, block),
       font: fontOf(s), lines: Math.max(1, lines), mirrored: netMirrored(parent, style),
     })
   }
@@ -174,7 +191,7 @@ function readFields(doc: Document, style: Style, skipped: Pred, visible: Pred, r
     const type = el.getAttribute('type')?.toLowerCase()
     if (type === 'hidden' || type === 'checkbox' || type === 'radio' || type === 'submit' || type === 'button') continue
     if (skipped(el) || !visible(el)) continue
-    out.push({ ...ref(el), kind: fieldKind(el), dir: dirOf(style(el)), dirAttr: el.getAttribute('dir'), placeholder: el.getAttribute('placeholder') ?? '' })
+    out.push({ ...ref(el), kind: fieldKind(el), dir: dirOf(style(el)), dirAttr: el.getAttribute('dir'), placeholder: el.getAttribute('placeholder') ?? '', placeholderShown: el.matches(':placeholder-shown') })
   }
   return out
 }

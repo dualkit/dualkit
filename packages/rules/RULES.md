@@ -32,6 +32,13 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 
 **Fix:** Add dir="ltr" to the input, or dir="auto" if people may type Arabic too.
 
+<a id="bidi-field-placeholder"></a>
+### `bidi/field-placeholder` An Arabic hint on the wrong side of the field
+
+**warning.** A field that runs left to right paints its placeholder at the left edge, so an Arabic hint sits where Arabic readers look last.
+
+**Fix:** Keep dir="ltr" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl }.
+
 ## Layout
 
 <a id="layout-physical-spacing"></a>
@@ -158,3 +165,9 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 **warning.** Lorem ipsum, in Latin or Arabic, hides how real copy will wrap and reads as unfinished.
 
 **Fix:** Replace it with real copy, or realistic Gulf sample data.
+
+## Known limits
+
+- A closing mark in the middle of a line, such as the ! in "Hello world! مرحبا", is not checked. Only the end of a paragraph, or of a line that a `<br>` closes on its own, is.
+- Codes without a leading # (A10293, A-10293) and groups of Arabic-Indic digits paint the same with or without `<bdi>`, so they are not flagged.
+- A number with a leading # (#10293) also shows in reverse inside Arabic, but it is not an email, link or code, so no rule covers it yet.

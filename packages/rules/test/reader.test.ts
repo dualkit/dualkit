@@ -208,6 +208,18 @@ describe('reader foundation: fonts, labels, placeholders, clips, mirrored text',
     expect(m.fields.map((f) => f.placeholder)).toEqual(['الاسم', ''])
   })
 
+  it('reads whether the placeholder is showing: a typed value hides it', async () => {
+    const m = await modelOf(page('<input placeholder="الاسم"><input placeholder="الاسم" value="سارة"><input>'))
+    expect(m.fields.map((f) => f.placeholderShown)).toEqual([true, false, false])
+  })
+
+  it('reads a run that is a whole line closed by a <br>, also out of an inline tag, and not a run sharing its line', async () => {
+    const m = await modelOf(page('<p>Hello world!<br>مرحبا <b>بكم</b>.<br><i>Pro.</i><br>سطر<i>1</i> <b>ثان</b><br></p><p><b>Two!</b></p>'))
+    expect(m.texts.map((t) => [t.text, t.endsLine])).toEqual([
+      ['Hello world!', true], ['مرحبا', false], ['بكم', false], ['.', false], ['Pro.', true], ['سطر', false], ['1', false], ['ثان', false], ['Two!', false],
+    ])
+  })
+
   it('reads a clipped box, its ellipsis, and nothing for visible overflow', async () => {
     const text = 'نص عربي طويل جدا يتجاوز عرض الصندوق بكثير ولا يتسع فيه أبدا'
     const hidden = await modelOf(page(`<div class="b">${text}</div>`, { css: '.b{width:60px;overflow:hidden;white-space:nowrap}' }))
