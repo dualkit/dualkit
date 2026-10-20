@@ -34,6 +34,52 @@ const startsJoining = (s: string): boolean => {
   return ARABIC_LETTER.test(ch) && !MARK.test(ch) && ch !== '\u0621' && ch !== '\u0674' && ch !== '\u08ad'
 }
 
+/** Displays that keep a box in its parent's line: inline, the atomic inline boxes, and contents (no box of its own). */
+const INLINE_LEVEL = new Set(['inline', 'inline-block', 'inline-flex', 'inline-grid', 'contents'])
+/** Containers whose children are blockified into flex or grid items, so no two of them share a line box. */
+const BLOCKIFIES = /^(inline-)?(flex|grid)$/
+
+/** True when every element from the node's parent up to (not including) the common ancestor stays in the parent's line. */
+function inlinePath(node: Node, common: Node, style: Style): boolean {
+  for (let el = node.parentElement; el && el !== common; el = el.parentElement) {
+    if (!INLINE_LEVEL.has(style(el).display)) return false
+  }
+  return true
+}
+
+/** The display that lays out the common ancestor's children: display:contents hands them to the nearest box above. */
+function layoutDisplay(common: Node, style: Style): string {
+  for (let el = common instanceof Element ? common : common.parentElement; el; el = el.parentElement) {
+    const d = style(el).display
+    if (d !== 'contents') return d
+  }
+  return 'block'
+}
+
+/** Both text nodes sit in one inline formatting context: inline-level all the way up, under a parent that does not blockify them. */
+function sameInlineContext(prev: Node, n: Node, common: Node, style: Style): boolean {
+  return inlinePath(prev, common, style) && inlinePath(n, common, style) && !BLOCKIFIES.test(layoutDisplay(common, style))
+}
+
+/** Under this gap, in px, the two boundary letters touch. */
+const TOUCH_GAP = 1
+
+const letterRect = (doc: Document, node: Node, at: number): DOMRect | null => {
+  const range = doc.createRange()
+  range.setStart(node, at)
+  range.setEnd(node, at + 1)
+  return range.getClientRects()[0] ?? null
+}
+
+/** True when the two boundary letters are painted on the same line and touch, with a horizontal gap under 1px. */
+export function lettersTouch(a: Pick<DOMRect, 'left' | 'right' | 'top' | 'bottom'>, b: Pick<DOMRect, 'left' | 'right' | 'top' | 'bottom'>): boolean {
+  const midA = (a.top + a.bottom) / 2
+  const midB = (b.top + b.bottom) / 2
+  const sameLine = midA >= b.top && midA <= b.bottom && midB >= a.top && midB <= a.bottom
+  const gap = Math.max(a.left, b.left) - Math.min(a.right, b.right)
+  return sameLine && gap < TOUCH_GAP
+}
+
 /** The nearest ancestor of the node, below the common ancestor, that is an atomic inline box (it shapes its text on its own). */
 function atomicAbove(node: Node, common: Node | null, style: Style): { el: Element; reason: JoinBreak['reason'] } | null {
   for (let el = node.parentElement; el && el !== common; el = el.parentElement) {
@@ -43,12 +89,7 @@ function atomicAbove(node: Node, common: Node | null, style: Style): { el: Eleme
   return null
 }
 
-const letterWidth = (doc: Document, node: Node, at: number): number => {
-  const range = doc.createRange()
-  range.setStart(node, at)
-  range.setEnd(node, at + 1)
-  return range.getClientRects()[0]?.width ?? 0
-}
+const letterWidth = (doc: Document, node: Node, at: number): number => letterRect(doc, node, at)?.width ?? 0
 
 /** The two reference widths for a boundary letter: drawn joined to its neighbour, and drawn alone. */
 export type Forms = [joined: number, alone: number]
@@ -81,7 +122,8 @@ function paintedSplit(doc: Document, node: Text, at: number, side: 'end' | 'star
     const s = style(parent)
     probe = doc.createElement('span')
     probe.setAttribute('aria-hidden', 'true')
-    probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;letter-spacing:0'
+    probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre'
+    probe.style.letterSpacing = s.letterSpacing
     probe.style.fontFamily = s.fontFamily
     probe.style.fontSize = s.fontSize
     probe.style.fontWeight = s.fontWeight
@@ -125,7 +167,10 @@ function fontSplit(doc: Document, style: Style, prev: Text, last: number, n: Tex
  * Words that Chromium paints apart. An inline-block or inline-flex box always splits the word. A font-family change
  * splits it on some platforms only, so it is measured in the page (fontSplit). Colour, `<b>` and padding keep the join
  * (verify.test.ts), so they are not looked at.
- * Only adjacent text nodes in different parents are looked at, where one ends and the next starts with a joining letter.
+ * Only adjacent text nodes in different parents are looked at, where one ends and the next starts with a joining letter,
+ * both sit in one inline formatting context (inline-level up to their common ancestor, which is not a flex or grid
+ * container), and the two boundary letters are painted on one line with less than 1px between them. Separate boxes
+ * that markup puts side by side with no whitespace (nav links, table cells, tabs, badges, blocks) are not one word.
  */
 export function readJoins(doc: Document, style: Style, skipped: Pred, ref: Ref): JoinBreak[] {
   const out: JoinBreak[] = []
@@ -148,11 +193,15 @@ export function readJoins(doc: Document, style: Style, skipped: Pred, ref: Ref):
     if (gap.textContent !== '' || gap.querySelector(BREAKING)) continue
     if (offScreen(a, style(a)) || offScreen(b, style(b))) continue
     const common = between.commonAncestorContainer
+    if (!sameInlineContext(prev, n, common, style)) continue
     const atomic = atomicAbove(n, common, style) ?? atomicAbove(prev, common, style)
     const differentFont = !atomic && style(a).fontFamily !== style(b).fontFamily
     if (!atomic && !differentFont) continue
     const el = atomic ? atomic.el : b
     if (seen.has(el)) continue
+    const endRect = letterRect(doc, prev, last)
+    const startRect = letterRect(doc, n, 0)
+    if (!endRect || !startRect || !lettersTouch(endRect, startRect)) continue
     if (differentFont && !fontSplit(doc, style, prev, last, n)) continue
     seen.add(el)
     const word = (before.match(/\S+$/)?.[0] ?? '') + (text.match(/^\S+/)?.[0] ?? '')

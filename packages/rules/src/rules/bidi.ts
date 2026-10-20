@@ -67,10 +67,11 @@ export const fieldDirection = defineRule({
 export const fieldPlaceholder = defineRule({
   id: 'bidi/field-placeholder', group: 'bidi', severity: 'warning',
   title: 'An Arabic hint on the wrong side of the field',
-  why: 'A field that runs left to right paints its placeholder at the left edge, so an Arabic hint sits where Arabic readers look last.',
-  fix: 'Keep dir="ltr" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl }.',
-  check: (m) => m.fields
-    .filter((f) => f.dir === 'ltr' && f.placeholderShown && hasArabic(f.placeholder))
+  why: 'A field that runs left to right paints its placeholder at the left edge, so on a right-to-left page an Arabic hint sits where Arabic readers look last.',
+  fix: 'Keep dir="ltr" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.',
+  // Only a hint that lands at the left: text-align: right on the field or on ::placeholder already puts it flush right.
+  check: (m) => m.root.computedDir !== 'rtl' ? [] : m.fields
+    .filter((f) => f.dir === 'ltr' && f.placeholderSide === 'left' && f.placeholderShown && hasArabic(f.placeholder))
     .map((f) => ({ node: pick(f), message: `The placeholder "${excerpt(f.placeholder)}" is Arabic in a left-to-right field.` })),
 })
 

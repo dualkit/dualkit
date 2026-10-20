@@ -45,6 +45,16 @@ describe('type rules', () => {
       const t = withFamilies(['Inter', 'sans-serif'])
       expect(messages(screen({ texts: [t], fonts: [face({ family: 'Inter' })] }))).toEqual(['Arabic falls back from Inter, sans-serif.'])
     })
+    it('counts a loaded default-range face under any name when the page measured it drawing Arabic', () => {
+      const t = withFamilies(['GE SS Two', 'sans-serif'])
+      expect(ids(screen({ texts: [t], fonts: [face({ family: 'GE SS Two', drawsArabic: true })] }))).toEqual([])
+      expect(ids(screen({ texts: [t], fonts: [face({ family: 'GE SS Two', drawsArabic: false })] }))).toEqual(['type/arabic-font'])
+      expect(ids(screen({ texts: [t], fonts: [face({ family: 'GE SS Two', drawsArabic: null })] }))).toEqual(['type/arabic-font'])
+    })
+    it('says a face that is still loading had not finished within 3 seconds', () => {
+      const t = withFamilies(['IBM Plex Sans Arabic', 'sans-serif'])
+      expect(messages(screen({ texts: [t], fonts: [face({ status: 'loading' })] }))).toEqual(['"IBM Plex Sans Arabic" had not finished loading within 3 seconds.'])
+    })
     it('counts a loaded face with an explicit Arabic range under any name', () => {
       const brand = face({ family: 'Brand', unicodeRange: 'U+0600-06FF, U+0750-077F' })
       expect(ids(screen({ texts: [withFamilies(['Brand', 'sans-serif'])], fonts: [brand] }))).toEqual([])
@@ -78,6 +88,10 @@ describe('type rules', () => {
       const t = text({ font: { ...font, families: ['Brand', 'sans-serif'], size: 13, weight: 400 } })
       expect(effectiveSize(t, fonts)).toBeCloseTo(14.56)
       expect(ids(screen({ texts: [t], fonts }))).toEqual([])
+    })
+    it('gives one size for a 13.3333px button label with no size-adjust', () => {
+      const m = screen({ texts: [text({ font: { ...font, size: 13.3333 } })], fonts: [face()] })
+      expect(messages(m)).toEqual(['"مرحبا" is 13.3333px.'])
     })
     it('ignores size-adjust on system fonts', () => {
       expect(ids(screen({ texts: [withFamilies(['SF Arabic'])], fonts: [face({ sizeAdjust: 0.5 })] }))).toEqual([])

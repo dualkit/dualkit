@@ -54,7 +54,11 @@ export const arabicFont = defineRule({
       seen.add(key)
       if (loadedArabicFace(t.font.families, m.fonts) || t.font.families.some(isSystemArabicFont)) return []
       const named = t.font.families.find((f) => ARABIC_FAMILY_NAME.test(f))
-      const message = named !== undefined ? `"${named}" is named but never loaded.` : `Arabic falls back from ${t.font.families.join(', ')}.`
+      // The loaders wait FONT_WAIT_MS (3 seconds) for document.fonts.ready, so a face still loading was slow, not missing.
+      const loading = named !== undefined && m.fonts.some((f) => f.family.toLowerCase() === named.toLowerCase() && f.status === 'loading')
+      const message = named === undefined
+        ? `Arabic falls back from ${t.font.families.join(', ')}.`
+        : loading ? `"${named}" had not finished loading within 3 seconds.` : `"${named}" is named but never loaded.`
       return [{ node: pick(t), message }]
     })
   },
@@ -69,7 +73,7 @@ export const arabicSize = defineRule({
     const size = effectiveSize(t, m.fonts)
     if (size >= MIN_ARABIC_SIZE) return []
     const shown = Math.round(size * 100) / 100
-    const message = shown === t.font.size ? `"${excerpt(t.text)}" is ${t.font.size}px.` : `"${excerpt(t.text)}" is ${t.font.size}px, which is ${shown}px after the font's size-adjust.`
+    const message = size === t.font.size ? `"${excerpt(t.text)}" is ${t.font.size}px.` : `"${excerpt(t.text)}" is ${t.font.size}px, which is ${shown}px after the font's size-adjust.`
     return [{ node: pick(t), message }]
   }),
 })

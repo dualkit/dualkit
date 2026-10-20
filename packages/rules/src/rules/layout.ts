@@ -1,6 +1,6 @@
 import type { LayoutNode } from '../model'
 import { defineRule, pick, type Hit } from '../rule'
-import { excerpt } from '../text'
+import { excerpt, hasArabic } from '../text'
 
 /** Under this many Arabic words a block is a label, such as a language switcher, not a paragraph. */
 const MIN_ARABIC_WORDS = 3
@@ -62,13 +62,13 @@ const MIN_CLIPPED = 2
 export const mirroredText = defineRule({
   id: 'layout/mirrored-text', group: 'layout', severity: 'error',
   title: 'Text flipped with the layout',
-  why: 'A scaleX(-1) on a container mirrors its letters too, so Arabic reads backwards. Only icons and artwork should flip.',
+  why: 'A scaleX(-1) on a container mirrors its letters too, so Arabic reads backwards. Only icons and artwork should flip. A turn such as rotate(180deg) does not mirror, so it is not counted.',
   fix: 'Flip the icon or image alone, and leave the text outside the transform.',
   check: (m) => {
     const seen = new Set<string>()
     return m.texts
-      .filter((t) => t.mirrored && !seen.has(t.mirroredBy ?? t.id) && Boolean(seen.add(t.mirroredBy ?? t.id)))
-      .map((t) => ({ node: pick(t), message: `"${excerpt(t.text)}" is drawn mirrored by a horizontal flip.` }))
+      .filter((t) => t.mirrored && hasArabic(t.text) && !seen.has(t.mirroredBy ?? t.id) && Boolean(seen.add(t.mirroredBy ?? t.id)))
+      .map((t) => ({ node: pick(t), message: `"${excerpt(t.text)}" is drawn mirrored by a flip.` }))
   },
 })
 

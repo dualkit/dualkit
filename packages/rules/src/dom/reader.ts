@@ -1,4 +1,4 @@
-import type { LoadedFace, FieldKind, FieldNode, Font, LayoutNode, NodeRef, Rect, ScreenModel, TextRun } from '../model'
+import type { LoadedFace, FieldKind, FieldNode, Font, LayoutNode, NodeRef, PlaceholderSide, Rect, ScreenModel, TextRun } from '../model'
 import { readClips } from './clips'
 import { readFonts } from './fonts'
 import { readJoins } from './joins'
@@ -184,13 +184,35 @@ function fieldKind(el: HTMLInputElement | HTMLTextAreaElement): FieldKind {
   return CODE_FIELD.test(hints) ? 'code' : 'text'
 }
 
+const PHYSICAL_ALIGN: Record<string, PlaceholderSide> = {
+  left: 'left', '-webkit-left': 'left', right: 'right', '-webkit-right': 'right', center: 'center', '-webkit-center': 'center',
+}
+
+/**
+ * Where the placeholder lands: the ::placeholder's text-align (which inherits the field's unless the page sets its
+ * own), else the field's. start, end and justify resolve against the field's direction.
+ */
+function placeholderSide(el: Element, field: CSSStyleDeclaration): PlaceholderSide {
+  let align = ''
+  try { align = el.ownerDocument.defaultView?.getComputedStyle(el, '::placeholder').textAlign ?? '' } catch { /* no pseudo style: use the field's */ }
+  align ||= field.textAlign
+  const physical = PHYSICAL_ALIGN[align]
+  if (physical) return physical
+  const ltr = dirOf(field) === 'ltr'
+  return align === 'end' ? (ltr ? 'right' : 'left') : (ltr ? 'left' : 'right')
+}
+
 function readFields(doc: Document, style: Style, skipped: Pred, visible: Pred, ref: Ref): FieldNode[] {
   const out: FieldNode[] = []
   for (const el of Array.from(doc.body.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea'))) {
     const type = el.getAttribute('type')?.toLowerCase()
     if (type === 'hidden' || type === 'checkbox' || type === 'radio' || type === 'submit' || type === 'button') continue
     if (skipped(el) || !visible(el)) continue
-    out.push({ ...ref(el), kind: fieldKind(el), dir: dirOf(style(el)), dirAttr: el.getAttribute('dir'), placeholder: el.getAttribute('placeholder') ?? '', placeholderShown: el.matches(':placeholder-shown') })
+    const s = style(el)
+    out.push({
+      ...ref(el), kind: fieldKind(el), dir: dirOf(s), dirAttr: el.getAttribute('dir'), placeholder: el.getAttribute('placeholder') ?? '',
+      placeholderShown: el.matches(':placeholder-shown'), placeholderSide: placeholderSide(el, s),
+    })
   }
   return out
 }

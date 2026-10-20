@@ -16,14 +16,20 @@ function parseRange(token: string): [number, number] | null {
 
 const FULL_RANGE = /^U\+0*-10FFFF$/i
 
+/** True when the face has the default range `U+0-10FFFF`, which says nothing about which glyphs it has. */
+export const defaultRange = (face: Pick<LoadedFace, 'unicodeRange'>): boolean => {
+  const ranges = face.unicodeRange.split(',').map((t) => t.trim())
+  return ranges.length === 1 && FULL_RANGE.test(ranges[0]!)
+}
+
 /**
  * True when the face is for Arabic. An explicit unicode-range that includes U+0627 (alef) says so. The default
- * range `U+0-10FFFF` says nothing about glyphs, so a face with it counts only when its family name is an Arabic one.
+ * range `U+0-10FFFF` says nothing about glyphs, so a face with it counts when its family name is an Arabic one, or when
+ * the reader measured it drawing alef (brand fonts such as GE SS Two or HelveticaNeueW23).
  */
 export function coversArabic(face: LoadedFace): boolean {
-  const ranges = face.unicodeRange.split(',').map((t) => t.trim())
-  if (ranges.length === 1 && FULL_RANGE.test(ranges[0]!)) return ARABIC_FAMILY_NAME.test(face.family)
-  return ranges.some((token) => {
+  if (defaultRange(face)) return ARABIC_FAMILY_NAME.test(face.family) || face.drawsArabic === true
+  return face.unicodeRange.split(',').some((token) => {
     const r = parseRange(token)
     return r !== null && r[0] <= ARABIC_LETTER_ALEF && ARABIC_LETTER_ALEF <= r[1]
   })
@@ -34,9 +40,8 @@ export function coversArabic(face: LoadedFace): boolean {
  * about glyphs, so it never counts: IBM Plex Sans Arabic has it and still draws U+20C3 as a missing-glyph box (test/verify.test.ts).
  */
 export function coversCodePoint(face: LoadedFace, cp: number): boolean {
-  const ranges = face.unicodeRange.split(',').map((t) => t.trim())
-  if (ranges.length === 1 && FULL_RANGE.test(ranges[0]!)) return false
-  return ranges.some((token) => {
+  if (defaultRange(face)) return false
+  return face.unicodeRange.split(',').some((token) => {
     const r = parseRange(token)
     return r !== null && r[0] <= cp && cp <= r[1]
   })

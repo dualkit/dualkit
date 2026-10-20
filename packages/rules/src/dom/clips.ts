@@ -5,7 +5,15 @@ import { clean, type Pred, type Ref, type Style } from './types'
 const CLIPS = /^(hidden|clip)$/
 const MIN_GAP = 1
 
-/** How far the text under the element (its own and its descendants') paints past the element's padding box, per axis. */
+type Box = { left: number; top: number; right: number; bottom: number }
+
+/** True when the painted rect overlaps the box. A rect wholly outside, such as an off-screen carousel slide, does not. */
+const overlaps = (r: DOMRect, b: Box): boolean => r.right > b.left && r.left < b.right && r.bottom > b.top && r.top < b.bottom
+
+/**
+ * How far the text under the element (its own and its descendants') paints past the element's padding box, per axis.
+ * Only text runs at least partly inside the box count; a run painted wholly outside it is not cut off, it is elsewhere.
+ */
 function textReach(el: HTMLElement, style: Style): { x: number; y: number; text: string } {
   const box = el.getBoundingClientRect()
   const left = box.left + el.clientLeft
@@ -20,16 +28,23 @@ function textReach(el: HTMLElement, style: Style): { x: number; y: number; text:
     const parent = node.parentElement
     const own = clean(node.textContent ?? '')
     if (!parent || parent.closest('svg, script, style') || !own || nestedClip(parent, el, style)) continue
-    texts.push(own)
     const range = el.ownerDocument.createRange()
     range.selectNodeContents(node)
-    for (const r of Array.from(range.getClientRects())) {
-      if (r.width === 0 && r.height === 0) continue
+    const rects = Array.from(range.getClientRects()).filter((r) => r.width > 0 || r.height > 0)
+    if (!rects.some((r) => overlaps(r, { left, top, right, bottom }))) continue
+    texts.push(own)
+    for (const r of rects) {
       x = Math.max(x, r.right - right, left - r.left)
       y = Math.max(y, r.bottom - bottom, top - r.top)
     }
   }
   return { x, y, text: texts.join(' ') }
+}
+
+/** -webkit-line-clamp (Tailwind line-clamp-2) draws its own ellipsis on the last line it keeps, so it counts as one. */
+const lineClamped = (s: CSSStyleDeclaration): boolean => {
+  const clamp = s.getPropertyValue('-webkit-line-clamp').trim()
+  return clamp !== '' && clamp !== 'none'
 }
 
 /** True when a box between the text and the root clips on its own, so the text is that box's to report. */
@@ -59,7 +74,7 @@ export function readClips(
     let hide = false
     for (let n: Element | null = el; n && n !== doc.body && !hide; n = n.parentElement) hide = hiddenFromView(n, style(n))
     if (hide) continue
-    const base = { ellipsis: s.textOverflow === 'ellipsis', hasArabic: hasArabic(reach.text) }
+    const base = { ellipsis: s.textOverflow === 'ellipsis' || lineClamped(s), hasArabic: hasArabic(reach.text) }
     // A box also scrolls for an oversized image or track, which cuts no text. Both the scroll size and the box's own text must overflow.
     const gapX = Math.min(el.scrollWidth - el.clientWidth, reach.x)
     const gapY = Math.min(el.scrollHeight - el.clientHeight, reach.y)

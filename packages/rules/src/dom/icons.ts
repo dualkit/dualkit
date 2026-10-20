@@ -1,6 +1,6 @@
 import type { IconNode } from '../model'
 import { offScreenWithin } from './hidden'
-import { flipSign, MIRROR_DEPTH } from './mirror'
+import { flipSign, MIRROR_DEPTH, turns } from './mirror'
 import { clean, dirOf, type Pred, type Ref, type Style } from './types'
 
 const ICON_CLASS = /^(lucide-|fa-|icon-|bi-|ri-|ti-|i-)(.+)$/
@@ -50,13 +50,20 @@ export function iconName(el: Element): string | null {
   return null
 }
 
-/** True when the element or an ancestor (up to 4 deep) has a horizontally flipping transform. Icons treat any flip as mirrored. */
-function mirrored(el: Element, style: Style): boolean {
+/**
+ * Whether the element or an ancestor (up to 4 deep) mirrors it (a flip: the determinant is negative), and whether one
+ * turns it to point the other way without mirroring (rotate(180deg), scale(-1,-1)). Icons treat any flip as mirrored.
+ */
+function orientation(el: Element, style: Style): { mirrored: boolean; turned: boolean } {
+  let mirrored = false
+  let turned = false
   let node: Element | null = el
   for (let depth = 0; node && depth < MIRROR_DEPTH; depth++, node = node.parentElement) {
-    if (flipSign(style(node)) < 0) return true
+    const s = style(node)
+    mirrored ||= flipSign(s) < 0
+    turned ||= turns(s)
   }
-  return false
+  return { mirrored, turned }
 }
 
 /** Every ancestor of a candidate, so wrappers can be dropped in favour of the innermost icon. */
@@ -76,7 +83,7 @@ export function readIcons(doc: Document, style: Style, skipped: Pred, visible: P
     if (wrappers.has(el) || el.parentElement?.closest('svg') || skipped(el) || !visible(el)) continue
     const r = el.getBoundingClientRect()
     if (r.width > 64 || r.height > 64) continue
-    out.push({ ...ref(el), name: iconName(el), dir: dirOf(style(el)), mirrored: mirrored(el, style) })
+    out.push({ ...ref(el), name: iconName(el), dir: dirOf(style(el)), ...orientation(el, style) })
   }
   return out
 }

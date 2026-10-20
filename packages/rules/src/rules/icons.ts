@@ -14,8 +14,9 @@ export const notMirrored = defineRule({
   title: 'A direction icon that points the wrong way',
   why: 'Back, forward and chevron icons describe reading order, so in Arabic they must point the other way.',
   fix: 'Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.',
+  // A turn such as Tailwind's rtl:rotate-180 points a symmetric arrow the other way too, so it counts.
   check: (m) => m.icons
-    .filter((i) => i.dir === 'rtl' && !i.mirrored && i.name !== null && directional(i.name))
+    .filter((i) => i.dir === 'rtl' && !i.mirrored && !i.turned && i.name !== null && directional(i.name))
     .map((i) => ({ node: pick(i), message: `"${i.name}" is not mirrored in right-to-left. Check it points the way the reader moves.` })),
 })
 

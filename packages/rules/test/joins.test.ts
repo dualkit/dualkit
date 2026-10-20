@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { boundarySplit, sideVerdict, touchesTatweel, type Forms } from '../src/dom/joins'
+import { boundarySplit, lettersTouch, sideVerdict, touchesTatweel, type Forms } from '../src/dom/joins'
 
 // The decision is pure: widths in, verdict out. These run without a browser, so they cover the branches on every platform.
 const forms = (zwj: Forms, neighbour: Forms = zwj) => (kind: 'zwj' | 'neighbour'): Forms => (kind === 'zwj' ? zwj : neighbour)
@@ -45,5 +45,19 @@ describe('touchesTatweel', () => {
   })
   it('keeps a split inside a real word', () => {
     expect(touchesTatweel('\u0645\u062d', 1, '\u0645\u062f')).toBe(false)
+  })
+})
+
+describe('lettersTouch', () => {
+  const r = (left: number, right: number, top = 0, bottom = 20) => ({ left, right, top, bottom })
+  it('touches when the letters meet or overlap on one line', () => {
+    expect(lettersTouch(r(100, 110), r(90, 100))).toBe(true)
+    expect(lettersTouch(r(100, 110), r(90, 100.9))).toBe(true)
+    expect(lettersTouch(r(100, 110), r(90, 99.2))).toBe(true)
+  })
+  it('does not touch with a gap of 1px or more, or on different lines', () => {
+    expect(lettersTouch(r(100, 110), r(90, 99))).toBe(false)
+    expect(lettersTouch(r(116, 126), r(90, 100))).toBe(false)
+    expect(lettersTouch(r(100, 110, 0, 20), r(90, 100, 27, 47))).toBe(false)
   })
 })

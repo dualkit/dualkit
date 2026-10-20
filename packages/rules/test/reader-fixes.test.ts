@@ -120,6 +120,11 @@ describe('joins across a font change are measured, not assumed', () => {
     const css = `@font-face{font-family:"Plex BoldFam";src:url(data:font/woff2;base64,${bold}) format("woff2")}`
     expect((await modelOf(page('<p>مح<span style="font-family:\'Plex BoldFam\'">مد</span></p>', { css }))).joins).toEqual([])
   })
+  it.each(['2px', '0.1em'])('measures the probe with the letter-spacing of the measured text (%s), so a join that holds stays quiet', async (spacing) => {
+    const bold = readFileSync(new URL('./fonts/IBMPlexSansArabic-Bold.woff2', import.meta.url)).toString('base64')
+    const css = `@font-face{font-family:"Plex BoldFam";src:url(data:font/woff2;base64,${bold}) format("woff2")}p{letter-spacing:${spacing}}`
+    expect((await modelOf(page('<p>مح<span style="font-family:\'Plex BoldFam\'">مد</span></p>', { css }))).joins).toEqual([])
+  })
   const installed = (family: string) => withPage(page('<p>x</p>'), async (p) =>
     p.evaluate((f) => {
       const w = (fam: string) => { const e = document.createElement('span'); e.style.cssText = `position:absolute;white-space:pre;font:32px ${fam}`; e.textContent = 'محمد'; document.body.append(e); const r = e.getBoundingClientRect().width; e.remove(); return r }

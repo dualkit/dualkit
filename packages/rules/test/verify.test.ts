@@ -536,6 +536,27 @@ describe('bidi/field-placeholder: an Arabic placeholder in a left-to-right field
     expect(await found(input('type="text"'), 'bidi/field-placeholder')).toEqual([])
   })
 
+  // Final review I3: the reader records where the hint lands, from the field's text-align and the ::placeholder's.
+  it.each([
+    ['text-align:right on the field', 'type="tel" dir="ltr" style="text-align:right"', ''],
+    ['::placeholder { text-align: right }', 'type="email" dir="ltr"', '::placeholder{text-align:right}'],
+    ['::placeholder { text-align: end }', 'type="email" dir="ltr"', '::placeholder{text-align:end}'],
+  ])('paints the hint flush right and stays quiet with %s', async (name, attrs, css) => {
+    const html = input(attrs, css)
+    const hint = await ink(html)
+    console.info(`placeholder: ${name}: ink ${hint.left.toFixed(3)}..${hint.right.toFixed(3)} of the 300px field`)
+    expect(hint.right).toBeGreaterThan(0.95)
+    expect(hint.left).toBeGreaterThan(0.5)
+    expect((await modelOf(html)).fields[0]?.placeholderSide).toBe('right')
+    expect(await found(html, 'bidi/field-placeholder')).toEqual([])
+  })
+  it('still fires with ::placeholder { text-align: start } in a left-to-right field', async () => {
+    const html = input('type="email" dir="ltr"', '::placeholder{text-align:start}')
+    expect((await ink(html)).left).toBeLessThan(0.05)
+    expect((await modelOf(html)).fields[0]?.placeholderSide).toBe('left')
+    expect(await found(html, 'bidi/field-placeholder')).toEqual(['bidi/field-placeholder'])
+  })
+
   it('stays quiet once the hint is fixed with :placeholder-shown, and while a typed value hides the hint', async () => {
     expect(await found(input('type="email" dir="ltr"', FIX), 'bidi/field-placeholder')).toEqual([])
     const prefilled = page(`<input type="email" dir="ltr" value="sara@example.com" placeholder="${HINT}">`)
@@ -755,11 +776,11 @@ describe('type/arabic-broken-join matches what Chromium paints', () => {
       const w = (fam: string) => { const s = document.createElement('span'); s.style.cssText = `position:absolute;white-space:pre;font:32px ${fam}`; s.textContent = 'محمد'; document.body.append(s); const r = s.getBoundingClientRect().width; s.remove(); return r }
       return w(`"${f}",monospace`) !== w('monospace') || w(`"${f}",serif`) !== w('serif')
     }, family))
-  it.each([
+  it.for([
     { name: 'Geeza Pro then Plex', first: "font-family:'Geeza Pro'", second: "font-family:'IBM Plex Sans Arabic'", family: 'Geeza Pro', letter: 1 },
     { name: 'Plex then Al Nile', first: "font-family:'IBM Plex Sans Arabic'", second: "font-family:'Al Nile'", family: 'Al Nile', letter: 2 },
-  ])('reports a break across a font change that paints the letters apart: $name', async ({ first, second, family, letter }) => {
-    if (!(await systemFont(family))) return console.info(`SKIPPED ${family} is not installed on this machine`)
+  ])('reports a break across a font change that paints the letters apart: $name', async ({ first, second, family, letter }, ctx) => {
+    if (!(await systemFont(family))) return ctx.skip(`${family} is not installed on this machine`)
     const html = wrap(`<span style="${first}">مح</span><span style="${second}">مد</span>`)
     const model = await modelOf(html)
     const w = await widths(html)

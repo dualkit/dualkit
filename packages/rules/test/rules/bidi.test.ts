@@ -132,4 +132,9 @@ describe('bidi/field-placeholder', () => {
     expect(ids(screen({ fields: [field({ dir: 'ltr' })] }))).toEqual([])
     expect(ids(screen({ fields: [field({ dir: 'ltr', placeholderShown: false, ...hint })] }))).toEqual([])
   })
+  it('passes a hint that lands on the right or in the centre, and a field on a left-to-right page', () => {
+    expect(ids(screen({ fields: [field({ dir: 'ltr', placeholderSide: 'right', ...hint })] }))).toEqual([])
+    expect(ids(screen({ fields: [field({ dir: 'ltr', placeholderSide: 'center', ...hint })] }))).toEqual([])
+    expect(ids(screen({ root: { lang: 'en', dir: 'ltr', computedDir: 'ltr' }, fields: [field({ dir: 'ltr', ...hint })] }))).toEqual([])
+  })
 })

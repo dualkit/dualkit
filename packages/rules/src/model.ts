@@ -40,7 +40,7 @@ export type TextRun = NodeRef & {
   lines: number
   /** One entry per new currency sign in the text; empty for every other run. */
   signs: SignProbe[]
-  /** Net horizontal flip: the product of scale signs over the element and up to 4 ancestors. */
+  /** Net mirror: the product of flip signs (the sign of each transform's determinant) over the element and up to 4 ancestors. */
   mirrored: boolean
   /** The nearest element that flips the run when it is mirrored overall, else null. Runs under one flip share it. */
   mirroredBy: string | null
@@ -58,10 +58,13 @@ export type LayoutNode = NodeRef & {
   physical: PhysicalDeclaration[]
 }
 
-export type IconNode = NodeRef & { name: string | null; dir: Direction; mirrored: boolean }
+/** `mirrored`: a flip (negative determinant) on the icon or up to 4 ancestors. `turned`: a turn that points it the other way without mirroring, such as rotate(180deg). */
+export type IconNode = NodeRef & { name: string | null; dir: Direction; mirrored: boolean; turned: boolean }
 
 export type FieldKind = 'email' | 'tel' | 'url' | 'number' | 'code' | 'text'
-export type FieldNode = NodeRef & { kind: FieldKind; dir: Direction; dirAttr: string | null; placeholder: string; placeholderShown: boolean }
+/** Which edge of the field the placeholder is painted against: its text-align, start and end resolved against the field's direction. */
+export type PlaceholderSide = 'left' | 'right' | 'center'
+export type FieldNode = NodeRef & { kind: FieldKind; dir: Direction; dirAttr: string | null; placeholder: string; placeholderShown: boolean; placeholderSide: PlaceholderSide }
 
 export type LoadedFace = {
   /** No quotes. */
@@ -72,6 +75,11 @@ export type LoadedFace = {
   /** A ratio: 0.9 for `90%`. */
   sizeAdjust: number
   status: 'unloaded' | 'loading' | 'loaded' | 'error'
+  /**
+   * Measured in the page for a loaded face with the default unicode-range whose name does not say Arabic: true when it
+   * draws alef (U+0627) itself. Null when it was not measured (an Arabic name, an explicit range, not loaded, or the probe failed).
+   */
+  drawsArabic: boolean | null
 }
 
 export type LabelNode = NodeRef & { attr: 'aria-label' | 'alt' | 'title'; text: string; lang: string | null }
