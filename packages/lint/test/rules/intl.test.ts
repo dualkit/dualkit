@@ -67,7 +67,7 @@ describe('intl-digits', () => {
     "Intl.NumberFormat('ar')",
     "new Intl.DateTimeFormat(['ar-SA','en'])",
     "n.toLocaleString('ar-EG')",
-    "d.toLocaleDateString('ar', { month: 'long' })",
+    "d.toLocaleDateString('ar', { month: 'long', day: 'numeric' })",
     "d.toLocaleTimeString('ar-AE')",
     "new Intl.NumberFormat('AR-ae', { style: 'currency', currency: 'AED' })",
     "d?.toLocaleString('ar')",
@@ -106,6 +106,28 @@ describe('intl-digits', () => {
     "d.toLocaleDateString('ar-SA-u-ca-islamic-umalqura', { timeZone: 'Asia/Riyadh', numberingSystem: 'latn' })",
   ])('stays quiet on %s', (code) => {
     expect(digits(code)).toEqual([])
+  })
+  it('stays quiet on date formats that ask only for text fields', () => {
+    expect(digits("d.toLocaleDateString('ar', { month: 'long' })")).toEqual([])
+    expect(digits("new Intl.DateTimeFormat('ar-AE', { weekday: 'short', timeZone: 'Asia/Dubai' })")).toEqual([])
+    expect(digits("d.toLocaleString('ar-SA', { era: 'long', month: 'narrow' })")).toEqual([])
+    expect(digits("d.toLocaleTimeString('ar', { dayPeriod: 'long' })")).toEqual([])
+  })
+  it('fires on date formats with a numeric field, a numeric month, or no options', () => {
+    expect(digits("d.toLocaleDateString('ar', { month: 'long', day: 'numeric' })")).toHaveLength(1)
+    expect(digits("d.toLocaleDateString('ar', { month: '2-digit' })")).toHaveLength(1)
+    expect(digits("d.toLocaleDateString('ar', { month: m })")).toHaveLength(1)
+    expect(digits("new Intl.DateTimeFormat('ar', { weekday: 'long', dateStyle: 'full' })")).toHaveLength(1)
+    expect(digits("new Intl.DateTimeFormat('ar', { timeZone: 'Asia/Dubai' })")).toHaveLength(1)
+    expect(digits("new Intl.DateTimeFormat('ar')")).toHaveLength(1)
+  })
+  it('names the runtime change for bare ar and the locale difference for a regional tag', () => {
+    const bare = digits("new Intl.NumberFormat('ar')")[0]!.message
+    expect(bare).toContain('CLDR 45 to 46')
+    const regional = digits("new Intl.NumberFormat('ar-AE')")[0]!.message
+    expect(regional).toContain('ar-SA prints Arabic-Indic and ar-AE prints Latin')
+    expect(regional).not.toContain('CLDR 45')
+    expect(digits("new Intl.NumberFormat('ar-u-ca-gregory')")[0]!.message).toContain('CLDR 45 to 46')
   })
   it('reads a locale extension nu keyword after other keywords', () => {
     expect(digits("new Intl.NumberFormat('ar-u-ca-gregory-nu-latn')")).toEqual([])

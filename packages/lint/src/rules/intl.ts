@@ -85,6 +85,40 @@ function calendarOf(call: IntlCall): string | null {
 }
 
 const DATE_KINDS: ReadonlySet<Kind> = new Set(['date', 'either'])
+
+/** Date fields that print words, never digits. month counts only with a word style. */
+const TEXT_FIELDS: ReadonlySet<string> = new Set(['weekday', 'era', 'dayPeriod', 'timeZoneName'])
+const TEXT_MONTHS: ReadonlySet<string> = new Set(['long', 'short', 'narrow'])
+const NUMERIC_FIELDS: ReadonlySet<string> = new Set(['year', 'day', 'hour', 'minute', 'second', 'fractionalSecondDigits', 'dateStyle', 'timeStyle'])
+
+/** A date format whose static options ask only for text fields, so it prints no digits. No options means the default, which has digits. */
+function textOnlyDate(call: IntlCall): boolean {
+  if (!DATE_KINDS.has(call.kind) || call.options === null) return false
+  let text = false
+  for (const [key, value] of call.options) {
+    if (NUMERIC_FIELDS.has(key)) return false
+    if (key === 'month') {
+      const style = staticString(value)
+      if (style === null || !TEXT_MONTHS.has(style)) return false
+      text = true
+    } else if (TEXT_FIELDS.has(key)) text = true
+  }
+  return text
+}
+
+/** A tag with a region subtag, such as ar-SA or ar-Arab-AE, as opposed to bare ar. */
+function hasRegion(locale: string): boolean {
+  for (const part of locale.split('-').slice(1)) {
+    if (part.length === 1) return false
+    if (/^(?:[a-z]{2}|\d{3})$/i.test(part)) return true
+  }
+  return false
+}
+
+const digitsMessage = (locale: string): string =>
+  hasRegion(locale)
+    ? `The locale '${locale}' has no numberingSystem and no -u-nu- extension. The default digits differ between Arabic locales (for example ar-SA prints Arabic-Indic and ar-AE prints Latin), so pin numberingSystem to say which you mean.`
+    : `The locale '${locale}' has no numberingSystem and no -u-nu- extension, and the default digits for bare ar changed from Arabic-Indic to Latin from CLDR 45 to 46, so they vary by runtime.`
 const BARE_ISLAMIC = 'islamic'
 
 export const INTL_RULES: readonly LintRule[] = [
@@ -92,7 +126,7 @@ export const INTL_RULES: readonly LintRule[] = [
     id: 'source/intl-digits',
     severity: 'warning',
     title: 'Digits left to the runtime',
-    why: "The default digits for Arabic locales depend on the runtime's CLDR data, and CLDR changed bare ar from Arabic-Indic to Latin digits between releases 45 and 46 (Node 18 prints Arabic-Indic, Node 20 and later print Latin), so the same code shows different digits on different machines.",
+    why: "The default digits for Arabic locales come from the runtime's CLDR data. CLDR changed bare ar from Arabic-Indic to Latin digits between releases 45 and 46 (Node 18 prints Arabic-Indic, Node 20 and later print Latin), so the same code shows different digits on different machines. Regional tags differ from each other too: ar-SA and ar-EG default to Arabic-Indic, ar-AE and ar-MA to Latin.",
     fix: 'Pin numberingSystem, or add a -u-nu- extension to the locale, set to latn or arab.',
     langs: JS_LANGS,
     check: (file) => {
@@ -100,8 +134,8 @@ export const INTL_RULES: readonly LintRule[] = [
       eachIntlCall(file, (call) => {
         const first = call.locales?.[0]
         if (first === undefined || !isArabic(first) || call.options === null) return
-        if (call.options.has('numberingSystem') || unicodeKeywords(first).has('nu')) return
-        hits.push({ offset: call.start, message: `The locale '${first}' has no numberingSystem and no -u-nu- extension, so the default digits can vary by runtime.` })
+        if (call.options.has('numberingSystem') || unicodeKeywords(first).has('nu') || textOnlyDate(call)) return
+        hits.push({ offset: call.start, message: digitsMessage(first) })
       })
       return hits
     },
