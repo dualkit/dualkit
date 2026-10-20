@@ -359,6 +359,112 @@ A 300px `overflow:hidden` box over a `display:flex; width:max-content` track of 
 
 ---
 
+## 10. Source rules (Part B)
+
+Checked 20 Oct 2026. Tailwind facts come from the Tailwind CHANGELOG (`CHANGELOG.md` on `main`, which lists 4.3.3 of 16 Jul 2026 as the latest release), the v3.3 blog post, the current docs, and the `src/corePlugins.js` file at the git tags `v3.0.0`, `v3.2.7`, `v3.3.0` and `v3.4.0`. "Added in" is the first release whose changelog or tagged source contains the class.
+
+### 10a. Tailwind physical to logical classes (feeds `TAILWIND_MAP`)
+
+| Physical family | Logical replacement | Added in | Source | Confidence |
+|---|---|---|---|---|
+| `ml-*` | `ms-*` (`margin-inline-start`) | 3.3.0 | blog table; `v3.3.0` source line `['ms', ['margin-inline-start']]`; changelog "Add logical properties support for inline direction" (#10166) | VERIFIED |
+| `mr-*` | `me-*` (`margin-inline-end`) | 3.3.0 | same | VERIFIED |
+| `pl-*` | `ps-*` (`padding-inline-start`) | 3.3.0 | blog table; `v3.3.0` source | VERIFIED |
+| `pr-*` | `pe-*` (`padding-inline-end`) | 3.3.0 | same | VERIFIED |
+| `left-*` | `start-*` (3.3.0), then `inset-s-*` (4.2.0) | `start-*` 3.3.0; `inset-s-*` 4.2.0 | blog table; `v3.3.0` source `['start', ['inset-inline-start']]`; 4.2.0 changelog "Add `inset-s-*`, `inset-e-*`, `inset-bs-*`, `inset-be-*` utilities" (#19613) and "Deprecate `start-*` and `end-*` utilities in favor of `inset-s-*` and `inset-e-*` utilities". Current docs (`/docs/top-right-bottom-left`) document only `inset-s-*` | VERIFIED. Which name to suggest depends on the project's Tailwind major and minor; see the note below |
+| `right-*` | `end-*` (3.3.0), then `inset-e-*` (4.2.0) | `end-*` 3.3.0; `inset-e-*` 4.2.0 | same | VERIFIED |
+| `text-left` | `text-start` (`text-align: start`) | 3.1.0 | changelog 3.1.0 "Add `text-start` and `text-end` utilities" (#6656); `v3.2.7` source has `.text-start`; `v3.0.0` source does not. Docs `/docs/text-align` | VERIFIED |
+| `text-right` | `text-end` (`text-align: end`) | 3.1.0 | same | VERIFIED |
+| `rounded-l-*` | `rounded-s-*` | 3.3.0 | blog table; `v3.3.0` source `['rounded-s', [...]]`; docs `/docs/border-radius` | VERIFIED |
+| `rounded-r-*` | `rounded-e-*` | 3.3.0 | same | VERIFIED |
+| `rounded-tl-*` | `rounded-ss-*` | 3.3.0 | blog table; `v3.3.0` source | VERIFIED |
+| `rounded-tr-*` | `rounded-se-*` | 3.3.0 | same | VERIFIED |
+| `rounded-bl-*` | `rounded-es-*` | 3.3.0 | same | VERIFIED |
+| `rounded-br-*` | `rounded-ee-*` | 3.3.0 | same | VERIFIED |
+| `border-l`, `border-l-*` | `border-s`, `border-s-*` | 3.3.0 | blog table; `v3.3.0` source `['border-s', ...]`; docs `/docs/border-width` | VERIFIED |
+| `border-r`, `border-r-*` | `border-e`, `border-e-*` | 3.3.0 | same | VERIFIED |
+| `float-left` | `float-start` (`float: inline-start`) | 3.4.0 | changelog 3.4.0 "Add logical property values for `float` and `clear` utilities" (#12480); `v3.3.0` source has no `float-start`, `v3.4.0` source has `.float-start` and `.float-end`; docs `/docs/float` | VERIFIED |
+| `float-right` | `float-end` (`float: inline-end`) | 3.4.0 | same | VERIFIED |
+| `scroll-ml-*` | `scroll-ms-*` | 3.3.0 | blog table; `v3.3.0` source `['scroll-ms', ...]` | VERIFIED |
+| `scroll-mr-*` | `scroll-me-*` | 3.3.0 | same | VERIFIED |
+| `scroll-pl-*` | `scroll-ps-*` | 3.3.0 | same | VERIFIED |
+| `scroll-pr-*` | `scroll-pe-*` | 3.3.0 | same | VERIFIED |
+| `clear-left`, `clear-right` | `clear-start`, `clear-end` | 3.4.0 | same changelog line (#12480); `v3.4.0` source `.clear-start`. Not in the spec's family list; recorded in case Task 4 wants it | VERIFIED |
+
+**First release with logical utilities overall.** The first class in the table above is `text-start` and `text-end` in 3.1.0 (8 Jun 2022). The first release of the margin, padding, inset, border-radius, border-width and scroll families is 3.3.0 (27 Mar 2023). The belief "logical utilities first appeared in 3.3" is right for those families and wrong for `text-start`/`text-end` (3.1.0) and `float-start`/`float-end`/`clear-start`/`clear-end` (3.4.0). The v3.3 blog post says "We've added new logical property utilities for inset, margin, padding, border-radius, scroll-margin, and scroll-padding", and the tagged 3.3.0 source also carries `border-s` and `border-e`.
+
+**Newer names, 4.2.0.** `inset-s-*` and `inset-e-*` replace `start-*` and `end-*` (deprecated, same release). 4.2.0 also adds block-axis names (`inset-bs-*`, `inset-be-*`, `pbs-*`, `pbe-*`, `mbs-*`, `mbe-*`, `border-bs-*`, `border-be-*`, `scroll-pbs-*` and others, #19601 and #19613). These are block (top and bottom) names, so they replace `top-*` and friends, not the horizontal families this rule covers. 4.2.3 teaches the upgrade tool to rewrite `start-<n>` to `inset-s-<n>` and `end-<n>` to `inset-e-<n>` (#19849). 4.3.0: "Ensure `start` and `end` legacy utilities without values do not generate CSS" (#20003).
+
+**Fix text for `left-*` and `right-*`.** Suggest `start-*`/`end-*` for Tailwind below 4.2 and `inset-s-*`/`inset-e-*` for 4.2 and later. If the installed version is unknown, name both. Neither `start-*` nor `end-*` was removed; they are deprecated.
+
+**What is not covered.** `ml-auto`, `mr-auto`, `space-x-*` and `divide-x-*` are not in the spec list and have no entry. Tailwind used logical properties for `space` and `divide` in 2.0.0-alpha.1 (#1883) and reverted that in 2.0.0-alpha.2 (#2644), per the changelog, so do not claim a logical replacement for them.
+
+Sources:
+- https://tailwindcss.com/blog/tailwindcss-v3-3 (section "Simplified RTL support with logical properties")
+- https://raw.githubusercontent.com/tailwindlabs/tailwindcss/main/CHANGELOG.md (entries 3.1.0, 3.3.0, 3.4.0, 4.2.0, 4.2.3, 4.3.0)
+- https://raw.githubusercontent.com/tailwindlabs/tailwindcss/v3.3.0/src/corePlugins.js, `v3.2.7`, `v3.4.0`, `v3.0.0` (same path)
+- https://tailwindcss.com/docs/text-align, /docs/border-radius, /docs/border-width, /docs/float, /docs/top-right-bottom-left
+
+### 10b. CLDR default numbering system for Arabic locales (feeds `intl-digits`)
+
+Local probe, `new Intl.NumberFormat(locale).resolvedOptions().numberingSystem`:
+
+| Runtime | CLDR | ICU | `ar` | `ar-AE` | `ar-SA` | `ar-EG` | `ar-MA` |
+|---|---|---|---|---|---|---|---|
+| Node 18.20.8 (`npx -y node@18`) | 44.1 | 74.2 | arab | latn | arab | arab | latn |
+| Node 20.20.2 (`npx -y node@20`) | 48.0 | 78.2 | latn | latn | arab | arab | latn |
+| Node 22.21.1 (nvm) | 47.0 | 77.1 | latn | latn | arab | arab | latn |
+| Node 25.6.1 (default `node`) | 48.0 | 78.2 | latn | latn | arab | arab | latn |
+
+Node 20 reports CLDR 48 because the 20.20.2 build ships a newer ICU than early Node 20 releases did. The CLDR column is `process.versions.cldr` as printed, not assumed from the major version.
+
+CLDR source data, the `<defaultNumberingSystem>` element in `common/main/<locale>.xml` at the git tag `release-<n>` of `unicode-org/cldr`. The symbol `↑↑↑` means "inherit from the parent locale", which for `ar` is root, whose default is `latn`:
+
+| Locale | r42 | r44.1 | r45 | r46 | r47 | r48 |
+|---|---|---|---|---|---|---|
+| `ar` | arab | arab | arab | inherits (latn) | inherits (latn) | inherits (latn) |
+| `ar-AE` | latn | latn | latn | inherits `ar` (latn) | same | same |
+| `ar-SA` | arab | inherits `ar` (arab) | inherits `ar` (arab) | arab | arab | arab |
+| `ar-EG` | arab | inherits `ar` (arab) | inherits `ar` (arab) | arab | arab | arab |
+| `ar-MA` | latn | latn | latn | inherits `ar` (latn) | same | same |
+
+| Claim | Confidence |
+|---|---|
+| CLDR changed the default digits for the generic `ar` locale from `arab` (Arabic-Indic) to `latn` between release 45 and release 46. Evidence: the `ar.xml` data at `release-45` says `arab`, at `release-46` it inherits root. The local probe agrees (Node 18 with CLDR 44.1 gives `arab`; the later runtimes give `latn`) | VERIFIED from the CLDR data and the local probe |
+| `ar-SA` and `ar-EG` keep `arab` in every release checked (42 to 48); `ar-AE` and `ar-MA` are `latn` in every release checked | VERIFIED |
+| A CLDR ticket or release-note sentence announcing the `ar` change | UNVERIFIED. The CLDR 46 release page (`cldr.unicode.org/downloads/cldr-46`) was read and does not mention it. A 2019 cldr-users thread discusses switching Arabic to ASCII digits but is a proposal, not the change. Do not cite a ticket |
+| `ar-AE` and `ar-MA` were `latn` in Node 18 | VERIFIED by the local probe |
+
+Consequence for the rule's `why`: say that the default digits for a bare `ar` depend on the runtime's CLDR version (Arabic-Indic before CLDR 46, Latin from 46) and that `ar-AE`, `ar-MA` and others differ from `ar-SA` and `ar-EG`, so the code should pin `numberingSystem`. Do not cite a ticket. CLDR 44.1 is inferred for Node 18 only from `process.versions.cldr` and the probe; the Node release notes were not read.
+
+Sources: https://raw.githubusercontent.com/unicode-org/cldr/release-45/common/main/ar.xml and `release-46`, `release-47`, `release-48`, plus the `ar_AE`, `ar_SA`, `ar_EG`, `ar_MA` files at each tag · https://cldr.unicode.org/downloads/cldr-46 · https://corp.unicode.org/pipermail/cldr-users/2019-April/000918.html
+
+### 10c. Islamic calendar ids and Saudi Arabia
+
+| Claim | Source | Confidence |
+|---|---|---|
+| The valid CLDR calendar types for the Hijri family are `islamic`, `islamic-civil`, `islamic-rgsa`, `islamic-tbla`, `islamic-umalqura`. The legacy `islamicc` is deprecated with `preferred="islamic-civil"` | `common/bcp47/calendar.xml` at `release-48`: `islamic` "Hijri calendar", `islamic-umalqura` "Hijri calendar, Umm al-Qura", `islamic-tbla` "tabular ... astronomical epoch", `islamic-civil` "tabular ... civil epoch", `islamic-rgsa` "Saudi Arabia sighting" | VERIFIED |
+| ECMA-402 identifies calendars by the UTS 35 calendar type and does not list the ids itself. `AvailableCalendars` is implementation-defined and "must include `iso8601`"; the spec names `islamicc` and `islamic-civil` as aliases that are both or neither supported | `tc39/ecma402` `spec/locales-currencies-tz.html`, clause `sec-calendar-types` | VERIFIED |
+| Node 25.6.1 `Intl.supportedValuesOf('calendar')` returns `islamic islamic-civil islamic-rgsa islamic-tbla islamic-umalqura` (plus the non-Hijri calendars) | local probe | VERIFIED for that runtime only |
+| CLDR calendar preference for `SA` is `gregorian islamic-umalqura islamic islamic-rgsa`; for `AE BH KW QA` it is `gregorian islamic-umalqura islamic islamic-civil islamic-tbla`; for `EG` it is `gregorian coptic islamic islamic-civil islamic-tbla` | `common/supplemental/supplementalData.xml` `calendarPreferenceData` at `release-48` | VERIFIED |
+| `new Intl.DateTimeFormat('ar-SA').resolvedOptions().calendar` is `gregory` in Node 25.6.1, so a bare `ar-SA` formatter does not produce Hijri dates by default; `ar-AE` and `ar-EG` are also `gregory` | local probe | VERIFIED. Hijri output needs `calendar: 'islamic-umalqura'` or the `-u-ca-` extension |
+| Saudi Arabia officially uses the Umm al-Qura calendar for civil dates | The CLDR preference above ranks `islamic-umalqura` first of the Hijri calendars for `SA`, and the site title `ummulqura.org.sa` reads "Official Umm al-Qura Calendar". A web search found papers saying the Umm al-Qura calendar is used by the Saudi government for civil purposes and is developed at KACST. No government or KACST page stating it was read | SECONDARY. Not VERIFIED, because no primary government statement was read. A rule may use the CLDR preference (VERIFIED) but must not say "officially" |
+
+Sources: https://raw.githubusercontent.com/unicode-org/cldr/release-48/common/bcp47/calendar.xml · https://raw.githubusercontent.com/unicode-org/cldr/release-48/common/supplemental/supplementalData.xml · https://raw.githubusercontent.com/tc39/ecma402/main/spec/locales-currencies-tz.html · https://www.ummulqura.org.sa/ · https://proceedings.uinsa.ac.id/index.php/ICOSLAW/article/view/947
+
+### 10d. U+FDFC in HTML source
+
+U+FDFC is already VERIFIED in section 3 (RIAL SIGN, age 3.2, gc Sc, bidi AL). Not redone here.
+
+| Claim | Confidence |
+|---|---|
+| `&#xFDFC;`, `&#xfdfc;` and `&#65020;` are all valid numeric character references to U+FDFC (hex digits are case-insensitive; 0xFDFC is 65020 decimal, computed) | VERIFIED (arithmetic checked; the character-reference syntax is the standard HTML numeric form) |
+| There is no named character reference for U+FDFC. `https://html.spec.whatwg.org/entities.json` (2231 entries, last-modified 12 Nov 2025) has no entry whose `codepoints` contains 0xFDFC | VERIFIED by a script over the file |
+
+Source: https://html.spec.whatwg.org/entities.json
+
+---
+
 ## Tally
 
 | Step | Verdict |
@@ -376,3 +482,4 @@ A 300px `overflow:hidden` box over a `display:flex; width:max-content` track of 
 | 7 Mirrored and clipped text (Task 6) | VERIFIED, see the probes in `verify.test.ts`. Dot-below ink beyond the line box is a stated limit |
 | 8 Split Arabic words (Task 7) | VERIFIED: inline-block and inline-flex break; b, colour and padding join. Font-family is platform-dependent (breaks with Geeza Pro and Al Nile on macOS, joins between Plex faces) and is measured per page. Serif fallback UNCERTAIN, not claimed |
 | 9 Final review fixes | VERIFIED, see the probes in `joins-boxes`, `flips`, `clips`, `fonts-measured` and `verify` tests. A read-more box with max-height is a stated limit. Flip card back faces (9f) and translated tracks (9g) measured; an untranslated over-wide track still reports |
+| 10 Source rules (Part B) | Tailwind logical classes and versions VERIFIED (3.1.0 text-start, 3.3.0 ms/me/ps/pe/start/end/rounded/border/scroll, 3.4.0 float/clear, 4.2.0 inset-s/inset-e). CLDR `ar` digits arab to latn between r45 and r46 VERIFIED from data; no CLDR ticket (UNVERIFIED). Islamic calendar ids VERIFIED. "Saudi officially uses Umm al-Qura" SECONDARY. No named entity for U+FDFC VERIFIED |
