@@ -244,11 +244,20 @@ Plain `محمد`: م 7.73, ح 10.63 (medial), م 8.41 (medial), د 8.5. `مح` a
 | colour only | 10.61 | 8.41 | JOINS |
 | `display:inline-block` | 10.28 | 7.75 | BREAKS |
 | `display:inline-flex` | 10.28 | 7.75 | BREAKS |
-| `font-family` to a second family name with the same Plex bytes | 10.61 | 8.41 | JOINS |
-| `font-family: serif` | 10.61 | 7.05 (initial and medial identical) | UNCERTAIN, left out |
+| `font-family`: Plex Bold loaded as its own family (different bytes) | 10.61 | 9.75 (bold medial) | JOINS |
+| `font-family: serif` | 10.61 | 7.05 (initial and medial identical) | UNCERTAIN: the fallback draws the same form everywhere |
 | `padding-inline-start: 2px` | 10.61 | 8.41 | JOINS |
 
-Result: only the atomic inline boxes (`inline-block`, `inline-flex`) cut the join. A weight, colour, font or padding change on a plain inline span does not, because Chromium shapes across inline element boundaries. The `serif` case falls back to a system face that draws meem the same in every position, so it cannot show a join either way and is not claimed. The rule reports `inline-block` and `inline-flex` only. `inline-grid` and `inline-table` were not probed and are not reported.
+A font-family change is platform-dependent, so the rule measures it in the page. Probes on this machine (macOS, system fonts, same Chromium and Playwright):
+
+| Pair | Boundary letter painted | Joined form | Split form | Verdict |
+|---|---|---|---|---|
+| Geeza Pro, then Plex | 8.38 (م, second span, Plex 16px) | 9.84 | 8.38 | BREAKS |
+| Plex, then Al Nile | 5.05 (م, second span, Al Nile 16px) | 6.73 | 5.05 | BREAKS |
+
+An earlier version of this section claimed a font change never breaks the join. That was wrong, and it came from a probe bug: the case styles were written with double quotes inside a double-quoted `style` attribute, so the font-family never applied. A reviewer's macOS probe at a larger size found the same breaks: Plex to Al Nile leaves the م initial (10.09; Nile initial 10.09, medial 13.45), Geeza Pro to Plex leaves the ح final (16.73; Geeza medial 19.67, final 16.73), and Plex Regular to Plex Bold as different families with different bytes joins (19.47 = Bold medial). Those numbers came from a macOS probe, not from the Linux CI fonts, so the result depends on the installed fonts and the reader measures it per page. ZWJ alone is not a reliable reference: Al Nile breaks the run at U+200D, so the reader falls back to the real neighbouring letter drawn in that font when the ZWJ forms are within 0.5px.
+
+The rule reports `inline-block` and `inline-flex` always, and a font-family change only when the measured boundary letter is nearest the non-joining form and the two reference forms differ by more than 0.5px. `inline-grid` and `inline-table` were not probed and are not reported.
 
 ---
 
@@ -267,4 +276,4 @@ Result: only the atomic inline boxes (`inline-block`, `inline-flex`) cut the joi
 | 5 Chromium bidi paint (Task 4) | VERIFIED, see the probes in `verify.test.ts` |
 | 6 Currency signs in webfonts (fix round) | VERIFIED, see the probes in `verify.test.ts` |
 | 7 Mirrored and clipped text (Task 6) | VERIFIED, see the probes in `verify.test.ts`. Dot-below ink beyond the line box is a stated limit |
-| 8 Split Arabic words (Task 7) | VERIFIED for inline-block and inline-flex (break) and b, colour, font-family, padding (join). Serif fallback UNCERTAIN, not claimed |
+| 8 Split Arabic words (Task 7) | VERIFIED: inline-block and inline-flex break; b, colour and padding join. Font-family is platform-dependent (breaks with Geeza Pro and Al Nile on macOS, joins between Plex faces) and is measured per page. Serif fallback UNCERTAIN, not claimed |

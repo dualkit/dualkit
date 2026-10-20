@@ -146,9 +146,9 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 <a id="type-arabic-broken-join"></a>
 ### `type/arabic-broken-join` Arabic word split by a box
 
-**error.** An inline-block or inline-flex box shapes its text on its own, so the letters on either side of it stop joining and the word reads as two.
+**error.** An inline-block or inline-flex box, and on some platforms a change of font, shapes the text on its own, so the letters on either side stop joining and the word reads as two.
 
-**Fix:** Keep the word in one inline element, or style the whole word. A colour, bold weight, font or padding on an inline span does not break the join.
+**Fix:** Keep the word in one inline element, or style the whole word. Colour, bold and padding on an inline span keep the join, but a font change can break it.
 
 ## Content
 

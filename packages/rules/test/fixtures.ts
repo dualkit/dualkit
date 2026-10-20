@@ -17,7 +17,7 @@ const icon = (name: string, style = '') =>
   `<button><svg data-icon="${name}" style="${style}" width="16" height="16" viewBox="0 0 16 16"><path d="M2 8h12"/></svg></button>`
 const long = 'نص عربي طويل يمتد على عدة أسطر في هذه الفقرة الصغيرة'
 
-export const FIXTURES: Record<string, { bad: string; good: string }> = {
+export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: string[] }> = {
   'bidi/unisolated-number': { bad: page('<p>رقم الهاتف 050 123 4567</p>'), good: page('<p>رقم الهاتف <bdi>050 123 4567</bdi></p>') },
   'bidi/unisolated-latin': { bad: page('<p>رقم الطلب #A-10293 تم</p>'), good: page('<p>رقم الطلب <bdi>#A-10293</bdi> تم</p>') },
   'bidi/punctuation-flip': { bad: page('<p>Hello world!</p>'), good: page('<p dir="ltr">Hello world!</p>') },
@@ -54,6 +54,7 @@ export const FIXTURES: Record<string, { bad: string; good: string }> = {
   'type/arabic-broken-join': {
     bad: page('<p>مح<span style="display:inline-block">مد</span></p>'),
     good: page('<p>مح<span style="color:red">مد</span></p>'),
+    moreGood: [page('<p>مح<b>مد</b></p>'), page('<p>مح<span style="padding-inline-start:2px">مد</span></p>')],
   },
   'type/arabic-size': { bad: page('<p>مرحبا</p>', { css: 'p{font-size:12px}' }), good: page('<p>مرحبا</p>', { css: 'p{font-size:16px}' }) },
   'content/missing-lang': { bad: page('<p>مرحبا</p>', { lang: null }), good: page('<p>مرحبا</p>') },

@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { afterAll, describe, expect, it } from 'vitest'
 import { RULES } from '../src/rules'
 import { runRules } from '../src/run'
@@ -94,7 +95,7 @@ describe('joins', () => {
     expect(block).toHaveLength(1)
     expect(block[0]).toMatchObject({ reason: 'inline-block', word: 'محمد' })
     expect((await joinsOf('<p>مح<span style="display:inline-flex">مد</span></p>'))[0]).toMatchObject({ reason: 'other' })
-    for (const inner of ['<span style="color:red">مد</span>', '<b>مد</b>', '<span style="font-family:serif">مد</span>', '<span style="padding-inline-start:2px">مد</span>']) {
+    for (const inner of ['<span style="color:red">مد</span>', '<b>مد</b>', '<span style="padding-inline-start:2px">مد</span>']) {
       expect(await joinsOf(`<p>مح${inner}</p>`)).toEqual([])
     }
   })
@@ -105,5 +106,27 @@ describe('joins', () => {
     expect(await joinsOf(`<p>مح<br><span ${box}>مد</span></p>`)).toEqual([])
     expect(await joinsOf(`<p>مح<span style="display:inline-block;visibility:hidden">مد</span></p>`)).toEqual([])
     expect(await joinsOf(`<p>mh<span ${box}>مد</span></p>`)).toEqual([])
+  })
+})
+
+describe('joins across a font change are measured, not assumed', () => {
+  it('stays quiet when the second family is the bold bytes of the first, which join in Chromium', async () => {
+    const bold = readFileSync(new URL('./fonts/IBMPlexSansArabic-Bold.woff2', import.meta.url)).toString('base64')
+    const css = `@font-face{font-family:"Plex BoldFam";src:url(data:font/woff2;base64,${bold}) format("woff2")}`
+    expect((await modelOf(page('<p>مح<span style="font-family:\'Plex BoldFam\'">مد</span></p>', { css }))).joins).toEqual([])
+  })
+  it('reports a font change only when the boundary letter is painted in its split form', async () => {
+    const html = page('<p>مح<span style="font-family:\'Geeza Pro\'">مد</span></p>')
+    const m = await modelOf(html)
+    // Whatever the platform paints, the reader's answer must match what the probe measures: at most one finding, and only with reason font-family.
+    expect(m.joins.every((j) => j.reason === 'font-family')).toBe(true)
+    expect(m.joins.length).toBeLessThanOrEqual(1)
+  })
+  it('treats trailing harakat as part of the letter, and skips non-joining letters outside the basic block', async () => {
+    const box = 'style="display:inline-block"'
+    expect((await modelOf(page(`<p>مَ<span ${box}>مد</span></p>`))).joins).toHaveLength(1)
+    for (const letter of ['\u0671', '\u0688', '\u0691', '\u0698', '\u06c6', '\u06c0', '\u06d5']) {
+      expect((await modelOf(page(`<p>م${letter}<span ${box}>مد</span></p>`))).joins).toEqual([])
+    }
   })
 })

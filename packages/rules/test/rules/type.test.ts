@@ -143,6 +143,9 @@ describe('type rules', () => {
     it('says inline-flex when that is the box', () => {
       expect(runRules(screen({ joins: [{ ...join, reason: 'other' }] }), { rules: typeRules })[0]!.message).toContain('an inline-flex box')
     })
+    it('names a font change as the cause', () => {
+      expect(runRules(screen({ joins: [{ ...join, reason: 'font-family' }] }), { rules: typeRules })[0]!.message).toContain('changes font inside the word')
+    })
     it('stays quiet with no joins', () => {
       expect(ids(screen({ joins: [] }))).toEqual([])
     })

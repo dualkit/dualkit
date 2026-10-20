@@ -20,4 +20,7 @@ describe.each(RULES.map((r) => [r.id, r] as const))('%s in a real browser', (id,
   it('stays quiet on the good page', async () => {
     expect(runRules(await modelOf(FIXTURES[id]!.good), { rules: [rule] })).toEqual([])
   })
+  it('stays quiet on every other good page', async () => {
+    for (const html of FIXTURES[id]!.moreGood ?? []) expect(runRules(await modelOf(html), { rules: [rule] })).toEqual([])
+  })
 })

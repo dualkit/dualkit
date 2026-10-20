@@ -704,9 +704,9 @@ describe('layout/clipped-text matches what Chromium cuts off', () => {
 // and a broken one paints ح final and م initial. Each case is classified against reference words set in the same style.
 describe('type/arabic-broken-join matches what Chromium paints', () => {
   const widths = (html: string) => withPage(html, async (p) => (await charBoxes(p, '#w')).map((b) => Math.round((b.right - b.left) * 100) / 100))
-  // The same Plex bytes under a second family name: a family boundary whose glyph forms are known to differ between joined and split.
-  const twin = `@font-face{font-family:"Plex Twin";src:url(data:font/woff2;base64,${readFileSync(new URL('./fonts/IBMPlexSansArabic-Regular.woff2', import.meta.url)).toString('base64')}) format("woff2")}`
-  const wrap = (inner: string) => page(`<p id="w">${inner}</p>`, { css: twin })
+  // Plex Bold loaded as its own family: different bytes, a real family boundary.
+  const boldFamily = `@font-face{font-family:"Plex BoldFam";src:url(data:font/woff2;base64,${readFileSync(new URL('./fonts/IBMPlexSansArabic-Bold.woff2', import.meta.url)).toString('base64')}) format("woff2")}`
+  const wrap = (inner: string) => page(`<p id="w">${inner}</p>`, { css: boldFamily })
   const tail = (style: string) => `<span style="${style}">`
   const CASES: Array<{ name: string; style: string }> = [
     { name: 'b', style: 'font-weight:700' },
@@ -714,7 +714,7 @@ describe('type/arabic-broken-join matches what Chromium paints', () => {
     { name: 'inline-block', style: 'display:inline-block' },
     { name: 'inline-flex', style: 'display:inline-flex' },
     { name: 'font-family (serif)', style: 'font-family:serif' },
-    { name: 'font-family (same face, other name)', style: 'font-family:"Plex Twin"' },
+    { name: 'font-family (Plex Bold as its own family)', style: "font-family:'Plex BoldFam'" },
     { name: 'padding-inline-start', style: 'padding-inline-start:2px' },
   ]
   it('classifies each case by the forms of the two letters at the boundary', async () => {
@@ -734,17 +734,43 @@ describe('type/arabic-broken-join matches what Chromium paints', () => {
       outcome.set(c.name, hahJoined && meemJoined)
       console.info(`join probe: ${c.name}: ح ${hah} (medial ${plainWord[1]}, final ${plainFinal}) joined=${hahJoined}; م ${meem} (medial ${styledWord[2]}, initial ${styledInitial}) joined=${meemJoined}`)
     }
-    // Only an atomic inline box cuts the join. The serif case is left out: its fallback font draws the same م form in every position, so it cannot tell.
+    // An atomic inline box always cuts the join. A font change does not between two Plex faces; whether it does with a
+    // system font depends on the platform (see the next test). The serif case cannot tell: its fallback draws the same م form everywhere.
     expect(outcome.get('inline-block')).toBe(false)
     expect(outcome.get('inline-flex')).toBe(false)
-    for (const name of ['b', 'colour span', 'font-family (same face, other name)', 'padding-inline-start']) expect(outcome.get(name)).toBe(true)
+    for (const name of ['b', 'colour span', 'font-family (Plex Bold as its own family)', 'padding-inline-start']) expect(outcome.get(name)).toBe(true)
   })
   it('reports the broken cases and stays quiet for the ones that join', async () => {
     const id = 'type/arabic-broken-join'
     expect(await found(wrap('مح<span style="display:inline-block">مد</span>'), id)).toEqual([id])
     expect(await found(wrap('مح<span style="display:inline-flex">مد</span>'), id)).toEqual([id])
-    for (const style of ['color:red', 'font-weight:700', 'font-family:serif', 'padding-inline-start:2px']) {
+    for (const style of ['color:red', 'font-weight:700', "font-family:'Plex BoldFam'", 'padding-inline-start:2px']) {
       expect(await found(wrap(`مح<span style="${style}">مد</span>`), id)).toEqual([])
     }
+  })
+  // Reviewer's macOS probe, Chromium 140: Plex then Al Nile leaves the م initial; Geeza Pro then Plex leaves the ح final.
+  // The result depends on the installed fonts, so each pair is skipped when the system font is missing.
+  const systemFont = (family: string) => withPage(wrap('محمد'), async (p) =>
+    p.evaluate((f) => {
+      const w = (fam: string) => { const s = document.createElement('span'); s.style.cssText = `position:absolute;white-space:pre;font:32px ${fam}`; s.textContent = 'محمد'; document.body.append(s); const r = s.getBoundingClientRect().width; s.remove(); return r }
+      return w(`"${f}",monospace`) !== w('monospace') || w(`"${f}",serif`) !== w('serif')
+    }, family))
+  it.each([
+    { name: 'Geeza Pro then Plex', first: "font-family:'Geeza Pro'", second: "font-family:'IBM Plex Sans Arabic'", family: 'Geeza Pro', letter: 1 },
+    { name: 'Plex then Al Nile', first: "font-family:'IBM Plex Sans Arabic'", second: "font-family:'Al Nile'", family: 'Al Nile', letter: 2 },
+  ])('reports a break across a font change that paints the letters apart: $name', async ({ first, second, family, letter }) => {
+    if (!(await systemFont(family))) return console.info(`SKIPPED ${family} is not installed on this machine`)
+    const html = wrap(`<span style="${first}">مح</span><span style="${second}">مد</span>`)
+    const model = await modelOf(html)
+    const w = await widths(html)
+    // The boundary letter is painted narrower or wider than the joined form: compare against each side's own references.
+    const ref = async (style: string, text: string) => (await widths(wrap(`<span style="${style}">${text}</span>`)))
+    const own = letter === 1 ? { medial: (await ref(first, 'محمد'))[1]!, final: (await ref(first, 'مح'))[1]! } : { medial: (await ref(second, 'محمد'))[2]!, final: (await ref(second, 'مد'))[0]! }
+    const seen = w[letter]!
+    console.info(`join probe: ${family}: boundary letter ${seen}, joined form ${own.medial}, split form ${own.final}`)
+    expect(Math.abs(seen - own.final)).toBeLessThan(Math.abs(seen - own.medial))
+    expect(model.joins).toHaveLength(1)
+    expect(model.joins[0]).toMatchObject({ reason: 'font-family' })
+    expect(await found(html, 'type/arabic-broken-join')).toEqual(['type/arabic-broken-join'])
   })
 })

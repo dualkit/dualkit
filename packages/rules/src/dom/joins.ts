@@ -2,20 +2,33 @@ import type { JoinBreak } from '../model'
 import { offScreen } from './hidden'
 import { type Pred, type Ref, type Style } from './types'
 
-/** Arabic letters that never join to the letter after them: hamza, alef forms, dal, thal, reh, zain, waw, teh marbuta. */
-const NO_LEFT_JOIN = new Set('ءآأؤإادذرزوة')
-const ARABIC_LETTER = /[ء-يٮ-ۓۺ-ۼ]/
+/**
+ * Arabic letters that never join to the letter after them: joining type U (hamza) and R (right-joining only) in
+ * ArabicShaping.txt, over the Arabic, Arabic Supplement and Arabic Extended-A blocks.
+ */
+const NO_LEFT_JOIN = new RegExp(
+  '[\\u0621\\u0622-\\u0625\\u0627\\u0629\\u062f-\\u0632\\u0648\\u0671-\\u0673\\u0674-\\u0677\\u0688-\\u0699\\u06c0\\u06c3-\\u06cb\\u06cd\\u06cf\\u06d2\\u06d3\\u06d5\\u06ee\\u06ef' +
+  '\\u0759-\\u075b\\u076b\\u076c\\u0771\\u0773\\u0774\\u0778\\u0779\\u08aa-\\u08ac\\u08ae\\u08b1\\u08b2\\u08b9]',
+)
+const ARABIC_LETTER = /[\u0621-\u064a\u066e-\u06d3\u06d5\u06ee\u06ef\u06fa-\u06fc\u06ff\u0750-\u077f\u08a0-\u08c9]/
+/** Harakat and other combining marks, which sit on a letter without ending the word. */
+const MARK = /[\u064b-\u065f\u0670\u06d6-\u06ed]/
 /** Replaced or line-breaking content between two text nodes means they are not one word. */
 const BREAKING = 'br,wbr,img,svg,video,canvas,input,button,select,textarea,iframe,object'
 const ATOMIC: Record<string, JoinBreak['reason']> = { 'inline-block': 'inline-block', 'inline-flex': 'other' }
+const ZWJ = '\u200d'
+const FORM_GAP = 0.5
 
-const endsJoining = (s: string): boolean => {
-  const ch = s.at(-1) ?? ''
-  return ARABIC_LETTER.test(ch) && !NO_LEFT_JOIN.has(ch)
+/** Index of the last letter before any trailing marks, or -1 when the text does not end in a letter that joins leftwards. */
+function lastJoining(s: string): number {
+  let i = s.length - 1
+  while (i >= 0 && MARK.test(s[i]!)) i--
+  const ch = s[i] ?? ''
+  return ARABIC_LETTER.test(ch) && !NO_LEFT_JOIN.test(ch) ? i : -1
 }
 const startsJoining = (s: string): boolean => {
   const ch = s[0] ?? ''
-  return ARABIC_LETTER.test(ch) && ch !== 'ء'
+  return ARABIC_LETTER.test(ch) && ch !== '\u0621' && ch !== '\u0674'
 }
 
 /** The nearest ancestor of the node, below the common ancestor, that is an atomic inline box (it shapes its text on its own). */
@@ -27,9 +40,70 @@ function atomicAbove(node: Node, common: Node | null, style: Style): { el: Eleme
   return null
 }
 
+const letterWidth = (doc: Document, node: Node, at: number): number => {
+  const range = doc.createRange()
+  range.setStart(node, at)
+  range.setEnd(node, at + 1)
+  return range.getClientRects()[0]?.width ?? 0
+}
+
 /**
- * Words that Chromium cannot join because an inline-block or inline-flex box splits them. Measured in verify.test.ts:
- * a colour span, `<b>`, a font-family change and padding leave the join intact, so they are not reported.
+ * Whether the boundary letter on one side was painted in its non-joining form. The letter is drawn in a hidden probe
+ * in that side's own computed font with its real neighbour inside the same text node, once with a ZWJ on the joining
+ * side and once without, and the rendered box is compared with both. Null when the two forms are within half a pixel,
+ * so they cannot be told apart.
+ */
+function paintedSplit(doc: Document, probe: HTMLElement, node: Text, at: number, side: 'end' | 'start', neighbour: string, measured: number, style: Style): boolean | null {
+  const s = style(node.parentElement!)
+  probe.style.fontFamily = s.fontFamily
+  probe.style.fontSize = s.fontSize
+  probe.style.fontWeight = s.fontWeight
+  probe.style.fontStyle = s.fontStyle
+  probe.style.fontStretch = s.fontStretch
+  probe.style.fontFeatureSettings = s.fontFeatureSettings
+  probe.style.fontVariationSettings = s.fontVariationSettings
+  probe.style.direction = s.direction
+  const widthOf = (text: string, index: number): number => {
+    probe.textContent = text
+    return letterWidth(doc, probe.firstChild!, index)
+  }
+  const letter = node.data[at]!
+  // The letter's own neighbour inside its text node stays, so the form being compared is the one it would take in the word.
+  const before = side === 'end' && at > 0 ? node.data[at - 1]! : ''
+  const after = side === 'start' ? (node.data[at + 1] ?? '') : ''
+  // Some fonts lack U+200D and break the run at it, which hides the join. The other side's real letter, drawn in this font, stands in then.
+  const forms = (joiner: string): [number, number] => side === 'end'
+    ? [widthOf(before + letter + joiner, before.length), widthOf(before + letter, before.length)]
+    : [widthOf(joiner + letter + after, joiner.length), widthOf(letter + after, 0)]
+  let [joined, alone] = forms(ZWJ)
+  if (Math.abs(joined - alone) <= FORM_GAP) [joined, alone] = forms(neighbour)
+  if (Math.abs(joined - alone) <= FORM_GAP) return null
+  return Math.abs(measured - alone) < Math.abs(measured - joined)
+}
+
+/** Whether the font change between the two text nodes painted the boundary letters apart. Never throws. */
+function fontSplit(doc: Document, style: Style, prev: Text, last: number, n: Text): boolean {
+  let probe: HTMLElement | null = null
+  try {
+    probe = doc.createElement('span')
+    probe.setAttribute('aria-hidden', 'true')
+    probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;letter-spacing:0'
+    doc.body.appendChild(probe)
+    const first = paintedSplit(doc, probe, prev, last, 'end', n.data[0]!, letterWidth(doc, prev, last), style)
+    const second = paintedSplit(doc, probe, n, 0, 'start', prev.data[last]!, letterWidth(doc, n, 0), style)
+    return first === true || second === true
+  } catch {
+    // A probe that cannot run says nothing about the fonts, so the boundary is not reported.
+    return false
+  } finally {
+    probe?.remove()
+  }
+}
+
+/**
+ * Words that Chromium paints apart. An inline-block or inline-flex box always splits the word. A font-family change
+ * splits it on some platforms only, so it is measured in the page (fontSplit). Colour, `<b>` and padding keep the join
+ * (verify.test.ts), so they are not looked at.
  * Only adjacent text nodes in different parents are looked at, where one ends and the next starts with a joining letter.
  */
 export function readJoins(doc: Document, style: Style, skipped: Pred, ref: Ref): JoinBreak[] {
@@ -41,7 +115,8 @@ export function readJoins(doc: Document, style: Style, skipped: Pred, ref: Ref):
     const text = n.data
     if (!prev || prev.parentElement === n.parentElement || !text) continue
     const before = prev.data
-    if (!before || !endsJoining(before) || !startsJoining(text)) continue
+    const last = before ? lastJoining(before) : -1
+    if (last < 0 || !startsJoining(text)) continue
     const a = prev.parentElement
     const b = n.parentElement
     if (!a || !b || skipped(a) || skipped(b)) continue
@@ -52,11 +127,14 @@ export function readJoins(doc: Document, style: Style, skipped: Pred, ref: Ref):
     if (gap.textContent !== '' || gap.querySelector(BREAKING)) continue
     if (offScreen(a, style(a)) || offScreen(b, style(b))) continue
     const common = between.commonAncestorContainer
-    const hit = atomicAbove(n, common, style) ?? atomicAbove(prev, common, style)
-    if (!hit || seen.has(hit.el)) continue
-    seen.add(hit.el)
+    const atomic = atomicAbove(n, common, style) ?? atomicAbove(prev, common, style)
+    const byFont = !atomic && style(a).fontFamily !== style(b).fontFamily && fontSplit(doc, style, prev, last, n)
+    if (!atomic && !byFont) continue
+    const el = atomic ? atomic.el : b
+    if (seen.has(el)) continue
+    seen.add(el)
     const word = (before.match(/\S+$/)?.[0] ?? '') + (text.match(/^\S+/)?.[0] ?? '')
-    out.push({ ...ref(hit.el), reason: hit.reason, word })
+    out.push({ ...ref(el), reason: atomic ? atomic.reason : 'font-family', word })
   }
   return out
 }
