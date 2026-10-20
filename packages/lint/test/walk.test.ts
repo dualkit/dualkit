@@ -52,13 +52,6 @@ describe('walk', () => {
     expect(walk(['my dir/a b.css'], root).files).toEqual(['my dir/a b.css'])
   })
 
-  it('skips a one-line 600 KB file as minified', () => {
-    const root = tree({ 'app.min.js': `var a=${'1+'.repeat(300_000)}1;`, 'ok.js': 'var a = 1\n' })
-    const result = walk(['.'], root)
-    expect(result.files).toEqual(['ok.js'])
-    expect(result.skipped).toEqual([{ file: 'app.min.js', reason: 'minified' }])
-  })
-
   it('skips a file over 1 MB as minified even with short lines', () => {
     const root = tree({ 'big.css': 'a{}\n'.repeat(300_000) })
     expect(walk(['.'], root).skipped).toEqual([{ file: 'big.css', reason: 'minified' }])
@@ -81,8 +74,8 @@ describe('walk', () => {
     expect(walk(['a.vue', 'b.d.ts'], root)).toMatchObject({ files: [], skipped: [{ file: 'a.vue', reason: 'unsupported file type' }, { file: 'b.d.ts', reason: 'unsupported file type' }] })
   })
 
-  it('hands back the text it read, so lint does not read a file twice', () => {
-    const root = tree({ 'a.css': '.a {}\n', 'empty.ts': '' })
-    expect(walk(['.'], root).texts).toEqual(new Map([['a.css', '.a {}\n'], ['empty.ts', '']]))
+  it('lists a long-line file without reading it, and returns only files and skipped', () => {
+    const root = tree({ 'app.min.js': `var a=${'1+'.repeat(300_000)}1;` })
+    expect(walk(['.'], root)).toEqual({ files: ['app.min.js'], skipped: [] })
   })
 })

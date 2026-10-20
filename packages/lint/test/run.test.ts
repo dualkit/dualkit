@@ -73,6 +73,14 @@ describe('lint', () => {
     expect(result.findings.map((f) => `${f.file}:${f.line}`)).toEqual(['a/y.css:3', 'a/z.css:2', 'b.css:1'])
   })
 
+  it('skips a one-line 600 KB file as minified before parsing it', async () => {
+    const root = tree({ 'app.min.js': `var bad=${'1+'.repeat(300_000)}1;`, 'ok.js': 'var bad = 1\n' })
+    const result = await lint(['.'], { cwd: root, rules: [bad] })
+    expect(result.files).toBe(1)
+    expect(result.skipped).toEqual([{ file: 'app.min.js', reason: 'minified' }])
+    expect(result.findings.map((f) => f.file)).toEqual(['ok.js'])
+  })
+
   it('honours ignore', async () => {
     const root = tree({ 'a.css': '.bad .worse{}' })
     const result = await lint(['.'], { cwd: root, rules: [bad, worse], ignore: ['test/worse'] })

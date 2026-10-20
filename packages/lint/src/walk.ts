@@ -51,8 +51,8 @@ function gitignores(root: string): (abs: string, isDir: boolean) => boolean {
   }
 }
 
-/** texts holds what was read for the minified check, keyed like files, so lint reads each file once. */
-export type Walked = { files: string[]; skipped: Skipped[]; texts: ReadonlyMap<string, string> }
+/** The walker never reads file contents; lint() reads each file once and checks it for minified code there. */
+export type Walked = { files: string[]; skipped: Skipped[] }
 
 /** Lists lintable files under paths, relative to cwd with forward slashes. Symlinked directories are not followed. */
 export function walk(paths: string[], cwd: string): Walked {
@@ -60,30 +60,14 @@ export function walk(paths: string[], cwd: string): Walked {
   const files = new Set<string>()
   const skipped: Skipped[] = []
   const seen = new Set<string>()
-  const texts = new Map<string, string>()
 
   const addFile = (abs: string, size: number): void => {
     const rel = toPosix(relative(cwd, abs))
     if (seen.has(rel)) return
     seen.add(rel)
-    // Over 1 MB is minified without reading it.
-    if (size > MINIFIED_BYTES) {
-      skipped.push({ file: rel, reason: 'minified' })
-      return
-    }
-    let text: string
-    try {
-      text = readFileSync(abs, 'utf8')
-    } catch {
-      skipped.push({ file: rel, reason: 'unreadable' })
-      return
-    }
-    if (isMinified(text)) {
-      skipped.push({ file: rel, reason: 'minified' })
-      return
-    }
-    files.add(rel)
-    texts.set(rel, text)
+    // Over 1 MB is minified, known from stat without reading it. Long lines are checked in lint().
+    if (size > MINIFIED_BYTES) skipped.push({ file: rel, reason: 'minified' })
+    else files.add(rel)
   }
 
   const visit = (dir: string): void => {
@@ -115,7 +99,7 @@ export function walk(paths: string[], cwd: string): Walked {
     else if (isLintable(abs)) addFile(abs, stat.size)
     else skipped.push({ file: toPosix(p), reason: 'unsupported file type' })
   }
-  return { files: [...files].sort(compare), skipped, texts }
+  return { files: [...files].sort(compare), skipped }
 }
 
 function statSafe(abs: string): Stats | undefined {
