@@ -24,5 +24,5 @@ export const face = (p: Partial<LoadedFace> = {}): LoadedFace => ({
   family: 'IBM Plex Sans Arabic', weight: [400, 400], style: 'normal', unicodeRange: 'U+0-10FFFF', sizeAdjust: 1, status: 'loaded', ...p,
 })
 export const screen = (p: Partial<ScreenModel> = {}): ScreenModel => ({
-  root: { lang: 'ar', dir: 'rtl', computedDir: 'rtl' }, texts: [], layouts: [], icons: [], fields: [], fonts: [face()], labels: [], clips: [], unreadableStylesheets: 0, ...p,
+  root: { lang: 'ar', dir: 'rtl', computedDir: 'rtl' }, texts: [], layouts: [], icons: [], fields: [], fonts: [face()], labels: [], clips: [], joins: [], unreadableStylesheets: 0, ...p,
 })

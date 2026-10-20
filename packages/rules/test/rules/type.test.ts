@@ -133,6 +133,20 @@ describe('type rules', () => {
       expect(effectiveSize(text({ font: { ...font, size: 20 } }), [])).toBe(20)
     })
   })
+  describe('type/arabic-broken-join', () => {
+    const join = { id: 'p>span', snippet: '<span>', box: { x: 0, y: 0, width: 10, height: 10 }, reason: 'inline-block' as const, word: 'محمد' }
+    it('flags a word split by a box, as an error', () => {
+      const found = runRules(screen({ joins: [join] }), { rules: typeRules })
+      expect(found.map((f) => [f.rule, f.severity])).toEqual([['type/arabic-broken-join', 'error']])
+      expect(found[0]!.message).toBe('"محمد" is split by an inline-block box, so its letters do not join.')
+    })
+    it('says inline-flex when that is the box', () => {
+      expect(runRules(screen({ joins: [{ ...join, reason: 'other' }] }), { rules: typeRules })[0]!.message).toContain('an inline-flex box')
+    })
+    it('stays quiet with no joins', () => {
+      expect(ids(screen({ joins: [] }))).toEqual([])
+    })
+  })
   it('ignores Latin text', () => {
     expect(ids(screen({ texts: [text({ text: 'Hello', font: { ...font, size: 11, letterSpacing: 2, style: 'italic', families: ['Inter'] } })] }))).toEqual([])
   })

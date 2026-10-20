@@ -232,6 +232,24 @@ Probes in `packages/rules/test/verify.test.ts`, Chromium 140.0.7339.16 via Playw
 | Ink that sticks out of a box whose line box still fits is not counted in `scrollHeight` | Not probed as a rule input: the rule relies on line boxes, and the limit is stated in RULES.md | none | NOT CLAIMED. Listed under Known limits |
 | `text-overflow: ellipsis`, `overflow: auto` and an `.sr-only` box are not clipped text | The rule stays quiet for all three | `stays quiet for an ellipsis, a scrolling container, and an .sr-only label` | VERIFIED |
 
+## 8. Arabic words split across inline elements (Task 7)
+
+Probes in `packages/rules/test/verify.test.ts` (`type/arabic-broken-join matches what Chromium paints`), Chromium 140.0.7339.16 via Playwright 1.55, 16px IBM Plex Sans Arabic. The brief's example `مر` + `حبا` cannot test a join, because reh joins to nothing on its left, so the probe uses `محمد` split as `مح` + `مد`: the heh joins to the following meem. Joined, heh paints medial and meem medial. Broken, heh paints final and meem initial. Each case is classified against reference words set in the same style (glyph box widths in px, from `Range.getClientRects`).
+
+Plain `محمد`: م 7.73, ح 10.63 (medial), م 8.41 (medial), د 8.5. `مح` alone: ح 10.28 (final). `مد` alone: م 7.75 (initial).
+
+| Case on the `مد` span | ح width | م width | Verdict |
+|---|---|---|---|
+| `<b>` (font-weight 700) | 10.61 | 9.75 (bold medial 9.75, bold initial 8.23) | JOINS |
+| colour only | 10.61 | 8.41 | JOINS |
+| `display:inline-block` | 10.28 | 7.75 | BREAKS |
+| `display:inline-flex` | 10.28 | 7.75 | BREAKS |
+| `font-family` to a second family name with the same Plex bytes | 10.61 | 8.41 | JOINS |
+| `font-family: serif` | 10.61 | 7.05 (initial and medial identical) | UNCERTAIN, left out |
+| `padding-inline-start: 2px` | 10.61 | 8.41 | JOINS |
+
+Result: only the atomic inline boxes (`inline-block`, `inline-flex`) cut the join. A weight, colour, font or padding change on a plain inline span does not, because Chromium shapes across inline element boundaries. The `serif` case falls back to a system face that draws meem the same in every position, so it cannot show a join either way and is not claimed. The rule reports `inline-block` and `inline-flex` only. `inline-grid` and `inline-table` were not probed and are not reported.
+
 ---
 
 ## Tally
@@ -249,3 +267,4 @@ Probes in `packages/rules/test/verify.test.ts`, Chromium 140.0.7339.16 via Playw
 | 5 Chromium bidi paint (Task 4) | VERIFIED, see the probes in `verify.test.ts` |
 | 6 Currency signs in webfonts (fix round) | VERIFIED, see the probes in `verify.test.ts` |
 | 7 Mirrored and clipped text (Task 6) | VERIFIED, see the probes in `verify.test.ts`. Dot-below ink beyond the line box is a stated limit |
+| 8 Split Arabic words (Task 7) | VERIFIED for inline-block and inline-flex (break) and b, colour, font-family, padding (join). Serif fallback UNCERTAIN, not claimed |

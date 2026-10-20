@@ -79,6 +79,9 @@ export type LabelNode = NodeRef & { attr: 'aria-label' | 'alt' | 'title'; text: 
 /** `hidden` is the px cut off: scrollWidth - clientWidth, or scrollHeight - clientHeight. */
 export type ClipNode = NodeRef & { axis: 'x' | 'y'; hidden: number; ellipsis: boolean; hasArabic: boolean }
 
+/** An Arabic word that an inline-block or inline-flex box splits, so its letters cannot join across the box. */
+export type JoinBreak = NodeRef & { reason: 'inline-block' | 'font-family' | 'other'; word: string }
+
 export type ScreenModel = {
   /** dir is the attribute as written; computedDir is how the page body actually runs (dir="auto" resolved). */
   root: { lang: string | null; dir: string | null; computedDir: Direction }
@@ -89,5 +92,6 @@ export type ScreenModel = {
   fonts: LoadedFace[]
   labels: LabelNode[]
   clips: ClipNode[]
+  joins: JoinBreak[]
   unreadableStylesheets: number
 }

@@ -698,3 +698,53 @@ describe('layout/clipped-text matches what Chromium cuts off', () => {
     expect(await found(q('.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}', 'sr-only'), 'layout/clipped-text')).toEqual([])
   })
 })
+
+// R9: a word split across inline elements. Chromium shapes a text run per element, so a boundary can cut the join.
+// The word is محمد split as مح + مد: the ح joins to the following م, so a joined boundary paints ح medial and م medial,
+// and a broken one paints ح final and م initial. Each case is classified against reference words set in the same style.
+describe('type/arabic-broken-join matches what Chromium paints', () => {
+  const widths = (html: string) => withPage(html, async (p) => (await charBoxes(p, '#w')).map((b) => Math.round((b.right - b.left) * 100) / 100))
+  // The same Plex bytes under a second family name: a family boundary whose glyph forms are known to differ between joined and split.
+  const twin = `@font-face{font-family:"Plex Twin";src:url(data:font/woff2;base64,${readFileSync(new URL('./fonts/IBMPlexSansArabic-Regular.woff2', import.meta.url)).toString('base64')}) format("woff2")}`
+  const wrap = (inner: string) => page(`<p id="w">${inner}</p>`, { css: twin })
+  const tail = (style: string) => `<span style="${style}">`
+  const CASES: Array<{ name: string; style: string }> = [
+    { name: 'b', style: 'font-weight:700' },
+    { name: 'colour span', style: 'color:red' },
+    { name: 'inline-block', style: 'display:inline-block' },
+    { name: 'inline-flex', style: 'display:inline-flex' },
+    { name: 'font-family (serif)', style: 'font-family:serif' },
+    { name: 'font-family (same face, other name)', style: 'font-family:"Plex Twin"' },
+    { name: 'padding-inline-start', style: 'padding-inline-start:2px' },
+  ]
+  it('classifies each case by the forms of the two letters at the boundary', async () => {
+    const plainWord = await widths(wrap('محمد'))
+    const plainFinal = (await widths(wrap('مح')))[1]!
+    const outcome = new Map<string, boolean>()
+    console.info(`join probe: plain محمد ${JSON.stringify(plainWord)}, ح final ${plainFinal}`)
+    for (const c of CASES) {
+      const open = tail(c.style)
+      const styledWord = await widths(wrap(`${open}محمد</span>`))
+      const styledInitial = (await widths(wrap(`${open}مد</span>`)))[0]!
+      const w = await widths(wrap(`مح${open}مد</span>`))
+      const hah = w[1]!
+      const meem = w[2]!
+      const hahJoined = Math.abs(hah - plainWord[1]!) < Math.abs(hah - plainFinal)
+      const meemJoined = Math.abs(meem - styledWord[2]!) < Math.abs(meem - styledInitial)
+      outcome.set(c.name, hahJoined && meemJoined)
+      console.info(`join probe: ${c.name}: ح ${hah} (medial ${plainWord[1]}, final ${plainFinal}) joined=${hahJoined}; م ${meem} (medial ${styledWord[2]}, initial ${styledInitial}) joined=${meemJoined}`)
+    }
+    // Only an atomic inline box cuts the join. The serif case is left out: its fallback font draws the same م form in every position, so it cannot tell.
+    expect(outcome.get('inline-block')).toBe(false)
+    expect(outcome.get('inline-flex')).toBe(false)
+    for (const name of ['b', 'colour span', 'font-family (same face, other name)', 'padding-inline-start']) expect(outcome.get(name)).toBe(true)
+  })
+  it('reports the broken cases and stays quiet for the ones that join', async () => {
+    const id = 'type/arabic-broken-join'
+    expect(await found(wrap('مح<span style="display:inline-block">مد</span>'), id)).toEqual([id])
+    expect(await found(wrap('مح<span style="display:inline-flex">مد</span>'), id)).toEqual([id])
+    for (const style of ['color:red', 'font-weight:700', 'font-family:serif', 'padding-inline-start:2px']) {
+      expect(await found(wrap(`مح<span style="${style}">مد</span>`), id)).toEqual([])
+    }
+  })
+})

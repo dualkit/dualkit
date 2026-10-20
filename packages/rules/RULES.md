@@ -143,6 +143,13 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 
 **Fix:** Load a real bold face for the Arabic family, for example an @font-face at font-weight 700.
 
+<a id="type-arabic-broken-join"></a>
+### `type/arabic-broken-join` Arabic word split by a box
+
+**error.** An inline-block or inline-flex box shapes its text on its own, so the letters on either side of it stop joining and the word reads as two.
+
+**Fix:** Keep the word in one inline element, or style the whole word. A colour, bold weight, font or padding on an inline span does not break the join.
+
 ## Content
 
 <a id="content-missing-lang"></a>

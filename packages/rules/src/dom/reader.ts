@@ -1,6 +1,7 @@
 import type { LoadedFace, FieldKind, FieldNode, Font, LayoutNode, NodeRef, Rect, ScreenModel, TextRun } from '../model'
 import { readClips } from './clips'
 import { readFonts } from './fonts'
+import { readJoins } from './joins'
 import { readIcons } from './icons'
 import { readSigns } from './signs'
 import { readLabels } from './labels'
@@ -53,6 +54,7 @@ export function readScreen(doc: Document, options: ReadOptions = {}): ScreenMode
     fonts,
     labels: readLabels(doc, skipped, visible, ref),
     clips: readClips(doc, style, skipped, visible, ref, screenReaderOnly),
+    joins: readJoins(doc, style, skipped, ref),
     unreadableStylesheets: unreadable,
   }
 }

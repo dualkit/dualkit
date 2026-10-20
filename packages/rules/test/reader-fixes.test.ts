@@ -86,3 +86,24 @@ describe('near misses in a real browser', () => {
     expect(found[0]?.node?.id).toContain('span.a')
   })
 })
+
+describe('joins', () => {
+  const joinsOf = async (body: string) => (await modelOf(page(body))).joins
+  it('reads a word split by an inline-block or inline-flex box, and nothing else', async () => {
+    const block = await joinsOf('<p>مح<span style="display:inline-block">مد</span></p>')
+    expect(block).toHaveLength(1)
+    expect(block[0]).toMatchObject({ reason: 'inline-block', word: 'محمد' })
+    expect((await joinsOf('<p>مح<span style="display:inline-flex">مد</span></p>'))[0]).toMatchObject({ reason: 'other' })
+    for (const inner of ['<span style="color:red">مد</span>', '<b>مد</b>', '<span style="font-family:serif">مد</span>', '<span style="padding-inline-start:2px">مد</span>']) {
+      expect(await joinsOf(`<p>مح${inner}</p>`)).toEqual([])
+    }
+  })
+  it('skips a gap, a letter that does not join, a line break and off-screen text', async () => {
+    const box = 'style="display:inline-block"'
+    expect(await joinsOf(`<p>مح <span ${box}>مد</span></p>`)).toEqual([])
+    expect(await joinsOf(`<p>مر<span ${box}>مد</span></p>`)).toEqual([])
+    expect(await joinsOf(`<p>مح<br><span ${box}>مد</span></p>`)).toEqual([])
+    expect(await joinsOf(`<p>مح<span style="display:inline-block;visibility:hidden">مد</span></p>`)).toEqual([])
+    expect(await joinsOf(`<p>mh<span ${box}>مد</span></p>`)).toEqual([])
+  })
+})

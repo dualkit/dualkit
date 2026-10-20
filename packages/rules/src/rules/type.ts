@@ -95,4 +95,15 @@ export const arabicFauxBold = defineRule({
   },
 })
 
-export const typeRules = [arabicLeading, arabicTracking, arabicItalic, arabicFont, arabicSize, arabicFauxBold]
+export const arabicBrokenJoin = defineRule({
+  id: 'type/arabic-broken-join', group: 'type', severity: 'error',
+  title: 'Arabic word split by a box',
+  why: 'An inline-block or inline-flex box shapes its text on its own, so the letters on either side of it stop joining and the word reads as two.',
+  fix: 'Keep the word in one inline element, or style the whole word. A colour, bold weight, font or padding on an inline span does not break the join.',
+  check: (m) => m.joins.map((j) => ({
+    node: pick(j),
+    message: `"${excerpt(j.word)}" is split by ${j.reason === 'inline-block' ? 'an inline-block' : 'an inline-flex'} box, so its letters do not join.`,
+  })),
+})
+
+export const typeRules = [arabicLeading, arabicTracking, arabicItalic, arabicFont, arabicSize, arabicFauxBold, arabicBrokenJoin]
