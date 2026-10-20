@@ -1,0 +1,8 @@
+import type { LintRule } from '../types'
+import { CSS_RULES } from './css'
+import { INTL_RULES } from './intl'
+import { RIAL_RULES } from './rial'
+import { TAILWIND_RULES } from './tailwind'
+
+/** Every source rule, in the order LINT.md lists them. Task 4 adds the rest. */
+export const RULES: readonly LintRule[] = [...CSS_RULES, ...TAILWIND_RULES, ...INTL_RULES, ...RIAL_RULES]

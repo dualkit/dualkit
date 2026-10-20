@@ -1,6 +1,6 @@
 .v3-num-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .v3-num-cell { display: flex; flex-direction: column; gap: 8px; padding: 16px; min-width: 0; }
-.v3-num-cell:nth-child(even) { border-left: 1px solid var(--v3-line); }
+.v3-num-cell:nth-child(even) { border-inline-start: 1px solid var(--v3-line); }
 .v3-num-cell:nth-child(n + 3) { border-top: 1px solid var(--v3-line); }
 .v3-num-value { position: relative; display: block; font-variant-numeric: tabular-nums; }
 .v3-num-what { color: var(--v3-soft); }
@@ -11,7 +11,7 @@
   .v3-num-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .v3-num-cell { padding: 24px; }
   .v3-num-cell:nth-child(n + 3) { border-top: 0; }
-  .v3-num-cell + .v3-num-cell { border-left: 1px solid var(--v3-line); }
+  .v3-num-cell + .v3-num-cell { border-inline-start: 1px solid var(--v3-line); }
 }
 
 /* Odometer: each digit column is a clipped strip of 0 to 9 that slides once. */

@@ -50,3 +50,18 @@ describe('roadmap', () => {
     for (const item of UP_NEXT.filter((i) => i.state !== 'Released')) expect(progress(item).percent, item.title).toBeLessThan(100)
   })
 })
+
+describe('lint release copy', () => {
+  const text = RELEASES.flatMap((r) => [r.title, ...r.body]).join('\n')
+  it('names the CLDR calendar ranking, not a claim about what the Gulf uses', () => {
+    expect(text).not.toContain('where the Gulf uses')
+    expect(text).toContain('the Hijri calendar CLDR ranks first for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar')
+  })
+  it('does not call the deliberate dogfood findings only demos and fixtures', () => {
+    expect(text).not.toContain('The rest were demos and test fixtures')
+    expect(text).toContain('shipped site CSS')
+  })
+  it('has no em dashes', () => {
+    expect(text).not.toContain('—')
+  })
+})

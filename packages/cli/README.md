@@ -28,4 +28,26 @@ It opens the page in Chromium, runs 29 rules (bidi, layout, icons, type, content
 
 Every rule, why it matters and how to fix it: [RULES.md](https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md). Exit codes: 0 done, 1 below `--min-score`, 2 a problem with the input, the browser or the page (including a page that answers with an error status such as 404).
 
-In CI, `uses: dualkit/dualkit/action@main` runs the same check on every pull request: [action/README.md](https://github.com/dualkit/dualkit/blob/main/action/README.md).
+## Lint your source
+
+```sh
+npx dualkit@beta lint .
+```
+
+`dualkit lint [paths...]` scans CSS, SCSS, HTML, JavaScript and TypeScript against 8 source rules, without launching a browser. Paths default to the current folder, and a folder walk skips what your `.gitignore` skips.
+
+```
+physical.css:2:3  ▲ source/physical-css  `margin-left: 8px` is tied to one side. Use `margin-inline-start`.
+
+0 errors, 1 warning, 0 notes in 2 files
+```
+
+| Option | Default | |
+| --- | --- | --- |
+| `--json` | | Print the result as JSON |
+| `--fail-on <level>` | `error` | Exit 1 on findings at or above `error`, `warning` or `note` |
+| `--config <file>` | `dualkit.config.json` | The same `ignore` list; it accepts lint rule ids too |
+
+Exit codes: 0 clean, 1 a finding at or above `--fail-on`, 2 a problem with the input. The lint rules live in [@dualkit/lint](https://github.com/dualkit/dualkit/blob/main/packages/lint/LINT.md), which is published before the CLI.
+
+In CI, `uses: dualkit/dualkit/action@main` with `mode: lint` runs it on every pull request: [action/README.md](https://github.com/dualkit/dualkit/blob/main/action/README.md).

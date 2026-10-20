@@ -74,7 +74,9 @@ export const oldRialSign = defineRule({
   why: 'U+FDFC is the Persian word for rial drawn as one glyph, so it reads as a different currency mark and many fonts draw it differently or not at all.',
   fix: 'Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.',
   check: (m) => m.texts
+    // dualkit-disable-next-line source/old-rial-sign -- the sign this check looks for
     .filter((t) => t.text.includes('\uFDFC'))
+    // dualkit-disable-next-line source/old-rial-sign -- the check message names the sign
     .map((t) => ({ node: pick(t), message: '﷼ is the rial ligature, not the Saudi riyal sign.' })),
 })
 

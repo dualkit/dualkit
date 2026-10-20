@@ -5,7 +5,7 @@ on:
       package:
         description: Which package to publish
         type: choice
-        options: [format, starter, rules, cli]
+        options: [format, starter, rules, lint, cli] # publish lint before cli, which depends on it
         default: format
         required: true
       tag:
@@ -33,12 +33,13 @@ jobs:
         id: ws
         run: |
           if [ "${{ inputs.package }}" = cli ]; then echo "name=dualkit" >> "$GITHUB_OUTPUT"; else echo "name=@dualkit/${{ inputs.package }}" >> "$GITHUB_OUTPUT"; fi
-      - name: Prepare rules and CLI (their tests need built packages and Chromium)
-        if: inputs.package == 'rules' || inputs.package == 'cli'
+      - name: Prepare rules, lint and CLI (their tests need built packages, and the CLI needs Chromium)
+        if: inputs.package == 'rules' || inputs.package == 'lint' || inputs.package == 'cli'
         run: |
           npm run build -w @dualkit/format
           npm run build -w @dualkit/rules
-          npx playwright@1.55.0 install --with-deps chromium
+          if [ "${{ inputs.package }}" != rules ]; then npm run build -w @dualkit/lint; fi
+          if [ "${{ inputs.package }}" != lint ]; then npx playwright@1.55.0 install --with-deps chromium; fi
       - run: npm publish -w ${{ steps.ws.outputs.name }} --provenance --access public --tag ${{ inputs.tag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

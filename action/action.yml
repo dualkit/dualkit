@@ -1,8 +1,11 @@
-name: Dualkit check
-description: Check a page for Arabic and right-to-left bugs and attach a Gulf-ready report.
+name: Dualkit
+description: Check a page for Arabic and right-to-left bugs, or lint source files for them, and report on the pull request.
 branding: { icon: check-circle, color: gray-dark }
 inputs:
-  url: { description: URL or HTML file to check, required: true }
+  mode: { description: 'check audits a rendered page (needs url), lint scans source files (uses paths)', default: check }
+  url: { description: URL or HTML file to check (check mode only), required: false, default: '' }
+  paths: { description: Space-separated files or folders to lint (lint mode only), default: '.' }
+  fail-on: { description: 'Lowest severity that fails the job: error, warning or note (lint mode only)', default: error }
   min-score: { description: Fail below this score, default: '0' }
   width: { description: Viewport width, default: '1280' }
   config: { description: Path to dualkit.config.json, default: '' }
@@ -10,15 +13,23 @@ inputs:
   command: { description: How to run the CLI, default: npx --yes dualkit@beta }
   github-token: { description: Token for the PR comment, default: '${{ github.token }}' }
 outputs:
-  score: { description: Score out of 100, value: '${{ steps.check.outputs.score }}' }
+  score: { description: Score out of 100 (check mode), value: '${{ steps.check.outputs.score }}' }
+  findings: { description: Number of lint findings (lint mode), value: '${{ steps.lint.outputs.findings }}' }
 runs:
   using: composite
   steps:
+    - shell: bash
+      env:
+        MODE: ${{ inputs.mode }}
+      run: |
+        if [ "$MODE" != check ] && [ "$MODE" != lint ]; then echo "The mode input must be check or lint, got \"$MODE\"." >&2; exit 2; fi
     - uses: actions/setup-node@v4
       with: { node-version: 22 }
-    - shell: bash
+    - if: inputs.mode == 'check'
+      shell: bash
       run: npx --yes playwright@1.55.0 install --with-deps chromium
     - id: check
+      if: inputs.mode == 'check'
       shell: bash
       env:
         URL: ${{ inputs.url }}
@@ -27,6 +38,7 @@ runs:
         CONFIG: ${{ inputs.config }}
         CMD: ${{ inputs.command }}
       run: |
+        if [ -z "$URL" ]; then echo "The url input is required when mode is check." >&2; exit 2; fi
         set +e
         ARGS=(check "$URL" --json --out dualkit-report.html --width "$WIDTH" --min-score "$MIN")
         [ -n "$CONFIG" ] && ARGS+=(--config "$CONFIG")
@@ -39,22 +51,72 @@ runs:
         node -e "
           const r = require('./dualkit.json');
           const rules = [...new Set(r.findings.map(f => f.rule))];
-          const lines = ['### Dualkit check: ' + r.score + '/100', '', r.url, '', ...rules.map(id => '- ' + id + ' (' + r.findings.filter(f => f.rule === id).length + ')'), '', 'Full report in the dualkit-report artifact.'];
+          const lines = ['<!-- dualkit:check -->', '### Dualkit check: ' + r.score + '/100', '', r.url, '', ...rules.map(id => '- ' + id + ' (' + r.findings.filter(f => f.rule === id).length + ')'), '', 'Full report in the dualkit-report artifact.'];
           require('fs').writeFileSync('dualkit-summary.md', lines.join('\n'));
         "
         cat dualkit-summary.md >> "$GITHUB_STEP_SUMMARY"
         echo "code=$CODE" >> "$GITHUB_OUTPUT"
-    - uses: actions/upload-artifact@v4
+    - if: inputs.mode == 'check'
+      uses: actions/upload-artifact@v4
       with: { name: dualkit-report, path: dualkit-report.html }
+    - id: lint
+      if: inputs.mode == 'lint'
+      shell: bash
+      env:
+        PATHS: ${{ inputs.paths }}
+        FAIL_ON: ${{ inputs.fail-on }}
+        CONFIG: ${{ inputs.config }}
+        CMD: ${{ inputs.command }}
+      run: |
+        set +e
+        read -ra TARGETS <<< "$PATHS"
+        ARGS=(lint "${TARGETS[@]}" --json --fail-on "$FAIL_ON")
+        [ -n "$CONFIG" ] && ARGS+=(--config "$CONFIG")
+        $CMD "${ARGS[@]}" > dualkit-lint.json
+        CODE=$?
+        set -e
+        if [ "$CODE" = 2 ]; then cat dualkit-lint.json; exit 2; fi
+        if ! node -e "JSON.parse(require('fs').readFileSync('dualkit-lint.json', 'utf8'))" 2>/dev/null; then
+          cat dualkit-lint.json
+          echo "Dualkit lint did not print valid JSON (exit code $CODE)." >&2
+          exit $((CODE == 0 ? 2 : CODE))
+        fi
+        node -e "
+          const r = require('./dualkit-lint.json');
+          const n = (s) => r.findings.filter(f => f.severity === s).length;
+          const rules = [...new Set(r.findings.map(f => f.rule))];
+          const lines = ['<!-- dualkit:lint -->', '### Dualkit lint: ' + n('error') + ' errors, ' + n('warning') + ' warnings, ' + n('note') + ' notes in ' + r.files + ' files', '', ...rules.map(id => '- ' + id + ' (' + r.findings.filter(f => f.rule === id).length + ')')];
+          require('fs').writeFileSync('dualkit-summary.md', lines.join('\n'));
+          require('fs').appendFileSync(process.env.GITHUB_OUTPUT, 'findings=' + r.findings.length + '\n');
+        "
+        cat dualkit-summary.md >> "$GITHUB_STEP_SUMMARY"
+        echo "code=$CODE" >> "$GITHUB_OUTPUT"
     - if: inputs.comment == 'true' && github.event_name == 'pull_request'
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.github-token }}
         PR: ${{ github.event.pull_request.number }}
+        MODE: ${{ inputs.mode }}
       run: |
-        gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --edit-last --body-file dualkit-summary.md || gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file dualkit-summary.md || echo "Could not comment; grant pull-requests write to enable it."
+        # Each mode edits only its own comment, found by the hidden marker on the summary's first line.
+        MARKER="<!-- dualkit:$MODE -->"
+        upsert() {
+          ME=$(gh api user --jq .login 2>/dev/null) || ME='github-actions[bot]'
+          ID=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate --jq ".[] | select(.user.login == \"$ME\" and (.body | contains(\"$MARKER\"))) | .id" | tail -n 1)
+          if [ -n "$ID" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$ID" -F body=@dualkit-summary.md > /dev/null
+          else
+            gh pr comment "$PR" --repo "$GITHUB_REPOSITORY" --body-file dualkit-summary.md
+          fi
+        }
+        upsert || echo "Could not comment; grant pull-requests write to enable it."
     - if: steps.check.outputs.code == '1'
       shell: bash
       env:
         MIN: ${{ inputs.min-score }}
       run: echo "Score is below $MIN." && exit 1
+    - if: steps.lint.outputs.code == '1'
+      shell: bash
+      env:
+        FAIL_ON: ${{ inputs.fail-on }}
+      run: echo "Found issues at $FAIL_ON or above." && exit 1

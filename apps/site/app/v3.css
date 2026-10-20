@@ -240,7 +240,7 @@ body { background: var(--v3-ground); }
 .v3-pv-family { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 8px; }
 .v3-pv-family-name { width: 72px; }
 .v3-pv-meter { position: relative; width: 220px; height: 3px; background: var(--v3-glass-ring); }
-.v3-pv-meter i { position: absolute; inset-block: 0; left: 0; background: var(--v3-glass-text); }
+.v3-pv-meter i { position: absolute; inset-block: 0; inset-inline-start: 0; background: var(--v3-glass-text); }
 .v3-pv-actions { display: flex; gap: 8px; }
 .v3-pv-solid { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding-block: 8px; background: var(--v3-glass-button); color: var(--v3-ink); }
 .v3-pv-ghost { padding: 8px 12px; box-shadow: inset 0 0 0 1px var(--v3-glass-ring); }
@@ -254,6 +254,7 @@ body { background: var(--v3-ground); }
 .v3-pv-bench-figures { gap: 12px; }
 .v3-pv-track { position: relative; display: block; width: 348px; height: 10px; background: linear-gradient(var(--v3-glass-ring), var(--v3-glass-ring)) 0 50% / 100% 1px no-repeat; }
 .v3-pv-lift { position: absolute; top: 4px; height: 2px; background: var(--v3-glass-text); }
+/* dualkit-disable-next-line source/physical-css -- centres the pin on the left: % that the code sets inline on a score axis */
 .v3-pv-pin { position: absolute; top: 0; width: 10px; height: 10px; margin-left: -5px; background: var(--v3-glass); box-shadow: inset 0 0 0 1px var(--v3-glass-text); }
 .v3-pv-pin.is-on { background: var(--v3-glass-text); }
 
