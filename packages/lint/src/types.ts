@@ -29,6 +29,8 @@ export type LintHit = { offset: number; message: string }
 export type LintContext = {
   /** The Tailwind version that applies to a file, or null when none is found. */
   tailwindVersion: (file: SourceFile) => string | null
+  /** The declared range when the version came from it because nothing installed was used, else null. */
+  tailwindRange?: (file: SourceFile) => string | null
 }
 
 export type LintRule = {

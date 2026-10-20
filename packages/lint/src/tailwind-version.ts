@@ -64,26 +64,35 @@ function fromRange(range: string): string | null {
   }
 }
 
+/** version is what the rule uses. range is set when the version came from the declared range, not an installed copy. */
+export type TailwindInfo = { version: string | null; range: string | null }
+
 /**
  * The installed copy counts when it satisfies the declared range, or when the range is not a semver
  * range at all (workspace:, catalog:, latest). A stale install outside the range gives way to the range.
  */
-function versionFor(dir: string, range: string, stops: Stops): string | null {
+function versionFor(dir: string, range: string, stops: Stops): TailwindInfo {
   const copy = installed(dir, stops)
-  if (copy && (!validRange(range) || satisfies(copy, range))) return copy
-  return fromRange(range)
+  if (copy && (!validRange(range) || satisfies(copy, range))) return { version: copy, range: null }
+  const version = fromRange(range)
+  return { version, range: version === null ? null : range }
 }
+
+const NONE: TailwindInfo = { version: null, range: null }
 
 /** cwd for lint(). The walk goes past it up to the repository top, so an app inside a workspace finds a root-level tailwindcss. */
 export type TailwindVersionResolver = (fileAbs: string, cwd: string) => string | null
 
+export type TailwindInfoResolver = (fileAbs: string, cwd: string) => TailwindInfo
+
 /** A resolver with its own per-folder cache, so one lint run reads each package.json once. home is for tests. */
-export function createTailwindVersion(options: { home?: string } = {}): TailwindVersionResolver {
+export function createTailwindInfo(options: { home?: string } = {}): TailwindInfoResolver {
   const stops: Stops = { home: resolve(options.home ?? homedir()) }
-  const cache = new Map<string, string | null>()
-  const forDir = (dir: string): string | null => {
-    if (cache.has(dir)) return cache.get(dir) ?? null
-    let result: string | null = null
+  const cache = new Map<string, TailwindInfo>()
+  const forDir = (dir: string): TailwindInfo => {
+    const known = cache.get(dir)
+    if (known) return known
+    let result = NONE
     const found = dir === stops.home ? undefined : declared(dir)
     if (found) result = versionFor(dir, found.range, stops)
     else if (found === undefined && dir !== stops.home && !lastFolder(dir, stops)) result = forDir(dirname(dir))
@@ -91,6 +100,17 @@ export function createTailwindVersion(options: { home?: string } = {}): Tailwind
     return result
   }
   return (fileAbs) => forDir(dirname(resolve(fileAbs)))
+}
+
+export function createTailwindVersion(options: { home?: string } = {}): TailwindVersionResolver {
+  const info = createTailwindInfo(options)
+  return (fileAbs, cwd) => info(fileAbs, cwd).version
+}
+
+/** The declared range when no installed copy is used, else null. */
+export function createTailwindRange(options: { home?: string } = {}): TailwindVersionResolver {
+  const info = createTailwindInfo(options)
+  return (fileAbs, cwd) => info(fileAbs, cwd).range
 }
 
 /**

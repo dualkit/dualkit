@@ -1,4 +1,4 @@
-import { coerce, compare, lt, type SemVer } from 'semver'
+import { coerce, compare, intersects, lt, type SemVer } from 'semver'
 import { classStrings, type ClassFragment } from '../classes'
 import type { LintHit, LintRule } from '../types'
 
@@ -123,7 +123,20 @@ const isOffscreen = (negative: string, core: string): boolean => {
   return match !== null && (negative === '-') !== (match[1] === '-') && Number(match[2]) >= OFFSCREEN_MIN
 }
 
-function messageFor(token: string, parsed: ParsedClass, matches: readonly TailwindEntry[], version: SemVer): string {
+/** The release that renamed start-* and end-* to inset-s-* and inset-e-*. */
+const INSET_RENAME = '4.2.0'
+
+/** A declared range that allows releases on both sides of 4.2, such as ^4, so either name may be right. */
+function spansRename(range: string | null | undefined): boolean {
+  if (!range) return false
+  try {
+    return intersects(range, `<${INSET_RENAME}`) && intersects(range, `>=${INSET_RENAME}`)
+  } catch {
+    return false
+  }
+}
+
+function messageFor(token: string, parsed: ParsedClass, matches: readonly TailwindEntry[], version: SemVer, bothNames: boolean): string {
   const side = sideOf(parsed.core)?.startsWith('l') ? 'left' : 'right'
   const usable = matches.filter((e) => !lt(version, e.since)).sort((a, b) => compare(b.since, a.since))
   const entry = usable[0]
@@ -133,8 +146,14 @@ function messageFor(token: string, parsed: ParsedClass, matches: readonly Tailwi
     return `\`${token}\` stays on the ${side} in Arabic. Tailwind ${first} adds a logical class for it; until then use the logical CSS property.`
   }
   const prefix = parsed.variants.map((v) => `${v}:`).join('')
-  const fixed = `${prefix}${parsed.important[0]}${parsed.negative}${replaced}${parsed.important[1]}`
-  return `\`${token}\` stays on the ${side} in Arabic. Use \`${fixed}\`.`
+  const write = (core: string): string => `${prefix}${parsed.important[0]}${parsed.negative}${core}${parsed.important[1]}`
+  const older = matches.find((e) => e.since !== INSET_RENAME && lt(e.since, INSET_RENAME))
+  const newer = matches.find((e) => e.since === INSET_RENAME)
+  if (bothNames && older && newer && !lt(version, older.since)) {
+    const [a, b] = [older.replace(parsed.core), newer.replace(parsed.core)]
+    if (a && b) return `\`${token}\` stays on the ${side} in Arabic. Use \`${write(a)}\` (or \`${write(b)}\` from Tailwind 4.2).`
+  }
+  return `\`${token}\` stays on the ${side} in Arabic. Use \`${write(replaced)}\`.`
 }
 
 type Placed = { fragment: number; conditional: boolean }
@@ -152,7 +171,7 @@ const index = (entries: readonly [string, Placed][]): Map<string, Placed[]> => {
 }
 
 /** Checks one class source. Pairs and centring are judged across its fragments; hits stay per token. */
-function checkSource(fragments: readonly ClassFragment[], version: SemVer): LintHit[] {
+function checkSource(fragments: readonly ClassFragment[], version: SemVer, bothNames: boolean): LintHit[] {
   const tokens = fragments.flatMap((f, fragment) =>
     [...f.text.matchAll(/\S+/g)].map((m) => ({ token: m[0], at: f.offset + m.index, parsed: parseClass(m[0]), placed: { fragment, conditional: f.conditional }, sided: f.sided === true })))
   const keys = index(tokens.map(({ parsed: p, placed }) => [key(p.variants, p.negative, p.core), placed]))
@@ -166,7 +185,7 @@ function checkSource(fragments: readonly ClassFragment[], version: SemVer): Lint
     const near = (map: Map<string, Placed[]>, k: string): boolean => (map.get(k) ?? []).some((p) => together(placed, p))
     const paired = near(keys, key(parsed.variants, parsed.negative, mirror(parsed.core)))
     if (paired || isCentring(parsed.core, (t) => near(cores, t))) continue
-    hits.push({ offset: at, message: messageFor(token, parsed, matches, version) })
+    hits.push({ offset: at, message: messageFor(token, parsed, matches, version, bothNames) })
   }
   return hits
 }
@@ -181,9 +200,10 @@ const physicalTailwind: LintRule = {
   check: (file, ctx) => {
     const version = coerce(ctx.tailwindVersion(file))
     if (!version || lt(version, FLOOR)) return []
+    const bothNames = spansRename(ctx.tailwindRange?.(file))
     const sources = new Map<number, ClassFragment[]>()
     for (const f of classStrings(file)) sources.set(f.group, [...(sources.get(f.group) ?? []), f])
-    return [...sources.values()].flatMap((fragments) => checkSource(fragments, version)).sort((a, b) => a.offset - b.offset)
+    return [...sources.values()].flatMap((fragments) => checkSource(fragments, version, bothNames)).sort((a, b) => a.offset - b.offset)
   },
 }
 

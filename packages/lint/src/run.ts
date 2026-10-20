@@ -4,7 +4,7 @@ import { parseSource, parseSourceOutcome } from './parse'
 import { lineStarts, positionAt } from './position'
 import { RULES } from './rules'
 import { suppressed } from './suppress'
-import { createTailwindVersion } from './tailwind-version'
+import { createTailwindInfo } from './tailwind-version'
 import type { LintContext, LintFinding, LintResult, LintRule, Skipped, SourceFile } from './types'
 import { compare, isMinified, walk } from './walk'
 
@@ -55,8 +55,11 @@ export function lintText(
 export async function lint(paths: string[], options: { cwd: string } & RuleOptions): Promise<LintResult> {
   const { files, skipped: walkSkipped } = walk(paths, options.cwd)
   const rules = activeRules(options)
-  const versionOf = createTailwindVersion()
-  const ctx: LintContext = { tailwindVersion: (file) => versionOf(file.abs, resolve(options.cwd)) }
+  const infoOf = createTailwindInfo()
+  const ctx: LintContext = {
+    tailwindVersion: (file) => infoOf(file.abs, resolve(options.cwd)).version,
+    tailwindRange: (file) => infoOf(file.abs, resolve(options.cwd)).range,
+  }
   const skipped: Skipped[] = [...walkSkipped]
   const findings: LintFinding[] = []
   let linted = 0

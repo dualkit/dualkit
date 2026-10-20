@@ -1,6 +1,6 @@
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { createTailwindVersion, tailwindVersion } from '../src/tailwind-version'
+import { createTailwindRange, createTailwindVersion, tailwindVersion } from '../src/tailwind-version'
 import { tree } from './helpers'
 
 const pkg = (deps: Record<string, unknown>, key = 'devDependencies'): string => JSON.stringify({ name: 'x', [key]: deps })
@@ -85,5 +85,14 @@ describe('tailwindVersion', () => {
     const home = tree({ 'package.json': pkg({ tailwindcss: '^3.4.0' }), 'node_modules/tailwindcss/package.json': installed('3.4.9'), 'proj/a.tsx': '' })
     expect(createTailwindVersion({ home })(join(home, 'proj/a.tsx'), join(home, 'proj'))).toBeNull()
     expect(createTailwindVersion({ home: join(home, 'elsewhere') })(join(home, 'proj/a.tsx'), join(home, 'proj'))).toBe('3.4.9')
+  })
+})
+
+describe('the declared range when nothing is installed', () => {
+  it('reports the range only when no installed copy is used', () => {
+    const range = tree({ 'package.json': pkg({ tailwindcss: '^4' }), 'a.tsx': '' })
+    expect(createTailwindRange()(join(range, 'a.tsx'), range)).toBe('^4')
+    const installedCopy = tree({ 'package.json': pkg({ tailwindcss: '^4' }), 'node_modules/tailwindcss/package.json': JSON.stringify({ version: '4.1.2' }), 'a.tsx': '' })
+    expect(createTailwindRange()(join(installedCopy, 'a.tsx'), installedCopy)).toBeNull()
   })
 })

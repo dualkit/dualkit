@@ -57,6 +57,20 @@ describe('fires at 3.4.0', () => {
   })
 })
 
+describe('fix text when only a range is known', () => {
+  const withRange = (cls: string, range: string, version: string) =>
+    lintText('a.tsx', `export const A = () => <div className="${cls}" />`, { rules, ctx: { tailwindVersion: () => version, tailwindRange: () => range } }).map((f) => f.message)
+  it('names both start-* and inset-s-* when the range spans 4.2', () => {
+    expect(withRange('left-0', '^4', '4.0.0')[0]).toContain('`start-0` (or `inset-s-0` from Tailwind 4.2)')
+    expect(withRange('right-4', '^4.0.0', '4.0.0')[0]).toContain('`end-4` (or `inset-e-4` from Tailwind 4.2)')
+  })
+  it('names one class when the range sits on one side of 4.2', () => {
+    expect(withRange('left-0', '~4.1.0', '4.1.0')[0]).not.toContain('inset-s-0')
+    expect(withRange('left-0', '^4.2.0', '4.2.0')[0]).not.toContain('`start-0`')
+    expect(withRange('ml-2', '^4', '4.0.0')[0]).not.toContain('(or')
+  })
+})
+
 describe('fix text follows the installed version', () => {
   it('names start-* below 4.2 and inset-s-* from 4.2', () => {
     expect(fired('left-0', '4.1.9')[0]).toContain('`start-0`')
@@ -255,5 +269,13 @@ describe('a side chosen by a left or right test', () => {
     expect(hits).toHaveLength(1)
     expect(hits[0]!.message).toContain('ml-2')
     expect(run("const v = tv({ variants: { side: { left: { base: 'pl-4' } } } })", 'a.ts')).toEqual([])
+  })
+})
+
+describe('lint names both inset names for a range with nothing installed', () => {
+  it('reads ^4 from package.json', async () => {
+    const root = tree({ 'package.json': JSON.stringify({ devDependencies: { tailwindcss: '^4' } }), 'a.tsx': 'export const A = () => <div className="left-0" />' })
+    const { findings } = await lint(['.'], { cwd: root, rules })
+    expect(findings[0]!.message).toContain('`start-0` (or `inset-s-0` from Tailwind 4.2)')
   })
 })
