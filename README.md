@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://dualkit.dev"><img src=".github/assets/banner.png" alt="Dualkit. Build for the Gulf. In both directions." width="100%"></a>
+  <a href="https://dualkit.dev"><img src=".github/assets/banner.jpg" alt="Dualkit. Build for the Gulf. In both directions. A desert at dusk." width="100%"></a>
 </p>
 
 <p align="center">
