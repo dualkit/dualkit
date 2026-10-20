@@ -416,7 +416,7 @@ Local probe, `new Intl.NumberFormat(locale).resolvedOptions().numberingSystem`:
 | Node 22.21.1 (nvm) | 47.0 | 77.1 | latn | latn | arab | arab | latn |
 | Node 25.6.1 (default `node`) | 48.0 | 78.2 | latn | latn | arab | arab | latn |
 
-Node 20 reports CLDR 48 because the 20.20.2 build ships a newer ICU than early Node 20 releases did. The CLDR column is `process.versions.cldr` as printed, not assumed from the major version.
+The CLDR column is `process.versions.cldr` as printed, not assumed from the major version. Why Node 20.20.2 prints a newer CLDR than Node 22 is not verified here; the rule relies on the CLDR data at each release tag, not on this mapping.
 
 CLDR source data, the `<defaultNumberingSystem>` element in `common/main/<locale>.xml` at the git tag `release-<n>` of `unicode-org/cldr`. The symbol `↑↑↑` means "inherit from the parent locale", which for `ar` is root, whose default is `latn`:
 
