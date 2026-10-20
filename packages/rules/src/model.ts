@@ -42,6 +42,8 @@ export type TextRun = NodeRef & {
   signs: SignProbe[]
   /** Net horizontal flip: the product of scale signs over the element and up to 4 ancestors. */
   mirrored: boolean
+  /** The nearest element that flips the run when it is mirrored overall, else null. Runs under one flip share it. */
+  mirroredBy: string | null
 }
 
 export type PhysicalDeclaration = { property: string; value: string }

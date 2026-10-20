@@ -69,6 +69,20 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 
 **Fix:** Set dir="rtl" on the page or the element, and lang="ar".
 
+<a id="layout-mirrored-text"></a>
+### `layout/mirrored-text` Text flipped with the layout
+
+**error.** A scaleX(-1) on a container mirrors its letters too, so Arabic reads backwards. Only icons and artwork should flip.
+
+**Fix:** Flip the icon or image alone, and leave the text outside the transform.
+
+<a id="layout-clipped-text"></a>
+### `layout/clipped-text` Text cut off by its box
+
+**warning.** A fixed-size box with overflow hidden cuts off Arabic that runs long or sits tall, such as a label wider than its button or dots below a tight line.
+
+**Fix:** Let the box grow with min-width or min-height, or add text-overflow: ellipsis if shortening is intended.
+
 ## Icons
 
 <a id="icons-not-mirrored"></a>
@@ -203,3 +217,6 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 - A new currency sign counts as drawn when a loaded font declares it in an explicit unicode-range, or when the page's own webfont draws it at a different width from both its missing-glyph box and plain sans-serif. A font that has the sign at exactly the width of the system fallback glyph would be missed.
 - Only the pairing of the dirham sign with AED is flagged, because that is the one the Central Bank of the UAE guideline forbids. Dh and the Arabic word are not in the guideline, so they are left alone.
 - A label is flagged only when it is wholly in the other script, such as a Latin sentence on an Arabic page. Labels that mix scripts, and one-word names like Visa, are left alone.
+- An icon is named from its data attribute, sprite reference, class, glyph text, aria-label, title, SVG `<title>`, or the aria-label of the button or link around it. A fully unnamed SVG is not recognised, so its direction is not checked.
+- Text is checked for a horizontal flip on its own element and up to 4 ancestors. A flip applied further up, or by a filter or animation, is not seen.
+- A clipped box is found from its scroll size against its client size, which counts line boxes. Ink that sticks out of a box that still fits its line, such as a dot just under a tight line, is not measured.

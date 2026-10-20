@@ -4,7 +4,7 @@ import { readFonts } from './fonts'
 import { readIcons } from './icons'
 import { readSigns } from './signs'
 import { readLabels } from './labels'
-import { netMirrored } from './mirror'
+import { mirrorRoot } from './mirror'
 import { makePathOf } from './path'
 import { arabicShare, arabicWordCount, hasArabic } from '../text'
 import { authoredPhysical, physicalOf, type Authored } from './styles'
@@ -154,12 +154,13 @@ function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, re
     const { block, id, full, text: blockText, dir: blockDir, facts } = blockInfo(parent)
     const s = style(parent)
     const font = fontOf(s)
+    const mirroredBy = mirrorRoot(parent, style)
     runs.push({
       ...ref(parent, rect(range.getBoundingClientRect())),
       text, blockId: id, blockText, ...facts, blockDir, dir: dirOf(s),
       lang: parent.closest('[lang]')?.getAttribute('lang') || null,
       isolated: isolatedBelow(parent, block, style), isLastInBlock: full.endsWith(text), endsLine: endsLine(node, block),
-      font, signs: readSigns(doc, text, font, fonts), lines: Math.max(1, lines), mirrored: netMirrored(parent, style),
+      font, signs: readSigns(doc, text, font, fonts), lines: Math.max(1, lines), mirrored: mirroredBy !== null, mirroredBy: mirroredBy && pathOf(mirroredBy),
     })
   }
   return runs

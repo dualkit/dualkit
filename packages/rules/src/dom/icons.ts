@@ -9,7 +9,7 @@ const CANDIDATES = 'svg, img, i, span[class*="icon"], [data-icon], [data-lucide]
 /** PascalCase and camelCase become kebab-case, then everything is lowercased. */
 const kebab = (name: string): string => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 
-/** Name sources, best first: data attributes, sprite reference, icon class, glyph text, aria-label, image alt or filename. */
+/** Name sources, best first: data attributes, sprite reference, icon class, glyph text, aria-label, image alt, title, SVG <title>, the aria-label of the button or link around it, image filename. */
 export function iconName(el: Element): string | null {
   const data = el.getAttribute('data-icon') ?? el.getAttribute('data-lucide')
   if (data) return kebab(data)
@@ -24,10 +24,14 @@ export function iconName(el: Element): string | null {
   }
   const label = el.getAttribute('aria-label')
   if (label) return kebab(label)
-  if (el.tagName === 'IMG') {
-    const img = el as HTMLImageElement
-    return kebab(img.alt || img.getAttribute('src')?.split('/').pop()?.replace(/\.\w+$/, '') || '') || null
-  }
+  const img = el.tagName === 'IMG' ? (el as HTMLImageElement) : null
+  if (img?.alt) return kebab(img.alt)
+  const own = clean(el.getAttribute('title') ?? '') || clean(el.querySelector(':scope > title')?.textContent ?? '')
+  if (own) return kebab(own)
+  // A bare icon inside a labelled button or link takes the control's name.
+  const control = clean(el.closest('button, a')?.getAttribute('aria-label') ?? '')
+  if (control) return kebab(control)
+  if (img) return kebab(img.getAttribute('src')?.split('/').pop()?.replace(/\.\w+$/, '') || '') || null
   return null
 }
 

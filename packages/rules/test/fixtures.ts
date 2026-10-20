@@ -33,6 +33,14 @@ export const FIXTURES: Record<string, { bad: string; good: string }> = {
   },
   'layout/text-align-left': { bad: page('<p>مرحبا</p>', { css: 'p{text-align:left}' }), good: page('<p>مرحبا</p>', { css: 'p{text-align:start}' }) },
   'layout/arabic-ltr-block': { bad: page('<p dir="ltr">مرحبا بكم في المتجر</p>'), good: page('<p>مرحبا بكم في المتجر</p>') },
+  'layout/mirrored-text': {
+    bad: page('<div style="transform:scaleX(-1)"><p>مرحبا بكم</p></div>'),
+    good: page('<div style="transform:scaleX(-1)"><div style="transform:scaleX(-1)"><p>مرحبا بكم</p></div></div>'),
+  },
+  'layout/clipped-text': {
+    bad: page('<div class="b">اشتري الآن واحصل على خصم</div>', { css: '.b{width:60px;overflow:hidden;white-space:nowrap}' }),
+    good: page('<div class="b">اشتري الآن واحصل على خصم</div>', { css: '.b{width:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' }),
+  },
   'icons/not-mirrored': { bad: page(icon('arrow-right')), good: page(icon('arrow-right', 'transform:scaleX(-1)')) },
   'icons/mirrored-by-mistake': { bad: page(icon('play', 'transform:scaleX(-1)')), good: page(icon('play')) },
   'type/arabic-leading': { bad: page(`<p>${long}</p>`, { css: 'p{line-height:1.2;width:120px}' }), good: page(`<p>${long}</p>`, { css: 'p{line-height:1.7;width:120px}' }) },

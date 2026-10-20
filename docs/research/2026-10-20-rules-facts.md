@@ -218,6 +218,19 @@ Probes in `packages/rules/test/verify.test.ts`, Chromium via Playwright, widths 
 
 Known blind spot: a webfont whose sign is exactly as wide as the system fallback glyph would read as not drawn.
 
+## 7. Mirrored and clipped text (Task 6)
+
+Probes in `packages/rules/test/verify.test.ts`, Chromium 140.0.7339.16 via Playwright 1.55, 1024px viewport.
+
+| Claim | Measurement | Test | Verdict |
+|---|---|---|---|
+| Arabic text under `scaleX(-1)` paints as its mirror image | In a 300px box the plain ink spans 0.813 to 0.997 of the width; with one flip it spans 0.003 to 0.187, exactly the mirror about the centre; the screenshots differ | `layout/mirrored-text matches what Chromium paints` | VERIFIED (Chromium probe) |
+| Two flips (nested `scaleX(-1)`, or `scale: -1 1` over a `transform`) paint the original | Ink spans 0.813 to 0.997 again, equal to the plain text. Pixels are not byte-identical (transformed layers antialias differently), so the probe compares the ink extent | same | VERIFIED. The reader multiplies the signs, so a double flip is not reported |
+| An Arabic button label wider than its fixed box paints past the edge and is cut | A 60px `overflow:hidden; white-space:nowrap` button: the characters reach 82.0px past the box edge; `scrollWidth - clientWidth` is 90px for a similar box | `an Arabic button label wider than its fixed box` | VERIFIED (Chromium probe) |
+| A one-line Arabic label at `line-height: 1` in an `overflow:hidden; height:1em` box loses ink below | At 20px: 44 dark pixels paint below the box with `overflow:visible` and 0 with `overflow:hidden`. The reader sees `scrollHeight - clientHeight` = 5px because the IBM Plex Sans Arabic line box is 25px against the 20px box | `a one-line label at line-height 1 in a 1em box` | VERIFIED (Chromium probe) |
+| Ink that sticks out of a box whose line box still fits is not counted in `scrollHeight` | Not probed as a rule input: the rule relies on line boxes, and the limit is stated in RULES.md | none | NOT CLAIMED. Listed under Known limits |
+| `text-overflow: ellipsis`, `overflow: auto` and an `.sr-only` box are not clipped text | The rule stays quiet for all three | `stays quiet for an ellipsis, a scrolling container, and an .sr-only label` | VERIFIED |
+
 ---
 
 ## Tally
@@ -234,3 +247,4 @@ Known blind spot: a webfont whose sign is exactly as wide as the system fallback
 | 4 Screen readers and `lang` | Language drives pronunciation: VERIFIED. English `aria-label` in `lang="ar"` case: SECONDARY, with a VERIFIED caveat against it |
 | 5 Chromium bidi paint (Task 4) | VERIFIED, see the probes in `verify.test.ts` |
 | 6 Currency signs in webfonts (fix round) | VERIFIED, see the probes in `verify.test.ts` |
+| 7 Mirrored and clipped text (Task 6) | VERIFIED, see the probes in `verify.test.ts`. Dot-below ink beyond the line box is a stated limit |

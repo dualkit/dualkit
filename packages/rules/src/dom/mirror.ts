@@ -11,10 +11,15 @@ export function flipSign(s: CSSStyleDeclaration): number {
   return sign
 }
 
-/** The product of the flips over the element and up to 4 ancestors, so a double flip reads as not mirrored. */
-export function netMirrored(el: Element, style: Style): boolean {
+/** The nearest element that flips, when the flips over the element and up to 4 ancestors multiply to a mirror; else null. A double flip reads as not mirrored. */
+export function mirrorRoot(el: Element, style: Style): Element | null {
   let sign = 1
+  let nearest: Element | null = null
   let node: Element | null = el
-  for (let depth = 0; node && depth < MIRROR_DEPTH; depth++, node = node.parentElement) sign *= flipSign(style(node))
-  return sign < 0
+  for (let depth = 0; node && depth < MIRROR_DEPTH; depth++, node = node.parentElement) {
+    const s = flipSign(style(node))
+    if (s < 0 && !nearest) nearest = node
+    sign *= s
+  }
+  return sign < 0 ? nearest : null
 }

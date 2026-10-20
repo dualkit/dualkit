@@ -82,6 +82,17 @@ describe('icons and fields', () => {
     expect(m.icons.map((i) => [i.name, i.mirrored])).toEqual([['arrow-right', false], ['chevron-left', true], ['back', false], ['play', false]])
   })
 
+  it('names an icon from its title, an SVG <title>, or the aria-label of the button or link around it', async () => {
+    const m = await modelOf(page([
+      '<i title="Back" style="display:inline-block;width:16px;height:16px"></i>',
+      '<svg width="16" height="16"><title>Arrow Right</title><path d="M2 8h12"/></svg>',
+      '<button aria-label="Next"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 8h12"/></svg></button>',
+      '<a href="#" aria-label="Previous"><svg width="16" height="16"><path d="M2 8h12"/></svg></a>',
+      '<svg width="16" height="16"><path d="M2 8h12"/></svg>',
+    ].join('')))
+    expect(m.icons.map((i) => i.name)).toEqual(['back', 'arrow right', 'next', 'previous', null])
+  })
+
   it('normalises PascalCase and camelCase icon names to kebab-case', async () => {
     const svg = (attrs: string) => `<svg ${attrs} width="16" height="16" viewBox="0 0 16 16"><path d="M2 8h12"/></svg>`
     const m = await modelOf(doc([
@@ -235,6 +246,26 @@ describe('reader foundation: fonts, labels, placeholders, clips, mirrored text',
   it('skips a visually hidden clip box', async () => {
     const m = await modelOf(page('<span class="sr">نص طويل جدا جدا</span>', { css: '.sr{position:absolute;width:1px;height:1px;overflow:hidden;white-space:nowrap}' }))
     expect(m.clips).toEqual([])
+  })
+
+  it('reads a y-axis clip: a fixed-height box that cuts its text', async () => {
+    const m = await modelOf(page('<div class="b">نص عربي</div>', { css: '.b{height:10px;overflow:hidden;line-height:1.7}' }))
+    expect(m.clips).toHaveLength(1)
+    expect(m.clips[0]).toMatchObject({ axis: 'y', ellipsis: false, hasArabic: true })
+    expect(m.clips[0]!.hidden).toBeGreaterThan(2)
+  })
+
+  it('does not read a clip for text inside an .sr-only ancestor', async () => {
+    const css = '.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.in{overflow:hidden;width:20px;white-space:nowrap}'
+    const m = await modelOf(page('<div class="sr-only"><div class="in">نص عربي طويل جدا جدا جدا</div></div>', { css }))
+    expect(m.clips).toEqual([])
+  })
+
+  it('names the nearest flipping element as mirroredBy, and null for a double flip', async () => {
+    const m = await modelOf(page('<div id="a" style="transform:scaleX(-1)"><p id="b">مرحبا</p><p id="c">بكم</p></div><div style="transform:scaleX(-1)"><div style="transform:scaleX(-1)"><p>مزدوج</p></div></div>'))
+    expect(m.texts.map((t) => [t.text, t.mirroredBy === null ? null : t.mirroredBy.length > 0])).toEqual([['مرحبا', true], ['بكم', true], ['مزدوج', null]])
+    expect(m.texts[0]!.mirroredBy).toBe(m.texts[1]!.mirroredBy)
+    expect(m.texts[0]!.mirroredBy).not.toBe(m.texts[0]!.id)
   })
 
   it('reads mirrored as the product of scale signs', async () => {

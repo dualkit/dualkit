@@ -1,5 +1,6 @@
 // Probes for the "costs if wrong" rulings. Ground truth is what Chromium paints, measured per character.
 import { readFileSync } from 'node:fs'
+import type { Page } from 'playwright'
 import { afterAll, describe, expect, it } from 'vitest'
 import { RULES } from '../src/rules'
 import { runRules } from '../src/run'
@@ -591,6 +592,11 @@ describe('content/currency-sign-font measures the webfont', () => {
     const noGlyph = page('<p>\u20C3</p>', { css: '@font-face{font-family:"Empty";src:local("Arial")}p{font-family:"Empty",sans-serif}' })
     expect((await signsOf(noGlyph))[0]?.drawnByWebfont).toBe(false)
   })
+  it('does not throw on a family name with a comma or a quote', async () => {
+    const odd = page('<p>\u20C1 100</p>', { css: '@font-face{font-family:"Odd, \\"Name\'s";src:local("Arial")}p{font-family:"Odd, \\"Name\'s",sans-serif}' })
+    const m = await modelOf(odd)
+    expect(m.texts.flatMap((t) => t.signs)).toEqual([{ codePoint: 0x20c1, drawnByWebfont: false }])
+  })
   it('leaves signs empty for runs without a sign and removes its probe', async () => {
     const html = page('<p>مرحبا</p>')
     const m = await modelOf(html)
@@ -601,5 +607,94 @@ describe('content/currency-sign-font measures the webfont', () => {
       return p.evaluate(() => document.body.children.length)
     })
     expect(withSign).toBe(1)
+  })
+})
+
+// R-mirror: text under scaleX(-1) paints as its mirror image; two flips paint it as the original.
+describe('layout/mirrored-text matches what Chromium paints', () => {
+  const ink = async (inner: string) => {
+    const html = page(`<div style="width:300px"><div id="probe">${inner}</div></div>`)
+    return withPage(html, async (p) => ({ ...(await inkExtent(p, '#probe')), png: (await p.locator('#probe').screenshot()).toString('base64') }))
+  }
+  const text = 'مرحبا بكم'
+  const flip = (s: string) => `<div style="transform:scaleX(-1)">${s}</div>`
+
+  it('one flip mirrors the ink about the box centre, two flips restore it', async () => {
+    const plain = await ink(text)
+    const once = await ink(flip(text))
+    const twice = await ink(flip(flip(text)))
+    expect(once.left).toBeCloseTo(1 - plain.right, 1)
+    expect(once.right).toBeCloseTo(1 - plain.left, 1)
+    expect(once.png).not.toBe(plain.png)
+    expect(twice.left).toBeCloseTo(plain.left, 2)
+    expect(twice.right).toBeCloseTo(plain.right, 2)
+    console.info(`mirror: plain ink ${plain.left.toFixed(3)}..${plain.right.toFixed(3)}, one flip ${once.left.toFixed(3)}..${once.right.toFixed(3)}, two flips ${twice.left.toFixed(3)}..${twice.right.toFixed(3)} (fractions of the 300px box)`)
+  })
+  it('the rule fires for one flip, and stays quiet for two flips, an icon alone and a scale() flip written twice', async () => {
+    expect(await found(page(`<p style="transform:scaleX(-1)">${text}</p>`), 'layout/mirrored-text')).toEqual(['layout/mirrored-text'])
+    expect(await found(page(`<div style="transform:scaleX(-1)"><p style="transform:scaleX(-1)">${text}</p></div>`), 'layout/mirrored-text')).toEqual([])
+    expect(await found(page(`<div style="scale:-1 1"><p style="transform:scaleX(-1)">${text}</p></div>`), 'layout/mirrored-text')).toEqual([])
+    expect(await found(page('<button><svg style="transform:scaleX(-1)" width="16" height="16"><path d="M2 8h12"/></svg></button>'), 'layout/mirrored-text')).toEqual([])
+  })
+  it('reports once for a flipped container that holds several paragraphs', async () => {
+    const html = page(`<div style="transform:scaleX(-1)"><p>${text}</p><p>${text}</p></div>`)
+    expect(await found(html, 'layout/mirrored-text')).toEqual(['layout/mirrored-text'])
+  })
+})
+
+// R-clip: what a fixed box cuts off, measured against the painted characters.
+describe('layout/clipped-text matches what Chromium cuts off', () => {
+  const label = 'اشتري الآن واحصل على خصم'
+  const box = (p: Page, sel: string) => p.evaluate((s) => document.querySelector(s)!.getBoundingClientRect().toJSON() as { left: number; right: number; top: number; bottom: number }, sel)
+
+  it('an Arabic button label wider than its fixed box paints past the edge, and the rule fires', async () => {
+    const html = page(`<button id="b" style="width:60px;overflow:hidden;white-space:nowrap">${label}</button>`)
+    const past = await withPage(html, async (p) => {
+      const b = await box(p, '#b')
+      const chars = await charBoxes(p, '#b')
+      return Math.max(b.left - Math.min(...chars.map((c) => c.left)), Math.max(...chars.map((c) => c.right)) - b.right)
+    })
+    expect(past).toBeGreaterThan(20)
+    console.info(`clip x: label paints ${past.toFixed(1)}px past its 60px button`)
+    expect(await found(html, 'layout/clipped-text')).toEqual(['layout/clipped-text'])
+  })
+
+  it('a one-line label at line-height 1 in a 1em box loses ink below the box, and the rule fires', async () => {
+    const css = (overflow: string) => `.b{font-size:20px;line-height:1;height:1em;overflow:${overflow}}`
+    const body = '<div class="b" id="b">ينبع بيت نور</div>'
+    const below = async (overflow: string) =>
+      withPage(page(body, { css: css(overflow) }), async (p) => {
+        const { bottom } = await box(p, '#b')
+        const png = (await p.screenshot({ clip: { x: 0, y: bottom - 10 - 10, width: 1024, height: 30 } })).toString('base64')
+        const rows = await p.evaluate(async (b64) => {
+          const img = await createImageBitmap(await (await fetch(`data:image/png;base64,${b64}`)).blob())
+          const c = new OffscreenCanvas(img.width, img.height)
+          const ctx = c.getContext('2d')!
+          ctx.drawImage(img, 0, 0)
+          const { data } = ctx.getImageData(0, 0, img.width, img.height)
+          let n = 0
+          for (let y = 20; y < img.height; y++) for (let x = 0; x < img.width; x++) if (data[(y * img.width + x) * 4]! < 128) n++
+          return n
+        }, png)
+        return rows
+      })
+    const cut = await below('hidden')
+    const free = await below('visible')
+    expect(cut).toBe(0)
+    expect(free).toBeGreaterThan(0)
+    console.info(`clip y: dark pixels below the 1em box: ${free} with overflow visible, ${cut} with overflow hidden`)
+    const html = page(body, { css: css('hidden') })
+    const m = await modelOf(html)
+    expect(m.clips[0]).toMatchObject({ axis: 'y' })
+    expect(m.clips[0]!.hidden).toBeGreaterThan(2)
+    console.info(`clip y: reader hidden = ${m.clips[0]!.hidden}px (scrollHeight - clientHeight)`)
+    expect(await found(html, 'layout/clipped-text')).toEqual(['layout/clipped-text'])
+  })
+
+  it('stays quiet for an ellipsis, a scrolling container, and an .sr-only label', async () => {
+    const q = (css: string, cls = 'b') => page(`<div class="${cls}">${label}</div>`, { css })
+    expect(await found(q('.b{width:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}'), 'layout/clipped-text')).toEqual([])
+    expect(await found(q('.b{width:60px;overflow:auto;white-space:nowrap}'), 'layout/clipped-text')).toEqual([])
+    expect(await found(q('.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}', 'sr-only'), 'layout/clipped-text')).toEqual([])
   })
 })
