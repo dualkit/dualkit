@@ -20,17 +20,20 @@ export function readSigns(doc: Document, text: string, font: Font, fonts: Loaded
   const present = NEW_SIGNS.filter((cp) => text.includes(String.fromCodePoint(cp)))
   if (present.length === 0) return []
   const declared = font.families.filter((f) => webfontFamily([f], fonts) !== null)
-  if (declared.length === 0) return present.map((codePoint) => ({ codePoint, drawnByWebfont: false }))
-  const probe = doc.createElement('span')
-  probe.setAttribute('aria-hidden', 'true')
-  probe.style.cssText = `position:absolute;visibility:hidden;white-space:pre;letter-spacing:0;font-size:${PROBE_SIZE}px;font-weight:${font.weight};font-style:${font.style}`
-  doc.body.appendChild(probe)
-  const width = (ch: string, family: string): number => {
-    probe.style.fontFamily = family
-    probe.textContent = ch
-    return probe.getBoundingClientRect().width
-  }
+  const notDrawn = present.map((codePoint) => ({ codePoint, drawnByWebfont: false }))
+  if (declared.length === 0) return notDrawn
+  let probe: HTMLElement | null = null
   try {
+    probe = doc.createElement('span')
+    probe.setAttribute('aria-hidden', 'true')
+    probe.style.cssText = `position:absolute;visibility:hidden;white-space:pre;letter-spacing:0;font-size:${PROBE_SIZE}px;font-weight:${font.weight};font-style:${font.style}`
+    doc.body.appendChild(probe)
+    const el = probe
+    const width = (ch: string, family: string): number => {
+      el.style.fontFamily = family
+      el.textContent = ch
+      return el.getBoundingClientRect().width
+    }
     const stack = declared.map(quoted).join(',')
     const box = width(UNASSIGNED, stack)
     return present.map((codePoint) => {
@@ -38,7 +41,10 @@ export function readSigns(doc: Document, text: string, font: Font, fonts: Loaded
       const drawn = width(ch, stack)
       return { codePoint, drawnByWebfont: Math.abs(drawn - box) > TOLERANCE && Math.abs(drawn - width(ch, 'sans-serif')) > TOLERANCE }
     })
+  } catch {
+    // A probe that cannot run says nothing about the font, so the rule reports the sign as not drawn.
+    return notDrawn
   } finally {
-    probe.remove()
+    probe?.remove()
   }
 }
