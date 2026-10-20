@@ -10,12 +10,17 @@ export const revalidate = 300
 
 const API: [string, string, string][] = [
   ['formatMoney(1234.5, { currency: "AED" })', 'AED 1,234.50', 'AED, SAR, QAR, KWD, BHD or OMR. Dinars and rials get three decimals. Add locale: "ar" and numerals: "arab" for Arabic.'],
-  ['formatHijri(date, { timeZone: "Asia/Riyadh" })', '1 Ramadan 1447 AH', 'Umm al-Qura dates. Always pass the time zone.'],
+  ['formatHijri(date, { timeZone: "Asia/Riyadh" })', '1 Ramadan 1447 AH', 'Umm al-Qura dates. The time zone is required.'],
   ['toWesternDigits("٠٥٠١٢٣٤٥٦٧")', '0501234567', 'Normalise typed digits before you validate or store them.'],
   ['parseUaePhone("+971 50 123 4567")', '{ ok: true, value: { e164, type } }', 'Every common way of writing a UAE mobile or landline.'],
   ['parseSaudiPhone("+966 55 123 4567")', '{ ok: true, value: { e164, type } }', 'The same for Saudi mobiles and landlines.'],
+  ['parseGulfPhone("+974 3312 3456")', '{ ok: true, value: { country, e164, type } }', 'A number from any of the six GCC countries. It needs a + or 00 and the country code.'],
+  ['parseQatarPhone("3312 3456")', '{ ok: true, value: { e164, type } }', 'Also parseKuwaitPhone, parseBahrainPhone and parseOmanPhone, each with format and isValid.'],
   ['parseEmiratesId("784-1990-1234567-6")', '{ ok: true, value: { formatted, year } }', 'Checks the 784 prefix and the Luhn check digit.'],
-  ['parseIban(value, { country: "AE" })', '{ ok: true, value: { formatted, bankCode } }', 'AE, SA, BH, KW and QA. Length per country and mod 97.'],
+  ['parseIban(value, { country: "AE" })', '{ ok: true, value: { formatted, bankCode } }', 'All six countries. Length per country and mod 97.'],
+  ['parseSaudiVatNumber("310 1223 9350 0003")', '{ ok: true, value: "310122393500003" }', '15 digits that start and end with 3. Also formatSaudiVatNumber and isValidSaudiVatNumber.'],
+  ['gulfWeek("AE")', '{ weekend: [6, 7], firstWorkday: 1 }', 'Weekend days as ISO weekdays for AE, AE-SH, SA, QA, KW, BH and OM. isGulfWeekend(date, region, { timeZone }) checks one date.'],
+  ['currencySign("SAR")', 'the U+20C1 sign', 'A sign for SAR, AED and OMR, and null for the rest. Most fonts do not draw it yet.'],
 ]
 
 export default async function Docs() {

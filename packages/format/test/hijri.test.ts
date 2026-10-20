@@ -47,3 +47,16 @@ describe('formatHijri', () => {
     expect(names.size).toBe(12)
   })
 })
+
+describe('timeZone is required', () => {
+  const date = new Date('2026-02-18T12:00:00Z')
+  it('throws a clear RangeError when it is missing or empty', () => {
+    // @ts-expect-error timeZone is required
+    expect(() => toHijri(date, {})).toThrow(RangeError)
+    expect(() => toHijri(date, { timeZone: '' })).toThrow(/timeZone/)
+    // @ts-expect-error options are required
+    expect(() => formatHijri(date)).toThrow(RangeError)
+    // @ts-expect-error timeZone is required
+    expect(() => formatHijri(date, { locale: 'ar' })).toThrow(/timeZone/)
+  })
+})

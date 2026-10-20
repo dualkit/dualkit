@@ -31,7 +31,7 @@ Dualkit fixes them at the source, in the agent and in the code, and checks any p
 | | What it is | Install |
 | --- | --- | --- |
 | **[Skills](plugin/skills/)** | Four agent skills for Claude Code and Cursor, listed in the Claude plugin directory: RTL layout, Arabic and Latin type pairing, Gulf formats, bilingual copy | `/plugin marketplace add dualkit/dualkit` |
-| **[Format](packages/format/)** | Six Gulf currencies, Umm al-Qura dates, Arabic numerals, UAE and Saudi phone, Emirates ID, Gulf IBAN. No dependencies | `npm i @dualkit/format` |
+| **[Format](packages/format/)** | Six Gulf currencies, Umm al-Qura dates, Arabic numerals, GCC phones and IBANs for all six countries, Emirates ID, Saudi VAT number, Gulf weekends. No dependencies | `npm i @dualkit/format` |
 | **[Starter](packages/starter/)** | A bilingual design system to fork: one token file feeds CSS, Tailwind and Figma, plus eight React components | [From the release](#starter) |
 | **[Check](packages/cli/)** | Audit any page for Arabic and RTL bugs, with a shareable Gulf-ready report | `npx dualkit check <url>` |
 
@@ -124,9 +124,9 @@ In CI, `uses: dualkit/dualkit/action@main` scores every pull request and uploads
 
 The most useful help right now:
 
-- **Read Arabic?** Review the skill rules in [`plugin/skills/`](plugin/skills/) and comment wherever something reads wrong. See [#6](https://github.com/dualkit/dualkit/issues/6).
+- **Read Arabic?** Review the skill rules in [`plugin/skills/`](plugin/skills/) and comment wherever something reads wrong.
 - **Shipping in the Gulf?** Tell us where it breaks in [Discussions](https://github.com/dualkit/dualkit/discussions).
-- **Want a first PR?** Saudi phone numbers ([#2](https://github.com/dualkit/dualkit/issues/2)) and the other Gulf currencies ([#3](https://github.com/dualkit/dualkit/issues/3)) are small and well scoped.
+- **Want a first PR?** Say hello in [Discussions](https://github.com/dualkit/dualkit/discussions) and we'll find a small one.
 
 ## Repo
 
