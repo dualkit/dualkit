@@ -25,6 +25,13 @@ Generated from `src/rules`. Each rule reads source files, before anything render
 
 **Fix:** Use the :dir(rtl) or :dir(ltr) pseudo-class, which matches the direction that applies to the element.
 
+<a id="source-physical-tailwind"></a>
+### `source/physical-tailwind` Use logical Tailwind classes instead of left and right
+
+**warning.** A physical class such as ml-4, pr-2, left-0, text-left or rounded-l-lg stays on the same side in Arabic, so the margin, padding, offset, alignment or corner is on the wrong edge.
+
+**Fix:** Use the logical class, such as ms-4, pe-2, start-0 (inset-s-0 from Tailwind 4.2), text-start or rounded-s-lg, so the side follows the reading direction. Keep a physical class only under an rtl: or ltr: variant.
+
 ## Known limits
 
 - Only .css, .scss, .html, .htm, .js, .mjs, .cjs, .jsx, .ts, .mts, .cts and .tsx files are read. Vue, Svelte, Astro and MDX files are not.
@@ -35,4 +42,8 @@ Generated from `src/rules`. Each rule reads source files, before anything render
 - physical-css skips left and right set to a negative offset of 999 or more, such as left: -9999px in a visually-hidden block, and a pair of sides set to the same value, such as left: 0 with right: 0.
 - physical-css skips left: 50% or right: 50% when the same block translates 50% on x, the centring idiom, because it looks the same in both directions.
 - physical-css and arabic-letter-spacing read only the selectors in the file. A direction set by a parent selector in another file, or by a class, is not known.
+- physical-tailwind reads classes only from class and className attributes, @apply, and the calls clsx, cn, cx, twMerge, twJoin, classnames, classNames, cva and tv. Any other string, such as a safelist in tailwind.config.js, is not read.
+- physical-tailwind does not guess a class built at runtime, such as ml-${n} or a string joined with +, and reads only the keys of a clsx object and the class values of a cva or tv config.
+- physical-tailwind finds the Tailwind version in the nearest package.json that lists tailwindcss, preferring the installed copy. Below 3.3, or with no version found, it stays quiet. A Tailwind prefix such as tw- is not known, so prefixed classes are not checked.
+- physical-tailwind skips a class under any variant holding rtl or ltr as a word, such as rtl:, group-[dir=rtl]: or [dir=rtl]_&:, a matching pair in the same string, such as ml-2 mr-2 or left-0 right-0, and left-1/2 with translate-x-1/2, the centring idiom. Arbitrary properties such as [margin-left:4px] are not checked.
 - A file named directly on the command line is linted even when a .gitignore would skip it. Only directory walks honour .gitignore.
