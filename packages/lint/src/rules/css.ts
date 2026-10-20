@@ -1,5 +1,5 @@
 import type { Container, Declaration, Rule } from 'postcss'
-import { directionScoped, fullSelectors, targetsArabic } from '../selectors'
+import { directionScoped, fullSelectors, targetsArabic, withoutDirection } from '../selectors'
 import type { LintHit, LintRule, SourceFile } from '../types'
 
 const CSS_LANGS = ['css', 'scss', 'html'] as const
@@ -79,6 +79,39 @@ function hasSymmetricSibling(decl: Declaration, prop: string, value: string): bo
   return (parent.nodes ?? []).some((n) => n.type === 'decl' && n.prop.toLowerCase() === opposite && normalise(n.value) === value)
 }
 
+/** The property family an override must set to count: the same edge kind, either side. */
+function familyOf(prop: string): string | null {
+  if (/^(?:left|right|inset(?:-inline(?:-start|-end)?)?)$/.test(prop)) return 'inset'
+  if (prop.startsWith('margin')) return 'margin'
+  if (prop.startsWith('padding')) return 'padding'
+  if (/^border-.*radius$/.test(prop) || prop === 'border-radius') return 'radius'
+  if (prop.startsWith('border')) return 'border'
+  return prop === 'float' || prop === 'clear' || prop === 'text-align' ? prop : null
+}
+
+/** selector|family for every direction-scoped rule in the file, with the direction parts removed from the selector. */
+function directionOverrides(file: SourceFile): Set<string> {
+  const out = new Set<string>()
+  for (const block of file.css) {
+    block.root.walkRules((rule) => {
+      const families = new Set((rule.nodes ?? []).flatMap((n) => (n.type === 'decl' ? [familyOf(n.prop.toLowerCase())] : [])))
+      for (const selector of fullSelectors(rule)) {
+        if (!directionScoped(selector)) continue
+        const base = withoutDirection(selector)
+        for (const family of families) if (family) out.add(`${base}|${family}`)
+      }
+    })
+  }
+  return out
+}
+
+/** Every selector of the rule has a direction-scoped twin in the file that sets the same family. */
+function overridden(rule: Rule | null, prop: string, overrides: ReadonlySet<string>): boolean {
+  const family = familyOf(prop)
+  if (!rule || !family || overrides.size === 0) return false
+  return fullSelectors(rule).every((s) => overrides.has(`${withoutDirection(s)}|${family}`))
+}
+
 function physicalFix(prop: string, value: string): string | null {
   const logical = PHYSICAL_PROPS[prop]
   if (logical) return logical
@@ -95,6 +128,7 @@ const physicalCss: LintRule = {
   langs: CSS_LANGS,
   check: (file) => {
     const hits: LintHit[] = []
+    const overrides = directionOverrides(file)
     eachDeclaration(file, (decl, offset, rule) => {
       const prop = decl.prop.toLowerCase()
       if (prop.startsWith('-') || prop.includes('#{') || prop.includes('$') || prop.includes('@')) return
@@ -103,6 +137,7 @@ const physicalCss: LintRule = {
       if (!logical) return
       if (PHYSICAL_PROPS[prop] ? hasSymmetricSibling(decl, prop, value) || isOffscreen(prop, value) || isCentring(decl, prop, value) : false) return
       if (rule && fullSelectors(rule).every(directionScoped)) return
+      if (overridden(rule, prop, overrides)) return
       hits.push({ offset, message: `\`${prop}: ${normalise(decl.value)}\` is tied to one side. Use \`${logical}\`.` })
     })
     return hits

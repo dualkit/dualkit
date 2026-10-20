@@ -191,3 +191,30 @@ describe('source/dir-attribute-selector', () => {
     expect(f[0]).toMatchObject({ line: 3, column: 1 })
   })
 })
+
+describe('physical-css with a direction override in the same file', () => {
+  it('skips the base when a :dir(), [dir] or :lang(ar) rule for the same selector sets the same family', () => {
+    expect(physical('.n { left: 0 } .n:dir(rtl) { left: auto; right: 0 }')).toEqual([])
+    expect(physical('.n { left: 0 } [dir=rtl] .n { left: auto; right: 0 }')).toEqual([])
+    expect(physical('.n { left: 0 } html[dir="rtl"] .n { inset-inline: auto 0 }')).toEqual([])
+    expect(physical('.a .b { margin-left: 4px } :lang(ar) .a .b { margin: 0 4px 0 0 }')).toEqual([])
+    expect(physical('.t { text-align: left } .t:dir(rtl) { text-align: right }')).toEqual([])
+    expect(physical('.c { border-top-left-radius: 4px } .c:dir(rtl) { border-top-right-radius: 4px }')).toEqual([])
+    expect(physical('.n { left: 0; &:dir(rtl) { left: auto; right: 0 } }', 'a.scss')).toEqual([])
+  })
+
+  it('still fires when the override is for another selector or another family', () => {
+    expect(physical('.n { left: 0 } .m:dir(rtl) { left: auto }')).toHaveLength(1)
+    expect(physical('.n { left: 0 } .n:dir(rtl) { margin-left: 0 }')).toHaveLength(1)
+    expect(physical('.c { border-top-left-radius: 4px } .c:dir(rtl) { border-left: 0 }')).toHaveLength(1)
+    expect(physical('.n { left: 0 } .n:hover { color: red }')).toHaveLength(1)
+  })
+})
+
+describe('withoutDirection', () => {
+  it('removes the direction parts and keeps the rest of the selector', async () => {
+    const { withoutDirection } = await import('../../src/selectors')
+    expect(['[dir=rtl] .n', '.n:dir(rtl)', 'html[dir="rtl"] > .n', ':root:lang(ar) .n', '.n:dir(rtl):hover', '.n:hover:dir(rtl)'].map(withoutDirection))
+      .toEqual(['.n', '.n', '.n', '.n', '.n:hover', '.n:hover'])
+  })
+})

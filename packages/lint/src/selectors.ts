@@ -31,6 +31,13 @@ const LANG_AR_PSEUDO = /:lang\(\s*["']?ar(?![a-z0-9])/i
 export const directionScoped = (selector: string): boolean =>
   DIR_ATTRIBUTE.test(selector) || DIR_PSEUDO.test(selector) || LANG_AR_PSEUDO.test(selector)
 
+/** A direction part with an optional html, body or :root it is attached to: html[dir=rtl], :dir(rtl), :lang(ar). */
+const DIRECTION_PART = /(?:\b(?:html|body)|:root)?(?:\[\s*dir\s*[~|^$*]?=[^\]]*\]|:dir\([^)]*\)|:lang\(\s*["']?ar[^)]*\))+/gi
+
+/** The selector with its direction parts removed, in one spacing, so [dir=rtl] .n and .n:dir(rtl) both give .n. */
+export const withoutDirection = (selector: string): string =>
+  selector.replace(DIRECTION_PART, '').replace(/\s*([>+~])\s*/g, ' $1 ').trim().replace(/^[>+~]\s*/, '').replace(/\s+/g, ' ')
+
 const NOT_PSEUDO = /:not\([^()]*(?:\([^()]*\)[^()]*)*\)/gi
 const LANG_AR_ATTRIBUTE = /\[\s*lang\s*[|^]?=\s*["']?ar(?:-|["'\]\s]|$)/i
 const DIR_RTL = /:dir\(\s*rtl\s*\)|\[\s*dir\s*=\s*["']?rtl["']?\s*\]/i

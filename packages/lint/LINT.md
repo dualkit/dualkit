@@ -70,6 +70,7 @@ Generated from `src/rules`. Each rule reads source files, before anything render
 - One inline `<script>` or `<style>` that does not parse, for example one holding template syntax, skips the whole HTML file.
 - physical-css skips left and right set to a negative offset of 999 or more, such as left: -9999px in a visually-hidden block, and a pair of sides set to the same value, such as left: 0 with right: 0.
 - physical-css skips left: 50% or right: 50% when the same block translates 50% on x, the centring idiom, because it looks the same in both directions.
+- physical-css skips a declaration when the same file has a :dir(), [dir] or :lang(ar) rule for the same selector, with the direction part removed, that sets a property of the same family, as in .n { left: 0 } .n:dir(rtl) { left: auto; right: 0 }. An override in another file is not seen.
 - physical-css and arabic-letter-spacing read only the selectors in the file. A direction set by a parent selector in another file, or by a class, is not known.
 - physical-tailwind reads classes only from class and className attributes, @apply, and the calls clsx, cn, cx, twMerge, twJoin, classnames, classNames, cva and tv. Any other string, such as a safelist in tailwind.config.js, is not read.
 - physical-tailwind reads a class helper only when it is called by its bare name, so utils.cn(...) or a renamed import is not read.
