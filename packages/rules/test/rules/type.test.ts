@@ -41,6 +41,14 @@ describe('type rules', () => {
     it('fails a loaded face that does not cover Arabic', () => {
       expect(ids(screen({ texts: [withFamilies(['IBM Plex Sans Arabic'])], fonts: [face({ unicodeRange: 'U+0000-00FF' })] }))).toEqual(['type/arabic-font'])
     })
+    it('does not count a loaded Latin webfont with the default range', () => {
+      const t = withFamilies(['Inter', 'sans-serif'])
+      expect(messages(screen({ texts: [t], fonts: [face({ family: 'Inter' })] }))).toEqual(['Arabic falls back from Inter, sans-serif.'])
+    })
+    it('counts a loaded face with an explicit Arabic range under any name', () => {
+      const brand = face({ family: 'Brand', unicodeRange: 'U+0600-06FF, U+0750-077F' })
+      expect(ids(screen({ texts: [withFamilies(['Brand', 'sans-serif'])], fonts: [brand] }))).toEqual([])
+    })
     it('falls back as before for Latin stacks', () => {
       expect(messages(screen({ texts: [withFamilies(['Inter', 'sans-serif'])] }))).toEqual(['Arabic falls back from Inter, sans-serif.'])
     })
@@ -61,6 +69,15 @@ describe('type rules', () => {
       const m = screen({ texts: [text({ font: { ...font, size: 15 } })], fonts: [face({ sizeAdjust: 0.9 })] })
       expect(messages(m)).toEqual([expect.stringContaining('15px')])
       expect(messages(m)[0]).toContain('13.5px')
+    })
+    it('uses the Arabic face of a split family', () => {
+      const fonts = [
+        face({ family: 'Brand', unicodeRange: 'U+0600-06FF', weight: [500, 500], sizeAdjust: 1.12 }),
+        face({ family: 'Brand', unicodeRange: 'U+0-10FFFF', weight: [400, 400], sizeAdjust: 1 }),
+      ]
+      const t = text({ font: { ...font, families: ['Brand', 'sans-serif'], size: 13, weight: 400 } })
+      expect(effectiveSize(t, fonts)).toBeCloseTo(14.56)
+      expect(ids(screen({ texts: [t], fonts }))).toEqual([])
     })
     it('ignores size-adjust on system fonts', () => {
       expect(ids(screen({ texts: [withFamilies(['SF Arabic'])], fonts: [face({ sizeAdjust: 0.5 })] }))).toEqual([])
@@ -93,6 +110,9 @@ describe('type rules', () => {
       expect(coversArabic(face({ unicodeRange: 'U+07??' }))).toBe(false)
       expect(coversArabic(face({ unicodeRange: 'U+0000-00FF' }))).toBe(false)
       expect(coversArabic(face({ unicodeRange: 'U+0627' }))).toBe(true)
+      expect(coversArabic(face({ family: 'Inter', unicodeRange: 'U+0-10FFFF' }))).toBe(false)
+      expect(coversArabic(face({ family: 'IBM Plex Sans Arabic', unicodeRange: 'U+0-10FFFF' }))).toBe(true)
+      expect(coversArabic(face({ family: 'Brand', unicodeRange: 'U+0600-06FF' }))).toBe(true)
     })
     it('finds the loaded Arabic face in a stack', () => {
       expect(loadedArabicFace(['Inter', 'IBM Plex Sans Arabic'], [face()])?.family).toBe('IBM Plex Sans Arabic')
