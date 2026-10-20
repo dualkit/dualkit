@@ -1,4 +1,5 @@
 import type { IconNode } from '../model'
+import { flipSign, MIRROR_DEPTH } from './mirror'
 import { clean, dirOf, type Pred, type Ref, type Style } from './types'
 
 const ICON_CLASS = /^(lucide-|fa-|icon-|bi-|ri-|ti-|i-)(.+)$/
@@ -30,13 +31,11 @@ export function iconName(el: Element): string | null {
   return null
 }
 
+/** True when the element or an ancestor (up to 4 deep) has a horizontally flipping transform. Icons treat any flip as mirrored. */
 function mirrored(el: Element, style: Style): boolean {
   let node: Element | null = el
-  for (let depth = 0; node && depth < 4; depth++, node = node.parentElement) {
-    const s = style(node)
-    const m = /matrix(?:3d)?\(([^)]+)\)/.exec(s.transform)
-    if (m && parseFloat(m[1]!.split(',')[0]!) < 0) return true
-    if (s.scale && s.scale !== 'none' && parseFloat(s.scale) < 0) return true
+  for (let depth = 0; node && depth < MIRROR_DEPTH; depth++, node = node.parentElement) {
+    if (flipSign(style(node)) < 0) return true
   }
   return false
 }

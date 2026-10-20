@@ -4,6 +4,19 @@ import { chromium, type Browser, type Page } from 'playwright'
 import type { ReadOptions } from '../../src/dom/reader'
 import type { ScreenModel } from '../../src/model'
 
+export const FONT_WAIT_MS = 3000
+
+/** Waits for web fonts so a read does not race them. Never throws and gives up after FONT_WAIT_MS. */
+const waitForFonts = async (page: Page): Promise<void> => {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  const timeout = new Promise<void>((r) => { timer = setTimeout(r, FONT_WAIT_MS) })
+  try {
+    await Promise.race([page.evaluate(() => document.fonts.ready).then(() => undefined, () => undefined), timeout])
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
 let browser: Promise<Browser> | null = null
 let source: Promise<string> | null = null
 
@@ -16,6 +29,7 @@ export const readerSource = (): Promise<string> =>
 const page = async (): Promise<Page> => (await (browser ??= chromium.launch())).newPage({ viewport: { width: 1024, height: 768 } })
 
 const read = async (p: Page, options: ReadOptions): Promise<ScreenModel> => {
+  await waitForFonts(p)
   await p.addScriptTag({ content: await readerSource() })
   return p.evaluate((o) => (globalThis as unknown as { dualkitReader: { readScreen: (d: Document, o: ReadOptions) => ScreenModel } }).dualkitReader.readScreen(document, o), options)
 }

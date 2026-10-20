@@ -1,5 +1,6 @@
 import { afterAll, describe, expect, it } from 'vitest'
 import { closeBrowser, modelAt, modelOf, timeRead } from './helpers/browser'
+import { page } from './fixtures'
 
 afterAll(closeBrowser)
 
@@ -180,5 +181,52 @@ describe('real page fixes', () => {
       expect(t.blockText.endsWith('كلمة1999')).toBe(true)
     }
     expect(m.texts.filter((t) => t.isLastInBlock).map((t) => t.text)).toEqual(['كلمة1999'])
+  })
+})
+
+describe('reader foundation: fonts, labels, placeholders, clips, mirrored text', () => {
+  it('lists the fixture faces as loaded, with their weight range', async () => {
+    const m = await modelOf(page('<p>مرحبا <b>بكم</b></p>'))
+    const plex = m.fonts.filter((f) => f.family === 'IBM Plex Sans Arabic')
+    expect(plex.map((f) => [f.weight, f.status])).toEqual(expect.arrayContaining([[[400, 400], 'loaded'], [[700, 700], 'loaded']]))
+    expect(plex[0]).toMatchObject({ style: 'normal', sizeAdjust: 1 })
+  })
+
+  it('reads size-adjust as a ratio', async () => {
+    const css = '@font-face{font-family:"Adj";src:local("Arial");size-adjust:90%}'
+    const m = await modelOf(page('<p>x</p>', { css }))
+    expect(m.fonts.find((f) => f.family === 'Adj')?.sizeAdjust).toBeCloseTo(0.9)
+  })
+
+  it('reads aria-label, alt and title, and skips empty values', async () => {
+    const m = await modelOf(page('<button aria-label="إغلاق" title="">x</button><img alt="شعار" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" width="4" height="4"><a title="رابط" href="#">y</a><i aria-label="  "></i>'))
+    expect(m.labels.map((l) => [l.attr, l.text, l.lang])).toEqual([['aria-label', 'إغلاق', 'ar'], ['alt', 'شعار', 'ar'], ['title', 'رابط', 'ar']])
+  })
+
+  it('reads a field placeholder', async () => {
+    const m = await modelOf(page('<input placeholder="الاسم"><input>'))
+    expect(m.fields.map((f) => f.placeholder)).toEqual(['الاسم', ''])
+  })
+
+  it('reads a clipped box, its ellipsis, and nothing for visible overflow', async () => {
+    const text = 'نص عربي طويل جدا يتجاوز عرض الصندوق بكثير ولا يتسع فيه أبدا'
+    const hidden = await modelOf(page(`<div class="b">${text}</div>`, { css: '.b{width:60px;overflow:hidden;white-space:nowrap}' }))
+    expect(hidden.clips).toHaveLength(1)
+    expect(hidden.clips[0]).toMatchObject({ axis: 'x', ellipsis: false, hasArabic: true })
+    expect(hidden.clips[0]!.hidden).toBeGreaterThan(100)
+    const ell = await modelOf(page(`<div class="b">${text}</div>`, { css: '.b{width:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' }))
+    expect(ell.clips[0]!.ellipsis).toBe(true)
+    const vis = await modelOf(page(`<div class="b">${text}</div>`, { css: '.b{width:60px;overflow:visible;white-space:nowrap}' }))
+    expect(vis.clips).toEqual([])
+  })
+
+  it('skips a visually hidden clip box', async () => {
+    const m = await modelOf(page('<span class="sr">نص طويل جدا جدا</span>', { css: '.sr{position:absolute;width:1px;height:1px;overflow:hidden;white-space:nowrap}' }))
+    expect(m.clips).toEqual([])
+  })
+
+  it('reads mirrored as the product of scale signs', async () => {
+    const m = await modelOf(page('<p style="transform:scaleX(-1)">مرحبا</p><div style="transform:scaleX(-1)"><div style="transform:scaleX(-1)"><p>بكم</p></div></div><p>عادي</p>'))
+    expect(m.texts.map((t) => [t.text, t.mirrored])).toEqual([['مرحبا', true], ['بكم', false], ['عادي', false]])
   })
 })

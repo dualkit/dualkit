@@ -33,6 +33,8 @@ export type TextRun = NodeRef & {
   isLastInBlock: boolean
   font: Font
   lines: number
+  /** Net horizontal flip: the product of scale signs over the element and up to 4 ancestors. */
+  mirrored: boolean
 }
 
 export type PhysicalDeclaration = { property: string; value: string }
@@ -50,7 +52,23 @@ export type LayoutNode = NodeRef & {
 export type IconNode = NodeRef & { name: string | null; dir: Direction; mirrored: boolean }
 
 export type FieldKind = 'email' | 'tel' | 'url' | 'number' | 'code' | 'text'
-export type FieldNode = NodeRef & { kind: FieldKind; dir: Direction; dirAttr: string | null }
+export type FieldNode = NodeRef & { kind: FieldKind; dir: Direction; dirAttr: string | null; placeholder: string }
+
+export type LoadedFace = {
+  /** No quotes. */
+  family: string
+  weight: [number, number]
+  style: string
+  unicodeRange: string
+  /** A ratio: 0.9 for `90%`. */
+  sizeAdjust: number
+  status: 'unloaded' | 'loading' | 'loaded' | 'error'
+}
+
+export type LabelNode = NodeRef & { attr: 'aria-label' | 'alt' | 'title'; text: string; lang: string | null }
+
+/** `hidden` is the px cut off: scrollWidth - clientWidth, or scrollHeight - clientHeight. */
+export type ClipNode = NodeRef & { axis: 'x' | 'y'; hidden: number; ellipsis: boolean; hasArabic: boolean }
 
 export type ScreenModel = {
   /** dir is the attribute as written; computedDir is how the page body actually runs (dir="auto" resolved). */
@@ -59,5 +77,8 @@ export type ScreenModel = {
   layouts: LayoutNode[]
   icons: IconNode[]
   fields: FieldNode[]
+  fonts: LoadedFace[]
+  labels: LabelNode[]
+  clips: ClipNode[]
   unreadableStylesheets: number
 }

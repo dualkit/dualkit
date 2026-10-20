@@ -18,6 +18,18 @@ export const SCORE_DEADLINE_MS = 90_000
 const GOTO_MS = 30_000
 const LOAD_MS = 10_000
 const SETTLE_MS = 800
+export const FONT_WAIT_MS = 3000
+
+/** Waits for web fonts so a read does not race them. Never throws and gives up after FONT_WAIT_MS. */
+const waitForFonts = async (page: Page): Promise<void> => {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  const timeout = new Promise<void>((r) => { timer = setTimeout(r, FONT_WAIT_MS) })
+  try {
+    await Promise.race([page.evaluate(() => document.fonts.ready).then(() => undefined, () => undefined), timeout])
+  } finally {
+    clearTimeout(timer)
+  }
+}
 
 // Written as escapes on purpose: these are invisible or look like their ASCII twins.
 const BIDI_CONTROLS = /[\u200E\u200F\u061C\u202A-\u202E\u2066-\u2069]/g
@@ -63,6 +75,7 @@ async function checkRequired(browser: Browser, url: string, required: readonly R
     const page = await context.newPage()
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: GOTO_MS })
     await page.waitForLoadState('load', { timeout: LOAD_MS }).catch(() => {})
+    await waitForFonts(page)
     await page.waitForTimeout(SETTLE_MS)
     return await missingParts(page, required)
   } finally {

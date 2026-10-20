@@ -1,10 +1,16 @@
+import { readFileSync } from 'node:fs'
+
+const face = (file: string, weight: number): string =>
+  `@font-face{font-family:"IBM Plex Sans Arabic";font-weight:${weight};src:url(data:font/woff2;base64,${readFileSync(new URL(`./fonts/${file}`, import.meta.url)).toString('base64')}) format("woff2")}`
+const PLEX_FACES = face('IBMPlexSansArabic-Regular.woff2', 400) + face('IBMPlexSansArabic-Bold.woff2', 700)
+
 type Page = { lang?: string | null; dir?: string | null; css?: string }
 
 export const page = (body: string, o: Page = {}): string => {
   const lang = o.lang === undefined ? 'ar' : o.lang
   const dir = o.dir === undefined ? 'rtl' : o.dir
   const attrs = [lang === null ? '' : `lang="${lang}"`, dir === null ? '' : `dir="${dir}"`].join(' ')
-  return `<!doctype html><html ${attrs}><head><meta charset="utf-8"><style>body{font-family:"IBM Plex Sans Arabic",sans-serif;font-size:16px;line-height:1.7}${o.css ?? ''}</style></head><body>${body}</body></html>`
+  return `<!doctype html><html ${attrs}><head><meta charset="utf-8"><style>${PLEX_FACES}body{font-family:"IBM Plex Sans Arabic",sans-serif;font-size:16px;line-height:1.7}${o.css ?? ''}</style></head><body>${body}</body></html>`
 }
 
 const icon = (name: string, style = '') =>

@@ -1,5 +1,9 @@
 import type { FieldKind, FieldNode, Font, LayoutNode, NodeRef, Rect, ScreenModel, TextRun } from '../model'
+import { readClips } from './clips'
+import { readFonts } from './fonts'
 import { readIcons } from './icons'
+import { readLabels } from './labels'
+import { netMirrored } from './mirror'
 import { makePathOf } from './path'
 import { arabicShare, arabicWordCount, hasArabic } from '../text'
 import { authoredPhysical, physicalOf, type Authored } from './styles'
@@ -44,6 +48,9 @@ export function readScreen(doc: Document, options: ReadOptions = {}): ScreenMode
     layouts: readLayouts(doc, style, skipped, visible, ref, authored),
     icons: readIcons(doc, style, skipped, visible, ref),
     fields: readFields(doc, style, skipped, visible, ref),
+    fonts: readFonts(doc),
+    labels: readLabels(doc, skipped, visible, ref),
+    clips: readClips(doc, style, skipped, visible, ref, screenReaderOnly),
     unreadableStylesheets: unreadable,
   }
 }
@@ -132,7 +139,7 @@ function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, re
       text, blockId: id, blockText, ...facts, blockDir, dir: dirOf(s),
       lang: parent.closest('[lang]')?.getAttribute('lang') || null,
       isolated: isolatedBelow(parent, block, style), isLastInBlock: full.endsWith(text),
-      font: fontOf(s), lines: Math.max(1, lines),
+      font: fontOf(s), lines: Math.max(1, lines), mirrored: netMirrored(parent, style),
     })
   }
   return runs
@@ -167,7 +174,7 @@ function readFields(doc: Document, style: Style, skipped: Pred, visible: Pred, r
     const type = el.getAttribute('type')?.toLowerCase()
     if (type === 'hidden' || type === 'checkbox' || type === 'radio' || type === 'submit' || type === 'button') continue
     if (skipped(el) || !visible(el)) continue
-    out.push({ ...ref(el), kind: fieldKind(el), dir: dirOf(style(el)), dirAttr: el.getAttribute('dir') })
+    out.push({ ...ref(el), kind: fieldKind(el), dir: dirOf(style(el)), dirAttr: el.getAttribute('dir'), placeholder: el.getAttribute('placeholder') ?? '' })
   }
   return out
 }

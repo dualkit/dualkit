@@ -16,6 +16,18 @@ type PageReader = { readScreen: (d: unknown, o: { exclude: string[] }) => Screen
 const READER = createRequire(import.meta.url).resolve('@dualkit/rules/reader')
 const SETTLE_MS = 800
 const LOAD_WAIT_MS = 10_000
+export const FONT_WAIT_MS = 3000
+
+/** Waits for web fonts so a read does not race them. Never throws and gives up after FONT_WAIT_MS. */
+const waitForFonts = async (page: Page): Promise<void> => {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  const timeout = new Promise<void>((r) => { timer = setTimeout(r, FONT_WAIT_MS) })
+  try {
+    await Promise.race([page.evaluate(() => document.fonts.ready).then(() => undefined, () => undefined), timeout])
+  } finally {
+    clearTimeout(timer)
+  }
+}
 const MAX_SHOT_HEIGHT = 8000
 /** Device pixels: a 2x capture is used while it stays this tall, so zoomed crops stay sharp and the PNG stays a sensible size. */
 const MAX_2X_DEVICE_HEIGHT = 8000
@@ -86,6 +98,7 @@ export async function audit(options: AuditOptions, launch: () => Promise<Browser
     // An error page is not the screen the user asked about, so scoring it would mislead.
     if (status >= HTTP_ERROR) throw new UserError(`${options.url} returned ${status}.`)
     await page.waitForLoadState('load', { timeout: LOAD_WAIT_MS }).catch(() => {})
+    await waitForFonts(page)
     await page.waitForTimeout(SETTLE_MS)
     const { model, pageHeight, shot } = await read(page, options)
     const findings = runRules(model, { ignore: options.config.ignore })
