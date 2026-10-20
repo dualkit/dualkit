@@ -18,7 +18,7 @@ const count = (findings: readonly LintFinding[], severity: LintFinding['severity
   findings.filter((f) => f.severity === severity).length
 
 export function formatLint(result: LintResult, color: boolean): string {
-  const { findings, files, skipped } = result
+  const { findings, files } = result
   const lines = findings.map((f) =>
     `${f.file}:${f.line}:${f.column}  ${paint(color, COLOR[f.severity], MARK[f.severity])} ${f.rule}  ${f.message}`)
   if (lines.length > 0) lines.push('')
@@ -27,6 +27,9 @@ export function formatLint(result: LintResult, color: boolean): string {
       ? `No issues found in ${plural(files, 'file')}.`
       : `${plural(count(findings, 'error'), 'error')}, ${plural(count(findings, 'warning'), 'warning')}, ${plural(count(findings, 'note'), 'note')} in ${plural(files, 'file')}`,
   )
-  for (const s of skipped) lines.push(`skipped ${s.file}: ${s.reason}`)
   return `${lines.join('\n')}\n`
 }
+
+/** One line per skipped file, for stderr, so stdout holds only the findings. */
+export const formatSkipped = (result: LintResult): string =>
+  result.skipped.map((s) => `skipped ${s.file}: ${s.reason}\n`).join('')

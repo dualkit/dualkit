@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import type { LintResult } from '@dualkit/lint'
 import { describe, expect, it } from 'vitest'
 import { run } from '../src/cli'
-import { formatLint } from '../src/lint'
+import { formatLint, formatSkipped } from '../src/lint'
 
 const project = (files: Record<string, string>) => {
   const dir = mkdtempSync(join(tmpdir(), 'dualkit-lint-'))
@@ -101,14 +101,40 @@ describe('dualkit lint', () => {
 
 describe('formatLint', () => {
   const base: LintResult = { root: '/x', files: 2, skipped: [], findings: [] }
-  it('says no issues, and lists skipped files after the totals', () => {
-    const text = formatLint({ ...base, skipped: [{ file: 'big.js', reason: 'minified' }] }, false)
+  it('says no issues, and leaves skipped files to formatSkipped', () => {
+    const result = { ...base, skipped: [{ file: 'big.js', reason: 'minified' }] }
+    const text = formatLint(result, false)
     expect(text).toContain('No issues found in 2 files.')
-    expect(text.trimEnd().endsWith('skipped big.js: minified')).toBe(true)
+    expect(text).not.toContain('skipped')
+    expect(formatSkipped(result)).toBe('skipped big.js: minified\n')
+    expect(formatSkipped(base)).toBe('')
   })
   it('colours marks only when asked', () => {
     const finding = { rule: 'r/x', group: 'source', severity: 'error', title: 't', message: 'm', fix: 'f', docs: 'd', file: 'a.css', line: 3, column: 5 } as const
     expect(formatLint({ ...base, findings: [finding] }, false)).toContain('a.css:3:5  ✖ r/x  m')
     expect(formatLint({ ...base, findings: [finding] }, true)).toContain('\u001b[31m✖')
+  })
+})
+
+describe('dualkit lint streams and flags', () => {
+  it('writes skipped files to stderr, not stdout', async () => {
+    const t = harness(project({ 'a.css': CLEAN, 'b.ts': 'const = ;\n' }))
+    expect(await run(['lint'], t.io)).toBe(0)
+    expect(t.out.join('')).not.toContain('skipped')
+    expect(t.err.join('')).toContain('skipped b.ts:')
+  })
+
+  it('keeps --json stdout pure JSON and prints no skipped lines', async () => {
+    const t = harness(project({ 'b.ts': 'const = ;\n' }))
+    expect(await run(['lint', '--json'], t.io)).toBe(0)
+    expect(JSON.parse(t.out.join('')).skipped).toHaveLength(1)
+    expect(t.err.join('')).toBe('')
+  })
+
+  it.each([['--width', '400'], ['--height', '600'], ['--out', 'r.html'], ['--min-score', '80']])('rejects the check-only flag %s with exit 2', async (flag, value) => {
+    const t = harness(project({ 'a.css': CLEAN }))
+    expect(await run(['lint', flag, value], t.io)).toBe(2)
+    expect(t.err.join('')).toContain(`${flag} is a dualkit check option`)
+    expect(t.out.join('')).toBe('')
   })
 })

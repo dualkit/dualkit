@@ -5,7 +5,7 @@ import { parseArgs } from 'node:util'
 import { lint } from '@dualkit/lint'
 import type { audit } from './audit'
 import { UserError, loadConfig } from './config'
-import { formatLint, isFailOn, shouldFail } from './lint'
+import { formatLint, formatSkipped, isFailOn, shouldFail } from './lint'
 import { renderReport } from './report'
 import { formatSummary } from './summary'
 import { toUrl } from './target'
@@ -48,7 +48,14 @@ const int = (name: string, value: string | undefined, fallback: number, min: num
   return n
 }
 
-async function runLint(paths: string[], values: { json?: boolean; 'fail-on'?: string; config?: string }, io: Io): Promise<number> {
+/** Flags that only dualkit check reads. dualkit lint rejects them rather than ignore them. */
+const CHECK_ONLY = ['out', 'width', 'height', 'min-score'] as const
+
+type LintValues = { json?: boolean; 'fail-on'?: string; config?: string } & Partial<Record<(typeof CHECK_ONLY)[number], string>>
+
+async function runLint(paths: string[], values: LintValues, io: Io): Promise<number> {
+  const checkOnly = CHECK_ONLY.find((name) => values[name] !== undefined)
+  if (checkOnly) throw new UserError(`--${checkOnly} is a dualkit check option. dualkit lint does not take it.`)
   const failOn = values['fail-on'] ?? 'error'
   if (!isFailOn(failOn)) throw new UserError(`--fail-on must be error, warning or note, got "${failOn}".`)
   const targets = paths.length > 0 ? paths : ['.']
@@ -56,7 +63,12 @@ async function runLint(paths: string[], values: { json?: boolean; 'fail-on'?: st
   if (missing !== undefined) throw new UserError(`Could not find ${missing}.`)
   const config = loadConfig(values.config, io.cwd)
   const result = await (io.lint ?? lint)(targets, { cwd: io.cwd, ignore: config.ignore })
-  io.out(values.json ? `${JSON.stringify(result)}\n` : formatLint(result, Boolean(process.stdout.isTTY)))
+  if (values.json) io.out(`${JSON.stringify(result)}\n`)
+  else {
+    io.out(formatLint(result, Boolean(process.stdout.isTTY)))
+    const skipped = formatSkipped(result)
+    if (skipped) io.err(skipped)
+  }
   return shouldFail(result, failOn) ? 1 : 0
 }
 
