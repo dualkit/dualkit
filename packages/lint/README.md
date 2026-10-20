@@ -19,7 +19,7 @@ npx dualkit@beta lint .
 | `source/dir-attribute-selector` | note | A `[dir]` attribute selector where `:dir()` also catches inherited direction |
 | `source/physical-tailwind` | warning | Physical Tailwind classes such as `ml-4` or `text-left`. The fix follows your installed Tailwind version |
 | `source/intl-digits` | warning | An Arabic `Intl` number or date format that leaves the digits to the runtime |
-| `source/islamic-calendar` | warning | The bare `islamic` calendar, where the Gulf uses `islamic-umalqura` |
+| `source/islamic-calendar` | warning | The bare `islamic` calendar instead of `islamic-umalqura`, the Hijri calendar CLDR ranks first for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar |
 | `source/hijri-time-zone` | warning | A Hijri date format with no `timeZone` |
 | `source/old-rial-sign` | warning | U+FDFC, the old rial sign, used as the Saudi riyal sign |
 

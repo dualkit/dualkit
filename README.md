@@ -123,7 +123,7 @@ In CI, `uses: dualkit/dualkit/action@main` scores every pull request and uploads
 
 ## Lint
 
-Lint reads your source instead of a rendered page, so it needs no browser and runs in seconds. It checks CSS, SCSS, HTML, JavaScript and TypeScript, including JSX, against 8 source rules: left and right in CSS and Tailwind classes, letter-spacing on Arabic, `[dir]` selectors, Arabic formats that leave the digits to the runtime, the bare `islamic` calendar where the Gulf uses `islamic-umalqura`, Hijri dates with no time zone, and the old rial sign.
+Lint reads your source instead of a rendered page, so it needs no browser and runs in seconds. It checks CSS, SCSS, HTML, JavaScript and TypeScript, including JSX, against 8 source rules: left and right in CSS and Tailwind classes, letter-spacing on Arabic, `[dir]` selectors, Arabic formats that leave the digits to the runtime, the bare `islamic` calendar instead of `islamic-umalqura` (the Hijri calendar CLDR ranks first for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar), Hijri dates with no time zone, and the old rial sign.
 
 ```
 npx dualkit@beta lint .
