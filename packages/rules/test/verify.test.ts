@@ -230,3 +230,22 @@ describe('bidi/field-direction and type="tel"', () => {
     expect(await found(html, 'bidi/field-direction')).toEqual(['bidi/field-direction', 'bidi/field-direction'])
   })
 })
+
+describe('type/arabic-font with a font-display: swap webfont', () => {
+  it('reads the face as loaded after the fonts wait, so the stack passes', async () => {
+    const swap = page('<p>مرحبا بكم</p>').replace(/@font-face\{/g, '@font-face{font-display:swap;')
+    const model = await modelOf(swap)
+    expect(model.fonts.some((f) => f.family === 'IBM Plex Sans Arabic' && f.status === 'loaded')).toBe(true)
+    expect(runRules(model, { rules: RULES.filter((r) => r.id === 'type/arabic-font') })).toEqual([])
+  })
+  it('fails a named Arabic family with no @font-face, with the never-loaded message', async () => {
+    const html = '<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><style>p{font-family:"IBM Plex Sans Arabic",sans-serif}</style></head><body><p>مرحبا بكم</p></body></html>'
+    const out = runRules(await modelOf(html), { rules: RULES.filter((r) => r.id === 'type/arabic-font') })
+    expect(out.map((f) => f.message)).toEqual(['"IBM Plex Sans Arabic" is named but never loaded.'])
+  })
+  it('type/arabic-faux-bold stays quiet when the 700 face is a loaded @font-face', async () => {
+    const html = page('<p>مرحبا بكم</p>', { css: 'p{font-weight:700}' })
+    const model = await modelOf(html)
+    expect(runRules(model, { rules: RULES.filter((r) => r.id === 'type/arabic-faux-bold') })).toEqual([])
+  })
+})

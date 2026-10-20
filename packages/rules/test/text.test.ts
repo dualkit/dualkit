@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  ARABIC_FONT, ARABIC_INDIC_DIGIT, ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, LATIN_TOKEN, PLACEHOLDER, WESTERN_DIGIT,
+  ARABIC_FAMILY_NAME, isSystemArabicFont, ARABIC_INDIC_DIGIT, ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, LATIN_TOKEN, PLACEHOLDER, WESTERN_DIGIT,
   arabicShare, excerpt, firstStrong, hasArabic, lastStrong,
 } from '../src/text'
 
@@ -54,9 +54,12 @@ describe('patterns', () => {
     expect(ARABIC_INDIC_DIGIT.test('۵۰')).toBe(true)
     expect(PLACEHOLDER.test('Lorem ipsum dolor')).toBe(true)
     expect(PLACEHOLDER.test('لوريم إيبسوم')).toBe(true)
-    expect(ARABIC_FONT.test('IBM Plex Sans Arabic')).toBe(true)
-    expect(ARABIC_FONT.test('Tajawal')).toBe(true)
-    expect(ARABIC_FONT.test('Inter')).toBe(false)
+    expect(ARABIC_FAMILY_NAME.test('IBM Plex Sans Arabic')).toBe(true)
+    expect(ARABIC_FAMILY_NAME.test('Tajawal')).toBe(true)
+    expect(ARABIC_FAMILY_NAME.test('Inter')).toBe(false)
+    for (const generic of ['Segoe UI', 'system-ui', '-apple-system', 'Tahoma']) expect(ARABIC_FAMILY_NAME.test(generic)).toBe(false)
+    expect(isSystemArabicFont('geeza pro')).toBe(true)
+    expect(isSystemArabicFont('Segoe UI')).toBe(false)
   })
 
   it('shortens long text for messages', () => {

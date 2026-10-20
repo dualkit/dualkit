@@ -1,5 +1,5 @@
 import { arabicShare, arabicWordCount, hasArabic } from '../../src/text'
-import type { FieldNode, IconNode, LayoutNode, ScreenModel, TextRun } from '../../src/model'
+import type { LoadedFace, FieldNode, IconNode, LayoutNode, ScreenModel, TextRun } from '../../src/model'
 
 const base = { id: 'p', snippet: '<p>', box: { x: 0, y: 0, width: 100, height: 20 } }
 
@@ -18,6 +18,10 @@ const run = (p: Partial<TextRun>): TextRun => ({
 export const layout = (p: Partial<LayoutNode> = {}): LayoutNode => ({ ...base, dir: 'rtl', textAlign: 'start', hasOwnText: true, hasArabicText: true, physical: [], ...p })
 export const icon = (p: Partial<IconNode> = {}): IconNode => ({ ...base, name: 'arrow-right', dir: 'rtl', mirrored: false, ...p })
 export const field = (p: Partial<FieldNode> = {}): FieldNode => ({ ...base, kind: 'email', dir: 'rtl', dirAttr: null, placeholder: '', ...p })
+/** A loaded face, defaulting to IBM Plex Sans Arabic at 400 with the default unicode-range. */
+export const face = (p: Partial<LoadedFace> = {}): LoadedFace => ({
+  family: 'IBM Plex Sans Arabic', weight: [400, 400], style: 'normal', unicodeRange: 'U+0-10FFFF', sizeAdjust: 1, status: 'loaded', ...p,
+})
 export const screen = (p: Partial<ScreenModel> = {}): ScreenModel => ({
-  root: { lang: 'ar', dir: 'rtl', computedDir: 'rtl' }, texts: [], layouts: [], icons: [], fields: [], fonts: [], labels: [], clips: [], unreadableStylesheets: 0, ...p,
+  root: { lang: 'ar', dir: 'rtl', computedDir: 'rtl' }, texts: [], layouts: [], icons: [], fields: [], fonts: [face()], labels: [], clips: [], unreadableStylesheets: 0, ...p,
 })

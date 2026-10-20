@@ -1,6 +1,7 @@
 import type { ScreenModel } from '../model'
 import { defineRule, pick } from '../rule'
-import { ARABIC_FONT, excerpt, hasArabic } from '../text'
+import { effectiveSize, loadedArabicFace, webfontFamily, coversArabic } from '../fonts'
+import { ARABIC_FAMILY_NAME, excerpt, hasArabic, isSystemArabicFont } from '../text'
 
 export const MIN_ARABIC_LEADING = 1.5
 export const MIN_ARABIC_SIZE = 14
@@ -41,17 +42,18 @@ export const arabicFont = defineRule({
   id: 'type/arabic-font', group: 'type', severity: 'warning',
   title: 'No Arabic font in the stack',
   why: 'With no Arabic face listed, every device falls back to its own font, so the design looks different everywhere.',
-  fix: 'Add an Arabic family to the font stack, for example "IBM Plex Sans Arabic".',
+  fix: 'Load an Arabic family with @font-face or a font link and name it in the stack, for example "IBM Plex Sans Arabic".',
   check: (m) => {
     const seen = new Set<string>()
-    return arabicRuns(m)
-      .filter((t) => {
-        const key = t.font.families.join(',')
-        if (seen.has(key) || t.font.families.some((f) => ARABIC_FONT.test(f))) return false
-        seen.add(key)
-        return true
-      })
-      .map((t) => ({ node: pick(t), message: `Arabic falls back from ${t.font.families.join(', ')}.` }))
+    return arabicRuns(m).flatMap((t) => {
+      const key = t.font.families.join(',')
+      if (seen.has(key)) return []
+      seen.add(key)
+      if (loadedArabicFace(t.font.families, m.fonts) || t.font.families.some(isSystemArabicFont)) return []
+      const named = t.font.families.find((f) => ARABIC_FAMILY_NAME.test(f))
+      const message = named !== undefined ? `"${named}" is named but never loaded.` : `Arabic falls back from ${t.font.families.join(', ')}.`
+      return [{ node: pick(t), message }]
+    })
   },
 })
 
@@ -60,9 +62,34 @@ export const arabicSize = defineRule({
   title: 'Arabic set too small',
   why: 'At the same pixel size Arabic reads smaller than Latin, and its dots blur below 14px.',
   fix: 'Keep Arabic UI text at 14px or more, and body text at 16px.',
-  check: (m) => arabicRuns(m)
-    .filter((t) => t.font.size < MIN_ARABIC_SIZE)
-    .map((t) => ({ node: pick(t), message: `"${excerpt(t.text)}" is ${t.font.size}px.` })),
+  check: (m) => arabicRuns(m).flatMap((t) => {
+    const size = effectiveSize(t, m.fonts)
+    if (size >= MIN_ARABIC_SIZE) return []
+    const shown = Math.round(size * 100) / 100
+    const message = shown === t.font.size ? `"${excerpt(t.text)}" is ${t.font.size}px.` : `"${excerpt(t.text)}" is ${t.font.size}px, which is ${shown}px after the font's size-adjust.`
+    return [{ node: pick(t), message }]
+  }),
 })
 
-export const typeRules = [arabicLeading, arabicTracking, arabicItalic, arabicFont, arabicSize]
+export const arabicFauxBold = defineRule({
+  id: 'type/arabic-faux-bold', group: 'type', severity: 'warning',
+  title: 'Arabic bold is faked',
+  why: 'When no bold face is loaded the browser smears the regular one to fake bold, which blurs Arabic joins and dots.',
+  fix: 'Load a real bold face for the Arabic family, for example an @font-face at font-weight 700.',
+  check: (m) => {
+    const seen = new Set<string>()
+    return arabicRuns(m).flatMap((t) => {
+      const family = webfontFamily(t.font.families, m.fonts)
+      if (family === null || t.font.weight < 600) return []
+      // An Arabic system font listed first may be the one painted, and it brings its own bold.
+      if (t.font.families.slice(0, t.font.families.indexOf(family)).some(isSystemArabicFont)) return []
+      const faces = m.fonts.filter((f) => f.family.toLowerCase() === family.toLowerCase() && f.status === 'loaded' && coversArabic(f))
+      const key = `${family.toLowerCase()}|${t.font.weight}`
+      if (faces.length === 0 || faces.some((f) => f.weight[1] >= t.font.weight) || seen.has(key)) return []
+      seen.add(key)
+      return [{ node: pick(t), message: `"${family}" is set at weight ${t.font.weight}, but no loaded face goes above ${Math.max(...faces.map((f) => f.weight[1]))}.` }]
+    })
+  },
+})
+
+export const typeRules = [arabicLeading, arabicTracking, arabicItalic, arabicFont, arabicSize, arabicFauxBold]

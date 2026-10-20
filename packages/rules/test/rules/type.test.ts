@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
+import { coversArabic, effectiveSize, loadedArabicFace } from '../../src/fonts'
 import { typeRules } from '../../src/rules/type'
 import { runRules } from '../../src/run'
-import { screen, text } from '../helpers/model'
+import { face, screen, text } from '../helpers/model'
 
 const font = text().font
 const ids = (m: Parameters<typeof runRules>[0]) => runRules(m, { rules: typeRules }).map((f) => f.rule)
@@ -23,6 +24,84 @@ describe('type rules', () => {
   it('flags a font stack with no Arabic face, once per stack', () => {
     const latin = { ...font, families: ['Inter', 'sans-serif'] }
     expect(ids(screen({ texts: [text({ font: latin }), text({ font: latin })] }))).toEqual(['type/arabic-font'])
+  })
+  const withFamilies = (families: string[]) => text({ font: { ...font, families } })
+  const messages = (m: Parameters<typeof runRules>[0]) => runRules(m, { rules: typeRules }).map((f) => f.message)
+  describe('type/arabic-font', () => {
+    it('passes a stack whose Arabic family is loaded', () => {
+      expect(ids(screen({ texts: [withFamilies(['IBM Plex Sans Arabic', 'sans-serif'])], fonts: [face()] }))).toEqual([])
+      expect(ids(screen({ texts: [withFamilies(['ibm plex sans arabic'])], fonts: [face()] }))).toEqual([])
+    })
+    it('fails a named family that never loaded, or errored', () => {
+      const t = withFamilies(['IBM Plex Sans Arabic', 'sans-serif'])
+      expect(messages(screen({ texts: [t], fonts: [] }))).toEqual(['"IBM Plex Sans Arabic" is named but never loaded.'])
+      expect(messages(screen({ texts: [t], fonts: [face({ status: 'error' })] }))).toEqual(['"IBM Plex Sans Arabic" is named but never loaded.'])
+      expect(ids(screen({ texts: [t], fonts: [face({ status: 'unloaded' })] }))).toEqual(['type/arabic-font'])
+    })
+    it('fails a loaded face that does not cover Arabic', () => {
+      expect(ids(screen({ texts: [withFamilies(['IBM Plex Sans Arabic'])], fonts: [face({ unicodeRange: 'U+0000-00FF' })] }))).toEqual(['type/arabic-font'])
+    })
+    it('falls back as before for Latin stacks', () => {
+      expect(messages(screen({ texts: [withFamilies(['Inter', 'sans-serif'])] }))).toEqual(['Arabic falls back from Inter, sans-serif.'])
+    })
+    it('passes on a system Arabic font, even unloaded', () => {
+      expect(ids(screen({ texts: [withFamilies(['SF Arabic', 'Segoe UI', 'sans-serif'])], fonts: [] }))).toEqual([])
+    })
+    it('does not pass on Latin-first system fonts or generics', () => {
+      expect(ids(screen({ texts: [withFamilies(['Segoe UI', 'Tahoma', 'sans-serif'])], fonts: [] }))).toEqual(['type/arabic-font'])
+      expect(ids(screen({ texts: [withFamilies(['system-ui'])], fonts: [] }))).toEqual(['type/arabic-font'])
+      expect(ids(screen({ texts: [withFamilies(['-apple-system', 'BlinkMacSystemFont'])], fonts: [] }))).toEqual(['type/arabic-font'])
+    })
+  })
+  describe('type/arabic-size and size-adjust', () => {
+    it('counts a size-adjust above 1 toward the effective size', () => {
+      expect(ids(screen({ texts: [text({ font: { ...font, size: 13 } })], fonts: [face({ sizeAdjust: 1.1 })] }))).toEqual([])
+    })
+    it('flags a size-adjust below 1 and shows both numbers', () => {
+      const m = screen({ texts: [text({ font: { ...font, size: 15 } })], fonts: [face({ sizeAdjust: 0.9 })] })
+      expect(messages(m)).toEqual([expect.stringContaining('15px')])
+      expect(messages(m)[0]).toContain('13.5px')
+    })
+    it('ignores size-adjust on system fonts', () => {
+      expect(ids(screen({ texts: [withFamilies(['SF Arabic'])], fonts: [face({ sizeAdjust: 0.5 })] }))).toEqual([])
+    })
+  })
+  describe('type/arabic-faux-bold', () => {
+    const bold = (families = ['IBM Plex Sans Arabic', 'sans-serif'], weight = 700) => text({ font: { ...font, families, weight } })
+    it('flags a bold run when only a regular face is loaded', () => {
+      expect(ids(screen({ texts: [bold()], fonts: [face()] }))).toEqual(['type/arabic-faux-bold'])
+    })
+    it('passes with a bold face, a variable face, or regular weight', () => {
+      expect(ids(screen({ texts: [bold()], fonts: [face(), face({ weight: [700, 700] })] }))).toEqual([])
+      expect(ids(screen({ texts: [bold()], fonts: [face({ weight: [100, 900] })] }))).toEqual([])
+      expect(ids(screen({ texts: [bold(undefined, 500)], fonts: [face()] }))).toEqual([])
+    })
+    it('never judges system fonts', () => {
+      expect(ids(screen({ texts: [bold(['SF Arabic', 'sans-serif'])], fonts: [face()] }))).toEqual([])
+      expect(ids(screen({ texts: [bold(['SF Arabic', 'IBM Plex Sans Arabic'])], fonts: [face()] }))).toEqual([])
+    })
+    it('judges the first declared family, not a later one', () => {
+      expect(ids(screen({ texts: [bold(['Brand', 'IBM Plex Sans Arabic'])], fonts: [face(), face({ family: 'Brand', weight: [700, 700] })] }))).toEqual([])
+    })
+    it('does not judge a family that has no Arabic face', () => {
+      expect(ids(screen({ texts: [bold(['Inter', 'SF Arabic'])], fonts: [face({ family: 'Inter', unicodeRange: 'U+0000-00FF' })] }))).toEqual([])
+    })
+  })
+  describe('font helpers', () => {
+    it('reads unicode ranges', () => {
+      expect(coversArabic(face({ unicodeRange: 'U+0600-06FF, U+0750-077F' }))).toBe(true)
+      expect(coversArabic(face({ unicodeRange: 'U+07??' }))).toBe(false)
+      expect(coversArabic(face({ unicodeRange: 'U+0000-00FF' }))).toBe(false)
+      expect(coversArabic(face({ unicodeRange: 'U+0627' }))).toBe(true)
+    })
+    it('finds the loaded Arabic face in a stack', () => {
+      expect(loadedArabicFace(['Inter', 'IBM Plex Sans Arabic'], [face()])?.family).toBe('IBM Plex Sans Arabic')
+      expect(loadedArabicFace(['Inter'], [face()])).toBeNull()
+    })
+    it('computes the effective size', () => {
+      expect(effectiveSize(text({ font: { ...font, size: 20 } }), [face({ sizeAdjust: 0.9 })])).toBeCloseTo(18)
+      expect(effectiveSize(text({ font: { ...font, size: 20 } }), [])).toBe(20)
+    })
   })
   it('ignores Latin text', () => {
     expect(ids(screen({ texts: [text({ text: 'Hello', font: { ...font, size: 11, letterSpacing: 2, style: 'italic', families: ['Inter'] } })] }))).toEqual([])

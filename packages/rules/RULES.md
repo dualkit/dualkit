@@ -106,7 +106,7 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 
 **warning.** With no Arabic face listed, every device falls back to its own font, so the design looks different everywhere.
 
-**Fix:** Add an Arabic family to the font stack, for example "IBM Plex Sans Arabic".
+**Fix:** Load an Arabic family with @font-face or a font link and name it in the stack, for example "IBM Plex Sans Arabic".
 
 <a id="type-arabic-size"></a>
 ### `type/arabic-size` Arabic set too small
@@ -114,6 +114,13 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 **warning.** At the same pixel size Arabic reads smaller than Latin, and its dots blur below 14px.
 
 **Fix:** Keep Arabic UI text at 14px or more, and body text at 16px.
+
+<a id="type-arabic-faux-bold"></a>
+### `type/arabic-faux-bold` Arabic bold is faked
+
+**warning.** When no bold face is loaded the browser smears the regular one to fake bold, which blurs Arabic joins and dots.
+
+**Fix:** Load a real bold face for the Arabic family, for example an @font-face at font-weight 700.
 
 ## Content
 

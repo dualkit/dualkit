@@ -35,6 +35,10 @@ export const FIXTURES: Record<string, { bad: string; good: string }> = {
   'type/arabic-tracking': { bad: page('<p>مرحبا بكم</p>', { css: 'p{letter-spacing:0.1em}' }), good: page('<p>مرحبا بكم</p>', { css: 'p{letter-spacing:0}' }) },
   'type/arabic-italic': { bad: page('<p><em>مرحبا</em></p>'), good: page('<p><em style="font-style:normal">مرحبا</em></p>') },
   'type/arabic-font': { bad: page('<p>مرحبا</p>', { css: 'p{font-family:"Inter",sans-serif}' }), good: page('<p>مرحبا</p>', { css: 'p{font-family:"Inter","IBM Plex Sans Arabic",sans-serif}' }) },
+  'type/arabic-faux-bold': {
+    bad: `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><style>${face('IBMPlexSansArabic-Regular.woff2', 400)}p{font-family:"IBM Plex Sans Arabic",sans-serif;font-size:16px;line-height:1.7;font-weight:700}</style></head><body><p>مرحبا بكم</p></body></html>`,
+    good: page('<p>مرحبا بكم</p>', { css: 'p{font-weight:700}' }),
+  },
   'type/arabic-size': { bad: page('<p>مرحبا</p>', { css: 'p{font-size:12px}' }), good: page('<p>مرحبا</p>', { css: 'p{font-size:16px}' }) },
   'content/missing-lang': { bad: page('<p>مرحبا</p>', { lang: null }), good: page('<p>مرحبا</p>') },
   'content/missing-dir': { bad: page('<p>مرحبا بكم</p>', { dir: null }), good: page('<p>مرحبا بكم</p>') },

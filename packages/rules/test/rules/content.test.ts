@@ -58,8 +58,8 @@ describe('content rules', () => {
 
 describe('RULES', () => {
   it('ships twenty rules with unique ids, in five groups', () => {
-    expect(RULES).toHaveLength(20)
-    expect(new Set(RULES.map((r) => r.id)).size).toBe(20)
+    expect(RULES).toHaveLength(21)
+    expect(new Set(RULES.map((r) => r.id)).size).toBe(21)
     expect(new Set(RULES.map((r) => r.group))).toEqual(new Set(['bidi', 'layout', 'icons', 'type', 'content']))
   })
   it('gives every rule a why and a fix with no em dash', () => {

@@ -26,8 +26,21 @@ export const ENDS_WITH_PUNCTUATION = /[.!?:;,)\]\u060C]\s*$/
  */
 export const ENDS_WITH_ARABIC_MARK = /[\u061B\u061F\u06D4]\s*$/
 export const PLACEHOLDER = /lorem ipsum|dolor sit amet|لوريم إيبسوم|هذا النص هو مثال/i
-export const ARABIC_FONT =
-  /arab|kufi|naskh|cairo|tajawal|almarai|readex|amiri|vazir|alexandria|rubik|geeza|dubai|lateef|scheherazade|harmattan|lalezar|messiri|changa|mada|zain|janna|noto sans arabic|plex sans arabic|segoe ui|system-ui|-apple-system/i
+/** Family names that say the font is for Arabic. Latin-first system fonts and the generics system-ui and -apple-system are not here: they leave Arabic to per-device fallback. */
+export const ARABIC_FAMILY_NAME =
+  /arab|kufi|naskh|cairo|tajawal|almarai|readex|amiri|vazir|alexandria|rubik|geeza|dubai|lateef|scheherazade|harmattan|lalezar|messiri|changa|mada|zain|janna/i
+
+/**
+ * Arabic families that ship with an operating system, from docs/research/2026-10-20-rules-facts.md.
+ * These only ever make a stack pass. A rule must never fire because a name is missing from this list.
+ */
+export const SYSTEM_ARABIC_FONTS: readonly string[] = [
+  'Geeza Pro', 'SF Arabic', 'Al Bayan', 'Baghdad', 'Damascus', 'Al Nile', 'Al Tarikh', 'Diwan Kufi', 'Farah', 'KufiStandardGK',
+  'Mishafi', 'Muna', 'Nadeem', 'Sana', 'Waseem', 'Noto Naskh Arabic', 'Noto Naskh Arabic UI', 'Noto Sans Arabic UI',
+  'Aldhabi', 'Andalus', 'Arabic Typesetting', 'Sakkal Majalla', 'Simplified Arabic', 'Traditional Arabic',
+]
+
+export const isSystemArabicFont = (family: string): boolean => SYSTEM_ARABIC_FONTS.some((f) => f.toLowerCase() === family.toLowerCase())
 
 /** Languages written in the Arabic script, matched as a whole subtag so 'art' is not Arabic. */
 const ARABIC_SCRIPT_LANG = /^(ar|fa|ur|ps|ku|ckb|sd|ug)(-|$)/i
