@@ -5,6 +5,8 @@ import { ARABIC_FAMILY_NAME, excerpt, hasArabic, isSystemArabicFont } from '../t
 
 export const MIN_ARABIC_LEADING = 1.5
 export const MIN_ARABIC_SIZE = 14
+/** Chromium synthesises bold only when the matched face is lighter than this and the run asks for this or more (measured in verify.test.ts). */
+const SYNTHETIC_BOLD_BELOW = 600
 
 const arabicRuns = (m: ScreenModel) => m.texts.filter((t) => hasArabic(t.text))
 
@@ -43,6 +45,7 @@ export const arabicFont = defineRule({
   title: 'No Arabic font in the stack',
   why: 'With no Arabic face listed, every device falls back to its own font, so the design looks different everywhere.',
   fix: 'Load an Arabic family with @font-face or a font link and name it in the stack, for example "IBM Plex Sans Arabic".',
+  // Face statuses are judged after the loaders' document.fonts.ready wait.
   check: (m) => {
     const seen = new Set<string>()
     return arabicRuns(m).flatMap((t) => {
@@ -85,9 +88,9 @@ export const arabicFauxBold = defineRule({
       if (t.font.families.slice(0, t.font.families.indexOf(family)).some(isSystemArabicFont)) return []
       const faces = m.fonts.filter((f) => f.family.toLowerCase() === family.toLowerCase() && f.status === 'loaded' && coversArabic(f))
       const key = `${family.toLowerCase()}|${t.font.weight}`
-      if (faces.length === 0 || faces.some((f) => f.weight[1] >= t.font.weight) || seen.has(key)) return []
+      if (faces.length === 0 || faces.some((f) => f.weight[1] >= SYNTHETIC_BOLD_BELOW) || seen.has(key)) return []
       seen.add(key)
-      return [{ node: pick(t), message: `"${family}" is set at weight ${t.font.weight}, but no loaded face goes above ${Math.max(...faces.map((f) => f.weight[1]))}.` }]
+      return [{ node: pick(t), message: `"${family}" is set at weight ${t.font.weight}, but the heaviest loaded face is ${Math.max(...faces.map((f) => f.weight[1]))}, so the browser fakes the bold.` }]
     })
   },
 })

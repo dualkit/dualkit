@@ -93,6 +93,16 @@ describe('type rules', () => {
       expect(ids(screen({ texts: [bold()], fonts: [face({ weight: [100, 900] })] }))).toEqual([])
       expect(ids(screen({ texts: [bold(undefined, 500)], fonts: [face()] }))).toEqual([])
     })
+    it('passes a 700 run when the heaviest loaded face is 600, which Chromium does not synthesise', () => {
+      expect(ids(screen({ texts: [bold()], fonts: [face({ weight: [600, 600] })] }))).toEqual([])
+      expect(ids(screen({ texts: [bold(undefined, 600)], fonts: [face({ weight: [500, 500] })] }))).toEqual(['type/arabic-faux-bold'])
+    })
+    it('does not judge against faces that are unloaded or errored', () => {
+      // type/arabic-font reports a face that never loads, so faux bold stays quiet about it.
+      for (const status of ['unloaded', 'error'] as const) {
+        expect(ids(screen({ texts: [bold()], fonts: [face({ status })] }))).not.toContain('type/arabic-faux-bold')
+      }
+    })
     it('never judges system fonts', () => {
       expect(ids(screen({ texts: [bold(['SF Arabic', 'sans-serif'])], fonts: [face()] }))).toEqual([])
       expect(ids(screen({ texts: [bold(['SF Arabic', 'IBM Plex Sans Arabic'])], fonts: [face()] }))).toEqual([])

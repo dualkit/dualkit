@@ -1,4 +1,5 @@
 // Probes for the "costs if wrong" rulings. Ground truth is what Chromium paints, measured per character.
+import { readFileSync } from 'node:fs'
 import { afterAll, describe, expect, it } from 'vitest'
 import { RULES } from '../src/rules'
 import { runRules } from '../src/run'
@@ -247,5 +248,72 @@ describe('type/arabic-font with a font-display: swap webfont', () => {
     const html = page('<p>مرحبا بكم</p>', { css: 'p{font-weight:700}' })
     const model = await modelOf(html)
     expect(runRules(model, { rules: RULES.filter((r) => r.id === 'type/arabic-faux-bold') })).toEqual([])
+  })
+})
+
+const fontB64 = (file: string) => readFileSync(new URL(`./fonts/${file}`, import.meta.url)).toString('base64')
+const plexFace = (file: string, extra: string, family = 'P') =>
+  `@font-face{font-family:"${family}";${extra};src:url(data:font/woff2;base64,${fontB64(file)}) format("woff2")}`
+const REGULAR = 'IBMPlexSansArabic-Regular.woff2'
+const BOLD = 'IBMPlexSansArabic-Bold.woff2'
+
+/** Width and total ink (sum of darkness in a screenshot) of an Arabic word set in family P at the given weight. */
+async function inkOf(faces: string, weight: number) {
+  const html = `<!doctype html><html lang="ar" dir="rtl"><style>${faces}span{font:${weight} 40px P}</style><span id="s">مرحبا بكم في المتجر</span>`
+  return withPage(html, async (p) => {
+    await p.evaluate(() => document.fonts.ready)
+    const width = await p.evaluate(() => document.getElementById('s')!.getBoundingClientRect().width)
+    const shot = (await p.locator('#s').screenshot()).toString('base64')
+    const ink = await p.evaluate(async (d) => {
+      const im = new Image()
+      im.src = `data:image/png;base64,${d}`
+      await im.decode()
+      const c = document.createElement('canvas')
+      c.width = im.width
+      c.height = im.height
+      const x = c.getContext('2d')!
+      x.drawImage(im, 0, 0)
+      const px = x.getImageData(0, 0, c.width, c.height).data
+      let t = 0
+      for (let i = 0; i < px.length; i += 4) t += 255 - px[i]!
+      return t
+    }, shot)
+    return { width, ink }
+  })
+}
+
+describe('type/arabic-faux-bold: what Chromium synthesises', () => {
+  // Measured: 400 face at 400 = ink 595359, width 282.8. (i) 400 face at 700 = ink 653400, same width (smeared).
+  // (ii) the 400 face declared as 600, run at 700 = ink 595359 (not synthesised). (iii) real 700 = ink 943155, width 303.3.
+  it('smears a 400 face asked for 700, but not a face that claims 600', async () => {
+    const base = await inkOf(plexFace(REGULAR, 'font-weight:400'), 400)
+    const faux = await inkOf(plexFace(REGULAR, 'font-weight:400'), 700)
+    const claims600 = await inkOf(plexFace(REGULAR, 'font-weight:600'), 700)
+    const real = await inkOf(plexFace(BOLD, 'font-weight:700'), 700)
+    expect(faux.width).toBeCloseTo(base.width, 1)
+    expect(faux.ink).toBeGreaterThan(base.ink * 1.05)
+    expect(claims600.ink).toBe(base.ink)
+    expect(real.width).toBeGreaterThan(base.width * 1.05)
+  })
+})
+
+describe('type/arabic-faux-bold and font reads in Chromium', () => {
+  const rule = (id: string) => RULES.filter((r) => r.id === id)
+  it('a 400 paragraph and a 700 heading with both fixture faces: both loaded, nothing fires', async () => {
+    const html = page('<h2 style="font-weight:700">مرحبا بكم</h2><p>مرحبا بكم في المتجر</p>')
+    const model = await modelOf(html)
+    const plex = model.fonts.filter((f) => f.family === 'IBM Plex Sans Arabic')
+    expect(plex.map((f) => f.status)).toEqual(['loaded', 'loaded'])
+    expect(runRules(model, { rules: rule('type/arabic-faux-bold') })).toEqual([])
+    expect(runRules(model, { rules: rule('type/arabic-font') })).toEqual([])
+  })
+  it('Google-Fonts-style subsets: the Arabic subset face loads and the stack passes', async () => {
+    const css = plexFace(REGULAR, 'font-weight:400;unicode-range:U+0000-00FF', 'Brand') +
+      plexFace(REGULAR, 'font-weight:400;unicode-range:U+0600-06FF,U+FB50-FDFF,U+FE70-FEFF', 'Brand')
+    const html = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><style>${css}p{font-family:Brand,sans-serif}</style></head><body><p>مرحبا بكم في المتجر</p></body></html>`
+    const model = await modelOf(html)
+    const arabic = model.fonts.find((f) => f.family === 'Brand' && /U\+0*600/.test(f.unicodeRange))
+    expect(arabic?.status).toBe('loaded')
+    expect(runRules(model, { rules: rule('type/arabic-font') })).toEqual([])
   })
 })
