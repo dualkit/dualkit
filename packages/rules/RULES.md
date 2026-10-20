@@ -166,9 +166,40 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 
 **Fix:** Replace it with real copy, or realistic Gulf sample data.
 
+<a id="content-old-rial-sign"></a>
+### `content/old-rial-sign` The old rial ligature used as a riyal sign
+
+**warning.** U+FDFC is the Persian word for rial drawn as one glyph, so it reads as a different currency mark and many fonts draw it differently or not at all.
+
+**Fix:** Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.
+
+<a id="content-currency-sign-font"></a>
+### `content/currency-sign-font` A new currency sign no loaded font declares
+
+**warning.** The Saudi riyal, UAE dirham and Omani rial signs are new to Unicode, so a font that does not declare them draws a blank box, or whatever the visitor's device happens to have.
+
+**Fix:** Load a font whose unicode-range includes the sign, or write the currency code instead.
+
+<a id="content-dirham-sign-with-code"></a>
+### `content/dirham-sign-with-code` The dirham sign next to the code AED
+
+**note.** The Central Bank of the UAE guideline says to use the dirham sign or the code AED, never both, because the price then names the currency twice.
+
+**Fix:** Keep the sign or the code AED, not both.
+
+<a id="content-label-language"></a>
+### `content/label-language` A label in a different language from its element
+
+**note.** The HTML lang attribute applies to the element's text attributes too, so the label is declared to be in the element's language, and screen readers that switch voice by language read it with the wrong pronunciation.
+
+**Fix:** Put lang on the element to match the label, or write the label in the language of the element.
+
 ## Known limits
 
 - A closing mark in the middle of a line, such as the ! in "Hello world! مرحبا", is not checked. Only the end of a paragraph, or of a line that a `<br>` closes on its own, is.
 - Emails, links and codes are flagged only where Chromium paints them differently once isolated: with a leading #, a trailing slash, or a Western digit beside them. In the middle of a sentence, at either end of a block, or before a full stop or bracket they paint the same, so they are not flagged.
 - An email, link or code beside a Latin word is not flagged: isolating it only splits one left-to-right phrase that already reads in order.
 - Groups of Arabic-Indic digits paint the same with or without `<bdi>`, so they are not flagged.
+- A font loaded with the default unicode-range does not count as covering the new currency signs, because a range says nothing about glyphs and IBM Plex Sans Arabic draws them as missing-glyph boxes. Declare the range your font really covers.
+- Only the pairing of the dirham sign with AED is flagged, because that is the one the Central Bank of the UAE guideline forbids. Dh and the Arabic word are not in the guideline, so they are left alone.
+- A label is flagged only when it is wholly in the other script, such as a Latin sentence on an Arabic page. Labels that mix scripts, and one-word names like Visa, are left alone.

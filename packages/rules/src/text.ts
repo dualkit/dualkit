@@ -114,6 +114,11 @@ export const isArabicScriptLang = (lang: string | null): boolean => lang !== nul
 /** Words that contain at least one Arabic letter. */
 export const arabicWordCount = (s: string): number => s.split(/\s+/).filter(hasArabic).length
 
+const LATIN_LETTER = /[A-Za-z\u00C0-\u024F]/
+
+/** Words (split on whitespace) that contain a Latin letter. */
+export const latinWordCount = (s: string): number => s.split(/\s+/).filter((w) => LATIN_LETTER.test(w)).length
+
 export const hasArabic = (s: string): boolean => {
   const letters = (s.match(ARABIC_CHARS) ?? []).length - (s.match(INDIC_CHARS) ?? []).length
   return letters > 0 && ARABIC_CHAR.test(s)

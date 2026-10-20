@@ -29,6 +29,19 @@ export function coversArabic(face: LoadedFace): boolean {
   })
 }
 
+/**
+ * True when the face declares the code point in an explicit unicode-range. The default range `U+0-10FFFF` says nothing
+ * about glyphs, so it never counts: IBM Plex Sans Arabic has it and still draws U+20C3 as a missing-glyph box (test/verify.test.ts).
+ */
+export function coversCodePoint(face: LoadedFace, cp: number): boolean {
+  const ranges = face.unicodeRange.split(',').map((t) => t.trim())
+  if (ranges.length === 1 && FULL_RANGE.test(ranges[0]!)) return false
+  return ranges.some((token) => {
+    const r = parseRange(token)
+    return r !== null && r[0] <= cp && cp <= r[1]
+  })
+}
+
 const facesOf = (family: string, fonts: LoadedFace[]): LoadedFace[] => fonts.filter((f) => same(f.family, family))
 
 /** The first family in the stack with a face that has loaded and covers Arabic, or null. */

@@ -541,3 +541,29 @@ describe('bidi/field-placeholder: an Arabic placeholder in a left-to-right field
     expect(await found(prefilled, 'bidi/field-placeholder')).toEqual([])
   })
 })
+
+// R-currency: does the fixture face (IBM Plex Sans Arabic, default unicode-range) really draw the new currency signs?
+describe('currency signs in IBM Plex Sans Arabic', () => {
+  const draw = (cp: string, family: string) =>
+    withPage(page(`<p><span id="s" style="font-size:48px;font-family:${family}">${cp}</span></p>`), async (p) => {
+      await p.evaluate(() => document.fonts.ready)
+      const width = await p.evaluate(() => document.querySelector('#s')!.getBoundingClientRect().width)
+      const png = (await p.locator('#s').screenshot()).toString('base64')
+      return { width, png }
+    })
+  const PLEX = '"IBM Plex Sans Arabic",sans-serif'
+
+  it('draws U+20C3 and U+20C4 as the face\'s own missing-glyph box, and U+20C1 from a system font, never from the face', async () => {
+    const alef = await draw('\u0627', PLEX)
+    // Control: the face does draw Arabic, and differently from the system font.
+    expect(alef.width).not.toBe((await draw('\u0627', 'sans-serif')).width)
+    const unassigned = (await draw('\u0378', PLEX)).width
+    // U+0378 is unassigned, so its advance is the face's .notdef box (22.66px at 48px).
+    for (const cp of ['\u20C3', '\u20C4']) expect((await draw(cp, PLEX)).width).toBe(unassigned)
+    // U+20C1 is 25.86px: not the face's box, and exactly what a stack without the face paints, so a system font drew it.
+    // That depends on the visitor's OS (this machine has one), which is why the rule asks for a font that covers it.
+    // A machine with no system font for it paints the face's box instead, so either result proves the face has no glyph.
+    const riyal = (await draw('\u20C1', PLEX)).width
+    expect([unassigned, (await draw('\u20C1', 'sans-serif')).width]).toContain(riyal)
+  })
+})

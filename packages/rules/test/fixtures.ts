@@ -48,5 +48,16 @@ export const FIXTURES: Record<string, { bad: string; good: string }> = {
   'content/missing-dir': { bad: page('<p>مرحبا بكم</p>', { dir: null }), good: page('<p>مرحبا بكم</p>') },
   'content/lang-mismatch': { bad: page('<p>مرحبا بكم</p>', { lang: 'en' }), good: page('<p>مرحبا بكم</p>') },
   'content/mixed-digits': { bad: page('<p>المبلغ 50 درهم</p><p>المبلغ ٥٠ درهم</p>'), good: page('<p>المبلغ 50 درهم</p><p>المبلغ 60 درهم</p>') },
+  'content/old-rial-sign': { bad: page('<p>١٠٠ \uFDFC</p>'), good: page('<p>١٠٠ ر.س</p>') },
+  'content/currency-sign-font': {
+    bad: page('<p>\u20C1 100</p>'),
+    // The face is the fixture font again, declared for the sign's block: the rule judges what the page declares.
+    good: page('<p>\u20C1 100</p>', { css: face('IBMPlexSansArabic-Regular.woff2', 400).replace('}', ';unicode-range:U+20C0-20CF}') }),
+  },
+  'content/dirham-sign-with-code': { bad: page('<p>\u20C3 500 AED</p>'), good: page('<p>\u20C3 500</p>') },
+  'content/label-language': {
+    bad: page('<button aria-label="Close the dialog">x</button>'),
+    good: page('<button aria-label="إغلاق النافذة">x</button>'),
+  },
   'content/placeholder-text': { bad: page('<p>لوريم إيبسوم دولور</p>'), good: page('<p>مرحبا</p>') },
 }
