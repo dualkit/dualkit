@@ -62,15 +62,22 @@ export function turns(s: CSSStyleDeclaration): boolean {
   return det(m) > 0 && m[0] < 0
 }
 
-/** The nearest element that flips, when the flips over the element and up to 4 ancestors multiply to a mirror; else null. A double flip reads as not mirrored. */
+/**
+ * The nearest element that flips, when the flips over the element and up to 4 ancestors multiply to a mirror; else null.
+ * A double flip reads as not mirrored. A run is not mirrored either when an element on its chain, up to and including
+ * the farthest flip, has backface-visibility:hidden and the net transform at that element shows its back: Chromium
+ * does not paint that face (the back of a flip card that has not turned, or the front of one that has).
+ */
 export function mirrorRoot(el: Element, style: Style): Element | null {
-  let sign = 1
-  let nearest: Element | null = null
-  let node: Element | null = el
-  for (let depth = 0; node && depth < MIRROR_DEPTH; depth++, node = node.parentElement) {
-    const s = flipSign(style(node))
-    if (s < 0 && !nearest) nearest = node
-    sign *= s
+  const chain: { node: Element; sign: number; hidesBack: boolean }[] = []
+  for (let node: Element | null = el, depth = 0; node && depth < MIRROR_DEPTH; depth++, node = node.parentElement) {
+    const s = style(node)
+    chain.push({ node, sign: flipSign(s), hidesBack: s.backfaceVisibility === 'hidden' })
   }
-  return sign < 0 ? nearest : null
+  const farthest = chain.findLastIndex((c) => c.sign < 0)
+  if (farthest < 0) return null
+  // net[i] is the sign of the transform at chain[i]: its own flip times every flip above it.
+  const net = chain.map((_, i) => chain.slice(i).reduce((p, c) => p * c.sign, 1))
+  if (chain.some((c, i) => i <= farthest && c.hidesBack && net[i]! < 0)) return null
+  return net[0]! < 0 ? chain.find((c) => c.sign < 0)!.node : null
 }

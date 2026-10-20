@@ -27,7 +27,7 @@ function textReach(el: HTMLElement, style: Style): { x: number; y: number; text:
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
     const parent = node.parentElement
     const own = clean(node.textContent ?? '')
-    if (!parent || parent.closest('svg, script, style') || !own || nestedClip(parent, el, style)) continue
+    if (!parent || parent.closest('svg, script, style') || !own || nestedClip(parent, el, style) || inTrack(parent, el, style)) continue
     const range = el.ownerDocument.createRange()
     range.selectNodeContents(node)
     const rects = Array.from(range.getClientRects()).filter((r) => r.width > 0 || r.height > 0)
@@ -45,6 +45,30 @@ function textReach(el: HTMLElement, style: Style): { x: number; y: number; text:
 const lineClamped = (s: CSSStyleDeclaration): boolean => {
   const clamp = s.getPropertyValue('-webkit-line-clamp').trim()
   return clamp !== '' && clamp !== 'none'
+}
+
+/**
+ * True when the element moves what it draws by a translate, through `translate` or a `transform` whose linear part is
+ * the identity (translate3d(0,0,0), as Swiper and Embla leave a track at rest, counts too).
+ */
+function translates(s: CSSStyleDeclaration): boolean {
+  if (s.translate && s.translate !== 'none') return true
+  if (!s.transform || s.transform === 'none') return false
+  try {
+    const m = new DOMMatrix(s.transform)
+    return m.e !== 0 || m.f !== 0 || (m.a === 1 && m.b === 0 && m.c === 0 && m.d === 1)
+  } catch {
+    return false
+  }
+}
+
+/**
+ * True when the text sits in a track moved by a translate inside the clip box: a carousel or odometer mask. The clip
+ * box's own translate (a hover lift, Tailwind v3 `transform`) moves the mask with the text, so it does not count.
+ */
+function inTrack(from: Element, root: Element, style: Style): boolean {
+  for (let n: Element | null = from; n && n !== root; n = n.parentElement) if (translates(style(n))) return true
+  return false
 }
 
 /** True when a box between the text and the root clips on its own, so the text is that box's to report. */
