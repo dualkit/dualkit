@@ -7,6 +7,7 @@ const asCode = (text: string): string => text.replace(HTML_TAG, '`$&`')
 /** What the source rules leave alone on purpose. */
 export const LINT_KNOWN_LIMITS: readonly string[] = [
   'Only .css, .scss, .html, .htm, .js, .mjs, .cjs, .jsx, .ts, .mts, .cts and .tsx files are read. Vue, Svelte, Astro and MDX files are not.',
+  'A physical side is checked on its own. When it pairs with a side set elsewhere, such as an inline left value written by script, switching only the stylesheet side breaks right-to-left. Change both sides together, or suppress the line with a reason.',
   'CSS written inside JavaScript, such as a styled-components or Emotion template literal, is not read as CSS.',
   'A file over 1 MB, or with an average line longer than 500 characters, is treated as minified and skipped.',
   'A file that does not parse is listed as skipped with the parser message, and none of its lines are checked.',

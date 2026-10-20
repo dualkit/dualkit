@@ -28,7 +28,8 @@ dualkit lint scans source files (CSS, SCSS, HTML, JS, TS, JSX, TSX) and needs no
   --fail-on <level>   Exit 1 on findings at or above error, warning or note (default error)
   --config <file>     Config file (default dualkit.config.json)
 
-Rules: https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md
+Check rules: https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md
+Lint rules: https://github.com/dualkit/dualkit/blob/main/packages/lint/LINT.md
 `
 
 const defaultIo: Io = {

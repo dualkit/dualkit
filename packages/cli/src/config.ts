@@ -28,6 +28,6 @@ export function loadConfig(path?: string, cwd = process.cwd()): Config {
   // ignore names ids from both registries; each command skips the ids it does not run.
   const known = new Set([...RULES, ...LINT_RULES].map((r) => r.id))
   const unknown = ignore.find((id) => !known.has(id))
-  if (unknown) throw new UserError(`Unknown rule "${unknown}" in ignore. The rule ids are listed in https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md`)
+  if (unknown) throw new UserError(`Unknown rule "${unknown}" in ignore. The rule ids are listed in https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md and https://github.com/dualkit/dualkit/blob/main/packages/lint/LINT.md`)
   return { ignore, exclude }
 }
