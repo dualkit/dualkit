@@ -74,11 +74,11 @@ export const mirroredText = defineRule({
 
 export const clippedText = defineRule({
   id: 'layout/clipped-text', group: 'layout', severity: 'warning',
-  title: 'Text cut off by its box',
-  why: 'A fixed-size box with overflow hidden cuts off Arabic that runs long or sits tall, such as a label wider than its button or dots below a tight line.',
+  title: 'Arabic text cut off by its box',
+  why: 'A fixed-size box with overflow hidden cuts off Arabic text that runs long or sits tall, such as a label wider than its button or dots below a tight line.',
   fix: 'Let the box grow with min-width or min-height, or add text-overflow: ellipsis if shortening is intended.',
   check: (m) => m.clips
-    .filter((c) => !c.ellipsis && c.hidden > MIN_CLIPPED)
+    .filter((c) => c.hasArabic && !c.ellipsis && c.hidden > MIN_CLIPPED)
     .map((c) => ({ node: pick(c), message: `${Math.round(c.hidden)}px of this text is cut off ${c.axis === 'x' ? 'sideways' : 'at the bottom'}.` })),
 })
 

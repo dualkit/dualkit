@@ -90,6 +90,11 @@ describe('near misses in a real browser', () => {
 
 describe('joins', () => {
   const joinsOf = async (body: string) => (await modelOf(page(body))).joins
+  it('stays quiet for a Hijri heh with tatweel in a flex item beside a label, and keeps a real word split in flex items', async () => {
+    const row = (a: string, b: string) => `<div style="display:flex;gap:12px"><span>${a}</span><span style="display:inline-flex">${b}</span></div>`
+    expect(await joinsOf(row('1447 \u0647\u0640', '\u0627\u0644\u062a\u0627\u0631\u064a\u062e'))).toEqual([])
+    expect(await joinsOf(`<p>\u0645\u062d<span style="display:inline-flex">\u0645\u062f</span></p>`)).toHaveLength(1)
+  })
   it('reads a word split by an inline-block or inline-flex box, and nothing else', async () => {
     const block = await joinsOf('<p>مح<span style="display:inline-block">مد</span></p>')
     expect(block).toHaveLength(1)

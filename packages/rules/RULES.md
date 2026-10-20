@@ -77,9 +77,9 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 **Fix:** Flip the icon or image alone, and leave the text outside the transform.
 
 <a id="layout-clipped-text"></a>
-### `layout/clipped-text` Text cut off by its box
+### `layout/clipped-text` Arabic text cut off by its box
 
-**warning.** A fixed-size box with overflow hidden cuts off Arabic that runs long or sits tall, such as a label wider than its button or dots below a tight line.
+**warning.** A fixed-size box with overflow hidden cuts off Arabic text that runs long or sits tall, such as a label wider than its button or dots below a tight line.
 
 **Fix:** Let the box grow with min-width or min-height, or add text-overflow: ellipsis if shortening is intended.
 
@@ -226,4 +226,5 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 - A label is flagged only when it is wholly in the other script, such as a Latin sentence on an Arabic page. Labels that mix scripts, and one-word names like Visa, are left alone.
 - An icon is named from its data attribute, sprite reference, class, glyph text, aria-label, title, SVG `<title>`, or the aria-label of the button or link around it when the icon is the only content of that control. A fully unnamed SVG that is not alone in a labelled control is not recognised, so its direction is not checked. An unnamed icon that is the only content of a control takes the name of that control, so a non-directional glyph in a control named with a direction word is read as directional.
 - Text is checked for a horizontal flip on its own element and up to 4 ancestors. A flip applied further up, or by a filter or animation, is not seen.
-- A clipped box is found when it scrolls and its own text, measured by the painted text boxes, reaches past its padding box. A box that scrolls only for an oversized image is not flagged. Ink that sticks out of a text box that still fits its line, such as a dot just under a tight line, is not measured.
+- A clipped box is found when it scrolls and its own text, measured by the painted text boxes, reaches past its padding box. A box that scrolls only for an oversized image is not flagged. Only boxes whose cut-off text contains Arabic are flagged. Ink that sticks out of a text box that still fits its line, such as a dot just under a tight line, is not measured.
+- Masks that reveal part of a strip by transform (odometers, rolling labels) look like clipped text.

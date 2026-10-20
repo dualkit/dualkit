@@ -69,6 +69,9 @@ describe('layout/clipped-text', () => {
   it('flags a box that cuts text off, on either axis', () => {
     expect(ids(screen({ clips: [clip({ hidden: 40 }), clip({ axis: 'y', hidden: 5 })] }))).toEqual(['layout/clipped-text', 'layout/clipped-text'])
   })
+  it('stays quiet for a clipped box with no Arabic in its text', () => {
+    expect(ids(screen({ clips: [clip({ hasArabic: false })] }))).toEqual([])
+  })
   it('passes an ellipsis, and a gap of 2px or less', () => {
     expect(ids(screen({ clips: [clip({ ellipsis: true }), clip({ hidden: 2 })] }))).toEqual([])
   })

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { boundarySplit, sideVerdict, type Forms } from '../src/dom/joins'
+import { boundarySplit, sideVerdict, touchesTatweel, type Forms } from '../src/dom/joins'
 
 // The decision is pure: widths in, verdict out. These run without a browser, so they cover the branches on every platform.
 const forms = (zwj: Forms, neighbour: Forms = zwj) => (kind: 'zwj' | 'neighbour'): Forms => (kind === 'zwj' ? zwj : neighbour)
@@ -35,5 +35,15 @@ describe('boundarySplit', () => {
     expect(boundarySplit(null, true)).toBe(true)
     expect(boundarySplit(false, null)).toBe(false)
     expect(boundarySplit(null, null)).toBe(false)
+  })
+})
+
+describe('touchesTatweel', () => {
+  it('skips a boundary next to a tatweel, as in the Hijri abbreviation', () => {
+    expect(touchesTatweel('1447 \u0647\u0640', 6, '\u0627\u0644\u062a\u0627\u0631\u064a\u062e')).toBe(true)
+    expect(touchesTatweel('\u0645\u062d', 1, '\u0640\u0645')).toBe(true)
+  })
+  it('keeps a split inside a real word', () => {
+    expect(touchesTatweel('\u0645\u062d', 1, '\u0645\u062f')).toBe(false)
   })
 })

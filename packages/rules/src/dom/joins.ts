@@ -26,6 +26,9 @@ function lastJoining(s: string): number {
   const ch = s[i] ?? ''
   return ARABIC_LETTER.test(ch) && !NO_LEFT_JOIN.test(ch) ? i : -1
 }
+/** U+0640 (tatweel) is an explicit connector, as in the Hijri abbreviation, so a boundary next to it is never a split word. */
+const TATWEEL = '\u0640'
+export const touchesTatweel = (before: string, last: number, text: string): boolean => before[last] === TATWEEL || text[0] === TATWEEL
 const startsJoining = (s: string): boolean => {
   const ch = s[0] ?? ''
   return ARABIC_LETTER.test(ch) && !MARK.test(ch) && ch !== '\u0621' && ch !== '\u0674' && ch !== '\u08ad'
@@ -134,7 +137,7 @@ export function readJoins(doc: Document, style: Style, skipped: Pred, ref: Ref):
     if (!prev || prev.parentElement === n.parentElement || !text) continue
     const before = prev.data
     const last = before ? lastJoining(before) : -1
-    if (last < 0 || !startsJoining(text)) continue
+    if (last < 0 || !startsJoining(text) || touchesTatweel(before, last, text)) continue
     const a = prev.parentElement
     const b = n.parentElement
     if (!a || !b || skipped(a) || skipped(b)) continue
