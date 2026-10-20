@@ -1,8 +1,9 @@
+import { readFileSync } from 'node:fs'
 import { afterAll, describe, expect, it } from 'vitest'
 import { RULES } from '../src/rules'
 import { runRules } from '../src/run'
 import { page } from './fixtures'
-import { closeBrowser, modelOf } from './helpers/browser'
+import { closeBrowser, modelOf, withPage } from './helpers/browser'
 
 afterAll(closeBrowser)
 
@@ -84,5 +85,89 @@ describe('near misses in a real browser', () => {
     const found = runRules(await modelOf(page('<div class="wrap"><span class="a">أ</span><span class="b">ب</span></div>', { css })), { rules: RULES.filter((r) => r.id === 'layout/physical-inset') })
     expect(found).toHaveLength(1)
     expect(found[0]?.node?.id).toContain('span.a')
+  })
+})
+
+describe('joins', () => {
+  const joinsOf = async (body: string) => (await modelOf(page(body))).joins
+  it('stays quiet for a Hijri heh with tatweel in a flex item beside a label, and keeps a real word split in flex items', async () => {
+    const row = (a: string, b: string) => `<div style="display:flex;gap:12px"><span>${a}</span><span style="display:inline-flex">${b}</span></div>`
+    expect(await joinsOf(row('1447 \u0647\u0640', '\u0627\u0644\u062a\u0627\u0631\u064a\u062e'))).toEqual([])
+    expect(await joinsOf(`<p>\u0645\u062d<span style="display:inline-flex">\u0645\u062f</span></p>`)).toHaveLength(1)
+  })
+  it('reads a word split by an inline-block or inline-flex box, and nothing else', async () => {
+    const block = await joinsOf('<p>مح<span style="display:inline-block">مد</span></p>')
+    expect(block).toHaveLength(1)
+    expect(block[0]).toMatchObject({ reason: 'inline-block', word: 'محمد' })
+    expect((await joinsOf('<p>مح<span style="display:inline-flex">مد</span></p>'))[0]).toMatchObject({ reason: 'other' })
+    for (const inner of ['<span style="color:red">مد</span>', '<b>مد</b>', '<span style="padding-inline-start:2px">مد</span>']) {
+      expect(await joinsOf(`<p>مح${inner}</p>`)).toEqual([])
+    }
+  })
+  it('skips a gap, a letter that does not join, a line break and off-screen text', async () => {
+    const box = 'style="display:inline-block"'
+    expect(await joinsOf(`<p>مح <span ${box}>مد</span></p>`)).toEqual([])
+    expect(await joinsOf(`<p>مر<span ${box}>مد</span></p>`)).toEqual([])
+    expect(await joinsOf(`<p>مح<br><span ${box}>مد</span></p>`)).toEqual([])
+    expect(await joinsOf(`<p>مح<span style="display:inline-block;visibility:hidden">مد</span></p>`)).toEqual([])
+    expect(await joinsOf(`<p>mh<span ${box}>مد</span></p>`)).toEqual([])
+  })
+})
+
+describe('joins across a font change are measured, not assumed', () => {
+  it('stays quiet when the second family is the bold bytes of the first, which join in Chromium', async () => {
+    const bold = readFileSync(new URL('./fonts/IBMPlexSansArabic-Bold.woff2', import.meta.url)).toString('base64')
+    const css = `@font-face{font-family:"Plex BoldFam";src:url(data:font/woff2;base64,${bold}) format("woff2")}`
+    expect((await modelOf(page('<p>مح<span style="font-family:\'Plex BoldFam\'">مد</span></p>', { css }))).joins).toEqual([])
+  })
+  it.each(['2px', '0.1em'])('measures the probe with the letter-spacing of the measured text (%s), so a join that holds stays quiet', async (spacing) => {
+    const bold = readFileSync(new URL('./fonts/IBMPlexSansArabic-Bold.woff2', import.meta.url)).toString('base64')
+    const css = `@font-face{font-family:"Plex BoldFam";src:url(data:font/woff2;base64,${bold}) format("woff2")}p{letter-spacing:${spacing}}`
+    expect((await modelOf(page('<p>مح<span style="font-family:\'Plex BoldFam\'">مد</span></p>', { css }))).joins).toEqual([])
+  })
+  const installed = (family: string) => withPage(page('<p>x</p>'), async (p) =>
+    p.evaluate((f) => {
+      const w = (fam: string) => { const e = document.createElement('span'); e.style.cssText = `position:absolute;white-space:pre;font:32px ${fam}`; e.textContent = 'محمد'; document.body.append(e); const r = e.getBoundingClientRect().width; e.remove(); return r }
+      return w(`"${f}",monospace`) !== w('monospace') || w(`"${f}",serif`) !== w('serif')
+    }, family))
+  it('reports Geeza Pro then Plex as one font-family join when Geeza Pro is installed', async (ctx) => {
+    if (!(await installed('Geeza Pro'))) return ctx.skip('Geeza Pro is not installed on this machine')
+    const m = await modelOf(page('<p><span style="font-family:\'Geeza Pro\'">مح</span>مد</p>'))
+    expect(m.joins).toHaveLength(1)
+    expect(m.joins[0]).toMatchObject({ reason: 'font-family' })
+  })
+  describe('under a scaled or zoomed ancestor, the probe is scaled with the letter', () => {
+    const bold = readFileSync(new URL('./fonts/IBMPlexSansArabic-Bold.woff2', import.meta.url)).toString('base64')
+    const css = `@font-face{font-family:"Plex BoldFam";src:url(data:font/woff2;base64,${bold}) format("woff2")}`
+    const split = (wrapStyle: string, second: string) =>
+      modelOf(page(`<div style="${wrapStyle}"><p><span>مح</span><span style="font-family:'${second}'">مد</span></p></div>`, { css }))
+    it.each(['transform:scale(.8);transform-origin:0 0', 'zoom:.8', 'transform:scale(2);transform-origin:0 0', 'zoom:2'])(
+      'stays quiet for Plex Regular then Plex Bold, which joins: %s',
+      async (wrapStyle) => { expect((await split(wrapStyle, 'Plex BoldFam')).joins).toEqual([]) },
+    )
+    for (const wrapStyle of ['transform:scale(2);transform-origin:0 0', 'transform:scale(.8);transform-origin:0 0', 'zoom:2']) {
+      it(`still reports a Plex then Al Nile split when Al Nile is installed: ${wrapStyle}`, async (ctx) => {
+        if (!(await installed('Al Nile'))) return ctx.skip('Al Nile is not installed on this machine')
+        const m = await split(wrapStyle, 'Al Nile')
+        expect(m.joins).toHaveLength(1)
+        expect(m.joins[0]).toMatchObject({ reason: 'font-family' })
+      })
+    }
+  })
+  it('treats trailing harakat as part of the letter, and skips non-joining letters outside the basic block', async () => {
+    const box = 'style="display:inline-block"'
+    expect((await modelOf(page(`<p>مَ<span ${box}>مد</span></p>`))).joins).toHaveLength(1)
+    for (const letter of ['\u0671', '\u0688', '\u0691', '\u0698', '\u06c6', '\u06c0', '\u06d5', '\u08ad']) {
+      expect((await modelOf(page(`<p>م${letter}<span ${box}>مد</span></p>`))).joins).toEqual([])
+    }
+  })
+})
+
+describe('joining starts', () => {
+  it('does not treat a combining mark or low alef as a letter that joins to the one before', async () => {
+    const box = 'style="display:inline-block"'
+    for (const start of ['ٰ', 'َ', 'ࢭ']) {
+      expect((await modelOf(page(`<p>م<span ${box}>${start}</span></p>`))).joins).toEqual([])
+    }
   })
 })

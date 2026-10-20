@@ -1,5 +1,12 @@
-import type { FieldKind, FieldNode, Font, LayoutNode, NodeRef, Rect, ScreenModel, TextRun } from '../model'
+import type { LoadedFace, FieldKind, FieldNode, Font, LayoutNode, NodeRef, PlaceholderSide, Rect, ScreenModel, TextRun } from '../model'
+import { readClips } from './clips'
+import { readFonts } from './fonts'
+import { readJoins } from './joins'
 import { readIcons } from './icons'
+import { readSigns } from './signs'
+import { readLabels } from './labels'
+import { screenReaderOnly } from './hidden'
+import { mirrorRoot } from './mirror'
 import { makePathOf } from './path'
 import { arabicShare, arabicWordCount, hasArabic } from '../text'
 import { authoredPhysical, physicalOf, type Authored } from './styles'
@@ -14,7 +21,6 @@ const splitCamel = (s: string): string => s.replace(/([a-z])([A-Z])/g, '$1 $2')
 const ISOLATING_DIR = /^(ltr|rtl|auto)$/i
 const BLOCK_TEXT_CAP = 600
 const BLOCK_TEXT_KEEP = 300
-const CLIPPED = /^rect\(\s*(0|1)(px)?[\s,)]/
 
 export function readScreen(doc: Document, options: ReadOptions = {}): ScreenModel {
   const win = doc.defaultView!
@@ -33,6 +39,7 @@ export function readScreen(doc: Document, options: ReadOptions = {}): ScreenMode
   const ref: Ref = (el, box = rect(el.getBoundingClientRect())): NodeRef => ({ id: pathOf(el), snippet: el.outerHTML.slice(0, 160), box })
 
   const { authored, unreadable } = authoredPhysical(doc, win)
+  const fonts = readFonts(doc)
   return {
     root: {
       lang: doc.documentElement.getAttribute('lang') || null,
@@ -40,10 +47,14 @@ export function readScreen(doc: Document, options: ReadOptions = {}): ScreenMode
       // The body inherits from <html> unless it sets its own dir, so it is where the page's direction lands.
       computedDir: dirOf(style(doc.body ?? doc.documentElement)),
     },
-    texts: readTexts(doc, style, skipped, visible, ref, rect, pathOf),
+    texts: readTexts(doc, style, skipped, visible, ref, rect, pathOf, fonts),
     layouts: readLayouts(doc, style, skipped, visible, ref, authored),
     icons: readIcons(doc, style, skipped, visible, ref),
     fields: readFields(doc, style, skipped, visible, ref),
+    fonts,
+    labels: readLabels(doc, skipped, visible, ref),
+    clips: readClips(doc, style, skipped, visible, ref, screenReaderOnly),
+    joins: readJoins(doc, style, skipped, ref),
     unreadableStylesheets: unreadable,
   }
 }
@@ -67,6 +78,23 @@ function isolatedBelow(el: Element, block: Element, style: Style): boolean {
   return false
 }
 
+/** What touches this text on one side, climbing out of inline tags up to the block: a <br>, the block's edge, or other content. */
+function edgeOf(node: Node, block: Element, side: 'previousSibling' | 'nextSibling'): 'br' | 'edge' | 'content' {
+  let at: Node | null = node
+  while (at && at !== block) {
+    let near = at[side]
+    while (near && near.nodeType === 3 && clean(near.textContent ?? '') === '') near = near[side]
+    if (near) return near.nodeName === 'BR' ? 'br' : 'content'
+    at = at.parentNode
+  }
+  return 'edge'
+}
+
+/** True for a run that is a whole line closed by a <br>: nothing else on its line, so the run alone decides how the line reads. */
+function endsLine(node: Node, block: Element): boolean {
+  return edgeOf(node, block, 'nextSibling') === 'br' && edgeOf(node, block, 'previousSibling') !== 'content'
+}
+
 /** Long blocks keep their first and last 300 characters, so the model stays small however many runs share a block. */
 function capBlockText(full: string): string {
   return full.length <= BLOCK_TEXT_CAP ? full : `${full.slice(0, BLOCK_TEXT_KEEP)}…${full.slice(-BLOCK_TEXT_KEEP)}`
@@ -83,14 +111,7 @@ function fontOf(s: CSSStyleDeclaration): Font {
   }
 }
 
-/** The standard visually-hidden pattern: a 1px box, or a clip that leaves nothing showing. */
-function screenReaderOnly(el: Element, s: CSSStyleDeclaration): boolean {
-  const r = el.getBoundingClientRect()
-  if (r.width <= 1 && r.height <= 1) return true
-  return CLIPPED.test(s.clip) || /^inset\(\s*50%/.test(s.clipPath)
-}
-
-function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, ref: Ref, rect: (r: DOMRect) => Rect, pathOf: (el: Element) => string): TextRun[] {
+function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, ref: Ref, rect: (r: DOMRect) => Rect, pathOf: (el: Element) => string, fonts: LoadedFace[]): TextRun[] {
   const runs: TextRun[] = []
   type BlockInfo = { block: Element; id: string; full: string; text: string; dir: ReturnType<typeof dirOf>; facts: Pick<TextRun, 'blockArabicShare' | 'blockHasArabic' | 'blockArabicWords'> }
   const blockCache = new Map<Element, BlockInfo>()
@@ -127,12 +148,14 @@ function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, re
     const lines = new Set(Array.from(range.getClientRects()).map((r) => Math.round(r.top))).size
     const { block, id, full, text: blockText, dir: blockDir, facts } = blockInfo(parent)
     const s = style(parent)
+    const font = fontOf(s)
+    const mirroredBy = mirrorRoot(parent, style)
     runs.push({
       ...ref(parent, rect(range.getBoundingClientRect())),
       text, blockId: id, blockText, ...facts, blockDir, dir: dirOf(s),
       lang: parent.closest('[lang]')?.getAttribute('lang') || null,
-      isolated: isolatedBelow(parent, block, style), isLastInBlock: full.endsWith(text),
-      font: fontOf(s), lines: Math.max(1, lines),
+      isolated: isolatedBelow(parent, block, style), isLastInBlock: full.endsWith(text), endsLine: endsLine(node, block),
+      font, signs: readSigns(doc, text, font, fonts), lines: Math.max(1, lines), mirrored: mirroredBy !== null, mirroredBy: mirroredBy && pathOf(mirroredBy),
     })
   }
   return runs
@@ -161,13 +184,35 @@ function fieldKind(el: HTMLInputElement | HTMLTextAreaElement): FieldKind {
   return CODE_FIELD.test(hints) ? 'code' : 'text'
 }
 
+const PHYSICAL_ALIGN: Record<string, PlaceholderSide> = {
+  left: 'left', '-webkit-left': 'left', right: 'right', '-webkit-right': 'right', center: 'center', '-webkit-center': 'center',
+}
+
+/**
+ * Where the placeholder lands: the ::placeholder's text-align (which inherits the field's unless the page sets its
+ * own), else the field's. start, end and justify resolve against the field's direction.
+ */
+function placeholderSide(el: Element, field: CSSStyleDeclaration): PlaceholderSide {
+  let align = ''
+  try { align = el.ownerDocument.defaultView?.getComputedStyle(el, '::placeholder').textAlign ?? '' } catch { /* no pseudo style: use the field's */ }
+  align ||= field.textAlign
+  const physical = PHYSICAL_ALIGN[align]
+  if (physical) return physical
+  const ltr = dirOf(field) === 'ltr'
+  return align === 'end' ? (ltr ? 'right' : 'left') : (ltr ? 'left' : 'right')
+}
+
 function readFields(doc: Document, style: Style, skipped: Pred, visible: Pred, ref: Ref): FieldNode[] {
   const out: FieldNode[] = []
   for (const el of Array.from(doc.body.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea'))) {
     const type = el.getAttribute('type')?.toLowerCase()
     if (type === 'hidden' || type === 'checkbox' || type === 'radio' || type === 'submit' || type === 'button') continue
     if (skipped(el) || !visible(el)) continue
-    out.push({ ...ref(el), kind: fieldKind(el), dir: dirOf(style(el)), dirAttr: el.getAttribute('dir') })
+    const s = style(el)
+    out.push({
+      ...ref(el), kind: fieldKind(el), dir: dirOf(s), dirAttr: el.getAttribute('dir'), placeholder: el.getAttribute('placeholder') ?? '',
+      placeholderShown: el.matches(':placeholder-shown'), placeholderSide: placeholderSide(el, s),
+    })
   }
   return out
 }

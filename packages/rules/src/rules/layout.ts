@@ -1,6 +1,6 @@
 import type { LayoutNode } from '../model'
 import { defineRule, pick, type Hit } from '../rule'
-import { excerpt } from '../text'
+import { excerpt, hasArabic } from '../text'
 
 /** Under this many Arabic words a block is a label, such as a language switcher, not a paragraph. */
 const MIN_ARABIC_WORDS = 3
@@ -56,4 +56,30 @@ export const arabicLtrBlock = defineRule({
   },
 })
 
-export const layoutRules = [physicalSpacing, physicalInset, textAlignLeft, arabicLtrBlock]
+/** Under this many pixels cut off, the gap is rounding, not lost text. */
+const MIN_CLIPPED = 2
+
+export const mirroredText = defineRule({
+  id: 'layout/mirrored-text', group: 'layout', severity: 'error',
+  title: 'Text flipped with the layout',
+  why: 'A scaleX(-1) on a container mirrors its letters too, so Arabic reads backwards. Only icons and artwork should flip. A turn such as rotate(180deg) does not mirror, so it is not counted.',
+  fix: 'Flip the icon or image alone, and leave the text outside the transform.',
+  check: (m) => {
+    const seen = new Set<string>()
+    return m.texts
+      .filter((t) => t.mirrored && hasArabic(t.text) && !seen.has(t.mirroredBy ?? t.id) && Boolean(seen.add(t.mirroredBy ?? t.id)))
+      .map((t) => ({ node: pick(t), message: `"${excerpt(t.text)}" is drawn mirrored by a flip.` }))
+  },
+})
+
+export const clippedText = defineRule({
+  id: 'layout/clipped-text', group: 'layout', severity: 'warning',
+  title: 'Arabic text cut off by its box',
+  why: 'A fixed-size box with overflow hidden cuts off Arabic text that runs long or sits tall, such as a label wider than its button or dots below a tight line.',
+  fix: 'Let the box grow with min-width or min-height, or add text-overflow: ellipsis if shortening is intended.',
+  check: (m) => m.clips
+    .filter((c) => c.hasArabic && !c.ellipsis && c.hidden > MIN_CLIPPED)
+    .map((c) => ({ node: pick(c), message: `${Math.round(c.hidden)}px of this text is cut off ${c.axis === 'x' ? 'sideways' : 'at the bottom'}.` })),
+})
+
+export const layoutRules = [physicalSpacing, physicalInset, textAlignLeft, arabicLtrBlock, mirroredText, clippedText]

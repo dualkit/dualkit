@@ -1,4 +1,6 @@
 import type { IconNode } from '../model'
+import { offScreenWithin } from './hidden'
+import { flipSign, MIRROR_DEPTH, turns } from './mirror'
 import { clean, dirOf, type Pred, type Ref, type Style } from './types'
 
 const ICON_CLASS = /^(lucide-|fa-|icon-|bi-|ri-|ti-|i-)(.+)$/
@@ -8,7 +10,21 @@ const CANDIDATES = 'svg, img, i, span[class*="icon"], [data-icon], [data-lucide]
 /** PascalCase and camelCase become kebab-case, then everything is lowercased. */
 const kebab = (name: string): string => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 
-/** Name sources, best first: data attributes, sprite reference, icon class, glyph text, aria-label, image alt or filename. */
+/** The aria-label of the nearest button or link, only when the icon is that control's sole visible content. Text or icons that are display:none, visibility:hidden or screen-reader-only do not count; aria-hidden alone still paints, so it does. */
+function soleControlLabel(el: Element): string {
+  const control = el.closest('button, a')
+  const label = clean(control?.getAttribute('aria-label') ?? '')
+  if (!control || !label) return ''
+  const walker = control.ownerDocument.createTreeWalker(control, NodeFilter.SHOW_TEXT)
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    const parent = node.parentElement
+    if (clean(node.textContent ?? '') && parent && !parent.closest('svg') && !offScreenWithin(parent, control)) return ''
+  }
+  const others = Array.from(control.querySelectorAll(CANDIDATES)).filter((c) => c !== el && !c.contains(el) && !el.contains(c) && !offScreenWithin(c, control))
+  return others.length === 0 ? label : ''
+}
+
+/** Name sources, best first: data attributes, sprite reference, icon class, glyph text, aria-label, image alt, title, SVG <title>, the aria-label of the button or link around it, image filename. */
 export function iconName(el: Element): string | null {
   const data = el.getAttribute('data-icon') ?? el.getAttribute('data-lucide')
   if (data) return kebab(data)
@@ -23,22 +39,31 @@ export function iconName(el: Element): string | null {
   }
   const label = el.getAttribute('aria-label')
   if (label) return kebab(label)
-  if (el.tagName === 'IMG') {
-    const img = el as HTMLImageElement
-    return kebab(img.alt || img.getAttribute('src')?.split('/').pop()?.replace(/\.\w+$/, '') || '') || null
-  }
+  const img = el.tagName === 'IMG' ? (el as HTMLImageElement) : null
+  if (img?.alt) return kebab(img.alt)
+  const own = clean(el.getAttribute('title') ?? '') || clean(el.querySelector(':scope > title')?.textContent ?? '')
+  if (own) return kebab(own)
+  // A bare icon inside a labelled button or link takes the control's name.
+  const control = soleControlLabel(el)
+  if (control) return kebab(control)
+  if (img) return kebab(img.getAttribute('src')?.split('/').pop()?.replace(/\.\w+$/, '') || '') || null
   return null
 }
 
-function mirrored(el: Element, style: Style): boolean {
+/**
+ * Whether the element or an ancestor (up to 4 deep) mirrors it (a flip: the determinant is negative), and whether one
+ * turns it to point the other way without mirroring (rotate(180deg), scale(-1,-1)). Icons treat any flip as mirrored.
+ */
+function orientation(el: Element, style: Style): { mirrored: boolean; turned: boolean } {
+  let mirrored = false
+  let turned = false
   let node: Element | null = el
-  for (let depth = 0; node && depth < 4; depth++, node = node.parentElement) {
+  for (let depth = 0; node && depth < MIRROR_DEPTH; depth++, node = node.parentElement) {
     const s = style(node)
-    const m = /matrix(?:3d)?\(([^)]+)\)/.exec(s.transform)
-    if (m && parseFloat(m[1]!.split(',')[0]!) < 0) return true
-    if (s.scale && s.scale !== 'none' && parseFloat(s.scale) < 0) return true
+    mirrored ||= flipSign(s) < 0
+    turned ||= turns(s)
   }
-  return false
+  return { mirrored, turned }
 }
 
 /** Every ancestor of a candidate, so wrappers can be dropped in favour of the innermost icon. */
@@ -58,7 +83,7 @@ export function readIcons(doc: Document, style: Style, skipped: Pred, visible: P
     if (wrappers.has(el) || el.parentElement?.closest('svg') || skipped(el) || !visible(el)) continue
     const r = el.getBoundingClientRect()
     if (r.width > 64 || r.height > 64) continue
-    out.push({ ...ref(el), name: iconName(el), dir: dirOf(style(el)), mirrored: mirrored(el, style) })
+    out.push({ ...ref(el), name: iconName(el), dir: dirOf(style(el)), ...orientation(el, style) })
   }
   return out
 }

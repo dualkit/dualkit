@@ -1,6 +1,7 @@
-import type { TextRun } from '../model'
+import { coversCodePoint } from '../fonts'
+import type { LoadedFace, TextRun } from '../model'
 import { defineRule, pick } from '../rule'
-import { ARABIC_INDIC_DIGIT, PLACEHOLDER, WESTERN_DIGIT, arabicShare, excerpt, isArabicScriptLang } from '../text'
+import { ARABIC_INDIC_DIGIT, PLACEHOLDER, WESTERN_DIGIT, arabicShare, arabicWordCount, excerpt, isArabicScriptLang, latinWordCount } from '../text'
 
 
 export const missingLang = defineRule({
@@ -67,4 +68,65 @@ export const placeholderText = defineRule({
     .map((t) => ({ node: pick(t), message: `"${excerpt(t.text)}" is placeholder text.` })),
 })
 
-export const contentRules = [missingLang, missingDir, langMismatch, mixedDigits, placeholderText]
+export const oldRialSign = defineRule({
+  id: 'content/old-rial-sign', group: 'content', severity: 'warning',
+  title: 'The old rial ligature used as a riyal sign',
+  why: 'U+FDFC is the Persian word for rial drawn as one glyph, so it reads as a different currency mark and many fonts draw it differently or not at all.',
+  fix: 'Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.',
+  check: (m) => m.texts
+    .filter((t) => t.text.includes('\uFDFC'))
+    .map((t) => ({ node: pick(t), message: '﷼ is the rial ligature, not the Saudi riyal sign.' })),
+})
+
+const NEW_SIGNS = [0x20c1, 0x20c3, 0x20c4] as const
+const hex = (cp: number): string => `U+${cp.toString(16).toUpperCase()}`
+const loadedIn = (families: string[], fonts: LoadedFace[]): LoadedFace[] =>
+  fonts.filter((f) => f.status === 'loaded' && families.some((fam) => fam.toLowerCase() === f.family.toLowerCase()))
+
+export const currencySignFont = defineRule({
+  id: 'content/currency-sign-font', group: 'content', severity: 'warning',
+  title: 'A new currency sign no loaded font draws',
+  why: 'The Saudi riyal, UAE dirham and Omani rial signs are new to Unicode, so a font without them draws a blank box, or whatever the visitor\'s device happens to have.',
+  fix: 'Load a font that has the sign, or write the currency code instead.',
+  // A loaded face in the stack counts when its explicit unicode-range includes the sign (fast path), or when the reader
+  // measured the run's webfont drawing it. A default-range face alone proves nothing: IBM Plex Sans Arabic has that
+  // range and draws these as missing-glyph boxes, while a face that does have the glyph shows up in `signs`.
+  check: (m) => m.texts.flatMap((t) => {
+    const faces = loadedIn(t.font.families, m.fonts)
+    const drawn = (cp: number): boolean => t.signs.some((s) => s.codePoint === cp && s.drawnByWebfont)
+    const missing = NEW_SIGNS.filter((cp) => t.text.includes(String.fromCodePoint(cp)) && !faces.some((f) => coversCodePoint(f, cp)) && !drawn(cp))
+    return missing.length === 0 ? [] : [{ node: pick(t), message: `${missing.map(hex).join(' and ')} in "${excerpt(t.text)}" is not drawn by any loaded font in this text's font stack.` }]
+  }),
+})
+
+// The Central Bank of the UAE guideline (centralbank.ae, Dirham Currency Symbol Guideline v1.0, p. 11 and p. 19) says
+// never to use the symbol and "AED" together. It says nothing about "Dh" or the Arabic word, so those never fire.
+const AED_CODE = /\bAED\b/i
+
+export const dirhamSignWithCode = defineRule({
+  id: 'content/dirham-sign-with-code', group: 'content', severity: 'note',
+  title: 'The dirham sign next to the code AED',
+  why: 'The Central Bank of the UAE guideline says to use the dirham sign or the code AED, never both, because the price then names the currency twice.',
+  fix: 'Keep the sign or the code AED, not both.',
+  check: (m) => m.texts
+    .filter((t) => t.text.includes('\u20C3') && AED_CODE.test(t.text))
+    .map((t) => ({ node: pick(t), message: `"${excerpt(t.text)}" has the dirham sign and AED together.` })),
+})
+
+export const labelLanguage = defineRule({
+  id: 'content/label-language', group: 'content', severity: 'note',
+  title: 'A label in a different language from its element',
+  why: 'The HTML lang attribute applies to the element\'s text attributes too, so the label is declared to be in the element\'s language, and screen readers that switch voice by language read it with the wrong pronunciation.',
+  fix: 'Put lang on the element to match the label, or write the label in the language of the element.',
+  // Facts section 4: lang covers text-bearing attributes (HTML Standard), and screen readers use the language of the text
+  // (WCAG 3.1.2). Reading an aria-label that way is derived, and some readers ignore language in names, hence a note.
+  // Only labels with no word in the other script count, so "ادفع عبر Apple Pay" and one-word brands stay quiet.
+  check: (m) => m.labels.flatMap((l) => {
+    if (l.lang === null) return []
+    const latinInArabic = isArabicScriptLang(l.lang) && latinWordCount(l.text) >= 2 && arabicWordCount(l.text) === 0
+    const arabicInOther = !isArabicScriptLang(l.lang) && arabicWordCount(l.text) >= 2 && latinWordCount(l.text) === 0
+    return latinInArabic || arabicInOther ? [{ node: pick(l), message: `The ${l.attr} "${excerpt(l.text)}" is read as ${l.lang}.` }] : []
+  }),
+})
+
+export const contentRules = [missingLang, missingDir, langMismatch, mixedDigits, placeholderText, oldRialSign, currencySignFont, dirhamSignWithCode, labelLanguage]

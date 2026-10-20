@@ -15,6 +15,9 @@ export type Font = {
   weight: number
 }
 
+/** Whether the run's own webfont family draws a new currency sign (U+20C1, U+20C3, U+20C4), measured in the page. */
+export type SignProbe = { codePoint: number; drawnByWebfont: boolean }
+
 export type TextRun = NodeRef & {
   text: string
   /** The nearest block ancestor: the bidi paragraph this text belongs to. */
@@ -31,8 +34,16 @@ export type TextRun = NodeRef & {
   /** Inside <bdi>, an element with a dir attribute, or unicode-bidi isolate or plaintext, below its block. */
   isolated: boolean
   isLastInBlock: boolean
+  /** The run is a whole line closed by a <br>, with nothing else on that line. */
+  endsLine: boolean
   font: Font
   lines: number
+  /** One entry per new currency sign in the text; empty for every other run. */
+  signs: SignProbe[]
+  /** Net mirror: the product of flip signs (the sign of each transform's determinant) over the element and up to 4 ancestors. */
+  mirrored: boolean
+  /** The nearest element that flips the run when it is mirrored overall, else null. Runs under one flip share it. */
+  mirroredBy: string | null
 }
 
 export type PhysicalDeclaration = { property: string; value: string }
@@ -47,10 +58,37 @@ export type LayoutNode = NodeRef & {
   physical: PhysicalDeclaration[]
 }
 
-export type IconNode = NodeRef & { name: string | null; dir: Direction; mirrored: boolean }
+/** `mirrored`: a flip (negative determinant) on the icon or up to 4 ancestors. `turned`: a turn that points it the other way without mirroring, such as rotate(180deg). */
+export type IconNode = NodeRef & { name: string | null; dir: Direction; mirrored: boolean; turned: boolean }
 
 export type FieldKind = 'email' | 'tel' | 'url' | 'number' | 'code' | 'text'
-export type FieldNode = NodeRef & { kind: FieldKind; dir: Direction; dirAttr: string | null }
+/** Which edge of the field the placeholder is painted against: its text-align, start and end resolved against the field's direction. */
+export type PlaceholderSide = 'left' | 'right' | 'center'
+export type FieldNode = NodeRef & { kind: FieldKind; dir: Direction; dirAttr: string | null; placeholder: string; placeholderShown: boolean; placeholderSide: PlaceholderSide }
+
+export type LoadedFace = {
+  /** No quotes. */
+  family: string
+  weight: [number, number]
+  style: string
+  unicodeRange: string
+  /** A ratio: 0.9 for `90%`. */
+  sizeAdjust: number
+  status: 'unloaded' | 'loading' | 'loaded' | 'error'
+  /**
+   * Measured in the page for a loaded face with the default unicode-range whose name does not say Arabic: true when it
+   * draws alef (U+0627) itself. Null when it was not measured (an Arabic name, an explicit range, not loaded, or the probe failed).
+   */
+  drawsArabic: boolean | null
+}
+
+export type LabelNode = NodeRef & { attr: 'aria-label' | 'alt' | 'title'; text: string; lang: string | null }
+
+/** `hidden` is the px cut off: scrollWidth - clientWidth, or scrollHeight - clientHeight. */
+export type ClipNode = NodeRef & { axis: 'x' | 'y'; hidden: number; ellipsis: boolean; hasArabic: boolean }
+
+/** An Arabic word that an inline-block or inline-flex box splits, so its letters cannot join across the box. */
+export type JoinBreak = NodeRef & { reason: 'inline-block' | 'font-family' | 'other'; word: string }
 
 export type ScreenModel = {
   /** dir is the attribute as written; computedDir is how the page body actually runs (dir="auto" resolved). */
@@ -59,5 +97,9 @@ export type ScreenModel = {
   layouts: LayoutNode[]
   icons: IconNode[]
   fields: FieldNode[]
+  fonts: LoadedFace[]
+  labels: LabelNode[]
+  clips: ClipNode[]
+  joins: JoinBreak[]
   unreadableStylesheets: number
 }

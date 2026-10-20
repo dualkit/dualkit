@@ -16,11 +16,63 @@ describe('bidi/unisolated-number', () => {
 })
 
 describe('bidi/unisolated-latin', () => {
-  it('flags an email inside Arabic', () => {
-    expect(ids(screen({ texts: [text({ text: 'راسلنا على hi@example.com', blockText: 'راسلنا على hi@example.com' })] }))).toContain('bidi/unisolated-latin')
+  it('flags an email followed by a digit, which Chromium reorders', () => {
+    expect(ids(screen({ texts: [text({ text: 'راسلنا على hi@example.com 5', blockText: 'راسلنا على hi@example.com 5' })] }))).toEqual(['bidi/unisolated-latin'])
+  })
+  it('flags a link with a trailing slash', () => {
+    expect(ids(screen({ texts: [text({ text: 'زر https://example.com/a/', blockText: 'زر https://example.com/a/' })] }))).toEqual(['bidi/unisolated-latin'])
+  })
+  it('flags each digit condition Chromium reorders: a digit directly before, an Extended Arabic-Indic digit after, a dash or Arabic comma before a digit', () => {
+    for (const t of ['تم 5https://example.com/a', 'تم \u0665ORDER-2041', 'تم hi@example.com \u06F5', 'تم hi@example.com - 5', 'تم hi@example.com\u060C 5']) {
+      expect(ids(screen({ texts: [text({ text: t, blockText: t })] })), t).toEqual(['bidi/unisolated-latin'])
+    }
+  })
+  it('passes an Arabic-Indic digit after the token, or an Arabic word between it and the digit', () => {
+    for (const t of ['تم hi@example.com \u0665', 'تم hi@example.com ثم 5']) expect(ids(screen({ texts: [text({ text: t, blockText: t })] })), t).toEqual([])
+  })
+  it('passes an email, link or code that has no #, trailing slash or digit beside it', () => {
+    for (const t of ['راسلنا على hi@example.com', 'زر https://example.com/a/b ثم', 'رقم ORDER-2041 تم', 'اكتب www.example.com ثم']) {
+      expect(ids(screen({ texts: [text({ text: t, blockText: t })] })), t).toEqual([])
+    }
+  })
+  it('passes a token that only joins a Latin neighbour', () => {
+    expect(ids(screen({ texts: [text({ text: 'تم hi@example.com Apple', blockText: 'تم hi@example.com Apple' })] }))).toEqual([])
   })
   it('passes when isolated', () => {
-    expect(ids(screen({ texts: [text({ text: 'hi@example.com', isolated: true })] }))).toEqual([])
+    expect(ids(screen({ texts: [text({ text: '#A-10293', isolated: true })] }))).toEqual([])
+  })
+})
+
+describe('bidi/unisolated-number: a leading #', () => {
+  const n = (t: string) => ids(screen({ texts: [text({ text: t, blockText: t })] }))
+  it('flags # and Western digits after Arabic, and # with Arabic-Indic digits anywhere', () => {
+    expect(n('رقم الطلب #10293 تم')).toEqual(['bidi/unisolated-number'])
+    expect(n('#\u0663\u0664\u0665 تم')).toEqual(['bidi/unisolated-number'])
+  })
+  it('passes a lone #, # at the start, # after a Latin word, a colour and an isolated number', () => {
+    for (const t of ['اللون # تم', '#10293 تم', 'Order #10293 تم', '5 #10293 تم']) expect(n(t), t).toEqual([])
+    expect(ids(screen({ texts: [text({ text: '#10293', blockText: 'رقم #10293', isolated: true })] }))).toEqual([])
+  })
+  it('only judges the # in its own run, not one in a later isolated run of the same block', () => {
+    const blockText = '#12 رقم #34'
+    expect(ids(screen({ texts: [text({ text: '#12 رقم', blockText }), text({ text: '#34', blockText, isolated: true })] }))).toEqual([])
+    expect(ids(screen({ texts: [text({ text: '#12 رقم', blockText }), text({ text: '#34', blockText })] }))).toEqual(['bidi/unisolated-number'])
+  })
+  it('reads the # in its place in the block: after Arabic and a digit group it fires, after brackets and quotes alone it does not', () => {
+    expect(n('رقم 5 #10293')).toEqual(['bidi/unisolated-number'])
+    for (const t of ['(#10293) تم', '"#10293" تم', '. #10293 تم']) expect(n(t), t).toEqual([])
+  })
+})
+
+describe('bidi/unisolated-latin: order codes', () => {
+  const flagged = (t: string) => ids(screen({ texts: [text({ text: t, blockText: `رقم الطلب ${t} تم` })] }))
+  it('flags a hash-prefixed code, which Chromium scrambles', () => {
+    expect(flagged('#A-10293')).toEqual(['bidi/unisolated-latin'])
+    expect(flagged('#A10293')).toEqual(['bidi/unisolated-latin'])
+  })
+  it('passes the near misses, and an isolated code', () => {
+    for (const t of ['Visa', 'A1', 'iPhone 15', 'A10293', 'في عام 2026']) expect(flagged(t), t).toEqual([])
+    expect(ids(screen({ texts: [text({ text: '#A-10293', isolated: true })] }))).toEqual([])
   })
 })
 
@@ -43,11 +95,46 @@ describe('bidi/punctuation-flip', () => {
   })
 })
 
+describe('bidi/punctuation-flip: a mark that closes a line before a <br>', () => {
+  const line = (p: Parameters<typeof text>[0]) => ids(screen({ texts: [text({ isLastInBlock: false, endsLine: true, ...p })] }))
+  it('flags English closing a line in an RTL block, and Arabic closing a line in an LTR block', () => {
+    expect(line({ text: 'Hello world!', blockText: 'Hello world! مرحبا بكم' })).toEqual(['bidi/punctuation-flip'])
+    expect(line({ text: 'مرحبا بكم في المتجر.', blockText: 'مرحبا بكم في المتجر. Hello there', blockDir: 'ltr' })).toEqual(['bidi/punctuation-flip'])
+  })
+  it('passes a line that matches its block, no closing mark, or an isolated run', () => {
+    expect(line({ text: 'مرحبا بكم في المتجر.', blockText: 'مرحبا بكم في المتجر. Hello there' })).toEqual([])
+    expect(line({ text: 'Hello world', blockText: 'Hello world مرحبا بكم' })).toEqual([])
+    expect(line({ text: 'Hello world!', blockText: 'Hello world! مرحبا بكم', isolated: true })).toEqual([])
+  })
+  it('passes a run that is neither last nor line-ending', () => {
+    expect(line({ text: 'Hello world!', blockText: 'Hello world! مرحبا بكم', endsLine: false })).toEqual([])
+  })
+})
+
 describe('bidi/field-direction', () => {
   it('flags an email field that inherits RTL', () => {
     expect(ids(screen({ fields: [field()] }))).toEqual(['bidi/field-direction'])
   })
   it('passes with a dir attribute, LTR direction, or a free-text field', () => {
     expect(ids(screen({ fields: [field({ dirAttr: 'auto' }), field({ dir: 'ltr' }), field({ kind: 'text' })] }))).toEqual([])
+  })
+})
+
+describe('bidi/field-placeholder', () => {
+  const hint = { placeholder: 'البريد الإلكتروني' }
+  it('flags an Arabic placeholder in a left-to-right field', () => {
+    expect(ids(screen({ fields: [field({ dir: 'ltr', dirAttr: 'ltr', ...hint })] }))).toEqual(['bidi/field-placeholder'])
+    expect(ids(screen({ fields: [field({ dir: 'ltr', kind: 'tel', ...hint })] }))).toEqual(['bidi/field-placeholder'])
+  })
+  it('passes a Latin placeholder, an RTL field, no placeholder, and a placeholder a value hides', () => {
+    expect(ids(screen({ fields: [field({ dir: 'ltr', placeholder: 'name@example.com' })] }))).toEqual([])
+    expect(ids(screen({ fields: [field({ dir: 'rtl', kind: 'text', ...hint })] }))).toEqual([])
+    expect(ids(screen({ fields: [field({ dir: 'ltr' })] }))).toEqual([])
+    expect(ids(screen({ fields: [field({ dir: 'ltr', placeholderShown: false, ...hint })] }))).toEqual([])
+  })
+  it('passes a hint that lands on the right or in the centre, and a field on a left-to-right page', () => {
+    expect(ids(screen({ fields: [field({ dir: 'ltr', placeholderSide: 'right', ...hint })] }))).toEqual([])
+    expect(ids(screen({ fields: [field({ dir: 'ltr', placeholderSide: 'center', ...hint })] }))).toEqual([])
+    expect(ids(screen({ root: { lang: 'en', dir: 'ltr', computedDir: 'ltr' }, fields: [field({ dir: 'ltr', ...hint })] }))).toEqual([])
   })
 })

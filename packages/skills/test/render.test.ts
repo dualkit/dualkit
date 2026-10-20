@@ -12,8 +12,15 @@ const read = (name: string) => readFileSync(join(SKILLS, name, 'SKILL.md'), 'utf
 /** Fence languages that are never UI code. Any other language, or none, must be covered or listed in UNRENDERED. */
 const NON_RENDER = new Set(['bash', 'sh', 'json', 'md', 'text'])
 
+const FONT_DIR = join(import.meta.dirname, '../../rules/test/fonts')
+const fontData = (file: string) => `data:font/woff2;base64,${readFileSync(join(FONT_DIR, file)).toString('base64')}`
+/** A site serves its own font files. The harness has no server, so IBM Plex Sans Arabic urls point at the fixture files. */
+const withServedFonts = (css: string) =>
+  css.replace(/url\((['"]?)\/fonts\/ibm-plex-sans-arabic-(\d+)\.woff2\1\)/g, (_m, _q, weight: string) =>
+    `url(${fontData(Number(weight) < 600 ? 'IBMPlexSansArabic-Regular.woff2' : 'IBMPlexSansArabic-Bold.woff2')})`)
+
 const shell = (css: string, body: string) =>
-  `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><style>${css}</style></head><body>${body}</body></html>`
+  `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><style>${withServedFonts(css)}</style></head><body>${body}</body></html>`
 
 const cssOf = (e: Example) => [e.cssFromQuote ? e.quote : '', e.css ?? ''].filter(Boolean).join('\n')
 
@@ -57,7 +64,7 @@ PINS[EXAMPLES.find((e) => e.quote.startsWith('const count = '))!.quote] = (e) =>
 afterAll(closeBrowser)
 
 describe('skill examples through the rules', () => {
-  it('runs all 20 rules', () => expect(RULES).toHaveLength(20))
+  it('runs all 29 rules', () => expect(RULES).toHaveLength(29))
 
   it('renders the bare shell with findings', async () => {
     const ids = runRules(await modelOf(shell('', '<p>مرحبا بكم</p>'))).map((f) => f.rule)
@@ -114,7 +121,7 @@ describe('skill examples through the rules', () => {
     }
   })
 
-  it.each(skillsWithExamples)('%s: its good examples pass all 20 rules on their own page', async (skill) => {
+  it.each(skillsWithExamples)('%s: its good examples pass all 29 rules on their own page', async (skill) => {
     const own = EXAMPLES.filter((e) => e.skill === skill)
     const page = shell(own.map(cssOf).join('\n'), own.map((e) => e.html).join('\n'))
     const findings = runRules(await modelOf(page), { ignore: ignoredFor(skill) }).map((f) => `${skill} ${f.rule}: ${f.message}`)

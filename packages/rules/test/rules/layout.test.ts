@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { layoutRules } from '../../src/rules/layout'
 import { runRules } from '../../src/run'
-import { layout, screen, text } from '../helpers/model'
+import { clip, icon, layout, screen, text } from '../helpers/model'
 
 const ids = (m: Parameters<typeof runRules>[0]) => runRules(m, { rules: layoutRules }).map((f) => f.rule)
 
@@ -52,5 +52,27 @@ describe('layout/arabic-ltr-block', () => {
   })
   it('passes mostly-English LTR blocks', () => {
     expect(ids(screen({ texts: [text({ text: 'Welcome مرحبا to the shop', blockText: 'Welcome مرحبا to the shop', blockDir: 'ltr' })] }))).toEqual([])
+  })
+})
+
+describe('layout/mirrored-text', () => {
+  it('flags text under a flip, once per mirroring ancestor', () => {
+    const m = screen({ texts: [text({ mirrored: true, mirroredBy: 'a', id: 'p1' }), text({ mirrored: true, mirroredBy: 'a', id: 'p2' }), text({ mirrored: true, mirroredBy: 'b', id: 'p3' })] })
+    expect(ids(m)).toEqual(['layout/mirrored-text', 'layout/mirrored-text'])
+  })
+  it('passes text that is not mirrored overall, and a mirrored icon with no text', () => {
+    expect(ids(screen({ texts: [text()], icons: [icon({ mirrored: true })] }))).toEqual([])
+  })
+})
+
+describe('layout/clipped-text', () => {
+  it('flags a box that cuts text off, on either axis', () => {
+    expect(ids(screen({ clips: [clip({ hidden: 40 }), clip({ axis: 'y', hidden: 5 })] }))).toEqual(['layout/clipped-text', 'layout/clipped-text'])
+  })
+  it('stays quiet for a clipped box with no Arabic in its text', () => {
+    expect(ids(screen({ clips: [clip({ hasArabic: false })] }))).toEqual([])
+  })
+  it('passes an ellipsis, and a gap of 2px or less', () => {
+    expect(ids(screen({ clips: [clip({ ellipsis: true }), clip({ hidden: 2 })] }))).toEqual([])
   })
 })

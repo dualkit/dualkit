@@ -106,7 +106,7 @@ Swap `amount` for `button`, `date-display`, `digit-input`, `field`, `sheet`, `ta
 
 ## Check
 
-Point one command at any page, local or live. It opens it in Chromium, runs 20 Arabic and right-to-left rules, and writes a report with a score out of 100 and every bug marked on a screenshot.
+Point one command at any page, local or live. It opens it in Chromium, runs 29 Arabic and right-to-left rules, and writes a report with a score out of 100 and every bug marked on a screenshot.
 
 ```
 npx playwright@1.55.0 install chromium   # once
@@ -133,7 +133,7 @@ The most useful help right now:
 | Path | Contents |
 | --- | --- |
 | `packages/format` | The format library, with its tests |
-| `packages/rules` | The 20 check rules and the page reader, with their tests |
+| `packages/rules` | The 29 check rules and the page reader, with their tests |
 | `packages/cli` | The `dualkit` CLI and its report |
 | `action` | The GitHub Action that runs the check on pull requests |
 | `skills` | The four skills (`SKILL.md` each) |

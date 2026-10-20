@@ -1,5 +1,6 @@
 import { afterAll, describe, expect, it } from 'vitest'
 import { closeBrowser, modelAt, modelOf, timeRead } from './helpers/browser'
+import { page } from './fixtures'
 
 afterAll(closeBrowser)
 
@@ -79,6 +80,17 @@ describe('icons and fields', () => {
       '<img alt="play" width="16" height="16" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=">',
     ].join('')))
     expect(m.icons.map((i) => [i.name, i.mirrored])).toEqual([['arrow-right', false], ['chevron-left', true], ['back', false], ['play', false]])
+  })
+
+  it('names an icon from its title, an SVG <title>, or the aria-label of the button or link around it', async () => {
+    const m = await modelOf(page([
+      '<i title="Back" style="display:inline-block;width:16px;height:16px"></i>',
+      '<svg width="16" height="16"><title>Arrow Right</title><path d="M2 8h12"/></svg>',
+      '<button aria-label="Next"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M2 8h12"/></svg></button>',
+      '<a href="#" aria-label="Previous"><svg width="16" height="16"><path d="M2 8h12"/></svg></a>',
+      '<svg width="16" height="16"><path d="M2 8h12"/></svg>',
+    ].join('')))
+    expect(m.icons.map((i) => i.name)).toEqual(['back', 'arrow right', 'next', 'previous', null])
   })
 
   it('normalises PascalCase and camelCase icon names to kebab-case', async () => {
@@ -180,5 +192,105 @@ describe('real page fixes', () => {
       expect(t.blockText.endsWith('كلمة1999')).toBe(true)
     }
     expect(m.texts.filter((t) => t.isLastInBlock).map((t) => t.text)).toEqual(['كلمة1999'])
+  })
+})
+
+describe('reader foundation: fonts, labels, placeholders, clips, mirrored text', () => {
+  it('lists the fixture faces as loaded, with their weight range', async () => {
+    const m = await modelOf(page('<p>مرحبا <b>بكم</b></p>'))
+    const plex = m.fonts.filter((f) => f.family === 'IBM Plex Sans Arabic')
+    expect(plex.map((f) => [f.weight, f.status])).toEqual(expect.arrayContaining([[[400, 400], 'loaded'], [[700, 700], 'loaded']]))
+    expect(plex[0]).toMatchObject({ style: 'normal', sizeAdjust: 1 })
+  })
+
+  it('reads size-adjust as a ratio', async () => {
+    const css = '@font-face{font-family:"Adj";src:local("Arial");size-adjust:90%}'
+    const m = await modelOf(page('<p>x</p>', { css }))
+    expect(m.fonts.find((f) => f.family === 'Adj')?.sizeAdjust).toBeCloseTo(0.9)
+  })
+
+  it('reads aria-label, alt and title, and skips empty values', async () => {
+    const m = await modelOf(page('<button aria-label="إغلاق" title="">x</button><img alt="شعار" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" width="4" height="4"><a title="رابط" href="#">y</a><i aria-label="  "></i>'))
+    expect(m.labels.map((l) => [l.attr, l.text, l.lang])).toEqual([['aria-label', 'إغلاق', 'ar'], ['alt', 'شعار', 'ar'], ['title', 'رابط', 'ar']])
+  })
+
+  it('reads a field placeholder', async () => {
+    const m = await modelOf(page('<input placeholder="الاسم"><input>'))
+    expect(m.fields.map((f) => f.placeholder)).toEqual(['الاسم', ''])
+  })
+
+  it('reads whether the placeholder is showing: a typed value hides it', async () => {
+    const m = await modelOf(page('<input placeholder="الاسم"><input placeholder="الاسم" value="سارة"><input>'))
+    expect(m.fields.map((f) => f.placeholderShown)).toEqual([true, false, false])
+  })
+
+  it('reads a run that is a whole line closed by a <br>, also out of an inline tag, and not a run sharing its line', async () => {
+    const m = await modelOf(page('<p>Hello world!<br>مرحبا <b>بكم</b>.<br><i>Pro.</i><br>سطر<i>1</i> <b>ثان</b><br></p><p><b>Two!</b></p>'))
+    expect(m.texts.map((t) => [t.text, t.endsLine])).toEqual([
+      ['Hello world!', true], ['مرحبا', false], ['بكم', false], ['.', false], ['Pro.', true], ['سطر', false], ['1', false], ['ثان', false], ['Two!', false],
+    ])
+  })
+
+  it('reads a clipped box, its ellipsis, and nothing for visible overflow', async () => {
+    const text = 'نص عربي طويل جدا يتجاوز عرض الصندوق بكثير ولا يتسع فيه أبدا'
+    const hidden = await modelOf(page(`<div class="b">${text}</div>`, { css: '.b{width:60px;overflow:hidden;white-space:nowrap}' }))
+    expect(hidden.clips).toHaveLength(1)
+    expect(hidden.clips[0]).toMatchObject({ axis: 'x', ellipsis: false, hasArabic: true })
+    expect(hidden.clips[0]!.hidden).toBeGreaterThan(100)
+    const ell = await modelOf(page(`<div class="b">${text}</div>`, { css: '.b{width:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' }))
+    expect(ell.clips[0]!.ellipsis).toBe(true)
+    const vis = await modelOf(page(`<div class="b">${text}</div>`, { css: '.b{width:60px;overflow:visible;white-space:nowrap}' }))
+    expect(vis.clips).toEqual([])
+  })
+
+  it('skips a visually hidden clip box', async () => {
+    const m = await modelOf(page('<span class="sr">نص طويل جدا جدا</span>', { css: '.sr{position:absolute;width:1px;height:1px;overflow:hidden;white-space:nowrap}' }))
+    expect(m.clips).toEqual([])
+  })
+
+  it('reads a y-axis clip: a fixed-height box that cuts its text', async () => {
+    const m = await modelOf(page('<div class="b">نص عربي</div>', { css: '.b{height:10px;overflow:hidden;line-height:1.7}' }))
+    expect(m.clips).toHaveLength(1)
+    expect(m.clips[0]).toMatchObject({ axis: 'y', ellipsis: false, hasArabic: true })
+    expect(m.clips[0]!.hidden).toBeGreaterThan(2)
+  })
+
+  it('reads no clip when the box scrolls for an oversized image but its caption fits', async () => {
+    const img = '<img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" style="display:block;width:600px;height:20px">'
+    const m = await modelOf(page(`<div class="card">${img}<p>وصف قصير</p></div>`, { css: '.card{width:200px;overflow:hidden}' }))
+    expect(m.clips).toEqual([])
+  })
+
+  it('reads no clip for text that fits in an overflow:hidden box', async () => {
+    const m = await modelOf(page('<div class="b">نص قصير</div>', { css: '.b{width:300px;overflow:hidden}' }))
+    expect(m.clips).toEqual([])
+  })
+
+  it('reads a clip from the text of an inline descendant', async () => {
+    const m = await modelOf(page('<div class="b"><b>نص عربي طويل جدا يتجاوز العرض بكثير ولا يتسع</b></div>', { css: '.b{width:60px;overflow:hidden;white-space:nowrap}' }))
+    expect(m.clips).toHaveLength(1)
+  })
+
+  it('does not read a clip for text inside an .sr-only ancestor', async () => {
+    const css = '.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.in{overflow:hidden;width:20px;white-space:nowrap}'
+    const m = await modelOf(page('<div class="sr-only"><div class="in">نص عربي طويل جدا جدا جدا</div></div>', { css }))
+    expect(m.clips).toEqual([])
+  })
+
+  it.each(['inset(100%)', 'inset(0 0 100% 0)', 'inset(50%)'])('treats clip-path %s as visually hidden', async (clipPath) => {
+    const m = await modelOf(page('<span class="h">للقراءة فقط</span><p>ظاهر</p>', { css: `.h{clip-path:${clipPath};position:absolute;white-space:nowrap}` }))
+    expect(m.texts.map((t) => t.text)).toEqual(['ظاهر'])
+  })
+
+  it('names the nearest flipping element as mirroredBy, and null for a double flip', async () => {
+    const m = await modelOf(page('<div id="a" style="transform:scaleX(-1)"><p id="b">مرحبا</p><p id="c">بكم</p></div><div style="transform:scaleX(-1)"><div style="transform:scaleX(-1)"><p>مزدوج</p></div></div>'))
+    expect(m.texts.map((t) => [t.text, t.mirroredBy === null ? null : t.mirroredBy.length > 0])).toEqual([['مرحبا', true], ['بكم', true], ['مزدوج', null]])
+    expect(m.texts[0]!.mirroredBy).toBe(m.texts[1]!.mirroredBy)
+    expect(m.texts[0]!.mirroredBy).not.toBe(m.texts[0]!.id)
+  })
+
+  it('reads mirrored as the product of scale signs', async () => {
+    const m = await modelOf(page('<p style="transform:scaleX(-1)">مرحبا</p><div style="transform:scaleX(-1)"><div style="transform:scaleX(-1)"><p>بكم</p></div></div><p>عادي</p>'))
+    expect(m.texts.map((t) => [t.text, t.mirrored])).toEqual([['مرحبا', true], ['بكم', false], ['عادي', false]])
   })
 })
