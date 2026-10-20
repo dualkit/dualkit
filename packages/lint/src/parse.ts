@@ -27,7 +27,7 @@ const PLUGINS: Readonly<Record<JsLang, ParserPlugin[]>> = { ts: ['typescript'], 
 
 function parseJs(text: string, lang: JsLang, offset: number): JsBlock {
   const run = (plugins: ParserPlugin[]): JsBlock['ast'] =>
-    parseBabel(text, { sourceType: 'unambiguous', errorRecovery: false, plugins }) as JsBlock['ast']
+    parseBabel(text, { sourceType: 'unambiguous', errorRecovery: false, allowReturnOutsideFunction: true, plugins }) as JsBlock['ast']
   if (lang !== 'js') return { ast: run(PLUGINS[lang]), offset, lang }
   try {
     return { ast: run(PLUGINS.js), offset, lang }

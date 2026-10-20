@@ -26,6 +26,10 @@ describe('parseSource', () => {
     expect(parseSource('a.js', 'const r = a < b > c\n')?.js).toHaveLength(1)
   })
 
+  it('parses a top-level return in a .cjs file', () => {
+    expect(parseSource('a.cjs', 'if (module.parent) return\nmodule.exports = 1\n')?.js).toHaveLength(1)
+  })
+
   it('parses SCSS interpolation and & nesting', () => {
     const file = parseSource('a.scss', '$side: left;\n.a { margin-#{$side}: 1px; &:hover { padding-#{$side}: 2px; } }\n')
     expect(file?.css).toHaveLength(1)

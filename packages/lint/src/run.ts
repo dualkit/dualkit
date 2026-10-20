@@ -1,4 +1,3 @@
-import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { parseSource, parseSourceOutcome } from './parse'
 import { lineStarts, positionAt } from './position'
@@ -52,17 +51,15 @@ export function lintText(
 
 /** Walks paths under cwd and lints every supported file. A file that cannot be read or parsed is listed in skipped. */
 export async function lint(paths: string[], options: { cwd: string } & RuleOptions): Promise<LintResult> {
-  const { files, skipped: walkSkipped } = walk(paths, options.cwd)
+  const { files, skipped: walkSkipped, texts } = walk(paths, options.cwd)
   const rules = activeRules(options)
   const skipped: Skipped[] = [...walkSkipped]
   const findings: LintFinding[] = []
   let linted = 0
   for (const path of files) {
     const abs = resolve(options.cwd, path)
-    let text: string
-    try {
-      text = await readFile(abs, 'utf8')
-    } catch {
+    const text = texts.get(path)
+    if (text === undefined) {
       skipped.push({ file: path, reason: 'unreadable' })
       continue
     }

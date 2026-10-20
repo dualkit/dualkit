@@ -10,13 +10,15 @@ export const MINIFIED_LINE = 500
 
 const toPosix = (p: string): string => p.split(sep).join('/')
 
-export const isLintable = (name: string): boolean => !/\.d\.[mc]?ts$/.test(name) && EXTENSIONS.some((ext) => name.endsWith(ext))
+export const isLintable = (name: string): boolean => {
+  const lower = name.toLowerCase()
+  return !/\.d\.[mc]?ts$/.test(lower) && EXTENSIONS.some((ext) => lower.endsWith(ext))
+}
 
 /** Over 1 MB, or an average line longer than 500 characters. */
-export function isMinified(abs: string, size: number): boolean {
-  if (size > MINIFIED_BYTES) return true
-  if (size <= MINIFIED_LINE) return false
-  const text = readFileSync(abs, 'utf8')
+export function isMinified(text: string): boolean {
+  if (text.length > MINIFIED_BYTES) return true
+  if (text.length <= MINIFIED_LINE) return false
   let lines = 1
   for (let i = text.indexOf('\n'); i !== -1; i = text.indexOf('\n', i + 1)) lines++
   return text.length / lines > MINIFIED_LINE
@@ -49,7 +51,8 @@ function gitignores(root: string): (abs: string, isDir: boolean) => boolean {
   }
 }
 
-type Walked = { files: string[]; skipped: Skipped[] }
+/** texts holds what was read for the minified check, keyed like files, so lint reads each file once. */
+export type Walked = { files: string[]; skipped: Skipped[]; texts: ReadonlyMap<string, string> }
 
 /** Lists lintable files under paths, relative to cwd with forward slashes. Symlinked directories are not followed. */
 export function walk(paths: string[], cwd: string): Walked {
@@ -57,13 +60,30 @@ export function walk(paths: string[], cwd: string): Walked {
   const files = new Set<string>()
   const skipped: Skipped[] = []
   const seen = new Set<string>()
+  const texts = new Map<string, string>()
 
   const addFile = (abs: string, size: number): void => {
     const rel = toPosix(relative(cwd, abs))
     if (seen.has(rel)) return
     seen.add(rel)
-    if (isMinified(abs, size)) skipped.push({ file: rel, reason: 'minified' })
-    else files.add(rel)
+    // Over 1 MB is minified without reading it.
+    if (size > MINIFIED_BYTES) {
+      skipped.push({ file: rel, reason: 'minified' })
+      return
+    }
+    let text: string
+    try {
+      text = readFileSync(abs, 'utf8')
+    } catch {
+      skipped.push({ file: rel, reason: 'unreadable' })
+      return
+    }
+    if (isMinified(text)) {
+      skipped.push({ file: rel, reason: 'minified' })
+      return
+    }
+    files.add(rel)
+    texts.set(rel, text)
   }
 
   const visit = (dir: string): void => {
@@ -91,9 +111,11 @@ export function walk(paths: string[], cwd: string): Walked {
     const stat = statSafe(abs)
     if (!stat) skipped.push({ file: toPosix(p), reason: 'not found' })
     else if (stat.isDirectory()) visit(abs)
-    else if (stat.isFile() && isLintable(abs)) addFile(abs, stat.size)
+    else if (!stat.isFile()) continue
+    else if (isLintable(abs)) addFile(abs, stat.size)
+    else skipped.push({ file: toPosix(p), reason: 'unsupported file type' })
   }
-  return { files: [...files].sort(compare), skipped }
+  return { files: [...files].sort(compare), skipped, texts }
 }
 
 function statSafe(abs: string): Stats | undefined {

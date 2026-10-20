@@ -22,6 +22,11 @@ describe('LINT.md', () => {
     expect(md).not.toContain('\u2014')
   })
 
+  it('names the HTML block and explicit path limits', () => {
+    expect(LINT_KNOWN_LIMITS.some((l) => l.includes('<script>') && l.includes('whole HTML file'))).toBe(true)
+    expect(LINT_KNOWN_LIMITS.some((l) => l.includes('.gitignore'))).toBe(true)
+  })
+
   it('renders each rule with an anchor that matches its docs link, and wraps HTML tags in code', () => {
     const rule = { ...wordRule('source/physical-css', 'x'), why: 'A <style> block is read.' }
     const md = renderLintMarkdown([rule])

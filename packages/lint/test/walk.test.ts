@@ -70,4 +70,19 @@ describe('walk', () => {
     expect(result.files).toEqual(['src/a.ts'])
     expect(result.skipped).toEqual([{ file: 'nope', reason: 'not found' }])
   })
+
+  it('matches extensions in any case', () => {
+    const root = tree({ 'FOO.HTML': '', 'Bar.CSS': '', 'x.D.TS': '' })
+    expect(walk(['.'], root).files).toEqual(['Bar.CSS', 'FOO.HTML'])
+  })
+
+  it('records an explicit file with an unsupported extension as skipped', () => {
+    const root = tree({ 'a.vue': '', 'b.d.ts': '' })
+    expect(walk(['a.vue', 'b.d.ts'], root)).toMatchObject({ files: [], skipped: [{ file: 'a.vue', reason: 'unsupported file type' }, { file: 'b.d.ts', reason: 'unsupported file type' }] })
+  })
+
+  it('hands back the text it read, so lint does not read a file twice', () => {
+    const root = tree({ 'a.css': '.a {}\n', 'empty.ts': '' })
+    expect(walk(['.'], root).texts).toEqual(new Map([['a.css', '.a {}\n'], ['empty.ts', '']]))
+  })
 })
