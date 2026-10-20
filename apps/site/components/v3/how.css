@@ -4,7 +4,7 @@
 .v3-how-lede { width: 400px; flex: none; }
 .v3-how-frame { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 80px; }
 .v3-how-cell { display: flex; flex-direction: column; gap: 24px; padding: 24px; min-width: 0; }
-.v3-how-cell + .v3-how-cell { border-left: 1px solid var(--v3-line); }
+.v3-how-cell + .v3-how-cell { border-inline-start: 1px solid var(--v3-line); }
 .v3-how-art { height: 240px; display: flex; align-items: center; justify-content: center; }
 .v3-how-text { display: flex; flex-direction: column; gap: 8px; }
 .v3-how-no { color: var(--v3-faint); }
@@ -12,7 +12,7 @@
 @media (max-width: 1199px) {
   .v3-how-frame { grid-template-columns: minmax(0, 1fr); }
   .v3-how-frame > .v3-tick:nth-child(n + 5) { display: none; }
-  .v3-how-cell + .v3-how-cell { border-left: 0; border-top: 1px solid var(--v3-line); }
+  .v3-how-cell + .v3-how-cell { border-inline-start: 0; border-top: 1px solid var(--v3-line); }
 }
 @media (max-width: 899px) {
   .v3-how-head { flex-direction: column; align-items: flex-start; gap: 20px; }
