@@ -67,3 +67,19 @@ describe('parseSource', () => {
     expect(result.skipped[0]?.reason).not.toContain('\n')
   })
 })
+
+describe('parseSource decorators and Flow', () => {
+  it('parses decorators in .ts and .tsx and keeps <T>y casts in .ts', () => {
+    expect(parseSource('a.ts', "@Injectable()\nexport class S {}\nconst x = <T>y\n")?.js).toHaveLength(1)
+    expect(parseSource('a.tsx', "@Component({})\nexport class C { @Input() v = 1 }\nexport const A = () => <div/>\n")?.js).toHaveLength(1)
+  })
+
+  it('retries a .js or .jsx file with an @flow pragma using the Flow plugin', () => {
+    expect(parseSource('a.js', '// @flow\nfunction f(x: number): string { return String(x) }\n')?.js).toHaveLength(1)
+    expect(parseSource('a.jsx', '/* @flow */\ntype P = { n: number }\nexport const A = (p: P) => <b>{p.n}</b>\n')?.js).toHaveLength(1)
+  })
+
+  it('does not parse Flow types without a pragma', () => {
+    expect(parseSource('a.js', 'function f(x: number): string { return String(x) }\n')).toBeNull()
+  })
+})

@@ -23,17 +23,28 @@ export function langOf(path: string): Lang | null {
 /** The text every offset refers to: a leading byte order mark is dropped, nothing else changes. */
 export const stripBom = (text: string): string => (text.startsWith(BOM) ? text.slice(1) : text)
 
-const PLUGINS: Readonly<Record<JsLang, ParserPlugin[]>> = { ts: ['typescript'], tsx: ['typescript', 'jsx'], js: ['jsx'], jsx: ['jsx'] }
+const PLUGINS: Readonly<Record<JsLang, ParserPlugin[]>> = {
+  ts: ['typescript', 'decorators-legacy'],
+  tsx: ['typescript', 'jsx', 'decorators-legacy'],
+  js: ['jsx'],
+  jsx: ['jsx'],
+}
+
+/** A `// @flow` or `/* @flow *\/` pragma comment. */
+const FLOW_PRAGMA = /(?:\/\/|\/\*|^\s*\*)[ \t]*@flow\b/m
 
 function parseJs(text: string, lang: JsLang, offset: number): JsBlock {
   const run = (plugins: ParserPlugin[]): JsBlock['ast'] =>
     parseBabel(text, { sourceType: 'unambiguous', errorRecovery: false, allowReturnOutsideFunction: true, plugins }) as JsBlock['ast']
-  if (lang !== 'js') return { ast: run(PLUGINS[lang]), offset, lang }
+  if (lang === 'ts' || lang === 'tsx') return { ast: run(PLUGINS[lang]), offset, lang }
   try {
-    return { ast: run(PLUGINS.js), offset, lang }
-  } catch {
+    return { ast: run(PLUGINS[lang]), offset, lang }
+  } catch (err) {
+    // A file marked @flow holds Flow types, which only the Flow plugin reads.
+    if (FLOW_PRAGMA.test(text)) return { ast: run(['flow', 'jsx']), offset, lang }
     // Plain JS can hold code that JSX reads differently, so a .js file gets one more try without it.
-    return { ast: run([]), offset, lang }
+    if (lang === 'js') return { ast: run([]), offset, lang }
+    throw err
   }
 }
 
