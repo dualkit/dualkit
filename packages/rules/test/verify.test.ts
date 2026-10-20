@@ -727,7 +727,8 @@ describe('type/arabic-broken-join matches what Chromium paints', () => {
   const widths = (html: string) => withPage(html, async (p) => (await charBoxes(p, '#w')).map((b) => Math.round((b.right - b.left) * 100) / 100))
   // Plex Bold loaded as its own family: different bytes, a real family boundary.
   const boldFamily = `@font-face{font-family:"Plex BoldFam";src:url(data:font/woff2;base64,${readFileSync(new URL('./fonts/IBMPlexSansArabic-Bold.woff2', import.meta.url)).toString('base64')}) format("woff2")}`
-  const wrap = (inner: string) => page(`<p id="w">${inner}</p>`, { css: boldFamily })
+  // 48px: Linux CI reports whole-pixel glyph boxes, and at 16px medial and initial meem both round to 8px.
+  const wrap = (inner: string) => page(`<p id="w" style="font-size:48px">${inner}</p>`, { css: boldFamily })
   const tail = (style: string) => `<span style="${style}">`
   const CASES: Array<{ name: string; style: string }> = [
     { name: 'b', style: 'font-weight:700' },
