@@ -4,6 +4,7 @@ import { lintText } from '../../src/run'
 
 const ID = 'source/old-rial-sign'
 const run = (code: string, path: string) => lintText(path, code, { rules: RULES.filter((r) => r.id === ID) })
+// dualkit-disable-next-line source/old-rial-sign -- test input for the rule
 const R = '﷼'
 const cols = (code: string, path: string) => run(code, path).map((f) => [f.line, f.column])
 

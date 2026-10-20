@@ -71,7 +71,9 @@ describe('coversCodePoint', () => {
 describe('content/old-rial-sign', () => {
   const id = 'content/old-rial-sign'
   it('flags U+FDFC with the exact copy', () => {
+    // dualkit-disable-next-line source/old-rial-sign -- test input for content/old-rial-sign
     const out = run(screen({ texts: [text({ text: '١٠٠ ﷼' })] }), id)
+    // dualkit-disable-next-line source/old-rial-sign -- asserts the check message
     expect(out.map((f) => f.message)).toEqual(['﷼ is the rial ligature, not the Saudi riyal sign.'])
     expect(out[0]?.fix).toBe('Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.')
     expect(out[0]?.severity).toBe('warning')

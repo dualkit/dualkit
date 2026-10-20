@@ -241,6 +241,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* Narrow screens */
 @media (max-width: 960px) {
   .links { display: none; }
+  /* dualkit-disable-next-line source/physical-css -- undoes the physical left: 50% centring and the drag position set in left */
   .win { position: relative; left: auto !important; top: auto !important; bottom: auto !important; translate: none !important; width: 100% !important; }
   .win.app { height: auto; }
   .convo .reply, .ask { display: none; }
@@ -370,6 +371,7 @@ button.bx-row:focus-visible, .bx-screen-head:focus-visible { outline-offset: -2p
 
 /* The range track: a hollow ring at the alone score, a line, a filled dot at the Dualkit score. Positions are cqw of the track. */
 .bx-track { position: relative; display: block; height: 16px; border-radius: 999px; background: var(--panel); container-type: inline-size; }
+/* dualkit-disable-next-line source/physical-css -- a score axis: the marks move by translateX, so they start from the physical left */
 .bx-track > i { position: absolute; top: 50%; left: 0; transition: transform 600ms var(--ease-expo) var(--delay, 0ms); }
 .bx-ring, .bx-point { width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 999px; }
 .bx-ring { z-index: 1; background: var(--page); box-shadow: inset 0 0 0 2px var(--ink); transform: translateX(calc(var(--a) * 1cqw)); }

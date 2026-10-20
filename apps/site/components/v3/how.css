@@ -36,6 +36,7 @@
 .v3-how-chip { display: flex; align-items: center; gap: 8px; height: 24px; padding-inline: 12px; font-size: 13px; font-weight: 500; line-height: 1; white-space: nowrap; }
 .v3-how-wires { position: relative; width: 56px; height: 104px; flex: none; }
 .v3-how-wires svg { display: block; }
+/* dualkit-disable-next-line source/physical-css -- the dot rides an SVG offset-path, which is drawn in physical coordinates */
 .v3-how-dot { position: absolute; left: 0; top: 0; width: 32px; height: 8px; offset-anchor: 100% 50%; offset-rotate: auto; offset-distance: 0%; opacity: 0; pointer-events: none;
   background: linear-gradient(#fff, #fff) right center / 8px 8px no-repeat, linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7)) left center / 24px 2px no-repeat; }
 .v3-how-node { position: relative; padding: 8px; flex: none; }

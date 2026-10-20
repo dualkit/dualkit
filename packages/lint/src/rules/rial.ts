@@ -5,6 +5,7 @@ import type { LintHit, LintRule, SourceFile } from '../types'
 
 type HtmlNode = DefaultTreeAdapterMap['node']
 
+// dualkit-disable-next-line source/old-rial-sign -- the sign this rule looks for
 const SIGN = '﷼'
 const SIGN_CODE = 0xfdfc
 const MESSAGE = 'U+FDFC is the rial sign, a ligature of the Persian word ریال, not the Saudi riyal sign.'
