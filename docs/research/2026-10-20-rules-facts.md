@@ -333,6 +333,30 @@ The rule passes the Plex bytes under "Brand Sans", "GE SS Two" and "HelveticaNeu
 
 The rule now also needs a right-to-left page.
 
+### 9f. The hidden face of a flip card is not painted
+
+A 200 by 100px card under `perspective:600px` with `transform-style:preserve-3d`. Both faces are absolutely placed with `backface-visibility:hidden`; the back face (blue) carries `rotateY(180deg)`, the front face is red. Counted pixels in a screenshot of the card:
+
+| Card | Front face pixels | Back face pixels | mirrored-text before | after |
+|---|---|---|---|---|
+| Not turned | 576 | 0 | REPORTED on the back face | QUIET |
+| Turned (`rotateY(180deg)` on the card) | 0 | 549 | REPORTED on the front face | QUIET |
+| Back face under `rotateY(180deg)` without `backface-visibility:hidden` | | | REPORTED | REPORTED |
+
+The reader now skips a run when an element on its chain, up to and including the farthest flip, has `backface-visibility:hidden` and the product of the flip signs from that element up is negative. On the turned card the back face's own flip cancels the card's, so it is not mirrored, and the front face shows its back, so it is hidden.
+
+### 9g. Text in a translated track is a mask
+
+A 300px `overflow:hidden` box over a `display:flex; width:max-content` track of two 250px slides, the second peeking in. Before, the peeking slide read as 124px of text cut off sideways. A run is now dropped from the gap when an element between it and the clip box, not counting the clip box itself, moves by a translate: the `translate` property, or a `transform` with a translation or an identity linear part (Swiper and Embla leave a track at rest at `translate3d(0,0,0)`).
+
+| Case | Verdict |
+|---|---|
+| Track with `translateX(50px)`, `translate3d(-40px,0,0)`, `translate:30px` or `translate3d(0,0,0)` | QUIET |
+| Same track with no transform at all (the reviewer's `peek-carousel` page) | REPORTED, 124px. Nothing on the page says it is a carousel; a too-wide row looks the same |
+| 60px Arabic button whose label runs past it | REPORTED |
+| The same button with its own `translateY(-2px)` or `translate(0,0)` | REPORTED (the clip box moves with its text) |
+| The same button inside a `rotate(2deg)` box | REPORTED |
+
 ---
 
 ## Tally
@@ -351,4 +375,4 @@ The rule now also needs a right-to-left page.
 | 6 Currency signs in webfonts (fix round) | VERIFIED, see the probes in `verify.test.ts` |
 | 7 Mirrored and clipped text (Task 6) | VERIFIED, see the probes in `verify.test.ts`. Dot-below ink beyond the line box is a stated limit |
 | 8 Split Arabic words (Task 7) | VERIFIED: inline-block and inline-flex break; b, colour and padding join. Font-family is platform-dependent (breaks with Geeza Pro and Al Nile on macOS, joins between Plex faces) and is measured per page. Serif fallback UNCERTAIN, not claimed |
-| 9 Final review fixes | VERIFIED, see the probes in `joins-boxes`, `flips`, `clips`, `fonts-measured` and `verify` tests. A read-more box with max-height is a stated limit |
+| 9 Final review fixes | VERIFIED, see the probes in `joins-boxes`, `flips`, `clips`, `fonts-measured` and `verify` tests. A read-more box with max-height is a stated limit. Flip card back faces (9f) and translated tracks (9g) measured; an untranslated over-wide track still reports |
