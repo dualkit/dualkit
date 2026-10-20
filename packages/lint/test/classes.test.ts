@@ -103,3 +103,17 @@ describe('classStrings is not a guess', () => {
     expect(tokens('a.html', '<div class="a"></div><script>el.className = clsx("ml-2")</script>')).toEqual(['a', 'ml-2'])
   })
 })
+
+describe('classStrings groups', () => {
+  const groups = (path: string, text: string): string[][] => {
+    const file = parseSource(path, text)!
+    const by = new Map<number, string[]>()
+    for (const f of classStrings(file)) by.set(f.group, [...(by.get(f.group) ?? []), f.text])
+    return [...by.values()]
+  }
+  it('gives one group per JSX attribute, top-level class call, HTML class attribute and @apply', () => {
+    expect(groups('a.jsx', '<a className={cn("a", on ? "b" : "c", ["d"])} /> ; cn("e", cx("f")); clsx("g")')).toEqual([['a', 'b', 'c', 'd'], ['e', 'f'], ['g']])
+    expect(groups('a.html', '<p class="a"></p><p class="b"></p>')).toEqual([['a'], ['b']])
+    expect(groups('a.css', '.x { @apply a; } .y { @apply b; }')).toEqual([['a'], ['b']])
+  })
+})

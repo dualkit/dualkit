@@ -62,8 +62,22 @@ describe('tailwindVersion', () => {
     expect(tailwindVersion(join(root, 'a.tsx'), root)).toBe('3.3.2')
   })
 
-  it('does not look above root', () => {
-    const outer = tree({ 'package.json': pkg({ tailwindcss: '^3.4.0' }), 'inner/a.tsx': '' })
+  it('walks up past cwd to a tailwind declared at the repo root', () => {
+    const root = tree({ '.git/HEAD': '', 'package.json': pkg({ tailwindcss: '^3.4.1' }), 'apps/web/package.json': pkg({ react: '^19.0.0' }), 'apps/web/a.tsx': '' })
+    expect(createTailwindVersion()(join(root, 'apps/web/a.tsx'), join(root, 'apps/web'))).toBe('3.4.1')
+  })
+
+  it('stops at a folder holding .git', () => {
+    const outer = tree({ 'package.json': pkg({ tailwindcss: '^3.4.0' }), 'node_modules/tailwindcss/package.json': installed('3.4.9'), 'inner/.git': 'gitdir: x', 'inner/a.tsx': '' })
     expect(tailwindVersion(join(outer, 'inner/a.tsx'), join(outer, 'inner'))).toBeNull()
+  })
+
+  it('uses the installed copy only when it satisfies the range', () => {
+    const stale = tree({ 'package.json': pkg({ tailwindcss: '^4.2.0' }), 'node_modules/tailwindcss/package.json': installed('3.4.17'), 'a.tsx': '' })
+    expect(tailwindVersion(join(stale, 'a.tsx'), stale)).toBe('4.2.0')
+    for (const range of ['workspace:*', 'catalog:', '*', 'latest']) {
+      const root = tree({ 'package.json': pkg({ tailwindcss: range }), 'node_modules/tailwindcss/package.json': installed('4.1.0'), 'a.tsx': '' })
+      expect(tailwindVersion(join(root, 'a.tsx'), root), range).toBe('4.1.0')
+    }
   })
 })

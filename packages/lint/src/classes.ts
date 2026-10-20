@@ -5,8 +5,12 @@ import type { SourceFile } from './types'
 type HtmlNode = DefaultTreeAdapterMap['node']
 type Element = DefaultTreeAdapterMap['element']
 
-/** A statically known piece of a class list. offset is where text starts in SourceFile.text. */
-export type ClassFragment = { offset: number; text: string }
+/**
+ * A statically known piece of a class list. offset is where text starts in SourceFile.text.
+ * group is shared by every fragment of one class source: one JSX attribute value, one top-level class
+ * call with all its arguments, one HTML class attribute or one @apply.
+ */
+export type ClassFragment = { offset: number; text: string; group: number }
 
 /** Calls whose string arguments are class lists. cva and tv also take a config object, read by configClasses. */
 const CLASS_CALLS = new Set(['clsx', 'cn', 'cx', 'twMerge', 'twJoin', 'classnames', 'classNames'])
@@ -17,7 +21,10 @@ const COMPOUND_CLASS_KEYS = new Set(['class', 'className'])
 
 const SPACE = /\s/
 
-type Sink = { file: SourceFile; base: number; out: Map<number, ClassFragment> }
+type Out = { map: Map<number, ClassFragment>; groups: number }
+type Sink = { file: SourceFile; base: number; out: Out; group: number }
+
+const nextGroup = (out: Out): number => ++out.groups
 
 /**
  * Adds the text between start and end. A side marked cut touches dynamic code, so a token
@@ -29,7 +36,7 @@ function emit(sink: Sink, start: number, end: number, cutStart: boolean, cutEnd:
   let to = sink.base + end
   if (cutStart) while (from < to && !SPACE.test(text[from]!)) from++
   if (cutEnd) while (to > from && !SPACE.test(text[to - 1]!)) to--
-  if (to > from && !sink.out.has(from)) sink.out.set(from, { offset: from, text: text.slice(from, to) })
+  if (to > from && !sink.out.map.has(from)) sink.out.map.set(from, { offset: from, text: text.slice(from, to), group: sink.group })
 }
 
 /** A string literal's content, without its quotes. */
@@ -156,10 +163,12 @@ const SKIP_KEYS = new Set(['loc', 'leadingComments', 'trailingComments', 'innerC
 function visit(sink: Sink, node: Node): void {
   if (node.type === 'JSXAttribute' && node.name.type === 'JSXIdentifier' && CLASS_ATTRS.has(node.name.name)) {
     const value = node.value
-    if (value?.type === 'StringLiteral') literal(sink, value)
-    else if (value?.type === 'JSXExpressionContainer' && value.expression.type !== 'JSXEmptyExpression') classExpr(sink, value.expression as Expression)
+    const attr = { ...sink, group: nextGroup(sink.out) }
+    if (value?.type === 'StringLiteral') literal(attr, value)
+    else if (value?.type === 'JSXExpressionContainer' && value.expression.type !== 'JSXEmptyExpression') classExpr(attr, value.expression as Expression)
   } else if (node.type === 'CallExpression') {
-    classCall(sink, node)
+    // A call already read as part of an outer source keeps that source's group: its offsets are taken.
+    classCall({ ...sink, group: nextGroup(sink.out) }, node)
   }
   for (const key of VISITOR_KEYS[node.type] ?? []) {
     if (SKIP_KEYS.has(key)) continue
@@ -180,7 +189,7 @@ function* elements(node: HtmlNode): Generator<Element> {
 
 const QUOTED_VALUE = /^[^=]*=\s*(["']?)/
 
-function htmlClasses(file: SourceFile, out: Map<number, ClassFragment>): void {
+function htmlClasses(file: SourceFile, out: Out): void {
   if (!file.html) return
   for (const el of elements(file.html)) {
     const loc = el.sourceCodeLocation?.attrs?.class
@@ -190,26 +199,26 @@ function htmlClasses(file: SourceFile, out: Map<number, ClassFragment>): void {
     if (!head) continue
     const start = loc.startOffset + head[0].length
     const end = loc.endOffset - (head[1] ? 1 : 0)
-    if (end > start) out.set(start, { offset: start, text: file.text.slice(start, end) })
+    if (end > start) out.map.set(start, { offset: start, text: file.text.slice(start, end), group: nextGroup(out) })
   }
 }
 
-function applyClasses(file: SourceFile, out: Map<number, ClassFragment>): void {
+function applyClasses(file: SourceFile, out: Out): void {
   for (const block of file.css) {
     block.root.walkAtRules((rule) => {
       const start = rule.source?.start?.offset
       if (rule.name.toLowerCase() !== 'apply' || start === undefined || !rule.params) return
       const offset = block.offset + start + 1 + rule.name.length + (rule.raws.afterName?.length ?? 0)
-      if (file.text.startsWith(rule.params, offset)) out.set(offset, { offset, text: rule.params })
+      if (file.text.startsWith(rule.params, offset)) out.map.set(offset, { offset, text: rule.params, group: nextGroup(out) })
     })
   }
 }
 
 /** Every statically known class-list fragment in the file, in file order. Other strings and comments are never read. */
 export function classStrings(file: SourceFile): ClassFragment[] {
-  const out = new Map<number, ClassFragment>()
+  const out: Out = { map: new Map(), groups: 0 }
   htmlClasses(file, out)
-  for (const block of file.js) visit({ file, base: block.offset, out }, block.ast.program)
+  for (const block of file.js) visit({ file, base: block.offset, out, group: 0 }, block.ast.program)
   applyClasses(file, out)
-  return [...out.values()].sort((a, b) => a.offset - b.offset)
+  return [...out.map.values()].sort((a, b) => a.offset - b.offset)
 }

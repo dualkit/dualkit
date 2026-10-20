@@ -1,5 +1,5 @@
 import { coerce, compare, lt, type SemVer } from 'semver'
-import { classStrings } from '../classes'
+import { classStrings, type ClassFragment } from '../classes'
 import type { LintHit, LintRule } from '../types'
 
 export type TailwindEntry = { pattern: RegExp; replace: (cls: string) => string | null; since: string }
@@ -74,9 +74,12 @@ function parseClass(token: string): ParsedClass {
   return { variants: parts, important: [pre, post], negative, core }
 }
 
-/** rtl or ltr as a whole word anywhere in a variant: rtl:, ltr:, group-[dir=rtl]:, [dir=rtl]_&:, [&:dir(rtl)]:. */
-const DIRECTION_VARIANT = /(^|[^a-z0-9])(rtl|ltr)(?![a-z0-9])/i
-const directionScoped = (variants: readonly string[]): boolean => variants.some((v) => DIRECTION_VARIANT.test(v))
+/**
+ * rtl, ltr, left or right as a whole word anywhere in a variant: rtl:, group-[dir=rtl]:, [dir=rtl]_&:,
+ * [&:dir(rtl)]:, data-[side=left]:. Under such a variant the side is chosen on purpose.
+ */
+const SIDED_VARIANT = /(^|[^a-z0-9])(rtl|ltr|left|right)(?![a-z0-9])/i
+const sideScoped = (variants: readonly string[]): boolean => variants.some((v) => SIDED_VARIANT.test(v))
 
 /** The side word in a physical class, so it can be mirrored. */
 const SIDE = /^((?:scroll-)?[mp]|rounded-[tb]?|border-|text-|float-|clear-|)(left|right|l|r)(?=-|$)/
@@ -88,9 +91,19 @@ const key = (variants: readonly string[], negative: string, core: string): strin
 
 /** left-1/2 with a 50% x translate centres the box in either direction. */
 const HALF = new Set(['1/2', '[50%]'])
+/** Cores only, so -translate-x-1/2 and translate-x-1/2 both arrive as translate-x-1/2. */
+const HALF_TRANSLATES = ['translate-x-1/2', 'translate-x-[50%]', 'translate-x-[-50%]']
 const isCentring = (core: string, cores: ReadonlySet<string>): boolean => {
   const match = /^(?:left|right)-(.+)$/.exec(core)
-  return match !== null && HALF.has(match[1]!) && [...HALF].some((v) => cores.has(`translate-x-${v}`))
+  return match !== null && HALF.has(match[1]!) && HALF_TRANSLATES.some((t) => cores.has(t))
+}
+
+/** -left-[9999px] or right-[-9999px]: far offscreen on either side, as in physical-css. */
+const OFFSCREEN = /^(?:left|right)-\[(-?)(\d+(?:\.\d+)?)[a-z%]*\]$/
+const OFFSCREEN_MIN = 999
+const isOffscreen = (negative: string, core: string): boolean => {
+  const match = OFFSCREEN.exec(core)
+  return match !== null && (negative === '-') !== (match[1] === '-') && Number(match[2]) >= OFFSCREEN_MIN
 }
 
 function messageFor(token: string, parsed: ParsedClass, matches: readonly TailwindEntry[], version: SemVer): string {
@@ -107,14 +120,16 @@ function messageFor(token: string, parsed: ParsedClass, matches: readonly Tailwi
   return `\`${token}\` stays on the ${side} in Arabic. Use \`${fixed}\`.`
 }
 
-function checkFragment(text: string, offset: number, version: SemVer): LintHit[] {
-  const tokens = [...text.matchAll(/\S+/g)].map((m) => ({ token: m[0], at: offset + m.index, parsed: parseClass(m[0]) }))
+/** Checks one class source. Pairs and centring are judged across all of its fragments; hits stay per token. */
+function checkSource(fragments: readonly ClassFragment[], version: SemVer): LintHit[] {
+  const tokens = fragments.flatMap((f) =>
+    [...f.text.matchAll(/\S+/g)].map((m) => ({ token: m[0], at: f.offset + m.index, parsed: parseClass(m[0]) })))
   const keys = new Set(tokens.map(({ parsed: p }) => key(p.variants, p.negative, p.core)))
   const cores = new Set(tokens.map(({ parsed: p }) => p.core))
   const hits: LintHit[] = []
   for (const { token, at, parsed } of tokens) {
     const matches = TAILWIND_MAP.filter((e) => e.pattern.test(parsed.core))
-    if (matches.length === 0 || directionScoped(parsed.variants)) continue
+    if (matches.length === 0 || sideScoped(parsed.variants) || isOffscreen(parsed.negative, parsed.core)) continue
     if (keys.has(key(parsed.variants, parsed.negative, mirror(parsed.core))) || isCentring(parsed.core, cores)) continue
     hits.push({ offset: at, message: messageFor(token, parsed, matches, version) })
   }
@@ -126,12 +141,14 @@ const physicalTailwind: LintRule = {
   severity: 'warning',
   title: 'Use logical Tailwind classes instead of left and right',
   why: 'A physical class such as ml-4, pr-2, left-0, text-left or rounded-l-lg stays on the same side in Arabic, so the margin, padding, offset, alignment or corner is on the wrong edge.',
-  fix: 'Use the logical class, such as ms-4, pe-2, start-0 (inset-s-0 from Tailwind 4.2), text-start or rounded-s-lg, so the side follows the reading direction. Keep a physical class only under an rtl: or ltr: variant.',
+  fix: 'Use the logical class, such as ms-4, pe-2, start-0 (inset-s-0 from Tailwind 4.2), text-start or rounded-s-lg, so the side follows the reading direction. Keep a physical class only under an rtl:, ltr: or side variant such as data-[side=left]:.',
   langs: ['css', 'scss', 'html', 'js', 'jsx', 'ts', 'tsx'],
   check: (file, ctx) => {
     const version = coerce(ctx.tailwindVersion(file))
     if (!version || lt(version, FLOOR)) return []
-    return classStrings(file).flatMap((f) => checkFragment(f.text, f.offset, version))
+    const sources = new Map<number, ClassFragment[]>()
+    for (const f of classStrings(file)) sources.set(f.group, [...(sources.get(f.group) ?? []), f])
+    return [...sources.values()].flatMap((fragments) => checkSource(fragments, version)).sort((a, b) => a.offset - b.offset)
   },
 }
 

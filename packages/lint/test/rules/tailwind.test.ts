@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { RULES } from '../../src/rules'
 import { TAILWIND_MAP } from '../../src/rules/tailwind'
@@ -161,5 +162,41 @@ describe('lint wires the installed version', () => {
     })
     const result = await lint(['.'], { cwd: root, rules })
     expect(result.findings.map((f) => f.file)).toEqual(['src/a.tsx'])
+  })
+})
+
+describe('fix round 1', () => {
+  it('shadcn Dialog: the centred content is quiet, the close button and header alignment fire', () => {
+    const src = readFileSync(new URL('../fixtures/shadcn-dialog.tsx.txt', import.meta.url), 'utf8')
+    expect(run(src).map((f) => f.message.split('`')[1])).toEqual(['right-4', 'sm:text-left'])
+  })
+
+  const centred = [
+    'left-1/2 -translate-x-1/2', 'left-1/2 translate-x-[-50%]', 'left-[50%] -translate-x-[50%]', 'left-[50%] translate-x-[-50%]',
+    'right-1/2 translate-x-1/2', 'right-[50%] translate-x-[50%]', 'right-1/2 -translate-x-1/2', 'right-[50%] translate-x-[-50%]',
+  ]
+  for (const cls of centred) it(`centring: ${cls}`, () => expect(fired(cls)).toEqual([]))
+
+  it('pairs and centring are judged per class source, not per string', () => {
+    const quietSrc = [
+      'cn("absolute left-1/2 top-0", "-translate-x-1/2")', "cn('ml-2', 'mr-2')", "cn('pl-4', on && 'pr-4')",
+      'export const A = () => <a className={on ? "left-0" : "right-0"} />', "cva('ml-2', { variants: { a: { b: 'mr-2' } } })",
+    ]
+    for (const src of quietSrc) expect(run(src), src).toEqual([])
+    expect(run("cn('ml-2'); cn('mr-2')")).toHaveLength(2)
+    expect(run('export const A = () => <><a className="ml-2" /><b className="mr-2" /></>')).toHaveLength(2)
+    expect(run('<p class="ml-2"></p><p class="mr-2"></p>', 'a.html')).toHaveLength(2)
+    expect(run('.a { @apply ml-2; } .b { @apply mr-2; }', 'a.css')).toHaveLength(2)
+  })
+
+  it('skips a class under a variant naming left or right, which is physical on purpose', () => {
+    for (const cls of ['data-[side=left]:mr-2', 'group-data-[side=right]:border-l', 'data-[side=right]:slide-in-from-left-2 data-[side=left]:pr-2']) expect(fired(cls), cls).toEqual([])
+    expect(fired('data-[state=open]:ml-2')).toHaveLength(1)
+    expect(fired('leftish:ml-2')).toHaveLength(1)
+  })
+
+  it('skips offscreen offsets of 999 or more', () => {
+    for (const cls of ['-left-[9999px]', 'right-[-9999px]', '-right-[999px]', 'left-[-10000em]']) expect(fired(cls), cls).toEqual([])
+    for (const cls of ['-left-[998px]', 'left-[9999px]', '-left-4']) expect(fired(cls), cls).toHaveLength(1)
   })
 })
