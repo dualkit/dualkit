@@ -79,37 +79,40 @@ function hasSymmetricSibling(decl: Declaration, prop: string, value: string): bo
   return (parent.nodes ?? []).some((n) => n.type === 'decl' && n.prop.toLowerCase() === opposite && normalise(n.value) === value)
 }
 
-/** The property family an override must set to count: the same edge kind, either side. */
-function familyOf(prop: string): string | null {
-  if (/^(?:left|right|inset(?:-inline(?:-start|-end)?)?)$/.test(prop)) return 'inset'
-  if (prop.startsWith('margin')) return 'margin'
-  if (prop.startsWith('padding')) return 'padding'
-  if (/^border-.*radius$/.test(prop) || prop === 'border-radius') return 'radius'
-  if (prop.startsWith('border')) return 'border'
-  return prop === 'float' || prop === 'clear' || prop === 'text-align' ? prop : null
+/** Shorthands that also set a physical property, so an override written with them resets it. */
+function coveringProps(prop: string): string[] {
+  const out = [prop]
+  const side = /^(margin|padding|border)-(left|right)(?:-(width|style|color))?$/.exec(prop)
+  if (side) {
+    const [, box, , part] = side
+    out.push(box!, `${box}-inline`)
+    if (part) out.push(`${box}-${side[2]}`, `border-${part}`, `border-inline-${part}`)
+  } else if (prop === 'left' || prop === 'right') out.push('inset', 'inset-inline')
+  else if (/^border-(?:top|bottom)-(?:left|right)-radius$/.test(prop)) out.push('border-radius')
+  return out
 }
 
-/** selector|family for every direction-scoped rule in the file, with the direction parts removed from the selector. */
+/** selector|property for every declaration in a direction-scoped rule in the file, with the direction parts removed from the selector. */
 function directionOverrides(file: SourceFile): Set<string> {
   const out = new Set<string>()
   for (const block of file.css) {
     block.root.walkRules((rule) => {
-      const families = new Set((rule.nodes ?? []).flatMap((n) => (n.type === 'decl' ? [familyOf(n.prop.toLowerCase())] : [])))
+      const props = (rule.nodes ?? []).flatMap((n) => (n.type === 'decl' ? [n.prop.toLowerCase()] : []))
       for (const selector of fullSelectors(rule)) {
         if (!directionScoped(selector)) continue
         const base = withoutDirection(selector)
-        for (const family of families) if (family) out.add(`${base}|${family}`)
+        for (const prop of props) out.add(`${base}|${prop}`)
       }
     })
   }
   return out
 }
 
-/** Every selector of the rule has a direction-scoped twin in the file that sets the same family. */
+/** Every selector of the rule has a direction-scoped twin in the file that resets the same property, directly or by a shorthand. */
 function overridden(rule: Rule | null, prop: string, overrides: ReadonlySet<string>): boolean {
-  const family = familyOf(prop)
-  if (!rule || !family || overrides.size === 0) return false
-  return fullSelectors(rule).every((s) => overrides.has(`${withoutDirection(s)}|${family}`))
+  if (!rule || overrides.size === 0) return false
+  const covering = coveringProps(prop)
+  return fullSelectors(rule).every((s) => covering.some((p) => overrides.has(`${withoutDirection(s)}|${p}`)))
 }
 
 function physicalFix(prop: string, value: string): string | null {

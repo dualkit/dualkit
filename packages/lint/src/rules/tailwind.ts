@@ -84,19 +84,16 @@ const sideScoped = (variants: readonly string[]): boolean => variants.some((v) =
 /** rtl or ltr as a whole word in a variant: an explicit direction override. */
 const DIRECTION_VARIANT = /(^|[^a-z0-9])(rtl|ltr)(?![a-z0-9])/i
 
-/** Class families an rtl: or ltr: override can redo. Order matters: scroll-* before margin and padding. */
-const FAMILIES: readonly [string, RegExp][] = [
-  ['scroll-margin', /^scroll-m[xylrsetb]?-/],
-  ['scroll-padding', /^scroll-p[xylrsetb]?-/],
-  ['margin', /^m[xylrsetb]?-/],
-  ['padding', /^p[xylrsetb]?-/],
-  ['inset', /^(?:left|right|start|end|inset(?:-[xyse])?)-/],
-  ['rounded', /^rounded(?:-|$)/],
-  ['border', /^border-[lrsex](?:-|$)/],
-  ['text-align', /^text-(?:left|right|start|end|center|justify)$/],
-  ['float-clear', /^(?:float|clear)-/],
-]
-const familyOf = (core: string): string | null => FAMILIES.find(([, re]) => re.test(core))?.[0] ?? null
+/**
+ * The one physical property a class sets, such as ml for margin-left or rounded-tl for one corner.
+ * text-align, float and clear are single properties whichever side the class names.
+ */
+function propertyOf(core: string): string | null {
+  const single = /^(text|float|clear)-(?:left|right|start|end|center|justify|none|both)$/.exec(core)
+  if (single) return single[1]!
+  const side = SIDE.exec(core)
+  return side && side[1] !== 'text-' && side[1] !== 'float-' && side[1] !== 'clear-' ? `${side[1]}${side[2]}` : null
+}
 
 /** The side word in a physical class, so it can be mirrored. */
 const SIDE = /^((?:scroll-)?[mp]|rounded-[tb]?|border-|text-|float-|clear-|)(left|right|l|r)(?=-|$)/
@@ -176,12 +173,14 @@ function checkSource(fragments: readonly ClassFragment[], version: SemVer, bothN
     [...f.text.matchAll(/\S+/g)].map((m) => ({ token: m[0], at: f.offset + m.index, parsed: parseClass(m[0]), placed: { fragment, conditional: f.conditional }, sided: f.sided === true })))
   const keys = index(tokens.map(({ parsed: p, placed }) => [key(p.variants, p.negative, p.core), placed]))
   const cores = index(tokens.map(({ parsed: p, placed }) => [p.core, placed]))
-  const overridden = new Set(tokens.filter(({ parsed: p }) => p.variants.some((v) => DIRECTION_VARIANT.test(v))).map(({ parsed: p }) => familyOf(p.core)))
+  // A base is overridden only when an rtl: or ltr: class resets the same physical property, such as rtl:ml-0 for ml-4.
+  const overridden = new Set(tokens.filter(({ parsed: p }) => p.variants.some((v) => DIRECTION_VARIANT.test(v))).map(({ parsed: p }) => propertyOf(p.core)))
   const hits: LintHit[] = []
   for (const { token, at, parsed, placed, sided } of tokens) {
     const matches = TAILWIND_MAP.filter((e) => e.pattern.test(parsed.core))
     if (matches.length === 0 || sided || sideScoped(parsed.variants) || isOffscreen(parsed.negative, parsed.core)) continue
-    if (overridden.has(familyOf(parsed.core))) continue
+    const property = propertyOf(parsed.core)
+    if (property !== null && overridden.has(property)) continue
     const near = (map: Map<string, Placed[]>, k: string): boolean => (map.get(k) ?? []).some((p) => together(placed, p))
     const paired = near(keys, key(parsed.variants, parsed.negative, mirror(parsed.core)))
     if (paired || isCentring(parsed.core, (t) => near(cores, t))) continue
@@ -195,7 +194,7 @@ const physicalTailwind: LintRule = {
   severity: 'warning',
   title: 'Use logical Tailwind classes instead of left and right',
   why: 'A physical class such as ml-4, pr-2, left-0, text-left or rounded-l-lg stays on the same side in Arabic, so the margin, padding, offset, alignment or corner is on the wrong edge.',
-  fix: 'Use the logical class, such as ms-4, pe-2, start-0 (inset-s-0 from Tailwind 4.2), text-start or rounded-s-lg, so the side follows the reading direction. Keep a physical class only under an rtl:, ltr: or side variant such as data-[side=left]:, or beside an rtl: or ltr: override of the same family.',
+  fix: 'Use the logical class, such as ms-4, pe-2, start-0 (inset-s-0 from Tailwind 4.2), text-start or rounded-s-lg, so the side follows the reading direction. Keep a physical class only under an rtl:, ltr: or side variant such as data-[side=left]:, or beside an rtl: or ltr: class that resets the same property, as in ml-4 rtl:ml-0 rtl:mr-4.',
   langs: ['css', 'scss', 'html', 'js', 'jsx', 'ts', 'tsx'],
   check: (file, ctx) => {
     const version = coerce(ctx.tailwindVersion(file))
