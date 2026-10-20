@@ -15,8 +15,8 @@ type IntlCall = {
   options: Map<string, Node> | null
 }
 
-const TO_LOCALE: Readonly<Record<string, Kind>> = { toLocaleString: 'either', toLocaleDateString: 'date', toLocaleTimeString: 'date' }
-const INTL_CTORS: Readonly<Record<string, Kind>> = { NumberFormat: 'number', DateTimeFormat: 'date' }
+const TO_LOCALE: Readonly<Record<string, Kind>> = { toLocaleString: 'either', toLocaleDateString: 'date', toLocaleTimeString: 'date' } as const satisfies Record<string, Kind>
+const INTL_CTORS: Readonly<Record<string, Kind>> = { NumberFormat: 'number', DateTimeFormat: 'date' } as const satisfies Record<string, Kind>
 
 const isUndefined = (n: Node | null): boolean => n === null || (n.type === 'Identifier' && n.name === 'undefined')
 
@@ -101,7 +101,7 @@ export const INTL_RULES: readonly LintRule[] = [
         const first = call.locales?.[0]
         if (first === undefined || !isArabic(first) || call.options === null) return
         if (call.options.has('numberingSystem') || unicodeKeywords(first).has('nu')) return
-        hits.push({ offset: call.start, message: `The locale '${first}' has no numberingSystem and no -u-nu- extension, so the digits come from the runtime's CLDR data.` })
+        hits.push({ offset: call.start, message: `The locale '${first}' has no numberingSystem and no -u-nu- extension, so the default digits can vary by runtime.` })
       })
       return hits
     },
@@ -110,14 +110,14 @@ export const INTL_RULES: readonly LintRule[] = [
     id: 'source/islamic-calendar',
     severity: 'warning',
     title: 'Bare islamic calendar',
-    why: 'The bare islamic calendar is an approximation that can differ by a day from the calendar people in the Gulf use.',
+    why: 'CLDR ranks islamic-umalqura first among the Hijri calendars for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar, and the bare islamic calendar is a different calculation, so the same day can print a different Hijri date.',
     fix: 'Use islamic-umalqura, as calendar: "islamic-umalqura" or -u-ca-islamic-umalqura in the locale.',
     langs: JS_LANGS,
     check: (file) => {
       const hits: LintHit[] = []
       eachIntlCall(file, (call) => {
         if (!DATE_KINDS.has(call.kind) || calendarOf(call) !== BARE_ISLAMIC) return
-        hits.push({ offset: call.start, message: 'The calendar is the bare islamic, which can differ by a day from the calendar used in the Gulf.' })
+        hits.push({ offset: call.start, message: 'The calendar is the bare islamic, a different calculation from islamic-umalqura, so the Hijri date can differ.' })
       })
       return hits
     },
@@ -126,7 +126,7 @@ export const INTL_RULES: readonly LintRule[] = [
     id: 'source/hijri-time-zone',
     severity: 'warning',
     title: 'Hijri date without a time zone',
-    why: "Without timeZone, the Hijri date follows the machine's time zone, so a server in another zone can show yesterday's or tomorrow's date.",
+    why: "Without timeZone, Intl uses the time zone of the machine it runs on, and the same instant can fall on a different Hijri day in another zone, so a server elsewhere can show yesterday's or tomorrow's date.",
     fix: 'Pass a timeZone such as Asia/Riyadh or Asia/Dubai.',
     langs: JS_LANGS,
     check: (file) => {

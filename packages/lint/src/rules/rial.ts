@@ -15,6 +15,13 @@ const NUMERIC_REFERENCE = /&#(?:x([0-9a-f]+)|([0-9]+));/gi
 /** A CSS escape: a backslash and one to six hex digits. */
 const CSS_ESCAPE = /\\([0-9a-f]{1,6})/gi
 
+/** How many backslashes sit directly before index. An odd number means the backslash at index is itself escaped. */
+function backslashesBefore(text: string, index: number): number {
+  let n = 0
+  while (text[index - 1 - n] === '\\') n++
+  return n
+}
+
 const count = (text: string): number => text.split(SIGN).length - 1
 
 /** Offsets of the raw sign in source, and of each numeric reference to it when references are decoded. */
@@ -96,6 +103,7 @@ function cssHits(file: SourceFile): LintHit[] {
     const masked = withoutComments(css, block.root)
     const offsets = rawOffsets(masked, false)
     for (const m of masked.matchAll(CSS_ESCAPE)) {
+      if (backslashesBefore(masked, m.index!) % 2 === 1) continue
       if (Number.parseInt(m[1]!, 16) === SIGN_CODE) offsets.push(m.index!)
     }
     for (const i of offsets.sort((a, b) => a - b)) hits.push({ offset: block.offset + i, message: MESSAGE })

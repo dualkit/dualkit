@@ -79,5 +79,8 @@ describe('CSS', () => {
     expect(run(`// ${R}\na { color: red }`, 'a.scss')).toEqual([])
     expect(run('a::after { content: "\\FDFD" }', 'a.css')).toEqual([])
     expect(run('a::after { content: "\\FDFC1" }', 'a.css')).toEqual([])
+    expect(run('a::after { content: "\\\\FDFC" }', 'a.css')).toEqual([])
+    expect(cols('a::after { content: "\\\\\\FDFC" }', 'a.css')).toEqual([[1, 24]])
+    expect(cols('a::after { content: "\\\\\\FDFC" }', 'a.css')).toEqual([[1, 24]])
   })
 })

@@ -42,14 +42,14 @@ Generated from `src/rules`. Each rule reads source files, before anything render
 <a id="source-islamic-calendar"></a>
 ### `source/islamic-calendar` Bare islamic calendar
 
-**warning.** The bare islamic calendar is an approximation that can differ by a day from the calendar people in the Gulf use.
+**warning.** CLDR ranks islamic-umalqura first among the Hijri calendars for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar, and the bare islamic calendar is a different calculation, so the same day can print a different Hijri date.
 
 **Fix:** Use islamic-umalqura, as calendar: "islamic-umalqura" or -u-ca-islamic-umalqura in the locale.
 
 <a id="source-hijri-time-zone"></a>
 ### `source/hijri-time-zone` Hijri date without a time zone
 
-**warning.** Without timeZone, the Hijri date follows the machine's time zone, so a server in another zone can show yesterday's or tomorrow's date.
+**warning.** Without timeZone, Intl uses the time zone of the machine it runs on, and the same instant can fall on a different Hijri day in another zone, so a server elsewhere can show yesterday's or tomorrow's date.
 
 **Fix:** Pass a timeZone such as Asia/Riyadh or Asia/Dubai.
 
