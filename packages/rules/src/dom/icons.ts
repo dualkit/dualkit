@@ -1,4 +1,5 @@
 import type { IconNode } from '../model'
+import { offScreenWithin } from './hidden'
 import { flipSign, MIRROR_DEPTH } from './mirror'
 import { clean, dirOf, type Pred, type Ref, type Style } from './types'
 
@@ -9,16 +10,17 @@ const CANDIDATES = 'svg, img, i, span[class*="icon"], [data-icon], [data-lucide]
 /** PascalCase and camelCase become kebab-case, then everything is lowercased. */
 const kebab = (name: string): string => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 
-/** The aria-label of the nearest button or link, only when the icon is that control's sole visible content. */
+/** The aria-label of the nearest button or link, only when the icon is that control's sole visible content. Text or icons that are display:none, visibility:hidden or screen-reader-only do not count; aria-hidden alone still paints, so it does. */
 function soleControlLabel(el: Element): string {
   const control = el.closest('button, a')
   const label = clean(control?.getAttribute('aria-label') ?? '')
   if (!control || !label) return ''
   const walker = control.ownerDocument.createTreeWalker(control, NodeFilter.SHOW_TEXT)
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-    if (clean(node.textContent ?? '') && !node.parentElement?.closest('svg')) return ''
+    const parent = node.parentElement
+    if (clean(node.textContent ?? '') && parent && !parent.closest('svg') && !offScreenWithin(parent, control)) return ''
   }
-  const others = Array.from(control.querySelectorAll(CANDIDATES)).filter((c) => c !== el && !c.contains(el) && !el.contains(c))
+  const others = Array.from(control.querySelectorAll(CANDIDATES)).filter((c) => c !== el && !c.contains(el) && !el.contains(c) && !offScreenWithin(c, control))
   return others.length === 0 ? label : ''
 }
 

@@ -4,6 +4,7 @@ import { readFonts } from './fonts'
 import { readIcons } from './icons'
 import { readSigns } from './signs'
 import { readLabels } from './labels'
+import { screenReaderOnly } from './hidden'
 import { mirrorRoot } from './mirror'
 import { makePathOf } from './path'
 import { arabicShare, arabicWordCount, hasArabic } from '../text'
@@ -19,8 +20,6 @@ const splitCamel = (s: string): string => s.replace(/([a-z])([A-Z])/g, '$1 $2')
 const ISOLATING_DIR = /^(ltr|rtl|auto)$/i
 const BLOCK_TEXT_CAP = 600
 const BLOCK_TEXT_KEEP = 300
-const HIDDEN_CLIP_PATH = /^inset\(\s*(50%|100%|0(px)?\s+0(px)?\s+100%)/
-const CLIPPED = /^rect\(\s*(0|1)(px)?[\s,)]/
 
 export function readScreen(doc: Document, options: ReadOptions = {}): ScreenModel {
   const win = doc.defaultView!
@@ -108,13 +107,6 @@ function fontOf(s: CSSStyleDeclaration): Font {
     style: s.fontStyle.startsWith('oblique') ? 'oblique' : s.fontStyle === 'italic' ? 'italic' : 'normal',
     weight: parseInt(s.fontWeight, 10),
   }
-}
-
-/** The standard visually-hidden pattern: a 1px box, or a clip that leaves nothing showing. */
-function screenReaderOnly(el: Element, s: CSSStyleDeclaration): boolean {
-  const r = el.getBoundingClientRect()
-  if (r.width <= 1 && r.height <= 1) return true
-  return CLIPPED.test(s.clip) || HIDDEN_CLIP_PATH.test(s.clipPath)
 }
 
 function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, ref: Ref, rect: (r: DOMRect) => Rect, pathOf: (el: Element) => string, fonts: LoadedFace[]): TextRun[] {
