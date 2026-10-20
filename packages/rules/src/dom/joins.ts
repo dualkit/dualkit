@@ -8,7 +8,7 @@ import { type Pred, type Ref, type Style } from './types'
  */
 const NO_LEFT_JOIN = new RegExp(
   '[\\u0621\\u0622-\\u0625\\u0627\\u0629\\u062f-\\u0632\\u0648\\u0671-\\u0673\\u0674-\\u0677\\u0688-\\u0699\\u06c0\\u06c3-\\u06cb\\u06cd\\u06cf\\u06d2\\u06d3\\u06d5\\u06ee\\u06ef' +
-  '\\u0759-\\u075b\\u076b\\u076c\\u0771\\u0773\\u0774\\u0778\\u0779\\u08aa-\\u08ac\\u08ae\\u08b1\\u08b2\\u08b9]',
+  '\\u0759-\\u075b\\u076b\\u076c\\u0771\\u0773\\u0774\\u0778\\u0779\\u08aa-\\u08ad\\u08ae\\u08b1\\u08b2\\u08b9]',
 )
 const ARABIC_LETTER = /[\u0621-\u064a\u066e-\u06d3\u06d5\u06ee\u06ef\u06fa-\u06fc\u06ff\u0750-\u077f\u08a0-\u08c9]/
 /** Harakat and other combining marks, which sit on a letter without ending the word. */
@@ -28,7 +28,7 @@ function lastJoining(s: string): number {
 }
 const startsJoining = (s: string): boolean => {
   const ch = s[0] ?? ''
-  return ARABIC_LETTER.test(ch) && ch !== '\u0621' && ch !== '\u0674'
+  return ARABIC_LETTER.test(ch) && !MARK.test(ch) && ch !== '\u0621' && ch !== '\u0674' && ch !== '\u08ad'
 }
 
 /** The nearest ancestor of the node, below the common ancestor, that is an atomic inline box (it shapes its text on its own). */
@@ -47,57 +47,75 @@ const letterWidth = (doc: Document, node: Node, at: number): number => {
   return range.getClientRects()[0]?.width ?? 0
 }
 
+/** The two reference widths for a boundary letter: drawn joined to its neighbour, and drawn alone. */
+export type Forms = [joined: number, alone: number]
+
 /**
- * Whether the boundary letter on one side was painted in its non-joining form. The letter is drawn in a hidden probe
- * in that side's own computed font with its real neighbour inside the same text node, once with a ZWJ on the joining
- * side and once without, and the rendered box is compared with both. Null when the two forms are within half a pixel,
- * so they cannot be told apart.
+ * Pure verdict for one side of the boundary: true when the rendered width is nearest the non-joining form, false when
+ * nearest the joining form, null when the forms cannot be told apart. `forms` is asked for the ZWJ references first;
+ * some fonts lack U+200D and break the run at it, which hides the join, so when those are within half a pixel it is
+ * asked again with the other side's real letter in place of the ZWJ.
  */
-function paintedSplit(doc: Document, probe: HTMLElement, node: Text, at: number, side: 'end' | 'start', neighbour: string, measured: number, style: Style): boolean | null {
-  const s = style(node.parentElement!)
-  probe.style.fontFamily = s.fontFamily
-  probe.style.fontSize = s.fontSize
-  probe.style.fontWeight = s.fontWeight
-  probe.style.fontStyle = s.fontStyle
-  probe.style.fontStretch = s.fontStretch
-  probe.style.fontFeatureSettings = s.fontFeatureSettings
-  probe.style.fontVariationSettings = s.fontVariationSettings
-  probe.style.direction = s.direction
-  const widthOf = (text: string, index: number): number => {
-    probe.textContent = text
-    return letterWidth(doc, probe.firstChild!, index)
-  }
-  const letter = node.data[at]!
-  // The letter's own neighbour inside its text node stays, so the form being compared is the one it would take in the word.
-  const before = side === 'end' && at > 0 ? node.data[at - 1]! : ''
-  const after = side === 'start' ? (node.data[at + 1] ?? '') : ''
-  // Some fonts lack U+200D and break the run at it, which hides the join. The other side's real letter, drawn in this font, stands in then.
-  const forms = (joiner: string): [number, number] => side === 'end'
-    ? [widthOf(before + letter + joiner, before.length), widthOf(before + letter, before.length)]
-    : [widthOf(joiner + letter + after, joiner.length), widthOf(letter + after, 0)]
-  let [joined, alone] = forms(ZWJ)
-  if (Math.abs(joined - alone) <= FORM_GAP) [joined, alone] = forms(neighbour)
+export function sideVerdict(measured: number, forms: (joiner: 'zwj' | 'neighbour') => Forms): boolean | null {
+  let [joined, alone] = forms('zwj')
+  if (Math.abs(joined - alone) <= FORM_GAP) [joined, alone] = forms('neighbour')
   if (Math.abs(joined - alone) <= FORM_GAP) return null
   return Math.abs(measured - alone) < Math.abs(measured - joined)
 }
 
-/** Whether the font change between the two text nodes painted the boundary letters apart. Never throws. */
-function fontSplit(doc: Document, style: Style, prev: Text, last: number, n: Text): boolean {
+/** The boundary is painted apart when either side's letter is nearest its non-joining form. */
+export const boundarySplit = (first: boolean | null, second: boolean | null): boolean => first === true || second === true
+
+/**
+ * The verdict for the letter at `at` in the text node, measured against a hidden probe in the same parent. The probe is
+ * a child of the node's own parent, absolutely positioned so the line does not reflow, so it inherits the same
+ * ancestor transforms and zoom as the measured letter. It is removed in finally, and a probe that cannot run says nothing.
+ */
+function paintedSplit(doc: Document, node: Text, at: number, side: 'end' | 'start', neighbour: string, style: Style): boolean | null {
+  const parent = node.parentElement!
   let probe: HTMLElement | null = null
   try {
+    const s = style(parent)
     probe = doc.createElement('span')
     probe.setAttribute('aria-hidden', 'true')
     probe.style.cssText = 'position:absolute;visibility:hidden;white-space:pre;letter-spacing:0'
-    doc.body.appendChild(probe)
-    const first = paintedSplit(doc, probe, prev, last, 'end', n.data[0]!, letterWidth(doc, prev, last), style)
-    const second = paintedSplit(doc, probe, n, 0, 'start', prev.data[last]!, letterWidth(doc, n, 0), style)
-    return first === true || second === true
+    probe.style.fontFamily = s.fontFamily
+    probe.style.fontSize = s.fontSize
+    probe.style.fontWeight = s.fontWeight
+    probe.style.fontStyle = s.fontStyle
+    probe.style.fontStretch = s.fontStretch
+    probe.style.fontFeatureSettings = s.fontFeatureSettings
+    probe.style.fontVariationSettings = s.fontVariationSettings
+    probe.style.direction = s.direction
+    parent.appendChild(probe)
+    const el = probe
+    const widthOf = (text: string, index: number): number => {
+      el.textContent = text
+      return letterWidth(doc, el.firstChild!, index)
+    }
+    const letter = node.data[at]!
+    // The letter's own neighbour inside its text node stays, so the form being compared is the one it would take in the word.
+    const before = side === 'end' && at > 0 ? node.data[at - 1]! : ''
+    const after = side === 'start' ? (node.data[at + 1] ?? '') : ''
+    return sideVerdict(letterWidth(doc, node, at), (kind) => {
+      const joiner = kind === 'zwj' ? ZWJ : neighbour
+      return side === 'end'
+        ? [widthOf(before + letter + joiner, before.length), widthOf(before + letter, before.length)]
+        : [widthOf(joiner + letter + after, joiner.length), widthOf(letter + after, 0)]
+    })
   } catch {
-    // A probe that cannot run says nothing about the fonts, so the boundary is not reported.
-    return false
+    return null
   } finally {
     probe?.remove()
   }
+}
+
+/** Whether the font change between the two text nodes painted the boundary letters apart. Never throws. */
+function fontSplit(doc: Document, style: Style, prev: Text, last: number, n: Text): boolean {
+  return boundarySplit(
+    paintedSplit(doc, prev, last, 'end', n.data[0]!, style),
+    paintedSplit(doc, n, 0, 'start', prev.data[last]!, style),
+  )
 }
 
 /**
@@ -128,10 +146,11 @@ export function readJoins(doc: Document, style: Style, skipped: Pred, ref: Ref):
     if (offScreen(a, style(a)) || offScreen(b, style(b))) continue
     const common = between.commonAncestorContainer
     const atomic = atomicAbove(n, common, style) ?? atomicAbove(prev, common, style)
-    const byFont = !atomic && style(a).fontFamily !== style(b).fontFamily && fontSplit(doc, style, prev, last, n)
-    if (!atomic && !byFont) continue
+    const differentFont = !atomic && style(a).fontFamily !== style(b).fontFamily
+    if (!atomic && !differentFont) continue
     const el = atomic ? atomic.el : b
     if (seen.has(el)) continue
+    if (differentFont && !fontSplit(doc, style, prev, last, n)) continue
     seen.add(el)
     const word = (before.match(/\S+$/)?.[0] ?? '') + (text.match(/^\S+/)?.[0] ?? '')
     out.push({ ...ref(el), reason: atomic ? atomic.reason : 'font-family', word })
