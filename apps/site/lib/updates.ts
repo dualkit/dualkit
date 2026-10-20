@@ -6,6 +6,23 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'rules-0-2-0',
+    date: '2026-10-20',
+    version: '@dualkit/rules 0.2.0-beta.0',
+    tags: ['Check'],
+    title: 'Nine new rules in Dualkit check',
+    body: [
+      'Dualkit check now runs 29 rules, up from 20. Every new rule was tested against what Chromium paints before it shipped.',
+      'Content gets four: the old rial ligature used as a riyal sign, a new currency sign that no loaded font draws, the dirham sign written next to AED, and a label in a different language from its element. Bidi gets a check for an Arabic placeholder in a left-to-right field. Layout gets text flipped with scaleX(-1) and text cut off by a fixed box. Type gets Arabic words split by an inline-block or inline-flex box, and Arabic bold that the browser fakes.',
+      'Some candidates did not make it. Groups of Arabic-Indic digits paint the same with or without bdi, so they are not flagged. Plain emails, links and order codes paint the same too, so only a leading #, a trailing slash or a Western digit beside them is flagged. A closing mark in the middle of a line, such as the exclamation mark in an English phrase that comes before Arabic, is not checked, and neither is an email or code that sits beside a Latin word.',
+      'We also narrowed a few claims. Only the dirham sign beside AED is flagged, not Dh or the Arabic word. A label is flagged only when it is wholly in the other script. Ink that sticks out of a box that still fits its line is not measured, and we do not claim the serif fallback for split Arabic words. The full list is under Known limits in RULES.md.',
+    ],
+    shipped: [
+      { name: '@dualkit/rules 0.2.0-beta.0', line: '29 rules, nine of them new, with the known limits listed in RULES.md' },
+      { name: 'dualkit 0.2.0-beta.0', line: 'npx dualkit check <url> runs the 29 rules' },
+    ],
+  },
+  {
     slug: 'format-0-2-0',
     date: '2026-10-20',
     version: '@dualkit/format 0.2.0-beta.0',

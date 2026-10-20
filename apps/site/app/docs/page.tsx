@@ -57,7 +57,7 @@ export default async function Docs() {
         </section>
         <section className="doc-block" id="check">
           <h2 className="h2">Check a screen</h2>
-          <p className="soft">Point it at any page, local or live. It runs twenty Arabic and right-to-left rules and writes a report you can share.</p>
+          <p className="soft">Point it at any page, local or live. It runs 29 Arabic and right-to-left rules and writes a report you can share.</p>
           <p className="small soft">Install the browser once:</p>
           <CopyCommand command="npx playwright@1.55.0 install chromium" />
           <p className="small soft">Then check a page:</p>

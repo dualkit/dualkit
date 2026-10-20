@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { RULES } from '@dualkit/rules'
 import { describe, expect, it } from 'vitest'
 import type { BenchModel, BenchMonth } from '../lib/bench-schema'
 import { benchRows } from '../lib/v3/bench-rows'
@@ -60,7 +61,7 @@ describe('numbersStats', () => {
     const stats = numbersStats()
     expect(stats.map((s) => s.what)).toEqual(V3.numbers.stats.map((s) => s[1]))
     expect(stats[0]?.value).toBe(TEST_COUNT.toLocaleString('en-US'))
-    expect(stats.slice(1).map((s) => s.value)).toEqual(['20', '6', String(skillCount())])
+    expect(stats.slice(1).map((s) => s.value)).toEqual([String(RULES.length), '6', String(skillCount())])
   })
 
   it('counts the plugin skill directories', () => {

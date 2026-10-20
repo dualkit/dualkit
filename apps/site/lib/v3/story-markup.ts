@@ -83,7 +83,7 @@ export function panelHTML(settled: boolean): string {
   const st = (css: string) => (f ? ` style="${css}"` : '')
   const kc = (k: KeyName) => `<span class="cell s" data-c="${k}K">${face(f ? keyFace.fx(k) : keyFace.bk(k))}</span>`
   const row = (k: KeyName, value: string) => `<div class="row" data-row="${k}"${st('opacity:1')}>${kc(k)}<span class="cell e" data-c="${k}V">${face(value)}</span>${pinsFor(k, f)}</div>`
-  const [failing, passing] = f ? ['0', '20'] : [String(S.check.startFailing), String(S.check.startPassing)]
+  const [failing, passing] = f ? ['0', String(S.check.startFailing + S.check.startPassing)] : [String(S.check.startFailing), String(S.check.startPassing)]
   const roll = S.direction.values
   return `
 <div class="panel${f ? ' typeset paid' : ''}" data-k="panel" dir="${f ? 'rtl' : 'ltr'}" lang="ar">
