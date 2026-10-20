@@ -10,9 +10,10 @@ type Element = DefaultTreeAdapterMap['element']
  * group is shared by every fragment of one class source: one JSX attribute value, one top-level class
  * call with all its arguments, one HTML class attribute or one @apply. conditional is true when the
  * fragment applies only sometimes: under &&, ||, ??, a ternary arm, a clsx object key, or a cva or tv
- * variant, slot or compound value.
+ * variant, slot or compound value. sided is true when the side is chosen on purpose: a ternary arm whose
+ * test compares with 'left' or 'right', or a cva or tv variant value under a left or right key.
  */
-export type ClassFragment = { offset: number; text: string; group: number; conditional: boolean }
+export type ClassFragment = { offset: number; text: string; group: number; conditional: boolean; sided?: true }
 
 /** Calls whose string arguments are class lists. cva and tv also take a config object, read by configClasses. */
 const CLASS_CALLS = new Set(['clsx', 'cn', 'cx', 'twMerge', 'twJoin', 'classnames', 'classNames'])
@@ -24,9 +25,19 @@ const COMPOUND_CLASS_KEYS = new Set(['class', 'className'])
 const SPACE = /\s/
 
 type Out = { map: Map<number, ClassFragment>; groups: number }
-type Sink = { file: SourceFile; base: number; out: Out; group: number; conditional: boolean }
+type Sink = { file: SourceFile; base: number; out: Out; group: number; conditional: boolean; sided?: true }
 
 const sometimes = (sink: Sink): Sink => (sink.conditional ? sink : { ...sink, conditional: true })
+
+const sidedSink = (sink: Sink): Sink => (sink.sided ? sink : { ...sink, sided: true })
+
+const SIDE_WORDS = new Set(['left', 'right'])
+const EQUALITY = new Set(['===', '!==', '==', '!='])
+
+/** side === 'left', 'right' !== side and the like. */
+const comparesSide = (test: Node): boolean =>
+  test.type === 'BinaryExpression' && EQUALITY.has(test.operator) &&
+  [test.left, test.right].some((n) => n.type === 'StringLiteral' && SIDE_WORDS.has(n.value))
 
 const nextGroup = (out: Out): number => ++out.groups
 
@@ -40,7 +51,10 @@ function emit(sink: Sink, start: number, end: number, cutStart: boolean, cutEnd:
   let to = sink.base + end
   if (cutStart) while (from < to && !SPACE.test(text[from]!)) from++
   if (cutEnd) while (to > from && !SPACE.test(text[to - 1]!)) to--
-  if (to > from && !sink.out.map.has(from)) sink.out.map.set(from, { offset: from, text: text.slice(from, to), group: sink.group, conditional: sink.conditional })
+  if (to > from && !sink.out.map.has(from)) {
+    const fragment: ClassFragment = { offset: from, text: text.slice(from, to), group: sink.group, conditional: sink.conditional }
+    sink.out.map.set(from, sink.sided ? { ...fragment, sided: true } : fragment)
+  }
 }
 
 /** A string literal's content, without its quotes. */
@@ -78,9 +92,11 @@ function classExpr(sink: Sink, node: Node | null | undefined, cutStart = false, 
       if (node.operator !== '+') return
       classExpr(sink, node.left, cutStart, true)
       return classExpr(sink, node.right, true, cutEnd)
-    case 'ConditionalExpression':
-      classExpr(sometimes(sink), node.consequent, cutStart, cutEnd)
-      return classExpr(sometimes(sink), node.alternate, cutStart, cutEnd)
+    case 'ConditionalExpression': {
+      const arm = comparesSide(node.test) ? sidedSink(sometimes(sink)) : sometimes(sink)
+      classExpr(arm, node.consequent, cutStart, cutEnd)
+      return classExpr(arm, node.alternate, cutStart, cutEnd)
+    }
     case 'LogicalExpression':
       if (node.operator !== '&&') classExpr(sometimes(sink), node.left, cutStart, cutEnd)
       return classExpr(sometimes(sink), node.right, cutStart, cutEnd)
@@ -118,10 +134,17 @@ const propName = (prop: Node): string | null => {
   return prop.key.type === 'StringLiteral' ? prop.key.value : null
 }
 
-/** Every leaf value under an object is a class list: variants, slots, and tv's per-slot variant values. */
-function leafValues(sink: Sink, node: Node): void {
+/**
+ * Every leaf value under an object is a class list: variants, slots, and tv's per-slot variant values.
+ * With sideKeys, a value under a left or right key picks that side on purpose.
+ */
+function leafValues(sink: Sink, node: Node, sideKeys = false): void {
   if (node.type !== 'ObjectExpression') return classExpr(sink, node)
-  for (const prop of node.properties) if (prop.type === 'ObjectProperty') leafValues(sink, prop.value)
+  for (const prop of node.properties) {
+    if (prop.type !== 'ObjectProperty') continue
+    const onSide = sideKeys && SIDE_WORDS.has(propName(prop) ?? '')
+    leafValues(onSide ? sidedSink(sink) : sink, prop.value, sideKeys)
+  }
 }
 
 /** compoundVariants and compoundSlots: only the class or className value is a class list. */
@@ -142,7 +165,7 @@ function configClasses(sink: Sink, node: Node): void {
     if (prop.type !== 'ObjectProperty') continue
     const name = propName(prop)
     if (name === 'base') classExpr(sink, prop.value)
-    else if (name === 'slots' || name === 'variants') leafValues(sometimes(sink), prop.value)
+    else if (name === 'slots' || name === 'variants') leafValues(sometimes(sink), prop.value, name === 'variants')
     else if (name === 'compoundVariants' || name === 'compoundSlots') compoundEntries(sometimes(sink), prop.value)
   }
 }

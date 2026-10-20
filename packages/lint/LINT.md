@@ -30,12 +30,12 @@ Generated from `src/rules`. Each rule reads source files, before anything render
 
 **warning.** A physical class such as ml-4, pr-2, left-0, text-left or rounded-l-lg stays on the same side in Arabic, so the margin, padding, offset, alignment or corner is on the wrong edge.
 
-**Fix:** Use the logical class, such as ms-4, pe-2, start-0 (inset-s-0 from Tailwind 4.2), text-start or rounded-s-lg, so the side follows the reading direction. Keep a physical class only under an rtl:, ltr: or side variant such as data-[side=left]:.
+**Fix:** Use the logical class, such as ms-4, pe-2, start-0 (inset-s-0 from Tailwind 4.2), text-start or rounded-s-lg, so the side follows the reading direction. Keep a physical class only under an rtl:, ltr: or side variant such as data-[side=left]:, or beside an rtl: or ltr: override of the same family.
 
 <a id="source-intl-digits"></a>
 ### `source/intl-digits` Digits left to the runtime
 
-**warning.** The default digits for Arabic locales depend on the runtime's CLDR data, and CLDR changed bare ar from Arabic-Indic to Latin digits between releases 45 and 46 (Node 18 prints Arabic-Indic, Node 20 and later print Latin), so the same code shows different digits on different machines.
+**warning.** The default digits for Arabic locales come from the runtime's CLDR data. CLDR changed bare ar from Arabic-Indic to Latin digits between releases 45 and 46 (Node 18 prints Arabic-Indic, Node 20 and later print Latin), so the same code shows different digits on different machines. Regional tags differ from each other too: ar-SA and ar-EG default to Arabic-Indic, ar-AE and ar-MA to Latin.
 
 **Fix:** Pin numberingSystem, or add a -u-nu- extension to the locale, set to latn or arab.
 
@@ -77,6 +77,7 @@ Generated from `src/rules`. Each rule reads source files, before anything render
 - physical-tailwind finds the Tailwind version in the nearest package.json that lists tailwindcss, walking up past the lint folder to the repository top (a folder holding .git), and never into the home folder. The installed copy wins when it satisfies the declared range. Below 3.3, or with no version found, it stays quiet. A Tailwind prefix such as tw- is not known, so prefixed classes are not checked.
 - physical-tailwind checks margin, padding, inset and scroll classes only with a Tailwind value: a number, a fraction, px, auto, full or an arbitrary value. A custom theme key such as ml-gutter, or a project class such as left-panel, is not checked.
 - physical-tailwind skips a class under any variant holding rtl, ltr, left or right as a word, such as rtl:, group-[dir=rtl]: or data-[side=left]:, a matching pair that always applies together (in one string, or in unconditional parts of one attribute, class call or @apply), such as ml-2 mr-2 or left-0 right-0, left-1/2 or left-[50%] with a 50% x translate, the centring idiom, and an offscreen offset of 999 or more, such as -left-[9999px]. Arbitrary properties such as [margin-left:4px] are not checked.
+- physical-tailwind skips a physical class when the same attribute, class call or @apply also holds an rtl: or ltr: class of the same family (margin, padding, inset, rounded, border, text-align, float and clear, scroll-margin, scroll-padding), as in ml-4 rtl:ml-0 rtl:mr-4. It does not check that the override undoes the base side. It also skips both arms of a ternary whose test compares with the string left or right, such as side === 'left' ? 'left-0' : 'right-0', and cva or tv variant values under a left or right key.
 - intl-digits, islamic-calendar and hijri-time-zone read only new Intl.NumberFormat and new Intl.DateTimeFormat (with or without new), and the methods toLocaleString, toLocaleDateString and toLocaleTimeString on any receiver. A destructured or aliased constructor, such as const { NumberFormat } = Intl, is not read.
 - intl-digits fires only when the first locale is a string literal (or a template without expressions) that is ar or starts with ar-, in any case, or an array of string literals whose first item is one, because Intl uses the first locale it supports. A locale held in a variable, a spread, or an array with a non-literal item is quiet.
 - The Intl rules go quiet when the options argument is anything but an object literal with plain keys: a variable, a spread, a computed key or a method. A numberingSystem, calendar or timeZone given any value, even a variable, counts as set.

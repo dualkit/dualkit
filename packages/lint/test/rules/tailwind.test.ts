@@ -142,12 +142,14 @@ const buttonVariants = cva("inline-flex items-center gap-2", {
   it('an HTML file with classes on many elements', () => {
     const src = '<!doctype html><html><body class="m-0"><nav class="flex px-4"><a class="mr-2">a</a><a class="ml-auto rtl:mr-auto">b</a></nav><p class="text-left">x</p></body></html>'
     expect(run(src, 'index.html').map((f) => f.message)).toEqual([
-      expect.stringContaining('`me-2`'), expect.stringContaining('`ms-auto`'), expect.stringContaining('`text-start`'),
+      // ml-auto has an rtl: override of the margin family on the same element, so it is quiet.
+      expect.stringContaining('`me-2`'), expect.stringContaining('`text-start`'),
     ])
   })
 
-  it('@apply in SCSS skips the rtl variant', () => {
-    const msgs = run('.btn { @apply ml-2 rtl:mr-2; }', 'a.scss').map((f) => f.message)
+  it('@apply in SCSS skips the rtl variant, and the base it overrides', () => {
+    expect(run('.btn { @apply ml-2 rtl:ml-0 rtl:mr-2; }', 'a.scss')).toEqual([])
+    const msgs = run('.btn { @apply ml-2 rtl:text-right; }', 'a.scss').map((f) => f.message)
     expect(msgs).toEqual([expect.stringContaining('`ms-2`')])
   })
 })
@@ -217,5 +219,41 @@ describe('fix round 2: only unconditional classes pair', () => {
   })
   it('a pair in one string or across unconditional arguments stays quiet', () => {
     for (const src of ["cn('absolute left-1/2', '-translate-x-1/2')", "cn('ml-2', 'mr-2')", "cn(open && 'ml-2 mr-2')", "clsx({ 'left-0 right-0': a })"]) expect(shown(src), src).toEqual([])
+  })
+})
+
+describe('an explicit rtl: or ltr: override of the same family', () => {
+  it('stays quiet when the source overrides the family under rtl:', () => {
+    expect(fired('ml-4 rtl:ml-0 rtl:mr-4')).toEqual([])
+    expect(fired('left-0 rtl:left-auto rtl:right-0')).toEqual([])
+    expect(fired('rounded-l-lg ltr:rounded-r-none')).toEqual([])
+    expect(fired('text-left rtl:text-right')).toEqual([])
+    expect(run("const c = cn('pl-2', on && 'rtl:pl-0 rtl:pr-2')", 'a.ts')).toEqual([])
+  })
+
+  it('still fires when the override is for another family', () => {
+    expect(fired('ml-4 rtl:text-right')).toHaveLength(1)
+    expect(fired('pl-4 rtl:ml-2')).toHaveLength(1)
+  })
+})
+
+describe('a side chosen by a left or right test', () => {
+  it('skips both arms of a ternary that compares with left or right (noli-ae console-frame shape)', () => {
+    const code = `export const A = ({ side }) => <div className={cn('absolute', side === 'left' ? 'left-0' : 'right-0 -scale-x-100')} />`
+    expect(run(code)).toEqual([])
+    expect(run(`const c = 'right' !== side ? 'pl-2' : 'pr-2'`.replace('const c = ', "const c = cn(") + ')', 'a.ts')).toEqual([])
+  })
+
+  it('still fires on a ternary with another test', () => {
+    expect(run("const c = cn(open ? 'left-0' : 'right-0')", 'a.ts')).toHaveLength(2)
+    expect(run("const c = cn(side === 'top' ? 'ml-2' : 'mt-2')", 'a.ts')).toHaveLength(1)
+  })
+
+  it('skips cva and tv variant values under a left or right key', () => {
+    const code = "const v = cva('p-2', { variants: { side: { left: 'left-0 rounded-r-lg', right: 'right-0 rounded-l-lg', top: 'ml-2' } } })"
+    const hits = run(code, 'a.ts')
+    expect(hits).toHaveLength(1)
+    expect(hits[0]!.message).toContain('ml-2')
+    expect(run("const v = tv({ variants: { side: { left: { base: 'pl-4' } } } })", 'a.ts')).toEqual([])
   })
 })
