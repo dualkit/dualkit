@@ -1,8 +1,8 @@
 import type { Rule } from './rule'
 
 /** Raw tags in prose (<html>, <bdi>) are stripped as HTML on GitHub, so they are wrapped as code spans. */
-const HTML_TAG = /<[^>\s][^>]*>/g
-const asCode = (text: string): string => text.replace(HTML_TAG, '`$&`')
+export const HTML_TAG = /<[^>\s][^>]*>/g
+export const asCode = (text: string): string => text.replace(HTML_TAG, '`$&`')
 
 const GROUP_TITLE = { bidi: 'Bidi', layout: 'Layout', icons: 'Icons', type: 'Type', content: 'Content' } as const
 

@@ -187,19 +187,23 @@ Sources:
 
 ## 5. Chromium paint measurements for the bidi rules (Task 4)
 
-Each row is a probe in `packages/rules/test/verify.test.ts`, measured per character in Chromium (Playwright) with and without `<bdi>`.
+Each row is a probe in `packages/rules/test/verify.test.ts`, measured per character in Chromium 140.0.7339.16 (Playwright) with and without `<bdi>`.
 
-| Claim | Measurement | Verdict |
-|---|---|---|
-| Three groups of Arabic-Indic digits are unchanged by isolation | `رقم ٠٥٠ ١٢٣ ٤٥٦٧` paints ٤٥٦٧ ١٢٣ ٠٥٠ left to right, bare and in `<bdi>` | VERIFIED |
-| `#A-10293` and `#A10293` are scrambled without isolation | The `#` lands on the wrong side of the code in all four test sentences; `<bdi>` fixes it | VERIFIED |
-| `A10293` and `A-10293` are not scrambled | Same paint with and without `<bdi>` in all four sentences (they differ only next to a digit) | VERIFIED |
-| A bare `#10293` is reversed to `10293#` | Differs with `<bdi>` in all four sentences, so it is a number problem, not a Latin token | VERIFIED |
-| A closing mark before a `<br>` flips like the end of a paragraph | English line in an rtl block, and Arabic line in an ltr block, paint the mark at the line start; matching directions do not | VERIFIED |
-| A mark inside `(AED)` before an inline `<b>` does not move | Parentheses paint around AED in order | VERIFIED |
-| A mark ending an English phrase before Arabic flips mid-line, tagged or not | `<b>Hello world!</b> مرحبا` and `Hello world! مرحبا` both paint `!` left of Hello in an rtl block | VERIFIED |
-| An Arabic placeholder in an ltr (or tel) input paints flush left | Ink spans 0.3% to 28% of the input width | VERIFIED |
-| `input:placeholder-shown { direction: rtl }` right-aligns the hint and leaves typed text ltr | Hint ink spans 71% to 99.7%; computed direction is rtl while empty and ltr after typing; a prefilled value paints flush left | VERIFIED |
+| Claim | Measurement | Test | Verdict |
+|---|---|---|---|
+| Three groups of Arabic-Indic digits are unchanged by isolation | `رقم ٠٥٠ ١٢٣ ٤٥٦٧` paints ٤٥٦٧ ١٢٣ ٠٥٠ left to right, bare and in `<bdi>` | `bidi/unisolated-number and three groups of Arabic-Indic digits` | VERIFIED (Chromium 140.0.7339.16 probe) |
+| Plain emails, links, `www.` links and ORDER/INV codes paint the same with and without `<bdi>` in the measured positions | `hi@example.com`, `user.name+tag@mail.co.uk`, `https://example.com/a/b`, `www.example.com`, `ORDER-2041`, `INV_2041`: identical between Arabic words, at either end of the block, alone, before an Arabic full stop or question mark, before a Latin `.` `)` `,` or Arabic `،`, inside brackets, before an Arabic-Indic digit, after a digit group and a space, and with an Arabic word between token and digit | `bidi/unisolated-latin: only the shapes and positions that Chromium paints differently` | VERIFIED (Chromium 140.0.7339.16 probe) |
+| A leading `#` always differs | `#A-10293`, `#A10293`, `#FFF`, `#iPhone` differ in all 21 positions | `same test` | VERIFIED (Chromium 140.0.7339.16 probe) |
+| A trailing slash always differs | `https://example.com/a/b/` differs in all 21 positions; `/a/b` without the slash does not | `same test` | VERIFIED (Chromium 140.0.7339.16 probe) |
+| A Western or Extended Arabic-Indic digit after the token differs, and so does any digit directly before it | `{} 5`, `{} - 5`, `{}، 5`, `{} ۵` differ; `5{}` and `٥{}` differ; an Arabic-Indic digit after (`{} ٥`) and an Arabic word between token and digit do not | `same test` | VERIFIED (Chromium 140.0.7339.16 probe) |
+| A Latin neighbour changes the paint only by splitting one left-to-right phrase, so it is dropped | `تم hi@example.com Apple` bare paints h before A: the phrase reads in order | `bidi/unisolated-latin: does not treat a token that joins a neighbouring Latin word as scrambled` | VERIFIED (Chromium 140.0.7339.16 probe) |
+| `#` before digits: Western and Extended Arabic-Indic digits differ only after Arabic text | `#10293`, `#12`, `#۵` differ after Arabic (also after a digit group, a full stop or a bracket that follows Arabic); the same at the block start, alone, after `(`, after a quote, after `. ` or after a Western digit with nothing before. After a Latin word the paint differs only by joining that phrase | `bidi/unisolated-number and a leading #` | VERIFIED (Chromium 140.0.7339.16 probe) |
+| `#` before Arabic-Indic digits differs everywhere | `#٣٤٥` differs at the start, alone, in brackets, in quotes and after a full stop | `same test` | VERIFIED (Chromium 140.0.7339.16 probe) |
+| A closing mark before a `<br>` flips like the end of a paragraph | English line in an rtl block, and Arabic line in an ltr block, paint the mark at the line start; matching directions do not; an Arabic line ending in an English tag is correct | `bidi/punctuation-flip beyond the last run` | VERIFIED (Chromium 140.0.7339.16 probe) |
+| A mark inside `(AED)` before an inline `<b>` does not move | Parentheses paint around AED in order | `bidi/punctuation-flip beyond the last run: does not move a closing parenthesis inside an inline run` | VERIFIED (Chromium 140.0.7339.16 probe) |
+| A mark ending an English phrase before Arabic flips mid-line, tagged or not (inline-run mark, dropped) | `<b>Hello world!</b> مرحبا` and `Hello world! مرحبا` both paint `!` left of Hello in an rtl block | `bidi/punctuation-flip beyond the last run: paints "!" at the start of an English phrase followed by Arabic` | VERIFIED (Chromium 140.0.7339.16 probe) |
+| An Arabic placeholder in an ltr (or tel) input paints flush left | Ink spans 0.3% to 28% of the input width | `bidi/field-placeholder: an Arabic placeholder in a left-to-right field` | VERIFIED (Chromium 140.0.7339.16 probe) |
+| `input:placeholder-shown { direction: rtl }` right-aligns the hint and leaves typed text ltr | Hint ink spans 71% to 99.7%; computed direction is rtl while empty and ltr after typing; a prefilled value paints flush left | `same describe` | VERIFIED (Chromium 140.0.7339.16 probe) |
 
 ---
 

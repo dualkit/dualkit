@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { KNOWN_LIMITS, renderRulesMarkdown } from '../src/docs'
+import { KNOWN_LIMITS, asCode, renderRulesMarkdown } from '../src/docs'
 import { RULES } from '../src/rules'
 
 const FILE = new URL('../RULES.md', import.meta.url)
@@ -25,7 +25,7 @@ describe('RULES.md', () => {
     const tail = md.slice(md.indexOf('## Known limits'))
     expect(tail.startsWith('## Known limits\n\n')).toBe(true)
     expect(KNOWN_LIMITS.length).toBeGreaterThan(0)
-    for (const limit of KNOWN_LIMITS) expect(tail).toContain(`- ${limit.replace(/<[^>\s][^>]*>/g, '`$&`')}\n`)
+    for (const limit of KNOWN_LIMITS) expect(tail).toContain(`- ${asCode(limit)}\n`)
     expect(tail.split('\n').filter((l) => l.startsWith('- '))).toHaveLength(KNOWN_LIMITS.length)
     expect(md.indexOf('## Known limits')).toBeGreaterThan(md.indexOf('## Content'))
     expect(md).not.toContain('\u2014')

@@ -22,6 +22,14 @@ describe('bidi/unisolated-latin', () => {
   it('flags a link with a trailing slash', () => {
     expect(ids(screen({ texts: [text({ text: 'زر https://example.com/a/', blockText: 'زر https://example.com/a/' })] }))).toEqual(['bidi/unisolated-latin'])
   })
+  it('flags each digit condition Chromium reorders: a digit directly before, an Extended Arabic-Indic digit after, a dash or Arabic comma before a digit', () => {
+    for (const t of ['تم 5https://example.com/a', 'تم \u0665ORDER-2041', 'تم hi@example.com \u06F5', 'تم hi@example.com - 5', 'تم hi@example.com\u060C 5']) {
+      expect(ids(screen({ texts: [text({ text: t, blockText: t })] })), t).toEqual(['bidi/unisolated-latin'])
+    }
+  })
+  it('passes an Arabic-Indic digit after the token, or an Arabic word between it and the digit', () => {
+    for (const t of ['تم hi@example.com \u0665', 'تم hi@example.com ثم 5']) expect(ids(screen({ texts: [text({ text: t, blockText: t })] })), t).toEqual([])
+  })
   it('passes an email, link or code that has no #, trailing slash or digit beside it', () => {
     for (const t of ['راسلنا على hi@example.com', 'زر https://example.com/a/b ثم', 'رقم ORDER-2041 تم', 'اكتب www.example.com ثم']) {
       expect(ids(screen({ texts: [text({ text: t, blockText: t })] })), t).toEqual([])
@@ -44,6 +52,15 @@ describe('bidi/unisolated-number: a leading #', () => {
   it('passes a lone #, # at the start, # after a Latin word, a colour and an isolated number', () => {
     for (const t of ['اللون # تم', '#10293 تم', 'Order #10293 تم', '5 #10293 تم']) expect(n(t), t).toEqual([])
     expect(ids(screen({ texts: [text({ text: '#10293', blockText: 'رقم #10293', isolated: true })] }))).toEqual([])
+  })
+  it('only judges the # in its own run, not one in a later isolated run of the same block', () => {
+    const blockText = '#12 رقم #34'
+    expect(ids(screen({ texts: [text({ text: '#12 رقم', blockText }), text({ text: '#34', blockText, isolated: true })] }))).toEqual([])
+    expect(ids(screen({ texts: [text({ text: '#12 رقم', blockText }), text({ text: '#34', blockText })] }))).toEqual(['bidi/unisolated-number'])
+  })
+  it('reads the # in its place in the block: after Arabic and a digit group it fires, after brackets and quotes alone it does not', () => {
+    expect(n('رقم 5 #10293')).toEqual(['bidi/unisolated-number'])
+    for (const t of ['(#10293) تم', '"#10293" تم', '. #10293 تم']) expect(n(t), t).toEqual([])
   })
 })
 

@@ -38,13 +38,16 @@ const AFTER_EN_DIGIT = new RegExp(`^[^\\p{L}\\p{N}]*[${EN_DIGIT}]`, 'u')
 const START_DIGIT = /^[0-9]/
 const ANY_DIGIT_BEFORE = /[0-9\u0660-\u0669\u06F0-\u06F9]$/
 
-/** Every place a piece of text sits in its block, so a rule can read what touches it. The block copy is capped, so the run itself is the fallback. */
-function surroundings(piece: string, text: string, blockText: string): Array<{ before: string; after: string }> {
-  const out: Array<{ before: string; after: string }> = []
-  for (let at = blockText.indexOf(piece); at !== -1; at = blockText.indexOf(piece, at + 1)) out.push({ before: blockText.slice(0, at), after: blockText.slice(at + piece.length) })
-  if (out.length > 0) return out
-  const at = text.indexOf(piece)
-  return [{ before: text.slice(0, at), after: text.slice(at + piece.length) }]
+/**
+ * What touches a piece of a run on each side, read from the block so neighbours in other elements count.
+ * The run is located in the block by its text, taking the first match. Two runs with identical text in one block
+ * (say two "5" digits) both read the first one's surroundings: a known limit, since the model has no run offset.
+ * The block copy is capped, so a run that is not found there falls back to its own text.
+ */
+function surroundings(at: number, length: number, text: string, blockText: string): { before: string; after: string } {
+  const base = blockText.indexOf(text)
+  const [source, start] = base === -1 ? [text, at] : [blockText, base + at]
+  return { before: source.slice(0, start), after: source.slice(start + length) }
 }
 
 /** The emails, links and codes in a run that Chromium paints differently once isolated, from the cases listed on LATIN_TOKEN. */
@@ -55,8 +58,8 @@ export function scrambledLatinTokens(text: string, blockText: string): string[] 
     if (token.length < 3) continue
     const hash = token.startsWith('#')
     const slash = token.endsWith('/')
-    const scrambles = surroundings(token, text, blockText).some(({ before, after }) => hash || slash || AFTER_EN_DIGIT.test(after) || ANY_DIGIT_BEFORE.test(before) || START_DIGIT.test(token))
-    if (scrambles) found.push(token)
+    const { before, after } = surroundings(match.index ?? 0, token.length, text, blockText)
+    if (hash || slash || AFTER_EN_DIGIT.test(after) || ANY_DIGIT_BEFORE.test(before) || START_DIGIT.test(token)) found.push(token)
   }
   return found
 }
@@ -66,12 +69,14 @@ const HASH_NUMBER = /#(?:([\u0660-\u0669])|[0-9\u06F0-\u06F9])/g
 /**
  * A # directly before digits. Measured in Chromium (verify.test.ts, "bidi/unisolated-number and a leading #"): with Arabic-Indic
  * digits the # always lands on the wrong side. With Western digits it does when a letter comes before it on the line:
- * after Arabic it is a scramble; after a Latin word it only joins that word's left-to-right phrase, so it is not one.
+ * after Arabic it is a scramble (even with a digit group or bracket between); after a Latin word it only joins that word's
+ * left-to-right phrase, and with nothing before it, or only brackets, quotes or full stops, it paints the same. Only this run's own
+ * matches count, read in their place in the block.
  */
 export function hashNumberScrambles(text: string, blockText: string): boolean {
-  if (!new RegExp(HASH_NUMBER.source).test(text)) return false
-  for (const m of blockText.matchAll(HASH_NUMBER)) {
-    if (m[1] !== undefined || lastStrong(blockText.slice(0, m.index)) === 'rtl') return true
+  for (const m of text.matchAll(HASH_NUMBER)) {
+    if (m[1] !== undefined) return true
+    if (lastStrong(surroundings(m.index ?? 0, 1, text, blockText).before) === 'rtl') return true
   }
   return false
 }

@@ -406,6 +406,12 @@ describe('bidi/unisolated-number and a leading #', () => {
     { name: 'at the start of the block', ctx: '{} تم الطلب', differs: false },
     { name: 'alone in the block', ctx: '{}', differs: false },
     { name: 'after a Western digit', ctx: '5 {} تم', differs: false },
+    { name: 'in brackets with nothing before', ctx: '({}) تم', differs: false },
+    { name: 'in quotes with nothing before', ctx: '"{}" تم', differs: false },
+    { name: 'after a full stop with nothing else before', ctx: '. {} تم', differs: false },
+    { name: 'after Arabic and a Western digit', ctx: 'رقم 5 {}', differs: true },
+    { name: 'after Arabic and an Arabic-Indic digit', ctx: 'رقم \u0665 {} تم', differs: true },
+    { name: 'after Arabic and a full stop', ctx: 'رقم. {} تم', differs: true },
   ]
   const paint = (h: string) => withPage(h, async (p) => visualText(await charBoxes(p, '#n')))
   const h = (ctx: string, n: string, bdi: boolean) => page(`<p id="n">${ctx.replace('{}', bdi ? `<bdi>${n}</bdi>` : n)}</p>`)
