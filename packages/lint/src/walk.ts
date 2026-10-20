@@ -1,5 +1,5 @@
-import { readFileSync, readdirSync, statSync, type Dirent, type Stats } from 'node:fs'
-import { join, relative, resolve, sep } from 'node:path'
+import { existsSync, readFileSync, readdirSync, statSync, type Dirent, type Stats } from 'node:fs'
+import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
 import ignore, { type Ignore } from 'ignore'
 import type { Skipped } from './types'
 
@@ -24,8 +24,31 @@ export function isMinified(text: string): boolean {
   return text.length / lines > MINIFIED_LINE
 }
 
+type Ignored = (abs: string, isDir: boolean) => boolean
+
+const inside = (parent: string, child: string): boolean => {
+  const rel = relative(parent, child)
+  return rel === '' || (!rel.startsWith('..') && !isAbsolute(rel))
+}
+
+/** The nearest directory at or above dir that holds a .git entry, or null. */
+function repoTop(dir: string): string | null {
+  for (let d = dir; ; d = dirname(d)) {
+    if (existsSync(join(d, '.git'))) return d
+    if (dirname(d) === d) return null
+  }
+}
+
+/**
+ * Where .gitignore matching starts for a walked directory: its repository top, else cwd when the
+ * directory is inside cwd, else the directory itself.
+ */
+function ignoreRoot(dir: string, cwd: string): string {
+  return repoTop(dir) ?? (inside(cwd, dir) ? cwd : dir)
+}
+
 /** Reads .gitignore files from the root down, caching one matcher per directory. */
-function gitignores(root: string): (abs: string, isDir: boolean) => boolean {
+function gitignores(root: string): Ignored {
   const cache = new Map<string, Ignore | null>()
   const matcher = (dir: string): Ignore | null => {
     if (cache.has(dir)) return cache.get(dir) ?? null
@@ -40,7 +63,7 @@ function gitignores(root: string): (abs: string, isDir: boolean) => boolean {
   }
   return (abs, isDir) => {
     const rel = relative(root, abs)
-    if (rel === '' || rel.startsWith('..')) return false
+    if (rel === '' || !inside(root, abs)) return false
     const parts = rel.split(sep)
     for (let i = 0; i < parts.length; i++) {
       const ig = matcher(join(root, ...parts.slice(0, i)))
@@ -56,7 +79,15 @@ export type Walked = { files: string[]; skipped: Skipped[] }
 
 /** Lists lintable files under paths, relative to cwd with forward slashes. Symlinked directories are not followed. */
 export function walk(paths: string[], cwd: string): Walked {
-  const ignored = gitignores(cwd)
+  const matchers = new Map<string, Ignored>()
+  const ignoredFor = (dir: string): Ignored => {
+    const root = ignoreRoot(dir, cwd)
+    const known = matchers.get(root)
+    if (known) return known
+    const made = gitignores(root)
+    matchers.set(root, made)
+    return made
+  }
   const files = new Set<string>()
   const skipped: Skipped[] = []
   const seen = new Set<string>()
@@ -70,7 +101,7 @@ export function walk(paths: string[], cwd: string): Walked {
     else files.add(rel)
   }
 
-  const visit = (dir: string): void => {
+  const visit = (dir: string, ignored: Ignored): void => {
     let entries: Dirent[]
     try {
       entries = readdirSync(dir, { withFileTypes: true })
@@ -81,7 +112,7 @@ export function walk(paths: string[], cwd: string): Walked {
     for (const entry of entries) {
       const abs = join(dir, entry.name)
       if (entry.isDirectory()) {
-        if (!ALWAYS_SKIP.includes(entry.name) && !ignored(abs, true)) visit(abs)
+        if (!ALWAYS_SKIP.includes(entry.name) && !ignored(abs, true)) visit(abs, ignored)
       } else if (entry.isFile() || entry.isSymbolicLink()) {
         if (!isLintable(entry.name) || ignored(abs, false)) continue
         const stat = statSafe(abs)
@@ -94,7 +125,7 @@ export function walk(paths: string[], cwd: string): Walked {
     const abs = resolve(cwd, p)
     const stat = statSafe(abs)
     if (!stat) skipped.push({ file: toPosix(p), reason: 'not found' })
-    else if (stat.isDirectory()) visit(abs)
+    else if (stat.isDirectory()) visit(abs, ignoredFor(abs))
     else if (!stat.isFile()) continue
     else if (isLintable(abs)) addFile(abs, stat.size)
     else skipped.push({ file: toPosix(p), reason: 'unsupported file type' })

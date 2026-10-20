@@ -79,3 +79,28 @@ describe('walk', () => {
     expect(walk(['.'], root)).toEqual({ files: ['app.min.js'], skipped: [] })
   })
 })
+
+describe('walk outside cwd', () => {
+  it('honours the .gitignore files of a target outside cwd, from its repository top', () => {
+    const other = tree({
+      '.git/HEAD': '',
+      '.gitignore': 'out/\n',
+      'app/.gitignore': '*.gen.ts\n',
+      'app/a.ts': '',
+      'app/b.gen.ts': '',
+      'app/out/_next/c.js': '',
+    })
+    const cwd = tree({ 'x.ts': '' })
+    const rel = join('..', other.split('/').pop() ?? '', 'app')
+    const viaRelative = walk([join(other, 'app')], cwd).files
+    expect(viaRelative.every((f) => f.startsWith('../'))).toBe(true)
+    expect(viaRelative.map((f) => f.split('/').slice(-2).join('/'))).toEqual(['app/a.ts'])
+    expect(walk([rel], cwd).files.map((f) => f.split('/').slice(-2).join('/'))).toEqual(['app/a.ts'])
+  })
+
+  it('uses the target dir itself when no repository is found above it', () => {
+    const other = tree({ '.gitignore': 'out/\n', 'a.ts': '', 'out/b.js': '' })
+    const cwd = tree({})
+    expect(walk([other], cwd).files.map((f) => f.split('/').pop())).toEqual(['a.ts'])
+  })
+})
