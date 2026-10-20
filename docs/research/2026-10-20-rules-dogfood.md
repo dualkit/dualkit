@@ -28,3 +28,17 @@ Rerun after the rule changes below: / 50, /docs 100, /updates 100, /bench 100, /
 3. `content/mixed-digits`, "1,234.50 د.إ" and "1 رمضان 1447 هـ": true positive by the rule's definition; the page is a demo of both systems; no change.
 
 No ignore was added to the site config.
+
+## Rerun after the final review fixes
+
+Run on 20 Oct 2026 after the final branch review fixes (split words need one line of inline content, flips by determinant, clipped text ignores runs outside the box and counts line-clamp as an ellipsis, measured brand webfonts, placeholder alignment). The rules and CLI dist were rebuilt, the site was rebuilt and served on port 4310, and each route ran with `node packages/cli/dist/cli.js check <url> --json` at a 1280px viewport.
+
+| Route | Score | Findings |
+|---|---|---|
+| / | 50 | 12 |
+| /docs | 100 | 0 |
+| /updates | 100 | 0 |
+| /bench | 100 | 0 |
+| /status | 100 | 0 |
+
+The 12 findings on / are the same as the last rerun: `type/arabic-tracking` x6 and `type/arabic-size` x4 on the `.bk` "without Dualkit" demo, and `content/mixed-digits` x2 on the demo of both digit systems. No new finding appeared and none went away, so there was nothing to judge or fix. The /updates entry now says in plain words that type/arabic-font fails Latin-first stacks, and the page still scores 100.

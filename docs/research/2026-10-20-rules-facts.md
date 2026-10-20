@@ -259,6 +259,80 @@ An earlier version of this section claimed a font change never breaks the join. 
 
 The rule reports `inline-block` and `inline-flex` always, and a font-family change only when the measured boundary letter is nearest the non-joining form and the two reference forms differ by more than 0.5px. `inline-grid` and `inline-table` were not probed and are not reported.
 
+## 9. Final branch review fixes
+
+Probes in `packages/rules/test/joins-boxes.test.ts`, `flips.test.ts`, `clips.test.ts`, `fonts-measured.test.ts` and `verify.test.ts`, plus a scratch probe that printed the raw numbers below. Chromium 140.0.7339.16 via Playwright 1.55, 1024px viewport, 16px IBM Plex Sans Arabic unless noted. The reviewer's page cases are kept as regression tests.
+
+### 9a. Split words need one line of inline content
+
+The earlier dogfood ruling kept flex items as breaks. The final review overrules it: two text nodes are a candidate only when every element from each up to their common ancestor is inline-level (inline, inline-block, inline-flex, inline-grid or contents), the common ancestor does not blockify its children (flex or grid), and the two boundary letters sit on one line with a horizontal gap under 1px.
+
+| Case | Boundary gap | Same line | Verdict |
+|---|---|---|---|
+| `مح` + unpadded inline-block `مد` | 0px | yes | REPORTED (kept) |
+| `مح` + unpadded inline-flex `مد` | 0px | yes | REPORTED (kept) |
+| Geeza Pro `مح` then Plex `مد`, inline spans | 0px | yes (tops 3px apart, rects overlap) | REPORTED (kept, macOS) |
+| Inline `li` + inline-block `a`, padding 8px | 16px | yes | QUIET (gap) |
+| Padded inline-flex tabs, padding 8px | 16px | yes | QUIET (gap) |
+| Badge, inline-flex with margin-inline-start 8px | 8px | yes | QUIET (gap) |
+| Table cells with inline-block spans | 4px | yes | QUIET (table-cell on the path, and the gap) |
+| Block `li` items | 37.5px | no (27px apart) | QUIET (list-item on the path) |
+| `h2` in Geeza Pro then `p` | 80.9px | no | QUIET (block on the path) |
+| Two adjacent divs in different fonts | n/a | no | QUIET (block on the path) |
+| Flex items in a row | n/a | n/a | QUIET (the common ancestor is a flex container) |
+| Hijri `هـ` beside an inline-block label | n/a | n/a | QUIET (tatweel) |
+| The same word wrapped across two lines at the box | n/a | no | QUIET |
+
+The join probe now copies the measured text's computed letter-spacing. Between 0 and 0.4em of letter-spacing the verdicts were the same with the old forced 0 and with the copied value (Geeza Pro then Plex and Plex then Al Nile report, Plex Regular then Plex Bold stays quiet), so this keeps the reference forms in the same style without changing a measured result.
+
+### 9b. A flip is a negative determinant
+
+| Style | Computed value | a | a·d − b·c | Mirrors |
+|---|---|---|---|---|
+| `transform: scaleX(-1)` | `matrix(-1, 0, 0, 1, 0, 0)` | -1 | -1 | yes |
+| `transform: rotate(180deg)` | `matrix(-1, 0, 0, -1, 0, 0)` | -1 | 1 | no, it turns |
+| `transform: scale(-1,-1)` | `matrix(-1, 0, 0, -1, 0, 0)` | -1 | 1 | no, it turns |
+| `rotate: 180deg` (Tailwind v4 rotate-180) | `rotate: 180deg`, transform none | -1 | 1 | no, it turns |
+| `scale: -1` | `scale: -1` | -1 | 1 | no, it turns |
+| `scale: -1 1` and `scale: -100% 100%` | `scale: -1 1` | -1 | -1 | yes |
+| `transform: rotateY(180deg)` | `matrix3d(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1)` | -1 | -1 | yes |
+| `transform: scaleY(-1)` | `matrix(1, 0, 0, -1, 0, 0)` | 1 | -1 | yes |
+
+The old reader read only `a`, so it called every row with a = -1 a flip and missed scaleY(-1). It also ignored the `rotate` property, so a Tailwind v4 `rtl:rotate-180` chevron read as not mirrored. Mirrored text now needs Arabic letters, so a flipped `→` glyph and a flipped material-icons `arrow_forward` ligature are left to the icon rules. Icons record `turned` (a positive determinant with a < 0), and icons/not-mirrored accepts a turned icon. A flipped play icon still fires icons/mirrored-by-mistake; a turned one does not.
+
+### 9c. Clipped text ignores runs outside the box, and line-clamp is an ellipsis
+
+| Case | Box (x) | Text runs (x) | Scroll gap | Verdict |
+|---|---|---|---|---|
+| 900px flex track in a 300px box | 716 to 1016 | 933 to 1016 (inside), 630 to 716 and 330 to 416 (wholly outside) | 600px | QUIET (old: 383px reported) |
+| Swiper-style track moved by `translate3d(300px,0,0)` | 716 to 1016 | 930 to 1016 (inside), 1233 to 1316 and 630 to 716 (outside) | 300px | QUIET |
+| Track moved 50px so one run straddles the edge | | | | REPORTED |
+| Tailwind line-clamp-2 in a 200px box | | four lines, two kept | 55px down | QUIET: computed `-webkit-line-clamp` is `2`, counted as an ellipsis (old: 41px reported) |
+| "Read more" box, `max-height: 48px` | | | | REPORTED, listed under Known limits |
+
+### 9d. Brand Arabic webfonts are measured
+
+Alef (U+0627) at 48px, with the face loaded as "Brand Sans" and the default unicode-range:
+
+| Face | Alef in `"Brand Sans",sans-serif` | U+0378 in the same stack | Alef in sans-serif | Alef in `"Brand Sans",serif` | Alef in serif | drawsArabic |
+|---|---|---|---|---|---|---|
+| IBM Plex Sans Arabic bytes | 10.77 | 22.66 | 14.05 | 10.77 | 14.05 | true |
+| CurrencySigns.woff (no Arabic) | 14.05 | 24 | 14.05 | 14.05 | 14.05 | false |
+
+The rule passes the Plex bytes under "Brand Sans", "GE SS Two" and "HelveticaNeueW23", and fails the Latin-only face. A name that says Arabic, an explicit range, and a face that is not loaded are not measured (drawsArabic is null). The probe never throws and is removed in finally.
+
+### 9e. Where the placeholder lands
+
+| Field (`dir="ltr"`, 300px) | Field text-align | ::placeholder text-align | Hint ink | Verdict |
+|---|---|---|---|---|
+| plain | start | start | 0.3% to 28% | REPORTED |
+| `text-align: right` on the field | right | right | 71.3% to 99.7% | QUIET |
+| `::placeholder { text-align: right }` | start | right | 71.3% to 99.7% | QUIET |
+| `::placeholder { text-align: end }` | start | end | 71.3% to 99.7% | QUIET (end resolves to right in an ltr field) |
+| `::placeholder { text-align: start }` | start | start | flush left | REPORTED |
+
+The rule now also needs a right-to-left page.
+
 ---
 
 ## Tally
@@ -277,3 +351,4 @@ The rule reports `inline-block` and `inline-flex` always, and a font-family chan
 | 6 Currency signs in webfonts (fix round) | VERIFIED, see the probes in `verify.test.ts` |
 | 7 Mirrored and clipped text (Task 6) | VERIFIED, see the probes in `verify.test.ts`. Dot-below ink beyond the line box is a stated limit |
 | 8 Split Arabic words (Task 7) | VERIFIED: inline-block and inline-flex break; b, colour and padding join. Font-family is platform-dependent (breaks with Geeza Pro and Al Nile on macOS, joins between Plex faces) and is measured per page. Serif fallback UNCERTAIN, not claimed |
+| 9 Final review fixes | VERIFIED, see the probes in `joins-boxes`, `flips`, `clips`, `fonts-measured` and `verify` tests. A read-more box with max-height is a stated limit |
