@@ -6,6 +6,24 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'lint-0-1-0',
+    date: '2026-10-20',
+    version: 'dualkit 0.3.0-beta.0',
+    tags: ['Check'],
+    title: 'Dualkit lint reads your source',
+    body: [
+      'Dualkit lint checks your CSS, HTML, JavaScript and TypeScript files for Arabic and right-to-left bugs before anything renders. It needs no browser, so it runs in seconds on a laptop or in CI. Run npx dualkit@beta lint . in your project, or set mode: lint in the GitHub Action.',
+      'It ships with 8 source rules. Left and right in CSS where a logical property would follow the reading direction. Physical Tailwind classes such as ml-4 or text-left. Letter-spacing on Arabic text. A [dir] attribute selector where :dir() would also catch inherited direction. Arabic number and date formats that leave the digits to the runtime. The bare islamic calendar where the Gulf uses islamic-umalqura. A Hijri date with no time zone. The old rial sign used as the Saudi riyal sign.',
+      'Some things are left alone on purpose. A matching pair of sides, such as ml-2 mr-2 or left: 0 with right: 0, looks the same in both directions. So does the centring idiom, left: 50% with a 50% translate. Classes under an rtl: or ltr: variant, and CSS under a direction-scoped selector such as :dir(rtl), are already handled. The full list is under Known limits in LINT.md.',
+      'Tailwind fixes follow the version you have installed. Lint reads it from the nearest package.json, so a project on Tailwind 3.4 is told to use start-0, and one on 4.2 is told inset-s-0.',
+      'We ran it on this repo first. It found 14 places on dualkit.dev that were tied to left to right, such as a divider on the left edge, and we fixed them. The rest were demos and test fixtures that keep their bugs on purpose.',
+    ],
+    shipped: [
+      { name: '@dualkit/lint 0.1.0-beta.0', line: '8 source rules, lint() and lintText() for your own tools, and LINT.md' },
+      { name: 'dualkit 0.3.0-beta.0', line: 'npx dualkit lint runs the 8 rules, and the GitHub Action takes mode: lint' },
+    ],
+  },
+  {
     slug: 'rules-0-2-0',
     date: '2026-10-20',
     version: '@dualkit/rules 0.2.0-beta.0',
@@ -143,6 +161,8 @@ export type RoadmapItem = { title: string; line: string; state: RoadmapState; st
 export const UP_NEXT: readonly RoadmapItem[] = [
   { title: 'Dualkit check', line: 'Point it at any screen. See what breaks in Arabic.', state: 'Released',
     steps: [['Design', true], ['First 20 rules', true], ['CLI and report', true], ['GitHub Action', true], ['Released', true]] },
+  { title: 'Dualkit lint', line: 'Catch Arabic and right-to-left bugs in your source.', state: 'Released',
+    steps: [['Design', true], ['8 source rules', true], ['CLI and Action', true], ['Released', true]] },
   { title: 'The Bench', line: 'How well does AI build Arabic? Find out every month.', state: 'In progress',
     steps: [['Design', true], ['Prompts', true], ['Monthly runner', true], ['Leaderboard page', true], ['First run', false]] },
   { title: 'Dualkit for Figma', line: 'Everything Dualkit knows, inside Figma.', state: 'Coming',

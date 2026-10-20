@@ -2,6 +2,7 @@
 export const FORMAT_COMMAND = 'npm i @dualkit/format'
 export const STARTER_COMMAND = 'npm i @dualkit/starter'
 export const CHECK_COMMAND = 'npx dualkit check https://your-site.com/ar'
+export const LINT_COMMAND = 'npx dualkit@beta lint .'
 export const ACTION_URL = 'https://github.com/dualkit/dualkit/blob/main/action/README.md'
 export const SKILLS_COMMAND = '/plugin marketplace add dualkit/dualkit'
 export const REPO_URL = 'https://github.com/dualkit/dualkit'

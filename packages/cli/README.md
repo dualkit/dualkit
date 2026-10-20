@@ -31,10 +31,16 @@ Every rule, why it matters and how to fix it: [RULES.md](https://github.com/dual
 ## Lint your source
 
 ```sh
-npx dualkit lint src
+npx dualkit@beta lint .
 ```
 
-`dualkit lint [paths...]` scans CSS, SCSS, HTML, JavaScript and TypeScript for the same class of bugs without launching a browser. Paths default to the current folder.
+`dualkit lint [paths...]` scans CSS, SCSS, HTML, JavaScript and TypeScript against 8 source rules, without launching a browser. Paths default to the current folder, and a folder walk skips what your `.gitignore` skips.
+
+```
+physical.css:2:3  ▲ source/physical-css  `margin-left: 8px` is tied to one side. Use `margin-inline-start`.
+
+0 errors, 1 warning, 0 notes in 2 files
+```
 
 | Option | Default | |
 | --- | --- | --- |
@@ -44,4 +50,4 @@ npx dualkit lint src
 
 Exit codes: 0 clean, 1 a finding at or above `--fail-on`, 2 a problem with the input. The lint rules live in [@dualkit/lint](https://github.com/dualkit/dualkit/blob/main/packages/lint/LINT.md), which is published before the CLI.
 
-In CI, `uses: dualkit/dualkit/action@main` runs the same check on every pull request: [action/README.md](https://github.com/dualkit/dualkit/blob/main/action/README.md).
+In CI, `uses: dualkit/dualkit/action@main` with `mode: lint` runs it on every pull request: [action/README.md](https://github.com/dualkit/dualkit/blob/main/action/README.md).
