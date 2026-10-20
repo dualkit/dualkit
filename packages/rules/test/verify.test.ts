@@ -687,7 +687,7 @@ describe('layout/clipped-text matches what Chromium cuts off', () => {
     const m = await modelOf(html)
     expect(m.clips[0]).toMatchObject({ axis: 'y' })
     expect(m.clips[0]!.hidden).toBeGreaterThan(2)
-    console.info(`clip y: reader hidden = ${m.clips[0]!.hidden}px (scrollHeight - clientHeight)`)
+    console.info(`clip y: reader hidden = ${m.clips[0]!.hidden}px (the smaller of the scroll gap and the text reach)`)
     expect(await found(html, 'layout/clipped-text')).toEqual(['layout/clipped-text'])
   })
 

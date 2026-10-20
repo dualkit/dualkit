@@ -255,10 +255,31 @@ describe('reader foundation: fonts, labels, placeholders, clips, mirrored text',
     expect(m.clips[0]!.hidden).toBeGreaterThan(2)
   })
 
+  it('reads no clip when the box scrolls for an oversized image but its caption fits', async () => {
+    const img = '<img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" style="display:block;width:600px;height:20px">'
+    const m = await modelOf(page(`<div class="card">${img}<p>وصف قصير</p></div>`, { css: '.card{width:200px;overflow:hidden}' }))
+    expect(m.clips).toEqual([])
+  })
+
+  it('reads no clip for text that fits in an overflow:hidden box', async () => {
+    const m = await modelOf(page('<div class="b">نص قصير</div>', { css: '.b{width:300px;overflow:hidden}' }))
+    expect(m.clips).toEqual([])
+  })
+
+  it('reads a clip from the text of an inline descendant', async () => {
+    const m = await modelOf(page('<div class="b"><b>نص عربي طويل جدا يتجاوز العرض بكثير ولا يتسع</b></div>', { css: '.b{width:60px;overflow:hidden;white-space:nowrap}' }))
+    expect(m.clips).toHaveLength(1)
+  })
+
   it('does not read a clip for text inside an .sr-only ancestor', async () => {
     const css = '.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.in{overflow:hidden;width:20px;white-space:nowrap}'
     const m = await modelOf(page('<div class="sr-only"><div class="in">نص عربي طويل جدا جدا جدا</div></div>', { css }))
     expect(m.clips).toEqual([])
+  })
+
+  it.each(['inset(100%)', 'inset(0 0 100% 0)', 'inset(50%)'])('treats clip-path %s as visually hidden', async (clipPath) => {
+    const m = await modelOf(page('<span class="h">للقراءة فقط</span><p>ظاهر</p>', { css: `.h{clip-path:${clipPath};position:absolute;white-space:nowrap}` }))
+    expect(m.texts.map((t) => t.text)).toEqual(['ظاهر'])
   })
 
   it('names the nearest flipping element as mirroredBy, and null for a double flip', async () => {

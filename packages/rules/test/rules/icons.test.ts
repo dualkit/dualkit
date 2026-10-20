@@ -5,6 +5,8 @@ import { page } from '../fixtures'
 import { closeBrowser, modelOf } from '../helpers/browser'
 import { icon, screen } from '../helpers/model'
 
+afterAll(closeBrowser)
+
 const ids = (m: Parameters<typeof runRules>[0]) => runRules(m, { rules: iconRules }).map((f) => f.rule)
 
 describe('icons/not-mirrored', () => {
@@ -38,9 +40,22 @@ describe('icons/not-mirrored on icons named by their surroundings', () => {
     expect(found).toEqual(['icons/not-mirrored'])
     expect(runRules(await modelOf(html.replace('<svg', '<svg style="transform:scaleX(-1)"')), { rules: iconRules })).toEqual([])
   })
+  const chevron = '<svg width="16" height="16" viewBox="0 0 16 16"><path d="M5 2l6 6-6 6"/></svg>'
+  const quiet = async (body: string) => runRules(await modelOf(page(body)), { rules: iconRules }).map((f) => f.rule)
+  it('does not borrow the control name for an icon that has its own name', async () => {
+    const search = '<svg data-icon="search" width="16" height="16"><circle cx="7" cy="7" r="5"/></svg>'
+    expect(await quiet(`<button aria-label="Next page">${search}</button>`)).toEqual([])
+  })
+  it('does not borrow the control name when the icon sits beside visible text', async () => {
+    expect(await quiet(`<button aria-label="Next">${chevron} التالي</button>`)).toEqual([])
+  })
+  it('does not borrow the link name for a logo beside text or another icon', async () => {
+    const logo = '<svg width="16" height="16"><rect width="16" height="16"/></svg>'
+    expect(await quiet(`<a href="#" aria-label="Back to home">${logo}<span>الرئيسية</span></a>`)).toEqual([])
+    expect(await quiet(`<a href="#" aria-label="Back to home">${logo}${logo}</a>`)).toEqual([])
+  })
   it('cannot name a fully unnamed SVG, so it stays quiet', async () => {
     const html = page('<button><svg width="16" height="16"><path d="M5 2l6 6-6 6"/></svg></button>')
     expect(runRules(await modelOf(html), { rules: iconRules })).toEqual([])
   })
 })
-afterAll(closeBrowser)

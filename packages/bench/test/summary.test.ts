@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { parseBenchMonth } from '../../../apps/site/lib/bench-schema'
 import { loadScreens, type ModelEntry } from '../src/config'
 import { makeStore, type BuildKey, type Condition } from '../src/store'
+import { RULE_COUNT } from '../src/score'
 import { buildSummary, publishSummary, writeSummary } from '../src/summary'
 
 const screens = loadScreens()
@@ -94,7 +95,7 @@ describe('buildSummary', () => {
     seed(store, 'b', { alone: 12, dualkit: 15 })
     const out = await buildSummary({ month: '2026-11', models: [model('a'), model('b', '2026-11')], screens, store, shots: async () => null })
     expect(out.models.map((m) => m.id)).toEqual(['a', 'b'])
-    expect(out.models[0]).toMatchObject({ alone: { rulesPassed: 40, outOf: 100 }, dualkit: { rulesPassed: 90 }, lift: 50, isNew: false })
+    expect(out.models[0]).toMatchObject({ alone: { rulesPassed: 40, outOf: RULE_COUNT * screens.length }, dualkit: { rulesPassed: 90 }, lift: 50, isNew: false })
     expect(out.models[1]!.isNew).toBe(true)
     // Three identical builds tie, and cell() picks the lower middle of runs [3, 2, 1]: run 2.
     expect(out.models[0]!.screens[0]!.alone).toMatchObject({ ran: true, raw: 'bench/runs/2026-11/a/payment-summary/alone-2.json' })

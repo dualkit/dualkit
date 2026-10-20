@@ -9,6 +9,19 @@ const CANDIDATES = 'svg, img, i, span[class*="icon"], [data-icon], [data-lucide]
 /** PascalCase and camelCase become kebab-case, then everything is lowercased. */
 const kebab = (name: string): string => name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 
+/** The aria-label of the nearest button or link, only when the icon is that control's sole visible content. */
+function soleControlLabel(el: Element): string {
+  const control = el.closest('button, a')
+  const label = clean(control?.getAttribute('aria-label') ?? '')
+  if (!control || !label) return ''
+  const walker = control.ownerDocument.createTreeWalker(control, NodeFilter.SHOW_TEXT)
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    if (clean(node.textContent ?? '') && !node.parentElement?.closest('svg')) return ''
+  }
+  const others = Array.from(control.querySelectorAll(CANDIDATES)).filter((c) => c !== el && !c.contains(el) && !el.contains(c))
+  return others.length === 0 ? label : ''
+}
+
 /** Name sources, best first: data attributes, sprite reference, icon class, glyph text, aria-label, image alt, title, SVG <title>, the aria-label of the button or link around it, image filename. */
 export function iconName(el: Element): string | null {
   const data = el.getAttribute('data-icon') ?? el.getAttribute('data-lucide')
@@ -29,7 +42,7 @@ export function iconName(el: Element): string | null {
   const own = clean(el.getAttribute('title') ?? '') || clean(el.querySelector(':scope > title')?.textContent ?? '')
   if (own) return kebab(own)
   // A bare icon inside a labelled button or link takes the control's name.
-  const control = clean(el.closest('button, a')?.getAttribute('aria-label') ?? '')
+  const control = soleControlLabel(el)
   if (control) return kebab(control)
   if (img) return kebab(img.getAttribute('src')?.split('/').pop()?.replace(/\.\w+$/, '') || '') || null
   return null

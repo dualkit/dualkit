@@ -1,6 +1,7 @@
 import type { Style } from './types'
 
-export const MIRROR_DEPTH = 4
+/** The element itself plus up to 4 ancestors. */
+export const MIRROR_DEPTH = 5
 
 /** The sign of the horizontal scale an element applies through `transform` or `scale`: -1, or 1 when it does not flip. */
 export function flipSign(s: CSSStyleDeclaration): number {
