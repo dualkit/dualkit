@@ -8,9 +8,11 @@ type Element = DefaultTreeAdapterMap['element']
 /**
  * A statically known piece of a class list. offset is where text starts in SourceFile.text.
  * group is shared by every fragment of one class source: one JSX attribute value, one top-level class
- * call with all its arguments, one HTML class attribute or one @apply.
+ * call with all its arguments, one HTML class attribute or one @apply. conditional is true when the
+ * fragment applies only sometimes: under &&, ||, ??, a ternary arm, a clsx object key, or a cva or tv
+ * variant, slot or compound value.
  */
-export type ClassFragment = { offset: number; text: string; group: number }
+export type ClassFragment = { offset: number; text: string; group: number; conditional: boolean }
 
 /** Calls whose string arguments are class lists. cva and tv also take a config object, read by configClasses. */
 const CLASS_CALLS = new Set(['clsx', 'cn', 'cx', 'twMerge', 'twJoin', 'classnames', 'classNames'])
@@ -22,7 +24,9 @@ const COMPOUND_CLASS_KEYS = new Set(['class', 'className'])
 const SPACE = /\s/
 
 type Out = { map: Map<number, ClassFragment>; groups: number }
-type Sink = { file: SourceFile; base: number; out: Out; group: number }
+type Sink = { file: SourceFile; base: number; out: Out; group: number; conditional: boolean }
+
+const sometimes = (sink: Sink): Sink => (sink.conditional ? sink : { ...sink, conditional: true })
 
 const nextGroup = (out: Out): number => ++out.groups
 
@@ -36,7 +40,7 @@ function emit(sink: Sink, start: number, end: number, cutStart: boolean, cutEnd:
   let to = sink.base + end
   if (cutStart) while (from < to && !SPACE.test(text[from]!)) from++
   if (cutEnd) while (to > from && !SPACE.test(text[to - 1]!)) to--
-  if (to > from && !sink.out.map.has(from)) sink.out.map.set(from, { offset: from, text: text.slice(from, to), group: sink.group })
+  if (to > from && !sink.out.map.has(from)) sink.out.map.set(from, { offset: from, text: text.slice(from, to), group: sink.group, conditional: sink.conditional })
 }
 
 /** A string literal's content, without its quotes. */
@@ -75,16 +79,16 @@ function classExpr(sink: Sink, node: Node | null | undefined, cutStart = false, 
       classExpr(sink, node.left, cutStart, true)
       return classExpr(sink, node.right, true, cutEnd)
     case 'ConditionalExpression':
-      classExpr(sink, node.consequent, cutStart, cutEnd)
-      return classExpr(sink, node.alternate, cutStart, cutEnd)
+      classExpr(sometimes(sink), node.consequent, cutStart, cutEnd)
+      return classExpr(sometimes(sink), node.alternate, cutStart, cutEnd)
     case 'LogicalExpression':
-      if (node.operator !== '&&') classExpr(sink, node.left, cutStart, cutEnd)
-      return classExpr(sink, node.right, cutStart, cutEnd)
+      if (node.operator !== '&&') classExpr(sometimes(sink), node.left, cutStart, cutEnd)
+      return classExpr(sometimes(sink), node.right, cutStart, cutEnd)
     case 'ArrayExpression':
       for (const el of node.elements) if (el && el.type !== 'SpreadElement') classExpr(sink, el)
       return
     case 'ObjectExpression':
-      return objectKeys(sink, node)
+      return objectKeys(sometimes(sink), node)
     case 'ParenthesizedExpression':
     case 'TSAsExpression':
     case 'TSSatisfiesExpression':
@@ -138,8 +142,8 @@ function configClasses(sink: Sink, node: Node): void {
     if (prop.type !== 'ObjectProperty') continue
     const name = propName(prop)
     if (name === 'base') classExpr(sink, prop.value)
-    else if (name === 'slots' || name === 'variants') leafValues(sink, prop.value)
-    else if (name === 'compoundVariants' || name === 'compoundSlots') compoundEntries(sink, prop.value)
+    else if (name === 'slots' || name === 'variants') leafValues(sometimes(sink), prop.value)
+    else if (name === 'compoundVariants' || name === 'compoundSlots') compoundEntries(sometimes(sink), prop.value)
   }
 }
 
@@ -199,7 +203,7 @@ function htmlClasses(file: SourceFile, out: Out): void {
     if (!head) continue
     const start = loc.startOffset + head[0].length
     const end = loc.endOffset - (head[1] ? 1 : 0)
-    if (end > start) out.map.set(start, { offset: start, text: file.text.slice(start, end), group: nextGroup(out) })
+    if (end > start) out.map.set(start, { offset: start, text: file.text.slice(start, end), group: nextGroup(out), conditional: false })
   }
 }
 
@@ -209,7 +213,7 @@ function applyClasses(file: SourceFile, out: Out): void {
       const start = rule.source?.start?.offset
       if (rule.name.toLowerCase() !== 'apply' || start === undefined || !rule.params) return
       const offset = block.offset + start + 1 + rule.name.length + (rule.raws.afterName?.length ?? 0)
-      if (file.text.startsWith(rule.params, offset)) out.map.set(offset, { offset, text: rule.params, group: nextGroup(out) })
+      if (file.text.startsWith(rule.params, offset)) out.map.set(offset, { offset, text: rule.params, group: nextGroup(out), conditional: false })
     })
   }
 }
@@ -218,7 +222,7 @@ function applyClasses(file: SourceFile, out: Out): void {
 export function classStrings(file: SourceFile): ClassFragment[] {
   const out: Out = { map: new Map(), groups: 0 }
   htmlClasses(file, out)
-  for (const block of file.js) visit({ file, base: block.offset, out, group: 0 }, block.ast.program)
+  for (const block of file.js) visit({ file, base: block.offset, out, group: 0, conditional: false }, block.ast.program)
   applyClasses(file, out)
   return [...out.map.values()].sort((a, b) => a.offset - b.offset)
 }

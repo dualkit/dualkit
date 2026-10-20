@@ -80,4 +80,10 @@ describe('tailwindVersion', () => {
       expect(tailwindVersion(join(root, 'a.tsx'), root), range).toBe('4.1.0')
     }
   })
+
+  it('stops at the home folder and does not read its package.json', () => {
+    const home = tree({ 'package.json': pkg({ tailwindcss: '^3.4.0' }), 'node_modules/tailwindcss/package.json': installed('3.4.9'), 'proj/a.tsx': '' })
+    expect(createTailwindVersion({ home })(join(home, 'proj/a.tsx'), join(home, 'proj'))).toBeNull()
+    expect(createTailwindVersion({ home: join(home, 'elsewhere') })(join(home, 'proj/a.tsx'), join(home, 'proj'))).toBe('3.4.9')
+  })
 })

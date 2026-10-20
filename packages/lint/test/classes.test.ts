@@ -117,3 +117,10 @@ describe('classStrings groups', () => {
     expect(groups('a.css', '.x { @apply a; } .y { @apply b; }')).toEqual([['a'], ['b']])
   })
 })
+
+describe('classStrings conditional', () => {
+  it('marks fragments under a condition, object key or variant leaf', () => {
+    const file = parseSource('a.tsx', "cn('a', x && 'b', y || 'c', z ? 'd' : 'e', { f: g }); cva('h', { variants: { v: { w: 'i' } } })\nexport const A = () => <p className=\"j\" />")!
+    expect(classStrings(file).map((f) => `${f.text}:${f.conditional}`)).toEqual(['a:false', 'b:true', 'c:true', 'd:true', 'e:true', 'f:true', 'h:false', 'i:true', 'j:false'])
+  })
+})

@@ -93,9 +93,9 @@ const key = (variants: readonly string[], negative: string, core: string): strin
 const HALF = new Set(['1/2', '[50%]'])
 /** Cores only, so -translate-x-1/2 and translate-x-1/2 both arrive as translate-x-1/2. */
 const HALF_TRANSLATES = ['translate-x-1/2', 'translate-x-[50%]', 'translate-x-[-50%]']
-const isCentring = (core: string, cores: ReadonlySet<string>): boolean => {
+const isCentring = (core: string, present: (core: string) => boolean): boolean => {
   const match = /^(?:left|right)-(.+)$/.exec(core)
-  return match !== null && HALF.has(match[1]!) && HALF_TRANSLATES.some((t) => cores.has(t))
+  return match !== null && HALF.has(match[1]!) && HALF_TRANSLATES.some(present)
 }
 
 /** -left-[9999px] or right-[-9999px]: far offscreen on either side, as in physical-css. */
@@ -120,17 +120,33 @@ function messageFor(token: string, parsed: ParsedClass, matches: readonly Tailwi
   return `\`${token}\` stays on the ${side} in Arabic. Use \`${fixed}\`.`
 }
 
-/** Checks one class source. Pairs and centring are judged across all of its fragments; hits stay per token. */
+type Placed = { fragment: number; conditional: boolean }
+
+/**
+ * Two classes count as one symmetric pair, or as left-1/2 with its translate, only when both always apply
+ * together: they share a fragment, or both sit in unconditional fragments of the source.
+ */
+const together = (a: Placed, b: Placed): boolean => a.fragment === b.fragment || (!a.conditional && !b.conditional)
+
+const index = (entries: readonly [string, Placed][]): Map<string, Placed[]> => {
+  const map = new Map<string, Placed[]>()
+  for (const [k, placed] of entries) map.set(k, [...(map.get(k) ?? []), placed])
+  return map
+}
+
+/** Checks one class source. Pairs and centring are judged across its fragments; hits stay per token. */
 function checkSource(fragments: readonly ClassFragment[], version: SemVer): LintHit[] {
-  const tokens = fragments.flatMap((f) =>
-    [...f.text.matchAll(/\S+/g)].map((m) => ({ token: m[0], at: f.offset + m.index, parsed: parseClass(m[0]) })))
-  const keys = new Set(tokens.map(({ parsed: p }) => key(p.variants, p.negative, p.core)))
-  const cores = new Set(tokens.map(({ parsed: p }) => p.core))
+  const tokens = fragments.flatMap((f, fragment) =>
+    [...f.text.matchAll(/\S+/g)].map((m) => ({ token: m[0], at: f.offset + m.index, parsed: parseClass(m[0]), placed: { fragment, conditional: f.conditional } })))
+  const keys = index(tokens.map(({ parsed: p, placed }) => [key(p.variants, p.negative, p.core), placed]))
+  const cores = index(tokens.map(({ parsed: p, placed }) => [p.core, placed]))
   const hits: LintHit[] = []
-  for (const { token, at, parsed } of tokens) {
+  for (const { token, at, parsed, placed } of tokens) {
     const matches = TAILWIND_MAP.filter((e) => e.pattern.test(parsed.core))
     if (matches.length === 0 || sideScoped(parsed.variants) || isOffscreen(parsed.negative, parsed.core)) continue
-    if (keys.has(key(parsed.variants, parsed.negative, mirror(parsed.core))) || isCentring(parsed.core, cores)) continue
+    const near = (map: Map<string, Placed[]>, k: string): boolean => (map.get(k) ?? []).some((p) => together(placed, p))
+    const paired = near(keys, key(parsed.variants, parsed.negative, mirror(parsed.core)))
+    if (paired || isCentring(parsed.core, (t) => near(cores, t))) continue
     hits.push({ offset: at, message: messageFor(token, parsed, matches, version) })
   }
   return hits

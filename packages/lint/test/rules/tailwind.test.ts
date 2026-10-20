@@ -179,9 +179,13 @@ describe('fix round 1', () => {
 
   it('pairs and centring are judged per class source, not per string', () => {
     const quietSrc = [
-      'cn("absolute left-1/2 top-0", "-translate-x-1/2")', "cn('ml-2', 'mr-2')", "cn('pl-4', on && 'pr-4')",
-      'export const A = () => <a className={on ? "left-0" : "right-0"} />', "cva('ml-2', { variants: { a: { b: 'mr-2' } } })",
+      'cn("absolute left-1/2 top-0", "-translate-x-1/2")', "cn('ml-2', 'mr-2')",
+      'export const A = () => <a className={cn("left-0", ["right-0"])} />',
     ]
+    // Round 2: a conditional half never pairs, so these fire.
+    expect(run("cn('pl-4', on && 'pr-4')")).toHaveLength(2)
+    expect(run('export const A = () => <a className={on ? "left-0" : "right-0"} />')).toHaveLength(2)
+    expect(run("cva('ml-2', { variants: { a: { b: 'mr-2' } } })")).toHaveLength(2)
     for (const src of quietSrc) expect(run(src), src).toEqual([])
     expect(run("cn('ml-2'); cn('mr-2')")).toHaveLength(2)
     expect(run('export const A = () => <><a className="ml-2" /><b className="mr-2" /></>')).toHaveLength(2)
@@ -198,5 +202,20 @@ describe('fix round 1', () => {
   it('skips offscreen offsets of 999 or more', () => {
     for (const cls of ['-left-[9999px]', 'right-[-9999px]', '-right-[999px]', 'left-[-10000em]']) expect(fired(cls), cls).toEqual([])
     for (const cls of ['-left-[998px]', 'left-[9999px]', '-left-4']) expect(fired(cls), cls).toHaveLength(1)
+  })
+})
+
+describe('fix round 2: only unconditional classes pair', () => {
+  const shown = (src: string) => run(src).map((f) => f.message.split('`')[1])
+  it('conditional halves of a pair both fire', () => {
+    expect(shown("cn('px-2', first && 'rounded-l', last && 'rounded-r')")).toEqual(['rounded-l', 'rounded-r'])
+    expect(shown("cn('ml-2', open && 'mr-2')")).toEqual(['ml-2', 'mr-2'])
+    expect(shown("cn(a ? 'left-0' : 'right-0')")).toEqual(['left-0', 'right-0'])
+    expect(shown("clsx({ 'pl-2': a, 'pr-2': b })")).toEqual(['pl-2', 'pr-2'])
+    expect(shown("cva('', { variants: { s: { a: 'ml-2', b: 'mr-2' } } })")).toEqual(['ml-2', 'mr-2'])
+    expect(shown("cn('left-1/2', open && '-translate-x-1/2')")).toEqual(['left-1/2'])
+  })
+  it('a pair in one string or across unconditional arguments stays quiet', () => {
+    for (const src of ["cn('absolute left-1/2', '-translate-x-1/2')", "cn('ml-2', 'mr-2')", "cn(open && 'ml-2 mr-2')", "clsx({ 'left-0 right-0': a })"]) expect(shown(src), src).toEqual([])
   })
 })
