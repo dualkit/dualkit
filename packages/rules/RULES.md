@@ -7,14 +7,14 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 <a id="bidi-unisolated-number"></a>
 ### `bidi/unisolated-number` A number that will show in reverse
 
-**error.** Inside right-to-left text the bidi algorithm reorders digit groups split by spaces, so 050 123 4567 shows as 4567 123 050.
+**error.** Inside right-to-left text the bidi algorithm reorders digit groups split by spaces and moves a leading # or +, so 050 123 4567 shows as 4567 123 050.
 
 **Fix:** Wrap the number in `<bdi>`, or give its element dir="ltr".
 
 <a id="bidi-unisolated-latin"></a>
 ### `bidi/unisolated-latin` An email, link or code that will scramble
 
-**error.** Punctuation inside emails, URLs and codes takes the direction of the Arabic around it, so dots and slashes jump to the wrong end.
+**error.** A leading #, a trailing slash or a digit beside an email, link or code takes the direction of the Arabic around it, so it jumps to the wrong end.
 
 **Fix:** Wrap it in `<bdi>`, or give its element dir="ltr".
 
@@ -169,5 +169,6 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 ## Known limits
 
 - A closing mark in the middle of a line, such as the ! in "Hello world! مرحبا", is not checked. Only the end of a paragraph, or of a line that a `<br>` closes on its own, is.
-- Codes without a leading # (A10293, A-10293) and groups of Arabic-Indic digits paint the same with or without `<bdi>`, so they are not flagged.
-- A number with a leading # (#10293) also shows in reverse inside Arabic, but it is not an email, link or code, so no rule covers it yet.
+- Emails, links and codes are flagged only where Chromium paints them differently once isolated: with a leading #, a trailing slash, or a Western digit beside them. In the middle of a sentence, at either end of a block, or before a full stop or bracket they paint the same, so they are not flagged.
+- An email, link or code beside a Latin word is not flagged: isolating it only splits one left-to-right phrase that already reads in order.
+- Groups of Arabic-Indic digits paint the same with or without `<bdi>`, so they are not flagged.

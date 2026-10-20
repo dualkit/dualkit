@@ -1,5 +1,5 @@
 import { defineRule, pick } from '../rule'
-import { ENDS_WITH_ARABIC_MARK, ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, LATIN_TOKEN, arabicShare, excerpt, hasArabic, firstStrong, lastStrong } from '../text'
+import { ENDS_WITH_ARABIC_MARK, ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, arabicShare, excerpt, hasArabic, firstStrong, hashNumberScrambles, lastStrong, scrambledLatinTokens } from '../text'
 
 const LATIN_LETTER = /[A-Za-zÀ-ɏ]/
 
@@ -13,21 +13,21 @@ const naturalDirection = (s: string, share: number): 'ltr' | 'rtl' | null => {
 export const unisolatedNumber = defineRule({
   id: 'bidi/unisolated-number', group: 'bidi', severity: 'error',
   title: 'A number that will show in reverse',
-  why: 'Inside right-to-left text the bidi algorithm reorders digit groups split by spaces, so 050 123 4567 shows as 4567 123 050.',
+  why: 'Inside right-to-left text the bidi algorithm reorders digit groups split by spaces and moves a leading # or +, so 050 123 4567 shows as 4567 123 050.',
   fix: 'Wrap the number in <bdi>, or give its element dir="ltr".',
   check: (m) => m.texts
-    .filter((t) => t.blockDir === 'rtl' && !t.isolated && GROUPED_NUMBER.test(t.text))
+    .filter((t) => t.blockDir === 'rtl' && !t.isolated && (GROUPED_NUMBER.test(t.text) || hashNumberScrambles(t.text, t.blockText)))
     .map((t) => ({ node: pick(t), message: `"${excerpt(t.text)}" is not isolated, so its groups can show in reverse order.` })),
 })
 
 export const unisolatedLatin = defineRule({
   id: 'bidi/unisolated-latin', group: 'bidi', severity: 'error',
   title: 'An email, link or code that will scramble',
-  why: 'Punctuation inside emails, URLs and codes takes the direction of the Arabic around it, so dots and slashes jump to the wrong end.',
+  why: 'A leading #, a trailing slash or a digit beside an email, link or code takes the direction of the Arabic around it, so it jumps to the wrong end.',
   fix: 'Wrap it in <bdi>, or give its element dir="ltr".',
   check: (m) => m.texts
-    .filter((t) => t.blockDir === 'rtl' && !t.isolated && LATIN_TOKEN.test(t.text))
-    .map((t) => ({ node: pick(t), message: `"${excerpt(t.text)}" sits in right-to-left text without isolation.` })),
+    .filter((t) => t.blockDir === 'rtl' && !t.isolated)
+    .flatMap((t) => scrambledLatinTokens(t.text, t.blockText).slice(0, 1).map((token) => ({ node: pick(t), message: `"${excerpt(token)}" sits in right-to-left text without isolation, so part of it can move.` }))),
 })
 
 /**

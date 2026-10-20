@@ -17,11 +17,65 @@ export const ARABIC_INDIC_DIGIT = /[٠-٩۰-۹]/
  */
 export const GROUPED_NUMBER = new RegExp(`(?=[0-9\\u0660-\\u0669\\u06F0-\\u06F9 \\u00A0]*[0-9])${DIGIT}+(?:[ \\u00A0]+${DIGIT}+)+|\\+${DIGIT}`)
 /**
- * Emails, URLs and codes such as ORDER-2041, plus hash-prefixed codes such as #A-10293.
- * Measured in Chromium: isolation moves the # of a hash-prefixed code in every context, but leaves a bare
- * code with one capital (A10293, A-10293) painting the same, so those are not tokens. See verify.test.ts.
+ * The shapes the Latin rule looks at: emails, URLs, codes such as ORDER-2041 and INV_2041, and hash tags and codes such as #A-10293.
+ *
+ * A shape alone is not enough. Measured in Chromium, bare against <bdi>, in 21 positions inside an Arabic paragraph
+ * (verify.test.ts, "bidi/unisolated-latin"): the punctuation inside an email, link or code never moves, so isolation
+ * changes nothing in mid-sentence, at either end of the block, or before a full stop or bracket. It changes the paint when:
+ *   1. the token starts with # (the # lands on the wrong side),
+ *   2. a link ends in a slash (the slash lands on the wrong side),
+ *   3. a Western digit follows the token across spaces or marks only (the digit joins the token and reads before it),
+ *   4. a digit directly precedes the token.
+ * A neighbouring Latin word also changes the paint, but only by joining one left-to-right phrase, which reads in order, so it is not a scramble.
+ * `scrambledLatinTokens` applies these conditions.
  */
-export const LATIN_TOKEN = /[\w.+-]+@[\w-]+\.[\w.]{2,}|https?:\/\/\S+|www\.\S+|\b[A-Z]{2,}[-_]?\d{2,}\b|#[A-Z]+[-_]?\d{3,}\b/
+export const LATIN_TOKEN = /#[A-Za-z][\w-]*|[\w.+-]+@[\w-]+\.[\w.]{2,}|https?:\/\/\S+|www\.\S+|(?<![A-Za-z])[A-Z]{2,}[-_]?\d{2,}\b/
+
+const TRAILING_MARKS = /[.,;:!?)\]}'"\u060C\u061B\u061F\u06D4]+$/
+const EN_DIGIT = '0-9\\u06F0-\\u06F9'
+const AFTER_EN_DIGIT = new RegExp(`^[^\\p{L}\\p{N}]*[${EN_DIGIT}]`, 'u')
+/** A digit that the token pattern swallowed, as in 5ORDER-2041: it still sits directly against the token. */
+const START_DIGIT = /^[0-9]/
+const ANY_DIGIT_BEFORE = /[0-9\u0660-\u0669\u06F0-\u06F9]$/
+
+/** Every place a piece of text sits in its block, so a rule can read what touches it. The block copy is capped, so the run itself is the fallback. */
+function surroundings(piece: string, text: string, blockText: string): Array<{ before: string; after: string }> {
+  const out: Array<{ before: string; after: string }> = []
+  for (let at = blockText.indexOf(piece); at !== -1; at = blockText.indexOf(piece, at + 1)) out.push({ before: blockText.slice(0, at), after: blockText.slice(at + piece.length) })
+  if (out.length > 0) return out
+  const at = text.indexOf(piece)
+  return [{ before: text.slice(0, at), after: text.slice(at + piece.length) }]
+}
+
+/** The emails, links and codes in a run that Chromium paints differently once isolated, from the cases listed on LATIN_TOKEN. */
+export function scrambledLatinTokens(text: string, blockText: string): string[] {
+  const found: string[] = []
+  for (const match of text.matchAll(new RegExp(LATIN_TOKEN.source, 'g'))) {
+    const token = match[0].replace(TRAILING_MARKS, '')
+    if (token.length < 3) continue
+    const hash = token.startsWith('#')
+    const slash = token.endsWith('/')
+    const scrambles = surroundings(token, text, blockText).some(({ before, after }) => hash || slash || AFTER_EN_DIGIT.test(after) || ANY_DIGIT_BEFORE.test(before) || START_DIGIT.test(token))
+    if (scrambles) found.push(token)
+  }
+  return found
+}
+
+const HASH_NUMBER = /#(?:([\u0660-\u0669])|[0-9\u06F0-\u06F9])/g
+
+/**
+ * A # directly before digits. Measured in Chromium (verify.test.ts, "bidi/unisolated-number and a leading #"): with Arabic-Indic
+ * digits the # always lands on the wrong side. With Western digits it does when a letter comes before it on the line:
+ * after Arabic it is a scramble; after a Latin word it only joins that word's left-to-right phrase, so it is not one.
+ */
+export function hashNumberScrambles(text: string, blockText: string): boolean {
+  if (!new RegExp(HASH_NUMBER.source).test(text)) return false
+  for (const m of blockText.matchAll(HASH_NUMBER)) {
+    if (m[1] !== undefined || lastStrong(blockText.slice(0, m.index)) === 'rtl') return true
+  }
+  return false
+}
+
 /** Closing marks the bidi algorithm treats as neutral, so they land at the paragraph's far end. U+060C is the Arabic comma. */
 export const ENDS_WITH_PUNCTUATION = /[.!?:;,)\]\u060C]\s*$/
 /**

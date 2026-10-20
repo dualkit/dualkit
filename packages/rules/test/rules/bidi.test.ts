@@ -16,11 +16,34 @@ describe('bidi/unisolated-number', () => {
 })
 
 describe('bidi/unisolated-latin', () => {
-  it('flags an email inside Arabic', () => {
-    expect(ids(screen({ texts: [text({ text: 'راسلنا على hi@example.com', blockText: 'راسلنا على hi@example.com' })] }))).toContain('bidi/unisolated-latin')
+  it('flags an email followed by a digit, which Chromium reorders', () => {
+    expect(ids(screen({ texts: [text({ text: 'راسلنا على hi@example.com 5', blockText: 'راسلنا على hi@example.com 5' })] }))).toEqual(['bidi/unisolated-latin'])
+  })
+  it('flags a link with a trailing slash', () => {
+    expect(ids(screen({ texts: [text({ text: 'زر https://example.com/a/', blockText: 'زر https://example.com/a/' })] }))).toEqual(['bidi/unisolated-latin'])
+  })
+  it('passes an email, link or code that has no #, trailing slash or digit beside it', () => {
+    for (const t of ['راسلنا على hi@example.com', 'زر https://example.com/a/b ثم', 'رقم ORDER-2041 تم', 'اكتب www.example.com ثم']) {
+      expect(ids(screen({ texts: [text({ text: t, blockText: t })] })), t).toEqual([])
+    }
+  })
+  it('passes a token that only joins a Latin neighbour', () => {
+    expect(ids(screen({ texts: [text({ text: 'تم hi@example.com Apple', blockText: 'تم hi@example.com Apple' })] }))).toEqual([])
   })
   it('passes when isolated', () => {
-    expect(ids(screen({ texts: [text({ text: 'hi@example.com', isolated: true })] }))).toEqual([])
+    expect(ids(screen({ texts: [text({ text: '#A-10293', isolated: true })] }))).toEqual([])
+  })
+})
+
+describe('bidi/unisolated-number: a leading #', () => {
+  const n = (t: string) => ids(screen({ texts: [text({ text: t, blockText: t })] }))
+  it('flags # and Western digits after Arabic, and # with Arabic-Indic digits anywhere', () => {
+    expect(n('رقم الطلب #10293 تم')).toEqual(['bidi/unisolated-number'])
+    expect(n('#\u0663\u0664\u0665 تم')).toEqual(['bidi/unisolated-number'])
+  })
+  it('passes a lone #, # at the start, # after a Latin word, a colour and an isolated number', () => {
+    for (const t of ['اللون # تم', '#10293 تم', 'Order #10293 تم', '5 #10293 تم']) expect(n(t), t).toEqual([])
+    expect(ids(screen({ texts: [text({ text: '#10293', blockText: 'رقم #10293', isolated: true })] }))).toEqual([])
   })
 })
 

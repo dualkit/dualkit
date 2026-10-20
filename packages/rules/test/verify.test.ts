@@ -331,23 +331,106 @@ describe('bidi/unisolated-number and three groups of Arabic-Indic digits', () =>
   })
 })
 
-describe('bidi/unisolated-latin and order codes', () => {
-  const CONTEXTS = ['رقم الطلب {} تم', 'الطلب ({}) تم', 'رقم الطلب: {}', 'الطلب رقم {}.']
-  const paint = (code: string, ctx: string, isolate: boolean) =>
-    withPage(page(`<p id="n">${ctx.replace('{}', isolate ? `<bdi>${code}</bdi>` : code)}</p>`), async (p) => visualText(await charBoxes(p, '#n')))
+// Every shape the Latin rule knows, in every position the fix round asked for, painted bare and inside <bdi>.
+// The rule must fire exactly where isolation changes the paint and a scramble (not a Latin neighbour joining) is the cause.
+const SHAPES = [
+  'hi@example.com', 'user.name+tag@mail.co.uk', 'https://example.com/a/b', 'https://example.com/a/b/', 'www.example.com',
+  'ORDER-2041', 'INV_2041', '#A-10293', '#A10293', '#FFF', '#iPhone',
+]
+// `scrambles` is whether isolation changes the paint for a trailing-slash-free, #-free token in that position.
+const POSITIONS: Array<{ name: string; ctx: string; scrambles: boolean; latinJoin?: boolean }> = [
+  { name: 'between Arabic words', ctx: 'رقم {} تم', scrambles: false },
+  { name: 'at the end', ctx: 'اكتب إلى {}', scrambles: false },
+  { name: 'at the end before an Arabic full stop', ctx: 'اكتب إلى {}\u06D4', scrambles: false },
+  { name: 'at the end before an Arabic question mark', ctx: 'اكتب إلى {}\u061F', scrambles: false },
+  { name: 'at the start of the block', ctx: '{} تم الطلب', scrambles: false },
+  { name: 'alone in the block', ctx: '{}', scrambles: false },
+  { name: 'before a Latin full stop', ctx: 'تم {}. ثم', scrambles: false },
+  { name: 'inside brackets', ctx: 'تم ({}) ثم', scrambles: false },
+  { name: 'before a Latin closing bracket', ctx: 'تم {}) ثم', scrambles: false },
+  { name: 'before a Latin comma', ctx: 'تم {}, ثم', scrambles: false },
+  { name: 'before an Arabic comma', ctx: 'تم {}\u060C ثم', scrambles: false },
+  { name: 'before an Arabic number', ctx: 'تم {} \u0665', scrambles: false },
+  { name: 'after a Western digit group with a space', ctx: 'تم 5 {}', scrambles: false },
+  { name: 'before a Western digit after a space', ctx: 'تم {} 5', scrambles: true },
+  { name: 'before a Western digit after a dash', ctx: 'تم {} - 5', scrambles: true },
+  { name: 'before a Western digit after a comma', ctx: 'تم {}\u060C 5', scrambles: true },
+  { name: 'before an Extended Arabic-Indic digit', ctx: 'تم {} \u06F5', scrambles: true },
+  { name: 'directly after a Western digit', ctx: 'تم 5{}', scrambles: true },
+  { name: 'directly after an Arabic-Indic digit', ctx: 'تم \u0665{}', scrambles: true },
+  { name: 'before a Western digit with an Arabic word between', ctx: 'تم {} ثم 5', scrambles: false },
+  { name: 'before a Latin word', ctx: 'تم {} Apple', scrambles: false, latinJoin: true },
+  { name: 'after a Latin word', ctx: 'Apple {} تم', scrambles: false, latinJoin: true },
+]
+const hasEdgeMark = (shape: string) => shape.startsWith('#') || shape.endsWith('/')
 
-  it.each(['#A-10293', '#A10293'])('isolation changes how %s paints in every context, so the rule flags it', async (code) => {
-    for (const ctx of CONTEXTS) expect(await paint(code, ctx, false), ctx).not.toBe(await paint(code, ctx, true))
-    expect(await found(page(`<p>رقم الطلب ${code} تم</p>`), 'bidi/unisolated-latin')).toEqual(['bidi/unisolated-latin'])
-    expect(await found(page(`<p>رقم الطلب <bdi>${code}</bdi> تم</p>`), 'bidi/unisolated-latin')).toEqual([])
+describe('bidi/unisolated-latin: only the shapes and positions that Chromium paints differently', () => {
+  const paint = (html: string) => withPage(html, async (p) => visualText(await charBoxes(p, '#n')))
+  const html = (ctx: string, shape: string, isolate: boolean) => page(`<p id="n">${ctx.replace('{}', isolate ? `<bdi>${shape}</bdi>` : shape)}</p>`)
+
+  it.each(SHAPES)('%s: the rule fires exactly where isolation scrambles it', async (shape) => {
+    for (const { name, ctx, scrambles, latinJoin } of POSITIONS) {
+      const differs = (await paint(html(ctx, shape, false))) !== (await paint(html(ctx, shape, true)))
+      if (!latinJoin) expect(differs, `${shape} ${name}: paint`).toBe(hasEdgeMark(shape) || scrambles)
+      const fires = (await found(html(ctx, shape, false), 'bidi/unisolated-latin')).length > 0
+      expect(fires, `${shape} ${name}: rule`).toBe(hasEdgeMark(shape) || scrambles)
+      expect(await found(html(ctx, shape, true), 'bidi/unisolated-latin'), `${shape} ${name}: isolated`).toEqual([])
+    }
+  }, 60_000)
+
+  // Dropped: a Latin neighbour. Isolation changes the order of "تم hi@example.com Apple", but only because the token
+  // and Apple stop being one left-to-right phrase. The bare paint reads token then Apple, in order, so it is not a scramble.
+  it('does not treat a token that joins a neighbouring Latin word as scrambled', async () => {
+    const bare = await paint(html('تم {} Apple', 'hi@example.com', false))
+    expect(bare.indexOf('h')).toBeLessThan(bare.indexOf('A'))
+    expect(await found(html('تم {} Apple', 'hi@example.com', false), 'bidi/unisolated-latin')).toEqual([])
   })
 
-  // Measured: a code without a leading # is one left-to-right run, so Arabic around it cannot move any of it.
-  // Isolation only matters when a digit follows or precedes the code directly. Dropped: A10293, A-10293.
-  // A bare #10293 does scramble (to 10293#), but it is a number, not a Latin token: out of scope here.
-  it.each(['A10293', 'A-10293'])('paints %s the same with and without isolation, so the rule leaves it alone', async (code) => {
-    for (const ctx of CONTEXTS) expect(await paint(code, ctx, false), ctx).toBe(await paint(code, ctx, true))
-    expect(await found(page(`<p>رقم الطلب ${code} تم</p>`), 'bidi/unisolated-latin')).toEqual([])
+  it('does not fire on a trailing full stop after a link, which is the sentence\'s own mark', async () => {
+    expect(await found(page('<p>زر https://example.com/a/b. ثم</p>'), 'bidi/unisolated-latin')).toEqual([])
+  })
+
+  it('still reads the surroundings when the token sits in its own element', async () => {
+    expect(await found(page('<p>تم <a href="#">hi@example.com</a> 5</p>'), 'bidi/unisolated-latin')).toEqual(['bidi/unisolated-latin'])
+    expect(await found(page('<p>تم <a href="#">hi@example.com</a> ثم</p>'), 'bidi/unisolated-latin')).toEqual([])
+  })
+})
+
+describe('bidi/unisolated-number and a leading #', () => {
+  const NUMBERS = ['#10293', '#12', '#\u0663\u0664\u0665', '#\u06F5']
+  const POS = [
+    { name: 'after Arabic text', ctx: 'رقم الطلب {} تم', differs: true },
+    { name: 'at the end after Arabic', ctx: 'الطلب رقم {}', differs: true },
+    { name: 'in brackets after Arabic', ctx: 'الطلب ({}) تم', differs: true },
+    { name: 'after a Latin word', ctx: 'Order {} تم', differs: true, latinJoin: true },
+    { name: 'at the start of the block', ctx: '{} تم الطلب', differs: false },
+    { name: 'alone in the block', ctx: '{}', differs: false },
+    { name: 'after a Western digit', ctx: '5 {} تم', differs: false },
+  ]
+  const paint = (h: string) => withPage(h, async (p) => visualText(await charBoxes(p, '#n')))
+  const h = (ctx: string, n: string, bdi: boolean) => page(`<p id="n">${ctx.replace('{}', bdi ? `<bdi>${n}</bdi>` : n)}</p>`)
+
+  it.each(NUMBERS)('%s: the rule fires where isolation changes the paint after Arabic', async (n) => {
+    const arabicIndic = /[\u0660-\u0669]/.test(n)
+    for (const { name, ctx, differs, latinJoin } of POS) {
+      const real = (await paint(h(ctx, n, false))) !== (await paint(h(ctx, n, true)))
+      // Arabic-Indic digits are never joined to the #, so they scramble even at the start; Western ones need a letter before.
+      expect(real, `${n} ${name}: paint`).toBe(arabicIndic || differs)
+      const fires = (await found(h(ctx, n, false), 'bidi/unisolated-number')).length > 0
+      expect(fires, `${n} ${name}: rule`).toBe(arabicIndic ? real : differs && !latinJoin)
+      expect(await found(h(ctx, n, true), 'bidi/unisolated-number'), `${n} ${name}: isolated`).toEqual([])
+    }
+  }, 60_000)
+
+  it('leaves a lone #, a colour such as #FFF and an isolated number alone, and does not double-fire', async () => {
+    const both = async (body: string) => {
+      const m = await modelOf(page(`<p>${body}</p>`))
+      return runRules(m, { rules: RULES.filter((r) => r.id === 'bidi/unisolated-number' || r.id === 'bidi/unisolated-latin') }).map((f) => f.rule)
+    }
+    expect(await both('اللون # تم')).toEqual([])
+    expect(await both('اللون #FFF تم')).toEqual(['bidi/unisolated-latin'])
+    expect(await both('رقم الطلب #10293 تم')).toEqual(['bidi/unisolated-number'])
+    expect(await both('رقم الطلب <bdi>#10293</bdi> تم')).toEqual([])
   })
 })
 

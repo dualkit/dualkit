@@ -19,7 +19,7 @@ const long = 'نص عربي طويل يمتد على عدة أسطر في هذه
 
 export const FIXTURES: Record<string, { bad: string; good: string }> = {
   'bidi/unisolated-number': { bad: page('<p>رقم الهاتف 050 123 4567</p>'), good: page('<p>رقم الهاتف <bdi>050 123 4567</bdi></p>') },
-  'bidi/unisolated-latin': { bad: page('<p>راسلنا على hi@example.com</p>'), good: page('<p>راسلنا على <bdi>hi@example.com</bdi></p>') },
+  'bidi/unisolated-latin': { bad: page('<p>رقم الطلب #A-10293 تم</p>'), good: page('<p>رقم الطلب <bdi>#A-10293</bdi> تم</p>') },
   'bidi/punctuation-flip': { bad: page('<p>Hello world!</p>'), good: page('<p dir="ltr">Hello world!</p>') },
   'bidi/field-direction': { bad: page('<label>البريد <input type="email"></label>'), good: page('<label>البريد <input type="email" dir="ltr"></label>') },
   'bidi/field-placeholder': {
