@@ -7,7 +7,7 @@ export const V3 = {
       ['01', 'Skills', 'Teach Claude Code and Cursor to build right to left', '4 skills'],
       ['02', 'Format', 'Money, dates, phones and IBANs from the digits people type', 'npm'],
       ['03', 'Starter', 'Eight bilingual components to copy into your app', 'shadcn'],
-      ['04', 'Check', 'Score any page against 29 Arabic rules', 'CLI'],
+      ['04', 'Check', 'Score live pages, or lint your source before it ships', 'CLI'],
       ['05', 'Bench', 'How free AI models build Arabic, every month', 'Monthly'],
     ],
     command: '/plugin install dualkit@dualkit',
@@ -155,7 +155,7 @@ export const V3 = {
   footer: {
     line: 'Arabic and English, built right the first time.',
     columns: [
-      ['Product', ['Skills', 'Format', 'Starter', 'Check', 'Bench']],
+      ['Product', ['Skills', 'Format', 'Starter', 'Check', 'Lint', 'Bench']],
       ['Resources', ['Docs', 'Updates', 'Status', 'Registry']],
       ['Community', ['GitHub', 'Discussions', 'npm', 'Plugin directory']],
       ['Legal', ['MIT licence']],
