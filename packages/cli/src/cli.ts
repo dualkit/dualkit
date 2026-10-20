@@ -1,16 +1,19 @@
-import { realpathSync, writeFileSync } from 'node:fs'
+import { existsSync, realpathSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { parseArgs } from 'node:util'
-import { audit } from './audit'
+import { lint } from '@dualkit/lint'
+import type { audit } from './audit'
 import { UserError, loadConfig } from './config'
+import { formatLint, isFailOn, shouldFail } from './lint'
 import { renderReport } from './report'
 import { formatSummary } from './summary'
 import { toUrl } from './target'
 
-export type Io = { out: (s: string) => void; err: (s: string) => void; write: (path: string, data: string) => void; audit: typeof audit; cwd: string }
+export type Io = { out: (s: string) => void; err: (s: string) => void; write: (path: string, data: string) => void; audit: typeof audit; lint?: typeof lint; cwd: string }
 
 const HELP = `Usage: dualkit check <url or file> [options]
+       dualkit lint [paths...] [options]
 
   --out <file>        Report path (default dualkit-report.html)
   --json              Print the result as JSON instead of the summary
@@ -19,12 +22,20 @@ const HELP = `Usage: dualkit check <url or file> [options]
   --min-score <n>     Exit 1 when the score is below n
   --config <file>     Config file (default dualkit.config.json)
 
+dualkit lint scans source files (CSS, SCSS, HTML, JS, TS, JSX, TSX) and needs no browser:
+
+  --json              Print the result as JSON instead of the list
+  --fail-on <level>   Exit 1 on findings at or above error, warning or note (default error)
+  --config <file>     Config file (default dualkit.config.json)
+
 Rules: https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md
 `
 
 const defaultIo: Io = {
   out: (s) => process.stdout.write(s), err: (s) => process.stderr.write(s),
-  write: (p, d) => writeFileSync(p, d), audit, cwd: process.cwd(),
+  write: (p, d) => writeFileSync(p, d),
+  // Lazy, so `dualkit lint` never loads Playwright.
+  audit: async (o) => (await import('./audit')).audit(o), cwd: process.cwd(),
 }
 
 const int = (name: string, value: string | undefined, fallback: number, min: number): number => {
@@ -36,17 +47,30 @@ const int = (name: string, value: string | undefined, fallback: number, min: num
   return n
 }
 
+async function runLint(paths: string[], values: { json?: boolean; 'fail-on'?: string; config?: string }, io: Io): Promise<number> {
+  const failOn = values['fail-on'] ?? 'error'
+  if (!isFailOn(failOn)) throw new UserError(`--fail-on must be error, warning or note, got "${failOn}".`)
+  const targets = paths.length > 0 ? paths : ['.']
+  const missing = targets.find((p) => !existsSync(resolve(io.cwd, p)))
+  if (missing !== undefined) throw new UserError(`Could not find ${missing}.`)
+  const config = loadConfig(values.config, io.cwd)
+  const result = await (io.lint ?? lint)(targets, { cwd: io.cwd, ignore: config.ignore })
+  io.out(values.json ? `${JSON.stringify(result)}\n` : formatLint(result, Boolean(process.stdout.isTTY)))
+  return shouldFail(result, failOn) ? 1 : 0
+}
+
 export async function run(argv: string[], io: Io = defaultIo): Promise<number> {
   try {
     const { values, positionals } = parseArgs({
       args: argv, allowPositionals: true,
       options: {
         out: { type: 'string' }, json: { type: 'boolean' }, width: { type: 'string' }, height: { type: 'string' },
-        'min-score': { type: 'string' }, config: { type: 'string' }, help: { type: 'boolean', short: 'h' },
+        'min-score': { type: 'string' }, 'fail-on': { type: 'string' }, config: { type: 'string' }, help: { type: 'boolean', short: 'h' },
       },
     })
     if (values.help) { io.out(HELP); return 0 }
     const [command, target] = positionals
+    if (command === 'lint') return await runLint(positionals.slice(1), values, io)
     if (command !== 'check' || !target) throw new UserError(`${command ? `Unknown command "${command}".` : 'Missing command.'}\n\n${HELP}`)
     // Validate every flag before the audit, so a typo fails in milliseconds, not after a browser run.
     const width = int('width', values.width, 1280, 1)

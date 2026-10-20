@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { RULES as LINT_RULES } from '@dualkit/lint'
 import { RULES } from '@dualkit/rules'
 
 export type Config = { ignore: string[]; exclude: string[] }
@@ -24,7 +25,8 @@ export function loadConfig(path?: string, cwd = process.cwd()): Config {
   const { ignore = [], exclude = [] } = (raw ?? {}) as Record<string, unknown>
   if (!isStringList(ignore)) throw new UserError('ignore must be a list of rule ids, for example ["type/arabic-size"].')
   if (!isStringList(exclude)) throw new UserError('exclude must be a list of CSS selectors, for example [".ads"].')
-  const known = new Set(RULES.map((r) => r.id))
+  // ignore names ids from both registries; each command skips the ids it does not run.
+  const known = new Set([...RULES, ...LINT_RULES].map((r) => r.id))
   const unknown = ignore.find((id) => !known.has(id))
   if (unknown) throw new UserError(`Unknown rule "${unknown}" in ignore. The rule ids are listed in https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md`)
   return { ignore, exclude }

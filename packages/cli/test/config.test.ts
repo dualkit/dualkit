@@ -20,6 +20,11 @@ describe('loadConfig', () => {
     writeFileSync(join(d, 'dualkit.config.json'), JSON.stringify({ ignore: ['type/arabic-sise'] }))
     expect(() => loadConfig(undefined, d)).toThrow(/Unknown rule "type\/arabic-sise"/)
   })
+  it('accepts lint rule ids in ignore', () => {
+    const d = dir()
+    writeFileSync(join(d, 'dualkit.config.json'), JSON.stringify({ ignore: ['source/physical-css', 'type/arabic-size'] }))
+    expect(loadConfig(undefined, d).ignore).toEqual(['source/physical-css', 'type/arabic-size'])
+  })
   it('rejects broken JSON, wrong types and a missing explicit file', () => {
     const d = dir()
     writeFileSync(join(d, 'bad.json'), '{ ignore: ')
