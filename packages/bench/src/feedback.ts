@@ -6,9 +6,14 @@ const SNIPPET_MAX = 160
 const HEADER = 'dualkit check and dualkit lint found these problems in your page.'
 const FOOTER = 'Fix these. Change only what they need. Reply with the whole file.'
 
-/** Lints the page source the way `dualkit lint` does; notes are never sent back to the model. */
+/** `dualkit lint` honours `dualkit-disable` and `dualkit-disable-next-line` in comments, and has no switch to turn that off. */
+const DIRECTIVE = /dualkit-disable/g
+/** Same length, so every finding keeps its line and column, and no longer a directive the linter reads. */
+const DEFUSED = 'dualkit-ignored'
+
+/** Lints the page source the way `dualkit lint` does, except that suppression comments are ignored, so a page cannot silence its own findings. Notes are never sent back to the model. */
 export function lintPage(html: string): LintFinding[] {
-  return lintText('index.html', html).filter((f) => f.severity !== 'note')
+  return lintText('index.html', html.replace(DIRECTIVE, DEFUSED)).filter((f) => f.severity !== 'note')
 }
 
 /** The prompt that asks a model to fix its page, or null when nothing at warning or error is left. */

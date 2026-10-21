@@ -38,9 +38,9 @@ describe('study', () => {
   it('sums failed rules from the median cells and marks a model halved when the loop fails half or fewer of alone', () => {
     const s = study(base, models, screens)
     expect(s.models).toEqual([
-      { id: 'a', label: 'A', failed: { alone: 20, dualkit: 12, loop: 8 }, halved: true },
-      { id: 'b', label: 'B', failed: { alone: 20, dualkit: 16, loop: 12 }, halved: false },
-      { id: 'c', label: 'C', failed: { alone: 20, dualkit: 12, loop: null }, halved: null },
+      { id: 'a', label: 'A', failed: { alone: 20, dualkit: 12, loop: 8 }, halved: true, rounds: { run: 0, failed: 0 } },
+      { id: 'b', label: 'B', failed: { alone: 20, dualkit: 16, loop: 12 }, halved: false, rounds: { run: 0, failed: 0 } },
+      { id: 'c', label: 'C', failed: { alone: 20, dualkit: 12, loop: null }, halved: null, rounds: { run: 0, failed: 0 } },
     ])
     expect(s.modelsHalved).toBe(1)
     expect(s.pass.gain).toBe(false)
@@ -52,7 +52,7 @@ describe('study', () => {
     ]
     const s = study(records, [model('a')], screens)
     expect(s.models[0]!.failed.loop).toBe(RULE_COUNT + 4)
-    expect(s.incomplete).toEqual({ dualkit: 0, loop: 3 })
+    expect(s.incomplete).toEqual({ dualkit: 0, loop: 3, pairs: 6 })
     expect(s.pass.honest).toBe(false)
   })
   it('passes gain with four models halved', () => {
@@ -73,6 +73,8 @@ describe('study', () => {
     expect(s.harmRate).toBe(0.5)
     expect(s.shrunk).toBe(1)
     expect(s.pass.harm).toBe(false)
+    expect(s.models[0]!.rounds).toEqual({ run: 6, failed: 2 })
+    expect(s.models[1]!.rounds).toEqual({ run: 0, failed: 0 })
   })
   it('passes harm at 10 per cent or less', () => {
     const rounds = [round({ regressed: ['contrast'] }), ...Array.from({ length: 9 }, () => round())]
@@ -86,11 +88,18 @@ describe('study', () => {
     expect(s.harmRate).toBeNull()
     expect(s.pass.harm).toBe(false)
   })
-  it('counts ok builds with missing parts per setup, and passes honest when the loop has no more', () => {
+  it('counts incomplete builds only over runs with both a dualkit and a loop build, and passes honest when the loop has no more', () => {
     const records = [...base, rec('a', 's1', 'dualkit', 4, 0, { missing: ['x'] }), rec('b', 's1', 'dualkit', 4, 0, { missing: ['x'] }), rec('a', 's1', 'loop', 4, 0, { missing: ['x'] })]
     const s = study(records, models, screens)
-    expect(s.incomplete).toEqual({ dualkit: 2, loop: 1 })
+    // b's run 4 has no loop build, so its incomplete dualkit build is not compared.
+    expect(s.incomplete).toEqual({ dualkit: 1, loop: 1, pairs: 16 })
     expect(s.pass.honest).toBe(true)
+  })
+  it('does not pass honest just because fewer loop builds exist', () => {
+    const records = [...base, rec('a', 's1', 'dualkit', 4, 0, { missing: ['x'] }), rec('a', 's1', 'loop', 4, 0, { missing: ['x'] }), rec('a', 's2', 'loop', 4, 0, { missing: ['x'] }), rec('a', 's2', 'dualkit', 4, 30, {})]
+    const s = study(records, models, screens)
+    expect(s.incomplete).toEqual({ dualkit: 1, loop: 2, pairs: 17 })
+    expect(s.pass.honest).toBe(false)
   })
   it('ignores records of models and screens it was not given', () => {
     const records = [...base, rec('zz', 's1', 'dualkit', 1, 0, { missing: ['x'] }), rec('a', 'other', 'loop', 1, 0, { rounds: [round({ regressed: ['x'] })] })]
@@ -105,15 +114,15 @@ describe('renderStudy', () => {
     const rounds = [round(), round({ regressed: ['contrast'] }), round({ arabicKept: 0.8 }), failedRound()]
     const s = study([...base, rec('a', 's1', 'loop', 4, RULE_COUNT, { rounds })], models, screens)
     expect(renderStudy(s)).toMatchInlineSnapshot(`
-      "| Model | Failed alone | With skills | With loop | Halved |
-      | --- | ---: | ---: | ---: | --- |
-      | A | 20 | 12 | 8 | yes |
-      | B | 20 | 16 | 12 | no |
-      | C | 20 | 12 | did not run | n/a |
+      "| Model | Failed alone | With skills | With loop | Halved | Fix rounds failed |
+      | --- | ---: | ---: | ---: | --- | ---: |
+      | A | 20 | 12 | 8 | yes | 1 of 4 |
+      | B | 20 | 16 | 12 | no | 0 of 0 |
+      | C | 20 | 12 | did not run | n/a | 0 of 0 |
 
       - Gain: 1 of 3 models at least halved their failed rules with the loop (needs 4): fail
       - Harm: 1 of 3 fix rounds that ran and rendered made something worse, 33.3% (needs 10% or less): fail
-      - Honest: 0 incomplete builds with the loop, 0 with skills (needs no more with the loop): pass
+      - Honest: over 15 runs with both builds, 0 incomplete with the loop, 0 with skills (needs no more with the loop): pass
 
       Shrunk Arabic: 1 of 3 rounds kept less than 90% of the Arabic text. Information, not a bar."
     `)

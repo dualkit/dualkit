@@ -51,8 +51,10 @@ describe('bench workflow', () => {
       expect(line).toMatch(/^\s*(MONTH|MODEL|SUMMARY): \$\{\{ inputs\.(month|model|summary) \}\}$/)
     }
   })
-  it('has a summary input, on by default, that skips the summary and commits only bench/ when off', () => {
-    expect(yml).toMatch(/summary:\n\s+description: .+\n\s+type: boolean\n\s+default: true\n/)
+  it('has a summary input, off by default for a run by hand, that skips the summary and commits only bench/ when off', () => {
+    expect(yml).toMatch(/summary:\n\s+description: .+\n\s+type: boolean\n\s+default: false\n/)
+    // A scheduled run has no inputs, so it still builds the summary: only an explicit false turns it off.
+    expect(yml).not.toMatch(/\[ "\$SUMMARY" != true \]/)
     const summary = yml.slice(yml.indexOf('name: Build the summary'), yml.indexOf('name: Commit the results'))
     expect(summary).toContain('SUMMARY: ${{ inputs.summary }}')
     expect(summary).toContain('[ "$SUMMARY" = false ]')

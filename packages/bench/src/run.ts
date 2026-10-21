@@ -9,7 +9,7 @@ import { scoreHtml } from './score'
 import type { BuildKey, BuildRecord, Condition, Store } from './store'
 import { checkSkills, SKILLS_DIR, systemPrompt } from './system'
 
-/** The two builds from the prompt; each dualkit run is followed by its loop run. */
+/** The two builds from the prompt; the loop runs after all of them, from each dualkit build. */
 const CONDITIONS: readonly Condition[] = ['alone', 'dualkit']
 const ALL: readonly Condition[] = [...CONDITIONS, 'loop']
 /** A 4xx other than 429 will not get better by asking again. */
@@ -140,18 +140,21 @@ async function runModel({ month, model, screens, generate, store, scorer, log, s
     // The build that found the budget spent is not written, so the next day's run builds it.
     if (!rec.record.ok && rec.record.error === BUDGET_SPENT) { spend(); return stop('daily request budget spent') }
     streak = nextStreak(streak, rec.record.ok ? null : rec.record.error)
-    store.write(rec.record, rec.html, rec.shot)
+    store.write(rec.record, rec.html, rec.shot, rec.pages)
     counts = rec.record.ok ? { ...counts, built: counts.built + 1 } : { ...counts, failed: counts.failed + 1 }
     log(`${key.model} ${key.screen} ${key.condition} ${key.run}: ${rec.record.ok ? `${rec.record.rulesPassed} rules` : rec.record.error}`)
     await onFinish(recentOf(rec.record, model, screen))
     return true
   }
+  // Two passes: every alone and dualkit build first, then the loops, so a deadline or budget stop never costs the published cells a build.
   for (const screen of screens) for (const condition of CONDITIONS) for (let run = 1; run <= runs; run++) {
     const key: BuildKey = { month, model: model.id, screen: screen.id, condition, run }
     if (!(await step(key, screen, () => build(key, model, screen, generate, scorer, skillsDir, shoot(key))))) return { ...counts, stoppedEarly: true }
-    if (condition !== 'dualkit') continue
-    const loopKey: BuildKey = { ...key, condition: 'loop' }
-    if (!(await step(loopKey, screen, () => loopBuild({ key: loopKey, model, screen, generate, store, scorer, skillsDir, shoot: shoot(loopKey) })))) return { ...counts, stoppedEarly: true }
+  }
+  for (const screen of screens) for (let run = 1; run <= runs; run++) {
+    const key: BuildKey = { month, model: model.id, screen: screen.id, condition: 'loop', run }
+    const make = () => loopBuild({ key, model, screen, generate, store, scorer, skillsDir, shoot: shoot(key), late: () => late() !== null })
+    if (!(await step(key, screen, make))) return { ...counts, stoppedEarly: true }
   }
   if (streak.n >= LOCK_AFTER) log(`${model.id}: skipped for this run after ${LOCK_AFTER} errors in a row that will not clear: ${streak.key}`)
   return counts

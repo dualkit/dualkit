@@ -40,8 +40,8 @@ function stub(replies: Generated[]) {
   const generate: Generate = async (_m, req) => { calls.push(req.turns ?? []); return replies[calls.length - 1] ?? reply('no more') }
   return { generate, calls }
 }
-const run = (store: ReturnType<typeof makeStore>, generate: Generate) =>
-  loopBuild({ key, model, screen, generate, store, scorer: (h) => scorer(h), shoot: async (png) => Buffer.from(`webp of ${png}`) })
+const run = (store: ReturnType<typeof makeStore>, generate: Generate, late?: () => boolean) =>
+  loopBuild({ key, model, screen, generate, store, scorer: (h) => scorer(h), shoot: async (png) => Buffer.from(`webp of ${png}`), ...(late ? { late } : {}) })
 
 const down = (error: string): Generated => ({ ok: false, error, ms: 3 })
 
@@ -61,6 +61,24 @@ describe('harm', () => {
     const out = (await run(store, generate))!
     const rounds = out.record.ok ? out.record.rounds! : []
     expect(rounds[0]).toMatchObject({ ok: true, regressed: ['source/arabic-letter-spacing'] })
+  })
+  it('sees a lint regression that the fix hid behind a suppression comment', async () => {
+    const store = setup(page(['a']))
+    const spaced = page([]).replace('<p>', '<!-- dualkit-disable --><style>:lang(ar) p { letter-spacing: 2px }</style><p>')
+    const { generate } = stub([reply(fenced(spaced))])
+    const out = (await run(store, generate))!
+    const rounds = out.record.ok ? out.record.rounds! : []
+    expect(rounds[0]).toMatchObject({ ok: true, regressed: ['source/arabic-letter-spacing'] })
+  })
+  it('measures round 1 against a fresh render of the dualkit page, not the stored findings', async () => {
+    // The stored record says only "a" failed; rendered again, the page fails "a" and "b". A fix that keeps "b" broke nothing.
+    const store = setup(page(['a', 'b']))
+    const stored = store.read(dk)!
+    store.write({ ...stored, ...(stored.ok ? { findings: [finding('a')] } : {}) } as BuildRecord, page(['a', 'b']), Buffer.from('dualkit webp'))
+    const { generate } = stub([reply(fenced(page(['b']))), reply(fenced(page(['b'])))])
+    const out = (await run(store, generate))!
+    const rounds = out.record.ok ? out.record.rounds! : []
+    expect(rounds[0]).toMatchObject({ ok: true, regressed: [] })
   })
   it('is 1 when there was no Arabic before', () => {
     expect(harm({ failed: [], missing: [], text: 'hello' }, { failed: [], missing: [], text: '' }).arabicKept).toBe(1)
@@ -91,7 +109,7 @@ describe('loopBuild', () => {
     expect(out.record).toMatchObject({ rulesPassed: 20, score: 100 })
   })
   it('fails the build, keeping the usage spent, on a provider error that may clear', async () => {
-    for (const error of ['HTTP 503: down', 'HTTP 429: slow', 'Network error: reset', 'Timed out after 600 s', 'HTTP 401: no', 'Daily request budget spent']) {
+    for (const error of ['HTTP 503: down', 'HTTP 429: slow', 'Network error: reset', 'Timed out after 600 s', 'HTTP 401: no']) {
       const store = setup(page(['a', 'b']))
       const { generate } = stub([reply(fenced(page(['b']))), down(error)])
       const out = (await run(store, generate))!
@@ -169,6 +187,35 @@ describe('loopBuild', () => {
     expect(calls[1]![3]!.content).toContain('[check] b (b)')
     const rounds = out.record.ok ? out.record.rounds! : []
     expect(rounds.map((r) => r.sent)).toEqual([2, 1])
+  })
+  it('keeps each rendered round\'s page and shot, and none for a failed round', async () => {
+    const store = setup(page(['a', 'b']))
+    const r1 = page(['b'])
+    const { generate } = stub([reply(fenced(r1)), reply('nope')])
+    const out = (await run(store, generate))!
+    expect(out.pages).toEqual([{ round: 1, html: r1, shot: Buffer.from('webp of png') }])
+  })
+  it('does not start round 2 past the deadline, and keeps round 1', async () => {
+    const store = setup(page(['a', 'b']))
+    const r1 = page(['b'])
+    const { generate, calls } = stub([reply(fenced(r1)), reply(fenced(page([])))])
+    const out = (await run(store, generate, () => calls.length > 0))!
+    expect(calls).toHaveLength(1)
+    expect(out.html).toBe(r1)
+    expect(out.record).toMatchObject({ ok: true, rulesPassed: 19, rounds: [{ ok: true }] })
+  })
+  it('keeps round 1 when the budget is spent before round 2', async () => {
+    const store = setup(page(['a', 'b']))
+    const r1 = page(['b'])
+    const { generate } = stub([reply(fenced(r1)), down('Daily request budget spent')])
+    const out = (await run(store, generate))!
+    expect(out.html).toBe(r1)
+    expect(out.record).toMatchObject({ ok: true, rulesPassed: 19, rounds: [{ ok: true }] })
+  })
+  it('fails the build, so nothing is kept, when the budget is spent before round 1', async () => {
+    const store = setup(page(['a']))
+    const { generate } = stub([down('Daily request budget spent')])
+    expect((await run(store, generate))!.record).toMatchObject({ ok: false, error: 'Daily request budget spent' })
   })
   it('keeps the last good page when round 2 fails', async () => {
     const store = setup(page(['a', 'b']))

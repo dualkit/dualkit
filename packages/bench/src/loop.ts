@@ -2,16 +2,18 @@ import { existsSync, readFileSync } from 'node:fs'
 import type { ModelEntry, Screen } from './config'
 import { extractHtml } from './extract'
 import { feedbackPrompt, lintPage, MAX_ITEMS } from './feedback'
-import { mayClear, type Generate, type Turn, type Usage } from './providers'
+import { BUDGET_SPENT, mayClear, type Generate, type Turn, type Usage } from './providers'
 import { failedRules, type Scored, type SlimFinding } from './score'
-import type { BuildKey, BuildRecord, Round, Store } from './store'
+import type { BuildKey, BuildRecord, Round, RoundPage, Store } from './store'
 import { SKILLS_DIR, systemPrompt } from './system'
 
 export type { Round }
 /** Fix rounds per loop build, after the dualkit build it starts from. */
 export const MAX_ROUNDS = 2
 
-export type Built = { record: BuildRecord; html: string | null; shot: Buffer | null }
+export type Built = { record: BuildRecord; html: string | null; shot: Buffer | null
+  /** Each fix round's rendered page, for a loop build. */
+  pages?: RoundPage[] }
 type Side = { failed: string[]; missing: string[]; text: string }
 type OkScored = Extract<Scored, { ok: true }>
 type Scorer = (html: string, screen: Screen) => Promise<Scored>
@@ -55,11 +57,13 @@ export function harm(before: Side, after: Side): { regressed: string[]; lostPart
 }
 
 type Input = { key: BuildKey; model: ModelEntry; screen: Screen; generate: Generate; store: Store; scorer: Scorer; skillsDir?: string
-  /** Turns the final page's PNG into the stored WebP. */
-  shoot: (png: string) => Promise<Buffer | null> }
+  /** Turns a page's PNG into the stored WebP. */
+  shoot: (png: string) => Promise<Buffer | null>
+  /** True once no new call may start (the deadline passed or the budget is spent); round 2 is then skipped and round 1 kept. */
+  late?: () => boolean }
 
 /** Sends the dualkit page's check and lint findings back for up to MAX_ROUNDS fixes. Null when there is no dualkit page to start from, so nothing is written and a rerun tries again. */
-export async function loopBuild({ key, model, screen, generate, store, scorer, skillsDir = SKILLS_DIR, shoot }: Input): Promise<Built | null> {
+export async function loopBuild({ key, model, screen, generate, store, scorer, skillsDir = SKILLS_DIR, shoot, late = () => false }: Input): Promise<Built | null> {
   const dualkitKey: BuildKey = { ...key, condition: 'dualkit' }
   const from = store.read(dualkitKey)
   const htmlFile = store.paths(dualkitKey).html
@@ -72,8 +76,13 @@ export async function loopBuild({ key, model, screen, generate, store, scorer, s
     result: { rulesPassed: from.rulesPassed, score: from.score, unreadableStylesheets: from.unreadableStylesheets, pageHeight: from.pageHeight }, png: null,
   }
   const rounds: Round[] = []
+  const pages: RoundPage[] = []
+  /** The shot of `good` when a round made it; undefined while it is still the dualkit page. */
+  let goodShot: Buffer | null | undefined
   const failed = (error: string): Built => ({ record: { ...key, at, reply: null, usage: sumUsage(rounds), ms: sumMs(rounds), finish: null, reasoningTokens: null, servedModel: null, ok: false, error }, html: null, shot: null })
   for (let n = 1; n <= MAX_ROUNDS; n++) {
+    if (n > 1 && late()) break
+    let before = good
     const lint = lintPage(good.html)
     const feedback = feedbackPrompt(good.findings, lint)
     if (feedback === null) break
@@ -82,21 +91,29 @@ export async function loopBuild({ key, model, screen, generate, store, scorer, s
       const base = await scorer(good.html, screen).catch((e: unknown): Scored => ({ ok: false, error: errorText(e) }))
       if (!base.ok) return failed(`Render failed: ${base.error}`)
       good = { ...good, text: base.text }
+      // Round 1 is measured against this same render, so a rule that differs between renders is not counted as harm.
+      before = { ...good, findings: base.findings, missing: base.missing }
     }
     const sent = Math.min(MAX_ITEMS, good.findings.filter((f) => f.severity !== 'note').length + lint.length)
     const turns: Turn[] = [...good.turns, { role: 'assistant', content: good.reply }, { role: 'user', content: feedback }]
-    const step = await round({ model, screen, generate, scorer, system: systemPrompt('loop', skillsDir), turns, sent, before: good })
+    const step = await round({ model, screen, generate, scorer, system: systemPrompt('loop', skillsDir), turns, sent, before })
+    // A budget spent after round 1 keeps what the build has; before any round, the build is left for the next day.
+    if ('error' in step && step.error === BUDGET_SPENT && n > 1) break
     if ('error' in step) return failed(step.error)
     rounds.push(step.round)
-    if (step.page) good = step.page
+    if (step.page) {
+      good = step.page
+      goodShot = good.png !== null ? await shoot(good.png) : null
+      pages.push({ round: n, html: good.html, shot: goodShot })
+    }
   }
-  const shot = good.png !== null ? await shoot(good.png) : readShot(store.paths(dualkitKey).webp)
+  const shot = goodShot !== undefined ? goodShot : readShot(store.paths(dualkitKey).webp)
   const record: BuildRecord = {
     ...key, at, reply: good.reply, usage: sumUsage(rounds), ms: sumMs(rounds), ...good.meta,
     ok: true, ...good.result, missing: good.missing, findings: good.findings,
     from: { rulesPassed: from.rulesPassed, score: from.score }, rounds,
   }
-  return { record, html: good.html, shot }
+  return { record, html: good.html, shot, pages }
 }
 
 const sumMs = (rounds: Round[]) => rounds.reduce((t, r) => t + r.ms, 0)

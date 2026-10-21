@@ -46,7 +46,9 @@ async function benchCell(records: BuildRecord[], shots: Shots): Promise<BenchCel
     console.warn(`Screenshot failed for ${rec.model}/${rec.screen}/${rec.condition}: ${e instanceof Error ? e.message : String(e)}`)
   }
   return {
-    ran: true, runs: c.runs, rulesPassed: c.rulesPassed, score: c.score, missing: rec.missing, findings: rec.findings,
+    ran: true, runs: c.runs, rulesPassed: c.rulesPassed, score: c.score, missing: rec.missing,
+    // Only what the page draws: the loop's message, fix and snippet (the model's own HTML) stay in bench/runs.
+    findings: rec.findings.map(({ rule, title, severity, box }) => ({ rule, title, severity, box })),
     shot, pageHeight: rec.pageHeight, raw: rawPath(rec),
   }
 }

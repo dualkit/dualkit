@@ -11,6 +11,8 @@ export type Round = {
   at: string; ms: number; usage: Usage | null; reply: string | null; ok: boolean; error: string | null; sent: number
   rulesPassed: number | null; score: number | null; missing: string[]; regressed: string[]; lostParts: string[]; arabicKept: number | null
 }
+/** The page a fix round rendered, kept for the by-eye harm check. */
+export type RoundPage = { round: number; html: string; shot: Buffer | null }
 /** What a loop build adds: the dualkit build it started from, and each round. */
 export type LoopFields = { from: { rulesPassed: number; score: number }; rounds: Round[] }
 /** finish, reasoningTokens and servedModel come from the provider, and are null when a failure left no reply. */
@@ -34,17 +36,28 @@ export function makeStore(root = RUNS_ROOT) {
     const base = join(root, k.month, k.model, k.screen, `${k.condition}-${k.run}`)
     return { json: `${base}.json`, html: `${base}.html`, webp: `${base}.webp` }
   }
+  /** A fix round's page and screenshot, beside the loop record: `loop-<run>-r<round>`. */
+  const roundPaths = (k: BuildKey, round: number) => {
+    const base = join(root, k.month, k.model, k.screen, `${k.condition}-${k.run}-r${round}`)
+    return { html: `${base}.html`, webp: `${base}.webp` }
+  }
   const progressFile = (month: string) => join(root, month, 'progress.json')
   const read = (k: BuildKey) => readRecord(paths(k).json)
   return {
     paths,
+    roundPaths,
     progressFile,
     read,
     isDone: (k: BuildKey) => read(k)?.ok === true,
-    write(rec: BuildRecord, html: string | null, shot: Buffer | null = null) {
+    write(rec: BuildRecord, html: string | null, shot: Buffer | null = null, pages: readonly RoundPage[] = []) {
       const p = paths(rec)
       mkdirSync(dirname(p.json), { recursive: true })
-      // HTML and screenshot first, JSON last: the JSON marks the build done, so a crash in between leaves it to be redone.
+      // Pages and screenshots first, JSON last: the JSON marks the build done, so a crash in between leaves it to be redone.
+      for (const page of pages) {
+        const rp = roundPaths(rec, page.round)
+        writeFileSync(rp.html, page.html)
+        if (page.shot !== null) writeFileSync(rp.webp, page.shot)
+      }
       if (html !== null) writeFileSync(p.html, html)
       if (shot !== null) writeFileSync(p.webp, shot)
       writeFileSync(p.json, `${JSON.stringify(rec, null, 2)}\n`)

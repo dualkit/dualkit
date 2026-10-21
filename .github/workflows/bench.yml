@@ -12,9 +12,9 @@ on:
         description: 'Only this model id from packages/bench/models.json'
         required: false
       summary:
-        description: 'Build the site summary and commit it (off: commit only bench/)'
+        description: 'Build the site summary and commit it (off: commit only bench/; scheduled runs always build it)'
         type: boolean
-        default: true
+        default: false
 permissions:
   contents: write
 concurrency:

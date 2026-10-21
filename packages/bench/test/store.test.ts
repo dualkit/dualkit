@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
@@ -12,6 +12,19 @@ describe('store', () => {
   it('lays builds out by month, model, screen and condition', () => {
     const s = makeStore('/r')
     expect(s.paths(key)).toEqual({ json: '/r/2026-11/gemma-4-31b/otp/alone-1.json', html: '/r/2026-11/gemma-4-31b/otp/alone-1.html', webp: '/r/2026-11/gemma-4-31b/otp/alone-1.webp' })
+  })
+  it('writes each rendered fix round\'s page beside the loop record, and lists only the record', () => {
+    const s = makeStore(mkdtempSync(join(tmpdir(), 'store-')))
+    const loop: BuildKey = { ...key, condition: 'loop' }
+    s.write(okRec(loop), '<final/>', Buffer.from('final'), [{ round: 1, html: '<r1/>', shot: Buffer.from('r1') }, { round: 2, html: '<r2/>', shot: null }])
+    expect(s.roundPaths(loop, 1)).toEqual({ html: s.paths(loop).html.replace('loop-1.html', 'loop-1-r1.html'), webp: s.paths(loop).webp.replace('loop-1.webp', 'loop-1-r1.webp') })
+    expect(readFileSync(s.roundPaths(loop, 1).html, 'utf8')).toBe('<r1/>')
+    expect(readFileSync(s.roundPaths(loop, 1).webp, 'utf8')).toBe('r1')
+    expect(readFileSync(s.roundPaths(loop, 2).html, 'utf8')).toBe('<r2/>')
+    expect(existsSync(s.roundPaths(loop, 2).webp)).toBe(false)
+    // A stray JSON with a round suffix is never read as a build.
+    writeFileSync(s.roundPaths(loop, 1).html.replace('.html', '.json'), JSON.stringify(okRec({ ...loop, run: 9 })))
+    expect(s.list('2026-11').map((r) => `${r.condition}-${r.run}`)).toEqual(['loop-1'])
   })
   it('round-trips a record', () => {
     const s = makeStore(mkdtempSync(join(tmpdir(), 'store-')))

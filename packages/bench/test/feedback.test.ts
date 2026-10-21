@@ -32,4 +32,16 @@ describe('feedbackPrompt', () => {
     expect(found.map((f) => f.rule)).toEqual(['source/arabic-letter-spacing'])
     expect(found.every((f) => f.severity !== 'note')).toBe(true)
   })
+  it('ignores suppression comments, so a page cannot silence its own findings', () => {
+    const style = '<style>:lang(ar) .a { letter-spacing: 2px }</style>'
+    const pages = [
+      `<!-- dualkit-disable -->${style}`,
+      '<style>/* dualkit-disable source/arabic-letter-spacing */ :lang(ar) .a { letter-spacing: 2px }</style>',
+      '<style>/* dualkit-disable-next-line */\n:lang(ar) .a { letter-spacing: 2px }</style>',
+    ]
+    for (const head of pages) {
+      const found = lintPage(`<!doctype html><html lang="ar" dir="rtl"><head>${head}</head><body></body></html>`)
+      expect(found.map((f) => f.rule), head).toEqual(['source/arabic-letter-spacing'])
+    }
+  })
 })

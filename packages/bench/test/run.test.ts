@@ -80,12 +80,12 @@ describe('loop', () => {
     }
     return { calls, generate }
   }
-  it('runs loop after dualkit for the same run', async () => {
+  it('runs the loop builds after every alone and dualkit build of the model', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
     const { calls, generate } = tracked()
     const out = await runBench({ month: '2026-11', models: [model('a')], screens, generate, store, score: fixScore })
     expect(out).toMatchObject({ built: 9, failed: 0 })
-    expect(calls).toEqual(['alone', 'alone', 'alone', 'dualkit', 'loop', 'dualkit', 'loop', 'dualkit', 'loop'])
+    expect(calls).toEqual(['alone', 'alone', 'alone', 'dualkit', 'dualkit', 'dualkit', 'loop', 'loop', 'loop'])
     const loops = store.list('2026-11').filter((r) => r.condition === 'loop')
     expect(loops.map((r) => r.run)).toEqual([1, 2, 3])
     expect(loops[0]).toMatchObject({ ok: true, rulesPassed: 15, rounds: [{ ok: true, sent: 1 }] })
@@ -103,11 +103,12 @@ describe('loop', () => {
   it('counts loop failures toward the error streak', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
     const { calls, generate } = tracked()
-    // From the first loop call on, every call is denied: loop 1, dualkit 2 and dualkit 3 make three in a row.
-    const deny: Generate = async (m, r) => (calls.includes('denied') || r.turns?.length ? (calls.push('denied'), { ok: false, error: 'HTTP 401: no', ms: 1 }) : generate(m, r))
+    // Every loop call is denied: the first screen's three loops make three in a row, so the second screen's loops never start.
+    const deny: Generate = async (m, r) => (r.turns?.length ? (calls.push('denied'), { ok: false, error: 'HTTP 401: no', ms: 1 }) : generate(m, r))
     const lines: string[] = []
     await runBench({ month: '2026-11', models: [model('a')], screens: loadScreens().slice(0, 2), generate: deny, store, score: fixScore, log: (l) => lines.push(l) })
-    expect(calls).toEqual(['alone', 'alone', 'alone', 'dualkit', 'denied', 'denied', 'denied'])
+    const builds = ['alone', 'alone', 'alone', 'dualkit', 'dualkit', 'dualkit']
+    expect(calls).toEqual([...builds, ...builds, 'denied', 'denied', 'denied'])
     expect(store.list('2026-11').find((r) => r.condition === 'loop')).toMatchObject({ ok: false, error: 'HTTP 401: no' })
     expect(lines.some((l) => l.includes('skipped for this run after 3 errors'))).toBe(true)
   })
@@ -121,7 +122,7 @@ describe('loop', () => {
     down = false
     calls.length = 0
     await runBench({ month: '2026-11', models: [model('a')], screens, generate: flaky, store, score: fixScore })
-    expect(calls).toEqual(['dualkit', 'loop', 'dualkit', 'loop', 'dualkit', 'loop'])
+    expect(calls).toEqual(['dualkit', 'dualkit', 'dualkit', 'loop', 'loop', 'loop'])
   })
 })
 
@@ -146,7 +147,10 @@ describe('concurrency', () => {
     expect(out).toMatchObject({ built: 54, failed: 0 })
     expect(most).toBe(3)
     expect(mostPerModel).toBe(1)
-    const expected = two.flatMap((s) => [...[1, 2, 3].map((n) => `${s.id} alone ${n}`), ...[1, 2, 3].flatMap((n) => [`${s.id} dualkit ${n}`, `${s.id} loop ${n}`])])
+    const expected = [
+      ...two.flatMap((s) => (['alone', 'dualkit'] as const).flatMap((c) => [1, 2, 3].map((n) => `${s.id} ${c} ${n}`))),
+      ...two.flatMap((s) => [1, 2, 3].map((n) => `${s.id} loop ${n}`)),
+    ]
     for (const id of ['a', 'b', 'c']) expect(lines.filter((l) => l.startsWith(`${id} `)).map((l) => l.split(':')[0]!.slice(id.length + 1))).toEqual(expected)
   })
   it(`scores at most ${SCORE_CONCURRENCY} builds at once`, async () => {
@@ -213,6 +217,18 @@ describe('daily budget', () => {
     expect(store.list('2026-11').filter((r) => r.model === 'fake-good').map((r) => `${r.condition}-${r.run}`)).toEqual(['alone-1'])
     expect(store.list('2026-11').filter((r) => r.model === 'gem')).toHaveLength(9)
     expect(lines.some((l) => l.includes('daily request budget spent, leaving the rest for the next run'))).toBe(true)
+  })
+  it('makes every alone and dualkit build before a loop can spend the budget', async () => {
+    let n = 0
+    const two = loadScreens().slice(0, 2)
+    // Four builds fit the budget: both screens' alone and dualkit, and no loop.
+    const budgeted: Generate = async (m, r) => (++n > 4 ? { ok: false, error: 'Daily request budget spent', ms: 0 } : fakeGenerate({ ...m, id: 'fake-buggy' }, r))
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    const findings = [{ rule: 'x', title: 'X', severity: 'error' as const, box: null, message: 'm', fix: 'f', snippet: null }]
+    const score = async () => ({ ...(await fastScore()), findings })
+    const out = await runBench({ month: '2026-11', models: [model('fake-buggy')], screens: two, generate: budgeted, store, score, runs: 1 })
+    expect(out).toMatchObject({ built: 4, stoppedEarly: true })
+    expect(store.list('2026-11').map((r) => `${r.screen} ${r.condition}`).sort()).toEqual(two.flatMap((s) => [`${s.id} alone`, `${s.id} dualkit`]).sort())
   })
   it('writes nothing for a loop build stopped by the budget', async () => {
     let n = 0
@@ -284,7 +300,7 @@ describe('progress.json', () => {
     expect(p).toMatchObject({ month: '2026-11', running: false, total: 6, done: 6 })
     expect(Number.isNaN(Date.parse(p.updatedAt))).toBe(false)
     expect(p.recent.map((r: { screen: string; condition: string }) => `${r.screen} ${r.condition}`)).toEqual([
-      `${two[1]!.id} loop`, `${two[1]!.id} dualkit`, `${two[1]!.id} alone`, `${two[0]!.id} loop`, `${two[0]!.id} dualkit`, `${two[0]!.id} alone`,
+      `${two[1]!.id} loop`, `${two[0]!.id} loop`, `${two[1]!.id} dualkit`, `${two[1]!.id} alone`, `${two[0]!.id} dualkit`, `${two[0]!.id} alone`,
     ])
     expect(p.recent[0]).toMatchObject({ model: 'fake-good', label: 'fake-good', by: 'Fake', mark: 'google', screenTitle: two[1]!.title, ok: true, rulesPassed: 15, error: null })
   })
@@ -293,8 +309,8 @@ describe('progress.json', () => {
     const seen: { running: boolean; done: number }[] = []
     const peek: Generate = async (m, r) => { seen.push(progress(store)); return fakeGenerate(m, r) }
     await runBench({ month: '2026-11', models: [model('fake-good')], screens: two, generate: peek, store, score: fastScore, runs: 1 })
-    // The loop build after each dualkit build needs no call here, since the fake pages leave nothing to fix.
-    expect(seen.map((s) => s.done)).toEqual([0, 1, 3, 4])
+    // The loop builds come last and need no call here, since the fake pages leave nothing to fix.
+    expect(seen.map((s) => s.done)).toEqual([0, 1, 2, 3])
     expect(seen.every((s) => s.running)).toBe(true)
   })
   it('counts failed builds as done and records their clipped error', async () => {

@@ -10,12 +10,14 @@ export const SHRUNK_BELOW = 0.9
 
 const SETUPS = ['alone', 'dualkit', 'loop'] as const
 type Failed = Record<(typeof SETUPS)[number], number | null>
-export type StudyModel = { id: string; label: string; failed: Failed; halved: boolean | null }
+/** Fix rounds in this model's loop builds, and how many of them failed (no HTML, no render, or an error). */
+export type StudyModel = { id: string; label: string; failed: Failed; halved: boolean | null; rounds: { run: number; failed: number } }
 export type Study = {
   models: StudyModel[]; modelsHalved: number
   /** Rounds that ran and rendered; failed rounds are left out of the harm rate. */
   rounds: number; harmfulRounds: number; harmRate: number | null; shrunk: number
-  incomplete: { dualkit: number; loop: number }
+  /** Incomplete builds, counted only over runs (model, screen, run) with both an ok dualkit and an ok loop build; `pairs` is how many. */
+  incomplete: { dualkit: number; loop: number; pairs: number }
   pass: { gain: boolean; harm: boolean; honest: boolean }
 }
 
@@ -37,10 +39,23 @@ function studyModel(m: ModelEntry, records: Ok[], screens: Screen[]): StudyModel
   const own = records.filter((r) => r.model === m.id)
   const failed = Object.fromEntries(SETUPS.map((c) => [c, failedRules(own, screens, c)])) as Failed
   const halved = failed.alone === null || failed.loop === null ? null : failed.loop <= failed.alone / 2
-  return { id: m.id, label: m.label, failed, halved }
+  const rounds = own.filter((r) => r.condition === 'loop').flatMap((r) => r.rounds ?? [])
+  return { id: m.id, label: m.label, failed, halved, rounds: { run: rounds.length, failed: rounds.filter((r) => !r.ok).length } }
 }
 
 const harmful = (r: Round) => r.regressed.length > 0 || r.lostParts.length > 0
+const runKey = (r: Ok) => `${r.model}/${r.screen}/${r.run}`
+
+/** Incomplete dualkit and loop builds over the same runs, so a month with fewer loop builds cannot pass for that alone. */
+function paired(ok: Ok[]): Study['incomplete'] {
+  const loops = new Map(ok.filter((r) => r.condition === 'loop').map((r) => [runKey(r), r]))
+  const pairs = ok.filter((r) => r.condition === 'dualkit' && loops.has(runKey(r))).map((d) => [d, loops.get(runKey(d))!] as const)
+  return {
+    dualkit: pairs.filter(([d]) => d.missing.length > 0).length,
+    loop: pairs.filter(([, l]) => l.missing.length > 0).length,
+    pairs: pairs.length,
+  }
+}
 
 export function study(records: BuildRecord[], models: ModelEntry[], screens: Screen[]): Study {
   const ids = new Set(models.map((m) => m.id))
@@ -50,9 +65,8 @@ export function study(records: BuildRecord[], models: ModelEntry[], screens: Scr
   const ran = ok.filter((r) => r.condition === 'loop').flatMap((r) => r.rounds ?? []).filter((r) => r.ok)
   const harmfulRounds = ran.filter(harmful).length
   const harmRate = ran.length === 0 ? null : harmfulRounds / ran.length
-  const incomplete = (c: Condition) => ok.filter((r) => r.condition === c && r.missing.length > 0).length
   const modelsHalved = rows.filter((r) => r.halved === true).length
-  const counts = { dualkit: incomplete('dualkit'), loop: incomplete('loop') }
+  const counts = paired(ok)
   return {
     models: rows, modelsHalved, rounds: ran.length, harmfulRounds, harmRate,
     shrunk: ran.filter((r) => r.arabicKept !== null && r.arabicKept < SHRUNK_BELOW).length,
@@ -69,9 +83,9 @@ const percent = (rate: number) => `${Math.round(rate * 1000) / 10}%`
 /** A Markdown table and the three bars, ready to paste into the study report. */
 export function renderStudy(s: Study): string {
   const table = [
-    '| Model | Failed alone | With skills | With loop | Halved |',
-    '| --- | ---: | ---: | ---: | --- |',
-    ...s.models.map((m) => `| ${m.label} | ${num(m.failed.alone)} | ${num(m.failed.dualkit)} | ${num(m.failed.loop)} | ${yesNo(m.halved)} |`),
+    '| Model | Failed alone | With skills | With loop | Halved | Fix rounds failed |',
+    '| --- | ---: | ---: | ---: | --- | ---: |',
+    ...s.models.map((m) => `| ${m.label} | ${num(m.failed.alone)} | ${num(m.failed.dualkit)} | ${num(m.failed.loop)} | ${yesNo(m.halved)} | ${m.rounds.failed} of ${m.rounds.run} |`),
   ]
   const harm = s.harmRate === null
     ? 'no fix round ran and rendered, so there is no rate'
@@ -79,7 +93,7 @@ export function renderStudy(s: Study): string {
   const bars = [
     `- Gain: ${s.modelsHalved} of ${s.models.length} models at least halved their failed rules with the loop (needs ${BARS.modelsHalved}): ${verdict(s.pass.gain)}`,
     `- Harm: ${harm} (needs ${percent(BARS.harmRate)} or less): ${verdict(s.pass.harm)}`,
-    `- Honest: ${s.incomplete.loop} incomplete builds with the loop, ${s.incomplete.dualkit} with skills (needs no more with the loop): ${verdict(s.pass.honest)}`,
+    `- Honest: over ${s.incomplete.pairs} runs with both builds, ${s.incomplete.loop} incomplete with the loop, ${s.incomplete.dualkit} with skills (needs no more with the loop): ${verdict(s.pass.honest)}`,
   ]
   const shrunk = `Shrunk Arabic: ${s.shrunk} of ${s.rounds} rounds kept less than ${percent(SHRUNK_BELOW)} of the Arabic text. Information, not a bar.`
   return [...table, '', ...bars, '', shrunk].join('\n')

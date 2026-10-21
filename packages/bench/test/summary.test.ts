@@ -119,6 +119,21 @@ describe('buildSummary', () => {
     expect(out.models[0]!.screens[0]!.alone).toMatchObject({ ran: true, raw: 'bench/runs/2026-11/a/payment-summary/alone-2.json' })
     expect(parseBenchMonth(JSON.parse(JSON.stringify(out)))).toEqual(out)
   })
+  it('keeps only rule, title, severity and box of each finding, so no model HTML reaches the site', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    seed(store, 'a', { alone: 8, dualkit: 18 })
+    const full = { rule: 'r', title: 'R', severity: 'error' as const, box: { x: 1, y: 2, width: 3, height: 4 }, message: 'm', fix: 'f', snippet: '<div onclick="x">' }
+    for (const run of [1, 2, 3]) {
+      const k: BuildKey = { month: '2026-11', model: 'a', screen: screens[0]!.id, condition: 'alone', run }
+      const r = store.read(k)!
+      if (r.ok) store.write({ ...r, findings: [full] }, '<html></html>', Buffer.from('x'))
+    }
+    const out = await buildSummary({ month: '2026-11', models: [model('a')], screens, store, shots: async () => null })
+    const cell = out.models[0]!.screens[0]!.alone
+    const findings = cell.ran ? cell.findings : []
+    expect(findings).toHaveLength(1)
+    expect(Object.keys(findings[0]!).sort()).toEqual(['box', 'rule', 'severity', 'title'])
+  })
   it('keeps the cell and logs when the screenshot step throws', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
     seed(store, 'a', { alone: 8, dualkit: 18 })
