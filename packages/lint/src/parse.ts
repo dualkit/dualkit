@@ -2,6 +2,7 @@ import { parse as parseBabel, type ParserPlugin } from '@babel/parser'
 import { parse as parseHtml, type DefaultTreeAdapterMap } from 'parse5'
 import { parse as parseCss } from 'postcss'
 import scss from 'postcss-scss'
+import { templateCss } from './css-in-js'
 import type { CssBlock, JsBlock, JsLang, Lang, SourceFile } from './types'
 
 type Node = DefaultTreeAdapterMap['node']
@@ -125,8 +126,12 @@ export function parseSourceOutcome(path: string, rawText: string, abs: string = 
   try {
     if (lang === 'css' || lang === 'scss') return { file: { ...base, css: [parseStyle(text, lang, 0)], js: [], html: null } }
     if (lang === 'html') return { file: { ...base, ...parseHtmlFile(text) } }
-    if (lang === 'vue' || lang === 'svelte') return { file: { ...base, ...parseHtmlFile(text, true) } }
-    return { file: { ...base, css: [], js: [parseJs(text, lang, 0)], html: null } }
+    if (lang === 'vue' || lang === 'svelte') {
+      const parsed = parseHtmlFile(text, true)
+      return { file: { ...base, ...parsed, css: [...parsed.css, ...parsed.js.flatMap((b) => templateCss(b, text))] } }
+    }
+    const block = parseJs(text, lang, 0)
+    return { file: { ...base, css: templateCss(block, text), js: [block], html: null } }
   } catch (err) {
     return { error: oneLine(err) }
   }

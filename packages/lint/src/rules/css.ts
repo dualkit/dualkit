@@ -2,7 +2,7 @@ import type { Container, Declaration, Rule } from 'postcss'
 import { directionScoped, fullSelectors, targetsArabic, withoutDirection } from '../selectors'
 import type { LintHit, LintRule, SourceFile } from '../types'
 
-const CSS_LANGS = ['css', 'scss', 'html', 'vue', 'svelte'] as const
+const CSS_LANGS = ['css', 'scss', 'html', 'vue', 'svelte', 'js', 'jsx', 'ts', 'tsx'] as const
 
 /** Calls visit for every declaration with its offset in the file text and its enclosing rule, if any. */
 function eachDeclaration(file: SourceFile, visit: (decl: Declaration, offset: number, rule: Rule | null) => void): void {

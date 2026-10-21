@@ -86,7 +86,8 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
   const reasonOf = (file: SourceFile): QuietReason | null => {
     const known = reasons.get(file.path)
     if (known !== undefined) return known
-    const flipper = file.lang === 'css' || file.lang === 'scss' ? flipperOf(file.abs) : null
+    // Stylesheets, and script files that hold CSS in template literals, are the files a build-time flipper mirrors.
+    const flipper = file.lang === 'css' || file.lang === 'scss' || (file.css.length > 0 && file.html === null && file.lang !== 'vue' && file.lang !== 'svelte') ? flipperOf(file.abs) : null
     flippers.set(file.path, flipper)
     const reason = quietReason(file.path, file.text) ?? (flipper ? 'flipped' : null)
     reasons.set(file.path, reason)
