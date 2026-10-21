@@ -134,13 +134,17 @@ describe('deliberate geometry', () => {
   const CASES: [string, string][] = [
     ['<span dir="ltr" className="ml-2" />', '<span dir="ltr" class="ml-2"></span>'],
     ['<i aria-hidden="true" className="right-2" />', '<i aria-hidden="true" class="right-2"></i>'],
-    ['<div className="absolute pointer-events-none -left-10" />', '<div class="absolute pointer-events-none -left-10"></div>'],
-    ['<div className="fixed pointer-events-none right-0" />', '<div class="fixed pointer-events-none right-0"></div>'],
   ]
 
   it.each(CASES)('marks %s as deliberate in JSX and HTML', (j, h) => {
     expect(classStrings(jsx(j)!).map((f) => f.deliberate)).toEqual([true])
     expect(classStrings(html(h)!).map((f) => f.deliberate)).toEqual([true])
+  })
+
+  it.each(['absolute', 'fixed'])('marks a %s pointer-events-none element as an overlay', (pos) => {
+    expect(classStrings(jsx(`<div className="${pos} pointer-events-none -left-10" />`)!).map((f) => f.overlay)).toEqual([true])
+    expect(classStrings(html(`<div class="${pos} pointer-events-none -left-10"></div>`)!).map((f) => f.overlay)).toEqual([true])
+    expect(classStrings(jsx(`<div className="${pos} left-2" />`)!)[0]?.overlay).toBeUndefined()
   })
 
   it('does not mark a plain absolute box or a child of a deliberate one', () => {
@@ -158,5 +162,20 @@ describe('deliberate geometry', () => {
     const ctx = { tailwindVersion: () => '3.4.0' }
     expect(lintText('a.tsx', 'export const A = () => <i aria-hidden="true" className="ml-2 right-2" />', { rules: TAILWIND_RULES, ctx })).toEqual([])
     expect(lintText('a.tsx', 'export const A = () => <i className="ml-2" />', { rules: TAILWIND_RULES, ctx })).toHaveLength(1)
+  })
+
+  describe('decorative overlays skip only a negative left or right offset', () => {
+    const ctx = { tailwindVersion: () => '3.4.0' }
+    const hits = (path: string, markup: string): number => lintText(path, path.endsWith('.html') ? `<body>${markup}</body>` : `export const A = () => ${markup}`, { rules: TAILWIND_RULES, ctx }).length
+    const both = (jsxClass: string): number[] => [
+      hits('a.tsx', `<div className="${jsxClass}" />`),
+      hits('a.html', `<div class="${jsxClass}"></div>`),
+    ]
+
+    it('reports a positive offset', () => expect(both('pointer-events-none absolute inset-y-0 right-3')).toEqual([1, 1]))
+    it('skips a negative offset', () => expect(both('pointer-events-none absolute -right-8')).toEqual([0, 0]))
+    it('skips a negative offset under a variant and important', () => expect(both('pointer-events-none absolute md:-left-8 !-right-4')).toEqual([0, 0]))
+    it('still reports a margin beside a negative offset', () => expect(both('pointer-events-none absolute -right-8 mr-2')).toEqual([1, 1]))
+    it('reports a negative offset without pointer-events-none', () => expect(both('absolute -right-8')).toEqual([1, 1]))
   })
 })
