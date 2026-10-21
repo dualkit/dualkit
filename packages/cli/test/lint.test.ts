@@ -27,7 +27,11 @@ const harness = (cwd: string) => {
   }
 }
 
+/** physical-css, a note. */
 const WARN = '.a { margin-left: 8px; }\n'
+/** physical-tailwind, a warning. It needs a Tailwind version from package.json. */
+const WARN_TW = '<div class="ml-4"></div>\n'
+const TAILWIND = JSON.stringify({ devDependencies: { tailwindcss: '^3.4.0' } })
 /** A locale file is a right-to-left signal, so the physical finding is reported on its own instead of collapsing into the repo note. */
 const RTL = { 'locales/ar.json': '{}' }
 const CLEAN = '.a { margin-inline-start: 8px; }\n'
@@ -40,9 +44,16 @@ describe('dualkit lint', () => {
   })
 
   it('exits 0 on warnings at the default fail-on, 1 at --fail-on warning', async () => {
-    const cwd = project({ 'a.css': WARN, ...RTL })
+    const cwd = project({ 'a.html': WARN_TW, 'package.json': TAILWIND, ...RTL })
     expect(await run(['lint', '.'], harness(cwd).io)).toBe(0)
     expect(await run(['lint', '.', '--fail-on', 'warning'], harness(cwd).io)).toBe(1)
+    expect(await run(['lint', '.', '--fail-on', 'note'], harness(cwd).io)).toBe(1)
+  })
+
+  it('a note does not fail at --fail-on warning, only at --fail-on note', async () => {
+    const cwd = project({ 'a.css': WARN, ...RTL })
+    expect(await run(['lint', '.'], harness(cwd).io)).toBe(0)
+    expect(await run(['lint', '.', '--fail-on', 'warning'], harness(cwd).io)).toBe(0)
     expect(await run(['lint', '.', '--fail-on', 'note'], harness(cwd).io)).toBe(1)
   })
 
@@ -74,8 +85,8 @@ describe('dualkit lint', () => {
     const t = harness(project({ 'a.css': WARN, ...RTL }))
     await run(['lint', '--fail-on', 'error'], t.io)
     const text = t.out.join('')
-    expect(text).toMatch(/a\.css:1:\d+ {2}▲ /)
-    expect(text).toMatch(/0 errors, 1 warning, 0 notes in 1 file/)
+    expect(text).toMatch(/a\.css:1:\d+ {2}· /)
+    expect(text).toMatch(/0 errors, 0 warnings, 1 note in 1 file/)
   })
 
   it('config ignore drops a lint id, rejects unknown ids, accepts check ids', async () => {

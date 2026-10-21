@@ -140,7 +140,7 @@ function physicalFix(prop: string, value: string): string | null {
 
 const physicalCss: LintRule = {
   id: 'source/physical-css',
-  severity: 'warning',
+  severity: 'note',
   title: 'Use logical CSS properties instead of left and right',
   why: 'A physical left or right property stays on the same side in Arabic, so the margin, padding, border, offset or alignment is on the wrong edge and the layout looks unbalanced.',
   fix: 'Use the logical property, such as margin-inline-start, padding-inline-end, inset-inline-start or text-align: start, so the side follows the reading direction.',

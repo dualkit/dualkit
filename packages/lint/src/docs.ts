@@ -12,6 +12,7 @@ export const LINT_KNOWN_LIMITS: readonly string[] = [
   'A file over 1 MB, or with an average line longer than 500 characters, is treated as minified and skipped.',
   'A file that does not parse is listed as skipped with the parser message, and none of its lines are checked.',
   'One inline <script> or <style> that does not parse, for example one holding template syntax, skips the whole HTML file.',
+  'physical-css is a note, not a warning. A note is listed and counted in the summary but does not fail the run unless --fail-on note is set. On real repositories most physical-css findings were sides that were already handled or did not matter. physical-tailwind stays a warning.',
   'physical-css skips left and right set to a negative offset of 999 or more, such as left: -9999px in a visually-hidden block, and a pair of sides set to the same value, such as left: 0 with right: 0.',
   'physical-css skips left: 50% or right: 50% when the same block translates 50% on x, the centring idiom, because it looks the same in both directions.',
   'physical-css skips a declaration when the same file has a :dir(), [dir] or :lang(ar) rule for the same selector, with the direction part removed, that resets the same property, directly or by a shorthand such as margin or inset-inline, as in .n { left: 0 } .n:dir(rtl) { left: auto; right: 0 }. An override that sets only the other side, such as margin-right for a base margin-left, still fires. An override in another file is not seen.',
