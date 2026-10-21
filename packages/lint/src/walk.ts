@@ -32,7 +32,7 @@ const inside = (parent: string, child: string): boolean => {
 }
 
 /** The nearest directory at or above dir that holds a .git entry, or null. */
-function repoTop(dir: string): string | null {
+export function repoTop(dir: string): string | null {
   for (let d = dir; ; d = dirname(d)) {
     if (existsSync(join(d, '.git'))) return d
     if (dirname(d) === d) return null

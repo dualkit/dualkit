@@ -2,11 +2,12 @@ import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { parseSource, parseSourceOutcome } from './parse'
 import { lineStarts, positionAt } from './position'
-import { RULES } from './rules'
+import { DEFAULT_RULES } from './rules'
+import { createFlipperLookup, quietReason } from './scope'
 import { suppressed } from './suppress'
 import { createTailwindInfo } from './tailwind-version'
-import type { LintContext, LintFinding, LintResult, LintRule, Skipped, SourceFile } from './types'
-import { compare, isMinified, walk } from './walk'
+import type { LintContext, LintFinding, LintResult, LintRule, QuietEntry, QuietReason, Skipped, SourceFile } from './types'
+import { compare, isMinified, repoTop, walk } from './walk'
 
 /** Built the same way as docsUrl in @dualkit/rules, pointing at LINT.md. */
 export const lintDocsUrl = (id: string): string =>
@@ -18,7 +19,7 @@ type RuleOptions = { rules?: readonly LintRule[]; ignore?: readonly string[] }
 
 const activeRules = (options: RuleOptions): readonly LintRule[] => {
   const ignore = new Set(options.ignore ?? [])
-  return (options.rules ?? RULES).filter((rule) => !ignore.has(rule.id))
+  return (options.rules ?? DEFAULT_RULES).filter((rule) => !ignore.has(rule.id))
 }
 
 export const byPosition = (a: LintFinding, b: LintFinding): number =>
@@ -60,6 +61,21 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
     tailwindVersion: (file) => infoOf(file.abs, resolve(options.cwd)).version,
     tailwindRange: (file) => infoOf(file.abs, resolve(options.cwd)).range,
   }
+  const cwd = resolve(options.cwd)
+  const flipperOf = createFlipperLookup(repoTop(cwd) ?? cwd)
+  const flippers = new Map<string, string | null>()
+  const reasons = new Map<string, QuietReason | null>()
+  const reasonOf = (file: SourceFile): QuietReason | null => {
+    const known = reasons.get(file.path)
+    if (known !== undefined) return known
+    const flipper = file.lang === 'css' || file.lang === 'scss' ? flipperOf(file.abs) : null
+    flippers.set(file.path, flipper)
+    const reason = quietReason(file.path, file.text) ?? (flipper ? 'flipped' : null)
+    reasons.set(file.path, reason)
+    return reason
+  }
+  ctx.physicalQuiet = reasonOf
+  const tally = new Map<string, QuietEntry>()
   const skipped: Skipped[] = [...walkSkipped]
   const findings: LintFinding[] = []
   let linted = 0
@@ -82,7 +98,14 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
       continue
     }
     linted++
+    const reason = reasonOf(outcome.file)
+    if (reason) {
+      const flipper = reason === 'flipped' ? flippers.get(path) ?? undefined : undefined
+      const key = `${reason}:${flipper ?? ''}`
+      const entry = tally.get(key)
+      tally.set(key, entry ? { ...entry, files: entry.files + 1 } : { reason, files: 1, ...(flipper ? { flipper } : {}) })
+    }
     findings.push(...lintFile(outcome.file, rules, ctx))
   }
-  return { root: options.cwd, files: linted, skipped, findings: findings.sort(byPosition) }
+  return { root: options.cwd, files: linted, skipped, findings: findings.sort(byPosition), quiet: [...tally.values()] }
 }

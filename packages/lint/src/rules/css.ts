@@ -129,7 +129,8 @@ const physicalCss: LintRule = {
   why: 'A physical left or right property stays on the same side in Arabic, so the margin, padding, border, offset or alignment is on the wrong edge and the layout looks unbalanced.',
   fix: 'Use the logical property, such as margin-inline-start, padding-inline-end, inset-inline-start or text-align: start, so the side follows the reading direction.',
   langs: CSS_LANGS,
-  check: (file) => {
+  check: (file, ctx) => {
+    if (ctx.physicalQuiet?.(file)) return []
     const hits: LintHit[] = []
     const overrides = directionOverrides(file)
     eachDeclaration(file, (decl, offset, rule) => {

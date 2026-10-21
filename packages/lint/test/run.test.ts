@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { RULES } from '../src/rules'
 import { lint, lintDocsUrl, lintText } from '../src/run'
 import { tree, wordRule } from './helpers'
 
@@ -96,5 +97,37 @@ describe('lint', () => {
 describe('lintDocsUrl', () => {
   it('points at the rule anchor in LINT.md', () => {
     expect(lintDocsUrl('source/physical-css')).toBe('https://github.com/dualkit/dualkit/blob/main/packages/lint/LINT.md#source-physical-css')
+  })
+})
+
+describe('lint quiet files', () => {
+  const tw = JSON.stringify({ devDependencies: { rtlcss: '^4', tailwindcss: '^3.4.0' } })
+  const installed = JSON.stringify({ name: 'tailwindcss', version: '3.4.17' })
+
+  it('silences physical-css under a flipper but not physical-tailwind', async () => {
+    const root = tree({
+      'package.json': tw, 'node_modules/tailwindcss/package.json': installed,
+      'a.scss': '.a { margin-left: 4px }', 'b.tsx': 'export const B = () => <div className="ml-2" />',
+    })
+    const result = await lint(['.'], { cwd: root })
+    expect(result.findings.map((f) => f.rule)).toEqual(['source/physical-tailwind'])
+    expect(result.quiet).toContainEqual({ reason: 'flipped', files: 1, flipper: 'rtlcss' })
+  })
+
+  it('silences example files', async () => {
+    const root = tree({ 'examples/a.css': '.a { margin-left: 4px }' })
+    const result = await lint(['.'], { cwd: root })
+    expect(result.findings).toEqual([])
+    expect(result.quiet).toContainEqual({ reason: 'example', files: 1 })
+  })
+
+  it('leaves the dir attribute rule out by default', async () => {
+    const root = tree({ 'a.scss': '[dir="rtl"] .x { margin-right: 0 }' })
+    expect((await lint(['.'], { cwd: root })).findings.map((f) => f.rule)).not.toContain('source/dir-attribute-selector')
+    expect((await lint(['.'], { cwd: root, rules: RULES })).findings.map((f) => f.rule)).toContain('source/dir-attribute-selector')
+  })
+
+  it('reports no quiet files from lintText', () => {
+    expect(lintText('examples/a.css', '.a { margin-left: 4px }').map((f) => f.rule)).toEqual(['source/physical-css'])
   })
 })

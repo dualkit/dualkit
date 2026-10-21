@@ -26,11 +26,16 @@ export type SourceFile = {
 /** offset is a character index into SourceFile.text. */
 export type LintHit = { offset: number; message: string }
 
+/** Why physical left and right rules are skipped for a file. */
+export type QuietReason = 'generated' | 'example' | 'email' | 'flipped'
+
 export type LintContext = {
   /** The Tailwind version that applies to a file, or null when none is found. */
   tailwindVersion: (file: SourceFile) => string | null
   /** The declared range when the version came from it because nothing installed was used, else null. */
   tailwindRange?: (file: SourceFile) => string | null
+  /** Set by lint(). A file where physical rules cannot be bugs gets the reason. */
+  physicalQuiet?: (file: SourceFile) => QuietReason | null
 }
 
 export type LintRule = {
@@ -62,4 +67,6 @@ export type LintFinding = {
 
 export type Skipped = { file: string; reason: string }
 
-export type LintResult = { root: string; files: number; skipped: Skipped[]; findings: LintFinding[] }
+export type QuietEntry = { reason: QuietReason; files: number; flipper?: string }
+
+export type LintResult = { root: string; files: number; skipped: Skipped[]; findings: LintFinding[]; quiet: QuietEntry[] }

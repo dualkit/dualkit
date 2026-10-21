@@ -197,6 +197,8 @@ const physicalTailwind: LintRule = {
   fix: 'Use the logical class, such as ms-4, pe-2, start-0 (inset-s-0 from Tailwind 4.2), text-start or rounded-s-lg, so the side follows the reading direction. Keep a physical class only under an rtl:, ltr: or side variant such as data-[side=left]:, or beside an rtl: or ltr: class that resets the same property, as in ml-4 rtl:ml-0 rtl:mr-4.',
   langs: ['css', 'scss', 'html', 'js', 'jsx', 'ts', 'tsx'],
   check: (file, ctx) => {
+    const quiet = ctx.physicalQuiet?.(file)
+    if (quiet && quiet !== 'flipped') return []
     const version = coerce(ctx.tailwindVersion(file))
     if (!version || lt(version, FLOOR)) return []
     const bothNames = spansRename(ctx.tailwindRange?.(file))

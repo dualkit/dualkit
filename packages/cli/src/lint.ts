@@ -3,6 +3,7 @@ import type { LintFinding, LintResult } from '@dualkit/lint'
 const paint = (on: boolean, code: number, s: string) => (on ? `\u001b[${code}m${s}\u001b[0m` : s)
 const MARK = { error: '✖', warning: '▲', note: '·' } as const
 const COLOR = { error: 31, warning: 33, note: 2 } as const
+const number = (n: number) => n.toLocaleString('en-US')
 const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`
 
 /** Lowest to highest. A finding fails the run when its rank is at or above the --fail-on rank. */
@@ -27,7 +28,18 @@ export function formatLint(result: LintResult, color: boolean): string {
       ? `No issues found in ${plural(files, 'file')}.`
       : `${plural(count(findings, 'error'), 'error')}, ${plural(count(findings, 'warning'), 'warning')}, ${plural(count(findings, 'note'), 'note')} in ${plural(files, 'file')}`,
   )
+  for (const q of result.quiet ?? []) lines.push(quietLine(q))
   return `${lines.join('\n')}\n`
+}
+
+const quietLine = (q: LintResult['quiet'][number]): string => {
+  const n = number(q.files)
+  switch (q.reason) {
+    case 'flipped': return `Skipped physical rules in ${n} files flipped by ${q.flipper ?? 'a build step'}.`
+    case 'example': return `Skipped physical rules in ${n} example files.`
+    case 'generated': return `Skipped physical rules in ${n} generated files.`
+    case 'email': return `Skipped physical rules in ${n} email templates.`
+  }
 }
 
 /** One line per skipped file, for stderr, so stdout holds only the findings. */
