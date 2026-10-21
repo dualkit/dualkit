@@ -40,6 +40,12 @@ describe('store', () => {
     expect(s.isDone(key)).toBe(false)
     expect(s.list('2026-11').map((r) => r.run)).toEqual([2])
   })
+  it('lists loop records with the others', () => {
+    const s = makeStore(mkdtempSync(join(tmpdir(), 'store-')))
+    s.write(okRec({ ...key, condition: 'dualkit' }), '<html></html>')
+    s.write({ ...okRec({ ...key, condition: 'loop' }), from: { rulesPassed: 10, score: 20 }, rounds: [] } as BuildRecord, '<html></html>')
+    expect(s.list('2026-11').map((r) => r.condition)).toEqual(['dualkit', 'loop'])
+  })
   it('lists nothing for a month that never ran', () => {
     expect(makeStore(mkdtempSync(join(tmpdir(), 'store-'))).list('2026-12')).toEqual([])
   })

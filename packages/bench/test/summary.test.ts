@@ -11,7 +11,7 @@ import { buildSummary, publishSummary, writeSummary } from '../src/summary'
 const screens = loadScreens()
 const model = (id: string, since = '2026-10'): ModelEntry => ({ id, provider: 'openrouter', model: id, label: id.toUpperCase(), since, by: 'Fake', mark: 'google' })
 
-function seed(store: ReturnType<typeof makeStore>, id: string, passed: Record<Condition, number>, skip: string[] = []) {
+function seed(store: ReturnType<typeof makeStore>, id: string, passed: Record<Exclude<Condition, 'loop'>, number>, skip: string[] = []) {
   for (const s of screens) for (const condition of ['alone', 'dualkit'] as const) for (const run of [1, 2, 3]) {
     if (skip.includes(`${s.id}/${condition}`)) continue
     const k: BuildKey = { month: '2026-11', model: id, screen: s.id, condition, run }

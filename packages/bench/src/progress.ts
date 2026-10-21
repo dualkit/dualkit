@@ -6,7 +6,7 @@ const ERROR_CHARS = 80
 
 export type RecentBuild = {
   at: string; model: string; label: string; by: string; mark: string; screen: string; screenTitle: string
-  condition: 'alone' | 'dualkit'; ok: boolean; rulesPassed: number | null; error: string | null
+  condition: 'alone' | 'dualkit' | 'loop'; ok: boolean; rulesPassed: number | null; error: string | null
 }
 export type Progress = { month: string; running: boolean; total: number; done: number; updatedAt: string; recent: RecentBuild[] }
 type Input = { month: string; running: boolean; total: number; done: number; updatedAt: string; /** Builds this run finished, oldest first. */ finished: readonly RecentBuild[] }

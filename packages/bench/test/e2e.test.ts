@@ -19,7 +19,10 @@ describe('the real path, end to end', () => {
     const models = [model('fake-good'), model('fake-incomplete')]
     // No score option: the real scoreHtml, with the shared Chromium.
     const out = await runBench({ month: '2026-11', models, screens, generate: fakeGenerate, store })
-    expect(out).toEqual({ built: 12, skipped: 0, failed: 0, stoppedEarly: false })
+    expect(out).toEqual({ built: 18, skipped: 0, failed: 0, stoppedEarly: false })
+    const loops = store.list('2026-11').filter((r) => r.condition === 'loop')
+    expect(loops).toHaveLength(6)
+    expect(loops.every((r) => r.ok && Array.isArray(r.rounds) && existsSync(store.paths(r).webp))).toBe(true)
     const summary = await buildSummary({ month: '2026-11', models, screens, store, siteRoot: site })
     const parsed = parseBenchMonth(JSON.parse(JSON.stringify(summary)))
     expect(existsSync(writeSummary(summary, site))).toBe(true)

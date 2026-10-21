@@ -1,7 +1,7 @@
 import { lintText, type LintFinding } from '@dualkit/lint'
 import type { SlimFinding } from './score'
 
-const MAX_ITEMS = 40
+export const MAX_ITEMS = 40
 const SNIPPET_MAX = 160
 const HEADER = 'dualkit check and dualkit lint found these problems in your page.'
 const FOOTER = 'Fix these. Change only what they need. Reply with the whole file.'
