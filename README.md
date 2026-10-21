@@ -123,16 +123,16 @@ In CI, `uses: dualkit/dualkit/action@main` scores every pull request and uploads
 
 ## Lint
 
-Lint reads your source instead of a rendered page, so it needs no browser and runs in seconds. It checks CSS, SCSS, HTML, JavaScript and TypeScript, including JSX, against 8 source rules: left and right in CSS and Tailwind classes, letter-spacing on Arabic, `[dir]` selectors, Arabic formats that leave the digits to the runtime, the bare `islamic` calendar instead of `islamic-umalqura` (the Hijri calendar CLDR ranks first for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar), Hijri dates with no time zone, and the old rial sign.
+Lint reads your source instead of a rendered page, so it needs no browser and runs in seconds. It checks CSS, SCSS, HTML, JavaScript and TypeScript, including JSX, plus Vue and Svelte files and CSS in styled and css templates, against 8 source rules: left and right in CSS and Tailwind classes, letter-spacing on Arabic, `[dir]` selectors, Arabic formats that leave the digits to the runtime, the bare `islamic` calendar instead of `islamic-umalqura` (the Hijri calendar CLDR ranks first for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar), Hijri dates with no time zone, and the old rial sign. Left and right in CSS is a note, so it is listed but does not fail the run unless you set `--fail-on note`.
 
 ```
 npx dualkit@beta lint .
 ```
 
 ```
-physical.css:2:3  ▲ source/physical-css  `margin-left: 8px` is tied to one side. Use `margin-inline-start`.
+physical.css:2:3  · source/physical-css  `margin-left: 8px` is tied to one side. Use `margin-inline-start`.
 
-0 errors, 1 warning, 0 notes in 2 files
+0 errors, 0 warnings, 1 note in 2 files
 ```
 
 It exits 1 when a finding reaches `--fail-on` (default `error`). Turn a rule off for one line with a `dualkit-disable-next-line <rule-id> -- reason` comment. In CI, set `mode: lint` on the same Action. Every rule and its known limits are in [LINT.md](packages/lint/LINT.md).

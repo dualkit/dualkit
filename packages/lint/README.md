@@ -1,6 +1,6 @@
 # @dualkit/lint
 
-Source rules that catch Arabic and right-to-left bugs before anything renders. It reads CSS, SCSS, HTML, JavaScript and TypeScript files, including JSX, and reports problems with a file, line and column. It needs no browser.
+Source rules that catch Arabic and right-to-left bugs before anything renders. It reads CSS, SCSS, HTML, JavaScript and TypeScript files, including JSX, plus Vue and Svelte files and CSS inside styled, css, createGlobalStyle and injectGlobal templates, and reports problems with a file, line and column. It needs no browser.
 
 Most people want the CLI, [`dualkit`](https://www.npmjs.com/package/dualkit):
 
@@ -12,11 +12,15 @@ npx dualkit@beta lint .
 
 8 source rules. Each one, why it matters and how to fix it is in [LINT.md](./LINT.md), with the known limits.
 
+A note is listed and counted in the summary, but it does not fail the run unless you set `--fail-on note`. `source/physical-css` is a note because on real repositories most of its findings were sides that were already handled or did not matter.
+
+When a build step such as rtlcss already flips your CSS, `source/physical-css` is skipped with one summary line.
+
 | Rule | Severity | Catches |
 | --- | --- | --- |
-| `source/physical-css` | warning | Left and right in CSS, such as `margin-left` or `text-align: left`, where a logical property follows the reading direction |
+| `source/physical-css` | note | Left and right in CSS, such as `margin-left` or `text-align: left`, where a logical property follows the reading direction |
 | `source/arabic-letter-spacing` | error | Letter-spacing on a selector that targets Arabic |
-| `source/dir-attribute-selector` | note | A `[dir]` attribute selector where `:dir()` also catches inherited direction |
+| `source/dir-attribute-selector` | note | A `[dir]` attribute selector where `:dir()` also catches inherited direction. Off by default; pass `RULES` to `lint()` to run it |
 | `source/physical-tailwind` | warning | Physical Tailwind classes such as `ml-4` or `text-left`. The fix follows your installed Tailwind version |
 | `source/intl-digits` | warning | An Arabic `Intl` number or date format that leaves the digits to the runtime |
 | `source/islamic-calendar` | warning | The bare `islamic` calendar instead of `islamic-umalqura`, the Hijri calendar CLDR ranks first for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar |

@@ -126,3 +126,36 @@ Check:
 4. Emit stable selectors.
 
 Then rerun this exact sweep with the same samples and labels and publish the before and after.
+
+## Results after the precision pass, 21 Oct 2026
+
+We reran the sweep after the fixes above. Lint used the same 10 repos at pinned commits. Check replayed the same 10 Arabic pages from recordings made on 21 Oct. Samples were labelled by hand again, and precision is real divided by real plus handled plus intended.
+
+### Lint
+
+| | Before (0.1.0-beta.0) | After |
+|---|---|---|
+| Findings on the 10 repos | 3,577 | 938 after the noise fixes, 1,887 after adding Vue, Svelte and CSS-in-JS |
+| Precision on the labelled sample, all rules | 16% | 34% |
+| Real bugs kept | 40 found | 39 of the 40 |
+
+- The one real bug lost came from the dir-attribute rule, which is now off by default.
+- A fresh sample of 79 new findings held 33 more real bugs.
+- Reading Vue, Svelte and CSS-in-JS added findings in Chatwoot (200), Twenty (688), Rocket.Chat (53) and Nextcloud (8).
+- By rule after the fixes: physical-tailwind 62% (20 real, 12 false), physical-css 30% (52 real, 123 false).
+- Discourse produced 2,249 false findings before because rtlcss runs in its build. It is now skipped with one summary line.
+- Lint did not reach the 80% goal. At 34% most of what it reports is still not a bug.
+- Decision on 21 Oct: physical-css becomes a note, so it is still listed but does not fail CI. physical-tailwind stays a warning.
+
+### Check
+
+| | Before (rules 0.2) | After |
+|---|---|---|
+| Findings on the 10 pages | 1,508 | 889 |
+| Precision on the labelled sample | 59% | 80% for every rule except the two layout side rules |
+| Real bugs kept | 64 present on replay | 58 of the 64 |
+
+- layout/physical-spacing and layout/physical-inset are now notes. On the sample they had 0 real and 21 false.
+- The 6 dropped real bugs: 5 sit on carousel slides a reader cannot see until the carousel moves, and 1 is letter-spacing of 0.008em, under the new 0.025em threshold.
+- Check now reads text inside display:contents wrappers, which Framer sites use and which it skipped before. On Salla that found 5 more real problems in a sample of 10.
+- Notes still weigh 1 point each in the score, capped at 3 per rule.

@@ -66,9 +66,9 @@ export default async function Docs() {
         </section>
         <section className="doc-block" id="lint">
           <h2 className="h2">Lint your source</h2>
-          <p className="soft">Run it in your project folder. It reads your CSS, HTML, JavaScript and TypeScript against 8 source rules, needs no browser, and skips what your .gitignore skips.</p>
+          <p className="soft">Run it in your project folder. It reads your CSS, HTML, Vue, Svelte, JavaScript and TypeScript, and CSS inside styled and css templates, against 8 source rules, needs no browser, and skips what your .gitignore skips.</p>
           <CopyCommand command={LINT_COMMAND} />
-          <p className="small soft">Add <code>--json</code> for the findings as JSON, <code>--fail-on warning</code> or <code>--fail-on note</code> to fail on more than errors, and <code>--config</code> to point at a <code>dualkit.config.json</code>. To turn a rule off for one line, put <code>dualkit-disable-next-line source/physical-css -- reason</code> in a comment above it.</p>
+          <p className="small soft">Add <code>--json</code> for the findings as JSON, <code>--fail-on warning</code> or <code>--fail-on note</code> to fail on more than errors (warnings and notes are listed but do not fail the run by default), and <code>--config</code> to point at a <code>dualkit.config.json</code>. To turn a rule off for one line, put <code>dualkit-disable-next-line source/physical-css -- reason</code> in a comment above it.</p>
           <p className="small soft">In CI, use the same Action with <code>mode: lint</code> under <code>with:</code>. It needs no browser, fails the job on errors, and comments the findings on the pull request; <code>paths</code> and <code>fail-on</code> are in the <a href={ACTION_URL}>Action README</a>. Every rule and its known limits are in <a href="https://github.com/dualkit/dualkit/blob/main/packages/lint/LINT.md">LINT.md</a>.</p>
         </section>
         <section className="doc-block">
