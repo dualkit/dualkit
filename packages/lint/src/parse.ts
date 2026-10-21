@@ -3,6 +3,7 @@ import { parse as parseHtml, type DefaultTreeAdapterMap } from 'parse5'
 import { parse as parseCss } from 'postcss'
 import scss from 'postcss-scss'
 import { templateCss } from './css-in-js'
+import { maskSvelteExpressions } from './svelte-mask'
 import type { CssBlock, JsBlock, JsLang, Lang, SourceFile } from './types'
 
 type Node = DefaultTreeAdapterMap['node']
@@ -82,8 +83,8 @@ function dropForeignTemplates(html: Node): void {
   }
 }
 
-function parseHtmlFile(text: string, component = false): Pick<SourceFile, 'css' | 'js' | 'html'> {
-  const html = parseHtml(text, { sourceCodeLocationInfo: true })
+function parseHtmlFile(text: string, component = false, markup: string = text): Pick<SourceFile, 'css' | 'js' | 'html'> {
+  const html = parseHtml(markup, { sourceCodeLocationInfo: true })
   const css: CssBlock[] = []
   const js: JsBlock[] = []
   for (const el of elements(html)) {
@@ -127,7 +128,7 @@ export function parseSourceOutcome(path: string, rawText: string, abs: string = 
     if (lang === 'css' || lang === 'scss') return { file: { ...base, css: [parseStyle(text, lang, 0)], js: [], html: null } }
     if (lang === 'html') return { file: { ...base, ...parseHtmlFile(text) } }
     if (lang === 'vue' || lang === 'svelte') {
-      const parsed = parseHtmlFile(text, true)
+      const parsed = parseHtmlFile(text, true, lang === 'svelte' ? maskSvelteExpressions(text) : text)
       return { file: { ...base, ...parsed, css: [...parsed.css, ...parsed.js.flatMap((b) => templateCss(b, text))] } }
     }
     const block = parseJs(text, lang, 0)

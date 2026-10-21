@@ -19,20 +19,23 @@ export function quietReason(path: string, text: string): 'generated' | 'example'
 }
 
 /** Packages that mirror physical CSS at build time, so source written left and right is already correct. */
-export const FLIPPERS: readonly string[] = ['rtlcss', 'postcss-rtlcss', 'postcss-rtl', 'cssjanus', 'stylis-plugin-rtl', '@mui/stylis-plugin-rtl']
+export const POSTCSS_FLIPPERS: readonly string[] = ['rtlcss', 'postcss-rtlcss', 'postcss-rtl', 'cssjanus']
+/** These run inside Stylis, so they mirror the CSS in styled-components and Emotion templates and nothing else. */
+export const STYLIS_FLIPPERS: readonly string[] = ['stylis-plugin-rtl', '@mui/stylis-plugin-rtl']
+export const FLIPPERS: readonly string[] = [...POSTCSS_FLIPPERS, ...STYLIS_FLIPPERS]
 const DEP_FIELDS = ['dependencies', 'devDependencies', 'peerDependencies'] as const
 
-function flipperIn(deps: unknown): string | null {
+function flipperIn(deps: unknown, names: readonly string[]): string | null {
   if (typeof deps !== 'object' || deps === null) return null
-  return FLIPPERS.find((name) => Object.hasOwn(deps, name)) ?? null
+  return names.find((name) => Object.hasOwn(deps, name)) ?? null
 }
 
-function fromPackageJson(dir: string): string | null {
+function fromPackageJson(dir: string, names: readonly string[]): string | null {
   try {
     const pkg: unknown = JSON.parse(readFileSync(join(dir, 'package.json'), 'utf8'))
     if (typeof pkg !== 'object' || pkg === null) return null
     for (const field of DEP_FIELDS) {
-      const found = flipperIn((pkg as Record<string, unknown>)[field])
+      const found = flipperIn((pkg as Record<string, unknown>)[field], names)
       if (found) return found
     }
   } catch {
@@ -41,17 +44,17 @@ function fromPackageJson(dir: string): string | null {
   return null
 }
 
-function fromGems(dir: string): string | null {
-  let names: string[]
+function fromGems(dir: string, names: readonly string[]): string | null {
+  let files: string[]
   try {
-    names = readdirSync(dir).filter((n) => n === 'Gemfile' || n.endsWith('.gemspec'))
+    files = readdirSync(dir).filter((n) => n === 'Gemfile' || n.endsWith('.gemspec'))
   } catch {
     return null
   }
-  for (const name of names) {
+  for (const name of files) {
     try {
       const text = readFileSync(join(dir, name), 'utf8').split(/\r\n|\r|\n/).filter((l) => !l.trimStart().startsWith('#')).join('\n')
-      const found = FLIPPERS.find((f) => new RegExp(`['"]${f}['"]`).test(text))
+      const found = names.find((f) => new RegExp(`['"]${f}['"]`).test(text))
       if (found) return found
     } catch {
       // Unreadable gem file: skip it.
@@ -69,12 +72,12 @@ const inside = (parent: string, child: string): boolean => {
  * Finds a flipper declared in any package.json from a file's directory up to top, or in a Gemfile or
  * gemspec at top. Nothing above top is read. A file outside top finds nothing.
  */
-export function createFlipperLookup(top: string): (abs: string) => string | null {
+export function createFlipperLookup(top: string, names: readonly string[] = FLIPPERS): (abs: string) => string | null {
   const byDir = new Map<string, string | null>()
-  const gems = fromGems(top)
+  const gems = fromGems(top, names)
   const search = (dir: string): string | null => {
     if (byDir.has(dir)) return byDir.get(dir) ?? null
-    const own = existsSync(join(dir, 'package.json')) ? fromPackageJson(dir) : null
+    const own = existsSync(join(dir, 'package.json')) ? fromPackageJson(dir, names) : null
     const found = own ?? (dir === top ? gems : dirname(dir) === dir ? null : search(dirname(dir)))
     byDir.set(dir, found)
     return found

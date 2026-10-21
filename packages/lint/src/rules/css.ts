@@ -1,32 +1,36 @@
 import type { Container, Declaration, Rule } from 'postcss'
 import { directionScoped, fullSelectors, targetsArabic, withoutDirection } from '../selectors'
-import type { LintHit, LintRule, SourceFile } from '../types'
+import type { CssBlock, LintHit, LintRule, SourceFile } from '../types'
 
 const CSS_LANGS = ['css', 'scss', 'html', 'vue', 'svelte', 'js', 'jsx', 'ts', 'tsx'] as const
 
 /** Calls visit for every declaration with its offset in the file text and its enclosing rule, if any. */
-function eachDeclaration(file: SourceFile, visit: (decl: Declaration, offset: number, rule: Rule | null, shown: string) => void): void {
+function eachDeclaration(
+  file: SourceFile,
+  visit: (decl: Declaration, offset: number, rule: Rule | null, shown: string) => void,
+  skip?: (block: CssBlock) => boolean,
+): void {
   for (const block of file.css) {
+    if (skip?.(block)) continue
     block.root.walkDecls((decl) => {
       const start = decl.source?.start?.offset
       if (start === undefined) return
       let parent = decl.parent as Container | undefined
       while (parent && parent.type !== 'rule') parent = parent.parent as Container | undefined
       const end = decl.source?.end?.offset ?? start
-      visit(decl, block.offset + start, (parent as Rule | undefined) ?? null, shownValue(file, decl, block.offset + start, block.offset + end + 1))
+      visit(decl, block.offset + start, (parent as Rule | undefined) ?? null, shownValue(file, block, decl, block.offset + start, block.offset + end + 1))
     })
   }
 }
 
 const SHOWN_MAX = 60
-const SCRIPT_LANGS = new Set(['js', 'jsx', 'ts', 'tsx'])
 
 /**
- * The value to print in a message. In a script file the parsed value may hold filler that stands in for a
- * `${...}`, so the source text is shown instead, on one line and cut when long.
+ * The value to print in a message. In CSS from a template literal the parsed value may hold filler that stands in
+ * for a `${...}`, so the source text is shown instead, on one line and cut when long.
  */
-function shownValue(file: SourceFile, decl: Declaration, from: number, to: number): string {
-  if (!SCRIPT_LANGS.has(file.lang)) return normalise(decl.value)
+function shownValue(file: SourceFile, block: CssBlock, decl: Declaration, from: number, to: number): string {
+  if (!block.fromTemplate) return normalise(decl.value)
   const raw = file.text.slice(from, to)
   const colon = raw.indexOf(':')
   const value = (colon === -1 ? raw : raw.slice(colon + 1)).replace(/;\s*$/, '').replace(/\s+/g, ' ').trim()
@@ -88,10 +92,13 @@ function isCentring(decl: Declaration, prop: string, value: string): boolean {
   })
 }
 
+/** The filler for a `${...}` in template CSS: two interpolations are never known to be equal. */
+const PLACEHOLDER = /\$x+/
+
 function hasSymmetricSibling(decl: Declaration, prop: string, value: string): boolean {
   const opposite = OPPOSITE[prop]
   const parent = decl.parent
-  if (!opposite || !parent) return false
+  if (!opposite || !parent || PLACEHOLDER.test(value)) return false
   return (parent.nodes ?? []).some((n) => n.type === 'decl' && n.prop.toLowerCase() === opposite && normalise(n.value) === value)
 }
 
@@ -146,9 +153,12 @@ const physicalCss: LintRule = {
   fix: 'Use the logical property, such as margin-inline-start, padding-inline-end, inset-inline-start or text-align: start, so the side follows the reading direction.',
   langs: CSS_LANGS,
   check: (file, ctx) => {
-    if (ctx.physicalQuiet?.(file)) return []
+    const quiet = ctx.physicalQuiet?.(file)
+    if (quiet && quiet !== 'flipped') return []
     const hits: LintHit[] = []
     const overrides = directionOverrides(file)
+    // A flipper only mirrors the CSS it processes, which differs by block: see blockFlipper in run.ts.
+    const flipped = (block: CssBlock): boolean => ctx.blockFlipper?.(file, block) != null
     eachDeclaration(file, (decl, offset, rule, shown) => {
       const prop = decl.prop.toLowerCase()
       if (prop.startsWith('-') || prop.includes('#{') || prop.includes('$') || prop.includes('@')) return
@@ -159,7 +169,7 @@ const physicalCss: LintRule = {
       if (rule && fullSelectors(rule).every(directionScoped)) return
       if (overridden(rule, prop, overrides)) return
       hits.push({ offset, message: `\`${prop}: ${shown}\` is tied to one side. Use \`${logical}\`.` })
-    })
+    }, flipped)
     return hits
   },
 }

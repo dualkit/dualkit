@@ -34,7 +34,7 @@ Every rule, why it matters and how to fix it: [RULES.md](https://github.com/dual
 npx dualkit@beta lint .
 ```
 
-`dualkit lint [paths...]` scans CSS, SCSS, HTML, Vue, Svelte, JavaScript and TypeScript against 8 source rules, without launching a browser. Paths default to the current folder, and a folder walk skips what your `.gitignore` skips.
+`dualkit lint [paths...]` scans CSS, SCSS, HTML, Vue, Svelte, JavaScript and TypeScript against the 8 source rules that run by default, without launching a browser. Paths default to the current folder, and a folder walk skips what your `.gitignore` skips.
 
 ```
 physical.css:2:3  · source/physical-css  `margin-left: 8px` is tied to one side. Use `margin-inline-start`.

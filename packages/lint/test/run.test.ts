@@ -121,8 +121,10 @@ describe('lint quiet files', () => {
     })
     const result = await lint(['.'], { cwd: root })
     expect(result.findings.map((f) => [f.rule, f.line])).toEqual(expect.arrayContaining([
-      ['source/physical-tailwind', 2], ['source/physical-tailwind', 4], ['source/physical-css', 10],
+      ['source/physical-tailwind', 2], ['source/physical-tailwind', 4],
     ]))
+    // rtlcss is a PostCSS flipper, so it already mirrors the <style> block.
+    expect(result.findings.some((f) => f.rule === 'source/physical-css')).toBe(false)
   })
 
   it('treats a dir attribute in a Vue template as deliberate', async () => {

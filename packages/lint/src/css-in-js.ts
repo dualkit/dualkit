@@ -22,15 +22,18 @@ const blank = (text: string, fill: string): string => text.replace(/[^\r\n]/g, f
 const DECLARATION_START = /(?:^|[{};]|\*\/)\s*$/
 const DECLARATION_END = /^[ \t]*(?:;|\r?\n|$)/
 
+/** An inline `${...}` becomes `$` and x: the rules read that shape as an unknown value, like `var()`. */
+const PLACEHOLDER_MARK = '$'
+
 /**
  * Stands in for a `${...}` of the same length. Where a whole declaration or rule could stand it becomes
- * a comment, so the CSS around it still parses; anywhere else it becomes an identifier of x.
+ * a comment, so the CSS around it still parses; anywhere else it becomes `$` followed by x.
  */
 function placeholder(raw: string, before: string, after: string): string {
   if (raw.length >= 4 && DECLARATION_START.test(before) && DECLARATION_END.test(after)) {
     return `/*${blank(raw.slice(2, -2), ' ')}*/`
   }
-  return blank(raw, 'x')
+  return `${PLACEHOLDER_MARK}${blank(raw.slice(1), 'x')}`
 }
 
 function cssOf(literal: TemplateLiteral, text: string, base: number): string | null {
@@ -66,7 +69,7 @@ export function templateCss(block: JsBlock, text: string): CssBlock[] {
     const css = cssOf(node.quasi, text, block.offset)
     if (css === null) return
     try {
-      blocks.push({ root: scss.parse(css), offset: block.offset + first.start })
+      blocks.push({ root: scss.parse(css), offset: block.offset + first.start, fromTemplate: true })
     } catch {
       // Not CSS once the expressions are gone: leave this template unread.
     }

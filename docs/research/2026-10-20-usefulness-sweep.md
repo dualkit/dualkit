@@ -21,7 +21,7 @@ The tools find real bugs in most products. They also flag too much that is fine,
 - **Labels:** real, handled (the project already fixes it), intended (correct as built), unclear. Precision is real divided by real plus handled plus intended; unclear is left out and reported.
 - **Swaps:** my.gov.sa, Emirates and noon block automated browsers, and stc returns 500 to headless Chromium. They were replaced by Al Rajhi Bank, du and dubizzle rather than getting around the blocks; stc was dropped. Careem and talabat were left out on purpose.
 
-Raw data, samples, crops and per-repo notes: scratchpad `sweep/` (out, samples, csamples, labels).
+Raw data, samples, crops and per-repo notes: `~/Documents/Code/dualkit-sweep-data` (out, samples, csamples, labels).
 
 ## Lint
 
@@ -152,7 +152,7 @@ We reran the sweep after the fixes above. Lint used the same 10 repos at pinned 
 | | Before (rules 0.2) | After |
 |---|---|---|
 | Findings on the 10 pages | 1,508 | 889 |
-| Precision on the labelled sample | 59% | 80% for every rule except the two layout side rules |
+| Precision on the labelled sample | 59% | Across every rule except the two layout side rules, 80% of findings are real |
 | Real bugs kept | 64 present on replay | 58 of the 64 |
 
 - layout/physical-spacing and layout/physical-inset are now notes. On the sample they had 0 real and 21 false.

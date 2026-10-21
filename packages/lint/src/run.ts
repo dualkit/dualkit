@@ -5,7 +5,7 @@ import { lineStarts, positionAt } from './position'
 import { DEFAULT_RULES } from './rules'
 import { NO_RTL_SUPPORT } from './rules/summary'
 import { hasRtlLocaleFiles, hasRtlSignal, isRtlLocalePath } from './rtl-signal'
-import { createFlipperLookup, quietReason } from './scope'
+import { createFlipperLookup, POSTCSS_FLIPPERS, quietReason, STYLIS_FLIPPERS } from './scope'
 import { suppressed } from './suppress'
 import { createTailwindInfo } from './tailwind-version'
 import type { LintContext, LintFinding, LintResult, LintRule, QuietEntry, QuietReason, Skipped, SourceFile } from './types'
@@ -44,8 +44,7 @@ function lintFile(file: SourceFile, rules: readonly LintRule[], ctx: LintContext
   return findings.sort(byPosition)
 }
 
-/** A script file with CSS in template literals: a build-time flipper mirrors that CSS like a stylesheet's. */
-const holdsTemplateCss = (file: SourceFile): boolean => file.js.length > 0 && file.html === null && file.css.length > 0
+const POSTCSS_LANGS = new Set(['css', 'scss', 'vue', 'svelte'])
 
 const PHYSICAL_RULES = new Set(['source/physical-css', 'source/physical-tailwind'])
 
@@ -83,13 +82,17 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
     tailwindRange: (file) => infoOf(file.abs, resolve(options.cwd)).range,
   }
   const cwd = resolve(options.cwd)
-  const flipperOf = createFlipperLookup(repoTop(cwd) ?? cwd)
+  const top = repoTop(cwd) ?? cwd
+  const postcssOf = createFlipperLookup(top, POSTCSS_FLIPPERS)
+  const stylisOf = createFlipperLookup(top, STYLIS_FLIPPERS)
+  // Each flipper mirrors only what it processes: PostCSS tools see stylesheets and <style> blocks, Stylis plugins see template CSS.
+  ctx.blockFlipper = (file, block) => (block.fromTemplate ? stylisOf(file.abs) : POSTCSS_LANGS.has(file.lang) ? postcssOf(file.abs) : null)
   const flippers = new Map<string, string | null>()
   const reasons = new Map<string, QuietReason | null>()
   const reasonOf = (file: SourceFile): QuietReason | null => {
     const known = reasons.get(file.path)
     if (known !== undefined) return known
-    const flipper = file.lang === 'css' || file.lang === 'scss' || holdsTemplateCss(file) ? flipperOf(file.abs) : null
+    const flipper = file.css.map((block) => ctx.blockFlipper?.(file, block) ?? null).find((name) => name !== null) ?? null
     flippers.set(file.path, flipper)
     const reason = quietReason(file.path, file.text) ?? (flipper ? 'flipped' : null)
     reasons.set(file.path, reason)
@@ -135,7 +138,6 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
   }
   const summary = rules.find((rule) => rule.id === NO_RTL_SUPPORT)
   const hasPhysical = findings.some((f) => PHYSICAL_RULES.has(f.rule))
-  const top = repoTop(cwd) ?? cwd
   // A subset run only sees part of the repo, so it cannot tell that the repo has no right-to-left support.
   const coversRepo = paths.some((p) => {
     const abs = resolve(options.cwd, p)

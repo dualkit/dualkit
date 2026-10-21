@@ -6,7 +6,8 @@ import type { Root } from 'postcss'
 export type Lang = 'css' | 'scss' | 'html' | 'vue' | 'svelte' | 'js' | 'jsx' | 'ts' | 'tsx'
 export type JsLang = 'js' | 'jsx' | 'ts' | 'tsx'
 
-export type CssBlock = { root: Root; offset: number }
+/** fromTemplate marks CSS read from a template literal in a script, where each `${...}` is filler. */
+export type CssBlock = { root: Root; offset: number; fromTemplate?: true }
 export type JsBlock = { ast: File; offset: number; lang: JsLang }
 
 export type SourceFile = {
@@ -36,6 +37,8 @@ export type LintContext = {
   tailwindRange?: (file: SourceFile) => string | null
   /** Set by lint(). A file where physical rules cannot be bugs gets the reason. */
   physicalQuiet?: (file: SourceFile) => QuietReason | null
+  /** Set by lint(). The build-time flipper that already mirrors this CSS block, or null. */
+  blockFlipper?: (file: SourceFile, block: CssBlock) => string | null
 }
 
 export type LintRule = {
