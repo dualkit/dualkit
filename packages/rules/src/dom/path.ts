@@ -22,6 +22,34 @@ export function makePathOf(): (el: Element) => string {
     return index
   }
 
+  const unique = new Map<string, boolean>()
+  const isUnique = (doc: Document, selector: string): boolean => {
+    const hit = unique.get(selector)
+    if (hit !== undefined) return hit
+    let result = false
+    try { result = doc.querySelectorAll(selector).length === 1 } catch { result = false }
+    unique.set(selector, result)
+    return result
+  }
+
+  /** An id, a data-testid or a class combination unique on the page names the element on its own. */
+  const stable = (node: Element): string | null => {
+    const tag = node.tagName.toLowerCase()
+    if (node.id) return `${tag}#${node.id}`
+    const doc = node.ownerDocument
+    const testId = node.getAttribute('data-testid')
+    if (testId) {
+      const selector = `${tag}[data-testid="${testId.replace(/["\\]/g, '\\$&')}"]`
+      if (isUnique(doc, selector)) return selector
+    }
+    const classes = typeof node.className === 'string' ? node.className.trim().split(/\s+/).filter(Boolean) : []
+    if (classes.length > 0) {
+      const selector = `${tag}${classes.map((c) => `.${doc.defaultView?.CSS?.escape ? doc.defaultView.CSS.escape(c) : c}`).join('')}`
+      if (isUnique(doc, selector)) return selector
+    }
+    return null
+  }
+
   const part = (node: Element): string => {
     const tag = node.tagName.toLowerCase()
     if (node.id) return `${tag}#${node.id}`
@@ -35,6 +63,8 @@ export function makePathOf(): (el: Element) => string {
   return (el) => {
     const known = memo.get(el)
     if (known !== undefined) return known
+    const direct = stable(el)
+    if (direct) { memo.set(el, direct); return direct }
     const parts: string[] = []
     let node: Element | null = el
     while (node && parts.length < MAX_DEPTH && node.tagName !== 'HTML') {

@@ -21,6 +21,12 @@ describe('type rules', () => {
     expect(ids(screen({ texts: [text({ font: { ...font, style: 'italic' } })] }))).toEqual(['type/arabic-italic'])
     expect(ids(screen({ texts: [text({ font: { ...font, size: 12 } })] }))).toEqual(['type/arabic-size'])
   })
+  it('scales the tracking threshold with the font size', () => {
+    const at = (size: number, letterSpacing: number) => ids(screen({ texts: [text({ font: { ...font, size, letterSpacing } })] }))
+    expect(at(16, 0.15)).toEqual([])
+    expect(at(16, 0.4)).toEqual(['type/arabic-tracking'])
+    expect(at(16, -0.4)).toEqual(['type/arabic-tracking'])
+  })
   it('flags a font stack with no Arabic face, once per stack', () => {
     const latin = { ...font, families: ['Inter', 'sans-serif'] }
     expect(ids(screen({ texts: [text({ font: latin }), text({ font: latin })] }))).toEqual(['type/arabic-font'])

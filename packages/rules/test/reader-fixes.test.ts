@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { afterAll, describe, expect, it } from 'vitest'
 import { RULES } from '../src/rules'
 import { runRules } from '../src/run'
+import { rtlScoped } from '../src/dom/styles'
 import { page } from './fixtures'
 import { closeBrowser, modelOf, withPage } from './helpers/browser'
 
@@ -140,7 +141,7 @@ describe('joins across a font change are measured, not assumed', () => {
     const bold = readFileSync(new URL('./fonts/IBMPlexSansArabic-Bold.woff2', import.meta.url)).toString('base64')
     const css = `@font-face{font-family:"Plex BoldFam";src:url(data:font/woff2;base64,${bold}) format("woff2")}`
     const split = (wrapStyle: string, second: string) =>
-      modelOf(page(`<div style="${wrapStyle}"><p><span>مح</span><span style="font-family:'${second}'">مد</span></p></div>`, { css }))
+      modelOf(page(`<div style="width:300px;margin:0 auto 0 0;${wrapStyle}"><p><span>مح</span><span style="font-family:'${second}'">مد</span></p></div>`, { css }))
     it.each(['transform:scale(.8);transform-origin:0 0', 'zoom:.8', 'transform:scale(2);transform-origin:0 0', 'zoom:2'])(
       'stays quiet for Plex Regular then Plex Bold, which joins: %s',
       async (wrapStyle) => { expect((await split(wrapStyle, 'Plex BoldFam')).joins).toEqual([]) },
@@ -170,4 +171,107 @@ describe('joining starts', () => {
       expect((await modelOf(page(`<p>م<span ${box}>${start}</span></p>`))).joins).toEqual([])
     }
   })
+})
+
+describe('rtlScoped', () => {
+  it.each([
+    ':dir(rtl) .a', '[dir=rtl] .a', '[dir="rtl"] .a', "[dir='rtl'] .a", 'html[dir="rtl"] .a', '.rtl .a', 'html.rtl .a',
+    '[lang^=ar] .a', '[lang^="ar"] .a', '[lang|=ar] .a', '[lang=ar] .a', ':lang(ar) .a', '.a:lang(ar-AE)',
+  ])('treats %s as scoped', (selector) => expect(rtlScoped(selector)).toBe(true))
+
+  it.each(['.a', '[dir=ltr] .a', '.rtl-fix .a', ':not([dir=rtl]) .a', '[lang^=en] .a', '[lang=arm] .a', 'div'])
+  ('treats %s as unscoped', (selector) => expect(rtlScoped(selector)).toBe(false))
+})
+
+const layoutsOf = async (body: string, css: string, attrs?: string) => (await modelOf(doc(body, css, attrs))).layouts
+
+describe('scoped and inline declarations', () => {
+  const css = '[dir="rtl"] .a{margin-right:8px}:dir(rtl) .b{padding-left:4px}.rtl .c{position:relative;left:10px}html[lang^="ar"] .d{float:right}'
+  const body = '<p class="a">نص</p><p class="b">نص</p><p class="c">نص</p><p class="d">نص</p>'
+
+  it('gives no hit for rules scoped to right to left', async () => {
+    expect((await layoutsOf(body, css, 'lang="ar" dir="rtl" class="rtl"')).filter((l) => l.physical.length > 0)).toEqual([])
+  })
+
+  it('still reports the same declarations when unscoped', async () => {
+    const plain = '.a{margin-right:8px}.b{padding-left:4px}.c{position:relative;left:10px}.d{float:right}'
+    const found = (await layoutsOf(body, plain)).filter((l) => l.physical.length > 0)
+    expect(found).toHaveLength(4)
+  })
+
+  it('judges a comma list by the selector that matched the element', async () => {
+    const list = '[dir="rtl"] .a, .b{margin-right:8px}'
+    const found = (await layoutsOf('<p class="a">نص</p><p class="b">نص</p>', list)).filter((l) => l.physical.length > 0)
+    expect(found.map((l) => l.id)).toEqual(['p.b'])
+  })
+
+  it('gives no hit for an inline style', async () => {
+    expect((await layoutsOf('<p style="margin-left:12px">نص</p>', '')).filter((l) => l.physical.length > 0)).toEqual([])
+  })
+})
+
+describe('unseen elements', () => {
+  const small = '<p style="font-size:11px">نص صغير جدا هنا</p>'
+  const ids = async (body: string, css = '') =>
+    runRules(await modelOf(doc(body, css)), { rules: RULES.filter((r) => r.id === 'type/arabic-size') }).map((f) => f.rule)
+
+  it('flags the small text when it is visible', async () => {
+    expect(await ids(small)).toEqual(['type/arabic-size'])
+  })
+
+  it('skips an element translated off the right of the viewport', async () => {
+    expect(await ids(`<div style="transform:translateX(110vw)">${small}</div>`)).toEqual([])
+  })
+
+  it('skips a slide fully outside an overflow hidden track', async () => {
+    const track = `<div style="width:300px;overflow:hidden"><div style="display:flex;width:900px"><div style="width:300px"></div><div style="width:300px">${small}</div></div></div>`
+    expect(await ids(track)).toEqual([])
+  })
+
+  it('keeps a slide that is inside the track', async () => {
+    const track = `<div style="width:300px;overflow:hidden"><div style="display:flex;width:900px"><div style="width:300px">${small}</div></div></div>`
+    expect(await ids(track)).toEqual(['type/arabic-size'])
+  })
+
+  it('keeps an absolute child that escapes a clipping ancestor it is not inside', async () => {
+    const body = `<div style="width:100px;overflow:hidden"><div style="position:absolute;left:400px;top:0;width:300px">${small}</div></div>`
+    expect(await ids(body)).toEqual(['type/arabic-size'])
+  })
+})
+
+describe('text-align-left on what shows', () => {
+  const run = async (body: string) =>
+    (await ruleIds(doc(body, '.l{text-align:left}'), 'layout/text-align-left'))
+
+  it('flags a wide block with short Arabic text', async () => {
+    expect(await run('<div class="l" style="width:400px">مرحبا</div>')).toEqual(['layout/text-align-left'])
+  })
+
+  it('skips an inline-block that shrink-wraps the text', async () => {
+    expect(await run('<div><span class="l" style="display:inline-block">مرحبا</span></div>')).toEqual([])
+  })
+
+  it('skips a block that is mostly digits and Latin', async () => {
+    expect(await run('<div class="l" style="width:400px">مرحبا 12345 ABCDEFGH 67890</div>')).toEqual([])
+  })
+})
+
+describe('arabic-tracking threshold', () => {
+  const run = async (size: number, spacing: number) =>
+    ruleIds(doc(`<p style="font-size:${size}px;letter-spacing:${spacing}px">نص عربي</p>`), 'type/arabic-tracking')
+
+  it('ignores 0.15px at 16px', async () => expect(await run(16, 0.15)).toEqual([]))
+  it('flags 0.5px at 9px', async () => expect(await run(9, 0.5)).toEqual(['type/arabic-tracking']))
+  it('flags 0.4px at 16px (boundary is inclusive)', async () => expect(await run(16, 0.4)).toEqual(['type/arabic-tracking']))
+})
+
+describe('stable node ids', () => {
+  const idOf = async (body: string, text: string) => (await modelOf(doc(body))).texts.find((t) => t.text === text)?.id
+
+  it('prefers an element id', async () => expect(await idOf('<div><p id="one">واحد</p></div>', 'واحد')).toBe('p#one'))
+  it('then data-testid', async () => expect(await idOf('<div><p data-testid="t1">واحد</p></div>', 'واحد')).toBe('p[data-testid="t1"]'))
+  it('then a class combination unique on the page', async () =>
+    expect(await idOf('<div><p class="a b">واحد</p><p class="a">اثنان</p></div>', 'واحد')).toBe('p.a.b'))
+  it('falls back to the chain when classes repeat', async () =>
+    expect(await idOf('<div><p class="a">واحد</p><p class="a">اثنان</p></div>', 'اثنان')).toBe('body > div > p.a:nth-of-type(2)'))
 })

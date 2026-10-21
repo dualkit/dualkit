@@ -22,3 +22,64 @@ export function offScreenWithin(el: Element, root: Element): boolean {
   }
   return false
 }
+
+type Range = { left: number; right: number }
+
+const intersect = (a: Range, b: Range): Range => ({ left: Math.max(a.left, b.left), right: Math.min(a.right, b.right) })
+const empty = (r: Range): boolean => r.right <= r.left
+const clipsX = (s: CSSStyleDeclaration): boolean => s.overflowX !== 'visible' && s.display !== 'contents'
+const isPositioned = (s: CSSStyleDeclaration): boolean => s.position !== 'static' || s.transform !== 'none'
+
+/**
+ * Builds a check for elements a reader never sees because they sit outside the viewport's horizontal range or outside
+ * an ancestor that clips overflow (off-canvas menus, inactive carousel slides). Results are cached per element, so a
+ * page costs one box read and one style read per element.
+ */
+export function makeClippedAway(): (el: Element) => boolean {
+  const childRanges = new Map<Element, Range>()
+  const visibleThrough = new Map<Element, boolean>()
+
+  /** The range this element's own box has to fall in: its parent's, or for positioned elements its containing block's. */
+  const incoming = (el: Element, position: string): Range => {
+    const doc = el.ownerDocument
+    const viewport = { left: 0, right: doc.documentElement.clientWidth }
+    if (position === 'fixed') return viewport
+    if (position === 'absolute') {
+      const win = doc.defaultView!
+      for (let n = el.parentElement; n; n = n.parentElement) {
+        if (isPositioned(win.getComputedStyle(n))) return rangeWithin(n)
+      }
+      return viewport
+    }
+    return el.parentElement ? rangeWithin(el.parentElement) : viewport
+  }
+
+  /** The horizontal range a child of this element can show in. */
+  const rangeWithin = (el: Element): Range => {
+    const known = childRanges.get(el)
+    if (known) return known
+    const s = el.ownerDocument.defaultView!.getComputedStyle(el)
+    let range = incoming(el, s.position)
+    if (el.parentElement && clipsX(s)) {
+      const r = el.getBoundingClientRect()
+      const left = r.left + el.clientLeft
+      range = intersect(range, { left, right: left + (el.clientWidth || r.width) })
+    }
+    childRanges.set(el, range)
+    return range
+  }
+
+  return (el) => {
+    const known = visibleThrough.get(el)
+    if (known !== undefined) return known
+    const s = el.ownerDocument.defaultView!.getComputedStyle(el)
+    const r = el.getBoundingClientRect()
+    const allowed = incoming(el, s.position)
+    const result = empty(intersect({ left: r.left, right: r.right }, allowed))
+    visibleThrough.set(el, result)
+    return result
+  }
+}
+
+/** True when the element's box, cut to the viewport and to every ancestor that clips overflow, has no width left. */
+export const clippedAway = (el: Element): boolean => makeClippedAway()(el)

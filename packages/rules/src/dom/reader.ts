@@ -5,7 +5,8 @@ import { readJoins } from './joins'
 import { readIcons } from './icons'
 import { readSigns } from './signs'
 import { readLabels } from './labels'
-import { screenReaderOnly } from './hidden'
+import { makeClippedAway, screenReaderOnly } from './hidden'
+import { textSlackOf } from './slack'
 import { mirrorRoot } from './mirror'
 import { makePathOf } from './path'
 import { arabicShare, arabicWordCount, hasArabic } from '../text'
@@ -19,6 +20,8 @@ const SKIP_TEXT = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE', 'TITLE'])
 const CODE_FIELD = /(^|[^a-z])(iban|otp|one-time-code|postal|zip|postcode|zipcode)([^a-z]|$)|(^|[^a-z])(?<!country[-_ ]?)code([^a-z]|$)|card[-_ ]?number|cc-number/i
 const splitCamel = (s: string): string => s.replace(/([a-z])([A-Z])/g, '$1 $2')
 const ISOLATING_DIR = /^(ltr|rtl|auto)$/i
+/** Own text counts as Arabic when at least half its letters are. */
+const MIN_ARABIC_SHARE = 0.5
 const BLOCK_TEXT_CAP = 600
 const BLOCK_TEXT_KEEP = 300
 
@@ -28,7 +31,8 @@ export function readScreen(doc: Document, options: ReadOptions = {}): ScreenMode
   const exclude = (options.exclude ?? []).filter((sel) => {
     try { doc.querySelector(sel); return true } catch { return false }
   })
-  const skipped = (el: Element) => exclude.some((sel) => el.closest(sel) !== null)
+  const clippedAway = makeClippedAway()
+  const skipped = (el: Element) => exclude.some((sel) => el.closest(sel) !== null) || clippedAway(el)
   const visible = (el: Element) => {
     const s = style(el)
     const r = el.getBoundingClientRect()
@@ -171,7 +175,7 @@ function readLayouts(doc: Document, style: Style, skipped: Pred, visible: Pred, 
     const hasOwnText = ownText !== ''
     const textAlign = s.textAlign
     if (physical.length > 0 || (hasOwnText && (textAlign === 'left' || textAlign === 'right'))) {
-      out.push({ ...ref(el), dir: dirOf(s), textAlign, hasOwnText, hasArabicText: hasArabic(ownText), physical })
+      out.push({ ...ref(el), dir: dirOf(s), textAlign, hasOwnText, hasArabicText: arabicShare(ownText) >= MIN_ARABIC_SHARE, textSlack: hasOwnText ? textSlackOf(el, s) : 0, physical })
     }
   }
   return out

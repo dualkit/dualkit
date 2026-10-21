@@ -22,6 +22,10 @@ describe('layout/text-align-left', () => {
   it('flags text-align left on RTL text', () => {
     expect(ids(screen({ layouts: [layout({ textAlign: 'left' })] }))).toEqual(['layout/text-align-left'])
   })
+  it('passes text that fills its box', () => {
+    expect(ids(screen({ layouts: [layout({ textAlign: 'left', textSlack: 3 })] }))).toEqual([])
+    expect(ids(screen({ layouts: [layout({ textAlign: 'left', textSlack: 4 })] }))).toEqual(['layout/text-align-left'])
+  })
   it('passes Latin text inside an RTL element', () => {
     expect(ids(screen({ layouts: [layout({ textAlign: 'left', hasArabicText: false })] }))).toEqual([])
   })

@@ -52,8 +52,10 @@ export type LayoutNode = NodeRef & {
   dir: Direction
   textAlign: string
   hasOwnText: boolean
-  /** The element's own text (not its children's) contains Arabic letters. */
+  /** At least half the letters in the element's own text (not its children's) are Arabic. */
   hasArabicText: boolean
+  /** Content box width minus the widest line of the element's own text, in px; 0 when it has no own text. */
+  textSlack: number
   /** Physical properties the author wrote that render differently on the left and right. */
   physical: PhysicalDeclaration[]
 }

@@ -5,6 +5,9 @@ import { excerpt, hasArabic } from '../text'
 /** Under this many Arabic words a block is a label, such as a language switcher, not a paragraph. */
 const MIN_ARABIC_WORDS = 3
 
+/** Text must sit at least this many px short of its box for text-align to show. */
+const MIN_TEXT_SLACK = 4
+
 const SPACING = /^(margin|padding)-(left|right)$/
 
 const firstPhysical = (layouts: LayoutNode[], match: (property: string) => boolean): Hit[] =>
@@ -37,7 +40,7 @@ export const textAlignLeft = defineRule({
   why: 'text-align: left pins right-to-left text to the wrong edge.',
   fix: 'Use text-align: start.',
   check: (m) => m.layouts
-    .filter((l) => l.dir === 'rtl' && l.hasOwnText && l.hasArabicText && l.textAlign === 'left')
+    .filter((l) => l.dir === 'rtl' && l.hasOwnText && l.hasArabicText && l.textAlign === 'left' && l.textSlack >= MIN_TEXT_SLACK)
     .map((l) => ({ node: pick(l), message: 'This right-to-left text is aligned left.' })),
 })
 
