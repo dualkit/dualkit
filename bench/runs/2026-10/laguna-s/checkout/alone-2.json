@@ -1,0 +1,179 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "checkout",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T17:21:58.411Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>سلة التسوق - توكيلة</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f5f5f5;\n            color: #333;\n            direction: rtl;\n            text-align: right;\n            max-width: 480px;\n            margin: 0 auto;\n            min-height: 100vh;\n            display: flex;\n            flex-direction: column;\n        }\n\n        .header {\n            background-color: #ffffff;\n            padding: 16px;\n            display: flex;\n            align-items: center;\n            border-bottom: 1px solid #e0e0e0;\n            position: sticky;\n            top: 0;\n            z-index: 100;\n        }\n\n        .back-arrow {\n            width: 24px;\n            height: 24px;\n            margin-left: 12px;\n            cursor: pointer;\n        }\n\n        .header-title {\n            font-size: 20px;\n            font-weight: 600;\n            color: #2c3e50;\n        }\n\n        .cart-items {\n            background-color: #ffffff;\n            padding: 16px;\n            border-bottom: 1px solid #e0e0e0;\n        }\n\n        .cart-item {\n            display: flex;\n            align-items: center;\n            margin-bottom: 16px;\n        }\n\n        .cart-item:last-child {\n            margin-bottom: 0;\n        }\n\n        .item-image {\n            width: 70px;\n            height: 70px;\n            background-color: #e0e0e0;\n            border-radius: 8px;\n            margin-left: 12px;\n            flex-shrink: 0;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            color: #999;\n            font-size: 12px;\n        }\n\n        .item-details {\n            flex-grow: 1;\n        }\n\n        .item-name {\n            font-size: 16px;\n            font-weight: 600;\n            margin-bottom: 4px;\n        }\n\n        .item-price {\n            font-size: 14px;\n            color: #27ae60;\n            font-weight: 600;\n        }\n\n        .quantity-stepper {\n            display: flex;\n            align-items: center;\n            margin-top: 8px;\n        }\n\n        .quantity-btn {\n            width: 30px;\n            height: 30px;\n            border: 1px solid #ddd;\n            border-radius: 4px;\n            background-color: #f9f9f9;\n            font-size: 16px;\n            cursor: pointer;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n        }\n\n        .quantity-input {\n            width: 40px;\n            text-align: center;\n            font-size: 14px;\n            border: 1px solid #ddd;\n            border-radius: 4px;\n            margin: 0 8px;\n            height: 30px;\n        }\n\n        .promo-section {\n            background-color: #ffffff;\n            padding: 16px;\n            border-bottom: 1px solid #e0e0e0;\n        }\n\n        .promo-label {\n            font-size: 14px;\n            font-weight: 600;\n            margin-bottom: 8px;\n        }\n\n        .promo-field {\n            display: flex;\n        }\n\n        .promo-input {\n            flex-grow: 1;\n            padding: 10px 12px;\n            border: 1px solid #ddd;\n            border-radius: 4px 0 0 4px;\n            font-size: 14px;\n            text-align: right;\n        }\n\n        .promo-btn {\n            padding: 10px 16px;\n            background-color: #2c3e50;\n            color: white;\n            border: none;\n            border-radius: 0 4px 4px 0;\n            font-size: 14px;\n            cursor: pointer;\n        }\n\n        .summary-section {\n            background-color: #ffffff;\n            padding: 16px;\n            border-bottom: 1px solid #e0e0e0;\n        }\n\n        .summary-row {\n            display: flex;\n            justify-content: space-between;\n            margin-bottom: 10px;\n            font-size: 15px;\n        }\n\n        .summary-row:last-child {\n            margin-bottom: 0;\n        }\n\n        .summary-label {\n            color: #555;\n        }\n\n        .summary-value {\n            font-weight: 600;\n        }\n\n        .total-row {\n            border-top: 1px solid #e0e0e0;\n            padding-top: 12px;\n            margin-top: 12px;\n            font-size: 18px;\n        }\n\n        .total-label {\n            font-weight: 700;\n        }\n\n        .total-value {\n            font-weight: 700;\n            color: #27ae60;\n        }\n\n        .place-order-btn {\n            background-color: #e67e22;\n            color: white;\n            border: none;\n            padding: 16px;\n            font-size: 18px;\n            font-weight: 600;\n            cursor: pointer;\n            width: 100%;\n            border-radius: 0;\n        }\n\n        .place-order-btn:hover {\n            background-color: #d35400;\n        }\n    </style>\n</head>\n<body>\n    <!-- Header -->\n    <div class=\"header\">\n        <svg class=\"back-arrow\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n            <path d=\"M15 18L9 12L15 6\" stroke=\"#2c3e50\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n        </svg>\n        <span class=\"header-title\">سلة التسوق</span>\n    </div>\n\n    <!-- Cart Items -->\n    <div class=\"cart-items\">\n        <!-- Item 1 -->\n        <div class=\"cart-item\">\n            <div class=\"item-image\">صورة المنتج</div>\n            <div class=\"item-details\">\n                <div class=\"item-name\">تفاح أحمر مستورد</div>\n                <div class=\"item-price\">٢٥.٠٠ د.إ</div>\n                <div class=\"quantity-stepper\">\n                    <button class=\"quantity-btn\">-</button>\n                    <input type=\"text\" class=\"quantity-input\" value=\"2\" readonly>\n                    <button class=\"quantity-btn\">+</button>\n                </div>\n            </div>\n        </div>\n\n        <!-- Item 2 -->\n        <div class=\"cart-item\">\n            <div class=\"item-image\">صورة المنتج</div>\n            <div class=\"item-details\">\n                <div class=\"item-name\">لبن زبادي طعم الفانيليا</div>\n                <div class=\"item-price\">٨.٥٠ د.إ</div>\n                <div class=\"quantity-stepper\">\n                    <button class=\"quantity-btn\">-</button>\n                    <input type=\"text\" class=\"quantity-input\" value=\"1\" readonly>\n                    <button class=\"quantity-btn\">+</button>\n                </div>\n            </div>\n        </div>\n\n        <!-- Item 3 -->\n        <div class=\"cart-item\">\n            <div class=\"item-image\">صورة المنتج</div>\n            <div class=\"item-details\">\n                <div class=\"item-name\">خبز شوفاني محلي</div>\n                <div class=\"item-price\">٦.٧٥ د.إ</div>\n                <div class=\"quantity-stepper\">\n                    <button class=\"quantity-btn\">-</button>\n                    <input type=\"text\" class=\"quantity-input\" value=\"3\" readonly>\n                    <button class=\"quantity-btn\">+</button>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <!-- Promo Code -->\n    <div class=\"promo-section\">\n        <div class=\"promo-label\">أدخل رمز الخصم</div>\n        <div class=\"promo-field\">\n            <input type=\"text\" class=\"promo-input\" placeholder=\"رمز الخصم\">\n            <button class=\"promo-btn\">تطبيق</button>\n        </div>\n    </div>\n\n    <!-- Order Summary -->\n    <div class=\"summary-section\">\n        <div class=\"summary-row\">\n            <span class=\"summary-label\">المجموع الفرعي</span>\n            <span class=\"summary-value\">٦٨.٢٥ د.إ</span>\n        </div>\n        <div class=\"summary-row\">\n            <span class=\"summary-label\">رسوم التوصيل</span>\n            <span class=\"summary-value\">١٠.٠٠ د.إ</span>\n        </div>\n        <div class=\"summary-row\">\n            <span class=\"summary-label\">ضريبة القيمة المضافة (5%)</span>\n            <span class=\"summary-value\">٣.٤١ د.إ</span>\n        </div>\n        <div class=\"summary-row total-row\">\n            <span class=\"total-label\">المجموع الكلي</span>\n            <span class=\"total-value\">٨١.٦٦ د.إ</span>\n        </div>\n    </div>\n\n    <!-- Place Order Button -->\n    <button class=\"place-order-btn\">تأكيد الطلب</button>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 158,
+    "output": 2518
+  },
+  "ms": 46695,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 71,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 201.8125,
+        "y": 520,
+        "width": 172.1875,
+        "height": 17
+      },
+      "message": "\"ضريبة القيمة المضافة (5%)\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"summary-label\">ضريبة القيمة المضافة (5%)</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 235.4375,
+        "y": 17,
+        "width": 102.5625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<span class=\"header-title\">سلة التسوق</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 32,
+        "y": 404,
+        "width": 35,
+        "height": 16
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"promo-btn\">تطبيق</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 308.328125,
+        "y": 104.5,
+        "width": 61.34375,
+        "height": 14
+      },
+      "message": "\"صورة المنتج\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"item-image\">صورة المنتج</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 308.328125,
+        "y": 197.5,
+        "width": 61.34375,
+        "height": 14
+      },
+      "message": "\"صورة المنتج\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"item-image\">صورة المنتج</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 308.328125,
+        "y": 290.5,
+        "width": 61.34375,
+        "height": 14
+      },
+      "message": "\"صورة المنتج\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"item-image\">صورة المنتج</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 83,
+        "y": 393,
+        "width": 291,
+        "height": 38
+      },
+      "message": "border-top-left-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<input type=\"text\" class=\"promo-input\" placeholder=\"رمز الخصم\">"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 393,
+        "width": 67,
+        "height": 38
+      },
+      "message": "border-top-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<button class=\"promo-btn\">تطبيق</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 304,
+        "y": 76.5,
+        "width": 70,
+        "height": 70
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"item-image\">صورة المنتج</div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 304,
+        "y": 169.5,
+        "width": 70,
+        "height": 70
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"item-image\">صورة المنتج</div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 304,
+        "y": 262.5,
+        "width": 70,
+        "height": 70
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"item-image\">صورة المنتج</div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

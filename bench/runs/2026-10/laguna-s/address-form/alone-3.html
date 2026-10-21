@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نموذج عنوان التسليم</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            padding: 20px;
+        }
+        .form-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        h1 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #2c3e50;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #555;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fafafa;
+            text-align: right;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            background-color: #fff;
+        }
+        .example {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+            text-align: right;
+        }
+        .save-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: #27ae60;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .save-btn:hover {
+            background-color: #219653;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>عنوان التسليم</h1>
+        <form id="addressForm">
+            <div class="form-group">
+                <label for="buildingVilla">العقار أو الفيلا</label>
+                <input type="text" id="buildingVilla" name="buildingVilla" placeholder="أدخل رقم العقار أو الفيلا">
+            </div>
+            <div class="form-group">
+                <label for="street">الشارع</label>
+                <input type="text" id="street" name="street" placeholder="أدخل اسم أو رقم الشارع">
+            </div>
+            <div class="form-group">
+                <label for="area">المنطقة</label>
+                <input type="text" id="area" name="area" placeholder="أدخل اسم المنطقة">
+            </div>
+            <div class="form-group">
+                <label for="makani">رقم المكاني</label>
+                <input type="text" id="makani" name="makani" placeholder="أدخل رقم المكاني">
+            </div>
+            <div class="form-group">
+                <label for="emirate">الإمارة</label>
+                <select id="emirate" name="emirate">
+                    <option value="دبي" selected>دبي</option>
+                    <option value="أبوظبي">أبوظبي</option>
+                    <option value="الشارقة">الشارقة</option>
+                    <option value="الإمارات الأخرى">باقي الإمارات</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="phone">رقم الهاتف</label>
+                <input type="tel" id="phone" name="phone" placeholder="050 123 4567">
+                <div class="example">مثال: 050 123 4567</div>
+            </div>
+            <button type="submit" class="save-btn">حفظ العنوان</button>
+        </form>
+    </div>
+</body>
+</html>

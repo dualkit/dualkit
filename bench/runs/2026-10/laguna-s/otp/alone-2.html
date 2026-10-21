@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البنك الأهلي - إدخال الرمز</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            border-radius: 24px;
+            padding: 32px 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+        .header p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+        .code-inputs {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        .code-box {
+            flex: 1;
+            height: 56px;
+            border: 1.5px solid #ddd;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 500;
+            color: #1a1a1a;
+            transition: all 0.2s ease;
+        }
+        .code-box:focus {
+            outline: none;
+            border-color: #0077b6;
+            box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.15);
+        }
+        .code-box.otp-input {
+            background-color: #fafafa;
+        }
+        .resend-container {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .resend-text {
+            font-size: 14px;
+            color: #666;
+        }
+        .resend-text strong {
+            color: #0077b6;
+            font-weight: 600;
+        }
+        .verify-btn {
+            width: 100%;
+            height: 52px;
+            background-color: #0077b6;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .verify-btn:hover {
+            background-color: #005f8a;
+        }
+        .verify-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>أدخل الرمز</h1>
+            <p>لقد أرسلنا رمزًا مكوّنًا من 6 أرقام إلى <br>+966 55 123 4567</p>
+        </div>
+        <div class="code-inputs">
+            <input type="text" maxlength="1" class="code-box" inputmode="numeric">
+            <input type="text" maxlength="1" class="code-box" inputmode="numeric">
+            <input type="text" maxlength="1" class="code-box" inputmode="numeric">
+            <input type="text" maxlength="1" class="code-box" inputmode="numeric">
+            <input type="text" maxlength="1" class="code-box" inputmode="numeric">
+            <input type="text" maxlength="1" class="code-box" inputmode="numeric">
+        </div>
+        <div class="resend-container">
+            <span class="resend-text">إعادة الإرسال خلال <strong id="countdown">0:45</strong></span>
+        </div>
+        <button class="verify-btn" id="verifyBtn">تحقق</button>
+    </div>
+
+    <script>
+        const inputs = document.querySelectorAll('.code-box');
+        const countdownEl = document.getElementById('countdown');
+        const verifyBtn = document.getElementById('verifyBtn');
+
+        // Auto-focus first input on load
+        inputs[0].focus();
+
+        // Handle input navigation
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', function() {
+                // Only allow numbers
+                this.value = this.value.replace(/[^0-9]/g, '');
+                
+                if (this.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+                
+                // Enable button if all fields filled
+                checkAllFilled();
+            });
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && index > 0 && !this.value) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        function checkAllFilled() {
+            const allFilled = Array.from(inputs).every(input => input.value.length === 1);
+            verifyBtn.disabled = !allFilled;
+        }
+
+        // Countdown timer
+        let timeLeft = 45;
+        const countdownInterval = setInterval(() => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            countdownEl.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            timeLeft--;
+
+            if (timeLeft < 0) {
+                clearInterval(countdownInterval);
+                countdownEl.textContent = 'يمكنك إعادة الإرسال الآن';
+                countdownEl.parentElement.innerHTML += ' <button id="resendBtn" style="background:none;border:none;color:#0077b6;font-size:14px;cursor:pointer;">إعادة الإرسال</button>';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

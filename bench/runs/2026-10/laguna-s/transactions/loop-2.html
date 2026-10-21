@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المعاملات</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --accent: #0d6efd;
+      --in-color: #2e7d32;
+      --out-color: #c6280e;
+      --border: #e5e7eb;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    :lang(ar) {
+      letter-spacing: 0;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .screen {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .balance-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      margin-bottom: 20px;
+    }
+
+    .balance-label {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .balance-amount {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      margin-bottom: 16px;
+    }
+
+    .filter-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 14px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-chip.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    th, td {
+      text-align: right;
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    th {
+      background: #f9fafb;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    td.merchant {
+      text-align: right;
+      font-weight: 500;
+    }
+
+    td.merchant bdi {
+      display: inline-block;
+    }
+
+    .amount.in {
+      color: var(--in-color);
+      font-weight: 600;
+    }
+
+    .amount.out {
+      color: var(--out-color);
+      font-weight: 600;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .status-completed {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-pending {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+
+    .status-failed {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    @media (max-width: 480px) {
+      .screen {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <!-- Header -->
+    <div class="header">
+      <h1>المعاملات</h1>
+      <span style="font-size:14px;color:var(--muted);">فلتر</span>
+    </div>
+
+    <!-- Balance -->
+    <div class="balance-card">
+      <div class="balance-label">الرصيد الحالي</div>
+      <div class="balance-amount"><bdi>ر.ع.</bdi> 1,234.500</div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <div class="filter-chip active">هذا الشهر</div>
+      <div class="filter-chip">الشهر الماضي</div>
+      <div class="filter-chip">آخر 90 يوم</div>
+      <div class="filter-chip">الكل</div>
+    </div>
+
+    <!-- Transactions Table -->
+    <table>
+      <thead>
+        <tr>
+          <th>التاريخ</th>
+          <th>التاجر</th>
+          <th>المبلغ</th>
+          <th>الحالة</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><bdi>12 مارس 2025</bdi></td>
+          <td class="merchant"><bdi>Lulu Hypermarket</bdi></td>
+          <td class="amount out"><bdi>ر.ع.</bdi> 45.900</td>
+          <td><span class="status-badge status-completed">مكتمل</span></td>
+        </tr>
+        <tr>
+          <td><bdi>11 مارس 2025</bdi></td>
+          <td class="merchant"><bdi>Netflix</bdi></td>
+          <td class="amount out"><bdi>ر.ع.</bdi> 29.900</td>
+          <td><span class="status-badge status-completed">مكتمل</span></td>
+        </tr>
+        <tr>
+          <td><bdi>10 مارس 2025</bdi></td>
+          <td class="merchant"><bdi>سوق ألكتروني</bdi></td>
+          <td class="amount in"><bdi>ر.ع.</bdi> 150.000</td>
+          <td><span class="status-badge status-completed">مكتمل</span></td>
+        </tr>
+        <tr>
+          <td><bdi>8 مارس 2025</bdi></td>
+          <td class="merchant"><bdi>ألكتروني للخدمات</bdi></td>
+          <td class="amount out"><bdi>ر.ع.</bdi> 12.750</td>
+          <td><span class="status-badge status-pending">معلق</span></td>
+        </tr>
+        <tr>
+          <td><bdi>6 مارس 2025</bdi></td>
+          <td class="merchant"><bdi>Starbucks</bdi></td>
+          <td class="amount out"><bdi>ر.ع.</bdi> 8.400</td>
+          <td><span class="status-badge status-completed">مكتمل</span></td>
+        </tr>
+        <tr>
+          <td><bdi>4 مارس 2025</bdi></td>
+          <td class="merchant"><bdi>تحويل بنكي</bdi></td>
+          <td class="amount in"><bdi>ر.ع.</bdi> 500.000</td>
+          <td><span class="status-badge status-completed">مكتمل</span></td>
+        </tr>
+        <tr>
+          <td><bdi>2 مارس 2025</bdi></td>
+          <td class="merchant"><bdi>Carrefour</bdi></td>
+          <td class="amount out"><bdi>ر.ع.</bdi> 67.300</td>
+          <td><span class="status-badge status-failed">فاشل</span></td>
+        </tr>
+        <tr>
+          <td><bdi>1 مارس 2025</bdi></td>
+          <td class="merchant"><bdi>محلات التجميل</bdi></td>
+          <td class="amount out"><bdi>ر.ع.</bdi> 35.000</td>
+          <td><span class="status-badge status-completed">مكتمل</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

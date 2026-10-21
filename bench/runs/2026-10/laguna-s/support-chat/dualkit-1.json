@@ -1,0 +1,403 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "support-chat",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-10-21T17:29:36.025Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>دعم العملاء - تيكوم كويت</title>\n  <style>\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n    body {\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n      background-color: #f4f6f9;\n      color: #333;\n      direction: rtl;\n      text-align: right;\n      padding: 16px;\n      max-width: 480px;\n      margin: 0 auto;\n      line-height: 1.6;\n    }\n    .chat-container {\n      display: flex;\n      flex-direction: column;\n      height: 100vh;\n      max-height: 100vh;\n      padding-top: 12px;\n    }\n    .messages {\n      flex: 1;\n      overflow-y: auto;\n      padding-bottom: 16px;\n    }\n    .message {\n      margin-bottom: 16px;\n      max-width: 80%;\n      padding: 10px 14px;\n      border-radius: 16px;\n      font-size: 15px;\n      line-height: 1.5;\n    }\n    .customer {\n      background-color: #dcf8c6;\n      margin-left: auto;\n      border-bottom-right-radius: 4px;\n    }\n    .agent {\n      background-color: #ffffff;\n      margin-right: auto;\n      border-bottom-left-radius: 4px;\n      box-shadow: 0 1px 1px rgba(0,0,0,0.05);\n    }\n    .time {\n      font-size: 11px;\n      color: #777;\n      margin-top: 6px;\n      text-align: left;\n    }\n    .agent-name {\n      font-weight: 600;\n      color: #0078d4;\n      margin-bottom: 4px;\n      display: block;\n    }\n    .input-area {\n      display: flex;\n      align-items: center;\n      padding: 10px;\n      background-color: #ffffff;\n      border-top: 1px solid #e0e0e0;\n    }\n    .input-area input[type=\"text\"] {\n      flex: 1;\n      padding: 10px 14px;\n      border: 1px solid #ccc;\n      border-radius: 20px;\n      font-size: 15px;\n      outline: none;\n      margin-left: 8px;\n    }\n    .send-button {\n      background-color: #0078d4;\n      color: white;\n      border: none;\n      border-radius: 20px;\n      padding: 10px 18px;\n      font-size: 15px;\n      cursor: pointer;\n      transition: background-color 0.2s;\n    }\n    .send-button:hover {\n      background-color: #005a9e;\n    }\n    .highlight {\n      background-color: #fff3cd;\n      padding: 2px 4px;\n      border-radius: 3px;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"chat-container\">\n    <div class=\"messages\">\n      <!-- Message 1 - Customer -->\n      <div class=\"message customer\">\n        <bdi>مرحباً، أريد الاستفادة من عرض eSIM الخاص بـ 5G. هل يدعمونه؟</bdi>\n        <div class=\"time\">10:12 ص</div>\n      </div>\n\n      <!-- Message 2 - Agent -->\n      <div class=\"message agent\">\n        <span class=\"agent-name\">سارة من دعم تيكوم</span>\n        <bdi>مرحباً بك! نعم، نحن ندعم eSIM مع شبكة 5G بشكل كامل. يمكنك تفعيلها مباشرة من تطبيقنا.</bdi>\n        <div class=\"time\">10:13 ص</div>\n      </div>\n\n      <!-- Message 3 - Customer -->\n      <div class=\"message customer\">\n        <bdi>جميل، لدي أيضاً طلب جديد برقم <span class=\"highlight\">TX-48213</span>. هل يمكن ربطه بحسابي؟</bdi>\n        <div class=\"time\">10:15 ص</div>\n      </div>\n\n      <!-- Message 4 - Agent -->\n      <div class=\"message agent\">\n        <span class=\"agent-name\">سارة من دعم تيكوم</span>\n        <bdi>بالطبع! لقد قمت بربط طلبك <span class=\"highlight\">TX-48213</span> بحسابكم بنجاح. سيصلكم إشعار عبر الرسائل القصيرة.</bdi>\n        <div class=\"time\">10:16 ص</div>\n      </div>\n\n      <!-- Message 5 - Customer -->\n      <div class=\"message customer\">\n        <bdi>شكراً جزيلاً! هل يمكن أن أستخدم 5G في جميع أنحاء المدينة؟</bdi>\n        <div class=\"time\">10:18 ص</div>\n      </div>\n\n      <!-- Message 6 - Agent -->\n      <div class=\"message agent\">\n        <span class=\"agent-name\">سارة من دعم تيكوم</span>\n        <bdi>أهلاً وسهلاً! نعم، خدمة 5G متاحة في معظم المناطق الرئيسية في الكويت. إذا واجهتك أي مشاكل، لا تتردد في التواصل معاًا مرة أخرى.</bdi>\n        <div class=\"time\">10:19 ص</div>\n      </div>\n    </div>\n\n    <div class=\"input-area\">\n      <input type=\"text\" placeholder=\"اكتب رسالتك هنا...\" aria-label=\"نص الرسالة\">\n      <button class=\"send-button\">إرسال</button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6488,
+    "output": 1660
+  },
+  "ms": 24238,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 44,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 101.609375,
+        "y": 89,
+        "width": 258.390625,
+        "height": 16.5
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"time\">10:12 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 30,
+        "y": 241.5,
+        "width": 258.390625,
+        "height": 16.5
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"time\">10:13 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 101.609375,
+        "y": 345,
+        "width": 258.390625,
+        "height": 16.5
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"time\">10:15 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 30,
+        "y": 497.5,
+        "width": 258.390625,
+        "height": 16.5
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"time\">10:16 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 101.609375,
+        "y": 601,
+        "width": 258.390625,
+        "height": 16.5
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"time\">10:18 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 30,
+        "y": 776,
+        "width": 258.390625,
+        "height": 16.5
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"time\">10:19 ص</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 128.140625,
+        "y": 40,
+        "width": 231.859375,
+        "height": 39.5
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<bdi>مرحباً، أريد الاستفادة من عرض eSIM الخاص بـ 5G. هل يدعمونه؟</bdi>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 44,
+        "y": 821.5,
+        "width": 40,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"send-button\">إرسال</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 101.609375,
+        "y": 91,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:12 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">10:12 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 30,
+        "y": 243.5,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:13 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">10:13 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 101.609375,
+        "y": 347,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:15 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">10:15 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 30,
+        "y": 499.5,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:16 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">10:16 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 101.609375,
+        "y": 603,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:18 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">10:18 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 30,
+        "y": 778,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:19 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">10:19 ص</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 28,
+        "width": 286.390625,
+        "height": 87.5
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">\n        <bdi>مرحباً، أريد الاستفادة من عرض eSIM الخاص بـ 5G. هل يدعمونه؟</bdi>\n        <div class=\"time\">10:12 ص</div>\n      </di"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 131.5,
+        "width": 286.390625,
+        "height": 136.5
+      },
+      "message": "border-bottom-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">\n        <span class=\"agent-name\">سارة من دعم تيكوم</span>\n        <bdi>مرحباً بك! نعم، نحن ندعم eSIM مع شبكة 5G بشكل كامل. يمكنك تفع"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 284,
+        "width": 286.390625,
+        "height": 87.5
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">\n        <bdi>جميل، لدي أيضاً طلب جديد برقم <span class=\"highlight\">TX-48213</span>. هل يمكن ربطه بحسابي؟</bdi>\n        <div class"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 387.5,
+        "width": 286.390625,
+        "height": 136.5
+      },
+      "message": "border-bottom-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">\n        <span class=\"agent-name\">سارة من دعم تيكوم</span>\n        <bdi>بالطبع! لقد قمت بربط طلبك <span class=\"highlight\">TX-48213</s"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 540,
+        "width": 286.390625,
+        "height": 87.5
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">\n        <bdi>شكراً جزيلاً! هل يمكن أن أستخدم 5G في جميع أنحاء المدينة؟</bdi>\n        <div class=\"time\">10:18 ص</div>\n      </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 643.5,
+        "width": 286.390625,
+        "height": 159
+      },
+      "message": "border-bottom-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">\n        <span class=\"agent-name\">سارة من دعم تيكوم</span>\n        <bdi>أهلاً وسهلاً! نعم، خدمة 5G متاحة في معظم المناطق الرئيسية في "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 28,
+        "width": 286.390625,
+        "height": 87.5
+      },
+      "message": "margin-left: 71.6094px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"message customer\">\n        <bdi>مرحباً، أريد الاستفادة من عرض eSIM الخاص بـ 5G. هل يدعمونه؟</bdi>\n        <div class=\"time\">10:12 ص</div>\n      </di"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 131.5,
+        "width": 286.390625,
+        "height": 136.5
+      },
+      "message": "margin-right: 71.6094px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"message agent\">\n        <span class=\"agent-name\">سارة من دعم تيكوم</span>\n        <bdi>مرحباً بك! نعم، نحن ندعم eSIM مع شبكة 5G بشكل كامل. يمكنك تفع"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 284,
+        "width": 286.390625,
+        "height": 87.5
+      },
+      "message": "margin-left: 71.6094px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"message customer\">\n        <bdi>جميل، لدي أيضاً طلب جديد برقم <span class=\"highlight\">TX-48213</span>. هل يمكن ربطه بحسابي؟</bdi>\n        <div class"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 387.5,
+        "width": 286.390625,
+        "height": 136.5
+      },
+      "message": "margin-right: 71.6094px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"message agent\">\n        <span class=\"agent-name\">سارة من دعم تيكوم</span>\n        <bdi>بالطبع! لقد قمت بربط طلبك <span class=\"highlight\">TX-48213</s"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 540,
+        "width": 286.390625,
+        "height": 87.5
+      },
+      "message": "margin-left: 71.6094px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"message customer\">\n        <bdi>شكراً جزيلاً! هل يمكن أن أستخدم 5G في جميع أنحاء المدينة؟</bdi>\n        <div class=\"time\">10:18 ص</div>\n      </div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 643.5,
+        "width": 286.390625,
+        "height": 159
+      },
+      "message": "margin-right: 71.6094px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"message agent\">\n        <span class=\"agent-name\">سارة من دعم تيكوم</span>\n        <bdi>أهلاً وسهلاً! نعم، خدمة 5G متاحة في معظم المناطق الرئيسية في "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 110,
+        "y": 811,
+        "width": 254,
+        "height": 39
+      },
+      "message": "margin-left: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<input type=\"text\" placeholder=\"اكتب رسالتك هنا...\" aria-label=\"نص الرسالة\">"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 876
+}

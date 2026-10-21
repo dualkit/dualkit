@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلة التسوق - توكيلة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            direction: rtl;
+            text-align: right;
+            max-width: 414px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background-color: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .back-arrow {
+            margin-left: 12px;
+            font-size: 24px;
+            color: #333;
+            text-decoration: none;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .cart-items {
+            background-color: #fff;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .cart-item:last-child {
+            margin-bottom: 0;
+        }
+        .item-image {
+            width: 80px;
+            height: 80px;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            margin-left: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+        .item-details {
+            flex-grow: 1;
+        }
+        .item-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .item-price {
+            font-size: 14px;
+            color: #666;
+        }
+        .quantity-stepper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .qty-value {
+            font-size: 14px;
+            min-width: 24px;
+            text-align: center;
+        }
+        .promo-section {
+            background-color: #fff;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .promo-label {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        .promo-field {
+            display: flex;
+            gap: 8px;
+        }
+        .promo-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: right;
+        }
+        .apply-btn {
+            padding: 10px 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .order-summary {
+            background-color: #fff;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+        .summary-label {
+            font-size: 14px;
+            color: #555;
+        }
+        .summary-value {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .total-row {
+            border-top: 2px solid #e0e0e0;
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+        .total-label {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .total-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+        .place-order-btn {
+            width: calc(100% - 32px);
+            margin: 0 16px 24px;
+            padding: 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="#" class="back-arrow">←</a>
+        <span class="header-title">سلة التسوق</span>
+    </div>
+
+    <div class="cart-items">
+        <div class="cart-item">
+            <div class="item-image">صورة المنتج</div>
+            <div class="item-details">
+                <div class="item-name">تفاح أمريكي</div>
+                <div class="item-price">٢٥.٠٠ د.إ</div>
+                <div class="quantity-stepper">
+                    <button class="qty-btn">−</button>
+                    <span class="qty-value">٢</span>
+                    <button class="qty-btn">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="cart-item">
+            <div class="item-image">صورة المنتج</div>
+            <div class="item-details">
+                <div class="item-name">حليب كامل الدسم</div>
+                <div class="item-price">٨.٥٠ د.إ</div>
+                <div class="quantity-stepper">
+                    <button class="qty-btn">−</button>
+                    <span class="qty-value">١</span>
+                    <button class="qty-btn">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="cart-item">
+            <div class="item-image">صورة المنتج</div>
+            <div class="item-details">
+                <div class="item-name">خبز برتقالي</div>
+                <div class="item-price">٦.٠٠ د.إ</div>
+                <div class="quantity-stepper">
+                    <button class="qty-btn">−</button>
+                    <span class="qty-value">٣</span>
+                    <button class="qty-btn">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="promo-section">
+        <label class="promo-label">رمز الخصم</label>
+        <div class="promo-field">
+            <input type="text" class="promo-input" placeholder="أدخل رمز الخصم">
+            <button class="apply-btn">تطبيق</button>
+        </div>
+    </div>
+
+    <div class="order-summary">
+        <div class="summary-row">
+            <span class="summary-label">المجموع الفرعي</span>
+            <span class="summary-value">٦٦.٥٠ د.إ</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">التوصيل</span>
+            <span class="summary-value">١٠.٠٠ د.إ</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">ضريبة القيمة المضافة (٥٪)</span>
+            <span class="summary-value">٣.٨٣ د.إ</span>
+        </div>
+        <div class="summary-row total-row">
+            <span class="total-label">المجموع الكلي</span>
+            <span class="total-value">٨٠.٣٣ د.إ</span>
+        </div>
+    </div>
+
+    <button class="place-order-btn">إتمام الطلب</button>
+</body>
+</html>

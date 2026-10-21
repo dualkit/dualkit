@@ -1,0 +1,207 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "payment-summary",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T16:43:09.661Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>ملخص الدفع</title>\n    <!-- Tailwind CSS -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Fonts: Cairo -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap\" rel=\"stylesheet\">\n    <script>\n        tailwind.config = {\n            theme: {\n                extend: {\n                    fontFamily: {\n                        cairo: ['Cairo', 'sans-serif'],\n                    },\n                    colors: {\n                        brand: {\n                            50: '#eef8f6',\n                            500: '#0d9488',\n                            600: '#0f766e',\n                            700: '#115e59',\n                        }\n                    }\n                }\n            }\n        }\n    </script>\n</head>\n<body class=\"bg-slate-900 font-cairo flex items-center justify-center min-h-screen p-0 sm:p-4\">\n\n    <!-- Phone Container -->\n    <div class=\"w-full sm:max-w-[390px] h-screen sm:h-[844px] bg-slate-50 text-slate-800 sm:rounded-[40px] shadow-2xl flex flex-col justify-between overflow-hidden relative border-0 sm:border-8 sm:border-slate-800\">\n        \n        <!-- Header -->\n        <div class=\"bg-white px-6 pt-12 pb-4 flex items-center justify-between border-b border-slate-100\">\n            <h1 class=\"text-lg font-bold text-slate-900\">ملخص الدفع</h1>\n            <button class=\"w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition\">\n                <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"></path>\n                </svg>\n            </button>\n        </div>\n\n        <!-- Main Content -->\n        <div class=\"flex-1 overflow-y-auto px-6 py-6 space-y-6\">\n            \n            <!-- Amount Card -->\n            <div class=\"bg-gradient-to-br from-brand-600 to-teal-800 rounded-2xl p-6 text-white shadow-lg text-center\">\n                <span class=\"text-xs uppercase tracking-wider text-teal-100 opacity-90 block mb-1\">المبلغ المستحق</span>\n                <div class=\"text-3xl font-bold tracking-tight mb-1\">\n                    1,234.50 <span class=\"text-lg font-normal\">درهم</span>\n                </div>\n                <div class=\"inline-block bg-teal-700/60 text-teal-50 text-xs px-3 py-1 rounded-full mt-2\">\n                    شامل ضريبة القيمة المضافة\n                </div>\n            </div>\n\n            <!-- Due Date & Order Info -->\n            <div class=\"bg-white rounded-2xl p-5 shadow-sm border border-slate-100 space-y-4\">\n                <!-- Due Date -->\n                <div class=\"flex items-start justify-between pb-4 border-b border-slate-100\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0\">\n                            <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"></path>\n                            </svg>\n                        </div>\n                        <div>\n                            <p class=\"text-xs text-slate-400\">تاريخ الاستحقاق</p>\n                            <p class=\"text-sm font-semibold text-slate-800\">3 نوفمبر 2026</p>\n                            <p class=\"text-xs text-slate-500\">22 جمادى الأولى 1448 هـ</p>\n                        </div>\n                    </div>\n                </div>\n\n                <!-- Items Count -->\n                <div class=\"flex items-center justify-between pt-1\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0\">\n                            <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z\"></path>\n                            </svg>\n                        </div>\n                        <div>\n                            <p class=\"text-xs text-slate-400\">تفاصيل الطلب</p>\n                            <p class=\"text-sm font-semibold text-slate-800\">لديك 3 عناصر في هذا الطلب</p>\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <!-- SMS Receipt Input -->\n            <div class=\"bg-white rounded-2xl p-5 shadow-sm border border-slate-100 space-y-2\">\n                <label for=\"phone\" class=\"block text-xs font-semibold text-slate-700\">رقم الهاتف لإرسال الإيصال (اختياري)</label>\n                <div class=\"relative flex items-center\">\n                    <input type=\"tel\" id=\"phone\" placeholder=\"050 123 4567\" dir=\"ltr\" class=\"w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-left text-sm text-slate-800 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition\">\n                    <div class=\"absolute right-3 text-xs text-slate-400 pointer-events-none font-medium\">🇦🇪 +971</div>\n                </div>\n            </div>\n\n        </div>\n\n        <!-- Footer / Pay Button -->\n        <div class=\"bg-white p-6 border-t border-slate-100\">\n            <button class=\"w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-600/30 transition transform active:scale-[0.98] flex items-center justify-center space-x-2 space-x-reverse\">\n                <span>ادفع الآن</span>\n                <svg class=\"w-5 h-5 transform rotate-180\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M14 5l7 7m0 0l-7 7m7-7H3\"></path>\n                </svg>\n            </button>\n            <div class=\"text-center mt-3\">\n                <span class=\"text-[10px] text-slate-400 flex items-center justify-center gap-1\">\n                    <svg class=\"w-3 h-3 text-emerald-600\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path fill-rule=\"evenodd\" d=\"M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z\" clip-rule=\"evenodd\"></path></svg>\n                    دفع آمن ومشفر بالكامل\n                </span>\n            </div>\n        </div>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 188,
+    "output": 2171
+  },
+  "ms": 10549,
+  "finish": "STOP",
+  "reasoningTokens": 774,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 55,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 287,
+        "y": 545,
+        "width": 46,
+        "height": 23
+      },
+      "message": "\"🇦🇪 +971\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"absolute right-3 text-xs text-slate-400 pointer-events-none font-medium\">🇦🇪 +971</div>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 155.5,
+        "y": 149,
+        "width": 79,
+        "height": 23
+      },
+      "message": "0.6px letter-spacing on \"المبلغ المستحق\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<span class=\"text-xs uppercase tracking-wider text-teal-100 opacity-90 block mb-1\">المبلغ المستحق</span>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 113.5,
+        "y": 179,
+        "width": 40,
+        "height": 33
+      },
+      "message": "-0.75px letter-spacing on \"درهم\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<span class=\"text-lg font-normal\">درهم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 155.5,
+        "y": 149,
+        "width": 79,
+        "height": 23
+      },
+      "message": "\"المبلغ المستحق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs uppercase tracking-wider text-teal-100 opacity-90 block mb-1\">المبلغ المستحق</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 124,
+        "y": 222,
+        "width": 142,
+        "height": 23
+      },
+      "message": "\"شامل ضريبة القيمة المضافة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"inline-block bg-teal-700/60 text-teal-50 text-xs px-3 py-1 rounded-full mt-2\">\n                    شامل ضريبة القيمة المضافة\n                </div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 214,
+        "y": 311,
+        "width": 79,
+        "height": 23
+      },
+      "message": "\"تاريخ الاستحقاق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-slate-400\">تاريخ الاستحقاق</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 160,
+        "y": 347,
+        "width": 133,
+        "height": 23
+      },
+      "message": "\"22 جمادى الأولى 1448 هـ\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-slate-500\">22 جمادى الأولى 1448 هـ</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 224,
+        "y": 402,
+        "width": 69,
+        "height": 23
+      },
+      "message": "\"تفاصيل الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-slate-400\">تفاصيل الطلب</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 168,
+        "y": 506,
+        "width": 177,
+        "height": 23
+      },
+      "message": "\"رقم الهاتف لإرسال الإيصال (اختياري)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"phone\" class=\"block text-xs font-semibold text-slate-700\">رقم الهاتف لإرسال الإيصال (اختياري)</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 137,
+        "y": 803,
+        "width": 100,
+        "height": 19
+      },
+      "message": "\"دفع آمن ومشفر بالكامل\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-slate-400 flex items-center justify-center gap-1\">\n                    <svg class=\"w-3 h-3 text-emerald-600\" fill=\"currentColor\" v"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 287,
+        "y": 549,
+        "width": 46,
+        "height": 16
+      },
+      "message": "right: 12px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"absolute right-3 text-xs text-slate-400 pointer-events-none font-medium\">🇦🇪 +971</div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 160,
+        "y": 315,
+        "width": 133,
+        "height": 52
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <p class=\"text-xs text-slate-400\">تاريخ الاستحقاق</p>\n                            <p class=\"text-sm font-semibold text-slate-8"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 133,
+        "y": 406,
+        "width": 160,
+        "height": 36
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <p class=\"text-xs text-slate-400\">تفاصيل الطلب</p>\n                            <p class=\"text-sm font-semibold text-slate-800\""
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

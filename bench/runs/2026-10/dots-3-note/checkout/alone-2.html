@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الطلب</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
+  direction: rtl;
+  text-align: right;
+}
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+.back-arrow {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+}
+header h1 {
+  flex: 1;
+  text-align: center;
+  font-size: 20px;
+  color: #333;
+}
+.item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.photo {
+  width: 60px;
+  height: 60px;
+  background-color: #ddd;
+  border-radius: 4px;
+  margin-left: 12px;
+}
+.details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.name {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
+}
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.stepper button {
+  width: 30px;
+  height: 30px;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.stepper input {
+  width: 40px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px;
+}
+.price {
+  font-size: 16px;
+  color: #333;
+  margin-left: auto;
+}
+.promo {
+  margin-top: 16px;
+}
+.promo input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+.summary {
+  margin-top: 16px;
+}
+.summary .row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.summary .row.total {
+  font-weight: bold;
+  font-size: 18px;
+  border-top: 1px solid #ccc;
+  margin-top: 8px;
+  padding-top: 12px;
+}
+.place-order {
+  margin-top: 24px;
+  width: 100%;
+  padding: 14px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <button class="back-arrow">←</button>
+    <h1>الطلب</h1>
+  </header>
+
+  <!-- Item 1 -->
+  <div class="item">
+    <div class="photo"></div>
+    <div class="details">
+      <div class="name">تفاح</div>
+      <div class="stepper">
+        <button class="dec">-</button>
+        <input type="number" value="2" min="1">
+        <button class="inc">+</button>
+      </div>
+    </div>
+    <div class="price">5 د.إ</div>
+  </div>
+
+  <!-- Item 2 -->
+  <div class="item">
+    <div class="photo"></div>
+    <div class="details">
+      <div class="name">حليب</div>
+      <div class="stepper">
+        <button class="dec">-</button>
+        <input type="number" value="1" min="1">
+        <button class="inc">+</button>
+      </div>
+    </div>
+    <div class="price">3 د.إ</div>
+  </div>
+
+  <!-- Item 3 -->
+  <div class="item">
+    <div class="photo"></div>
+    <div class="details">
+      <div class="name">برتقال</div>
+      <div class="stepper">
+        <button class="dec">-</button>
+        <input type="number" value="3" min="1">
+        <button class="inc">+</button>
+      </div>
+    </div>
+    <div class="price">4 د.إ</div>
+  </div>
+
+  <div class="promo">
+    <input type="text" placeholder="رمز الخصم">
+  </div>
+
+  <div class="summary">
+    <div class="row">
+      <span>الإجمالي الفرعي</span>
+      <span>25 د.إ</span>
+    </div>
+    <div class="row">
+      <span>التكاليف</span>
+      <span>5 د.إ</span>
+    </div>
+    <div class="row">
+      <span>ضريبة القيمة المضافة (5%)</span>
+      <span>1.5 د.إ</span>
+    </div>
+    <div class="row total">
+      <span>الإجمالي</span>
+      <span>31.5 د.إ</span>
+    </div>
+  </div>
+
+  <button class="place-order">إتمام الطلب</button>
+</div>
+</body>
+</html>

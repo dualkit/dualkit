@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الملف الشخصي</title>
+  <style>
+    :lang(ar) {
+      --type-body-size: 16px;
+      --type-label-size: 14px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      font-size: var(--type-body-size);
+      line-height: 1.7;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    .profile-header {
+      background-color: #0077b6;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    .profile-header h1 {
+      font-size: 20px;
+      margin: 0;
+    }
+    .profile-section {
+      background-color: #fff;
+      padding: 16px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .profile-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .profile-item:last-child {
+      margin-bottom: 0;
+    }
+    .profile-label {
+      font-size: var(--type-label-size);
+      color: #555;
+    }
+    .profile-value {
+      font-size: var(--type-body-size);
+      color: #222;
+      text-align: right;
+    }
+    .edit-button {
+      background-color: #0077b6;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .edit-button:hover {
+      background-color: #005f8a;
+    }
+    bdi {
+      unicode-bidi: isolate;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-header">
+    <h1>الملف الشخصي</h1>
+  </div>
+
+  <div class="profile-section">
+    <div class="profile-item">
+      <button class="edit-button">تعديل</button>
+      <div class="profile-value" lang="ar">ليلى المنصوري</div>
+      <div class="profile-label">الاسم</div>
+    </div>
+
+    <div class="profile-item">
+      <button class="edit-button">تعديل</button>
+      <div class="profile-value"><bdi dir="ltr">layla@example.com</bdi></div>
+      <div class="profile-label">البريد الإلكتروني</div>
+    </div>
+
+    <div class="profile-item">
+      <button class="edit-button">تعديل</button>
+      <div class="profile-value"><bdi dir="ltr">+971 50 123 4567</bdi></div>
+      <div class="profile-label">رقم الهاتف</div>
+    </div>
+
+    <div class="profile-item">
+      <button class="edit-button">تعديل</button>
+      <div class="profile-value"><bdi dir="ltr">AE07 0331 2345 6789 0123 456</bdi></div>
+      <div class="profile-label">رقم الآيبان</div>
+    </div>
+  </div>
+</body>
+</html>

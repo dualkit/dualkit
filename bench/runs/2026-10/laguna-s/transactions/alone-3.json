@@ -1,0 +1,221 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "transactions",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T17:44:31.212Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>المحفظة الإلكترونية - المعاملات</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f5f7fa;\n            color: #333;\n            direction: rtl;\n            text-align: right;\n            padding: 20px;\n        }\n\n        .container {\n            max-width: 420px;\n            margin: 0 auto;\n        }\n\n        /* Header */\n        .header {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            margin-bottom: 25px;\n        }\n\n        .header h1 {\n            font-size: 22px;\n            color: #1a3c6e;\n        }\n\n        .logo {\n            width: 40px;\n            height: 40px;\n            background: linear-gradient(135deg, #1a3c6e, #2e7d32);\n            border-radius: 10px;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            color: white;\n            font-weight: bold;\n            font-size: 18px;\n        }\n\n        /* Balance Card */\n        .balance-card {\n            background: linear-gradient(135deg, #1a3c6e, #2e7d32);\n            color: white;\n            padding: 20px;\n            border-radius: 16px;\n            margin-bottom: 20px;\n            box-shadow: 0 6px 16px rgba(26, 60, 110, 0.25);\n        }\n\n        .balance-card .label {\n            font-size: 14px;\n            opacity: 0.85;\n            margin-bottom: 8px;\n        }\n\n        .balance-card .amount {\n            font-size: 28px;\n            font-weight: bold;\n        }\n\n        .balance-card .currency {\n            font-size: 16px;\n            opacity: 0.8;\n        }\n\n        /* Filter */\n        .filter-section {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            margin-bottom: 18px;\n        }\n\n        .filter-section .filter-label {\n            font-size: 15px;\n            color: #1a3c6e;\n            font-weight: 600;\n        }\n\n        .filter-dropdown {\n            padding: 8px 14px;\n            border: 1px solid #cbd5e1;\n            border-radius: 8px;\n            background-color: #ffffff;\n            font-size: 14px;\n            color: #333;\n            outline: none;\n            cursor: pointer;\n        }\n\n        /* Transactions Table */\n        .table-container {\n            background-color: #ffffff;\n            border-radius: 14px;\n            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);\n            overflow: hidden;\n        }\n\n        table {\n            width: 100%;\n            border-collapse: collapse;\n        }\n\n        th {\n            background-color: #f0f4f8;\n            padding: 12px 14px;\n            font-size: 13px;\n            color: #555;\n            font-weight: 600;\n            text-align: center;\n        }\n\n        td {\n            padding: 13px 14px;\n            border-bottom: 1px solid #eef1f5;\n            font-size: 14px;\n            text-align: center;\n        }\n\n        tr:last-child td {\n            border-bottom: none;\n        }\n\n        /* Transaction Type Badges */\n        .type-badge {\n            display: inline-block;\n            padding: 4px 12px;\n            border-radius: 20px;\n            font-size: 12px;\n            font-weight: 600;\n        }\n\n        .type-income {\n            background-color: #e6f4ea;\n            color: #2e7d32;\n        }\n\n        .type-expense {\n            background-color: #fdecea;\n            color: #c62828;\n        }\n\n        /* Amount Styling */\n        .amount-income {\n            color: #2e7d32;\n            font-weight: 600;\n        }\n\n        .amount-expense {\n            color: #c62828;\n            font-weight: 600;\n        }\n\n        /* Responsive */\n        @media (max-width: 480px) {\n            body {\n                padding: 15px;\n            }\n\n            .header h1 {\n                font-size: 20px;\n            }\n\n            .balance-card .amount {\n                font-size: 24px;\n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <!-- Header -->\n        <div class=\"header\">\n            <h1>المعاملات</h1>\n            <div class=\"logo\">محفظة</div>\n        </div>\n\n        <!-- Balance -->\n        <div class=\"balance-card\">\n            <div class=\"label\">الرصيد الحالي</div>\n            <div class=\"amount\">524.876 <span class=\"currency\">ر.ع.</span></div>\n        </div>\n\n        <!-- Filter -->\n        <div class=\"filter-section\">\n            <span class=\"filter-label\">تصفية حسب الفترة</span>\n            <select class=\"filter-dropdown\">\n                <option>هذا الشهر</option>\n                <option>الشهر الماضي</option>\n                <option>آخر 90 يوم</option>\n                <option>السنة الكاملة</option>\n            </select>\n        </div>\n\n        <!-- Transactions Table -->\n        <div class=\"table-container\">\n            <table>\n                <thead>\n                    <tr>\n                        <th>التاريخ</th>\n                        <th>اسم التاجر</th>\n                        <th>المبلغ (ر.ع.)</th>\n                        <th>النوع</th>\n                    </tr>\n                </thead>\n                <tbody>\n                    <tr>\n                        <td>١٥ مارس ٢٠٢٤</td>\n                        <td>Lulu Hypermarket</td>\n                        <td class=\"amount-expense\">٢٥.٩٠٠</td>\n                        <td><span class=\"type-badge type-expense\">صرف</span></td>\n                    </tr>\n                    <tr>\n                        <td>١٤ مارس ٢٠٢٤</td>\n                        <td>Netflix</td>\n                        <td class=\"amount-expense\">٨.٩٩٠</td>\n                        <td><span class=\"type-badge type-expense\">صرف</span></td>\n                    </tr>\n                    <tr>\n                        <td>١٣ مارس ٢٠٢٤</td>\n                        <td>تيب توب للتجارة</td>\n                        <td class=\"amount-income\">١٠٠٠.٠٠٠</td>\n                        <td><span class=\"type-badge type-income\">إيداع</span></td>\n                    </tr>\n                    <tr>\n                        <td>١٢ مارس ٢٠٢٤</td>\n                        <td>مطعم البحر الأحمر</td>\n                        <td class=\"amount-expense\">٣٢.٥٠٠</td>\n                        <td><span class=\"type-badge type-expense\">صرف</span></td>\n                    </tr>\n                    <tr>\n                        <td>١١ مارس ٢٠٢٤</td>\n                        <td>أوبر كاب</td>\n                        <td class=\"amount-expense\">٦.٧٥٠</td>\n                        <td><span class=\"type-badge type-expense\">صرف</span></td>\n                    </tr>\n                    <tr>\n                        <td>١٠ مارس ٢٠٢٤</td>\n                        <td>دفع فاتورة كهرباء</td>\n                        <td class=\"amount-expense\">٤٥.٠٠٠</td>\n                        <td><span class=\"type-badge type-expense\">صرف</span></td>\n                    </tr>\n                    <tr>\n                        <td>٩ مارس ٢٠٢٤</td>\n                        <td>سوقر ماركت</td>\n                        <td class=\"amount-expense\">١٧.٣٠٠</td>\n                        <td><span class=\"type-badge type-expense\">صرف</span></td>\n                    </tr>\n                    <tr>\n                        <td>٨ مارس ٢٠٢٤</td>\n                        <td>تحويل بنكي من أبو بكر</td>\n                        <td class=\"amount-income\">٢٠٠.٠٠٠</td>\n                        <td><span class=\"type-badge type-income\">إيداع</span></td>\n                    </tr>\n                </tbody>\n            </table>\n        </div>\n    </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 157,
+    "output": 2424
+  },
+  "ms": 39217,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 80,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 261.5625,
+        "y": 124,
+        "width": 93.4375,
+        "height": 27
+      },
+      "message": "\"524.876\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<div class=\"amount\">524.876 <span class=\"currency\">ر.ع.</span></div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 293,
+        "y": 24,
+        "width": 82,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>المعاملات</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 321.3125,
+        "y": 265.5,
+        "width": 34,
+        "height": 15
+      },
+      "message": "\"التاريخ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th>التاريخ</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 213.828125,
+        "y": 265.5,
+        "width": 58.625,
+        "height": 15
+      },
+      "message": "\"اسم التاجر\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th>اسم التاجر</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 124.84375,
+        "y": 258,
+        "width": 31,
+        "height": 30
+      },
+      "message": "\"المبلغ (ر.ع.)\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th>المبلغ (ر.ع.)</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 42,
+        "y": 265.5,
+        "width": 27,
+        "height": 15
+      },
+      "message": "\"النوع\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th>النوع</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 41,
+        "y": 330,
+        "width": 29,
+        "height": 14
+      },
+      "message": "\"صرف\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"type-badge type-expense\">صرف</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 41,
+        "y": 405,
+        "width": 29,
+        "height": 14
+      },
+      "message": "\"صرف\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"type-badge type-expense\">صرف</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 44.5,
+        "y": 480,
+        "width": 22,
+        "height": 14
+      },
+      "message": "\"إيداع\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"type-badge type-income\">إيداع</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 41,
+        "y": 555,
+        "width": 29,
+        "height": 14
+      },
+      "message": "\"صرف\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"type-badge type-expense\">صرف</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 41,
+        "y": 630,
+        "width": 29,
+        "height": 14
+      },
+      "message": "\"صرف\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"type-badge type-expense\">صرف</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 41,
+        "y": 705,
+        "width": 29,
+        "height": 14
+      },
+      "message": "\"صرف\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"type-badge type-expense\">صرف</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 41,
+        "y": 780,
+        "width": 29,
+        "height": 14
+      },
+      "message": "\"صرف\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"type-badge type-expense\">صرف</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 44.5,
+        "y": 855,
+        "width": 22,
+        "height": 14
+      },
+      "message": "\"إيداع\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"type-badge type-income\">إيداع</span>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 914
+}

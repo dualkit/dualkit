@@ -1,0 +1,133 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "support-chat",
+  "condition": "loop",
+  "run": 2,
+  "at": "2026-10-21T17:02:55.721Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الدعم الفني - اتصالات الكويت</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --bg-canvas: #f0f4f8;\n      --bg-phone: #ffffff;\n      --primary: #0052cc;\n      --primary-light: #e6f0ff;\n      --text-main: #172b4d;\n      --text-muted: #6b778c;\n      --bubble-agent: #f4f5f7;\n      --bubble-user: #0052cc;\n      --bubble-user-text: #ffffff;\n      --border-color: #dfe1e6;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      background-color: var(--bg-canvas);\n      color: var(--text-main);\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      min-height: 100vh;\n      padding: 16px;\n    }\n\n    /* Arabic typography rules */\n    :lang(ar) {\n      font-size: 16px;\n      line-height: 1.7;\n      letter-spacing: 0;\n      text-rendering: optimizeLegibility;\n    }\n\n    /* Phone Shell */\n    .phone-frame {\n      width: 100%;\n      max-width: 390px;\n      height: 844px;\n      background-color: var(--bg-phone);\n      border-radius: 40px;\n      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 0 0 10px #1e293b;\n      display: flex;\n      flex-direction: column;\n      overflow: hidden;\n      position: relative;\n    }\n\n    /* Status Bar Mock */\n    .status-bar {\n      height: 44px;\n      background-color: #ffffff;\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 0 24px;\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--text-main);\n      flex-shrink: 0;\n    }\n\n    /* Chat Header */\n    .chat-header {\n      background-color: #ffffff;\n      padding: 12px 16px;\n      display: flex;\n      align-items: center;\n      border-bottom: 1px solid var(--border-color);\n      flex-shrink: 0;\n      gap: 12px;\n    }\n\n    .back-btn {\n      background: none;\n      border: none;\n      cursor: pointer;\n      color: var(--text-main);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 4px;\n    }\n\n    .agent-avatar {\n      width: 40px;\n      height: 40px;\n      border-radius: 50%;\n      background-color: var(--primary-light);\n      color: var(--primary);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: 700;\n      font-size: 16px;\n      position: relative;\n    }\n\n    .status-dot {\n      width: 10px;\n      height: 10px;\n      background-color: #36b37e;\n      border: 2px solid #ffffff;\n      border-radius: 50%;\n      position: absolute;\n      bottom: 0;\n      inset-inline-start: 0;\n    }\n\n    .agent-info h1 {\n      font-size: 15px;\n      font-weight: 600;\n      color: var(--text-main);\n      line-height: 1.2;\n    }\n\n    .agent-info p {\n      font-size: 14px;\n      color: #36b37e;\n      font-weight: 500;\n    }\n\n    /* Chat Messages Body */\n    .chat-messages {\n      flex: 1;\n      background-color: #f8fafc;\n      padding: 16px;\n      overflow-y: auto;\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .message-group {\n      display: flex;\n      flex-direction: column;\n      max-width: 80%;\n    }\n\n    .message-group.agent {\n      align-self: flex-start;\n    }\n\n    .message-group.user {\n      align-self: flex-end;\n    }\n\n    .bubble {\n      padding: 12px 16px;\n      border-radius: 18px;\n      font-size: 14px;\n      line-height: 1.6;\n      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);\n      word-break: break-word;\n    }\n\n    .agent .bubble {\n      background-color: var(--bubble-agent);\n      color: var(--text-main);\n      border-start-start-radius: 4px;\n    }\n\n    .user .bubble {\n      background-color: var(--bubble-user);\n      color: var(--bubble-user-text);\n      border-start-end-radius: 4px;\n    }\n\n    .timestamp {\n      font-size: 14px;\n      color: var(--text-muted);\n      margin-top: 4px;\n      padding-inline: 4px;\n    }\n\n    .agent .timestamp {\n      align-self: flex-start;\n    }\n\n    .user .timestamp {\n      align-self: flex-end;\n    }\n\n    /* Input Footer */\n    .chat-footer {\n      background-color: #ffffff;\n      padding: 12px 16px 28px 16px;\n      border-top: 1px solid var(--border-color);\n      display: flex;\n      align-items: center;\n      gap: 8px;\n      flex-shrink: 0;\n    }\n\n    .input-wrapper {\n      flex: 1;\n      background-color: #f1f3f5;\n      border-radius: 24px;\n      display: flex;\n      align-items: center;\n      padding: 0 16px;\n      border: 1px solid transparent;\n      transition: border-color 0.2s;\n    }\n\n    .input-wrapper:focus-within {\n      border-color: var(--primary);\n      background-color: #ffffff;\n    }\n\n    .chat-input {\n      flex: 1;\n      border: none;\n      background: none;\n      padding: 10px 0;\n      font-family: inherit;\n      font-size: 14px;\n      color: var(--text-main);\n      outline: none;\n    }\n\n    .chat-input:placeholder-shown {\n      direction: rtl;\n    }\n\n    .chat-input::placeholder {\n      color: var(--text-muted);\n    }\n\n    .send-btn {\n      background-color: var(--primary);\n      color: white;\n      border: none;\n      width: 40px;\n      height: 40px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      cursor: pointer;\n      flex-shrink: 0;\n      transition: opacity 0.2s;\n    }\n\n    .send-btn:hover {\n      opacity: 0.9;\n    }\n\n    .send-btn svg {\n      width: 18px;\n      height: 18px;\n      transform: scaleX(-1);\n    }\n  </style>\n</head>\n<body>\n\n  <div class=\"phone-frame\">\n    <!-- Status Bar -->\n    <div class=\"status-bar\">\n      <span>9:41</span>\n      <div style=\"display: flex; gap: 6px; align-items: center;\">\n        <span style=\"font-size: 14px;\">5G</span>\n        <svg width=\"16\" height=\"12\" viewBox=\"0 0 16 12\" fill=\"currentColor\"><path d=\"M1 9h2v2H1V9zm3-3h2v5H4V6zm3-3h2v8H7V3zm3-3h2v11h-2V0zm3 4h2v7h-2V4z\"/></svg>\n      </div>\n    </div>\n\n    <!-- Chat Header -->\n    <header class=\"chat-header\">\n      <button class=\"back-btn\" aria-label=\"رجوع\">\n        <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m9 18 6-6-6-6\"/></svg>\n      </button>\n      <div class=\"agent-avatar\">\n        س\n        <div class=\"status-dot\"></div>\n      </div>\n      <div class=\"agent-info\">\n        <h1>سارة</h1>\n        <p>خدمة العملاء</p>\n      </div>\n    </header>\n\n    <!-- Chat Messages -->\n    <main class=\"chat-messages\">\n      \n      <!-- Message 1: Customer -->\n      <div class=\"message-group user\">\n        <div class=\"bubble\">\n          مرحباً، أريد الاستفسار عن طريقة تفعيل باقة الـ <bdi dir=\"ltr\">5G</bdi> الجديدة.\n        </div>\n        <span class=\"timestamp\">10:40 ص</span>\n      </div>\n\n      <!-- Message 2: Agent -->\n      <div class=\"message-group agent\">\n        <div class=\"bubble\">\n          أهلاً بك! يسعدني مساعدتك. هل تقصد باقة الإنترنت المنزلي أم باقة الموبايل؟\n        </div>\n        <span class=\"timestamp\">10:41 ص</span>\n      </div>\n\n      <!-- Message 3: Customer -->\n      <div class=\"message-group user\">\n        <div class=\"bubble\">\n          باقة الموبايل، ولقد طلبت شرائح <bdi dir=\"ltr\">eSIM</bdi> برقم الطلب <bdi dir=\"ltr\">TX-48213</bdi>.\n        </div>\n        <span class=\"timestamp\">10:42 ص</span>\n      </div>\n\n      <!-- Message 4: Agent -->\n      <div class=\"message-group agent\">\n        <div class=\"bubble\">\n          شكراً لتزويدي بالمعلومات. لقد تحققت من الطلب رقم <bdi dir=\"ltr\">TX-48213</bdi> وهو قيد المعالجة للتفعيل الآن.\n        </div>\n        <span class=\"timestamp\">10:43 ص</span>\n      </div>\n\n      <!-- Message 5: Customer -->\n      <div class=\"message-group user\">\n        <div class=\"bubble\">\n          ممتاز، كم يستغرق وقت التفعيل عادة؟\n        </div>\n        <span class=\"timestamp\">10:44 ص</span>\n      </div>\n\n      <!-- Message 6: Agent -->\n      <div class=\"message-group agent\">\n        <div class=\"bubble\">\n          عادة ما يستغرق التفعيل أقل من 15 دقيقة. هل يمكنني مساعدتك بشيء آخر اليوم؟\n        </div>\n        <span class=\"timestamp\">10:45 ص</span>\n      </div>\n\n    </main>\n\n    <!-- Input Footer -->\n    <footer class=\"chat-footer\">\n      <div class=\"input-wrapper\">\n        <input type=\"text\" class=\"chat-input\" placeholder=\"اكتب رسالتك هنا...\" dir=\"ltr\">\n      </div>\n      <button class=\"send-btn\" aria-label=\"إرسال الرسالة\">\n        <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <line x1=\"22\" y1=\"2\" x2=\"11\" y2=\"13\"></line>\n          <polygon points=\"22 2 15 22 11 13 2 9 22 2\"></polygon>\n        </svg>\n      </button>\n    </footer>\n  </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 10360,
+    "output": 3223
+  },
+  "ms": 8709,
+  "finish": "STOP",
+  "reasoningTokens": 722,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 29,
+  "score": 97,
+  "unreadableStylesheets": 1,
+  "pageHeight": 876,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 32,
+        "y": 142.796875,
+        "width": 260.796875,
+        "height": 73.578125
+      },
+      "message": "border-top-left-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          مرحباً، أريد الاستفسار عن طريقة تفعيل باقة الـ <bdi dir=\"ltr\">5G</bdi> الجديدة.\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 97.203125,
+        "y": 260.171875,
+        "width": 260.796875,
+        "height": 68.78125
+      },
+      "message": "border-top-left-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          أهلاً بك! يسعدني مساعدتك. هل تقصد باقة الإنترنت المنزلي أم باقة الموبايل؟\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 32,
+        "y": 372.75,
+        "width": 260.796875,
+        "height": 78.375
+      },
+      "message": "border-top-left-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          باقة الموبايل، ولقد طلبت شرائح <bdi dir=\"ltr\">eSIM</bdi> برقم الطلب <bdi dir=\"ltr\">TX-48213</bdi>.\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 97.203125,
+        "y": 494.921875,
+        "width": 260.796875,
+        "height": 95.96875
+      },
+      "message": "border-top-left-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          شكراً لتزويدي بالمعلومات. لقد تحققت من الطلب رقم <bdi dir=\"ltr\">TX-48213</bdi> وهو قيد المعالجة للتفعيل الآن.\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 32,
+        "y": 634.6875,
+        "width": 226,
+        "height": 46.390625
+      },
+      "message": "border-top-left-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          ممتاز، كم يستغرق وقت التفعيل عادة؟\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 97.203125,
+        "y": 724.875,
+        "width": 260.796875,
+        "height": 68.78125
+      },
+      "message": "border-top-left-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          عادة ما يستغرق التفعيل أقل من 15 دقيقة. هل يمكنني مساعدتك بشيء آخر اليوم؟\n        </div>"
+    }
+  ],
+  "from": {
+    "rulesPassed": 27,
+    "score": 81
+  },
+  "rounds": [
+    {
+      "at": "2026-10-21T17:02:57.941Z",
+      "ms": 8709,
+      "usage": {
+        "input": 10360,
+        "output": 3223
+      },
+      "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الدعم الفني - اتصالات الكويت</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --bg-canvas: #f0f4f8;\n      --bg-phone: #ffffff;\n      --primary: #0052cc;\n      --primary-light: #e6f0ff;\n      --text-main: #172b4d;\n      --text-muted: #6b778c;\n      --bubble-agent: #f4f5f7;\n      --bubble-user: #0052cc;\n      --bubble-user-text: #ffffff;\n      --border-color: #dfe1e6;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      background-color: var(--bg-canvas);\n      color: var(--text-main);\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      min-height: 100vh;\n      padding: 16px;\n    }\n\n    /* Arabic typography rules */\n    :lang(ar) {\n      font-size: 16px;\n      line-height: 1.7;\n      letter-spacing: 0;\n      text-rendering: optimizeLegibility;\n    }\n\n    /* Phone Shell */\n    .phone-frame {\n      width: 100%;\n      max-width: 390px;\n      height: 844px;\n      background-color: var(--bg-phone);\n      border-radius: 40px;\n      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 0 0 10px #1e293b;\n      display: flex;\n      flex-direction: column;\n      overflow: hidden;\n      position: relative;\n    }\n\n    /* Status Bar Mock */\n    .status-bar {\n      height: 44px;\n      background-color: #ffffff;\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 0 24px;\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--text-main);\n      flex-shrink: 0;\n    }\n\n    /* Chat Header */\n    .chat-header {\n      background-color: #ffffff;\n      padding: 12px 16px;\n      display: flex;\n      align-items: center;\n      border-bottom: 1px solid var(--border-color);\n      flex-shrink: 0;\n      gap: 12px;\n    }\n\n    .back-btn {\n      background: none;\n      border: none;\n      cursor: pointer;\n      color: var(--text-main);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 4px;\n    }\n\n    .agent-avatar {\n      width: 40px;\n      height: 40px;\n      border-radius: 50%;\n      background-color: var(--primary-light);\n      color: var(--primary);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: 700;\n      font-size: 16px;\n      position: relative;\n    }\n\n    .status-dot {\n      width: 10px;\n      height: 10px;\n      background-color: #36b37e;\n      border: 2px solid #ffffff;\n      border-radius: 50%;\n      position: absolute;\n      bottom: 0;\n      inset-inline-start: 0;\n    }\n\n    .agent-info h1 {\n      font-size: 15px;\n      font-weight: 600;\n      color: var(--text-main);\n      line-height: 1.2;\n    }\n\n    .agent-info p {\n      font-size: 14px;\n      color: #36b37e;\n      font-weight: 500;\n    }\n\n    /* Chat Messages Body */\n    .chat-messages {\n      flex: 1;\n      background-color: #f8fafc;\n      padding: 16px;\n      overflow-y: auto;\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .message-group {\n      display: flex;\n      flex-direction: column;\n      max-width: 80%;\n    }\n\n    .message-group.agent {\n      align-self: flex-start;\n    }\n\n    .message-group.user {\n      align-self: flex-end;\n    }\n\n    .bubble {\n      padding: 12px 16px;\n      border-radius: 18px;\n      font-size: 14px;\n      line-height: 1.6;\n      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);\n      word-break: break-word;\n    }\n\n    .agent .bubble {\n      background-color: var(--bubble-agent);\n      color: var(--text-main);\n      border-start-start-radius: 4px;\n    }\n\n    .user .bubble {\n      background-color: var(--bubble-user);\n      color: var(--bubble-user-text);\n      border-start-end-radius: 4px;\n    }\n\n    .timestamp {\n      font-size: 14px;\n      color: var(--text-muted);\n      margin-top: 4px;\n      padding-inline: 4px;\n    }\n\n    .agent .timestamp {\n      align-self: flex-start;\n    }\n\n    .user .timestamp {\n      align-self: flex-end;\n    }\n\n    /* Input Footer */\n    .chat-footer {\n      background-color: #ffffff;\n      padding: 12px 16px 28px 16px;\n      border-top: 1px solid var(--border-color);\n      display: flex;\n      align-items: center;\n      gap: 8px;\n      flex-shrink: 0;\n    }\n\n    .input-wrapper {\n      flex: 1;\n      background-color: #f1f3f5;\n      border-radius: 24px;\n      display: flex;\n      align-items: center;\n      padding: 0 16px;\n      border: 1px solid transparent;\n      transition: border-color 0.2s;\n    }\n\n    .input-wrapper:focus-within {\n      border-color: var(--primary);\n      background-color: #ffffff;\n    }\n\n    .chat-input {\n      flex: 1;\n      border: none;\n      background: none;\n      padding: 10px 0;\n      font-family: inherit;\n      font-size: 14px;\n      color: var(--text-main);\n      outline: none;\n    }\n\n    .chat-input:placeholder-shown {\n      direction: rtl;\n    }\n\n    .chat-input::placeholder {\n      color: var(--text-muted);\n    }\n\n    .send-btn {\n      background-color: var(--primary);\n      color: white;\n      border: none;\n      width: 40px;\n      height: 40px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      cursor: pointer;\n      flex-shrink: 0;\n      transition: opacity 0.2s;\n    }\n\n    .send-btn:hover {\n      opacity: 0.9;\n    }\n\n    .send-btn svg {\n      width: 18px;\n      height: 18px;\n      transform: scaleX(-1);\n    }\n  </style>\n</head>\n<body>\n\n  <div class=\"phone-frame\">\n    <!-- Status Bar -->\n    <div class=\"status-bar\">\n      <span>9:41</span>\n      <div style=\"display: flex; gap: 6px; align-items: center;\">\n        <span style=\"font-size: 14px;\">5G</span>\n        <svg width=\"16\" height=\"12\" viewBox=\"0 0 16 12\" fill=\"currentColor\"><path d=\"M1 9h2v2H1V9zm3-3h2v5H4V6zm3-3h2v8H7V3zm3-3h2v11h-2V0zm3 4h2v7h-2V4z\"/></svg>\n      </div>\n    </div>\n\n    <!-- Chat Header -->\n    <header class=\"chat-header\">\n      <button class=\"back-btn\" aria-label=\"رجوع\">\n        <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m9 18 6-6-6-6\"/></svg>\n      </button>\n      <div class=\"agent-avatar\">\n        س\n        <div class=\"status-dot\"></div>\n      </div>\n      <div class=\"agent-info\">\n        <h1>سارة</h1>\n        <p>خدمة العملاء</p>\n      </div>\n    </header>\n\n    <!-- Chat Messages -->\n    <main class=\"chat-messages\">\n      \n      <!-- Message 1: Customer -->\n      <div class=\"message-group user\">\n        <div class=\"bubble\">\n          مرحباً، أريد الاستفسار عن طريقة تفعيل باقة الـ <bdi dir=\"ltr\">5G</bdi> الجديدة.\n        </div>\n        <span class=\"timestamp\">10:40 ص</span>\n      </div>\n\n      <!-- Message 2: Agent -->\n      <div class=\"message-group agent\">\n        <div class=\"bubble\">\n          أهلاً بك! يسعدني مساعدتك. هل تقصد باقة الإنترنت المنزلي أم باقة الموبايل؟\n        </div>\n        <span class=\"timestamp\">10:41 ص</span>\n      </div>\n\n      <!-- Message 3: Customer -->\n      <div class=\"message-group user\">\n        <div class=\"bubble\">\n          باقة الموبايل، ولقد طلبت شرائح <bdi dir=\"ltr\">eSIM</bdi> برقم الطلب <bdi dir=\"ltr\">TX-48213</bdi>.\n        </div>\n        <span class=\"timestamp\">10:42 ص</span>\n      </div>\n\n      <!-- Message 4: Agent -->\n      <div class=\"message-group agent\">\n        <div class=\"bubble\">\n          شكراً لتزويدي بالمعلومات. لقد تحققت من الطلب رقم <bdi dir=\"ltr\">TX-48213</bdi> وهو قيد المعالجة للتفعيل الآن.\n        </div>\n        <span class=\"timestamp\">10:43 ص</span>\n      </div>\n\n      <!-- Message 5: Customer -->\n      <div class=\"message-group user\">\n        <div class=\"bubble\">\n          ممتاز، كم يستغرق وقت التفعيل عادة؟\n        </div>\n        <span class=\"timestamp\">10:44 ص</span>\n      </div>\n\n      <!-- Message 6: Agent -->\n      <div class=\"message-group agent\">\n        <div class=\"bubble\">\n          عادة ما يستغرق التفعيل أقل من 15 دقيقة. هل يمكنني مساعدتك بشيء آخر اليوم؟\n        </div>\n        <span class=\"timestamp\">10:45 ص</span>\n      </div>\n\n    </main>\n\n    <!-- Input Footer -->\n    <footer class=\"chat-footer\">\n      <div class=\"input-wrapper\">\n        <input type=\"text\" class=\"chat-input\" placeholder=\"اكتب رسالتك هنا...\" dir=\"ltr\">\n      </div>\n      <button class=\"send-btn\" aria-label=\"إرسال الرسالة\">\n        <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <line x1=\"22\" y1=\"2\" x2=\"11\" y2=\"13\"></line>\n          <polygon points=\"22 2 15 22 11 13 2 9 22 2\"></polygon>\n        </svg>\n      </button>\n    </footer>\n  </div>\n\n</body>\n</html>\n```",
+      "sent": 8,
+      "ok": true,
+      "error": null,
+      "rulesPassed": 29,
+      "score": 97,
+      "missing": [],
+      "regressed": [],
+      "lostParts": [],
+      "arabicKept": 1
+    }
+  ]
+}

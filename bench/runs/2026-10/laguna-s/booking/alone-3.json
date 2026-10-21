@@ -1,0 +1,151 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "booking",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T17:33:31.269Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n    <title>حجز موعد - عيادة القطرية</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f0f2f5;\n            color: #333;\n            padding: 15px;\n            direction: rtl;\n            text-align: right;\n        }\n        .container {\n            max-width: 414px;\n            margin: 0 auto;\n            background: #fff;\n            border-radius: 20px;\n            box-shadow: 0 4px 20px rgba(0,0,0,0.08);\n            overflow: hidden;\n        }\n        .header {\n            background: linear-gradient(135deg, #006a9c, #0087c7);\n            color: #fff;\n            padding: 20px;\n            text-align: center;\n        }\n        .header h1 {\n            font-size: 22px;\n            font-weight: 600;\n        }\n        .doctor-section {\n            padding: 15px 20px;\n            border-bottom: 1px solid #eee;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n        .doctor-info h2 {\n            font-size: 18px;\n            color: #006a9c;\n        }\n        .doctor-info p {\n            font-size: 14px;\n            color: #666;\n            margin-top: 4px;\n        }\n        .calendar-header {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            padding: 12px 20px;\n            background: #f8f9fa;\n            border-bottom: 1px solid #eee;\n        }\n        .month-nav {\n            display: flex;\n            align-items: center;\n            gap: 10px;\n        }\n        .nav-btn {\n            background: #006a9c;\n            color: #fff;\n            border: none;\n            width: 32px;\n            height: 32px;\n            border-radius: 8px;\n            font-size: 16px;\n            cursor: pointer;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            transition: background 0.2s;\n        }\n        .nav-btn:hover {\n            background: #005a82;\n        }\n        .month-title {\n            font-size: 18px;\n            font-weight: 600;\n            color: #333;\n        }\n        .weekdays {\n            display: grid;\n            grid-template-columns: repeat(7, 1fr);\n            background: #f8f9fa;\n            border-bottom: 1px solid #eee;\n        }\n        .weekday {\n            text-align: center;\n            padding: 10px 4px;\n            font-size: 13px;\n            font-weight: 600;\n            color: #888;\n        }\n        .days-grid {\n            display: grid;\n            grid-template-columns: repeat(7, 1fr);\n        }\n        .day-cell {\n            height: 48px;\n            padding: 6px;\n            border-bottom: 1px solid #eee;\n            cursor: pointer;\n            position: relative;\n        }\n        .day-cell.other-month {\n            background: #fafafa;\n            color: #bbb;\n        }\n        .day-cell.current-day {\n            background: #e7f4fb;\n            border-radius: 6px;\n        }\n        ..day-number {\n            font-size: 14px;\n            font-weight: 500;\n        }\n        .day-cell.current-day .day-number {\n            color: #006a9c;\n            font-weight: 700;\n        }\n        .day-cell.selected {\n            background: #006a9c;\n            color: #fff;\n            border-radius: 6px;\n        }\n        .day-cell.selected .day-number {\n            color: #fff;\n            font-weight: 700;\n        }\n        .time-slots-container {\n            padding: 15px 20px;\n        }\n        .time-slots-title {\n            font-size: 16px;\n            font-weight: 600;\n            color: #333;\n            margin-bottom: 12px;\n        }\n        .time-slots {\n            display: grid;\n            grid-template-columns: repeat(3, 1fr);\n            gap: 10px;\n        }\n        .time-slot {\n            padding: 12px;\n            text-align: center;\n            border: 2px solid #e0e0e0;\n            border-radius: 10px;\n            background: #fff;\n            font-size: 14px;\n            font-weight: 500;\n            color: #555;\n            cursor: pointer;\n            transition: all 0.2s;\n        }\n        .time-slot:hover {\n            border-color: #006a9c;\n            color: #006a9c;\n        }\n        .time-slot.selected {\n            background: #006a9c;\n            color: #fff;\n            border-color: #006a9c;\n        }\n        .confirm-btn {\n            display: block;\n            width: calc(100% - 40px);\n            margin: 10px auto;\n            padding: 14px;\n            background: #006a9c;\n            color: #fff;\n            border: none;\n            border-radius: 12px;\n            font-size: 18px;\n            font-weight: 600;\n            cursor: pointer;\n            transition: background 0.2s;\n        }\n        .confirm-btn:hover {\n            background: #005a82;\n        }\n        .confirm-btn:disabled {\n            background: #ccc;\n            cursor: not-allowed;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header\">\n            <h1>حجز موعد</h1>\n        </div>\n\n        <div class=\"doctor-section\">\n            <div class=\"doctor-info\">\n                <h2>د. فاطمة المنصوري</h2>\n                <p>أخصائية طب الأسرة</p>\n            </div>\n        </div>\n\n        <div class=\"calendar-header\">\n            <div class=\"month-nav\">\n                <button class=\"nav-btn\" id=\"nextMonth\">›</button>\n                <span class=\"month-title\" id=\"monthTitle\">أكتوبر 2024</span>\n                <button class=\"nav-btn\" id=\"prevMonth\">‹</button>\n            </div>\n        </div>\n\n        <div class=\"weekdays\" id=\"weekdays\"></div>\n        <div class=\"days-grid\" id=\"daysGrid\"></div>\n\n        <div class=\"time-slots-container\">\n            <div class=\"time-slots-title\">اختر وقت الحجز</div>\n            <div class=\"time-slots\" id=\"timeSlots\"></div>\n        </div>\n\n        <button class=\"confirm-btn\" id=\"confirmBtn\" disabled>تأكيد الحجز</button>\n    </div>\n\n    <script>\n        const arabicMonths = [\n            \"يناير\", \"فبراير\", \"مارس\", \"أبريل\", \"مايو\", \"يونيو\",\n            \"يوليو\", \"أغسطس\", \"سبتمبر\", \"أكتوبر\", \"نوفمبر\", \"ديسمبر\"\n        ];\n\n        const arabicWeekdays = [\"س\", \"أ\", \"ح\", \"ث\", \"ج\", \"ب\", \"أ\"];\n\n        let currentDate = new Date();\n        let selectedDate = null;\n        let selectedTime = null;\n\n        const monthTitle = document.getElementById(\"monthTitle\");\n        const weekdaysEl = document.getElementById(\"weekdays\");\n        const daysGridEl = document.getElementById(\"daysGrid\");\n        const timeSlotsEl = document.getElementById(\"timeSlots\");\n        const confirmBtn = document.getElementById(\"confirmBtn\");\n        const prevMonthBtn = document.getElementById(\"prevMonth\");\n        const nextMonthBtn = document.getElementById(\"nextMonth\");\n\n        function renderWeekdays() {\n            weekdaysEl.innerHTML = \"\";\n            arabicWeekdays.forEach(day => {\n                const div = document.createElement(\"div\");\n                div.className = \"weekday\";\n                div.textContent = day;\n                weekdaysEl.appendChild(div);\n            });\n        }\n\n        function renderCalendar() {\n            const year = currentDate.getFullYear();\n            const month = currentDate.getMonth();\n            const today = new Date();\n\n            monthTitle.textContent = `${arabicMonths[month]} ${year}`;\n\n            daysGridEl.innerHTML = \"\";\n\n            const firstDay = new Date(year, month, 1);\n            const lastDayPrev = new Date(year, month, 0);\n            const startDate = firstDay.getDay();\n\n            let startOffset = (startDate - 6 + 7) % 7;\n\n            const daysInMonth = lastDayPrev.getDate();\n\n            const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;\n\n            for (let i = 0; i < totalCells; i++) {\n                const dayCell = document.createElement(\"div\");\n                dayCell.className = \"day-cell\";\n\n                const dayNumber = i - startOffset + 1;\n\n                if (i < startOffset) {\n                    dayCell.classList.add(\"other-month\");\n                    dayCell.textContent = \"\";\n                } else if (dayNumber > daysInMonth) {\n                    dayCell.classList.add(\"other-month\");\n                    dayCell.textContent = \"\";\n                } else {\n                    dayCell.textContent = dayNumber;\n\n                    const cellDate = new Date(year, month, dayNumber);\n\n                    if (\n                        today.getDate() === dayNumber &&\n                        today.getMonth() === month &&\n                        today.getFullYear() === year\n                    ) {\n                        dayCell.classList.add(\"current-day\");\n                    }\n\n                    if (\n                        selectedDate &&\n                        selectedDate.getDate() === dayNumber &&\n                        selectedDate.getMonth() === month &&\n                        selectedDate.getFullYear() === year\n                    ) {\n                        dayCell.classList.add(\"selected\");\n                    }\n\n                    dayCell.addEventListener(\"click\", () => {\n                        document.querySelectorAll(\".day-cell\").forEach(c => c.classList.remove(\"selected\"));\n                        dayCell.classList.add(\"selected\");\n                        selectedDate = new Date(year, month, dayNumber);\n                        updateConfirmButton();\n                    });\n                }\n\n                daysGridEl.appendChild(dayCell);\n            }\n        }\n\n        function renderTimeSlots() {\n            timeSlotsEl.innerHTML = \"\";\n            const slots = [\n                \"09:00\", \"09:30\", \"10:00\", \"10:30\",\n                \"11:00\", \"11:30\", \"12:00\"\n            ];\n\n            slots.forEach(slot => {\n                const btn = document.createElement(\"div\");\n                btn.className = \"time-slot\";\n                btn.textContent = slot;\n                btn.addEventListener(\"click\", () => {\n                    document.querySelectorAll(\".time-slot\").forEach(s => s.classList.remove(\"selected\"));\n                    btn.classList.add(\"selected\");\n                    selectedTime = slot;\n                    updateConfirmButton();\n                });\n                timeSlotsEl.appendChild(btn);\n            });\n        }\n\n        function updateConfirmButton() {\n            if (selectedDate && selectedTime) {\n                confirmBtn.disabled = false;\n            } else {\n                confirmBtn.disabled = true;\n            }\n        }\n\n        prevMonthBtn.addEventListener(\"click\", () => {\n            currentDate.setMonth(currentDate.getMonth() - 1);\n            renderCalendar();\n        });\n\n        nextMonthBtn.addEventListener(\"click\", () => {\n            currentDate.setMonth(currentDate.getMonth() + 1);\n            renderCalendar();\n        });\n\n        confirmBtn.addEventListener(\"click\", () => {\n            if (selectedDate && selectedTime) {\n                alert(`تم حجز موعد مع د. فاطمة المنصوري في تاريخ ${selectedDate.toLocaleDateString('ar-EG')} الساعة ${selectedTime}`);\n            }\n        });\n\n        renderWeekdays();\n        renderCalendar();\n        renderTimeSlots();\n    </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 156,
+    "output": 3079
+  },
+  "ms": 53261,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 80,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 147.9375,
+        "y": 35,
+        "width": 94.125,
+        "height": 25
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>حجز موعد</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 153.984375,
+        "y": 725,
+        "width": 82.015625,
+        "height": 20
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"confirm-btn\" id=\"confirmBtn\" disabled=\"\">تأكيد الحجز</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 341.28125,
+        "y": 221,
+        "width": 16,
+        "height": 15
+      },
+      "message": "\"س\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">س</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 295.859375,
+        "y": 221,
+        "width": 4,
+        "height": 15
+      },
+      "message": "\"أ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">أ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 242.4375,
+        "y": 221,
+        "width": 8,
+        "height": 15
+      },
+      "message": "\"ح\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">ح</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 189,
+        "y": 221,
+        "width": 12,
+        "height": 15
+      },
+      "message": "\"ث\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">ث</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 139.578125,
+        "y": 221,
+        "width": 8,
+        "height": 15
+      },
+      "message": "\"ج\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">ج</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 86.140625,
+        "y": 221,
+        "width": 12,
+        "height": 15
+      },
+      "message": "\"ب\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">ب</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 38.71875,
+        "y": 221,
+        "width": 4,
+        "height": 15
+      },
+      "message": "\"أ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">أ</div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

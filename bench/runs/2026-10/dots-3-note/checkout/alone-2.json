@@ -1,0 +1,137 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "checkout",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T17:24:42.985Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>الطلب</title>\n<style>\n* { box-sizing: border-box; margin: 0; padding: 0; }\nbody {\n  font-family: 'Arial', sans-serif;\n  background-color: #f5f5f5;\n  direction: rtl;\n  text-align: right;\n}\n.container {\n  max-width: 480px;\n  margin: 0 auto;\n  background: #fff;\n  padding: 16px;\n  min-height: 100vh;\n  display: flex;\n  flex-direction: column;\n}\nheader {\n  display: flex;\n  align-items: center;\n  padding-bottom: 12px;\n  border-bottom: 1px solid #eee;\n}\n.back-arrow {\n  background: none;\n  border: none;\n  font-size: 24px;\n  color: #333;\n  cursor: pointer;\n}\nheader h1 {\n  flex: 1;\n  text-align: center;\n  font-size: 20px;\n  color: #333;\n}\n.item {\n  display: flex;\n  align-items: center;\n  padding: 12px 0;\n  border-bottom: 1px solid #f0f0f0;\n}\n.photo {\n  width: 60px;\n  height: 60px;\n  background-color: #ddd;\n  border-radius: 4px;\n  margin-left: 12px;\n}\n.details {\n  flex: 1;\n  display: flex;\n  flex-direction: column;\n}\n.name {\n  font-size: 16px;\n  color: #333;\n  margin-bottom: 8px;\n}\n.stepper {\n  display: flex;\n  align-items: center;\n  gap: 8px;\n}\n.stepper button {\n  width: 30px;\n  height: 30px;\n  background: #f0f0f0;\n  border: none;\n  border-radius: 4px;\n  font-size: 18px;\n  cursor: pointer;\n}\n.stepper input {\n  width: 40px;\n  text-align: center;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n  padding: 4px;\n}\n.price {\n  font-size: 16px;\n  color: #333;\n  margin-left: auto;\n}\n.promo {\n  margin-top: 16px;\n}\n.promo input {\n  width: 100%;\n  padding: 12px;\n  border: 1px solid #ccc;\n  border-radius: 4px;\n  font-size: 16px;\n}\n.summary {\n  margin-top: 16px;\n}\n.summary .row {\n  display: flex;\n  justify-content: space-between;\n  padding: 8px 0;\n  border-bottom: 1px solid #f0f0f0;\n}\n.summary .row.total {\n  font-weight: bold;\n  font-size: 18px;\n  border-top: 1px solid #ccc;\n  margin-top: 8px;\n  padding-top: 12px;\n}\n.place-order {\n  margin-top: 24px;\n  width: 100%;\n  padding: 14px;\n  background-color: #4CAF50;\n  color: white;\n  border: none;\n  border-radius: 4px;\n  font-size: 18px;\n  cursor: pointer;\n}\n</style>\n</head>\n<body>\n<div class=\"container\">\n  <header>\n    <button class=\"back-arrow\">←</button>\n    <h1>الطلب</h1>\n  </header>\n\n  <!-- Item 1 -->\n  <div class=\"item\">\n    <div class=\"photo\"></div>\n    <div class=\"details\">\n      <div class=\"name\">تفاح</div>\n      <div class=\"stepper\">\n        <button class=\"dec\">-</button>\n        <input type=\"number\" value=\"2\" min=\"1\">\n        <button class=\"inc\">+</button>\n      </div>\n    </div>\n    <div class=\"price\">5 د.إ</div>\n  </div>\n\n  <!-- Item 2 -->\n  <div class=\"item\">\n    <div class=\"photo\"></div>\n    <div class=\"details\">\n      <div class=\"name\">حليب</div>\n      <div class=\"stepper\">\n        <button class=\"dec\">-</button>\n        <input type=\"number\" value=\"1\" min=\"1\">\n        <button class=\"inc\">+</button>\n      </div>\n    </div>\n    <div class=\"price\">3 د.إ</div>\n  </div>\n\n  <!-- Item 3 -->\n  <div class=\"item\">\n    <div class=\"photo\"></div>\n    <div class=\"details\">\n      <div class=\"name\">برتقال</div>\n      <div class=\"stepper\">\n        <button class=\"dec\">-</button>\n        <input type=\"number\" value=\"3\" min=\"1\">\n        <button class=\"inc\">+</button>\n      </div>\n    </div>\n    <div class=\"price\">4 د.إ</div>\n  </div>\n\n  <div class=\"promo\">\n    <input type=\"text\" placeholder=\"رمز الخصم\">\n  </div>\n\n  <div class=\"summary\">\n    <div class=\"row\">\n      <span>الإجمالي الفرعي</span>\n      <span>25 د.إ</span>\n    </div>\n    <div class=\"row\">\n      <span>التكاليف</span>\n      <span>5 د.إ</span>\n    </div>\n    <div class=\"row\">\n      <span>ضريبة القيمة المضافة (5%)</span>\n      <span>1.5 د.إ</span>\n    </div>\n    <div class=\"row total\">\n      <span>الإجمالي</span>\n      <span>31.5 د.إ</span>\n    </div>\n  </div>\n\n  <button class=\"place-order\">إتمام الطلب</button>\n</div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 148,
+    "output": 6482
+  },
+  "ms": 67858,
+  "finish": "stop",
+  "reasoningTokens": 5134,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 77,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 224,
+        "y": 100,
+        "width": 40,
+        "height": 25
+      },
+      "message": "This number field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"number\" value=\"2\" min=\"1\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 224,
+        "y": 185,
+        "width": 40,
+        "height": 25
+      },
+      "message": "This number field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"number\" value=\"1\" min=\"1\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 224,
+        "y": 270,
+        "width": 40,
+        "height": 25
+      },
+      "message": "This number field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"number\" value=\"3\" min=\"1\">"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 155.5,
+        "y": 19,
+        "width": 55,
+        "height": 22
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الطلب</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 149.984375,
+        "y": 587,
+        "width": 90.015625,
+        "height": 20
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"place-order\">إتمام الطلب</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 314,
+        "y": 69,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo\"></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 314,
+        "y": 154,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo\"></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 314,
+        "y": 239,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo\"></div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

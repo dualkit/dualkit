@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الإعدادات</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text-primary: #1a1a1a;
+      --text-secondary: #6b7280;
+      --border: #e5e7eb;
+      --accent: #0d6efd;
+      --toggle-on: #0d6efd;
+      --toggle-off: #ccc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 16px;
+      padding: 16px;
+    }
+
+    .screen-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .settings-group {
+      background-color: var(--card);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    .group-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 16px;
+      background-color: #f9fafb;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .settings-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .settings-row:last-child {
+      border-bottom: none;
+    }
+
+    .row-label {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .row-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .row-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .row-action {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chevron {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-secondary);
+    }
+
+    .language-value {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* Toggle Switch */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--toggle-off);
+      transition: 0.3s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--toggle-on);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
+
+      .screen-title {
+        font-size: 18px;
+      }
+
+      .settings-row {
+        padding: 12px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="screen-title">الإعدادات</h1>
+
+  <!-- Account Group -->
+  <div class="settings-group">
+    <div class="group-title">الحساب</div>
+    
+    <div class="settings-row">
+      <div class="row-label">
+        <span class="row-title">الاسم</span>
+        <span class="row-subtitle">محمد علي أحمد</span>
+      </div>
+    </div>
+
+    <div class="settings-row">
+      <div class="row-label">
+        <span class="row-title">رقم الهاتف</span>
+        <span class="row-subtitle"><bdi dir="ltr">+973 3600 1234</bdi></span>
+      </div>
+      <div class="row-action">
+        <svg class="chevron" viewBox="0 0 24 24">
+          <path d="M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.59Z" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="settings-row">
+      <div class="row-label">
+        <span class="row-title">اللغة</span>
+      </div>
+      <div class="row-action">
+        <span class="language-value">العربية</span>
+        <svg class="chevron" viewBox="0 0 24 24">
+          <path d="M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.59Z" />
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security Group -->
+  <div class="settings-group">
+    <div class="group-title">الأمان</div>
+    
+    <div class="settings-row">
+      <div class="row-label">
+        <span class="row-title">تفعيل الوجه</span>
+        <span class="row-subtitle">لتسجيل الدخول باستخدام التعرف على الوجه</span>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" checked />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="settings-row">
+      <div class="row-label">
+        <span class="row-title">تسجيل الدخول ثنائي العوامل</span>
+        <span class="row-subtitle">إرسال رمز تحقق إضافي عند تسجيل الدخول</span>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" checked />
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Notifications Group -->
+  <div class="settings-group">
+    <div class="group-title">الإشعارات</div>
+    
+    <div class="settings-row">
+      <div class="row-label">
+        <span class="row-title">التحويلات البنكية</span>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" checked />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="settings-row">
+      <div class="row-label">
+        <span class="row-title">العروض والعروض الخاصة</span>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="settings-row">
+      <div class="row-label">
+        <span class="row-title">كشف الحساب الشهري</span>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" checked />
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+</body>
+</html>

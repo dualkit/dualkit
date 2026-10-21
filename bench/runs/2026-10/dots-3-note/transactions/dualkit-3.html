@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المعاملات — مزاج</title>
+<style>
+  :root{
+    --bg:#f4f5f7;
+    --card:#ffffff;
+    --ink:#1f2430;
+    --muted:#8a90a0;
+    --line:#eceef2;
+    --accent:#1f6f5b;
+    --in:#0f9d58;
+    --out:#d64545;
+    --type-body:16px;
+    --type-label:14px;
+    --type-caption:13px;
+  }
+  *{box-sizing:border-box}
+  :lang(ar){
+    --type-label-size:14px;
+    --type-caption-size:14px;
+    --type-body-size:16px;
+    letter-spacing:0;
+    text-transform:none;
+    font-style:normal;
+    line-height:1.7;
+  }
+  body{
+    margin:0;
+    font-family:"IBM Plex Sans Arabic","Noto Sans Arabic",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    font-size:var(--type-body-size);
+    -webkit-font-smoothing:antialiased;
+  }
+  .phone{
+    width:390px;
+    margin:24px auto;
+    background:var(--bg);
+    padding:0 18px 28px;
+  }
+  /* top bar */
+  .top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 0 14px;
+  }
+  .top h1{font-size:20px;margin:0;font-weight:700}
+  .icon-btn{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink)}
+  /* balance card */
+  .balance{
+    background:linear-gradient(135deg,#1f6f5b,#165044);
+    color:#fff;
+    border-radius:20px;
+    padding:20px 22px;
+    margin-bottom:18px;
+    position:relative;
+    overflow:hidden;
+  }
+  .balance .label{font-size:13px;opacity:.85}
+  .balance .amount{font-size:30px;font-weight:700;margin-top:6px;letter-spacing:.5px}
+  .balance .sub{font-size:13px;opacity:.8;margin-top:8px;display:flex;gap:14px}
+  .balance .sub span{background:rgba(255,255,255,.14);padding:4px 10px;border-radius:999px;font-size:12px}
+  .chip{position:absolute;right:-24px;top:-24px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.07)}
+  /* filter */
+  .filter-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:4}
+  .filter-row::-webkit-scrollbar{display:none}
+  .pill{
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--muted);
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:13px;
+    white-space:nowrap;
+    font-weight:600;
+  }
+  .pill.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  /* table */
+  .table{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+  }
+  .row{
+    display:grid;
+    grid-template-columns:84px 1fr auto auto;
+    align-items:center;
+    gap:10px;
+    padding:14px 16px;
+    border-bottom:1px solid var(--line);
+  }
+  .row:last-child{border-bottom:0}
+  .date{font-size:13px;color:var(--muted);line-height:1.4}
+  .date .d{display:block;font-weight:700;color:var(--ink)}
+  .merchant{font-size:15px;font-weight:600}
+  .merchant .en{color:var(--ink)}
+  .amount{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+  .badge{
+    font-size:12px;font-weight:700;
+    padding:5px 10px;border-radius:999px;
+    display:flex;align-items:center;gap:5px;
+    margin-inline-start:auto;
+  }
+  .badge.in{background:#e7f6ec;color:var(--in)}
+  .badge.out{background:#fdecec;color:var(--out)}
+  .badge svg{width:10px;height:10px}
+  .empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px}
+  /* footer */
+  .foot{text-align:center;margin-top:18px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- top bar -->
+  <div class="top">
+    <h1>المعاملات</h1>
+    <div style="display:flex;gap:8px">
+      <div class="icon-btn" aria-label="بحث">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </div>
+      <div class="icon-btn" aria-label="more">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- balance -->
+  <div class="balance">
+    <div class="chip"></div>
+    <div class="label">الميزان المتاح</div>
+    <div class="amount">٢٤٧٫٥٠٠ ر.ع</div>
+    <div class="sub">
+      <span>هذا الشهر</span>
+      <span>+٣٥٠٫٠٠٠</span>
+    </div>
+  </div>
+
+  <!-- filter -->
+  <div class="filter-row">
+    <div class="pill active">كل المعاملات</div>
+    <div class="pill">هذا الشهر</div>
+    <div class="pill">السابق</div>
+    <div class="pill">الواردات</div>
+    <div class="pill">المصروفات</div>
+    <div class="pill">ال-last 30</div>
+  </div>
+
+  <!-- table -->
+  <div class="table">
+
+    <div class="row">
+      <div class="date"><span class="d">١٢ Sep</span>٢٠٢٥</div>
+      <div class="merchant"><span class="en" dir="ltr">Lulu Hypermarket</span></div>
+      <div class="amount" style="color:var(--out)">-١٢٫٥٠٠ ر.ع</div>
+      <div class="badge out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12l7-7 7 7"/></svg>صادر</div>
+    </div>
+
+    <div class="row">
+      <div class="date"><span class="d">١١ Sep</span>٢٠٢٥</div>
+      <div class="merchant"><span class="en" dir="ltr">Netflix</span></div>
+      <div class="amount" style="color:var(--out)">-٤٫٥٠٠ ر.ع</div>
+      <div class="badge out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12l7-7 7 7"/></svg>صادر</div>
+    </div>
+
+    <div class="row">
+      <div class="date"><span class="d">١٠ Sep</span>٢٠٢٥</div>
+      <div class="merchant">راتب</div>
+      <div class="amount" style="color:var(--in)">+٣٥٠٫٠٠٠ ر.ع</div>
+      <div class="badge in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 19V5M19 12l-7 7-7-7"/></svg>وارد</div>
+    </div>
+
+    <div class="row">
+      <div class="date"><span class="d">٩ Sep</span>٢٠٢٥</div>
+      <div class="merchant">مطعم بيت الشواية</div>
+      <div class="amount" style="color:var(--out)">-٨٫٢٥٠ ر.ع</div>
+      <div class="badge out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12l7-7 7 7"/></svg>صادر</div>
+    </div>
+
+    <div class="row">
+      <div class="date"><span class="d">٨ Sep</span>٢٠٢٥</div>
+      <div class="merchant"><span class="en" dir="ltr">Careem</span></div>
+      <div class="amount" style="color:var(--out)">-٣٫٥٠٠ ر.ع</div>
+      <div class="badge out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12l7-7 7 7"/></svg>صادر</div>
+    </div>
+
+    <div class="row">
+      <div class="date"><span class="d">٧ Sep</span>٢٠٢٥</div>
+      <div class="merchant">تحويل بنكي</div>
+      <div class="amount" style="color:var(--in)">+١٠٠٫٠٠٠ ر.ع</div>
+      <div class="badge in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 19V5M19 12l-7 7-7-7"/></svg>وارد</div>
+    </div>
+
+    <div class="row">
+      <div class="date"><span class="d">٦ Sep</span>٢٠٢٥</div>
+      <div class="merchant"><span class="en" dir="ltr">Aramex</span></div>
+      <div class="amount" style="color:var(--out)">-١٥٫٠٠٠ ر.ع</div>
+      <div class="badge out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12l7-7 7 7"/></svg>صادر</div>
+    </div>
+
+    <div class="row">
+      <div class="date"><span class="d">٥ Sep</span>٢٠٢٥</div>
+      <div class="merchant">محل أزياء نور</div>
+      <div class="amount" style="color:var(--out)">-٢٢٫٧٥٠ ر.ع</div>
+      <div class="badge out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12l7-7 7 7"/></svg>صادر</div>
+    </div>
+
+  </div>
+
+  <div class="foot">عرض last 8 معاملات · حدث في ٢٠٢٥-٠٩-١٢</div>
+
+</div>
+</body>
+</html>

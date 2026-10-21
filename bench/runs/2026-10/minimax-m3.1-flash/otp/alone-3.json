@@ -1,0 +1,81 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "otp",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T16:46:37.437Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"theme-color\" content=\"#0d6d46\">\n  <title>التحقق من رمز الدخول</title>\n  <style>\n    * {\n      box-sizing: border-box;\n      -webkit-tap-highlight-color: transparent;\n    }\n\n    body {\n      margin: 0;\n      min-height: 100vh;\n      font-family: Tahoma, Arial, sans-serif;\n      color: #17221d;\n      background: #f4f8f6;\n      display: flex;\n      justify-content: center;\n    }\n\n    .page {\n      width: 100%;\n      max-width: 430px;\n      min-height: 100vh;\n      padding: 28px 22px 24px;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .header {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin-bottom: 44px;\n    }\n\n    .logo {\n      display: flex;\n      align-items: center;\n      gap: 9px;\n      color: #0d6d46;\n      font-weight: 700;\n      font-size: 19px;\n    }\n\n    .logo-mark {\n      width: 34px;\n      height: 34px;\n      border-radius: 11px;\n      display: grid;\n      place-items: center;\n      color: #fff;\n      background: #0d6d46;\n      font-size: 17px;\n    }\n\n    .back-button {\n      width: 42px;\n      height: 42px;\n      border: 1px solid #dce5e0;\n      border-radius: 50%;\n      background: #fff;\n      color: #25332c;\n      display: grid;\n      place-items: center;\n      font-size: 23px;\n      cursor: pointer;\n    }\n\n    .content {\n      flex: 1;\n    }\n\n    .step {\n      display: inline-block;\n      margin-bottom: 14px;\n      padding: 6px 11px;\n      border-radius: 999px;\n      background: #e2f1e9;\n      color: #0d6d46;\n      font-size: 12px;\n      font-weight: 700;\n    }\n\n    h1 {\n      margin: 0 0 12px;\n      font-size: 28px;\n      line-height: 1.4;\n    }\n\n    .description {\n      margin: 0 0 30px;\n      color: #617069;\n      font-size: 15px;\n      line-height: 1.8;\n    }\n\n    .description strong {\n      color: #24352d;\n      font-weight: 700;\n      direction: ltr;\n      display: inline-block;\n    }\n\n    .code-group {\n      direction: ltr;\n      display: grid;\n      grid-template-columns: repeat(6, 1fr);\n      gap: 9px;\n      margin-bottom: 22px;\n    }\n\n    .code-input {\n      width: 100%;\n      aspect-ratio: 1 / 1.18;\n      min-width: 0;\n      border: 1.5px solid #cad6d0;\n      border-radius: 13px;\n      background: #fff;\n      color: #17221d;\n      text-align: center;\n      font-size: 25px;\n      font-weight: 700;\n      outline: none;\n      transition: border-color 0.2s, box-shadow 0.2s;\n      appearance: textfield;\n    }\n\n    .code-input::-webkit-outer-spin-button,\n    .code-input::-webkit-inner-spin-button {\n      margin: 0;\n      appearance: none;\n    }\n\n    .code-input:focus {\n      border-color: #0d6d46;\n      box-shadow: 0 0 0 3px rgba(13, 109, 70, 0.12);\n    }\n\n    .code-input.filled {\n      border-color: #0d6d46;\n      background: #fbfefc;\n    }\n\n    .error {\n      min-height: 24px;\n      margin: -7px 0 8px;\n      color: #c53e3e;\n      font-size: 13px;\n    }\n\n    .resend {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      padding: 16px 2px;\n      color: #627068;\n      font-size: 14px;\n      border-bottom: 1px solid #e0e8e4;\n    }\n\n    .resend button {\n      border: 0;\n      background: transparent;\n      color: #0d6d46;\n      font: inherit;\n      font-weight: 700;\n      cursor: pointer;\n      padding: 4px;\n    }\n\n    .resend button:disabled {\n      color: #7b8982;\n      cursor: default;\n    }\n\n    .support {\n      margin-top: 24px;\n      text-align: center;\n      color: #728078;\n      font-size: 13px;\n    }\n\n    .support a {\n      color: #0d6d46;\n      text-decoration: none;\n      font-weight: 700;\n    }\n\n    .verify-button {\n      width: 100%;\n      min-height: 54px;\n      margin-top: 32px;\n      border: 0;\n      border-radius: 14px;\n      color: #fff;\n      background: #0d6d46;\n      font: inherit;\n      font-size: 16px;\n      font-weight: 700;\n      cursor: pointer;\n      box-shadow: 0 8px 20px rgba(13, 109, 70, 0.2);\n      transition: opacity 0.2s, transform 0.2s;\n    }\n\n    .verify-button:active {\n      transform: translateY(1px);\n    }\n\n    .verify-button:disabled {\n      opacity: 0.5;\n      cursor: not-allowed;\n      box-shadow: none;\n    }\n\n    @media (max-width: 350px) {\n      .page {\n        padding-inline: 16px;\n      }\n\n      .code-group {\n        gap: 6px;\n      }\n\n      .code-input {\n        border-radius: 10px;\n        font-size: 21px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <main class=\"page\">\n    <header class=\"header\">\n      <div class=\"logo\" aria-label=\"البنك\">\n        <span class=\"logo-mark\">✓</span>\n        <span>البنك</span>\n      </div>\n      <button class=\"back-button\" type=\"button\" aria-label=\"رجوع\">‹</button>\n    </header>\n\n    <section class=\"content\">\n      <span class=\"step\">التحقق من الهوية</span>\n      <h1>أدخل رمز التحقق</h1>\n      <p class=\"description\">\n        أرسلنا رمزًا مكونًا من 6 أرقام إلى الرقم\n        <strong dir=\"ltr\">+966 55 123 4567</strong>\n      </p>\n\n      <form id=\"verificationForm\" novalidate>\n        <div class=\"code-group\" aria-label=\"حقول رمز التحقق\">\n          <input class=\"code-input\" type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" aria-label=\"الرقم الأول\">\n          <input class=\"code-input\" type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" aria-label=\"الرقم الثاني\">\n          <input class=\"code-input\" type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" aria-label=\"الرقم الثالث\">\n          <input class=\"code-input\" type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" aria-label=\"الرقم الرابع\">\n          <input class=\"code-input\" type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" aria-label=\"الرقم الخامس\">\n          <input class=\"code-input\" type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" aria-label=\"الرقم السادس\">\n        </div>\n\n        <p class=\"error\" id=\"error\" role=\"alert\" aria-live=\"polite\"></p>\n\n        <div class=\"resend\">\n          <span>لم تصلك الرسالة؟</span>\n          <button id=\"resendButton\" type=\"button\" disabled>إعادة الإرسال خلال 0:45</button>\n        </div>\n\n        <p class=\"support\">\n          هل تواجه مشكلة؟ <a href=\"tel:8000000000\">تواصل مع خدمة العملاء</a>\n        </p>\n\n        <button class=\"verify-button\" id=\"verifyButton\" type=\"submit\" disabled>تحقق</button>\n      </form>\n    </section>\n  </main>\n\n  <script>\n    const inputs = Array.from(document.querySelectorAll(\".code-input\"));\n    const form = document.getElementById(\"verificationForm\");\n    const error = document.getElementById(\"error\");\n    const verifyButton = document.getElementById(\"verifyButton\");\n    const resendButton = document.getElementById(\"resendButton\");\n\n    function updateCodeState() {\n      inputs.forEach((input) => {\n        input.value = input.value.replace(/\\D/g, \"\").slice(0, 1);\n        input.classList.toggle(\"filled\", input.value !== \"\");\n      });\n\n      const complete = inputs.every((input) => input.value !== \"\");\n      verifyButton.disabled = !complete;\n      if (complete) error.textContent = \"\";\n    }\n\n    inputs.forEach((input, index) => {\n      input.addEventListener(\"input\", () => {\n        input.value = input.value.replace(/\\D/g, \"\").slice(0, 1);\n        updateCodeState();\n        if (input.value && index < inputs.length - 1) {\n          inputs[index + 1].focus();\n        }\n      });\n\n      input.addEventListener(\"keydown\", (event) => {\n        if (event.key === \"Backspace\" && !input.value && index > 0) {\n          inputs[index - 1].focus();\n        }\n        if (event.key === \"ArrowLeft\" && index < inputs.length - 1) {\n          inputs[index + 1].focus();\n        }\n        if (event.key === \"ArrowRight\" && index > 0) {\n          inputs[index - 1].focus();\n        }\n      });\n\n      input.addEventListener(\"paste\", (event) => {\n        const digits = (event.clipboardData.getData(\"text\") || \"\").replace(/\\D/g, \"\");\n        if (digits) {\n          event.preventDefault();\n          digits.slice(0, 6).split(\"\").forEach((digit, i) => {\n            if (inputs[i]) inputs[i].value = digit;\n          });\n          updateCodeState();\n          inputs[Math.min(digits.length, 6) - 1].focus();\n        }\n      });\n    });\n\n    form.addEventListener(\"submit\", (event) => {\n      event.preventDefault();\n      const code = inputs.map((input) => input.value).join(\"\");\n\n      if (code.length !== 6) {\n        error.textContent = \"يرجى إدخال الأرقام الستة كاملة.\";\n        return;\n      }\n\n      error.textContent = \"تم التحقق من الرمز بنجاح.\";\n      verifyButton.textContent = \"تم التحقق ✓\";\n      verifyButton.disabled = true;\n    });\n\n    let remaining = 45;\n    const timer = setInterval(() => {\n      remaining -= 1;\n      const minutes = Math.floor(remaining / 60);\n      const seconds = String(remaining % 60).padStart(2, \"0\");\n      resendButton.textContent = `إعادة الإرسال خلال ${minutes}:${seconds}`;\n\n      if (remaining <= 0) {\n        clearInterval(timer);\n        resendButton.disabled = false;\n        resendButton.textContent = \"إعادة إرسال الرمز\";\n      }\n    }, 1000);\n\n    resendButton.addEventListener(\"click\", () => {\n      remaining = 45;\n      resendButton.disabled = true;\n      resendButton.textContent = \"إعادة الإرسال خلال 0:45\";\n      error.textContent = \"تم إرسال رمز جديد.\";\n      inputs.forEach((input) => input.value = \"\");\n      updateCodeState();\n      inputs[0].focus();\n    });\n\n    inputs[0].focus();\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 332,
+    "output": 2782
+  },
+  "ms": 15618,
+  "finish": "stop",
+  "reasoningTokens": 46,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 84,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 286,
+        "y": 38.5,
+        "width": 39,
+        "height": 21
+      },
+      "message": "Arabic falls back from Tahoma, Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<span>البنك</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 272.328125,
+        "y": 120,
+        "width": 84.671875,
+        "height": 14
+      },
+      "message": "\"التحقق من الهوية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"step\">التحقق من الهوية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 207,
+        "y": 476.375,
+        "width": 101.84375,
+        "height": 15
+      },
+      "message": "\"هل تواجه مشكلة؟\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"support\">\n          هل تواجه مشكلة؟ <a href=\"tel:8000000000\">تواصل مع خدمة العملاء</a>\n        </p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 81.15625,
+        "y": 476.375,
+        "width": 125.84375,
+        "height": 15
+      },
+      "message": "\"تواصل مع خدمة العملاء\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<a href=\"tel:8000000000\">تواصل مع خدمة العملاء</a>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

@@ -1,0 +1,291 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "support-chat",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-10-21T17:42:20.813Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n    <title>الدعم - منتج كويتي</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n            font-family: 'Segoe UI', 'Tahoma', 'Arabic Typesetting', sans-serif;\n        }\n\n        body {\n            background-color: #f5f5f5;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            min-height: 100vh;\n            padding: 0;\n        }\n\n        .phone-frame {\n            width: 100%;\n            max-width: 480px;\n            height: 100vh;\n            background-color: #ffffff;\n            display: flex;\n            flex-direction: column;\n            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);\n            position: relative;\n            overflow: hidden;\n        }\n\n        /* Header */\n        .chat-header {\n            background-color: #0052cc;\n            color: white;\n            padding: 12px 16px;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            flex-shrink: 0;\n            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\n        }\n\n        .header-btn {\n            background: none;\n            border: none;\n            color: white;\n            font-size: 20px;\n            cursor: pointer;\n            width: 36px;\n            height: 36px;\n            border-radius: 50%;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n        }\n\n        .header-btn:active {\n            background-color: rgba(255, 255, 255, 0.1);\n        }\n\n        .agent-info {\n            display: flex;\n            flex-direction: column;\n            align-items: center;\n            flex: 1;\n        }\n\n        .agent-name {\n            font-size: 16px;\n            font-weight: 600;\n            margin-bottom: 2px;\n        }\n\n        .agent-status {\n            font-size: 12px;\n            color: #b3d4ff;\n        }\n\n        /* Messages area */\n        .messages-container {\n            flex: 1;\n            overflow-y: auto;\n            padding: 16px;\n            display: flex;\n            flex-direction: column;\n            gap: 12px;\n            background-color: #f8f9fa;\n        }\n\n        .message {\n            display: flex;\n            flex-direction: column;\n            max-width: 80%;\n            animation: fadeIn 0.3s ease-out;\n        }\n\n        .message.customer {\n            align-self: flex-end;\n            align-items: flex-end;\n        }\n\n        .message.agent {\n            align-self: flex-start;\n            align-items: flex-start;\n        }\n\n        .bubble {\n            padding: 10px 14px;\n            border-radius: 18px;\n            font-size: 15px;\n            line-height: 1.4;\n            word-wrap: break-word;\n            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);\n        }\n\n        .message.customer .bubble {\n            background-color: #0052cc;\n            color: white;\n            border-bottom-right-radius: 4px;\n        }\n\n        .message.agent .bubble {\n            background-color: white;\n            color: #333;\n            border-bottom-left-radius: 4px;\n        }\n\n        .time {\n            font-size: 11px;\n            color: #888;\n            margin-top: 4px;\n            padding: 0 4px;\n        }\n\n        /* Input area */\n        .input-container {\n            display: flex;\n            padding: 10px 12px;\n            background-color: white;\n            border-top: 1px solid #e0e0e0;\n            align-items: center;\n            gap: 8px;\n            flex-shrink: 0;\n        }\n\n        .message-input {\n            flex: 1;\n            border: 1px solid #ddd;\n            border-radius: 20px;\n            padding: 10px 16px;\n            font-size: 15px;\n            outline: none;\n            direction: auto;\n        }\n\n        .message-input:focus {\n            border-color: #0052cc;\n        }\n\n        .send-btn {\n            background-color: #0052cc;\n            color: white;\n            border: none;\n            border-radius: 50%;\n            width: 40px;\n            height: 40px;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            cursor: pointer;\n            font-size: 18px;\n            transition: background-color 0.2s;\n        }\n\n        .send-btn:active {\n            background-color: #0041a3;\n        }\n\n        .send-btn:disabled {\n            background-color: #ccc;\n            cursor: not-allowed;\n        }\n\n        /* Animations */\n        @keyframes fadeIn {\n            from {\n                opacity: 0;\n                transform: translateY(10px);\n            }\n            to {\n                opacity: 1;\n                transform: translateY(0);\n            }\n        }\n\n        /* Scrollbar */\n        .messages-container::-webkit-scrollbar {\n            width: 6px;\n        }\n\n        .messages-container::-webkit-scrollbar-track {\n            background: #f1f1f1;\n            border-radius: 10px;\n        }\n\n        .messages-container::-webkit-scrollbar-thumb {\n            background: #c1c1c1;\n            border-radius: 10px;\n        }\n\n        .messages-container::-webkit-scrollbar-thumb:hover {\n            background: #a8a8a8;\n        }\n\n        /* Responsive adjustments */\n        @media (max-width: 480px) {\n            .phone-frame {\n                width: 100%;\n                height: 100vh;\n                border-radius: 0;\n            }\n        }\n\n        @media (max-height: 600px) {\n            .messages-container {\n                padding: 10px;\n                gap: 8px;\n            }\n            \n            .bubble {\n                padding: 8px 12px;\n                font-size: 14px;\n            }\n        }\n    </style>\n</head>\n<body>\n    <div class=\"phone-frame\">\n        <!-- Header -->\n        <header class=\"chat-header\">\n            <button class=\"header-btn\" aria-label=\"الرجوع\">⟲</button>\n            <div class=\"agent-info\">\n                <span class=\"agent-name\">سارة</span>\n                <span class=\"agent-status\">متصل الآن</span>\n            </div>\n            <button class=\"header-btn\" aria-label=\"اتصال\">📞</button>\n        </header>\n\n        <!-- Messages -->\n        <div class=\"messages-container\" id=\"messagesContainer\">\n            <!-- Message 1: Customer -->\n            <div class=\"message customer\">\n                <div class=\"bubble\">مرحباً، لا أستقبل إنترن็ت.</div>\n                <div class=\"time\">١٠:٣٠ ص</div>\n            </div>\n\n            <!-- Message 2: Agent (Sara) -->\n            <div class=\"message agent\">\n                <div class=\"bubble\">مرحباً بك، شكرًا لاتصالك. ما رقم طلبك؟</div>\n                <div class=\"time\">١٠:٣١ ص</div>\n            </div>\n\n            <!-- Message 3: Customer -->\n            <div class=\"message customer\">\n                <div class=\"bubble\">طلبي هو <bdi dir=\"ltr\">TX-48213</bdi>. لا أستقبل إشارة <bdi dir=\"ltr\">5G</bdi>.</div>\n                <div class=\"time\">١٠:٣٢ ص</div>\n            </div>\n\n            <!-- Message 4: Agent (Sara) -->\n            <div class=\"message agent\">\n                <div class=\"bubble\">شكراً. هل جربت تشغيل المودم مرة أخرى؟</div>\n                <div class=\"time\">١٠:٣٣ ص</div>\n            </div>\n\n            <!-- Message 5: Customer -->\n            <div class=\"message customer\">\n                <div class=\"bubble\">نعم، لكن يظهر خطأ في اتصال <bdi dir=\"ltr\">eSIM</bdi>.</div>\n                <div class=\"time\">١٠:٣٤ ص</div>\n            </div>\n\n            <!-- Message 6: Agent (Sara) -->\n            <div class=\"message agent\">\n                <div class=\"bubble\">فهمت. سأ reported these to the technical team. Please wait.</div>\n                <div class=\"time\">١٠:٣٥ ص</div>\n            </div>\n        </div>\n\n        <!-- Input Area -->\n        <div class=\"input-container\">\n            <input type=\"text\" class=\"message-input\" id=\"messageInput\" placeholder=\"اكتب رسالتك...\" dir=\"auto\">\n            <button class=\"send-btn\" id=\"sendBtn\" aria-label=\"أرسل\">➤</button>\n        </div>\n    </div>\n\n    <script>\n        document.addEventListener('DOMContentLoaded', function() {\n            const messagesContainer = document.getElementById('messagesContainer');\n            const messageInput = document.getElementById('messageInput');\n            const sendBtn = document.getElementById('sendBtn');\n\n            // Function to add a new message\n            function addMessage(text, isCustomer) {\n                const messageDiv = document.createElement('div');\n                messageDiv.className = `message ${isCustomer ? 'customer' : 'agent'}`;\n                \n                const bubble = document.createElement('div');\n                bubble.className = 'bubble';\n                bubble.textContent = text;\n                \n                const time = document.createElement('div');\n                time.className = 'time';\n                \n                // Get current time in Arabic format\n                const now = new Date();\n                const hours = now.getHours();\n                const minutes = now.getMinutes().toString().padStart(2, '0');\n                const period = hours >= 12 ? 'م' : 'ص';\n                const displayHours = hours % 12 || 12;\n                \n                // Convert to Arabic-Indic digits\n                const arabicHours = displayHours.toString().split('').map(digit => \n                    '٠١٢٣٤٥٦٧٨٩'[digit] || digit).join('');\n                const arabicMinutes = minutes.split('').map(digit => \n                    '٠١٢٣٤٥٦٧٨٩'[digit] || digit).join('');\n                \n                time.textContent = `${arabicHours}:${arabicMinutes} ${period}`;\n                \n                messageDiv.appendChild(bubble);\n                messageDiv.appendChild(time);\n                \n                messagesContainer.appendChild(messageDiv);\n                messagesContainer.scrollTop = messagesContainer.scrollHeight;\n            }\n\n            // Send button click handler\n            sendBtn.addEventListener('click', function() {\n                const text = messageInput.value.trim();\n                if (text) {\n                    addMessage(text, true);\n                    messageInput.value = '';\n                    \n                    // Simulate agent reply after a short delay\n                    setTimeout(function() {\n                        const replies = [\n                            'فهمت، سأ Reported هذه[size] للمستخدمين. Please wait.',\n                            'شكراً على التفاصيل، سأقوم بتحليل Problem.',\n                            'أنا هنا لمساعدتك. ما الذي يمكنني فعله لك؟',\n                            'فهمت، سأ reported these to the technical team. Please wait.'\n                        ];\n                        const randomReply = replies[Math.floor(Math.random() * replies.length)];\n                        addMessage(randomReply, false);\n                    }, 1500);\n                }\n            });\n\n            // Enter key to send\n            messageInput.addEventListener('keypress', function(e) {\n                if (e.key === 'Enter') {\n                    sendBtn.click();\n                }\n            });\n\n            // Focus on input\n            messageInput.focus();\n        });\n    </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6300,
+    "output": 7312
+  },
+  "ms": 73794,
+  "finish": "stop",
+  "reasoningTokens": 4769,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 24,
+  "score": 61,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-placeholder",
+      "title": "An Arabic hint on the wrong side of the field",
+      "severity": "warning",
+      "box": {
+        "x": 60,
+        "y": 794.5,
+        "width": 318,
+        "height": 39
+      },
+      "message": "The placeholder \"اكتب رسالتك...\" is Arabic in a left-to-right field.",
+      "fix": "Keep dir=\"ltr\" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.",
+      "snippet": "<input type=\"text\" class=\"message-input\" id=\"messageInput\" placeholder=\"اكتب رسالتك...\" dir=\"auto\">"
+    },
+    {
+      "rule": "bidi/punctuation-flip",
+      "title": "Punctuation at the wrong end",
+      "severity": "warning",
+      "box": {
+        "x": 153.046875,
+        "y": 480,
+        "width": 206.953125,
+        "height": 38
+      },
+      "message": "\"فهمت. سأ reported these to the technical…\" runs right to left, so its last mark moves to the start.",
+      "fix": "Give the block the direction of its own text, with dir=\"ltr\", dir=\"rtl\" or dir=\"auto\".",
+      "snippet": "<div class=\"bubble\">فهمت. سأ reported these to the technical team. Please wait.</div>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 163.171875,
+        "y": 228,
+        "width": 65.875,
+        "height": 17
+      },
+      "message": "\"TX-48213\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">TX-48213</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 268.375,
+        "y": 249,
+        "width": 20.015625,
+        "height": 17
+      },
+      "message": "\"5G\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">5G</bdi>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 140.984375,
+        "y": 319,
+        "width": 219.015625,
+        "height": 38
+      },
+      "message": "Line height is 1.40 on \"شكراً. هل جربت تشغيل المودم مرة أخرى؟\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<div class=\"bubble\">شكراً. هل جربت تشغيل المودم مرة أخرى؟</div>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 153.046875,
+        "y": 480,
+        "width": 206.953125,
+        "height": 38
+      },
+      "message": "Line height is 1.40 on \"فهمت. سأ reported these to the technical…\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<div class=\"bubble\">فهمت. سأ reported these to the technical team. Please wait.</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 169.328125,
+        "y": 33.5,
+        "width": 51.34375,
+        "height": 14
+      },
+      "message": "\"متصل الآن\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"agent-status\">متصل الآن</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 20,
+        "y": 121,
+        "width": 43.125,
+        "height": 12
+      },
+      "message": "\"١٠:٣٠ ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">١٠:٣٠ ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 326.875,
+        "y": 191,
+        "width": 43.125,
+        "height": 12
+      },
+      "message": "\"١٠:٣١ ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">١٠:٣١ ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 20,
+        "y": 282,
+        "width": 43.125,
+        "height": 12
+      },
+      "message": "\"١٠:٣٢ ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">١٠:٣٢ ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 326.875,
+        "y": 373,
+        "width": 43.125,
+        "height": 12
+      },
+      "message": "\"١٠:٣٣ ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">١٠:٣٣ ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 20,
+        "y": 443,
+        "width": 43.125,
+        "height": 12
+      },
+      "message": "\"١٠:٣٤ ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">١٠:٣٤ ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 326.875,
+        "y": 534,
+        "width": 43.125,
+        "height": 12
+      },
+      "message": "\"١٠:٣٥ ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">١٠:٣٥ ص</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 76,
+        "width": 198.171875,
+        "height": 41
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">مرحباً، لا أستقبل إنترن็ت.</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 97.8125,
+        "y": 146,
+        "width": 276.1875,
+        "height": 41
+      },
+      "message": "border-bottom-right-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">مرحباً بك، شكرًا لاتصالك. ما رقم طلبك؟</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 216,
+        "width": 286.390625,
+        "height": 62
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">طلبي هو <bdi dir=\"ltr\">TX-48213</bdi>. لا أستقبل إشارة <bdi dir=\"ltr\">5G</bdi>.</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 307,
+        "width": 286.390625,
+        "height": 62
+      },
+      "message": "border-bottom-right-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">شكراً. هل جربت تشغيل المودم مرة أخرى؟</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 398,
+        "width": 256.203125,
+        "height": 41
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">نعم، لكن يظهر خطأ في اتصال <bdi dir=\"ltr\">eSIM</bdi>.</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 468,
+        "width": 286.390625,
+        "height": 62
+      },
+      "message": "border-bottom-right-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">فهمت. سأ reported these to the technical team. Please wait.</div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

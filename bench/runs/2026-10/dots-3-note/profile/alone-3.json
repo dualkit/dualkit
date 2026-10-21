@@ -1,0 +1,137 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "profile",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T17:11:43.932Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الملف</title>\n  <style>\n    body {\n      font-family: 'Arial', sans-serif;\n      background-color: #f5f5f5;\n      margin: 0;\n      padding: 0;\n      display: flex;\n      justify-content: center;\n      align-items: flex-start;\n      min-height: 100vh;\n    }\n    .container {\n      width: 100%;\n      max-width: 375px;\n      background-color: #fff;\n      padding: 20px;\n      box-sizing: border-box;\n    }\n    h1 {\n      text-align: center;\n      margin-bottom: 30px;\n    }\n    .info-group {\n      margin-bottom: 20px;\n      padding: 10px;\n      border-bottom: 1px solid #eee;\n    }\n    .label {\n      font-weight: bold;\n      display: block;\n      margin-bottom: 4px;\n    }\n    .value {\n      display: block;\n      margin-bottom: 8px;\n    }\n    .edit-btn {\n      background-color: #007AFF;\n      color: white;\n      border: none;\n      padding: 6px 12px;\n      border-radius: 4px;\n      cursor: pointer;\n    }\n    .edit-btn:hover {\n      background-color: #0056b3;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>الملف</h1>\n\n    <!-- Name and Email group -->\n    <div class=\"info-group\">\n      <span class=\"label\">الاسم</span>\n      <span class=\"value\">Layla Al Mansouri</span>\n      <span class=\"label\">البريد الإلكتروني</span>\n      <span class=\"value\">layla@example.com</span>\n      <button class=\"edit-btn\">تعديل</button>\n    </div>\n\n    <!-- Phone group -->\n    <div class=\"info-group\">\n      <span class=\"label\">رقم الهاتف</span>\n      <span class=\"value\">+971 50 123 4567</span>\n      <button class=\"edit-btn\">تعديل</button>\n    </div>\n\n    <!-- IBAN group -->\n    <div class=\"info-group\">\n      <span class=\"label\">رقم IBAN</span>\n      <span class=\"value\">AE07 0331 2345 6789 0123 456</span>\n      <button class=\"edit-btn\">تعديل</button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 166,
+    "output": 3406
+  },
+  "ms": 35079,
+  "finish": "stop",
+  "reasoningTokens": 2867,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 25,
+  "score": 50,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 122.0625,
+        "y": 425.4375,
+        "width": 230.4375,
+        "height": 17
+      },
+      "message": "\"AE07\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"value\">AE07 0331 2345 6789 0123 456</span>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 223,
+        "y": 308.4375,
+        "width": 129.5,
+        "height": 17
+      },
+      "message": "\"+971 50 123 4567\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"value\">+971 50 123 4567</span>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 122.0625,
+        "y": 425.4375,
+        "width": 230.4375,
+        "height": 17
+      },
+      "message": "\"AE07 0331 2345 6789 0123 456\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"value\">AE07 0331 2345 6789 0123 456</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 154,
+        "y": 42.4375,
+        "width": 82,
+        "height": 36
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الملف</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 309.5,
+        "y": 223.4375,
+        "width": 31,
+        "height": 15
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 309.5,
+        "y": 223.4375,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13.3333px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 309.5,
+        "y": 340.4375,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13.3333px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 309.5,
+        "y": 457.4375,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13.3333px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

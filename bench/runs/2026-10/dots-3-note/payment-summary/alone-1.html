@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Summary</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .phone-screen {
+      width: 100%;
+      max-width: 480px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid #ddd;
+      background-color: #fafafa;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #333;
+    }
+    .title {
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+    .content {
+      padding: 20px;
+    }
+    .amount {
+      font-size: 28px;
+      font-weight: bold;
+      color: #000;
+      margin-bottom: 12px;
+    }
+    .due-date {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 12px;
+    }
+    .items {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .phone-field {
+      margin-bottom: 24px;
+    }
+    .phone-field input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .pay-btn {
+      width: 100%;
+      padding: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .pay-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-screen">
+    <div class="header">
+      <button class="back-btn" onclick="history.back()">&larr;</button>
+      <div class="title">Payment summary</div>
+    </div>
+    <div class="content">
+      <div class="amount">1,234.50 AED</div>
+      <div class="due-date">Due date: 3 November 2026 (24 Rabi' al-Thani 1448)</div>
+      <div class="items">لديك 3 عناصر في هذا الطلب</div>
+      <div class="phone-field">
+        <input type="tel" placeholder="050 123 4567" />
+      </div>
+      <button class="pay-btn">ادفع الآن</button>
+    </div>
+  </div>
+</body>
+</html>

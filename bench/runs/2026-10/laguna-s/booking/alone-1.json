@@ -1,0 +1,741 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "booking",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T17:31:25.915Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>حجز موعد - عيادة القطبية</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f0f2f5;\n            color: #333;\n            padding: 20px;\n            direction: rtl;\n            text-align: right;\n        }\n        .container {\n            max-width: 420px;\n            margin: 0 auto;\n            background: #fff;\n            border-radius: 16px;\n            box-shadow: 0 4px 12px rgba(0,0,0,0.1);\n            overflow: hidden;\n        }\n        .header {\n            background: linear-gradient(135deg, #0a7b3f, #1a9d55);\n            color: #fff;\n            padding: 20px;\n            text-align: center;\n        }\n        .header h1 style=\"font-size: 20px; margin-bottom: 4px;\">حجز موعد</h1>\n        .doctor-name {\n            font-size: 16px;\n            opacity: 0.9;\n        }\n        .calendar-header {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            padding: 15px 20px;\n            background: #f8f9fa;\n            border-bottom: 1px solid #e0e0e0;\n        }\n        .nav-arrow {\n            background: none;\n            border: none;\n            font-size: 20px;\n            cursor: pointer;\n            color: #0a7b3f;\n            padding: 5px 10px;\n            border-radius: 6px;\n            transition: background 0.2s;\n        }\n        .nav-arrow:hover {\n            background: #e8f5e9;\n        }\n        .month-year {\n            font-size: 18px;\n            font-weight: bold;\n            color: #333;\n        }\n        .weekdays {\n            display: grid;\n            grid-template-columns: repeat(7, 1fr);\n            background: #f8f9fa;\n            border-bottom: 1px solid #e0e0e0;\n        }\n        .weekday {\n            text-align: center;\n            padding: 12px 5px;\n            font-size: 13px;\n            font-weight: 600;\n            color: #666;\n        }\n        .days-grid {\n            display: grid;\n            grid-template-columns: repeat(7, 1fr);\n        }\n        .day {\n            height: 48px;\n            border-bottom: 1px solid #eee;\n            border-left: 1px solid #eee;\n            padding: 8px;\n            cursor: pointer;\n            transition: background 0.2s;\n        }\n        .day:hover {\n            background: #e8f5e9;\n        }\n        .day.other-month {\n            background: #fafafa;\n            color: #ccc;\n            cursor: default;\n        }\n        .day.other-month:hover {\n            background: #fafafa;\n        }\n        .day.today {\n            background: #e8f5e9;\n            color: #0a7b3f;\n            font-weight: bold;\n        }\n        .day.selected {\n            background: #0a7b3f;\n            color: #fff;\n        }\n        .day-number {\n            font-size: 14px;\n        }\n        .time-slots {\n            padding: 20px;\n        }\n        .time-slots h3 {\n            font-size: 16px;\n            margin-bottom: 12px;\n            color: #333;\n        }\n        .slots-container {\n            display: flex;\n            flex-wrap: wrap;\n            gap: 10px;\n        }\n        .slot {\n            flex: 1 1 calc(50% - 10px);\n            background: #f8f9fa;\n            border: 2px solid #e0e0e0;\n            border-radius: 8px;\n            padding: 12px;\n            text-align: center;\n            cursor: pointer;\n            font-size: 14px;\n            transition: all 0.2s;\n        }\n        .slot:hover {\n            border-color: #0a7b3f;\n            background: #e8f5e9;\n        }\n        .slot.selected {\n            background: #0a7b3f;\n            color: #fff;\n            border-color: #0a7b3f;\n        }\n        .confirm-btn {\n            display: block;\n            width: calc(100% - 40px);\n            margin: 20px auto;\n            padding: 14px;\n            background: linear-gradient(135deg, #0a7b3f, #1a9d55);\n            color: #fff;\n            border: none;\n            border-radius: 10px;\n            font-size: 16px;\n            font-weight: bold;\n            cursor: pointer;\n            transition: transform 0.2s, box-shadow 0.2s;\n        }\n        .confirm-btn:hover {\n            transform: translateY(-2px);\n            box-shadow: 0 6px 16px rgba(10, 123, 63, 0.3);\n        }\n        .confirm-btn:disabled {\n            background: #ccc;\n            cursor: not-allowed;\n            transform: none;\n            box-shadow: none;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header\">\n            <h1 style=\"font-size: 20px; margin-bottom: 4px;\">حجز موعد</h1>\n            <div class=\"doctor-name\">د. فاطمة المنصوري</div>\n        </div>\n\n        <div class=\"calendar-header\">\n            <button class=\"nav-arrow\" id=\"prevMonth\">&#8249;</button>\n            <div class=\"month-year\" id=\"monthYear\">أكتوبر 2023</div>\n            <button class=\"nav-arrow\" id=\"nextMonth\">&#8250;</button>\n        </div>\n\n        <div class=\"weekdays\">\n            <div class=\"weekday\">س</div>\n            <div class=\"weekday\">أ</div>\n            <div class=\"weekday\">أ</div>\n            <div class=\"weekday\">أ</div>\n            <div class=\"weekday\">أ</div>\n            <div class=\"weekday\">أ</div>\n            <div class=\"weekday\">أ</div>\n        </div>\n\n        <div class=\"days-grid\" id=\"daysGrid\"></div>\n\n        <div class=\"time-slots\">\n            <h3>اختر وقتًا</h3>\n            <div class=\"slots-container\" id=\"slotsContainer\"></div>\n        </div>\n\n        <button class=\"confirm-btn\" id=\"confirmBtn\" disabled>تأكيد الحجز</button>\n    </div>\n\n    <script>\n        const arabicMonths = [\n            \"يناير\", \"فبراير\", \"مارس\", \"أبريل\", \"مايو\", \"يونيو\",\n            \"يوليو\", \"أغسطس\", \"سبتممبر\", \"أكتوبر\", \"نوفمبر\", \"ديسمبر\"\n        ];\n\n        const arabicWeekdays = [\"س\", \"أ\", \"أ\", \"أ\", \"أ\", \"أ\", \"أ\"];\n\n        let currentDate = new Date();\n        let selectedDate = null;\n        let selectedSlot = null;\n\n        const monthYearEl = document.getElementById(\"monthYear\");\n        const daysGridEl = document.getElementById(\"daysGrid\");\n        const slotsContainerEl = document.getElementById(\"slotsContainer\");\n        const confirmBtn = document.getElementById(\"confirmBtn\");\n        const prevMonthBtn = document.getElementById(\"prevMonth\");\n        const nextMonthBtn = document.getElementById(\"nextMonth\");\n\n        function renderCalendar() {\n            const year = currentDate.getFullYear();\n            const month = currentDate.getMonth();\n\n            monthYearEl.textContent = `${arabicMonths[month]} ${year}`;\n\n            daysGridEl.innerHTML = \"\";\n\n            const firstDay = new Date(year, month, 1);\n            const lastDay = new Date(year, month + 1, 0);\n            const daysInMonth = lastDay.getDate();\n\n            // Get the day of week (0=Sunday, 1=Monday, ..., 6=Saturday)\n            let startDay = firstDay.getDay();\n            // Convert to Saturday-based week (Saturday=0, Sunday=1, ..., Friday=6)\n            startDay = (startDay + 1) % 7;\n\n            // Add empty cells for days from previous month\n            for (let i = 0; i < startDay; i++) {\n                const emptyDay = document.createElement(\"div\");\n                emptyDay.className = \"day other-month\";\n                emptyDay.innerHTML = '<div class=\"day-number\"></div>';\n                daysGridEl.appendChild(emptyDay);\n            }\n\n            // Add days of current month\n            for (let day = 1; day <= daysInMonth; day++) {\n                const dayEl = document.createElement(\"div\");\n                dayEl.className = \"day\";\n                dayEl.innerHTML = `<div class=\"day-number\">${day}</div>`;\n\n                const today = new Date();\n                if (day === today.getDate() &&\n                    month === today.getMonth() &&\n                    year === today.getFullYear()) {\n                    dayEl.classList.add(\"today\");\n                }\n\n                dayEl.addEventListener(\"click\", () => {\n                    document.querySelectorAll(\".day\").forEach(d => d.classList.remove(\"selected\"));\n                    dayEl.classList.add(\"selected\");\n                    selectedDate = new Date(year, month, day);\n                    renderTimeSlots();\n                });\n\n                daysGridEl.appendChild(dayEl);\n            }\n\n            // Fill remaining cells with next month's days\n            const totalCells = startDay + daysInMonth;\n            const remainingCells = Math.ceil(totalCells / 7) * 7 - totalCells;\n            for (let i = 1; i <= remainingCells; i++) {\n                const nextDay = document.createElement(\"div\");\n                nextDay.className = \"day other-month\";\n                nextDay.innerHTML = `<div class=\"day-number\">${i}</div>`;\n                daysGridEl.appendChild(nextDay);\n            }\n        }\n\n        function renderTimeSlots() {\n            slotsContainerEl.innerHTML = \"\";\n            selectedSlot = null;\n            confirmBtn.disabled = true;\n\n            const times = [];\n            for (let h = 9; h <= 12; h++) {\n                for (let m = 0; m < 60; m += 30) {\n                    if (h === 12 && m > 0) break;\n                    const hourStr = h.toString().padStart(2, \"0\");\n                    const minStr = m.toString().padStart(2, \"0\");\n                    times.push(`${hourStr}:${minStr}`);\n                }\n            }\n\n            times.forEach(time => {\n                const slotEl = document.createElement(\"div\");\n                slotEl.className = \"slot\";\n                slotEl.textContent = time;\n                slotEl.addEventListener(\"click\", () => {\n                    document.querySelectorAll(\".slot\").forEach(s => s.classList.remove(\"selected\"));\n                    slotEl.classList.add(\"selected\");\n                    selectedSlot = time;\n                    confirmBtn.disabled = false;\n                });\n                slotsContainerEl.appendChild(slotEl);\n            });\n        }\n\n        prevMonthBtn.addEventListener(\"click\", () => {\n            currentDate.setMonth(currentDate.getMonth() - 1);\n            renderCalendar();\n        });\n\n        nextMonthBtn.addEventListener(\"click\", () => {\n            currentDate.setMonth(currentDate.getMonth() + 1);\n            renderCalendar();\n        });\n\n        confirmBtn.addEventListener(\"click\", () => {\n            if (selectedDate && selectedSlot) {\n                alert(`تم حجز موعد في ${selectedDate.toLocaleDateString('ar-EG')} الساعة ${selectedSlot}`);\n            }\n        });\n\n        // Initialize\n        renderCalendar();\n    </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 156,
+    "output": 2994
+  },
+  "ms": 46888,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 77,
+  "missing": [
+    "time slots"
+  ],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 152.21875,
+        "y": 41,
+        "width": 85.5625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1 style=\"font-size: 20px; margin-bottom: 4px;\">حجز موعد</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 158.765625,
+        "y": 605,
+        "width": 72.453125,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"confirm-btn\" id=\"confirmBtn\" disabled=\"\">تأكيد الحجز</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 337,
+        "y": 183,
+        "width": 16,
+        "height": 15
+      },
+      "message": "\"س\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">س</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 293,
+        "y": 183,
+        "width": 4,
+        "height": 15
+      },
+      "message": "\"أ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">أ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 243,
+        "y": 183,
+        "width": 4,
+        "height": 15
+      },
+      "message": "\"أ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">أ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 193,
+        "y": 183,
+        "width": 4,
+        "height": 15
+      },
+      "message": "\"أ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">أ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 143,
+        "y": 183,
+        "width": 4,
+        "height": 15
+      },
+      "message": "\"أ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">أ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 93,
+        "y": 183,
+        "width": 4,
+        "height": 15
+      },
+      "message": "\"أ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">أ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 183,
+        "width": 4,
+        "height": 15
+      },
+      "message": "\"أ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">أ</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 320,
+        "y": 211,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day other-month\"><div class=\"day-number\"></div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 270,
+        "y": 211,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day other-month\"><div class=\"day-number\"></div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 220,
+        "y": 211,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day other-month\"><div class=\"day-number\"></div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 170,
+        "y": 211,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day other-month\"><div class=\"day-number\"></div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 120,
+        "y": 211,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day other-month\"><div class=\"day-number\"></div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 70,
+        "y": 211,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">1</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 211,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">2</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 320,
+        "y": 259,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">3</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 270,
+        "y": 259,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">4</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 220,
+        "y": 259,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">5</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 170,
+        "y": 259,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">6</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 120,
+        "y": 259,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">7</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 70,
+        "y": 259,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">8</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 259,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">9</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 320,
+        "y": 307,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">10</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 270,
+        "y": 307,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">11</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 220,
+        "y": 307,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">12</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 170,
+        "y": 307,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">13</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 120,
+        "y": 307,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">14</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 70,
+        "y": 307,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">15</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 307,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">16</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 320,
+        "y": 355,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">17</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 270,
+        "y": 355,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">18</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 220,
+        "y": 355,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">19</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 170,
+        "y": 355,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">20</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 120,
+        "y": 355,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day today\"><div class=\"day-number\">21</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 70,
+        "y": 355,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">22</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 355,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">23</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 320,
+        "y": 403,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">24</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 270,
+        "y": 403,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">25</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 220,
+        "y": 403,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">26</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 170,
+        "y": 403,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">27</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 120,
+        "y": 403,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">28</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 70,
+        "y": 403,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">29</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 403,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">30</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 320,
+        "y": 451,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day\"><div class=\"day-number\">31</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 270,
+        "y": 451,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day other-month\"><div class=\"day-number\">1</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 220,
+        "y": 451,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day other-month\"><div class=\"day-number\">2</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 170,
+        "y": 451,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day other-month\"><div class=\"day-number\">3</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 120,
+        "y": 451,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day other-month\"><div class=\"day-number\">4</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 70,
+        "y": 451,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day other-month\"><div class=\"day-number\">5</div></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 451,
+        "width": 50,
+        "height": 48
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"day other-month\"><div class=\"day-number\">6</div></div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

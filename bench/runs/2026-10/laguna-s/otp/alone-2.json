@@ -1,0 +1,67 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "otp",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T16:59:18.242Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>البنك الأهلي - إدخال الرمز</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f5f5f5;\n            color: #333;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            min-height: 100vh;\n            padding: 20px;\n        }\n        .container {\n            width: 100%;\n            max-width: 420px;\n            background: #fff;\n            border-radius: 24px;\n            padding: 32px 24px;\n            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);\n        }\n        .header {\n            text-align: center;\n            margin-bottom: 32px;\n        }\n        .header h1 {\n            font-size: 24px;\n            font-weight: 600;\n            color: #1a1a1a;\n            margin-bottom: 12px;\n        }\n        .header p {\n            font-size: 14px;\n            color: #666;\n            line-height: 1.5;\n        }\n        .code-inputs {\n            display: flex;\n            justify-content: space-between;\n            gap: 12px;\n            margin-bottom: 32px;\n        }\n        .code-box {\n            flex: 1;\n            height: 56px;\n            border: 1.5px solid #ddd;\n            border-radius: 12px;\n            text-align: center;\n            font-size: 22px;\n            font-weight: 500;\n            color: #1a1a1a;\n            transition: all 0.2s ease;\n        }\n        .code-box:focus {\n            outline: none;\n            border-color: #0077b6;\n            box-shadow: 0 0 0 3px rgba(0, 119, 182, 0.15);\n        }\n        .code-box.otp-input {\n            background-color: #fafafa;\n        }\n        .resend-container {\n            text-align: center;\n            margin-bottom: 28px;\n        }\n        .resend-text {\n            font-size: 14px;\n            color: #666;\n        }\n        .resend-text strong {\n            color: #0077b6;\n            font-weight: 600;\n        }\n        .verify-btn {\n            width: 100%;\n            height: 52px;\n            background-color: #0077b6;\n            color: #fff;\n            border: none;\n            border-radius: 12px;\n            font-size: 16px;\n            font-weight: 600;\n            cursor: pointer;\n            transition: background-color 0.2s ease;\n        }\n        .verify-btn:hover {\n            background-color: #005f8a;\n        }\n        .verify-btn:disabled {\n            background-color: #ccc;\n            cursor: not-allowed;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header\">\n            <h1>أدخل الرمز</h1>\n            <p>لقد أرسلنا رمزًا مكوّنًا من 6 أرقام إلى <br>+966 55 123 4567</p>\n        </div>\n        <div class=\"code-inputs\">\n            <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\">\n            <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\">\n            <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\">\n            <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\">\n            <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\">\n            <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\">\n        </div>\n        <div class=\"resend-container\">\n            <span class=\"resend-text\">إعادة الإرسال خلال <strong id=\"countdown\">0:45</strong></span>\n        </div>\n        <button class=\"verify-btn\" id=\"verifyBtn\">تحقق</button>\n    </div>\n\n    <script>\n        const inputs = document.querySelectorAll('.code-box');\n        const countdownEl = document.getElementById('countdown');\n        const verifyBtn = document.getElementById('verifyBtn');\n\n        // Auto-focus first input on load\n        inputs[0].focus();\n\n        // Handle input navigation\n        inputs.forEach((input, index) => {\n            input.addEventListener('input', function() {\n                // Only allow numbers\n                this.value = this.value.replace(/[^0-9]/g, '');\n                \n                if (this.value.length === 1 && index < inputs.length - 1) {\n                    inputs[index + 1].focus();\n                }\n                \n                // Enable button if all fields filled\n                checkAllFilled();\n            });\n\n            input.addEventListener('keydown', function(e) {\n                if (e.key === 'Backspace' && index > 0 && !this.value) {\n                    inputs[index - 1].focus();\n                }\n            });\n        });\n\n        function checkAllFilled() {\n            const allFilled = Array.from(inputs).every(input => input.value.length === 1);\n            verifyBtn.disabled = !allFilled;\n        }\n\n        // Countdown timer\n        let timeLeft = 45;\n        const countdownInterval = setInterval(() => {\n            const minutes = Math.floor(timeLeft / 60);\n            const seconds = timeLeft % 60;\n            countdownEl.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;\n            timeLeft--;\n\n            if (timeLeft < 0) {\n                clearInterval(countdownInterval);\n                countdownEl.textContent = 'يمكنك إعادة الإرسال الآن';\n                countdownEl.parentElement.innerHTML += ' <button id=\"resendBtn\" style=\"background:none;border:none;color:#0077b6;font-size:14px;cursor:pointer;\">إعادة الإرسال</button>';\n            }\n        }, 1000);\n    </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 163,
+    "output": 1669
+  },
+  "ms": 38692,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 82,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 138.34375,
+        "y": 335,
+        "width": 113.3125,
+        "height": 16
+      },
+      "message": "\"+966 55 123 4567\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<p>لقد أرسلنا رمزًا مكوّنًا من 6 أرقام إلى <br>+966 55 123 4567</p>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 139.65625,
+        "y": 272,
+        "width": 110.671875,
+        "height": 27
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>أدخل الرمز</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 177.5,
+        "y": 537.5,
+        "width": 35,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"verify-btn\" id=\"verifyBtn\">تحقق</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

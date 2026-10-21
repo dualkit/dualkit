@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f7fb">
+  <title>المحفظة | المعاملات</title>
+  <style>
+    :root {
+      --primary: #0e775f;
+      --primary-dark: #095a49;
+      --primary-soft: #e7f5f0;
+      --text: #172321;
+      --muted: #71807c;
+      --line: #e8eeec;
+      --surface: #ffffff;
+      --background: #f5f7fb;
+      --in: #0e775f;
+      --out: #d05b4b;
+      --shadow: 0 12px 30px rgba(20, 55, 47, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--background);
+      color: var(--text);
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 440px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--background);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: max(24px, env(safe-area-inset-top)) 20px 18px;
+      background: linear-gradient(145deg, #0b6c56 0%, #0d8065 68%, #149276 100%);
+      color: #fff;
+      position: relative;
+    }
+
+    .header::after {
+      content: "";
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      border: 35px solid rgba(255, 255, 255, 0.045);
+      border-radius: 50%;
+      left: -65px;
+      top: -75px;
+      pointer-events: none;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-button,
+    .profile-button {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .back-button svg,
+    .profile-button svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .title-wrap {
+      text-align: center;
+    }
+
+    .title-wrap h1 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .title-wrap p {
+      margin: 4px 0 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 12px;
+    }
+
+    .balance-box {
+      position: relative;
+      z-index: 1;
+    }
+
+    .balance-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .eye {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .balance {
+      font-size: 31px;
+      line-height: 1.15;
+      font-weight: 700;
+      direction: ltr;
+      text-align: right;
+      unicode-bidi: isolate;
+    }
+
+    .balance small {
+      font-size: 14px;
+      font-weight: 500;
+      margin-right: 7px;
+      color: rgba(255, 255, 255, 0.84);
+    }
+
+    .balance-caption {
+      margin-top: 8px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.68);
+    }
+
+    .content {
+      padding: 20px 16px 104px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .filter {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 37px;
+      padding: 7px 11px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: 0 3px 10px rgba(28, 49, 44, 0.04);
+      cursor: pointer;
+    }
+
+    .filter svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .filter span {
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .filter .chevron {
+      width: 13px;
+      height: 13px;
+      stroke: var(--muted);
+      margin-right: -2px;
+    }
+
+    .transactions {
+      background: var(--surface);
+      border: 1px solid #edf1ef;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .table-head {
+      display: grid;
+      grid-template-columns: 66px minmax(0, 1fr) 99px;
+      gap: 8px;
+      align-items: center;
+      padding: 12px 15px;
+      background: #fafcfb;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .table-head span:nth-child(3) {
+      text-align: left;
+    }
+
+    .transaction {
+      display: grid;
+      grid-template-columns: 66px minmax(0, 1fr) 99px;
+      gap: 8px;
+      align-items: center;
+      min-height: 71px;
+      padding: 10px 15px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+    }
+
+    .transaction:last-child {
+      border-bottom: 0;
+    }
+
+    .date {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .date strong {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .merchant {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .merchant-icon {
+      flex: 0 0 39px;
+      width: 39px;
+      height: 39px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 700;
+      direction: ltr;
+    }
+
+    .merchant-icon.orange {
+      color: #ca6c21;
+      background: #fff1e5;
+    }
+
+    .merchant-icon.red {
+      color: #d34646;
+      background: #fff0f0;
+    }
+
+    .merchant-icon.blue {
+      color: #3975b7;
+      background: #edf5ff;
+    }
+
+    .merchant-icon.purple {
+      color: #7655b7;
+      background: #f2edff;
+    }
+
+    .merchant-icon.gold {
+      color: #9b7719;
+      background: #fff8df;
+    }
+
+    .merchant-text {
+      min-width: 0;
+    }
+
+    .merchant-name {
+      margin: 0 0 4px;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      direction: ltr;
+      text-align: right;
+    }
+
+    .merchant-name.arabic {
+      direction: rtl;
+    }
+
+    .transaction-type {
+      margin: 0;
+      color: var(--muted);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .amount {
+      text-align: left;
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    .amount strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .amount span {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-top: 4px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .amount.in strong {
+      color: var(--in);
+    }
+
+    .amount.in span {
+      color: var(--in);
+    }
+
+    .amount.out strong {
+      color: var(--out);
+    }
+
+    .amount.out span {
+      color: var(--out);
+    }
+
+    .arrow {
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .summary-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 13px 14px;
+    }
+
+    .summary-card p {
+      margin: 0 0 7px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .summary-card strong {
+      font-size: 15px;
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-block;
+    }
+
+    .summary-card.in strong {
+      color: var(--in);
+    }
+
+    .summary-card.out strong {
+      color: var(--out);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 10;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 440px;
+      height: 78px;
+      padding: 10px 25px max(10px, env(safe-area-inset-bottom));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.96);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav-item {
+      border: 0;
+      background: none;
+      color: #8b9793;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-center {
+      width: 46px;
+      height: 46px;
+      margin-top: -25px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: #fff;
+      border: 5px solid var(--background);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 6px 16px rgba(14, 119, 95, 0.24);
+    }
+
+    .nav-center svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    @media (max-width: 350px) {
+      .table-head,
+      .transaction {
+        grid-template-columns: 55px minmax(0, 1fr) 88px;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .merchant {
+        gap: 7px;
+      }
+
+      .merchant-icon {
+        flex-basis: 34px;
+        width: 34px;
+        height: 34px;
+      }
+
+      .amount strong {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <div class="topbar">
+        <button class="back-button" aria-label="رجوع">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 18l6-6-6-6"></path>
+          </svg>
+        </button>
+        <div class="title-wrap">
+          <h1>المعاملات</h1>
+          <p>نشاط محفظتك المالية</p>
+        </div>
+        <button class="profile-button" aria-label="الملف الشخصي">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
+          </svg>
+        </button>
+      </div>
+
+      <section class="balance-box" aria-label="الرصيد المتاح">
+        <div class="balance-label">
+          <svg class="eye" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z"></path>
+            <circle cx="12" cy="12" r="2.5"></circle>
+          </svg>
+          <span>الرصيد المتاح</span>
+        </div>
+        <div class="balance"><small>ر.ع.</small> 1,248.750</div>
+        <div class="balance-caption">تم تحديث الرصيد منذ قليل</div>
+      </section>
+    </header>
+
+    <section class="content">
+      <div class="section-heading">
+        <h2>سجل المعاملات</h2>
+        <button class="filter" type="button" aria-label="تصفية حسب الشهر">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="16" rx="3"></rect>
+            <path d="M8 3v4M16 3v4M3 10h18"></path>
+          </svg>
+          <span>هذا الشهر</span>
+          <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 9l6 6 6-6"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="transactions" role="table" aria-label="معاملات شهر مارس">
+        <div class="table-head" role="row">
+          <span role="columnheader">التاريخ</span>
+          <span role="columnheader">التاجر</span>
+          <span role="columnheader">المبلغ</span>
+        </div>
+
+        <div class="transaction" role="row">
+          <div class="date" role="cell"><strong>18</strong>مارس</div>
+          <div class="merchant" role="cell">
+            <div class="merchant-icon orange">L</div>
+            <div class="merchant-text">
+              <p class="merchant-name">Lulu Hypermarket</p>
+              <p class="transaction-type">تسوق</p>
+            </div>
+          </div>
+          <div class="amount out" role="cell">
+            <strong>42.750</strong>
+            <span><b class="arrow">↑</b> صادر</span>
+          </div>
+        </div>
+
+        <div class="transaction" role="row">
+          <div class="date" role="cell"><strong>17</strong>مارس</div>
+          <div class="merchant" role="cell">
+            <div class="merchant-icon red">N</div>
+            <div class="merchant-text">
+              <p class="merchant-name">Netflix</p>
+              <p class="transaction-type">اشتراك</p>
+            </div>
+          </div>
+          <div class="amount out" role="cell">
+            <strong>8.900</strong>
+            <span><b class="arrow">↑</b> صادر</span>
+          </div>
+        </div>
+
+        <div class="transaction" role="row">
+          <div class="date" role="cell"><strong>15</strong>مارس</div>
+          <div class="merchant" role="cell">
+            <div class="merchant-icon blue">O</div>
+            <div class="merchant-text">
+              <p class="merchant-name">Omani Credit Bank</p>
+              <p class="transaction-type">تحويل بنكي</p>
+            </div>
+          </div>
+          <div class="amount in" role="cell">
+            <strong>325.000</strong>
+            <span><b class="arrow">↓</b> وارد</span>
+          </div>
+        </div>
+
+        <div class="transaction" role="row">
+          <div class="date" role="cell"><strong>12</strong>مارس</div>
+          <div class="merchant" role="cell">
+            <div class="merchant-icon purple">S</div>
+            <div class="merchant-text">
+              <p class="merchant-name">Spotify</p>
+              <p class="transaction-type">موسيقى</p>
+            </div>
+          </div>
+          <div class="amount out" role="cell">
+            <strong>3.500</strong>
+            <span><b class="arrow">↑</b> صادر</span>
+          </div>
+        </div>
+
+        <div class="transaction" role="row">
+          <div class="date" role="cell"><strong>10</strong>مارس</div>
+          <div class="merchant" role="cell">
+            <div class="merchant-icon orange">S</div>
+            <div class="merchant-text">
+              <p class="merchant-name">Sunrise Market</p>
+              <p class="transaction-type">بقالة</p>
+            </div>
+          </div>
+          <div class="amount out" role="cell">
+            <strong>27.350</strong>
+            <span><b class="arrow">↑</b> صادر</span>
+          </div>
+        </div>
+
+        <div class="transaction" role="row">
+          <div class="date" role="cell"><strong>08</strong>مارس</div>
+          <div class="merchant" role="cell">
+            <div class="merchant-icon gold">A</div>
+            <div class="merchant-text">
+              <p class="merchant-name arabic">الCongratulations</p>
+              <p class="transaction-type">تحويل صادر</p>
+            </div>
+          </div>
+          <div class="amount out" role="cell">
+            <strong>15.000</strong>
+            <span><b class="arrow">↑</b> صادر</span>
+          </div>
+        </div>
+
+        <div class="transaction" role="row">
+          <div class="date" role="cell"><strong>05</strong>مارس</div>
+          <div class="merchant" role="cell">
+            <div class="merchant-icon">M</div>
+            <div class="merchant-text">
+              <p class="merchant-name arabic">مساءة espl覺</p>
+              <p class="transaction-type">مطعم ومقهى</p>
+            </div>
+          </div>
+          <div class="amount out" role="cell">
+            <strong>11.600</strong>
+            <span><b class="arrow">↑</b> صادر</span>
+          </div>
+        </div>
+
+        <div class="transaction" role="row">
+          <div class="date" role="cell"><strong>02</strong>مارس</div>
+          <div class="merchant" role="cell">
+            <div class="merchant-icon blue">A</div>
+            <div class="merchant-text">
+              <p class="merchant-name">Apple Services</p>
+              <p class="transaction-type">خدمات رقمية</p>
+            </div>
+          </div>
+          <div class="amount out" role="cell">
+            <strong>2.199</strong>
+            <span><b class="arrow">↑</b> صادر</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary" aria-label="ملخص المعاملات">
+        <div class="summary-card in">
+          <p>إجمالي المبالغ الواردة</p>
+          <strong>325.000 ر.ع.</strong>
+        </div>
+        <div class="summary-card out">
+          <p>إجمالي المبالغ الصادرة</p>
+          <strong>111.299 ر.ع.</strong>
+        </div>
+      </div>
+    </section>
+
+    <nav class="bottom-nav" aria-label="التنقل الرئيسي">
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 11l9-8 9 8"></path>
+          <path d="M5 10v11h14V10M9 21v-7h6v7"></path>
+        </svg>
+        <span>الرئيسية</span>
+      </button>
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="4" y="3" width="16" height="18" rx="3"></rect>
+          <path d="M8 8h8M8 12h8M8 16h5"></path>
+        </svg>
+        <span>الحسابات</span>
+      </button>
+      <button class="nav-center" type="button" aria-label="إضافة معاملة">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 5v14M5 12h14"></path>
+        </svg>
+      </button>
+      <button class="nav-item active" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h10"></path>
+          <circle cx="18" cy="17" r="3"></circle>
+          <path d="M18 15.5v3M16.5 17h3"></path>
+        </svg>
+        <span>المعاملات</span>
+      </button>
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
+        </svg>
+        <span>حسابي</span>
+      </button>
+    </nav>
+  </main>
+</body>
+</html>

@@ -1,0 +1,263 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "order-history",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T17:18:50.027Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>الطلبات السابقة</title>\n  <style>\n    :root {\n      --bg: #f5f5f5;\n      --card-bg: #ffffff;\n      --text: #1a1a1a;\n      --muted: #707070;\n      --border: #e0e0e0;\n      --delivered: #2e7d32;\n      --on-way: #1565c0;\n      --cancelled: #c62828;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'IBM Plex Sans Arabic', 'Segoe UI', sans-serif;\n      background: var(--bg);\n      color: var(--text);\n      font-size: 16px;\n      line-height: 1.7;\n      padding: 16px;\n    }\n\n    header {\n      font-size: 20px;\n      font-weight: 600;\n      margin-bottom: 20px;\n      text-align: start;\n    }\n\n    .order-list {\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .order-card {\n      background: var(--card-bg);\n      border: 1px solid var(--border);\n      border-radius: 12px;\n      padding: 16px;\n      display: flex;\n      flex-direction: column;\n      gap: 8px;\n    }\n\n    .order-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n\n    .order-number {\n      font-weight: 600;\n      font-size: 15px;\n    }\n\n    .status-badge {\n      font-size: 12px;\n      font-weight: 600;\n      padding: 4px 10px;\n      border-radius: 999px;\n      color: #fff;\n    }\n\n    .status-delivered { background-color: var(--delivered); }\n    .status-on-way { background-color: var(--on-way); }\n    .status-cancelled { background-color: var(--cancelled); }\n\n    .order-dates {\n      font-size: 13px;\n      color: var(--muted);\n      display: flex;\n      flex-direction: column;\n      gap: 2px;\n    }\n\n    .order-total {\n      font-weight: 600;\n      font-size: 15px;\n      margin-top: 4px;\n    }\n\n    .amount {\n      font-variant-numeric: tabular-nums;\n    }\n  </style>\n</head>\n<body>\n  <header>الطلبات السابقة</header>\n  <div class=\"order-list\">\n    <!-- Order 1 -->\n    <div class=\"order-card\">\n      <div class=\"order-header\">\n        <span class=\"order-number\">#A-10293</span>\n        <span class=\"status-badge status-delivered\">تم التسليم</span>\n      </div>\n      <div class=\"order-dates\">\n        <span>٢٥ أكتوبر ٢٠٢٣</span>\n        <span>٢٦ ربيع الأول ١٤٤٥ هـ</span>\n      </div>\n      <div class=\"order-total\">المجموع: <span class=\"amount\">١٬٢٩٩.٠٠ ر.س</span></div>\n    </div>\n\n    <!-- Order 2 -->\n    <div class=\"order-card\">\n      <div class=\"order-header\">\n        <span class=\"order-number\">#A-10292</span>\n        <span class=\"status-badge status-on-way\">في الطريق</span>\n      </div>\n      <div class=\"order-dates\">\n        <span>٢٠ أكتوبر ٢٠٢٣</span>\n        <span>٢١ ربيع الأول ١٤٤٥ هـ</span>\n      </div>\n      <div class=\"order-total\">المجموع: <span class=\"amount\">٨٦٩.٩٠ ر.س</span></div>\n    </div>\n\n    <!-- Order 3 -->\n    <div class=\"order-card\">\n      <div class=\"order-header\">\n        <span class=\"order-number\">#A-10291</span>\n        <span class=\"status-badge status-cancelled\">ملغاة</span>\n      </div>\n      <div class=\"order-dates\">\n        <span>١٥ أكتوبر ٢٠٢٣</span>\n        <span>١٦ ربيع الأول ١٤٤٥ هـ</span>\n      </div>\n      <div class=\"order-total\">المجموع: <span class=\"amount\">٨٩٩.٠٠ ر.س</span></div>\n    </div>\n\n    <!-- Order 4 -->\n    <div class=\"order-card\">\n      <div class=\"order-header\">\n        <span class=\"order-number\">#A-10290</span>\n        <span class=\"status-badge status-delivered\">تم التسليم</span>\n      </div>\n      <div class=\"order-dates\">\n        <span>١٠ أكتوبر ٢٠٢٣</span>\n        <span>١١ ربيع الأول ١٤٤٥ هـ</span>\n      </div>\n      <div class=\"order-total\">المجموع: <span class=\"amount\">١٬٠٩٩.٩٠ ر.س</span></div>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6468,
+    "output": 1492
+  },
+  "ms": 38625,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 54,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 291.109375,
+        "y": 92.4375,
+        "width": 65.890625,
+        "height": 17
+      },
+      "message": "\"#A-10293\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"order-number\">#A-10293</span>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 291.109375,
+        "y": 262.515625,
+        "width": 65.890625,
+        "height": 17
+      },
+      "message": "\"#A-10292\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"order-number\">#A-10292</span>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 291.109375,
+        "y": 432.59375,
+        "width": 65.890625,
+        "height": 17
+      },
+      "message": "\"#A-10291\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"order-number\">#A-10291</span>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 291.109375,
+        "y": 602.671875,
+        "width": 65.890625,
+        "height": 17
+      },
+      "message": "\"#A-10290\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"order-number\">#A-10290</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 239.4375,
+        "y": 22,
+        "width": 134.5625,
+        "height": 22
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<header>الطلبات السابقة</header>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 94,
+        "width": 52.34375,
+        "height": 14
+      },
+      "message": "\"تم التسليم\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-delivered\">تم التسليم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 275.765625,
+        "y": 126.390625,
+        "width": 81.234375,
+        "height": 15
+      },
+      "message": "\"٢٥ أكتوبر ٢٠٢٣\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>٢٥ أكتوبر ٢٠٢٣</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 242.53125,
+        "y": 150.484375,
+        "width": 114.46875,
+        "height": 15
+      },
+      "message": "\"٢٦ ربيع الأول ١٤٤٥ هـ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>٢٦ ربيع الأول ١٤٤٥ هـ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 264.078125,
+        "width": 56.34375,
+        "height": 14
+      },
+      "message": "\"في الطريق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-on-way\">في الطريق</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 275.765625,
+        "y": 296.46875,
+        "width": 81.234375,
+        "height": 15
+      },
+      "message": "\"٢٠ أكتوبر ٢٠٢٣\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>٢٠ أكتوبر ٢٠٢٣</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 242.53125,
+        "y": 320.5625,
+        "width": 114.46875,
+        "height": 15
+      },
+      "message": "\"٢١ ربيع الأول ١٤٤٥ هـ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>٢١ ربيع الأول ١٤٤٥ هـ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 434.15625,
+        "width": 26,
+        "height": 14
+      },
+      "message": "\"ملغاة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-cancelled\">ملغاة</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 275.765625,
+        "y": 466.546875,
+        "width": 81.234375,
+        "height": 15
+      },
+      "message": "\"١٥ أكتوبر ٢٠٢٣\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>١٥ أكتوبر ٢٠٢٣</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 242.53125,
+        "y": 490.640625,
+        "width": 114.46875,
+        "height": 15
+      },
+      "message": "\"١٦ ربيع الأول ١٤٤٥ هـ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>١٦ ربيع الأول ١٤٤٥ هـ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 604.234375,
+        "width": 52.34375,
+        "height": 14
+      },
+      "message": "\"تم التسليم\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-delivered\">تم التسليم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 275.765625,
+        "y": 636.625,
+        "width": 81.234375,
+        "height": 15
+      },
+      "message": "\"١٠ أكتوبر ٢٠٢٣\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>١٠ أكتوبر ٢٠٢٣</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 242.53125,
+        "y": 660.71875,
+        "width": 114.46875,
+        "height": 15
+      },
+      "message": "\"١١ ربيع الأول ١٤٤٥ هـ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>١١ ربيع الأول ١٤٤٥ هـ</span>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

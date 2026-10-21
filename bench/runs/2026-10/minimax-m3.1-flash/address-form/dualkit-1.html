@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b7a4b">
+  <title>عنوان التوصيل</title>
+  <style>
+    :root {
+      --green: #087a4b;
+      --green-dark: #05623c;
+      --green-soft: #eaf7f0;
+      --text: #17221d;
+      --muted: #68756e;
+      --border: #dce5df;
+      --surface: #ffffff;
+      --background: #f5f8f6;
+      --danger: #b42318;
+      --radius: 14px;
+      --type-label-size: 14px;
+      --type-body-size: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--background);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: var(--background);
+      font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+      font-size: var(--type-body-size);
+      line-height: 1.7;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      width: 100%;
+      min-height: 100vh;
+      max-width: 520px;
+      margin: 0 auto;
+      background: var(--background);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 64px;
+      padding: 10px 18px;
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--green);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      color: #fff;
+      background: var(--green);
+      border-radius: 11px;
+    }
+
+    .brand-mark svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .back-button {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      place-items: center;
+      color: var(--text);
+      background: transparent;
+      border: 0;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    .back-button:active {
+      background: var(--green-soft);
+    }
+
+    .back-button svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    main {
+      padding: 24px 18px 112px;
+    }
+
+    .intro {
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 26px;
+      line-height: 1.4;
+    }
+
+    .intro p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .section {
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 14px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .section-title svg {
+      width: 21px;
+      height: 21px;
+      color: var(--green);
+    }
+
+    .card {
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(18, 52, 36, 0.05);
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: var(--type-label-size);
+      font-weight: 600;
+    }
+
+    .optional {
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .control {
+      width: 100%;
+      min-height: 50px;
+      padding: 11px 14px;
+      color: var(--text);
+      background: #fff;
+      border: 1px solid #cfd9d2;
+      border-radius: var(--radius);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .control::placeholder {
+      color: #98a39d;
+    }
+
+    .control:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(8, 122, 75, 0.12);
+    }
+
+    .control[aria-invalid="true"] {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.09);
+    }
+
+    select.control {
+      appearance: none;
+      padding-inline-end: 44px;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #65736b 50%),
+        linear-gradient(135deg, #65736b 50%, transparent 50%);
+      background-position:
+        calc(20px) calc(50% - 2px),
+        calc(15px) calc(50% - 2px);
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+    }
+
+    .phone-wrap {
+      position: relative;
+    }
+
+    .phone-wrap .control {
+      padding-inline-end: 76px;
+      direction: ltr;
+      text-align: left;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .phone-prefix {
+      position: absolute;
+      top: 50%;
+      inset-inline-end: 14px;
+      transform: translateY(-50%);
+      color: var(--muted);
+      direction: ltr;
+      font-size: 14px;
+      font-weight: 600;
+      pointer-events: none;
+    }
+
+    .helper {
+      margin: 6px 2px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .error {
+      display: none;
+      margin: 6px 2px 0;
+      color: var(--danger);
+      font-size: 14px;
+    }
+
+    .error.visible {
+      display: block;
+    }
+
+    .save-area {
+      position: fixed;
+      z-index: 20;
+      inset-inline: 0;
+      bottom: 0;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 14px 18px calc(14px + env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, 0.97);
+      border-top: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .save-button {
+      display: flex;
+      width: 100%;
+      min-height: 52px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      color: #fff;
+      background: var(--green);
+      border: 0;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 18px rgba(8, 122, 75, 0.2);
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .save-button:hover {
+      background: var(--green-dark);
+    }
+
+    .save-button:active {
+      transform: translateY(1px);
+    }
+
+    .save-button svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 30;
+      inset-inline: 20px;
+      bottom: 94px;
+      display: flex;
+      max-width: 480px;
+      margin: 0 auto;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 16px;
+      color: #fff;
+      background: #173c2c;
+      border-radius: 13px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast svg {
+      width: 21px;
+      height: 21px;
+      flex: 0 0 auto;
+      color: #65d69e;
+    }
+
+    @media (min-width: 521px) {
+      .app {
+        border-inline: 1px solid var(--border);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand" aria-label="متجر الإمارات">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 9h16l-1.2 10H5.2L4 9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M8 9a4 4 0 0 1 8 0M3 9h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span>سوق الإمارات</span>
+      </div>
+
+      <button class="back-button" type="button" aria-label="العودة إلى صفحة الدفع">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </header>
+
+    <main>
+      <section class="intro">
+        <h1>عنوان التوصيل</h1>
+        <p>أدخل تفاصيل العنوان حتى نوصل طلبك إلىLocation الصحيحة.</p>
+      </section>
+
+      <form id="addressForm" novalidate>
+        <section class="section" aria-labelledby="locationHeading">
+          <h2 class="section-title" id="locationHeading">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="1.8"/>
+              <circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+            تفاصيل الموقع
+          </h2>
+
+          <div class="card">
+            <div class="field">
+              <label for="building">المبنى أو الفيلا</label>
+              <input
+                class="control"
+                id="building"
+                name="building"
+                type="text"
+                inputmode="text"
+                autocomplete="address-line1"
+                placeholder="مثال: فيلا 12، مبنى أ"
+                required
+              >
+              <p class="error" id="buildingError">يرجى إدخال اسم المبنى أو الفيلا.</p>
+            </div>
+
+            <div class="field">
+              <label for="street">الشارع</label>
+              <input
+                class="control"
+                id="street"
+                name="street"
+                type="text"
+                inputmode="text"
+                autocomplete="address-line2"
+                placeholder="اسم الشارع"
+                required
+              >
+              <p class="error" id="streetError">يرجى إدخال اسم الشارع.</p>
+            </div>
+
+            <div class="field">
+              <label for="area">المنطقة</label>
+              <input
+                class="control"
+                id="area"
+                name="area"
+                type="text"
+                inputmode="text"
+                autocomplete="address-level3"
+                placeholder="مثال: دبي مول، بر دبي"
+                required
+              >
+              <p class="error" id="areaError">يرجى إدخال اسم المنطقة.</p>
+            </div>
+
+            <div class="field">
+              <label for="emirate">الإمارة</label>
+              <select class="control" id="emirate" name="emirate" autocomplete="address-level1">
+                <option value="dubai" selected>دبي</option>
+                <option value="abu-dhabi">أبوظبي</option>
+                <option value="sharjah">الشارقة</option>
+                <option value="ajman">عجمان</option>
+                <option value="umm-al-quwain">أم القيوين</option>
+                <option value="ras-al-khaimah">رأس الخيمة</option>
+                <option value="fujairah">الفجيرة</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="makani">رقم-location <span class="optional">(اختياري)</span></label>
+              <input
+                class="control"
+                id="makani"
+                name="makani"
+                type="text"
+                inputmode="numeric"
+                autocomplete="off"
+                placeholder="أدخل رقم-location"
+              >
+            </div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="contactHeading">
+          <h2 class="section-title" id="contactHeading">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7.5 3.5h-2A2.5 2.5 0 0 0 3 6v2c0 7.2 5.8 13 13 13h2a2.5 2.5 0 0 0 2.5-2.5v-2l-4.2-1.4-1.7 2.3a13.8 13.8 0 0 1-6-6l2.3-1.7L7.5 3.5Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            رقم التواصل
+          </h2>
+
+          <div class="card">
+            <div class="field">
+              <label for="phone">رقم الهاتف</label>
+              <div class="phone-wrap">
+                <input
+                  class="control"
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  inputmode="tel"
+                  autocomplete="tel"
+                  dir="ltr"
+                  placeholder="050 123 4567"
+                  aria-describedby="phoneHint phoneError"
+                  required
+                >
+                <span class="phone-prefix" aria-hidden="true">+971</span>
+              </div>
+              <p class="helper" id="phoneHint">سنستخدم هذا الرقم للتواصل عند الحاجة فقط.</p>
+              <p class="error" id="phoneError">يرجى إدخال رقم هاتف إماراتي صحيح.</p>
+            </div>
+          </div>
+        </section>
+      </form>
+    </main>
+
+    <div class="save-area">
+      <button class="save-button" type="submit" form="addressForm">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 4h12l2 2v14H5V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M8 4v6h8V4M8 20v-6h8v6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        </svg>
+        حفظ العنوان
+      </button>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+        <path d="m8 12 2.5 2.5L16.5 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>تم حفظ عنوان التوصيل بنجاح.</span>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("addressForm");
+    const toast = document.getElementById("toast");
+    const fields = ["building", "street", "area", "phone"];
+
+    function showError(id, visible) {
+      const input = document.getElementById(id);
+      const error = document.getElementById(id + "Error");
+      input.setAttribute("aria-invalid", visible ? "true" : "false");
+      error.classList.toggle("visible", visible);
+    }
+
+    function normalizeDigits(value) {
+      return value
+        .replace(/[٠-٩]/g, digit => String(digit.charCodeAt(0) - 0x0660))
+        .replace(/[۰-۹]/g, digit => String(digit.charCodeAt(0) - 0x06F0));
+    }
+
+    fields.forEach(id => {
+      const input = document.getElementById(id);
+      input.addEventListener("input", () => {
+        if (input.getAttribute("aria-invalid") === "true") showError(id, false);
+      });
+    });
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      let firstInvalid = null;
+
+      fields.forEach(id => {
+        const input = document.getElementById(id);
+        const value = input.value.trim();
+        let invalid = value === "";
+
+        if (id === "phone" && !invalid) {
+          const normalized = normalizeDigits(value).replace(/[\s()-]/g, "");
+          const localNumber = normalized.startsWith("+971")
+            ? normalized.slice(4).replace(/^0/, "")
+            : normalized.replace(/^0/, "");
+          invalid = !/^(5[0-9]|6[0-9]|7[0-9])\d{7}$/.test(localNumber);
+        }
+
+        showError(id, invalid);
+        if (invalid && !firstInvalid) firstInvalid = input;
+      });
+
+      if (firstInvalid) {
+        firstInvalid.focus();
+        return;
+      }
+
+      const button = form.querySelector(".save-button");
+      button.disabled = true;
+      button.textContent = "جارٍ حفظ العنوان…";
+
+      setTimeout(() => {
+        button.disabled = false;
+        button.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 4h12l2 2v14H5V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M8 4v6h8V4M8 20v-6h8v6" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+          حفظ العنوان
+        `;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 3000);
+      }, 500);
+    });
+  </script>
+</body>
+</html>

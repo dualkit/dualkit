@@ -1,0 +1,137 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "settings",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-10-21T18:01:08.414Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n  <title>الإعدادات</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link href=\"https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --bg: #f5f5f5;\n      --surface: #ffffff;\n      --text: #1a1a1a;\n      --text-secondary: #6b6b6b;\n      --border: #e8e8e8;\n      --accent: #0066cc;\n      --accent-soft: #e8f0fe;\n      --toggle-off: #d0d0d0;\n      --toggle-on: #0066cc;\n    }\n\n    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }\n\n    body {\n      font-family: 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;\n      background: var(--bg);\n      color: var(--text);\n      min-height: 100vh;\n      display: flex;\n      justify-content: center;\n      align-items: flex-start;\n      line-height: 1.7;\n    }\n\n    .screen {\n      width: 100%;\n      max-width: 480px;\n      background: var(--bg);\n      min-height: 100vh;\n    }\n\n    /* ── Header ── */\n    .header {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      padding: 16px 20px;\n      background: var(--surface);\n      border-bottom: 1px solid var(--border);\n      position: sticky;\n      top: 0;\n      z-index: 10;\n    }\n\n    .header-title {\n      font-size: 18px;\n      font-weight: 700;\n      flex: 1;\n      text-align: start;\n    }\n\n    .header-spacer { width: 40px; }\n\n    .back-btn {\n      width: 40px;\n      height: 40px;\n      border: none;\n      background: transparent;\n      cursor: pointer;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      color: var(--text);\n      flex-shrink: 0;\n    }\n\n    .back-btn:active { background: var(--accent-soft); }\n\n    /* ── Group ── */\n    .group {\n      margin-top: 20px;\n      background: var(--surface);\n      border-top: 1px solid var(--border);\n      border-bottom: 1px solid var(--border);\n    }\n\n    .group-title {\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--text-secondary);\n      padding: 16px 20px 8px;\n    }\n\n    /* ── Row ── */\n    .row {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      padding: 14px 20px;\n      min-height: 56px;\n      cursor: pointer;\n      transition: background 0.15s;\n      border-bottom: 1px solid var(--border);\n    }\n\n    .row:last-child { border-bottom: none; }\n    .row:active { background: var(--accent-soft); }\n\n    .row-content {\n      display: flex;\n      flex-direction: column;\n      gap: 2px;\n      flex: 1;\n    }\n\n    .row-label {\n      font-size: 16px;\n      font-weight: 500;\n      color: var(--text);\n    }\n\n    .row-value {\n      font-size: 14px;\n      color: var(--text-secondary);\n    }\n\n    .row-right {\n      display: flex;\n      align-items: center;\n      gap: 8px;\n      flex-shrink: 0;\n      margin-inline-start: 12px;\n    }\n\n    /* ── Avatar ── */\n    .avatar {\n      width: 40px;\n      height: 40px;\n      border-radius: 50%;\n      background: var(--accent-soft);\n      color: var(--accent);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-size: 16px;\n      font-weight: 600;\n      flex-shrink: 0;\n      margin-inline-end: 12px;\n    }\n\n    /* ── Toggle ── */\n    .toggle {\n      width: 52px;\n      height: 30px;\n      background: var(--toggle-off);\n      border-radius: 15px;\n      position: relative;\n      cursor: pointer;\n      transition: background 0.2s;\n      flex-shrink: 0;\n    }\n\n    .toggle.on { background: var(--toggle-on); }\n\n    .toggle-thumb {\n      position: absolute;\n      top: 3px;\n      inset-inline-start: 3px;\n      width: 24px;\n      height: 24px;\n      background: white;\n      border-radius: 50%;\n      transition: inset-inline-start 0.2s;\n      box-shadow: 0 1px 3px rgba(0,0,0,0.2);\n    }\n\n    .toggle.on .toggle-thumb { inset-inline-start: 25px; }\n\n    /* ── Chevron ── */\n    .chevron {\n      width: 8px;\n      height: 14px;\n      flex-shrink: 0;\n    }\n\n    /* ── Bottom spacer ── */\n    .footer-spacer { height: 40px; }\n  </style>\n</head>\n<body>\n  <div class=\"screen\">\n\n    <!-- ═══════════ Header ═══════════ -->\n    <header class=\"header\">\n      <button class=\"back-btn\" aria-label=\"الرجوع\">\n        <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <path d=\"M5 12H19M12 5l7 7-7 7\"/>\n        </svg>\n      </button>\n      <h1 class=\"header-title\">الإعدادات</h1>\n      <div class=\"header-spacer\"></div>\n    </header>\n\n    <!-- ═══════════ Account Group ═══════════ -->\n    <section class=\"group\">\n      <h2 class=\"group-title\">الحساب</h2>\n\n      <div class=\"row\">\n        <div class=\"avatar\">أ</div>\n        <div class=\"row-content\">\n          <span class=\"row-label\">الاسم</span>\n          <span class=\"row-value\">أحمد محمد</span>\n        </div>\n      </div>\n\n      <div class=\"row\">\n        <div class=\"row-content\">\n          <span class=\"row-label\">رقم الهاتف</span>\n          <span class=\"row-value\"><bdi dir=\"ltr\">+973 3600 1234</bdi></span>\n        </div>\n      </div>\n\n      <div class=\"row\">\n        <div class=\"row-content\">\n          <span class=\"row-label\">اللغة</span>\n          <span class=\"row-value\">العربية</span>\n        </div>\n        <div class=\"row-right\">\n          <svg class=\"chevron\" viewBox=\"0 0 8 14\" fill=\"none\">\n            <path d=\"M7 1L1 7L7 13\" stroke=\"#6b6b6b\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n          </svg>\n        </div>\n      </div>\n    </section>\n\n    <!-- ═══════════ Security Group ═══════════ -->\n    <section class=\"group\">\n      <h2 class=\"group-title\">الأمان</h2>\n\n      <div class=\"row\">\n        <div class=\"row-content\">\n          <span class=\"row-label\"><bdi>Face ID</bdi></span>\n        </div>\n        <div class=\"row-right\">\n          <div class=\"toggle on\" role=\"switch\" aria-checked=\"true\" tabindex=\"0\" aria-label=\"Face ID\">\n            <div class=\"toggle-thumb\"></div>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"row\">\n        <div class=\"row-content\">\n          <span class=\"row-label\">تسجيل الدخول بخطوتين</span>\n        </div>\n        <div class=\"row-right\">\n          <div class=\"toggle on\" role=\"switch\" aria-checked=\"true\" tabindex=\"0\" aria-label=\"تسجيل الدخول بخطوتين\">\n            <div class=\"toggle-thumb\"></div>\n          </div>\n        </div>\n      </div>\n    </section>\n\n    <!-- ═══════════ Notifications Group ═══════════ -->\n    <section class=\"group\">\n      <h2 class=\"group-title\">الإشعارات</h2>\n\n      <div class=\"row\">\n        <div class=\"row-content\">\n          <span class=\"row-label\">التحويلات</span>\n        </div>\n        <div class=\"row-right\">\n          <div class=\"toggle on\" role=\"switch\" aria-checked=\"true\" tabindex=\"0\" aria-label=\"التحويلات\">\n            <div class=\"toggle-thumb\"></div>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"row\">\n        <div class=\"row-content\">\n          <span class=\"row-label\">الOffers</span>\n        </div>\n        <div class=\"row-right\">\n          <div class=\"toggle on\" role=\"switch\" aria-checked=\"true\" tabindex=\"0\" aria-label=\"الOffers\">\n            <div class=\"toggle-thumb\"></div>\n          </div>\n        </div>\n      </div>\n\n      <div class=\"row\">\n        <div class=\"row-content\">\n          <span class=\"row-label\">الكشوف</span>\n        </div>\n        <div class=\"row-right\">\n          <div class=\"toggle on\" role=\"switch\" aria-checked=\"true\" tabindex=\"0\" aria-label=\"الكشوف\">\n            <div class=\"toggle-thumb\"></div>\n          </div>\n        </div>\n      </div>\n    </section>\n\n    <div class=\"footer-spacer\"></div>\n  </div>\n\n  <script>\n    document.querySelectorAll('.toggle').forEach(toggle => {\n      toggle.addEventListener('click', function () {\n        this.classList.toggle('on');\n        this.setAttribute('aria-checked', this.classList.contains('on') ? 'true' : 'false');\n      });\n      toggle.addEventListener('keydown', function (e) {\n        if (e.key === ' ' || e.key === 'Enter') {\n          e.preventDefault();\n          this.classList.toggle('on');\n          this.setAttribute('aria-checked', this.classList.contains('on') ? 'true' : 'false');\n        }\n      });\n    });\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6301,
+    "output": 15754
+  },
+  "ms": 150536,
+  "finish": "stop",
+  "reasoningTokens": 12856,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 29,
+  "score": 96,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/label-language",
+      "title": "A label in a different language from its element",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 470.546875,
+        "width": 52,
+        "height": 30
+      },
+      "message": "The aria-label \"Face ID\" is read as ar.",
+      "fix": "Put lang on the element to match the label, or write the label in the language of the element.",
+      "snippet": "<div class=\"toggle on\" role=\"switch\" aria-checked=\"true\" tabindex=\"0\" aria-label=\"Face ID\">\n            <div class=\"toggle-thumb\"></div>\n          </div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 330,
+        "y": 162.28125,
+        "width": 40,
+        "height": 40
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"avatar\">أ</div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 339.25,
+        "width": 8,
+        "height": 14
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"row-right\">\n          <svg class=\"chevron\" viewBox=\"0 0 8 14\" fill=\"none\">\n            <path d=\"M7 1L1 7L7 13\" stroke=\"#6b6b6b\" stroke-width=\"2\" str"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 470.546875,
+        "width": 52,
+        "height": 30
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"row-right\">\n          <div class=\"toggle on\" role=\"switch\" aria-checked=\"true\" tabindex=\"0\" aria-label=\"Face ID\">\n            <div class=\"toggle-thu"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 529.546875,
+        "width": 52,
+        "height": 30
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"row-right\">\n          <div class=\"toggle on\" role=\"switch\" aria-checked=\"true\" tabindex=\"0\" aria-label=\"تسجيل الدخول بخطوتين\">\n            <div clas"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 657.34375,
+        "width": 52,
+        "height": 30
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"row-right\">\n          <div class=\"toggle on\" role=\"switch\" aria-checked=\"true\" tabindex=\"0\" aria-label=\"التحويلات\">\n            <div class=\"toggle-t"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 716.34375,
+        "width": 52,
+        "height": 30
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"row-right\">\n          <div class=\"toggle on\" role=\"switch\" aria-checked=\"true\" tabindex=\"0\" aria-label=\"الOffers\">\n            <div class=\"toggle-th"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 775.34375,
+        "width": 52,
+        "height": 30
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"row-right\">\n          <div class=\"toggle on\" role=\"switch\" aria-checked=\"true\" tabindex=\"0\" aria-label=\"الكشوف\">\n            <div class=\"toggle-thum"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 860
+}

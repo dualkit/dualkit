@@ -1,0 +1,95 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "order-history",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-10-21T17:19:30.655Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>الطلبات السابقة</title>\n  <style>\n    :root {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      --color-text: #1a1a1a;\n      --color-muted: #6b7280;\n      --color-border: #e5e7eb;\n      --color-bg: #ffffff;\n      --color-delivered: #16a34a;\n      --color-onway: #2563eb;\n      --color-cancelled: #dc2626;\n    }\n\n    :lang(ar) {\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      --type-body-size: 16px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;\n      font-size: var(--type-body-size);\n      line-height: 1.7;\n      color: var(--color-text);\n      background-color: var(--color-bg);\n      padding: 16px;\n    }\n\n    header {\n      padding-bottom: 16px;\n      border-bottom: 1px solid var(--color-border);\n      margin-bottom: 16px;\n    }\n\n    header h1 {\n      font-size: 20px;\n      font-weight: 600;\n    }\n\n    .order-list {\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .order-card {\n      border: 1px solid var(--color-border);\n      border-radius: 12px;\n      padding: 16px;\n      background-color: var(--color-bg);\n    }\n\n    .order-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 8px;\n    }\n\n    .order-number {\n      font-weight: 600;\n      font-size: var(--type-label-size);\n    }\n\n    .status-badge {\n      font-size: var(--type-caption-size);\n      font-weight: 600;\n      padding: 4px 10px;\n      border-radius: 999px;\n      white-space: nowrap;\n    }\n\n    .status-delivered {\n      color: var(--color-delivered);\n      background-color: #dcfce7;\n    }\n\n    .status-onway {\n      color: var(--color-onway);\n      background-color: #dbeafe;\n    }\n\n    .status-cancelled {\n      color: var(--color-cancelled);\n      background-color: #fee2e2;\n    }\n\n    .order-details {\n      margin-top: 8px;\n    }\n\n    .order-row {\n      display: flex;\n      justify-content: space-between;\n      font-size: var(--type-body-size);\n      margin-bottom: 4px;\n    }\n\n    .order-row:last-child {\n      margin-bottom: 0;\n    }\n\n    .label {\n      color: var(--color-muted);\n    }\n\n    .value {\n      font-weight: 500;\n    }\n\n    .amount {\n      font-weight: 600;\n    }\n\n    .date-line {\n      display: flex;\n      flex-direction: column;\n      align-items: flex-end;\n    }\n\n    .gregorian {\n      font-size: var(--type-body-size);\n    }\n\n    .hijri {\n      font-size: var(--type-caption-size);\n      color: var(--color-muted);\n    }\n\n    @media (max-width: 480px) {\n      body {\n        padding: 12px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <header>\n    <h1>الطلبات السابقة</h1>\n  </header>\n\n  <div class=\"order-list\">\n    <!-- Order 1 -->\n    <div class=\"order-card\">\n      <div class=\"order-header\">\n        <span class=\"order-number\">رقم الطلب: <bdi dir=\"ltr\">#A-10293</bdi></span>\n        <span class=\"status-badge status-delivered\">تم التسليم</span>\n      </div>\n      <div class=\"order-details\">\n        <div class=\"order-row\">\n          <span class=\"label\">التاريخ</span>\n          <span class=\"value date-line\">\n            <span class=\"gregorian\">١٢ فبراير ٢٠٢٥</span>\n            <span class=\"hijri\">٢٧ جمادى الأولى ١٤٤٦ هـ</span>\n          </span>\n        </div>\n        <div class=\"order-row\">\n          <span class=\"label\">المجموع</span>\n          <span class=\"value amount\"><bdi>١٬٢٩٩.٠٠</bdi> ر.س</span>\n        </div>\n      </div>\n    </div>\n\n    <!-- Order 2 -->\n    <div class=\"order-card\">\n      <div class=\"order-header\">\n        <span class=\"order-number\">رقم الطلب: <bdi dir=\"ltr\">#A-10292</bdi></span>\n        <span class=\"status-badge status-onway\">في الطريق</span>\n      </div>\n      <div class=\"order-details\">\n        <div class=\"order-row\">\n          <span class=\"label\">التاريخ</span>\n          <span class=\"value date-line\">\n            <span class=\"gregorian\">١٠ فبراير ٢٠٢٥</span>\n            <span class=\"hijri\">٢٥ جمادى الأولى ١٤٤٦ هـ</span>\n          </span>\n        </div>\n        <div class=\"order-row\">\n          <span class=\"label\">المجموع</span>\n          <span class=\"value amount\"><bdi>٨٩٩.٩٩</bdi> ر.س</span>\n        </div>\n      </div>\n    </div>\n\n    <!-- Order 3 -->\n    <div class=\"order-card\">\n      <div class=\"order-header\">\n        <span class=\"order-number\">رقم الطلب: <bdi dir=\"ltr\">#A-10291</bdi></span>\n        <span class=\"status-badge status-cancelled\">ألغيت</span>\n      </div>\n      <div class=\"order-details\">\n        <div class=\"order-row\">\n          <span class=\"label\">التاريخ</span>\n          <span class=\"value date-line\">\n            <span class=\"gregorian\">٥ فبراير ٢٠٢٥</span>\n            <span class=\"hijri\">٢٠ جمادى الأولى ١٤٤٦ هـ</span>\n          </span>\n        </div>\n        <div class=\"order-row\">\n          <span class=\"label\">المجموع</span>\n          <span class=\"value amount\"><bdi>٣٢٠.٠٠</bdi> ر.س</span>\n        </div>\n      </div>\n    </div>\n\n    <!-- Order 4 -->\n    <div class=\"order-card\">\n      <div class=\"order-header\">\n        <span class=\"order-number\">رقم الطلب: <bdi dir=\"ltr\">#A-10290</bdi></span>\n        <span class=\"status-badge status-delivered\">تم التسليم</span>\n      </div>\n      <div class=\"order-details\">\n        <div class=\"order-row\">\n          <span class=\"label\">التاريخ</span>\n          <span class=\"value date-line\">\n            <span class=\"gregorian\">٢٨ يناير ٢٠٢٥</span>\n            <span class=\"hijri\">١٥ جمادى الأولى ١٤٤٦ هـ</span>\n          </span>\n        </div>\n        <div class=\"order-row\">\n          <span class=\"label\">المجموع</span>\n          <span class=\"value amount\"><bdi>٢٬١٥٠.٧٥</bdi> ر.س</span>\n        </div>\n      </div>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6468,
+    "output": 2197
+  },
+  "ms": 104849,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 84,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 226.046875,
+        "y": 103,
+        "width": 61.5,
+        "height": 16
+      },
+      "message": "\"#A-10293\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">#A-10293</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 226.046875,
+        "y": 274.96875,
+        "width": 61.5,
+        "height": 16
+      },
+      "message": "\"#A-10292\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">#A-10292</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 226.046875,
+        "y": 446.9375,
+        "width": 61.5,
+        "height": 16
+      },
+      "message": "\"#A-10291\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">#A-10291</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 226.046875,
+        "y": 618.90625,
+        "width": 61.5,
+        "height": 16
+      },
+      "message": "\"#A-10290\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">#A-10290</bdi>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 243.4375,
+        "y": 18,
+        "width": 134.5625,
+        "height": 22
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الطلبات السابقة</h1>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

@@ -1,0 +1,83 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "otp",
+  "condition": "loop",
+  "run": 3,
+  "at": "2026-10-21T17:49:29.210Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>إدخال الرمز</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :lang(ar) {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n\n    body {\n      margin: 0;\n      padding: 0;\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      background-color: #f5f5f5;\n      color: #1a1a1a;\n      font-size: var(--type-body-size);\n      line-height: 1.7;\n      display: flex;\n      justify-content: center;\n      align-items: flex-start;\n      min-height: 100vh;\n    }\n\n    .container {\n      width: 100%;\n      max-width: 400px;\n      padding: 24px 16px;\n      box-sizing: border-box;\n    }\n\n    .title {\n      font-size: 20px;\n      font-weight: 700;\n      text-align: center;\n      margin-bottom: 8px;\n    }\n\n    .subtitle {\n      font-size: var(--type-body-size);\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .code-inputs {\n      display: flex;\n      justify-content: space-between;\n      gap: 8px;\n      margin-bottom: 24px;\n    }\n\n    .code-box {\n      flex: 1;\n      height: 48px;\n      border: 1px solid #ccc;\n      border-radius: 8px;\n      text-align: center;\n      font-size: 20px;\n      font-weight: 500;\n      background-color: #fff;\n      box-sizing: border-box;\n    }\n\n    .countdown {\n      font-size: var(--type-label-size);\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .verify-button {\n      width: 100%;\n      height: 48px;\n      background-color: #0070ba;\n      color: #fff;\n      border: none;\n      border-radius: 8px;\n      font-size: var(--type-label-size);\n      font-weight: 600;\n      cursor: pointer;\n      box-sizing: border-box;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1 class=\"title\">أدخل الرمز</h1>\n    <p class=\"subtitle\">لقد أرسلنا رمزًا مكوّنًا من 6 أرقام إلى <bdi dir=\"ltr\">+966 55 123 4567</bdi></p>\n\n    <div class=\"code-inputs\">\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n    </div>\n\n    <p class=\"countdown\">إعادة الإرسال خلال <span id=\"timer\">0:45</span></p>\n\n    <button class=\"verify-button\">تحقّق</button>\n  </div>\n\n  <script>\n    let seconds = 45;\n    const timerEl = document.getElementById('timer');\n\n    const interval = setInterval(() => {\n      seconds--;\n      if (seconds < 0) {\n        clearInterval(interval);\n        timerEl.textContent = 'انتهى الوقت';\n      } else {\n        const m = String(Math.floor(seconds / 60)).padStart(2, '0');\n        const s = String(seconds % 60).padStart(2, '0');\n        timerEl.textContent = `${m}:${s}`;\n      }\n    }, 1000);\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 17033,
+    "output": 2393
+  },
+  "ms": 56534,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 96,
+  "unreadableStylesheets": 1,
+  "pageHeight": 844,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 179,
+        "y": 273.46875,
+        "width": 32,
+        "height": 16
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"verify-button\">تحقّق</button>"
+    }
+  ],
+  "from": {
+    "rulesPassed": 28,
+    "score": 92
+  },
+  "rounds": [
+    {
+      "at": "2026-10-21T17:49:31.120Z",
+      "ms": 23960,
+      "usage": {
+        "input": 7814,
+        "output": 1188
+      },
+      "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>إدخال الرمز</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic&display=swap\" rel=\"stylesheet\">\n  <style>\n    :lang(ar) {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n\n    body {\n      margin: 0;\n      padding: 0;\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      background-color: #f5f5f5;\n      color: #1a1a1a;\n      font-size: var(--type-body-size);\n      line-height: 1.7;\n      display: flex;\n      justify-content: center;\n      align-items: flex-start;\n      min-height: 100vh;\n    }\n\n    .container {\n      width: 100%;\n      max-width: 400px;\n      padding: 24px 16px;\n      box-sizing: border-box;\n    }\n\n    .title {\n      font-size: 20px;\n      font-weight: 600;\n      text-align: center;\n      margin-bottom: 8px;\n    }\n\n    .subtitle {\n      font-size: var(--type-body-size);\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .code-inputs {\n      display: flex;\n      justify-content: space-between;\n      gap: 8px;\n      margin-bottom: 24px;\n    }\n\n    .code-box {\n      flex: 1;\n      height: 48px;\n      border: 1px solid #ccc;\n      border-radius: 8px;\n      text-align: center;\n      font-size: 20px;\n      font-weight: 500;\n      background-color: #fff;\n      box-sizing: border-box;\n    }\n\n    .countdown {\n      font-size: var(--type-label-size);\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .verify-button {\n      width: 100%;\n      height: 48px;\n      background-color: #0070ba;\n      color: #fff;\n      border: none;\n      border-radius: 8px;\n      font-size: var(--type-label-size);\n      font-weight: 600;\n      cursor: pointer;\n      box-sizing: border-box;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1 class=\"title\">أدخل الرمز</h1>\n    <p class=\"subtitle\">لقد أرسلنا رمزًا مكوّنًا من 6 أرقام إلى <bdi dir=\"ltr\">+966 55 123 4567</bdi></p>\n\n    <div class=\"code-inputs\">\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n    </div>\n\n    <p class=\"countdown\">إعادة الإرسال خلال <span id=\"timer\">0:45</span></p>\n\n    <button class=\"verify-button\">تحقّق</button>\n  </div>\n\n  <script>\n    let seconds = 45;\n    const timerEl = document.getElementById('timer');\n\n    const interval = setInterval(() => {\n      seconds--;\n      if (seconds < 0) {\n        clearInterval(interval);\n        timerEl.textContent = 'انتهى الوقت';\n      } else {\n        const m = String(Math.floor(seconds / 60)).padStart(2, '0');\n        const s = String(seconds % 60).padStart(2, '0');\n        timerEl.textContent = `${m}:${s}`;\n      }\n    }, 1000);\n  </script>\n</body>\n</html>\n```",
+      "sent": 2,
+      "ok": true,
+      "error": null,
+      "rulesPassed": 27,
+      "score": 92,
+      "missing": [],
+      "regressed": [
+        "type/arabic-faux-bold"
+      ],
+      "lostParts": [],
+      "arabicKept": 1
+    },
+    {
+      "at": "2026-10-21T17:49:57.231Z",
+      "ms": 32574,
+      "usage": {
+        "input": 9219,
+        "output": 1205
+      },
+      "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>إدخال الرمز</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :lang(ar) {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n\n    body {\n      margin: 0;\n      padding: 0;\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      background-color: #f5f5f5;\n      color: #1a1a1a;\n      font-size: var(--type-body-size);\n      line-height: 1.7;\n      display: flex;\n      justify-content: center;\n      align-items: flex-start;\n      min-height: 100vh;\n    }\n\n    .container {\n      width: 100%;\n      max-width: 400px;\n      padding: 24px 16px;\n      box-sizing: border-box;\n    }\n\n    .title {\n      font-size: 20px;\n      font-weight: 700;\n      text-align: center;\n      margin-bottom: 8px;\n    }\n\n    .subtitle {\n      font-size: var(--type-body-size);\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .code-inputs {\n      display: flex;\n      justify-content: space-between;\n      gap: 8px;\n      margin-bottom: 24px;\n    }\n\n    .code-box {\n      flex: 1;\n      height: 48px;\n      border: 1px solid #ccc;\n      border-radius: 8px;\n      text-align: center;\n      font-size: 20px;\n      font-weight: 500;\n      background-color: #fff;\n      box-sizing: border-box;\n    }\n\n    .countdown {\n      font-size: var(--type-label-size);\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .verify-button {\n      width: 100%;\n      height: 48px;\n      background-color: #0070ba;\n      color: #fff;\n      border: none;\n      border-radius: 8px;\n      font-size: var(--type-label-size);\n      font-weight: 600;\n      cursor: pointer;\n      box-sizing: border-box;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1 class=\"title\">أدخل الرمز</h1>\n    <p class=\"subtitle\">لقد أرسلنا رمزًا مكوّنًا من 6 أرقام إلى <bdi dir=\"ltr\">+966 55 123 4567</bdi></p>\n\n    <div class=\"code-inputs\">\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n      <input type=\"text\" maxlength=\"1\" class=\"code-box\" inputmode=\"numeric\" />\n    </div>\n\n    <p class=\"countdown\">إعادة الإرسال خلال <span id=\"timer\">0:45</span></p>\n\n    <button class=\"verify-button\">تحقّق</button>\n  </div>\n\n  <script>\n    let seconds = 45;\n    const timerEl = document.getElementById('timer');\n\n    const interval = setInterval(() => {\n      seconds--;\n      if (seconds < 0) {\n        clearInterval(interval);\n        timerEl.textContent = 'انتهى الوقت';\n      } else {\n        const m = String(Math.floor(seconds / 60)).padStart(2, '0');\n        const s = String(seconds % 60).padStart(2, '0');\n        timerEl.textContent = `${m}:${s}`;\n      }\n    }, 1000);\n  </script>\n</body>\n</html>\n```",
+      "sent": 2,
+      "ok": true,
+      "error": null,
+      "rulesPassed": 28,
+      "score": 96,
+      "missing": [],
+      "regressed": [],
+      "lostParts": [],
+      "arabicKept": 1
+    }
+  ]
+}

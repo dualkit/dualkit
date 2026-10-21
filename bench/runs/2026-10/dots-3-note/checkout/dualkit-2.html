@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إتمام الطلب</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --primary: #2e7d32;
+      --border: #e0e0e0;
+      --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans Arabic', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      direction: rtl;
+      text-align: start;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    /* Arabic type rules */
+    :lang(ar) {
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background-color: var(--card-bg);
+      min-height: 100vh;
+      position: relative;
+      padding-bottom: 100px;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      background-color: var(--card-bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      z-index: 10;
+    }
+
+    .back-btn {
+      position: absolute;
+      inset-inline-start: 1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      color: var(--text-color);
+    }
+
+    .icon-directional {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Mirror back arrow in RTL */
+    :dir(rtl) .icon-directional {
+      transform: scaleX(-1);
+    }
+
+    .header-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    /* Cart items */
+    .cart-items {
+      padding: 0 1rem;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .item-photo {
+      width: 80px;
+      height: 80px;
+      background-color: #e0e0e0;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .item-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .item-name {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .item-price {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .stepper button {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--border);
+      background-color: #fff;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-color);
+    }
+
+    .stepper input {
+      width: 40px;
+      text-align: center;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .item-total {
+      font-weight: 600;
+      color: var(--primary);
+      margin-inline-start: auto;
+    }
+
+    /* Promo code */
+    .promo-section {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .promo-input-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .promo-input {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      direction: ltr;
+    }
+
+    .promo-btn {
+      padding: 0.75rem 1.5rem;
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-family: inherit;
+    }
+
+    /* Summary */
+    .summary-section {
+      padding: 1rem;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      font-size: 1rem;
+    }
+
+    .summary-row.total {
+      border-top: 1px solid var(--border);
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+
+    /* Place order button */
+    .place-order-btn {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 480px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 1rem;
+      background-color: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    /* Utility for isolating Latin runs */
+    .ltr {
+      direction: ltr;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <button class="back-btn" aria-label="رجوع">
+        <svg class="icon-directional" viewBox="0 0 24 24">
+          <path d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <h1 class="header-title">إتمام الطلب</h1>
+    </header>
+
+    <main class="cart-items">
+      <!-- Item 1 -->
+      <div class="cart-item" data-item="1">
+        <div class="item-photo"></div>
+        <div class="item-details">
+          <div>
+            <div class="item-name">تفاحة خضراء</div>
+            <div class="item-price"><span class="ltr">5.50 AED</span></div>
+          </div>
+          <div class="stepper">
+            <button class="decrease" aria-label="خفض">−</button>
+            <input type="text" class="quantity" value="2" readonly>
+            <button class="increase" aria-label="زيادة">+</button>
+          </div>
+        </div>
+        <div class="item-total"><span class="ltr">11.00 AED</span></div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="cart-item" data-item="2">
+        <div class="item-photo"></div>
+        <div class="item-details">
+          <div>
+            <div class="item-name">حليب طازج</div>
+            <div class="item-price"><span class="ltr">3.75 AED</span></div>
+          </div>
+          <div class="stepper">
+            <button class="decrease" aria-label="خفض">−</button>
+            <input type="text" class="quantity" value="1" readonly>
+            <button class="increase" aria-label="زيادة">+</button>
+          </div>
+        </div>
+        <div class="item-total"><span class="ltr">3.75 AED</span></div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="cart-item" data-item="3">
+        <div class="item-photo"></div>
+        <div class="item-details">
+          <div>
+            <div class="item-name">بروتين مسحوب</div>
+            <div class="item-price"><span class="ltr">12.00 AED</span></div>
+          </div>
+          <div class="stepper">
+            <button class="decrease" aria-label="خفض">−</button>
+            <input type="text" class="quantity" value="3" readonly>
+            <button class="increase" aria-label="زيادة">+</button>
+          </div>
+        </div>
+        <div class="item-total"><span class="ltr">36.00 AED</span></div>
+      </div>
+    </main>
+
+    <section class="promo-section">
+      <div class="promo-input-group">
+        <input type="text" class="promo-input" placeholder="أدخل رمز الخصم" dir="ltr" autocomplete="off">
+        <button class="promo-btn">تطبيق</button>
+      </div>
+    </section>
+
+    <section class="summary-section">
+      <div class="summary-row">
+        <span>المجموع الفرعي</span>
+        <span class="summary-subtotal"><span class="ltr">50.75 AED</span></span>
+      </div>
+      <div class="summary-row">
+        <span>التوصيل</span>
+        <span class="summary-delivery"><span class="ltr">5.00 AED</span></span>
+      </div>
+      <div class="summary-row">
+        <span>ضريبة القيمة المضافة 5%</span>
+        <span class="summary-vat"><span class="ltr">2.79 AED</span></span>
+      </div>
+      <div class="summary-row total">
+        <span>الإجمالي</span>
+        <span class="summary-total"><span class="ltr">58.54 AED</span></span>
+      </div>
+    </section>
+  </div>
+
+  <button class="place-order-btn">إتمام الطلب</button>
+
+  <script>
+    // Unit prices per item
+    const itemPrices = {
+      1: 5.50,
+      2: 3.75,
+      3: 12.00
+    };
+    const deliveryFee = 5.00;
+    const vatRate = 0.05;
+
+    // Helper: format a number as AED with isolated Latin run
+    function formatAED(amount) {
+      const formatted = new Intl.NumberFormat('en-AE', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(amount);
+      return `<span class="ltr">${formatted} AED</span>`;
+    }
+
+    // Update item line totals and order summary
+    function updateTotals() {
+      let subtotal = 0;
+
+      document.querySelectorAll('.cart-item').forEach(item => {
+        const id = item.getAttribute('data-item');
+        const qty = parseInt(item.querySelector('.quantity').value, 10);
+        const price = itemPrices[id];
+        const lineTotal = price * qty;
+
+        item.querySelector('.item-total').innerHTML = formatAED(lineTotal);
+        subtotal += lineTotal;
+      });
+
+      const vat = subtotal * vatRate;
+      const total = subtotal + deliveryFee + vat;
+
+      document.querySelector('.summary-subtotal').innerHTML = formatAED(subtotal);
+      document.querySelector('.summary-delivery').innerHTML = formatAED(deliveryFee);
+      document.querySelector('.summary-vat').innerHTML = formatAED(vat);
+      document.querySelector('.summary-total').innerHTML = formatAED(total);
+    }
+
+    // Stepper event handlers
+    document.querySelectorAll('.stepper').forEach(stepper => {
+      const decreaseBtn = stepper.querySelector('.decrease');
+      const increaseBtn = stepper.querySelector('.increase');
+      const input = stepper.querySelector('.quantity');
+
+      decreaseBtn.addEventListener('click', () => {
+        let val = parseInt(input.value, 10);
+        if (val > 1) {
+          input.value = val - 1;
+          updateTotals();
+        }
+      });
+
+      increaseBtn.addEventListener('click', () => {
+        let val = parseInt(input.value, 10);
+        input.value = val + 1;
+        updateTotals();
+      });
+    });
+
+    // Promo code apply
+    document.querySelector('.promo-btn').addEventListener('click', () => {
+      const code = document.querySelector('.promo-input').value.trim();
+      if (code) {
+        alert(`تم تطبيق الرمز: ${code}`);
+        // In a real app, this would trigger a discount recalculation
+      }
+    });
+
+    // Place order button
+    document.querySelector('.place-order-btn').addEventListener('click', () => {
+      alert('تم إرسال الطلب بنجاح!');
+    });
+
+    // Initial calculation
+    updateTotals();
+  </script>
+</body>
+</html>

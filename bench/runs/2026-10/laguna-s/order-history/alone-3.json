@@ -1,0 +1,207 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "order-history",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T17:17:37.642Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>سجل الطلبات</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f4f6f9;\n            color: #333;\n            padding: 20px;\n        }\n        .header {\n            text-align: center;\n            margin-bottom: 25px;\n        }\n        .header h1 {\n            font-size: 24px;\n            color: #2c3e50;\n            font-weight: 600;\n        }\n        .order-list {\n            display: flex;\n            flex-direction: column;\n            gap: 18px;\n        }\n        .order-card {\n            background: #ffffff;\n            border-radius: 12px;\n            padding: 18px;\n            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);\n        }\n        .order-top {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            margin-bottom: 12px;\n        }\n        .order-number {\n            font-size: 16px;\n            font-weight: 600;\n            color: #2c3e50;\n        }\n        .status-badge {\n            font-size: 13px;\n            font-weight: 600;\n            padding: 5px 12px;\n            border-radius: 20px;\n            text-align: center;\n        }\n        .status-delivered {\n            background-color: #e6f7ee;\n            color: #008060;\n        }\n        .status-on-the-way {\n            background-color: #fff3e6;\n            color: #cc6600;\n        }\n        .status-cancelled {\n            background-color: #fdecea;\n            color: #cc0000;\n        }\n        .order-details {\n            display: flex;\n            flex-direction: column;\n            gap: 6px;\n        }\n        .detail-row {\n            display: flex;\n            justify-content: space-between;\n            font-size: 14px;\n        }\n        .detail-label {\n            color: #7f8c8d;\n            font-weight: 500;\n        }\n        .detail-value {\n            color: #2c3e50;\n            font-weight: 600;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"header\">\n        <h1>سجل الطلبات</h1>\n    </div>\n    <div class=\"order-list\">\n        <!-- طلب 1 -->\n        <div class=\"order-card\">\n            <div class=\"order-top\">\n                <span class=\"order-number\">رقم الطلب #A-10293</span>\n                <span class=\"status-badge status-delivered\">تم التوصيل</span>\n            </div>\n            <div class=\"order-details\">\n                <div class=\"detail-row\">\n                    <span class=\"detail-label\">التاريخ (ميلادي):</span>\n                    <span class=\"detail-value\">١٥ مارس ٢٠٢٤</span>\n                </div>\n                <div class=\"detail-row\">\n                    <span class=\"detail-label\">التاريخ (هجري):</span>\n                    <span class=\"detail-value\">٠٢ رمضان ١٤٤٥</span>\n                </div>\n                <div class=\"detail-row\">\n                    <span class=\"detail-label\">المجموع:</span>\n                    <span class=\"detail-value\">٢٩٩٫٩٩ ر.س</span>\n                </div>\n            </div>\n        </div>\n        <!-- طلب 2 -->\n        <div class=\"order-card\">\n            <div class=\"order-top\">\n                <span class=\"order-number\">رقم الطلب #A-10294</span>\n                <span class=\"status-badge status-on-the-way\">في الطريق</span>\n            </div>\n            <div class=\"order-details\">\n                <div class=\"detail-row\">\n                    <span class=\"detail-label\">التاريخ (ميلادي):</span>\n                    <span class=\"detail-value\">١٠ مارس ٢٠٢٤</span>\n                </div>\n                <div class=\"detail-row\">\n                    <span class=\"detail-label\">التاريخ (هجري):</span>\n                    <span class=\"detail-value\">٢٧ شعبان ١٤٤٥</span>\n                </div>\n                <div class=\"detail-row\">\n                    <span class=\"detail-label\">المجموع:</span>\n                    <span class=\"detail-value\">١٥٩٫٥٠ ر.س</span>\n                </div>\n            </div>\n        </div>\n        <!-- طلب 3 -->\n        <div class=\"order-card\">\n            <div class=\"order-top\">\n                <span class=\"order-number\">رقم الطلب #A-10295</span>\n                <span class=\"status-badge status-cancelled\">ألغيت</span>\n            </div>\n            <div class=\"order-details\">\n                <div class=\"detail-row\">\n                    <span class=\"detail-label\">التاريخ (ميلادي):</span>\n                    <span class=\"detail-value\">٠٥ مارس ٢٠٢٤</span>\n                </div>\n                <div class=\"detail-row\">\n                    <span class=\"detail-label\">التاريخ (هجري):</span>\n                    <span class=\"detail-value\">٢٢ شعبان ١٤٤٥</span>\n                </div>\n                <div class=\"detail-row\">\n                    <span class=\"detail-label\">المجموع:</span>\n                    <span class=\"detail-value\">٤٢٩٫٠٠ ر.س</span>\n                </div>\n            </div>\n        </div>\n        <!-- طلب 4 -->\n        <div class=\"order-card\">\n            <div class=\"order-top\">\n                <span class=\"order-number\">رقم الطلب #A-10296</span>\n                <span class=\"status-badge status-delivered\">تم التوصيل</span>\n            </div>\n            <div class=\"order-details\">\n                <div class=\"detail-row\">\n                    <span class=\"detail-label\">التاريخ (ميلادي):</span>\n                    <span class=\"detail-value\">٢٨ فبراير ٢٠٢٤</span>\n                </div>\n                <div class=\"detail-row\">\n                    <span class=\"detail-label\">التاريخ (هجري):</span>\n                    <span class=\"detail-value\">١٦ شعبان ١٤٤٥</span>\n                </div>\n                <div class=\"detail-row\">\n                    <span class=\"detail-label\">المجموع:</span>\n                    <span class=\"detail-value\">١٨٩٫٧٥ ر.س</span>\n                </div>\n            </div>\n        </div>\n    </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 138,
+    "output": 1891
+  },
+  "ms": 36322,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 25,
+  "score": 42,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 202.828125,
+        "y": 95,
+        "width": 149.171875,
+        "height": 17
+      },
+      "message": "\"#A-10293\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"order-number\">رقم الطلب #A-10293</span>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 202.828125,
+        "y": 246,
+        "width": 149.171875,
+        "height": 17
+      },
+      "message": "\"#A-10294\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"order-number\">رقم الطلب #A-10294</span>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 202.828125,
+        "y": 397,
+        "width": 149.171875,
+        "height": 17
+      },
+      "message": "\"#A-10295\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"order-number\">رقم الطلب #A-10295</span>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 202.828125,
+        "y": 548,
+        "width": 149.171875,
+        "height": 17
+      },
+      "message": "\"#A-10296\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"order-number\">رقم الطلب #A-10296</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 202.828125,
+        "y": 95,
+        "width": 149.171875,
+        "height": 17
+      },
+      "message": "\"رقم الطلب #A-10293\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"order-number\">رقم الطلب #A-10293</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 202.828125,
+        "y": 246,
+        "width": 149.171875,
+        "height": 17
+      },
+      "message": "\"رقم الطلب #A-10294\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"order-number\">رقم الطلب #A-10294</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 202.828125,
+        "y": 397,
+        "width": 149.171875,
+        "height": 17
+      },
+      "message": "\"رقم الطلب #A-10295\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"order-number\">رقم الطلب #A-10295</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 202.828125,
+        "y": 548,
+        "width": 149.171875,
+        "height": 17
+      },
+      "message": "\"رقم الطلب #A-10296\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"order-number\">رقم الطلب #A-10296</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 125.15625,
+        "y": 20,
+        "width": 139.671875,
+        "height": 27
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>سجل الطلبات</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 96,
+        "width": 60.625,
+        "height": 15
+      },
+      "message": "\"تم التوصيل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-delivered\">تم التوصيل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 247,
+        "width": 61.625,
+        "height": 15
+      },
+      "message": "\"في الطريق\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-on-the-way\">في الطريق</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 398,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"ألغيت\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-cancelled\">ألغيت</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 549,
+        "width": 60.625,
+        "height": 15
+      },
+      "message": "\"تم التوصيل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-delivered\">تم التوصيل</span>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المعاملات - محفظة عمان</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :lang(ar) {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0f172a;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .phone-frame {
+      width: 100%;
+      max-width: 393px;
+      height: 852px;
+      background: #f8fafc;
+      border-radius: 48px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      border: 8px solid #1e293b;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
+      background: #ffffff;
+    }
+
+    /* App Header */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .app-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .icon-btn {
+      background: #f1f5f9;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #475569;
+    }
+
+    /* Main Scrollable Area */
+    .content-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Balance Card */
+    .balance-card {
+      background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+      color: #ffffff;
+      padding: 24px;
+      border-radius: 24px;
+      box-shadow: 0 10px 25px -5px rgba(6, 95, 70, 0.3);
+    }
+
+    .balance-label {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 6px;
+    }
+
+    .balance-amount {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .balance-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding-top: 12px;
+    }
+
+    /* Filter Section */
+    .filter-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .filter-chip {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Transactions List */
+    .transactions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-bottom: 20px;
+    }
+
+    .tx-item {
+      background: #ffffff;
+      padding: 14px 16px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      border: 1px solid #f1f5f9;
+    }
+
+    .tx-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .tx-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .tx-icon.out {
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    .tx-icon.in {
+      background: #f0fdf4;
+      color: #16a34a;
+    }
+
+    .tx-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .tx-merchant {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .tx-date {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .tx-amount-wrapper {
+      text-align: end;
+    }
+
+    .tx-amount {
+      font-size: 15px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .tx-amount.out {
+      color: #dc2626;
+    }
+
+    .tx-amount.in {
+      color: #16a34a;
+    }
+
+    .tx-status {
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-around;
+      padding: 12px 0 24px;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: #94a3b8;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .nav-item.active {
+      color: #059669;
+    }
+
+    .nav-item svg {
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-frame">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <span>٥G</span>
+        <span>100%</span>
+      </div>
+    </div>
+
+    <!-- App Header -->
+    <header class="app-header">
+      <h1 class="app-title">المعاملات</h1>
+      <button class="icon-btn" aria-label="البحث">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+    </header>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Balance Card -->
+      <div class="balance-card">
+        <div class="balance-label">الرصيد المتاح</div>
+        <div class="balance-amount"><bdi dir="ltr">1,450.750</bdi> ر.ع.</div>
+        <div class="balance-footer">
+          <span>رقم الحساب: <bdi dir="ltr">OM83 3000 ... 4012</bdi></span>
+          <span>عمانتل</span>
+        </div>
+      </div>
+
+      <!-- Filter Section -->
+      <div class="filter-section">
+        <h2 class="section-title">سجل الحركات</h2>
+        <button class="filter-chip">
+          <span>هذا الشهر</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+      </div>
+
+      <!-- Transactions List (8 items) -->
+      <div class="transactions-list">
+        
+        <!-- 1 -->
+        <div class="tx-item">
+          <div class="tx-left">
+            <div class="tx-icon out">🛒</div>
+            <div class="tx-details">
+              <span class="tx-merchant"><bdi dir="ltr">Lulu Hypermarket</bdi></span>
+              <span class="tx-date"><bdi dir="ltr">28 أكتوبر 2023</bdi></span>
+            </div>
+          </div>
+          <div class="tx-amount-wrapper">
+            <div class="tx-amount out">-<bdi dir="ltr">45.200</bdi> ر.ع.</div>
+            <span class="tx-status">مكتملة</span>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="tx-item">
+          <div class="tx-left">
+            <div class="tx-icon out">🎬</div>
+            <div class="tx-details">
+              <span class="tx-merchant"><bdi dir="ltr">Netflix</bdi></span>
+              <span class="tx-date"><bdi dir="ltr">27 أكتوبر 2023</bdi></span>
+            </div>
+          </div>
+          <div class="tx-amount-wrapper">
+            <div class="tx-amount out">-<bdi dir="ltr">4.500</bdi> ر.ع.</div>
+            <span class="tx-status">مكتملة</span>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="tx-item">
+          <div class="tx-left">
+            <div class="tx-icon in">📥</div>
+            <div class="tx-details">
+              <span class="tx-merchant">تحويل من صالح بن محمد</span>
+              <span class="tx-date"><bdi dir="ltr">25 أكتوبر 2023</bdi></span>
+            </div>
+          </div>
+          <div class="tx-amount-wrapper">
+            <div class="tx-amount in">+<bdi dir="ltr">120.000</bdi> ر.ع.</div>
+            <span class="tx-status">مكتملة</span>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="tx-item">
+          <div class="tx-left">
+            <div class="tx-icon out">⛽</div>
+            <div class="tx-details">
+              <span class="tx-merchant"><bdi dir="ltr">Shell Oman</bdi></span>
+              <span class="tx-date"><bdi dir="ltr">24 أكتوبر 2023</bdi></span>
+            </div>
+          </div>
+          <div class="tx-amount-wrapper">
+            <div class="tx-amount out">-<bdi dir="ltr">15.000</bdi> ر.ع.</div>
+            <span class="tx-status">مكتملة</span>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="tx-item">
+          <div class="tx-left">
+            <div class="tx-icon in">💼</div>
+            <div class="tx-details">
+              <span class="tx-merchant"><bdi dir="ltr">Oman Arab Bank</bdi> (<bdi>راتب</bdi>)</span>
+              <span class="tx-date"><bdi dir="ltr">24 أكتوبر 2023</bdi></span>
+            </div>
+          </div>
+          <div class="tx-amount-wrapper">
+            <div class="tx-amount in">+<bdi dir="ltr">850.000</bdi> ر.ع.</div>
+            <span class="tx-status">مكتملة</span>
+          </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="tx-item">
+          <div class="tx-left">
+            <div class="tx-icon out">☕</div>
+            <div class="tx-details">
+              <span class="tx-merchant"><bdi dir="ltr">Starbucks</bdi></span>
+              <span class="tx-date"><bdi dir="ltr">22 أكتوبر 2023</bdi></span>
+            </div>
+          </div>
+          <div class="tx-amount-wrapper">
+            <div class="tx-amount out">-<bdi dir="ltr">2.350</bdi> ر.ع.</div>
+            <span class="tx-status">مكتملة</span>
+          </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="tx-item">
+          <div class="tx-left">
+            <div class="tx-icon out">🍽️</div>
+            <div class="tx-details">
+              <span class="tx-merchant">مطعم المائدة العمانية</span>
+              <span class="tx-date"><bdi dir="ltr">20 أكتوبر 2023</bdi></span>
+            </div>
+          </div>
+          <div class="tx-amount-wrapper">
+            <div class="tx-amount out">-<bdi dir="ltr">18.600</bdi> ر.ع.</div>
+            <span class="tx-status">مكتملة</span>
+          </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="tx-item">
+          <div class="tx-left">
+            <div class="tx-icon out">📱</div>
+            <div class="tx-details">
+              <span class="tx-merchant"><bdi dir="ltr">Omantel</bdi></span>
+              <span class="tx-date"><bdi dir="ltr">19 أكتوبر 2023</bdi></span>
+            </div>
+          </div>
+          <div class="tx-amount-wrapper">
+            <div class="tx-amount out">-<bdi dir="ltr">12.000</bdi> ر.ع.</div>
+            <span class="tx-status">مكتملة</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>الرئيسية</span>
+      </a>
+      <a href="#" class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>المعاملات</span>
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <span>البطاقات</span>
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>حسابي</span>
+      </a>
+    </nav>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حجز موعد - عيادة القطاريع</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --primary: #0077b6;
+      --primary-light: #e0f2fe;
+      --border: #e5e7eb;
+      --today: #fef9c3;
+      --selected: #0077b6;
+      --selected-text: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      max-width: 420px;
+      margin: 0 auto;
+      direction: rtl;
+      text-align: right;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .nav-arrow {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--primary);
+      padding: 6px 10px;
+    }
+
+    .doctor-card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .doctor-img {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .doctor-info h2 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .doctor-info p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .calendar {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .calendar-header .month-year {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .weekdays div {
+      padding: 6px 0;
+    }
+
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+    }
+
+    .day {
+      padding: 10px 0;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .day:hover:not(.empty):not(.disabled) {
+      background-color: var(--primary-light);
+    }
+
+    .day.selected {
+      background-color: var(--selected);
+      color: var(--selected-text);
+    }
+
+    .day.today {
+      background-color: var(--today);
+      font-weight: 600;
+    }
+
+    .day.empty {
+      cursor: default;
+      color: transparent;
+    }
+
+    .day.disabled {
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+
+    .time-slots {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 20px;
+    }
+
+    .time-slots h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .slots-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .slot-btn {
+      flex: 1 1 calc(50% - 8px);
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .slot-btn:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .slot-btn.selected {
+      background: var(--selected);
+      color: var(--selected-text);
+      border-color: var(--selected);
+    }
+
+    .slot-btn.disabled {
+      background: #f9fafb;
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+
+    .confirm-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: var(--selected-text);
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,119,182,0.3);
+      transition: background 0.2s;
+    }
+
+    .confirm-btn:hover {
+      background: #006294;
+    }
+
+    .confirm-btn:disabled {
+      background: #94c2d4;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <button class="nav-arrow" id="prevMonth">‹</button>
+    <h1>حجز موعد</h1>
+    <button class="nav-arrow" id="nextMonth">›</button>
+  </div>
+
+  <div class="doctor-card">
+    <div class="doctor-img">👩‍⚕️</div>
+    <div class="doctor-info">
+      <h2>د. فاطمة المطيري</h2>
+      <p>أخصائية أمراض القلب</p>
+    </div>
+  </div>
+
+  <div class="calendar">
+    <div class="calendar-header">
+      <button class="nav-arrow" id="prevMonthCal">‹</button>
+      <span class="month-year" id="monthYear">أكتوبر 2024</span>
+      <button class="nav-arrow" id="nextMonthCal">›</button>
+    </div>
+    <div class="weekdays">
+      <div>س</div><div>ح</div><div>ث</div><div>ر</div><div>خ</div><div>ج</div><div>أ</div>
+    </div>
+    <div class="days" id="calendarDays"></div>
+  </div>
+
+  <div class="time-slots">
+    <h3>اختر وقتًا مناسبًا</h3>
+    <div class="slots-list" id="slotsList">
+      <button class="slot-btn disabled">٩:٠٠ ص - محجوز</button>
+      <button class="slot-btn">٩:٣٠ ص</button>
+      <button class="slot-btn">١٠:٠٠ ص</button>
+      <button class="slot-btn selected">١٠:٣٠ ص</button>
+      <button class="slot-btn">١١:٠٠ ص</button>
+      <button class="slot-btn">١١:٣٠ ص</button>
+      <button class="slot-btn">١٢:٠٠ م</button>
+    </div>
+  </div>
+
+  <button class="confirm-btn" id="confirmBtn">تأكيد الحجز</button>
+
+  <script>
+    const today = new Date();
+    let currentMonth = today.getMonth();
+    let currentYear = today.getFullYear();
+
+    const monthNames = [
+      "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+      "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+    ];
+
+    const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+    const firstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
+
+    // Adjust so week starts on Saturday (6)
+    function getStartDayIndex(year, month) {
+      const d = firstDayOfMonth(year, month);
+      // Shift so Saturday = 0
+      return (d + 1) % 7;
+    }
+
+    function renderCalendar() {
+      const daysContainer = document.getElementById("calendarDays");
+      const monthYearLabel = document.getElementById("monthYear");
+      monthYearLabel.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+      daysContainer.innerHTML = "";
+
+      const startDay = getStartDayIndex(currentYear, currentMonth);
+      const totalDays = daysInMonth(currentYear, currentMonth);
+
+      // Empty cells before first day
+      for (let i = 0; i < startDay; i++) {
+        const empty = document.createElement("div");
+        empty.className = "day empty";
+        daysContainer.appendChild(empty);
+      }
+
+      // Day cells
+      for (let day = 1; day <= totalDays; day++) {
+        const dayEl = document.createElement("div");
+        dayEl.className = "day";
+        dayEl.textContent = day;
+
+        const isToday =
+          day === today.getDate() &&
+          currentMonth === today.getMonth() &&
+          currentYear === today.getFullYear();
+
+        if (isToday) {
+          dayEl.classList.add("today");
+        }
+
+        dayEl.addEventListener("click", () => {
+          document.querySelectorAll(".day").forEach(d => d.classList.remove("selected"));
+          dayEl.classList.add("selected");
+        });
+
+        daysContainer.appendChild(dayEl);
+      }
+    }
+
+    document.getElementById("prevMonth").addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar();
+    });
+
+    document.getElementById("nextMonth").addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar();
+    });
+
+    document.getElementById("prevMonthCal").addEventListener("click", () => {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar();
+    });
+
+    document.getElementById("nextMonthCal").addEventListener("click", () => {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar();
+    });
+
+    renderCalendar();
+  </script>
+</body>
+</html>

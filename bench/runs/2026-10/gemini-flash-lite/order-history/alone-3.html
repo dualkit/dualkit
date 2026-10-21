@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل الطلبات - متجر السعودية</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        saudi: {
+                            green: '#006C35',
+                            light: '#E6F4ED',
+                            dark: '#004D25'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-cairo bg-gray-100 flex justify-center items-center min-h-screen">
+
+    <!-- Phone Screen Container -->
+    <div class="w-full max-w-[390px] h-[844px] bg-gray-50 shadow-2xl flex flex-col overflow-hidden relative border border-gray-200 rounded-[40px]">
+        
+        <!-- Status Bar (Simulated) -->
+        <div class="bg-white px-6 pt-3 pb-1 flex justify-between items-center text-xs text-gray-800 font-semibold shrink-0">
+            <span>9:41</span>
+            <div class="flex items-center space-x-1 space-x-reverse">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- App Header -->
+        <div class="bg-white px-6 py-4 shadow-sm flex items-center justify-between shrink-0">
+            <button class="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-200 transition">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <h1 class="text-lg font-bold text-gray-900">سجل الطلبات</h1>
+            <div class="w-9"></div> <!-- Spacer for centering -->
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="px-6 py-3 bg-white border-b border-gray-100 flex gap-2 overflow-x-auto shrink-0 no-scrollbar">
+            <button class="px-4 py-1.5 bg-saudi-green text-white text-xs font-semibold rounded-full shadow-sm">الكل (٤)</button>
+            <button class="px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition">نشطة (١)</button>
+            <button class="px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition">المكتملة (٢)</button>
+            <button class="px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition">الملغاة (١)</button>
+        </div>
+
+        <!-- Orders List (Scrollable Area) -->
+        <div class="flex-1 overflow-y-auto px-5 py-4 space-y-3.5 pb-20">
+            
+            <!-- Order 1: On the Way -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <span class="text-xs text-gray-400 font-medium">رقم الطلب</span>
+                        <h3 class="text-sm font-bold text-gray-800">#A-10293</h3>
+                    </div>
+                    <!-- Status Badge -->
+                    <span class="px-2.5 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-truck-fast"></i> في الطريق
+                    </span>
+                </div>
+                <div class="border-t border-gray-100 pt-2.5 pb-2.5 space-y-1">
+                    <div class="flex items-center text-xs text-gray-600 gap-2">
+                        <i class="fa-regular fa-calendar text-gray-400 w-4"></i>
+                        <span>٢٥ أكتوبر ٢٠٢٣ | ١٠ ربيع الثاني ١٤٤٥ هـ</span>
+                    </div>
+                    <div class="flex items-center text-xs text-gray-600 gap-2">
+                        <i class="fa-solid fa-tag text-gray-400 w-4"></i>
+                        <span>المجموع: <strong class="text-gray-900 font-bold">٣٥٠.٠٠ ر.س</strong></span>
+                    </div>
+                </div>
+                <div class="border-t border-gray-100 pt-2.5 flex justify-between items-center">
+                    <span class="text-[11px] text-gray-400">التوصيل المتوقع: غداً</span>
+                    <button class="text-xs text-saudi-green font-bold hover:underline flex items-center gap-1">
+                        تتبع الطلب <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Order 2: Delivered -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <span class="text-xs text-gray-400 font-medium">رقم الطلب</span>
+                        <h3 class="text-sm font-bold text-gray-800">#A-10182</h3>
+                    </div>
+                    <!-- Status Badge -->
+                    <span class="px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-circle-check"></i> تم التوصيل
+                    </span>
+                </div>
+                <div class="border-t border-gray-100 pt-2.5 pb-2.5 space-y-1">
+                    <div class="flex items-center text-xs text-gray-600 gap-2">
+                        <i class="fa-regular fa-calendar text-gray-400 w-4"></i>
+                        <span>١٨ أكتوبر ٢٠٢٣ | ٣ ربيع الأول ١٤٤٥ هـ</span>
+                    </div>
+                    <div class="flex items-center text-xs text-gray-600 gap-2">
+                        <i class="fa-solid fa-tag text-gray-400 w-4"></i>
+                        <span>المجموع: <strong class="text-gray-900 font-bold">١,٢٥٠.٥٠ ر.س</strong></span>
+                    </div>
+                </div>
+                <div class="border-t border-gray-100 pt-2.5 flex justify-between items-center">
+                    <span class="text-[11px] text-gray-400">تم التسليم بنجاح</span>
+                    <button class="text-xs text-saudi-green font-bold hover:underline flex items-center gap-1">
+                        إعادة الطلب <i class="fa-solid fa-rotate-right text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Order 3: Delivered -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <span class="text-xs text-gray-400 font-medium">رقم الطلب</span>
+                        <h3 class="text-sm font-bold text-gray-800">#A-09941</h3>
+                    </div>
+                    <!-- Status Badge -->
+                    <span class="px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-circle-check"></i> تم التوصيل
+                    </span>
+                </div>
+                <div class="border-t border-gray-100 pt-2.5 pb-2.5 space-y-1">
+                    <div class="flex items-center text-xs text-gray-600 gap-2">
+                        <i class="fa-regular fa-calendar text-gray-400 w-4"></i>
+                        <span>٠٥ أكتوبر ٢٠٢٣ | ٢٠ صفر ١٤٤٥ هـ</span>
+                    </div>
+                    <div class="flex items-center text-xs text-gray-600 gap-2">
+                        <i class="fa-solid fa-tag text-gray-400 w-4"></i>
+                        <span>المجموع: <strong class="text-gray-900 font-bold">١٨٠.٠٠ ر.س</strong></span>
+                    </div>
+                </div>
+                <div class="border-t border-gray-100 pt-2.5 flex justify-between items-center">
+                    <span class="text-[11px] text-gray-400">تم التسليم بنجاح</span>
+                    <button class="text-xs text-saudi-green font-bold hover:underline flex items-center gap-1">
+                        تقييم المنتجات <i class="fa-solid fa-star text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Order 4: Cancelled -->
+            <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition">
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <span class="text-xs text-gray-400 font-medium">رقم الطلب</span>
+                        <h3 class="text-sm font-bold text-gray-800">#A-09822</h3>
+                    </div>
+                    <!-- Status Badge -->
+                    <span class="px-2.5 py-1 bg-rose-50 text-rose-600 rounded-full text-xs font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-circle-xmark"></i> ملغي
+                    </span>
+                </div>
+                <div class="border-t border-gray-100 pt-2.5 pb-2.5 space-y-1">
+                    <div class="flex items-center text-xs text-gray-600 gap-2">
+                        <i class="fa-regular fa-calendar text-gray-400 w-4"></i>
+                        <span>٠١ أكتوبر ٢٠٢٣ | ١٦ صفر ١٤٤٥ هـ</span>
+                    </div>
+                    <div class="flex items-center text-xs text-gray-600 gap-2">
+                        <i class="fa-solid fa-tag text-gray-400 w-4"></i>
+                        <span>المجموع: <strong class="text-gray-900 font-bold">٥٢٠.٠٠ ر.س</strong></span>
+                    </div>
+                </div>
+                <div class="border-t border-gray-100 pt-2.5 flex justify-between items-center">
+                    <span class="text-[11px] text-rose-500">تم الإلغاء من قبل العميل</span>
+                    <button class="text-xs text-saudi-green font-bold hover:underline flex items-center gap-1">
+                        التفاصيل <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-2.5 flex justify-between items-center z-10 shadow-lg">
+            <a href="#" class="flex flex-col items-center text-gray-400 hover:text-saudi-green transition">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px] mt-1 font-medium">الرئيسية</span>
+            </a>
+            <a href="#" class="flex flex-col items-center text-gray-400 hover:text-saudi-green transition">
+                <i class="fa-solid fa-th-large text-lg"></i>
+                <span class="text-[10px] mt-1 font-medium">الأقسام</span>
+            </a>
+            <a href="#" class="flex flex-col items-center text-saudi-green">
+                <i class="fa-solid fa-bag-shopping text-lg"></i>
+                <span class="text-[10px] mt-1 font-bold">الطلبات</span>
+            </a>
+            <a href="#" class="flex flex-col items-center text-gray-400 hover:text-saudi-green transition">
+                <i class="fa-solid fa-user text-lg"></i>
+                <span class="text-[10px] mt-1 font-medium">حسابي</span>
+            </a>
+        </div>
+
+        <!-- Home Indicator Bar -->
+        <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-gray-300 rounded-full z-20 pointer-events-none"></div>
+
+    </div>
+
+</body>
+</html>

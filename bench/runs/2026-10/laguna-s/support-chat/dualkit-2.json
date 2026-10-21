@@ -1,0 +1,277 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "support-chat",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T17:30:02.308Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>دردشة الدعم - كويتيل</title>\n  <style>\n    * {\n      margin: 0;\n      padding: 0;\n      box-sizing: border-box;\n    }\n\n    body {\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n      background-color: #f0f2f5;\n      color: #333;\n      direction: rtl;\n      text-align: right;\n      padding: 16px;\n      max-width: 480px;\n      margin: 0 auto;\n      min-height: 100vh;\n    }\n\n    .chat-container {\n      background-color: #ffffff;\n      border-radius: 12px;\n      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);\n      display: flex;\n      flex-direction: column;\n      height: 90vh;\n      overflow: hidden;\n    }\n\n    .chat-header {\n      background-color: #0078d4;\n      color: white;\n      padding: 16px;\n      font-size: 18px;\n      font-weight: 600;\n      text-align: center;\n    }\n\n    .messages-wrapper {\n      flex: 1;\n      overflow-y: auto;\n      padding: 16px;\n      display: flex;\n      flex-direction: column;\n      gap: 12px;\n    }\n\n    .message {\n      max-width: 75%;\n      padding: 10px 14px;\n      border-radius: 16px;\n      line-height: 1.6;\n      font-size: 15px;\n      word-wrap: break-word;\n    }\n\n    .customer-message {\n      background-color: #e4f2ff;\n      border-bottom-right-radius: 4px;\n      align-self: flex-end;\n    }\n\n    .agent-message {\n      background-color: #f0f0f0;\n      border-bottom-left-radius: 4px;\n      align-self: flex-start;\n    }\n\n    .message-time {\n      font-size: 12px;\n      color: #666;\n      margin-top: 4px;\n      text-align: left;\n    }\n\n    .agent-name {\n      font-weight: 600;\n      color: #0078d4;\n      margin-bottom: 4px;\n      display: block;\n    }\n\n    .input-area {\n      display: flex;\n      padding: 12px;\n      background-color: #f9f9f9;\n      border-top: 1px solid #ddd;\n      gap: 8px;\n    }\n\n    .text-field {\n      flex: 1;\n      padding: 12px 16px;\n      border: 1px solid #ccc;\n      border-radius: 20px;\n      font-size: 15px;\n      outline: none;\n      transition: border-color 0.2s;\n    }\n\n    .text-field:focus {\n      border-color: #0078d4;\n    }\n\n    .send-button {\n      background-color: #0078d4;\n      color: white;\n      border: none;\n      border-radius: 20px;\n      padding: 12px 20px;\n      font-size: 15px;\n      font-weight: 600;\n      cursor: pointer;\n      transition: background-color 0.2s;\n    }\n\n    .send-button:hover {\n      background-color: #005a9e;\n    }\n\n    .scrollbar-thin::-webkit-scrollbar {\n      width: 6px;\n    }\n\n    .scrollbar-thin::-webkit-scrollbar-thumb {\n      background-color: #ccc;\n      border-radius: 3px;\n    }\n\n    .scrollbar-thin::-webkit-scrollbar-track {\n      background-color: transparent;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"chat-container\">\n    <div class=\"chat-header\">دردشة الدعم الفني - كويتيل</div>\n    \n    <div class=\"messages-wrapper scrollbar-thin\">\n      <!-- Message 1 - Customer -->\n      <div class=\"message customer-message\">\n        <span class=\"message-time\">٩:٠٠ ص</span>\n        <div>مرحباً، أحتاج مساعدة في تفعيل خدمة 5G على هاتفي.</div>\n      </div>\n\n      <!-- Message 2 - Agent -->\n      <div class=\"message agent-message\">\n        <span class=\"message-time\">٩:٠٢ ص</span>\n        <span class=\"agent-name\">سارة (وكيلة دعم)</span>\n        <div>مرحباً بك! بالطبع، يسعدني مساعدتك. هل هاتفك يدعم شبكة 5G؟</div>\n      </div>\n\n      <!-- Message 3 - Customer -->\n      <div class=\"message customer-message\">\n        <span class=\"message-time\">٩:٠٣ ص</span>\n        <div>نعم، هاتفي يدعم 5G، لكن لم أستقبل رسالة تفعيل بعد.</div>\n      </div>\n\n      <!-- Message 4 - Agent -->\n      <div class=\"message agent-message\">\n        <span class=\"message-time\">٩:٠٥ ص</span>\n        <span class=\"agent-name\">سارة (وكيلة دعم)</span>\n        <div>سأتحقق من حسابك الآن. هل لديك رقم الطلب؟</div>\n      </div>\n\n      <!-- Message 5 - Customer -->\n      <div class=\"message customer-message\">\n        <span class=\"message-time\">٩:٠٦ ص</span>\n        <div>نعم، رقم الطلب الخاص بي هو TX-48213.</div>\n      </div>\n\n      <!-- Message 6 - Agent -->\n      <div class=\"message agent-message\">\n        <span class=\"message-time\">٩:٠٨ ص</span>\n        <span class=\"agent-name\">سارة (وكيلة دعم)</span>\n        <div>شكراً لك. تم العثور على طلبك بنجاح. سأقوم بإرسال رسالة تفعيل eSIM خلال دقيقة.</div>\n      </div>\n    </div>\n\n    <div class=\"input-area\">\n      <input type=\"text\" class=\"text-field\" placeholder=\"اكتب رسالتك هنا...\" />\n      <button class=\"send-button\">إرسال</button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6488,
+    "output": 1742
+  },
+  "ms": 26711,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 65,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 66.828125,
+        "y": 123,
+        "width": 195.671875,
+        "height": 41
+      },
+      "message": "\"مرحباً، أحتاج مساعدة في تفعيل خدمة 5G عل…\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<div>مرحباً، أحتاج مساعدة في تفعيل خدمة 5G على هاتفي.</div>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 141.15625,
+        "y": 255,
+        "width": 202.84375,
+        "height": 65
+      },
+      "message": "\"مرحباً بك! بالطبع، يسعدني مساعدتك. هل ها…\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<div>مرحباً بك! بالطبع، يسعدني مساعدتك. هل هاتفك يدعم شبكة 5G؟</div>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 82.625,
+        "y": 383,
+        "width": 179.875,
+        "height": 41
+      },
+      "message": "\"نعم، هاتفي يدعم 5G، لكن لم أستقبل رسالة …\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<div>نعم، هاتفي يدعم 5G، لكن لم أستقبل رسالة تفعيل بعد.</div>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 47.3125,
+        "y": 619,
+        "width": 215.1875,
+        "height": 41
+      },
+      "message": "\"نعم، رقم الطلب الخاص بي هو TX-48213.\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<div>نعم، رقم الطلب الخاص بي هو TX-48213.</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 93,
+        "y": 33,
+        "width": 204,
+        "height": 20
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"chat-header\">دردشة الدعم الفني - كويتيل</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 48,
+        "y": 733.09375,
+        "width": 40,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"send-button\">إرسال</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 222.8125,
+        "y": 102,
+        "width": 39.6875,
+        "height": 14
+      },
+      "message": "\"٩:٠٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"message-time\">٩:٠٠ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 304.3125,
+        "y": 206,
+        "width": 39.6875,
+        "height": 14
+      },
+      "message": "\"٩:٠٢ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"message-time\">٩:٠٢ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 222.8125,
+        "y": 362,
+        "width": 39.6875,
+        "height": 14
+      },
+      "message": "\"٩:٠٣ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"message-time\">٩:٠٣ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 304.3125,
+        "y": 466,
+        "width": 39.6875,
+        "height": 14
+      },
+      "message": "\"٩:٠٥ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"message-time\">٩:٠٥ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 222.8125,
+        "y": 598,
+        "width": 39.6875,
+        "height": 14
+      },
+      "message": "\"٩:٠٦ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"message-time\">٩:٠٦ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 304.3125,
+        "y": 702,
+        "width": 39.6875,
+        "height": 14
+      },
+      "message": "\"٩:٠٨ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"message-time\">٩:٠٨ ص</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 32,
+        "y": 86,
+        "width": 244.5,
+        "height": 92
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer-message\">\n        <span class=\"message-time\">٩:٠٠ ص</span>\n        <div>مرحباً، أحتاج مساعدة في تفعيل خدمة 5G على هاتفي.</div>\n    "
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 113.5,
+        "y": 190,
+        "width": 244.5,
+        "height": 144
+      },
+      "message": "border-bottom-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent-message\">\n        <span class=\"message-time\">٩:٠٢ ص</span>\n        <span class=\"agent-name\">سارة (وكيلة دعم)</span>\n        <div>مرحبا"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 32,
+        "y": 346,
+        "width": 244.5,
+        "height": 92
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer-message\">\n        <span class=\"message-time\">٩:٠٣ ص</span>\n        <div>نعم، هاتفي يدعم 5G، لكن لم أستقبل رسالة تفعيل بعد.</div>\n  "
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 113.5,
+        "y": 450,
+        "width": 244.5,
+        "height": 120
+      },
+      "message": "border-bottom-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent-message\">\n        <span class=\"message-time\">٩:٠٥ ص</span>\n        <span class=\"agent-name\">سارة (وكيلة دعم)</span>\n        <div>سأتحق"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 32,
+        "y": 582,
+        "width": 244.5,
+        "height": 92
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer-message\">\n        <span class=\"message-time\">٩:٠٦ ص</span>\n        <div>نعم، رقم الطلب الخاص بي هو TX-48213.</div>\n      </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 113.5,
+        "y": 686,
+        "width": 244.5,
+        "height": 144
+      },
+      "message": "border-bottom-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent-message\">\n        <span class=\"message-time\">٩:٠٨ ص</span>\n        <span class=\"agent-name\">سارة (وكيلة دعم)</span>\n        <div>شكراً"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

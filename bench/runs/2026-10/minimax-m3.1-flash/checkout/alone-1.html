@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b6b4b">
+  <title>إتمام الطلب — فواكه الطازج</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --green-950: #073f2d;
+      --green-900: #075238;
+      --green-800: #096846;
+      --green-700: #0c7955;
+      --green-100: #e6f4ed;
+      --green-50: #f1f8f4;
+      --orange: #f5a623;
+      --ink: #17231f;
+      --muted: #708078;
+      --line: #e6ece8;
+      --surface: #ffffff;
+      --background: #f6f8f6;
+      --danger: #d94c4c;
+      --shadow: 0 12px 34px rgba(20, 55, 41, .08);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: #e9eeeb;
+      color: var(--ink);
+      font-family: "Tajawal", Arial, sans-serif;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding-bottom: 112px;
+      background: var(--background);
+      box-shadow: 0 0 40px rgba(7, 58, 42, .08);
+    }
+
+    .topbar {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      display: grid;
+      grid-template-columns: 44px 1fr 44px;
+      align-items: center;
+      min-height: 70px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, .96);
+      border-bottom: 1px solid rgba(219, 229, 223, .82);
+      backdrop-filter: blur(16px);
+    }
+
+    .back-button {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      padding: 0;
+      border-radius: 13px;
+      background: var(--green-50);
+      color: var(--green-800);
+      cursor: pointer;
+    }
+
+    .back-button svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      color: var(--green-950);
+      font-size: 20px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green-700);
+    }
+
+    .secure-badge svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    main {
+      padding: 18px 16px 0;
+    }
+
+    .delivery-card {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 82px;
+      margin-bottom: 18px;
+      padding: 15px 16px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--green-900), var(--green-700));
+      color: #fff;
+      box-shadow: 0 12px 25px rgba(7, 82, 56, .18);
+    }
+
+    .delivery-card::after {
+      content: "";
+      position: absolute;
+      top: -38px;
+      left: -24px;
+      width: 110px;
+      height: 110px;
+      border: 18px solid rgba(255,255,255,.06);
+      border-radius: 50%;
+    }
+
+    .pin-icon {
+      display: grid;
+      flex: 0 0 43px;
+      width: 43px;
+      height: 43px;
+      place-items: center;
+      border-radius: 14px;
+      background: rgba(255,255,255,.14);
+    }
+
+    .pin-icon svg {
+      width: 23px;
+      height: 23px;
+    }
+
+    .delivery-copy {
+      flex: 1;
+    }
+
+    .delivery-copy strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 15px;
+    }
+
+    .delivery-copy span {
+      color: rgba(255,255,255,.78);
+      font-size: 12px;
+    }
+
+    .change-link {
+      position: relative;
+      z-index: 1;
+      padding: 7px 10px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.12);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 3px 12px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      color: var(--green-950);
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .item-count {
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--green-100);
+      color: var(--green-800);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .cart-list {
+      overflow: hidden;
+      padding: 0 14px;
+      border: 1px solid rgba(223, 230, 225, .9);
+      border-radius: 22px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 0;
+    }
+
+    .cart-item + .cart-item {
+      border-top: 1px solid var(--line);
+    }
+
+    .product-photo {
+      position: relative;
+      display: grid;
+      width: 72px;
+      height: 72px;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 17px;
+      background: #f1f4ed;
+    }
+
+    .product-photo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 25%, rgba(255,255,255,.9), transparent 42%);
+    }
+
+    .product-photo svg {
+      position: relative;
+      width: 49px;
+      height: 49px;
+      filter: drop-shadow(0 5px 5px rgba(44, 70, 45, .12));
+    }
+
+    .photo-tomato { background: #fff0e7; }
+    .photo-milk { background: #eaf4fb; }
+    .photo-eggs { background: #f8f1df; }
+
+    .product-info {
+      min-width: 0;
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .product-name {
+      margin: 0 0 3px;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .product-detail {
+      margin: 0 0 9px;
+      color: var(--muted);
+      font-size: 11.5px;
+      white-space: nowrap;
+    }
+
+    .stepper {
+      display: inline-flex;
+      direction: ltr;
+      align-items: center;
+      width: max-content;
+      overflow: hidden;
+      border: 1px solid #dfe7e2;
+      border-radius: 10px;
+      background: #fafcfb;
+    }
+
+    .stepper button {
+      display: grid;
+      width: 30px;
+      height: 28px;
+      place-items: center;
+      padding: 0;
+      background: transparent;
+      color: var(--green-800);
+      font-size: 19px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .stepper button:active {
+      background: var(--green-100);
+    }
+
+    .quantity {
+      display: grid;
+      width: 30px;
+      height: 28px;
+      place-items: center;
+      border-right: 1px solid #e4ebe7;
+      border-left: 1px solid #e4ebe7;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .price-block {
+      align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .price {
+      margin-bottom: 5px;
+      color: var(--green-900);
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .price small {
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .remove-button {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      padding: 3px;
+      background: transparent;
+      color: #9a6666;
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    .remove-button svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .promo-card {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: 0 8px 25px rgba(20, 55, 41, .045);
+    }
+
+    .promo-label {
+      display: block;
+      margin: 0 2px 8px;
+      color: var(--green-950);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .promo-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .promo-input-wrap {
+      position: relative;
+      flex: 1;
+    }
+
+    .promo-input-wrap > svg {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      width: 18px;
+      height: 18px;
+      transform: translateY(-50%);
+      color: #8b9992;
+      pointer-events: none;
+    }
+
+    .promo-input {
+      width: 100%;
+      height: 44px;
+      padding: 0 39px 0 12px;
+      border: 1px solid #dfe6e2;
+      outline: none;
+      border-radius: 12px;
+      background: #fbfcfb;
+      color: var(--ink);
+      font-size: 13px;
+      text-align: right;
+    }
+
+    .promo-input::placeholder {
+      color: #9ba6a0;
+    }
+
+    .promo-input:focus {
+      border-color: var(--green-700);
+      box-shadow: 0 0 0 3px rgba(12, 121, 85, .1);
+    }
+
+    .apply-button {
+      min-width: 67px;
+      height: 44px;
+      padding: 0 14px;
+      border-radius: 12px;
+      background: var(--green-100);
+      color: var(--green-800);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .promo-message {
+      display: none;
+      margin: 8px 2px 0;
+      color: var(--green-700);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .summary-card {
+      margin-top: 16px;
+      padding: 17px 16px 14px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .summary-card h2 {
+      margin: 0 0 13px;
+      color: var(--green-950);
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 10px 0;
+      color: #52615a;
+      font-size: 13px;
+    }
+
+    .summary-row span:last-child {
+      color: var(--ink);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .summary-row.discount span {
+      color: var(--green-700);
+    }
+
+    .summary-row.total {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed #d5dfda;
+      color: var(--green-950);
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .summary-row.total span:last-child {
+      color: var(--green-800);
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .vat-note {
+      margin: 5px 0 0;
+      color: #98a39e;
+      font-size: 10px;
+    }
+
+    .payment-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 14px 0 0;
+      color: #78857f;
+      font-size: 11px;
+    }
+
+    .payment-note svg {
+      width: 15px;
+      height: 15px;
+      color: var(--green-700);
+    }
+
+    .checkout-bar {
+      position: fixed;
+      z-index: 30;
+      right: 50%;
+      bottom: 0;
+      width: 100%;
+      max-width: 430px;
+      padding: 12px 16px 18px;
+      transform: translateX(50%);
+      border-top: 1px solid rgba(221, 229, 224, .9);
+      background: rgba(255,255,255,.97);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 -10px 30px rgba(24, 59, 45, .08);
+    }
+
+    .place-order {
+      display: flex;
+      width: 100%;
+      min-height: 54px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--green-800), var(--green-700));
+      color: #fff;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(9, 104, 70, .23);
+    }
+
+    .place-order:active {
+      transform: scale(.99);
+      background: var(--green-900);
+    }
+
+    .place-order svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .checkout-caption {
+      margin: 8px 0 0;
+      color: #849089;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 50;
+      right: 50%;
+      bottom: 100px;
+      width: max-content;
+      max-width: calc(100% - 40px);
+      padding: 10px 16px;
+      transform: translate(50%, 15px);
+      border-radius: 12px;
+      background: var(--green-950);
+      color: #fff;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s ease;
+    }
+
+    .toast.show {
+      transform: translate(50%, 0);
+      opacity: 1;
+    }
+
+    @media (min-width: 600px) {
+      body {
+        padding: 24px 0;
+      }
+
+      .app {
+        min-height: calc(100vh - 48px);
+        border-radius: 28px;
+        overflow: hidden;
+      }
+
+      .checkout-bar {
+        bottom: 24px;
+        border-radius: 0 0 28px 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <button class="back-button" type="button" aria-label="العودة إلى السلة">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1>إتمام الطلب</h1>
+      <span class="secure-badge" title="دفع آمن">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3l7 3v5c0 4.6-2.8 8.3-7 10-4.2-1.7-7-5.4-7-10V6l7-3z" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M9.2 12l1.8 1.8 3.8-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </header>
+
+    <main>
+      <section class="delivery-card" aria-label="عنوان التوصيل">
+        <div class="pin-icon">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1116 0z" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="12" cy="10" r="2.6" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </div>
+        <div class="delivery-copy">
+          <strong>التوصيل إلى</strong>
+          <span>شقة ٢١، برج النخيل، دبي</span>
+        </div>
+        <button class="change-link" type="button">تغيير</button>
+      </section>
+
+      <div class="section-title">
+        <h2>سلة التسوق</h2>
+        <span class="item-count">٣ منتجات</span>
+      </div>
+
+      <section class="cart-list" aria-label="المنتجات في السلة">
+        <article class="cart-item">
+          <div class="product-photo photo-tomato" role="img" aria-label="صورةplaceholder طماطم">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <path d="M34 21c-2-6 0-11 5-14 1 6-1 10-5 14z" fill="#4d9851"/>
+              <path d="M31 20c-5-3-10-2-14 2 5 1 9 1 14-2z" fill="#60ad5d"/>
+              <path d="M31 18c1-5 5-8 10-8-1 5-4 8-10 8z" fill="#3e8745"/>
+              <path d="M31 21c-9 0-17 8-17 19 0 9 7 16 17 16s17-7 17-17c0-10-7-18-17-18z" fill="#ef5c43"/>
+              <path d="M29 25c-5 5-7 14-4 22" stroke="#ff8b72" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">طماطم بلدية طازجة</h3>
+            <p class="product-detail">١ كجم · معروضة في星期</p>
+            <div class="stepper" aria-label="كمية الطماطم">
+              <button type="button" data-item="tomato" data-step="1" aria-label="زيادة الكمية">+</button>
+              <span class="quantity" id="tomato-qty">١</span>
+              <button type="button" data-item="tomato" data-step="-1" aria-label="تقليل الكمية">−</button>
+            </div>
+          </div>
+          <div class="price-block">
+            <div class="price"><span id="tomato-price">٨٫٥٠</span> <small>درهم</small></div>
+            <button class="remove-button" type="button" aria-label="حذف الطماطم">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              حذف
+            </button>
+          </div>
+        </article>
+
+        <article class="cart-item">
+          <div class="product-photo photo-milk" role="img" aria-label="صورةplaceholder حليب">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <path d="M21 10h22l4 9v32c0 4-2 6-6 6H23c-4 0-6-2-6-6V19l4-9z" fill="#fff" stroke="#dce9e9" stroke-width="2"/>
+              <path d="M22 10h20l-3-6H25l-3 6z" fill="#e9f2f5" stroke="#bad1d5" stroke-width="2"/>
+              <path d="M17 26h30v20H17z" fill="#dff1f7"/>
+              <path d="M18 35c8-5 13 5 21 0 4-2 7-1 8 0v11H17V35z" fill="#72bad0"/>
+              <circle cx="32" cy="28" r="6" fill="#fff" opacity=".85"/>
+              <path d="M22 52h20" stroke="#cad9dc" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">حليب طازج كامل الدسم</h3>
+            <p class="product-detail">٢ لتر · عبوة معبأة</p>
+            <div class="stepper" aria-label="كمية الحليب">
+              <button type="button" data-item="milk" data-step="1" aria-label="زيادة الكمية">+</button>
+              <span class="quantity" id="milk-qty">١</span>
+              <button type="button" data-item="milk" data-step="-1" aria-label="تقليل الكمية">−</button>
+            </div>
+          </div>
+          <div class="price-block">
+            <div class="price"><span id="milk-price">١١٫٠٠</span> <small>درهم</small></div>
+            <button class="remove-button" type="button" aria-label="حذف الحليب">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              حذف
+            </button>
+          </div>
+        </article>
+
+        <article class="cart-item">
+          <div class="product-photo photo-eggs" role="img" aria-label="صورةplaceholder بيض">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <path d="M12 49c2-7 8-13 12-20 3-5 4-9 3-13 8 2 13 9 13 17 0 10-8 18-18 18-5 0-9-1-10-2z" fill="#f8f2df" stroke="#d8cba8" stroke-width="2"/>
+              <path d="M31 18c5 4 8 9 8 15 0 8-6 14-13 15 7-5 10-14 5-30z" fill="#ead9b5" opacity=".7"/>
+              <path d="M42 51c2-7 8-12 12-19 2-4 3-8 2-11 7 3 11 10 10 17-1 10-9 17-18 17-3 0-5-1-6-4z" fill="#fff9e9" stroke="#d8cba8" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="product-info">
+            <h3 class="product-name">بيض بلدي طازج</h3>
+            <p class="product-detail">٦ حبات · درجة أولى</p>
+            <div class="stepper" aria-label="كمية البيض">
+              <button type="button" data-item="eggs" data-step="1" aria-label="زيادة الكمية">+</button>
+              <span class="quantity" id="eggs-qty">١</span>
+              <button type="button" data-item="eggs" data-step="-1" aria-label="تقليل الكمية">−</button>
+            </div>
+          </div>
+          <div class="price-block">
+            <div class="price"><span id="eggs-price">١٤٫٢٥</span> <small>درهم</small></div>
+            <button class="remove-button" type="button" aria-label="حذف البيض">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              حذف
+            </button>
+          </div>
+        </article>
+      </section>
+
+      <section class="promo-card">
+        <label class="promo-label" for="promo">هل لديك رمز خصم؟</label>
+        <div class="promo-row">
+          <div class="promo-input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 7h16v3a2 2 0 000 4v3H4v-3a2 2 0 000-4V7z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+              <path d="M12 7v2M12 11v2M12 15v2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            <input class="promo-input" id="promo" type="text" placeholder="أدخل الرمز هنا" autocomplete="off">
+          </div>
+          <button class="apply-button" id="apply-promo" type="button">تطبيق</button>
+        </div>
+        <p class="promo-message" id="promo-message">✓ تم تطبيق رمز الخصم</p>
+      </section>
+
+      <section class="summary-card" aria-label="ملخص الطلب">
+        <h2>ملخص الطلب</h2>
+        <div class="summary-row">
+          <span>المجموع الفرعي</span>
+          <span id="subtotal">٣٣٫٧٥ درهم</span>
+        </div>
+        <div class="summary-row">
+          <span>رسوم التوصيل</span>
+          <span>٥٫٠٠ درهم</span>
+        </div>
+        <div class="summary-row discount" id="discount-row" hidden>
+          <span>الخصم</span>
+          <span id="discount">− ٠٫٠٠ درهم</span>
+        </div>
+        <div class="summary-row">
+          <span>ضريبة القيمة المضافة (٥٪)</span>
+          <span id="vat">١٫٩٤ درهم</span>
+        </div>
+        <div class="summary-row total">
+          <span>الإجمالي</span>
+          <span id="total">٤٠٫٦٩ درهم</span>
+        </div>
+        <p class="vat-note">السعر شامل ضريبة القيمة المضافة</p>
+      </section>
+
+      <div class="payment-note">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M3 10h18M7 15h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+        الدفع عند الاستلام أو بالبطاقة
+      </div>
+    </main>
+
+    <footer class="checkout-bar">
+      <button class="place-order" id="place-order" type="button">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 7h14l-1 12H6L5 7z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>
+          <path d="M9 9V6a3 3 0 016 0v3" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+        </svg>
+        تأكيد الطلب
+      </button>
+      <p class="checkout-caption">بتأكيد الطلب، أنت توافق على شروط الاستخدام وسياسة الاسترداد</p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const products = {
+      tomato: { qty: 1, unit: 8.50, priceEl: document.getElementById('tomato-price'), qtyEl: document.getElementById('tomato-qty') },
+      milk: { qty: 1, unit: 11.00, priceEl: document.getElementById('milk-price'), qtyEl: document.getElementById('milk-qty') },
+      eggs: { qty: 1, unit: 14.25, priceEl: document.getElementById('eggs-price'), qtyEl: document.getElementById('eggs-qty') }
+    };
+
+    const arabicNumbers = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    const toArabicNumber = value => String(value).replace(/\d/g, digit => arabicNumbers[digit]);
+    const formatPrice = value => toArabicNumber(value.toFixed(2).replace('.', '٫'));
+
+    let discount = 0;
+
+    function calculateTotals() {
+      const subtotal = Object.values(products).reduce((sum, item) => sum + item.unit * item.qty, 0);
+      const delivery = 5;
+      const taxable = Math.max(0, subtotal - discount);
+      const vat = taxable * 0.05;
+      const total = taxable + delivery + vat;
+
+      document.getElementById('subtotal').textContent = `${formatPrice(subtotal)} درهم`;
+      document.getElementById('vat').textContent = `${formatPrice(vat)} درهم`;
+      document.getElementById('total').textContent = `${formatPrice(total)} درهم`;
+
+      if (discount > 0) {
+        document.getElementById('discount-row').hidden = false;
+        document.getElementById('discount').textContent = `− ${formatPrice(discount)} درهم`;
+      }
+    }
+
+    function updateQuantity(key, step) {
+      const product = products[key];
+      product.qty = Math.max(1, Math.min(20, product.qty + step));
+      product.qtyEl.textContent = toArabicNumber(product.qty);
+      product.priceEl.textContent = formatPrice(product.unit * product.qty);
+      calculateTotals();
+    }
+
+    document.querySelectorAll('[data-item]').forEach(button => {
+      button.addEventListener('click', () => {
+        updateQuantity(button.dataset.item, Number(button.dataset.step));
+      });
+    });
+
+    document.querySelectorAll('.remove-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.closest('.cart-item');
+        item.style.opacity = '.35';
+        item.style.pointerEvents = 'none';
+        showToast('تم حذف المنتج من السلة');
+      });
+    });
+
+    document.getElementById('apply-promo').addEventListener('click', () => {
+      const input = document.getElementById('promo');
+      const message = document.getElementById('promo-message');
+      if (input.value.trim() === '') {
+        message.textContent = 'أدخل رمز الخصم أولًا';
+        message.style.color = '#c54b4b';
+        message.style.display = 'block';
+        return;
+      }
+      discount = 3;
+      message.textContent = '✓ تم تطبيق خصم ٣٫٠٠ درهم';
+      message.style.color = '#0c7955';
+      message.style.display = 'block';
+      calculateTotals();
+    });
+
+    document.getElementById('place-order').addEventListener('click', () => {
+      showToast('تم إرسال طلبك بنجاح');
+      const button = document.getElementById('place-order');
+      button.innerHTML = '✓ تم تأكيد الطلب';
+      setTimeout(() => {
+        button.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 7h14l-1 12H6L5 7z" stroke="currentColor" stroke-width="1.9"/><path d="M9 9V6a3 3 0 016 0v3" stroke="currentColor" stroke-width="1.9"/></svg> تأكيد الطلب';
+      }, 1800);
+    });
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    calculateTotals();
+  </script>
+</body>
+</html>

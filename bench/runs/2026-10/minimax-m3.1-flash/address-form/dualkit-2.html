@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f7a4f">
+  <title>عنوان التوصيل</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --primary: #0f7a4f;
+      --primary-dark: #095c3b;
+      --text: #17251f;
+      --muted: #68756f;
+      --border: #d9e1dc;
+      --surface: #ffffff;
+      --background: #f5f8f6;
+      --error: #b42318;
+      font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .app {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: var(--primary);
+      color: #fff;
+      padding: max(18px, env(safe-area-inset-top)) 20px 22px;
+    }
+
+    .header__inner {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.4;
+      font-weight: 700;
+    }
+
+    .header p {
+      margin: 4px 0 0;
+      color: #ddf3e8;
+      font-size: 15px;
+    }
+
+    main {
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 20px 16px 32px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid #e6ece8;
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: 0 8px 24px rgba(21, 61, 42, 0.06);
+    }
+
+    .field {
+      margin-bottom: 19px;
+    }
+
+    .field:last-of-type {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .optional {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 50px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      padding: 11px 13px;
+      font: inherit;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input::placeholder {
+      color: #99a49f;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 122, 79, 0.12);
+    }
+
+    input[aria-invalid="true"] {
+      border-color: var(--error);
+    }
+
+    .phone-wrap {
+      display: flex;
+      align-items: stretch;
+      direction: ltr;
+    }
+
+    .phone-prefix {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 82px;
+      border: 1px solid var(--border);
+      border-inline-end: 0;
+      border-radius: 12px 0 0 12px;
+      background: #eef4f0;
+      color: #34453d;
+      font-weight: 600;
+      direction: ltr;
+    }
+
+    .phone-wrap input {
+      border-radius: 0 12px 12px 0;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .hint {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .error-message {
+      display: none;
+      margin: 6px 0 0;
+      color: var(--error);
+      font-size: 14px;
+    }
+
+    .error-message.visible {
+      display: block;
+    }
+
+    .save-button {
+      width: 100%;
+      min-height: 52px;
+      border: 0;
+      border-radius: 13px;
+      background: var(--primary);
+      color: #fff;
+      font: inherit;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .save-button:hover {
+      background: var(--primary-dark);
+    }
+
+    .save-button:active {
+      transform: translateY(1px);
+    }
+
+    .save-button:focus-visible {
+      outline: 3px solid rgba(15, 122, 79, 0.25);
+      outline-offset: 3px;
+    }
+
+    .toast {
+      position: fixed;
+      inset-inline: 16px;
+      bottom: max(20px, env(safe-area-inset-bottom));
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 13px 18px;
+      border-radius: 12px;
+      background: #17251f;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 360px) {
+      main {
+        padding-inline: 12px;
+      }
+
+      .card {
+        padding: 18px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header__inner">
+        <h1>عنوان التوصيل</h1>
+        <p>أدخل تفاصيل موقع تسليم الطلب.</p>
+      </div>
+    </header>
+
+    <main>
+      <form class="card" id="addressForm" novalidate>
+        <div class="field">
+          <label for="building">المبنى أو الفيلا</label>
+          <input
+            id="building"
+            name="building"
+            type="text"
+            inputmode="text"
+            autocomplete="address-line2"
+            placeholder="مثال: فيلا 12 أو برج النخيل"
+            required
+          >
+          <p class="error-message" id="buildingError">يرجى إدخال اسم المبنى أو الفيلا.</p>
+        </div>
+
+        <div class="field">
+          <label for="street">الشارع</label>
+          <input
+            id="street"
+            name="street"
+            type="text"
+            inputmode="text"
+            autocomplete="address-line1"
+            placeholder="اسم الشارع"
+            required
+          >
+          <p class="error-message" id="streetError">يرجى إدخال اسم الشارع.</p>
+        </div>
+
+        <div class="field">
+          <label for="area">المنطقة</label>
+          <input
+            id="area"
+            name="area"
+            type="text"
+            inputmode="text"
+            autocomplete="address-level3"
+            placeholder="اسم المنطقة"
+            required
+          >
+          <p class="error-message" id="areaError">يرجى إدخال اسم المنطقة.</p>
+        </div>
+
+        <div class="field">
+          <label for="makani">
+            رقم-location
+            <span class="optional">(اختياري)</span>
+          </label>
+          <input
+            id="makani"
+            name="makani"
+            type="text"
+            inputmode="numeric"
+            autocomplete="off"
+            placeholder="أدخل رقم-location"
+          >
+        </div>
+
+        <div class="field">
+          <label for="emirate">الإمارة</label>
+          <select id="emirate" name="emirate" autocomplete="address-level1">
+            <option value="dubai" selected>دبي</option>
+            <option value="abu-dhabi">أبوظبي</option>
+            <option value="sharjah">الشارقة</option>
+            <option value="ajman">عجمان</option>
+            <option value="umm-al-quwain">أم القيوين</option>
+            <option value="ras-al-khaimah">رأس الخيمة</option>
+            <option value="fujairah">الفجيرة</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="phone">رقم الهاتف</label>
+          <div class="phone-wrap">
+            <span class="phone-prefix" aria-hidden="true">+971</span>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              inputmode="tel"
+              autocomplete="tel"
+              dir="ltr"
+              aria-describedby="phoneHint phoneError"
+              placeholder="050 123 4567"
+              required
+            >
+          </div>
+          <p class="hint" id="phoneHint">مثال: <bdi dir="ltr">050 123 4567</bdi></p>
+          <p class="error-message" id="phoneError">يرجى إدخال رقم هاتف إماراتي صحيح.</p>
+        </div>
+
+        <button class="save-button" type="submit">حفظ العنوان</button>
+      </form>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    تم حفظ عنوان التوصيل بنجاح.
+  </div>
+
+  <script>
+    const form = document.getElementById("addressForm");
+    const phoneInput = document.getElementById("phone");
+    const toast = document.getElementById("toast");
+
+    function setError(inputId, errorId, show) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+      input.setAttribute("aria-invalid", show ? "true" : "false");
+      error.classList.toggle("visible", show);
+    }
+
+    function validateText(id, errorId) {
+      const input = document.getElementById(id);
+      const valid = input.value.trim().length > 0;
+      setError(id, errorId, !valid);
+      return valid;
+    }
+
+    function normalizeDigits(value) {
+      return value
+        .replace(/[٠-٩]/g, digit => String(digit.charCodeAt(0) - 0x0660))
+        .replace(/[۰-۹]/g, digit => String(digit.charCodeAt(0) - 0x06F0))
+        .replace(/\D/g, "");
+    }
+
+    function validatePhone() {
+      const digits = normalizeDigits(phoneInput.value);
+      const localNumber = digits.startsWith("00971")
+        ? digits.slice(5)
+        : digits.startsWith("971")
+          ? digits.slice(3)
+          : digits.startsWith("0")
+            ? digits.slice(1)
+            : digits;
+
+      const valid = /^5[024568]\d{7}$/.test(localNumber);
+      setError("phone", "phoneError", !valid);
+      return valid;
+    }
+
+    phoneInput.addEventListener("input", function () {
+      this.value = this.value.replace(/[^\d٠-٩۰-۹+\-\s()]/g, "");
+      if (this.getAttribute("aria-invalid") === "true") {
+        validatePhone();
+      }
+    });
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const results = [
+        validateText("building", "buildingError"),
+        validateText("street", "streetError"),
+        validateText("area", "areaError"),
+        validatePhone()
+      ];
+
+      if (results.includes(false)) {
+        const firstInvalid = form.querySelector('[aria-invalid="true"]');
+        firstInvalid.focus();
+        return;
+      }
+
+      toast.classList.add("show");
+      window.setTimeout(() => toast.classList.remove("show"), 3000);
+    });
+  </script>
+</body>
+</html>

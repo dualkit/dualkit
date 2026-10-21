@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محفظة - المعاملات</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            direction: rtl;
+            text-align: right;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            color: #1a1a2e;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .balance-card .label {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-bottom: 8px;
+        }
+
+        .balance-card .amount {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .filter-section {
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-section .filter-label {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .filter-toggle {
+            background-color: #e6f0ff;
+            color: #1e3c72;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .filter-toggle:hover {
+            background-color: #d0e4ff;
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .transactions-table th {
+            background-color: #f0f4f8;
+            padding: 12px 10px;
+            font-size: 13px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .transactions-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .transactions-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .merchant-name {
+            font-weight: 500;
+            color: #222;
+        }
+
+        .amount-in {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .amount-out {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-in {
+            background-color: #e6f9f0;
+            color: #27ae60;
+        }
+
+        .status-out {
+            background-color: #fdecea;
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>المعاملات</h1>
+        </div>
+
+        <div class="balance-card">
+            <div class="label">الرصيد الحالي</div>
+            <div class="amount">3,247.850 ر.ع.</div>
+        </div>
+
+        <div class="filter-section">
+            <span class="filter-label">تصفية حسب الفترة</span>
+            <button class="filter-toggle">هذا الشهر</button>
+        </div>
+
+        <table class="transactions-table">
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>اسم التاجر</th>
+                    <th>المبلغ (ر.ع.)</th>
+                    <th>الحالة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>15 أكتوبر 2023</td>
+                    <td class="merchant-name">لولو هايبرماركت</td>
+                    <td class="amount-out">- 125.750</td>
+                    <td><span class="status-badge status-out">صادر</span></td>
+                </tr>
+                <tr>
+                    <td>14 أكتوبر 2023</td>
+                    <td class="merchant-name">نتفلكس</td>
+                    <td class="amount-out">- 35.000</td>
+                    <td><span class="status-badge status-out">صادر</span></td>
+                </tr>
+                <tr>
+                    <td>13 أكتوبر 2023</td>
+                    <td class="merchant-name">مطعم الأمانة</td>
+                    <td class="amount-out">- 42.300</td>
+                    <td><span class="status-badge status-out">صادر</span></td>
+                </tr>
+                <tr>
+                    <td>12 أكتوبر 2023</td>
+                    <td class="merchant-name">تحويل بنكي</td>
+                    <td class="amount-in">+ 500.000</td>
+                    <td><span class="status-badge status-in">وارد</span></td>
+                </tr>
+                <tr>
+                    <td>11 أكتوبر 2023</td>
+                    <td class="merchant-name">أبل مووزيك</td>
+                    <td class="amount-out">- 12.990</td>
+                    <td><span class="status-badge status-out">صادر</span></td>
+                </tr>
+                <tr>
+                    <td>10 أكتوبر 2023</td>
+                    <td class="merchant-name">سوق المواصف</td>
+                    <td class="amount-out">- 88.500</td>
+                    <td><span class="status-badge status-out">صادر</span></td>
+                </tr>
+                <tr>
+                    <td>9 أكتوبر 2023</td>
+                    <td class="merchant-name">رواتر ديجيتال</td>
+                    <td class="amount-in">+ 1,200.000</td>
+                    <td><span class="status-badge status-in">وارد</span></td>
+                </tr>
+                <tr>
+                    <td>8 أكتوبر 2023</td>
+                    <td class="merchant-name">مقهى السماء الزرقاء</td>
+                    <td class="amount-out">- 18.750</td>
+                    <td><span class="status-badge status-out">صادر</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

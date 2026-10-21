@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>حجز موعد - عيادة القطرية</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --accent: #0d6efd;
+      --accent-bg: #e7f1ff;
+      --border: #e5e7eb;
+      --today-bg: #fff3cd;
+      --selected-bg: #0d6efd;
+      --selected-text: #ffffff;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', 'Tahoma', 'Arial', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .screen {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--accent);
+      cursor: pointer;
+      padding: 6px 10px;
+    }
+
+    /* Doctor info */
+    .doctor-card {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .doctor-card .name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .doctor-card .specialty {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    /* Calendar */
+    .calendar {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .month-year {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .weekdays span {
+      font-weight: 600;
+    }
+
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .day {
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: default;
+      user-select: none;
+    }
+
+    .day.other-month {
+      color: var(--muted);
+      opacity: 0.4;
+    }
+
+    .day.today {
+      background: var(--today-bg);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .day.selected {
+      background: var(--selected-bg);
+      color: var(--selected-text);
+      font-weight: 600;
+    }
+
+    /* Time slots */
+    .time-slots {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .time-slots h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .slots-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .slot {
+      flex: 1 0 calc(50% - 8px);
+      min-width: 0;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 14px;
+      background: var(--bg);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .slot:hover {
+      background: var(--accent-bg);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .slot.selected {
+      background: var(--selected-bg);
+      color: var(--selected-text);
+      border-color: var(--selected-bg);
+    }
+
+    /* Confirm button */
+    .confirm-btn {
+      margin: 20px;
+      padding: 14px;
+      background: var(--accent);
+      color: var(--selected-text);
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      font-family: 'IBM Plex Sans Arabic', 'Tahoma', 'Arial', sans-serif;
+    }
+
+    .confirm-btn:disabled {
+      background: var(--muted);
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <!-- Header -->
+    <div class="header">
+      <button class="nav-btn" id="prevMonth" aria-label="الشهر السابق">‹</button>
+      <h1 id="monthYear">أكتوبر ٢٠٢٤</h1>
+      <button class="nav-btn" id="nextMonth" aria-label="الشهر التالي">›</button>
+    </div>
+
+    <!-- Doctor info -->
+    <div class="doctor-card">
+      <div class="name">د. فاطمة المنصوري</div>
+      <div class="specialty">أخصائية أطفال وتغذية</div>
+    </div>
+
+    <!-- Calendar -->
+    <div class="calendar">
+      <div class="weekdays">
+        <span>س</span><span>ح</span><span>خ</span><span>ث</span><span>ر</span><span>ت</span><span>أ</span>
+      </div>
+      <div class="days" id="calendarDays"></div>
+    </div>
+
+    <!-- Time slots -->
+    <div class="time-slots">
+      <h2>اختر وقتًا</h2>
+      <div class="slots-list" id="timeSlots"></div>
+    </div>
+
+    <!-- Confirm -->
+    <button class="confirm-btn" id="confirmBtn" disabled>تأكيد الحجز</button>
+  </div>
+
+  <script>
+    const monthYearEl = document.getElementById('monthYear');
+    const calendarDaysEl = document.getElementById('calendarDays');
+    const timeSlotsEl = document.getElementById('timeSlots');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const prevBtn = document.getElementById('prevMonth');
+    const nextBtn = document.getElementById('nextMonth');
+
+    const arabicMonths = [
+      'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
+      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+    ];
+
+    const arabicWeekdaysShort = ['س', 'ح', 'خ', 'ث', 'ر', 'ت', 'أ'];
+
+    let currentDate = new Date();
+    let selectedDate = null;
+    let selectedSlot = null;
+
+    function renderCalendar(date) {
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      monthYearEl.textContent = `${arabicMonths[month]} ${year}`;
+
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const daysInMonth = lastDay.getDate();
+
+      // Shift so Saturday (6) is first day
+      const startDay = (firstDay.getDay() + 1) % 7; // 0=Sat ... 6=Fri
+
+      calendarDaysEl.innerHTML = '';
+
+      // Previous month filler
+      const prevMonthDays = new Date(year, month, 0).getDate();
+      for (let i = 0; i < startDay; i++) {
+        const dayEl = document.createElement('div');
+        dayEl.classList.add('day', 'other-month');
+        dayEl.textContent = prevMonthDays - startDay + i + 1;
+        calendarDaysEl.appendChild(dayEl);
+      }
+
+      // Current month days
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dayEl = document.createElement('div');
+        dayEl.classList.add('day');
+        dayEl.textContent = d;
+        dayEl.dataset.date = `${year}-${month + 1}-${d}`;
+
+        const thisDate = new Date(year, month, d);
+        if (thisDate.getTime() === today.getTime()) {
+          dayEl.classList.add('today');
+        }
+
+        if (selectedDate && thisDate.getTime() === selectedDate.getTime()) {
+          dayEl.classList.add('selected');
+        }
+
+        dayEl.addEventListener('click', () => selectDate(thisDate));
+        calendarDaysEl.appendChild(dayEl);
+      }
+
+      // Next month filler
+      const totalCells = startDay + daysInMonth;
+      const remaining = (7 - (totalCells % 7)) % 7;
+      for (let j = 1; j <= remaining; j++) {
+        const dayEl = document.createElement('div');
+        dayEl.classList.add('day', 'other-month');
+        dayEl.textContent = j;
+        calendarDaysEl.appendChild(dayEl);
+      }
+    }
+
+    function selectDate(date) {
+      selectedDate = date;
+      renderCalendar(currentDate);
+      renderTimeSlots();
+      updateConfirmButton();
+    }
+
+    function renderTimeSlots() {
+      timeSlotsEl.innerHTML = '';
+      const slots = [];
+      for (let h = 9; h <= 11; h++) {
+        for (let m = 0; m < 60; m += 30) {
+          const displayHour = h < 10 ? '0' + h : h;
+          const displayMin = m < 10 ? '0' + m : m;
+          const timeStr = `${displayHour}:${displayMin}`;
+          slots.push(timeStr);
+        }
+      }
+      // Add 12:00
+      slots.push('12:00');
+
+      slots.forEach(slot => {
+        const slotEl = document.createElement('div');
+        slotEl.classList.add('slot');
+        slotEl.textContent = slot;
+        slotEl.dataset.slot = slot;
+
+        if (selectedSlot === slot) {
+          slotEl.classList.add('selected');
+        }
+
+        slotEl.addEventListener('click', () => selectSlot(slot));
+        timeSlotsEl.appendChild(slotEl);
+      });
+    }
+
+    function selectSlot(slot) {
+      selectedSlot = slot;
+      renderTimeSlots();
+      updateConfirmButton();
+    }
+
+    function updateConfirmButton() {
+      confirmBtn.disabled = !(selectedDate && selectedSlot);
+    }
+
+    prevBtn.addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderCalendar(currentDate);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderCalendar(currentDate);
+    });
+
+    confirmBtn.addEventListener('click', () => {
+      if (selectedDate && selectedSlot) {
+        const formattedDate = new Intl.DateTimeFormat('ar-EG-u-nu-latn', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }).format(selectedDate);
+        alert(`تم حجز موعدك:\nالتاريخ: ${formattedDate}\nالوقت: ${selectedSlot}`);
+      }
+    });
+
+    // Initial render
+    renderCalendar(currentDate);
+    renderTimeSlots();
+  </script>
+</body>
+</html>

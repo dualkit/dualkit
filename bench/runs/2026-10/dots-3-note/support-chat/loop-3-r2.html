@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الدعم - منتج كويتي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Tahoma', 'Arabic Typesetting', sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .chat-header {
+            background-color: #0052cc;
+            color: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-btn:active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .agent-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .agent-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .agent-status {
+            font-size: 14px; /* Fixed from 12px to 14px */
+            color: #b3d4ff;
+        }
+
+        /* Messages area */
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background-color: #f8f9fa;
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .message.customer {
+            align-self: flex-end;
+            align-items: flex-end;
+        }
+
+        .message.agent {
+            align-self: flex-start;
+            align-items: flex-start;
+        }
+
+        .bubble {
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.7; /* Fixed from 1.4 to 1.7 for Arabic */
+            word-wrap: break-word;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .message.customer .bubble {
+            background-color: #0052cc;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.agent .bubble {
+            background-color: white;
+            color: #333;
+            border-bottom-left-radius: 4px;
+        }
+
+        /* Fix for mixed direction content */
+        .bubble:dir(auto) {
+            direction: auto;
+        }
+
+        .time {
+            font-size: 14px; /* Fixed from 11px to 14px */
+            color: #888;
+            margin-top: 4px;
+            padding: 0 4px;
+        }
+
+        /* Input area */
+        .input-container {
+            display: flex;
+            padding: 10px 12px;
+            background-color: white;
+            border-top: 1px solid #e0e0e0;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .message-input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 16px;
+            font-size: 15px;
+            outline: none;
+            direction: ltr; /* Fixed: keep dir="ltr" for what people type */
+        }
+
+        .message-input:focus {
+            border-color: #0052cc;
+        }
+
+        /* Right-align Arabic placeholder */
+        .message-input:placeholder-shown {
+            direction: rtl;
+            text-align: right;
+        }
+
+        .send-btn {
+            background-color: #0052cc;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.2s;
+        }
+
+        .send-btn:active {
+            background-color: #0041a3;
+        }
+
+        .send-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scrollbar */
+        .messages-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 10px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .phone-frame {
+                width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .messages-container {
+                padding: 10px;
+                gap: 8px;
+            }
+            
+            .bubble {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <!-- Header -->
+        <header class="chat-header">
+            <button class="header-btn" aria-label="الرجوع">⟲</button>
+            <div class="agent-info">
+                <span class="agent-name">سارة</span>
+                <span class="agent-status">متصل الآن</span>
+            </div>
+            <button class="header-btn" aria-label="اتصال">📞</button>
+        </header>
+
+        <!-- Messages -->
+        <div class="messages-container" id="messagesContainer">
+            <!-- Message 1: Customer -->
+            <div class="message customer">
+                <div class="bubble">مرحباً، لا أستقبل إنترن็ت.</div>
+                <div class="time">10:30 ص</div>
+            </div>
+
+            <!-- Message 2: Agent (Sara) -->
+            <div class="message agent">
+                <div class="bubble">مرحباً بك، شكرًا لاتصالك. ما رقم طلبك؟</div>
+                <div class="time">10:31 ص</div>
+            </div>
+
+            <!-- Message 3: Customer -->
+            <div class="message customer">
+                <div class="bubble">طلبي هو <bdi dir="ltr">TX-48213</bdi>. لا أستقبل إشارة <bdi dir="ltr">5G</bdi>.</div>
+                <div class="time">10:32 ص</div>
+            </div>
+
+            <!-- Message 4: Agent (Sara) -->
+            <div class="message agent">
+                <div class="bubble">شكراً. هل جربت تشغيل المودم مرة أخرى؟</div>
+                <div class="time">10:33 ص</div>
+            </div>
+
+            <!-- Message 5: Customer -->
+            <div class="message customer">
+                <div class="bubble">نعم، لكن يظهر خطأ في اتصال <bdi dir="ltr">eSIM</bdi>.</div>
+                <div class="time">10:34 ص</div>
+            </div>
+
+            <!-- Message 6: Agent (Sara) -->
+            <div class="message agent">
+                <div class="bubble" dir="auto">فهمت. سأ reported these to the technical team. Please wait.</div>
+                <div class="time">10:35 ص</div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-container">
+            <input type="text" class="message-input" id="messageInput" placeholder="اكتب رسالتك..." dir="ltr">
+            <button class="send-btn" id="sendBtn" aria-label="أرسل">➤</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const messageInput = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendBtn');
+
+            // Function to add a new message
+            function addMessage(text, isCustomer) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isCustomer ? 'customer' : 'agent'}`;
+                
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.textContent = text;
+                
+                const time = document.createElement('div');
+                time.className = 'time';
+                
+                // Get current time in Western digits
+                const now = new Date();
+                const hours = now.getHours();
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const period = hours >= 12 ? 'م' : 'ص';
+                const displayHours = hours % 12 || 12;
+                
+                time.textContent = `${displayHours}:${minutes} ${period}`;
+                
+                messageDiv.appendChild(bubble);
+                messageDiv.appendChild(time);
+                
+                messagesContainer.appendChild(messageDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            // Send button click handler
+            sendBtn.addEventListener('click', function() {
+                const text = messageInput.value.trim();
+                if (text) {
+                    addMessage(text, true);
+                    messageInput.value = '';
+                    
+                    // Simulate agent reply after a short delay
+                    setTimeout(function() {
+                        const replies = [
+                            'فهمت. سأ reported these to the technical team. Please wait.',
+                            'شكراً على التفاصيل، سأقوم بتحليل Problem.',
+                            'أنا هنا لمساعدتك. ما الذي يمكنني فعله لك؟',
+                            'فهمت. سأ reported these to the technical team. Please wait.'
+                        ];
+                        const randomReply = replies[Math.floor(Math.random() * replies.length)];
+                        const replyBubble = document.createElement('div');
+                        replyBubble.className = 'bubble';
+                        replyBubble.dir = 'auto';
+                        replyBubble.textContent = randomReply;
+                        addMessage(randomReply, false);
+                    }, 1500);
+                }
+            });
+
+            // Enter key to send
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendBtn.click();
+                }
+            });
+
+            // Focus on input
+            messageInput.focus();
+        });
+    </script>
+</body>
+</html>

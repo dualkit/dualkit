@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b7a53">
+  <title>إتمام الطلب — طلباتي</title>
+  <style>
+    :root {
+      --green-900: #075d40;
+      --green-800: #0b7450;
+      --green-700: #0c8f61;
+      --green-100: #e8f5ef;
+      --green-50: #f2faf6;
+      --ink: #18231f;
+      --muted: #68746f;
+      --line: #e4e9e6;
+      --surface: #ffffff;
+      --canvas: #f5f7f6;
+      --danger: #bd3b3b;
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--canvas);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      width: 100%;
+      min-height: 100vh;
+      background: var(--surface);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 48px 1fr 48px;
+      align-items: center;
+      min-height: 68px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+    }
+
+    .icon-button {
+      display: inline-grid;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: var(--ink);
+      background: transparent;
+    }
+
+    .icon-button:hover,
+    .icon-button:focus-visible {
+      background: #f1f4f2;
+      outline: none;
+    }
+
+    .icon-button:focus-visible {
+      box-shadow: 0 0 0 3px rgba(12, 143, 97, 0.22);
+    }
+
+    .icon-button svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .cart-icon {
+      position: relative;
+      color: var(--green-800);
+    }
+
+    .cart-count {
+      position: absolute;
+      inset-block-start: -2px;
+      inset-inline-end: -1px;
+      display: grid;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 5px;
+      place-items: center;
+      border: 2px solid white;
+      border-radius: 999px;
+      color: white;
+      background: var(--green-700);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    main {
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 20px 16px 32px;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .items {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: white;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 78px 1fr auto;
+      gap: 13px;
+      align-items: center;
+      padding: 15px;
+    }
+
+    .item + .item {
+      border-block-start: 1px solid var(--line);
+    }
+
+    .photo {
+      display: grid;
+      width: 78px;
+      height: 78px;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 14px;
+      color: #8da098;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.8), transparent),
+        #e8eeea;
+    }
+
+    .photo svg {
+      width: 38px;
+      height: 38px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.5;
+    }
+
+    .item-details {
+      min-width: 0;
+    }
+
+    .item-name {
+      display: block;
+      margin-block-end: 3px;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .unit-price {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .item-end {
+      display: flex;
+      min-width: 78px;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 9px;
+    }
+
+    .price {
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-size: 15px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .stepper {
+      display: grid;
+      grid-template-columns: 34px 30px 34px;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid #cfd8d3;
+      border-radius: 999px;
+      background: white;
+    }
+
+    .stepper button {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: 0;
+      color: var(--green-800);
+      background: transparent;
+      font-size: 22px;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .stepper button:hover {
+      background: var(--green-50);
+    }
+
+    .stepper button:disabled {
+      color: #b9c1bd;
+      cursor: not-allowed;
+    }
+
+    .quantity {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .promo {
+      margin-block: 24px 20px;
+    }
+
+    .promo label {
+      display: block;
+      margin-block-end: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .promo-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 9px;
+    }
+
+    .promo-row input {
+      width: 100%;
+      min-width: 0;
+      height: 50px;
+      padding: 10px 14px;
+      border: 1px solid #cfd8d3;
+      border-radius: 12px;
+      color: var(--ink);
+      background: white;
+      outline: none;
+      direction: ltr;
+      text-align: start;
+    }
+
+    .promo-row input:focus {
+      border-color: var(--green-700);
+      box-shadow: 0 0 0 3px rgba(12, 143, 97, 0.13);
+    }
+
+    .apply-button {
+      min-width: 84px;
+      height: 50px;
+      padding: 0 17px;
+      border: 0;
+      border-radius: 12px;
+      color: white;
+      background: var(--green-800);
+      font-weight: 700;
+    }
+
+    .apply-button:hover {
+      background: var(--green-900);
+    }
+
+    .promo-message {
+      min-height: 24px;
+      margin: 6px 2px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .promo-message.success {
+      color: var(--green-800);
+    }
+
+    .promo-message.error {
+      color: var(--danger);
+    }
+
+    .summary {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfb;
+    }
+
+    .summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-block-end: 11px;
+      color: #45514c;
+      font-size: 15px;
+    }
+
+    .summary-row:last-child {
+      margin-block-end: 0;
+    }
+
+    .summary-row span:last-child {
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .summary .divider {
+      height: 1px;
+      margin: 15px 0;
+      background: var(--line);
+    }
+
+    .total-row {
+      color: var(--ink);
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .total-row span:last-child {
+      color: var(--green-800);
+      font-size: 20px;
+    }
+
+    .payment-note {
+      margin: 12px 2px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .place-order {
+      width: 100%;
+      min-height: 56px;
+      margin-block-start: 24px;
+      padding: 12px 20px;
+      border: 0;
+      border-radius: 14px;
+      color: white;
+      background: var(--green-700);
+      box-shadow: 0 8px 20px rgba(7, 93, 64, 0.2);
+      font-size: 17px;
+      font-weight: 700;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .place-order:hover {
+      background: var(--green-800);
+    }
+
+    .place-order:active {
+      transform: scale(0.985);
+    }
+
+    .place-order:focus-visible,
+    .apply-button:focus-visible {
+      outline: 3px solid rgba(12, 143, 97, 0.3);
+      outline-offset: 2px;
+    }
+
+    .secure-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .secure-note svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
+
+    .toast {
+      position: fixed;
+      inset-inline: 20px;
+      inset-block-end: 20px;
+      z-index: 30;
+      max-width: 420px;
+      margin: auto;
+      padding: 13px 18px;
+      border-radius: 12px;
+      color: white;
+      background: #24312c;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(16px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (min-width: 700px) {
+      body {
+        padding: 24px 0;
+      }
+
+      .app {
+        min-height: calc(100vh - 48px);
+        border-radius: 24px;
+        box-shadow: 0 18px 60px rgba(25, 43, 35, 0.1);
+        overflow: hidden;
+      }
+
+      .topbar {
+        border-radius: 24px 24px 0 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <button class="icon-button" type="button" aria-label="الرجوع إلى صفحة التسوق">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 18l6-6-6-6"></path>
+        </svg>
+      </button>
+
+      <h1>إتمام الطلب</h1>
+
+      <div class="icon-button cart-icon" aria-label="عدد المنتجات في السلة">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 7H6"></path>
+          <circle cx="10" cy="20" r="1"></circle>
+          <circle cx="18" cy="20" r="1"></circle>
+        </svg>
+        <span class="cart-count" id="cartCount">3</span>
+      </div>
+    </header>
+
+    <main>
+      <h2 class="section-title">منتجاتك</h2>
+
+      <section class="items" aria-label="قائمة المنتجات">
+        <article class="item" data-price="12.5" data-name="طماطم حمراء">
+          <div class="photo" role="img" aria-label="صورة توضيحية للطماطم الحمراء">
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <circle cx="24" cy="28" r="13"></circle>
+              <path d="M24 15c-1-5 3-8 8-9-1 5-3 8-8 9Z"></path>
+              <path d="M24 15v5"></path>
+            </svg>
+          </div>
+          <div class="item-details">
+            <span class="item-name">طماطم حمراء</span>
+            <span class="unit-price">للوحدة <bdi>12.50 AED</bdi></span>
+          </div>
+          <div class="item-end">
+            <span class="price"><bdi>37.50 AED</bdi></span>
+            <div class="stepper" aria-label="كمية طماطم حمراء">
+              <button type="button" data-action="increase" aria-label="زيادة كمية طماطم حمراء">+</button>
+              <span class="quantity" aria-live="polite">3</span>
+              <button type="button" data-action="decrease" aria-label="تقليل كمية طماطم حمراء">−</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="item" data-price="7.75" data-name="حليب طازج">
+          <div class="photo" role="img" aria-label="صورة توضيحية لعبوة الحليب">
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M15 13h18v27H15z"></path>
+              <path d="M19 13V7h10v6"></path>
+              <path d="M20 22h8M20 27h8"></path>
+            </svg>
+          </div>
+          <div class="item-details">
+            <span class="item-name">حليب طازج</span>
+            <span class="unit-price">للوحدة <bdi>7.75 AED</bdi></span>
+          </div>
+          <div class="item-end">
+            <span class="price"><bdi>15.50 AED</bdi></span>
+            <div class="stepper" aria-label="كمية الحليب الطازج">
+              <button type="button" data-action="increase" aria-label="زيادة كمية الحليب الطازج">+</button>
+              <span class="quantity" aria-live="polite">2</span>
+              <button type="button" data-action="decrease" aria-label="تقليل كمية الحليب الطازج">−</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="item" data-price="9.25" data-name="أرخبز了整个">
+          <div class="photo" role="img" aria-label="صورة توضيحية لرغيف الخبز">
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M8 30c2-9 8-15 16-15s14 6 16 15c-6 5-26 5-32 0Z"></path>
+              <path d="M14 29h20M17 23l-2 9M25 20l-1 12M32 22l2 10"></path>
+            </svg>
+          </div>
+          <div class="item-details">
+            <span class="item-name">رغيف خبز عربي</span>
+            <span class="unit-price">للوحدة <bdi>9.25 AED</bdi></span>
+          </div>
+          <div class="item-end">
+            <span class="price"><bdi>9.25 AED</bdi></span>
+            <div class="stepper" aria-label="كمية رغيف الخبز العربي">
+              <button type="button" data-action="increase" aria-label="زيادة كمية رغيف الخبز العربي">+</button>
+              <span class="quantity" aria-live="polite">1</span>
+              <button type="button" data-action="decrease" aria-label="تقليل كمية رغيف الخبز العربي">−</button>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="promo" aria-labelledby="promoLabel">
+        <label id="promoLabel" for="promoCode">هل لديك رمز خصم؟</label>
+        <div class="promo-row">
+          <input id="promoCode" type="text" inputmode="text" autocomplete="off" placeholder="أدخل رمز الخصم">
+          <button class="apply-button" id="applyPromo" type="button">تطبيق</button>
+        </div>
+        <p class="promo-message" id="promoMessage" aria-live="polite"></p>
+      </section>
+
+      <section class="summary" aria-labelledby="summaryTitle">
+        <h2 class="section-title" id="summaryTitle">ملخص الطلب</h2>
+
+        <div class="summary-row">
+          <span>المجموع الفرعي</span>
+          <span id="subtotal">62.25 AED</span>
+        </div>
+        <div class="summary-row">
+          <span>التوصيل</span>
+          <span id="delivery">7.00 AED</span>
+        </div>
+        <div class="summary-row">
+          <span>ضريبة القيمة المضافة (5%)</span>
+          <span id="vat">3.11 AED</span>
+        </div>
+        <div class="summary-row">
+          <span>الخصم</span>
+          <span id="discount">0.00 AED</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="summary-row total-row">
+          <span>الإجمالي</span>
+          <span id="total">72.36 AED</span>
+        </div>
+        <p class="payment-note">شامل جميع الرسوم والضرائب</p>
+      </section>
+
+      <button class="place-order" id="placeOrder" type="button">تأكيد الطلب</button>
+      <p class="secure-note">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="5" y="10" width="14" height="10" rx="2"></rect>
+          <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+        </svg>
+        الدفع الآمن والمشفّر
+      </p>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const items = [...document.querySelectorAll(".item")];
+    const subtotalEl = document.getElementById("subtotal");
+    const deliveryEl = document.getElementById("delivery");
+    const vatEl = document.getElementById("vat");
+    const discountEl = document.getElementById("discount");
+    const totalEl = document.getElementById("total");
+    const cartCountEl = document.getElementById("cartCount");
+    const promoInput = document.getElementById("promoCode");
+    const promoMessage = document.getElementById("promoMessage");
+    const toast = document.getElementById("toast");
+
+    const deliveryFee = 7;
+    let discount = 0;
+    let toastTimer;
+
+    function formatMoney(value) {
+      return `${value.toLocaleString("en-AE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })} AED`;
+    }
+
+    function updateSummary() {
+      let subtotal = 0;
+      let count = 0;
+
+      items.forEach((item) => {
+        const quantity = Number(item.querySelector(".quantity").textContent);
+        const unitPrice = Number(item.dataset.price);
+        const lineTotal = quantity * unitPrice;
+
+        subtotal += lineTotal;
+        count += quantity;
+        item.querySelector(".price bdi").textContent = formatMoney(lineTotal);
+        item.querySelector('[data-action="decrease"]').disabled = quantity <= 1;
+      });
+
+      const taxable = Math.max(0, subtotal - discount);
+      const vat = taxable * 0.05;
+      const total = taxable + vat + deliveryFee;
+
+      subtotalEl.textContent = formatMoney(subtotal);
+      deliveryEl.textContent = formatMoney(deliveryFee);
+      vatEl.textContent = formatMoney(vat);
+      discountEl.textContent = `−${formatMoney(discount)}`;
+      totalEl.textContent = formatMoney(total);
+      cartCountEl.textContent = count;
+    }
+
+    function showToast(message) {
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.add("show");
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    items.forEach((item) => {
+      item.querySelectorAll(".stepper button").forEach((button) => {
+        button.addEventListener("click", () => {
+          const quantityEl = item.querySelector(".quantity");
+          let quantity = Number(quantityEl.textContent);
+
+          if (button.dataset.action === "increase") {
+            quantity += 1;
+          } else if (quantity > 1) {
+            quantity -= 1;
+          }
+
+          quantityEl.textContent = quantity;
+          discount = 0;
+          promoMessage.textContent = "";
+          promoMessage.className = "promo-message";
+          updateSummary();
+        });
+      });
+    });
+
+    document.getElementById("applyPromo").addEventListener("click", () => {
+      const code = promoInput.value.trim().toUpperCase();
+
+      if (!code) {
+        promoMessage.textContent = "أدخل رمز الخصم أولًا.";
+        promoMessage.className = "promo-message error";
+        return;
+      }
+
+      if (code === "FRESH10") {
+        discount = 5;
+        promoMessage.textContent = "تم تطبيق خصم 5.00 AED على طلبك.";
+        promoMessage.className = "promo-message success";
+      } else {
+        discount = 0;
+        promoMessage.textContent = "رمز الخصم غير صالح. جرّب FRESH10.";
+        promoMessage.className = "promo-message error";
+      }
+
+      updateSummary();
+    });
+
+    promoInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        document.getElementById("applyPromo").click();
+      }
+    });
+
+    document.getElementById("placeOrder").addEventListener("click", () => {
+      showToast("تم استلام طلبك بنجاح. جارٍ تأكيد التفاصيل.");
+    });
+
+    updateSummary();
+  </script>
+</body>
+</html>

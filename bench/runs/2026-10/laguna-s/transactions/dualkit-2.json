@@ -1,0 +1,503 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "transactions",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T17:45:46.088Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>المعاملات</title>\n  <style>\n    :root {\n      --bg: #f5f7fa;\n      --card: #ffffff;\n      --text: #1a1a1a;\n      --muted: #6b7280;\n      --accent: #0d6efd;\n      --in-color: #2e7d32;\n      --out-color: #c6280e;\n      --border: #e5e7eb;\n    }\n\n    body {\n      margin: 0;\n      padding: 0;\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n      background: var(--bg);\n      color: var(--text);\n      font-size: 16px;\n      line-height: 1.6;\n    }\n\n    .screen {\n      max-width: 420px;\n      margin: 0 auto;\n      padding: 16px;\n    }\n\n    .header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 20px;\n    }\n\n    .header h1 {\n      font-size: 20px;\n      font-weight: 600;\n      margin: 0;\n    }\n\n    .balance-card {\n      background: var(--card);\n      border-radius: 12px;\n      padding: 16px;\n      box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n      margin-bottom: 20px;\n    }\n\n    .balance-label {\n      font-size: 14px;\n      color: var(--muted);\n      margin-bottom: 4px;\n    }\n\n    .balance-amount {\n      font-size: 24px;\n      font-weight: 700;\n    }\n\n    .filter-bar {\n      display: flex;\n      gap: 12px;\n      overflow-x: auto;\n      padding-bottom: 4px;\n      margin-bottom: 16px;\n    }\n\n    .filter-chip {\n      background: var(--card);\n      border: 1px solid var(--border);\n      border-radius: 999px;\n      padding: 8px 14px;\n      font-size: 14px;\n      white-space: nowrap;\n      cursor: pointer;\n      transition: all 0.2s;\n    }\n\n    .filter-chip.active {\n      background: var(--accent);\n      color: #fff;\n      border-color: var(--accent);\n    }\n\n    table {\n      width: 100%;\n      border-collapse: collapse;\n      background: var(--card);\n      border-radius: 12px;\n      overflow: hidden;\n      box-shadow: 0 1px 3px rgba(0,0,0,0.08);\n    }\n\n    th, td {\n      text-align: right;\n      padding: 12px 10px;\n      border-bottom: 1px solid var(--border);\n      font-size: 14px;\n    }\n\n    th {\n      background: #f9fafb;\n      font-weight: 600;\n      color: var(--muted);\n      font-size: 13px;\n      text-transform: uppercase;\n      letter-spacing: 0.03em;\n    }\n\n    td.merchant {\n      text-align: right;\n      font-weight: 500;\n    }\n\n    td.merchant bdi {\n      display: inline-block;\n    }\n\n    .amount.in {\n      color: var(--in-color);\n      font-weight: 600;\n    }\n\n    .amount.out {\n      color: var(--out-color);\n      font-weight: 600;\n    }\n\n    .status-badge {\n      display: inline-block;\n      padding: 2px 8px;\n      border-radius: 999px;\n      font-size: 12px;\n      font-weight: 600;\n    }\n\n    .status-completed {\n      background: #dcfce7;\n      color: #166534;\n    }\n\n    .status-pending {\n      background: #fef9c3;\n      color: #854d0e;\n    }\n\n    .status-failed {\n      background: #fee2e2;\n      color: #991b1b;\n    }\n\n    tr:last-child td {\n      border-bottom: none;\n    }\n\n    @media (max-width: 480px) {\n      .screen {\n        padding: 12px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"screen\">\n    <!-- Header -->\n    <div class=\"header\">\n      <h1>المعاملات</h1>\n      <span style=\"font-size:14px;color:var(--muted);\">فلتر</span>\n    </div>\n\n    <!-- Balance -->\n    <div class=\"balance-card\">\n      <div class=\"balance-label\">الرصيد الحالي</div>\n      <div class=\"balance-amount\"><bdi>﷼</bdi> 1,234.500</div>\n    </div>\n\n    <!-- Filter -->\n    <div class=\"filter-bar\">\n      <div class=\"filter-chip active\">هذا الشهر</div>\n      <div class=\"filter-chip\">الشهر الماضي</div>\n      <div class=\"filter-chip\">آخر 90 يوم</div>\n      <div class=\"filter-chip\">الكل</div>\n    </div>\n\n    <!-- Transactions Table -->\n    <table>\n      <thead>\n        <tr>\n          <th>التاريخ</th>\n          <th>التاجر</th>\n          <th>المبلغ</th>\n          <th>الحالة</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr>\n          <td><bdi>١٢ مارس ٢٠٢٥</bdi></td>\n          <td class=\"merchant\"><bdi>Lulu Hypermarket</bdi></td>\n          <td class=\"amount out\"><bdi>﷼</bdi> 45.900</td>\n          <td><span class=\"status-badge status-completed\">مكتمل</span></td>\n        </tr>\n        <tr>\n          <td><bdi>١١ مارس ٢٠٢٥</bdi></td>\n          <td class=\"merchant\"><bdi>Netflix</bdi></td>\n          <td class=\"amount out\"><bdi>﷼</bdi> 29.900</td>\n          <td><span class=\"status-badge status-completed\">مكتمل</span></td>\n        </tr>\n        <tr>\n          <td><bdi>١٠ مارس ٢٠٢٥</bdi></td>\n          <td class=\"merchant\"><bdi>سوق ألكتروني</bdi></td>\n          <td class=\"amount in\"><bdi>﷼</bdi> 150.000</td>\n          <td><span class=\"status-badge status-completed\">مكتمل</span></td>\n        </tr>\n        <tr>\n          <td><bdi>٨ مارس ٢٠٢٥</bdi></td>\n          <td class=\"merchant\"><bdi>ألكتروني للخدمات</bdi></td>\n          <td class=\"amount out\"><bdi>﷼</bdi> 12.750</td>\n          <td><span class=\"status-badge status-pending\">معلق</span></td>\n        </tr>\n        <tr>\n          <td><bdi>٦ مارس ٢٠٢٥</bdi></td>\n          <td class=\"merchant\"><bdi>Starbucks</bdi></td>\n          <td class=\"amount out\"><bdi>﷼</bdi> 8.400</td>\n          <td><span class=\"status-badge status-completed\">مكتمل</span></td>\n        </tr>\n        <tr>\n          <td><bdi>٤ مارس ٢٠٢٥</bdi></td>\n          <td class=\"merchant\"><bdi>تحويل بنكي</bdi></td>\n          <td class=\"amount in\"><bdi>﷼</bdi> 500.000</td>\n          <td><span class=\"status-badge status-completed\">مكتمل</span></td>\n        </tr>\n        <tr>\n          <td><bdi>٢ مارس ٢٠٢٥</bdi></td>\n          <td class=\"merchant\"><bdi>Carrefour</bdi></td>\n          <td class=\"amount out\"><bdi>﷼</bdi> 67.300</td>\n          <td><span class=\"status-badge status-failed\">فاشل</span></td>\n        </tr>\n        <tr>\n          <td><bdi>١ مارس ٢٠٢٥</bdi></td>\n          <td class=\"merchant\"><bdi>محلات التجميل</bdi></td>\n          <td class=\"amount out\"><bdi>﷼</bdi> 35.000</td>\n          <td><span class=\"status-badge status-completed\">مكتمل</span></td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6487,
+    "output": 2423
+  },
+  "ms": 40682,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 24,
+  "score": 30,
+  "missing": [
+    "OMR amounts"
+  ],
+  "findings": [
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 334,
+        "y": 255.171875,
+        "width": 34,
+        "height": 15
+      },
+      "message": "0.39px letter-spacing on \"التاريخ\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<th>التاريخ</th>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 244.046875,
+        "y": 255.171875,
+        "width": 31,
+        "height": 15
+      },
+      "message": "0.39px letter-spacing on \"التاجر\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<th>التاجر</th>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 123.796875,
+        "y": 255.171875,
+        "width": 31,
+        "height": 15
+      },
+      "message": "0.39px letter-spacing on \"المبلغ\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<th>المبلغ</th>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 40.015625,
+        "y": 255.171875,
+        "width": 31,
+        "height": 15
+      },
+      "message": "0.39px letter-spacing on \"الحالة\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<th>الحالة</th>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 312.109375,
+        "y": 301.96875,
+        "width": 55.890625,
+        "height": 38.390625
+      },
+      "message": "\"١٢ مارس ٢٠٢٥\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi>١٢ مارس ٢٠٢٥</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 312.109375,
+        "y": 371.75,
+        "width": 55.890625,
+        "height": 38.390625
+      },
+      "message": "\"١١ مارس ٢٠٢٥\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi>١١ مارس ٢٠٢٥</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 312.109375,
+        "y": 441.53125,
+        "width": 55.890625,
+        "height": 38.390625
+      },
+      "message": "\"١٠ مارس ٢٠٢٥\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi>١٠ مارس ٢٠٢٥</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 320.109375,
+        "y": 511.3125,
+        "width": 47.890625,
+        "height": 38.390625
+      },
+      "message": "\"٨ مارس ٢٠٢٥\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi>٨ مارس ٢٠٢٥</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 320.109375,
+        "y": 581.09375,
+        "width": 47.890625,
+        "height": 38.390625
+      },
+      "message": "\"٦ مارس ٢٠٢٥\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi>٦ مارس ٢٠٢٥</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 320.109375,
+        "y": 650.875,
+        "width": 47.890625,
+        "height": 38.390625
+      },
+      "message": "\"٤ مارس ٢٠٢٥\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi>٤ مارس ٢٠٢٥</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 320.109375,
+        "y": 720.65625,
+        "width": 47.890625,
+        "height": 38.390625
+      },
+      "message": "\"٢ مارس ٢٠٢٥\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi>٢ مارس ٢٠٢٥</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 320.109375,
+        "y": 790.4375,
+        "width": 47.890625,
+        "height": 38.390625
+      },
+      "message": "\"١ مارس ٢٠٢٥\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi>١ مارس ٢٠٢٥</bdi>"
+    },
+    {
+      "rule": "content/old-rial-sign",
+      "title": "The old rial ligature used as a riyal sign",
+      "severity": "warning",
+      "box": {
+        "x": 335,
+        "y": 111.390625,
+        "width": 27,
+        "height": 27
+      },
+      "message": "﷼ is the rial ligature, not the Saudi riyal sign.",
+      "fix": "Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.",
+      "snippet": "<bdi>﷼</bdi>"
+    },
+    {
+      "rule": "content/old-rial-sign",
+      "title": "The old rial ligature used as a riyal sign",
+      "severity": "warning",
+      "box": {
+        "x": 138.796875,
+        "y": 313.15625,
+        "width": 16,
+        "height": 16
+      },
+      "message": "﷼ is the rial ligature, not the Saudi riyal sign.",
+      "fix": "Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.",
+      "snippet": "<bdi>﷼</bdi>"
+    },
+    {
+      "rule": "content/old-rial-sign",
+      "title": "The old rial ligature used as a riyal sign",
+      "severity": "warning",
+      "box": {
+        "x": 138.796875,
+        "y": 382.9375,
+        "width": 16,
+        "height": 16
+      },
+      "message": "﷼ is the rial ligature, not the Saudi riyal sign.",
+      "fix": "Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.",
+      "snippet": "<bdi>﷼</bdi>"
+    },
+    {
+      "rule": "content/old-rial-sign",
+      "title": "The old rial ligature used as a riyal sign",
+      "severity": "warning",
+      "box": {
+        "x": 138.796875,
+        "y": 441.53125,
+        "width": 16,
+        "height": 16
+      },
+      "message": "﷼ is the rial ligature, not the Saudi riyal sign.",
+      "fix": "Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.",
+      "snippet": "<bdi>﷼</bdi>"
+    },
+    {
+      "rule": "content/old-rial-sign",
+      "title": "The old rial ligature used as a riyal sign",
+      "severity": "warning",
+      "box": {
+        "x": 138.796875,
+        "y": 522.5,
+        "width": 16,
+        "height": 16
+      },
+      "message": "﷼ is the rial ligature, not the Saudi riyal sign.",
+      "fix": "Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.",
+      "snippet": "<bdi>﷼</bdi>"
+    },
+    {
+      "rule": "content/old-rial-sign",
+      "title": "The old rial ligature used as a riyal sign",
+      "severity": "warning",
+      "box": {
+        "x": 138.796875,
+        "y": 592.28125,
+        "width": 16,
+        "height": 16
+      },
+      "message": "﷼ is the rial ligature, not the Saudi riyal sign.",
+      "fix": "Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.",
+      "snippet": "<bdi>﷼</bdi>"
+    },
+    {
+      "rule": "content/old-rial-sign",
+      "title": "The old rial ligature used as a riyal sign",
+      "severity": "warning",
+      "box": {
+        "x": 138.796875,
+        "y": 650.875,
+        "width": 16,
+        "height": 16
+      },
+      "message": "﷼ is the rial ligature, not the Saudi riyal sign.",
+      "fix": "Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.",
+      "snippet": "<bdi>﷼</bdi>"
+    },
+    {
+      "rule": "content/old-rial-sign",
+      "title": "The old rial ligature used as a riyal sign",
+      "severity": "warning",
+      "box": {
+        "x": 138.796875,
+        "y": 731.84375,
+        "width": 16,
+        "height": 16
+      },
+      "message": "﷼ is the rial ligature, not the Saudi riyal sign.",
+      "fix": "Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.",
+      "snippet": "<bdi>﷼</bdi>"
+    },
+    {
+      "rule": "content/old-rial-sign",
+      "title": "The old rial ligature used as a riyal sign",
+      "severity": "warning",
+      "box": {
+        "x": 138.796875,
+        "y": 801.625,
+        "width": 16,
+        "height": 16
+      },
+      "message": "﷼ is the rial ligature, not the Saudi riyal sign.",
+      "fix": "Use ⃁ (U+20C1) for the Saudi riyal with a font that has it, or write ر.س or SAR.",
+      "snippet": "<bdi>﷼</bdi>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 296,
+        "y": 17,
+        "width": 82,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>المعاملات</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 334,
+        "y": 255.171875,
+        "width": 34,
+        "height": 15
+      },
+      "message": "\"التاريخ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th>التاريخ</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 244.046875,
+        "y": 255.171875,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"التاجر\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th>التاجر</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 123.796875,
+        "y": 255.171875,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"المبلغ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th>المبلغ</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 40.015625,
+        "y": 255.171875,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"الحالة\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th>الحالة</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 30.015625,
+        "y": 314.265625,
+        "width": 33,
+        "height": 14
+      },
+      "message": "\"مكتمل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-completed\">مكتمل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 30.015625,
+        "y": 384.046875,
+        "width": 33,
+        "height": 14
+      },
+      "message": "\"مكتمل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-completed\">مكتمل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 30.015625,
+        "y": 453.828125,
+        "width": 33,
+        "height": 14
+      },
+      "message": "\"مكتمل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-completed\">مكتمل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 37.015625,
+        "y": 523.609375,
+        "width": 26,
+        "height": 14
+      },
+      "message": "\"معلق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-pending\">معلق</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 30.015625,
+        "y": 593.390625,
+        "width": 33,
+        "height": 14
+      },
+      "message": "\"مكتمل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-completed\">مكتمل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 30.015625,
+        "y": 663.171875,
+        "width": 33,
+        "height": 14
+      },
+      "message": "\"مكتمل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-completed\">مكتمل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34.015625,
+        "y": 732.953125,
+        "width": 29,
+        "height": 14
+      },
+      "message": "\"فاشل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-failed\">فاشل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 30.015625,
+        "y": 802.734375,
+        "width": 33,
+        "height": 14
+      },
+      "message": "\"مكتمل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-completed\">مكتمل</span>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 856
+}

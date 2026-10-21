@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المعاملات</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    text-align: right;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .container {
+    width: 100%;
+    max-width: 480px;
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .balance {
+    font-size: 1.2em;
+    margin-bottom: 16px;
+    padding: 12px;
+    background-color: #e8f5e9;
+    border-radius: 6px;
+    text-align: center;
+  }
+  .filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .filter label {
+    font-size: 1em;
+    margin-left: 8px;
+  }
+  .filter select {
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 60%;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    font-size: 0.9em;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  tr.incoming td:nth-child(3) {
+    color: green;
+  }
+  tr.outgoing td:nth-child(3) {
+    color: red;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="balance">
+      السالد: 1,234.567 OMR
+    </div>
+    <div class="filter">
+      <label for="monthFilter">فلتر</label>
+      <select id="monthFilter">
+        <option value="thisMonth">هذا الشهر</option>
+        <option value="lastMonth">الشهر الماضي</option>
+        <option value="nextMonth">الشهر(next)</option>
+      </select>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>التاريخ</th>
+          <th>التاجر</th>
+          <th>المبلغ</th>
+          <th>الاتجاه</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="outgoing">
+          <td>2025-11-01</td>
+          <td>Lulu Hypermarket</td>
+          <td>12.345 OMR</td>
+          <td>صادر</td>
+        </tr>
+        <tr class="outgoing">
+          <td>2025-11-02</td>
+          <td>Netflix</td>
+          <td>5.678 OMR</td>
+          <td>صادر</td>
+        </tr>
+        <tr class="outgoing">
+          <td>2025-11-03</td>
+          <td>Amazon</td>
+          <td>23.456 OMR</td>
+          <td>صادر</td>
+        </tr>
+        <tr class="outgoing">
+          <td>2025-11-04</td>
+          <td>Starbucks</td>
+          <td>4.321 OMR</td>
+          <td>صادر</td>
+        </tr>
+        <tr class="incoming">
+          <td>2025-11-05</td>
+          <td>Salary</td>
+          <td>1000.000 OMR</td>
+          <td>وارد</td>
+        </tr>
+        <tr class="incoming">
+          <td>2025-11-06</td>
+          <td>Transfer</td>
+          <td>50.000 OMR</td>
+          <td>وارد</td>
+        </tr>
+        <tr class="outgoing">
+          <td>2025-11-07</td>
+          <td>Uber</td>
+          <td>7.890 OMR</td>
+          <td>صادر</td>
+        </tr>
+        <tr class="outgoing">
+          <td>2025-11-08</td>
+          <td>Careem</td>
+          <td>3.210 OMR</td>
+          <td>صادر</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

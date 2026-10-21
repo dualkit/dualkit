@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المعاملات - محفظتي</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Tajawal -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        tajawal: ['Tajawal', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-100 font-tajawal flex justify-center items-center min-h-screen p-0 sm:p-4">
+
+    <!-- Phone Frame -->
+    <div class="w-full max-w-md bg-white sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col h-screen sm:h-[844px] relative border border-slate-200">
+        
+        <!-- Status Bar -->
+        <div class="bg-emerald-900 text-white px-6 pt-3 pb-2 flex justify-between items-center text-xs">
+            <span>٩:٤١</span>
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- App Header -->
+        <div class="bg-emerald-900 text-white px-6 pb-6 pt-2 rounded-b-3xl shadow-md">
+            <div class="flex justify-between items-center mb-4">
+                <button class="w-9 h-9 rounded-full bg-emerald-800/60 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <h1 class="text-lg font-bold">سجل المعاملات</h1>
+                <button class="w-9 h-9 rounded-full bg-emerald-800/60 flex items-center justify-center text-white">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </div>
+
+            <!-- Balance Section -->
+            <div class="text-center mt-2">
+                <p class="text-emerald-200 text-xs font-medium">الرصيد الإجمالي</p>
+                <h2 class="text-3xl font-extrabold mt-1 tracking-wider">١,٤٨٢.٣٥٠ <span class="text-sm font-normal text-emerald-300">ر.ع.</span></h2>
+            </div>
+        </div>
+
+        <!-- Filter & Content Section -->
+        <div class="flex-1 overflow-y-auto px-6 py-4 bg-slate-50">
+            
+            <!-- Filter Bar -->
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-slate-800 text-sm">المعاملات الأخيرة</h3>
+                <div class="flex items-center space-x-2 space-x-reverse bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm text-xs font-medium text-slate-700 cursor-pointer hover:bg-slate-50">
+                    <i class="fa-solid fa-calendar-days text-emerald-600 ml-1"></i>
+                    <span>هذا الشهر</span>
+                    <i class="fa-solid fa-angle-down text-slate-400 mr-1"></i>
+                </div>
+            </div>
+
+            <!-- Transactions List (Table View) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 divide-y divide-slate-100 overflow-hidden">
+                
+                <!-- Transaction 1 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-slate-50/80 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Lulu Hypermarket</h4>
+                            <p class="text-slate-400 text-[11px]">٢٤ أكتوبر ٢٠٢٣، ١٠:٣٠ ص</p>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-bold text-rose-600 text-sm">- ٤٥.٢٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-slate-400 block">صادر</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 2 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-slate-50/80 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">راتب الشركة الشهري</h4>
+                            <p class="text-slate-400 text-[11px]">٢٢ أكتوبر ٢٠٢٣، ٠٨:٠٠ ص</p>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-bold text-emerald-600 text-sm">+ ٨٥٠.٠٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-slate-400 block">وارد</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 3 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-slate-50/80 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-film"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Netflix</h4>
+                            <p class="text-slate-400 text-[11px]">٢٠ أكتوبر ٢٠٢٣، ٠٤:١٥ م</p>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-bold text-rose-600 text-sm">- ٤.٩٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-slate-400 block">صادر</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 4 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-slate-50/80 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-mug-hot"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Caribou Coffee</h4>
+                            <p class="text-slate-400 text-[11px]">١٨ أكتوبر ٢٠٢٣، ٠٩:٣٠ ص</p>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-bold text-rose-600 text-sm">- ٢.٢٥٠ ر.ع.</span>
+                        <span class="text-[10px] text-slate-400 block">صادر</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 5 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-slate-50/80 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-gas-pump"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Shell Oman</h4>
+                            <p class="text-slate-400 text-[11px]">١٥ أكتوبر ٢٠٢٣، ٠٦:٤٥ م</p>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-bold text-rose-600 text-sm">- ١٠.٥٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-slate-400 block">صادر</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 6 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-slate-50/80 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">تحويل من سعيد البلوشي</h4>
+                            <p class="text-slate-400 text-[11px]">١٢ أكتوبر ٢٠٢٣، ٠٢:٢٠ م</p>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-bold text-emerald-600 text-sm">+ ٥٠.٠٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-slate-400 block">وارد</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 7 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-slate-50/80 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Grand Hypermarket</h4>
+                            <p class="text-slate-400 text-[11px]">١٠ أكتوبر ٢٠٢٣، ٠٧:٠٠ م</p>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-bold text-rose-600 text-sm">- ١٨.٤٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-slate-400 block">صادر</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 8 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-slate-50/80 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-zinc-100 text-zinc-800 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-brands fa-apple"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Apple Store</h4>
+                            <p class="text-slate-400 text-[11px]">٠٨ أكتوبر ٢٠٢٣، ١١:١٠ ص</p>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="block font-bold text-rose-600 text-sm">- ٣٢.٩٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-slate-400 block">صادر</span>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Bottom spacing for nav bar -->
+            <div class="h-16"></div>
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-6 py-3 flex justify-between items-center text-slate-400 text-xs">
+            <button class="flex flex-col items-center space-y-1 hover:text-emerald-700">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span>الرئيسية</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 text-emerald-700 font-bold">
+                <i class="fa-solid fa-clock-rotate-left text-lg"></i>
+                <span>المعاملات</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 hover:text-emerald-700">
+                <i class="fa-solid fa-qrcode text-lg"></i>
+                <span>دفع</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 hover:text-emerald-700">
+                <i class="fa-solid fa-gear text-lg"></i>
+                <span>الإعدادات</span>
+            </button>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خدمة العملاء - الدعم الفني</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Cairo for modern Arabic typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            DEFAULT: '#dc2626', // Vibrant telecom red (like stc/VIVA vibe)
+                            dark: '#b91c1c',
+                            light: '#fef2f2',
+                            bubble: '#f3f4f6',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-900 font-cairo flex items-center justify-center min-h-screen p-0 sm:p-4">
+
+    <!-- Phone Frame Container -->
+    <div class="w-full sm:w-[390px] h-screen sm:h-[844px] bg-slate-50 sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border-0 sm:border-[10px] sm:border-slate-800">
+        
+        <!-- iPhone Notch / Dynamic Island (Desktop view enhancement) -->
+        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 h-6 w-32 bg-slate-800 rounded-b-2xl z-50 hidden sm:flex items-center justify-center">
+            <div class="w-3 h-3 bg-slate-900 rounded-full mr-3"></div>
+            <div class="w-12 h-1.5 bg-slate-900 rounded-full"></div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="bg-white px-6 pt-3 pb-2 flex justify-between items-center text-xs text-slate-600 font-semibold border-b border-slate-100 z-40">
+            <span>9:41</span>
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full text-sm"></i>
+            </div>
+        </div>
+
+        <!-- App Header -->
+        <div class="bg-white px-4 py-3 flex items-center justify-between border-b border-slate-200 shadow-sm z-30">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="relative">
+                    <div class="w-11 h-11 rounded-full bg-red-100 flex items-center justify-center text-brand font-bold text-lg border-2 border-red-500">
+                        س
+                    </div>
+                    <span class="absolute bottom-0 left-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
+                </div>
+                <div>
+                    <h1 class="font-bold text-slate-800 text-sm">ساره - خدمة العملاء</h1>
+                    <p class="text-xs text-emerald-600 font-medium">متواجدة الآن</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3 space-x-reverse text-slate-600">
+                <button class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition">
+                    <i class="fa-solid fa-phone text-sm text-brand"></i>
+                </button>
+                <button class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition">
+                    <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Messages Area -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-slate-50 to-slate-100">
+            
+            <!-- Date Divider -->
+            <div class="flex justify-center">
+                <span class="bg-slate-200 text-slate-600 text-[10px] px-3 py-1 rounded-full font-medium">اليوم</span>
+            </div>
+
+            <!-- Message 1 (Customer) -->
+            <div class="flex flex-col items-end">
+                <div class="max-w-[80%] bg-brand text-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm text-sm leading-relaxed">
+                    السلام عليكم، عندي استفسار بخصوص اشتراك الـ 5G الجديد.
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">10:14 ص</span>
+            </div>
+
+            <!-- Message 2 (Agent - Sara) -->
+            <div class="flex flex-col items-start">
+                <div class="max-w-[80%] bg-white text-slate-800 border border-slate-200 rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm text-sm leading-relaxed">
+                    وعليكم السلام ورحمة الله. أهلاً بك! معك ساره من خدمة العملاء. تفضل، كيف أقدر أساعدك اليوم؟
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">10:15 ص</span>
+            </div>
+
+            <!-- Message 3 (Customer) -->
+            <div class="flex flex-col items-end">
+                <div class="max-w-[80%] bg-brand text-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm text-sm leading-relaxed">
+                    طلبت شريحة eSIM وصلني رقم الطلب TX-48213 بس ما وصلني الـ QR Code عالايميل.
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">10:17 ص</span>
+            </div>
+
+            <!-- Message 4 (Agent - Sara) -->
+            <div class="flex flex-col items-start">
+                <div class="max-w-[80%] bg-white text-slate-800 border border-slate-200 rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm text-sm leading-relaxed">
+                    ولا تشيل هم أخي الكريم، الحين أتاكد لك من النظام وأرسل الـ QR Code مباشرة.
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">10:18 ص</span>
+            </div>
+
+            <!-- Message 5 (Agent - Sara) -->
+            <div class="flex flex-col items-start">
+                <div class="max-w-[80%] bg-white text-slate-800 border border-slate-200 rounded-2xl rounded-tr-sm px-4 py-3 shadow-sm text-sm leading-relaxed">
+                    تم التأكد، وارسلت الرابط مرة ثانية. تحقق من البريد الوارد أو الـ Spam folder لو سمحت.
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">10:19 ص</span>
+            </div>
+
+            <!-- Message 6 (Customer) -->
+            <div class="flex flex-col items-end">
+                <div class="max-w-[80%] bg-brand text-white rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm text-sm leading-relaxed">
+                    وصلني الحين، يعطيكم العافية على السرعة والخدمة الممتازة!
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">10:20 ص</span>
+            </div>
+
+        </div>
+
+        <!-- Bottom Input Field & Send Button -->
+        <div class="bg-white border-t border-slate-200 p-3 z-30">
+            <div class="flex items-center space-x-2 space-x-reverse bg-slate-100 rounded-full px-4 py-1.5 border border-slate-200 focus-within:border-brand transition">
+                <button class="text-slate-400 hover:text-slate-600 transition">
+                    <i class="fa-solid fa-paperclip text-lg"></i>
+                </button>
+                <input type="text" placeholder="اكتب رسالتك هنا..." class="flex-1 bg-transparent border-none focus:outline-none text-sm text-slate-800 py-2">
+                <button class="w-9 h-9 bg-brand text-white rounded-full flex items-center justify-center hover:bg-brand-dark transition shadow-sm">
+                    <i class="fa-solid fa-paper-plane text-xs"></i>
+                </button>
+            </div>
+            <div class="text-center mt-2">
+                <span class="text-[10px] text-slate-400">تطبيق الاتصالات الكويتي • الدعم الفني 24/7</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

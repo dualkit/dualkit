@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#075e54">
+  <title>دردشة الدعم</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(46, 190, 167, 0.14), transparent 28%),
+        #e9efed;
+      font-family: "SF Arabic", "Noto Sans Arabic", Tahoma, Arial, sans-serif;
+      color: #172321;
+    }
+
+    .phone {
+      position: relative;
+      width: min(100%, 430px);
+      height: min(860px, calc(100dvh - 40px));
+      min-height: 650px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #f5f7f6;
+      border: 1px solid rgba(7, 94, 84, 0.12);
+      border-radius: 32px;
+      box-shadow:
+        0 30px 70px rgba(22, 48, 43, 0.2),
+        0 8px 24px rgba(22, 48, 43, 0.08);
+    }
+
+    .status-bar {
+      height: 28px;
+      padding: 7px 19px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: none;
+      background: #075e54;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      direction: ltr;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .signal {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 10px;
+    }
+
+    .signal i {
+      display: block;
+      width: 2px;
+      border-radius: 2px;
+      background: currentColor;
+    }
+
+    .signal i:nth-child(1) { height: 4px; }
+    .signal i:nth-child(2) { height: 6px; }
+    .signal i:nth-child(3) { height: 8px; }
+    .signal i:nth-child(4) { height: 10px; }
+
+    .battery {
+      width: 18px;
+      height: 9px;
+      padding: 1.5px;
+      border: 1px solid rgba(255,255,255,.9);
+      border-radius: 3px;
+      position: relative;
+    }
+
+    .battery::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      right: -3px;
+      width: 2px;
+      height: 4px;
+      background: white;
+      border-radius: 0 1px 1px 0;
+    }
+
+    .battery span {
+      display: block;
+      width: 75%;
+      height: 100%;
+      border-radius: 1px;
+      background: white;
+    }
+
+    .app-header {
+      flex: none;
+      min-height: 68px;
+      padding: 9px 16px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #075e54;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 48, 42, 0.18);
+      z-index: 2;
+    }
+
+    .back-button,
+    .call-button {
+      border: 0;
+      background: transparent;
+      color: white;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .back-button {
+      width: 36px;
+      height: 36px;
+      flex: none;
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    .avatar {
+      position: relative;
+      width: 43px;
+      height: 43px;
+      flex: none;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #075e54;
+      background: #d7f0e9;
+      border: 2px solid rgba(255,255,255,.72);
+    }
+
+    .avatar svg {
+      width: 25px;
+      height: 25px;
+    }
+
+    .online-dot {
+      position: absolute;
+      left: 0;
+      bottom: 1px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #36d399;
+      border: 2px solid #075e54;
+    }
+
+    .agent-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .agent-info h1 {
+      margin: 0 0 3px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .agent-info p {
+      margin: 0;
+      color: #cce7df;
+      font-size: 12px;
+    }
+
+    .call-button {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+    }
+
+    .call-button svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .chat {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 20px 15px 18px;
+      background:
+        linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)),
+        radial-gradient(circle at 12px 12px, #dbe5e1 1.3px, transparent 1.4px);
+      background-size: auto, 24px 24px;
+      scrollbar-width: thin;
+      scrollbar-color: #bdcbc7 transparent;
+    }
+
+    .date-divider {
+      width: fit-content;
+      margin: 0 auto 20px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      color: #64736f;
+      background: rgba(255,255,255,.82);
+      box-shadow: 0 1px 3px rgba(21,55,48,.06);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .message {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 14px;
+    }
+
+    .message.agent {
+      align-items: flex-start;
+    }
+
+    .message.customer {
+      align-items: flex-end;
+    }
+
+    .sender {
+      margin: 0 4px 5px;
+      color: #65736f;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .bubble {
+      position: relative;
+      max-width: 82%;
+      padding: 10px 13px 8px;
+      border-radius: 17px;
+      font-size: 14px;
+      line-height: 1.75;
+      box-shadow: 0 2px 6px rgba(23, 54, 47, 0.08);
+    }
+
+    .agent .bubble {
+      border-top-right-radius: 5px;
+      border-top-left-radius: 17px;
+      border-bottom-right-radius: 17px;
+      border-bottom-left-radius: 17px;
+      background: white;
+    }
+
+    .customer .bubble {
+      color: white;
+      border-top-right-radius: 17px;
+      border-top-left-radius: 5px;
+      border-bottom-right-radius: 17px;
+      border-bottom-left-radius: 17px;
+      background: #087c6e;
+    }
+
+    .bubble p {
+      margin: 0;
+    }
+
+    .latin {
+      direction: ltr;
+      display: inline-block;
+      unicode-bidi: isolate;
+      font-family: Arial, sans-serif;
+      font-weight: 600;
+    }
+
+    .time {
+      margin-top: 4px;
+      color: #82908c;
+      font-size: 10px;
+      direction: ltr;
+      text-align: left;
+    }
+
+    .customer .time {
+      color: #d1eee8;
+    }
+
+    .typing-note {
+      width: fit-content;
+      margin: 2px 4px 0;
+      color: #75837f;
+      font-size: 10px;
+    }
+
+    .composer {
+      flex: none;
+      padding: 10px 12px max(12px, env(safe-area-inset-bottom));
+      display: flex;
+      align-items: flex-end;
+      gap: 9px;
+      background: white;
+      border-top: 1px solid #e3e9e7;
+      box-shadow: 0 -5px 18px rgba(30, 60, 53, 0.06);
+    }
+
+    .input-wrap {
+      flex: 1;
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      padding: 0 13px;
+      border-radius: 23px;
+      background: #f1f5f4;
+      border: 1px solid #e1e8e6;
+    }
+
+    textarea {
+      width: 100%;
+      max-height: 100px;
+      min-height: 24px;
+      padding: 9px 0 6px;
+      resize: none;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #24332f;
+      font: inherit;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    textarea::placeholder {
+      color: #8a9793;
+    }
+
+    .send-button {
+      width: 46px;
+      height: 46px;
+      flex: none;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: white;
+      background: #087c6e;
+      box-shadow: 0 5px 13px rgba(8, 124, 110, 0.25);
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .send-button:active {
+      transform: scale(.94);
+      background: #06695e;
+    }
+
+    .send-button svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+        background: #f5f7f6;
+      }
+
+      .phone {
+        width: 100%;
+        height: 100dvh;
+        min-height: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <div class="status-bar" aria-hidden="true">
+      <span>9:41</span>
+      <div class="status-icons">
+        <span class="signal"><i></i><i></i><i></i><i></i></span>
+        <span>5G</span>
+        <span class="battery"><span></span></span>
+      </div>
+    </div>
+
+    <header class="app-header">
+      <button class="back-button" type="button" aria-label="العودة">‹</button>
+      <div class="avatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M4.5 21c.5-4 3.1-6 7.5-6s7 2 7.5 6"></path>
+        </svg>
+        <span class="online-dot"></span>
+      </div>
+      <div class="agent-info">
+        <h1>سارة</h1>
+        <p>موظفة دعم العملاء · متصلة الآن</p>
+      </div>
+      <button class="call-button" type="button" aria-label="الاتصال صوتاً">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z"></path>
+        </svg>
+      </button>
+    </header>
+
+    <section class="chat" aria-label="محادثة الدعم">
+      <div class="date-divider">اليوم</div>
+
+      <article class="message customer">
+        <div class="sender">أنت</div>
+        <div class="bubble">
+          <p>السلام عليكم، طلبت شريحة <span class="latin">eSIM</span> جديدة، لكن ما وصلتني رسالة تأكيد.</p>
+          <div class="time">10:18 ص</div>
+        </div>
+      </article>
+
+      <article class="message agent">
+        <div class="sender">سارة</div>
+        <div class="bubble">
+          <p>وعليكم السلام، أهلاً بك. تأكدت من الطلب، والطلب تحت رقم <span class="latin">TX-48213</span>.</p>
+          <div class="time">10:20 ص</div>
+        </div>
+      </article>
+
+      <article class="message customer">
+        <div class="sender">أنت</div>
+        <div class="bubble">
+          <p>تمام، هل يمكن تفعيله على شبكتنا <span class="latin">5G</span> مباشرة؟</p>
+          <div class="time">10:21 ص</div>
+        </div>
+      </article>
+
+      <article class="message agent">
+        <div class="sender">سارة</div>
+        <div class="bubble">
+          <p>أكيد. طالما جهازك متوافق مع <span class="latin">5G</span>، سأرسل لك رمز التفعيل خلال دقائق.</p>
+          <div class="time">10:22 ص</div>
+        </div>
+      </article>
+
+      <article class="message customer">
+        <div class="sender">أنت</div>
+        <div class="bubble">
+          <p>ممتاز. بس تأكد إن رقم جوالي المسجل في الطلب صحيح.</p>
+          <div class="time">10:24 ص</div>
+        </div>
+      </article>
+
+      <article class="message agent">
+        <div class="sender">سارة</div>
+        <div class="bubble">
+          <p>الرقم صحيح ومطابق للطلب. سأرسل الرمز الآن، وبعد استلامه أخبرني إذا ظهرت لك خطوات التفعيل.</p>
+          <div class="time">10:25 ص</div>
+        </div>
+      </article>
+
+      <div class="typing-note">سارة متصلة الآن</div>
+    </section>
+
+    <form class="composer" onsubmit="event.preventDefault(); this.reset();">
+      <label class="input-wrap">
+        <textarea rows="1" placeholder="اكتب رسالتك هنا..." aria-label="اكتب رسالتك هنا"></textarea>
+      </label>
+      <button class="send-button" type="submit" aria-label="إرسال الرسالة">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m22 2-7 20-4-9-9-4Z"></path>
+          <path d="M22 2 11 13"></path>
+        </svg>
+      </button>
+    </form>
+  </main>
+</body>
+</html>

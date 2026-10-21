@@ -1,0 +1,179 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "address-form",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T16:47:52.222Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"theme-color\" content=\"#0b8f55\">\n  <title>عنوان التوصيل</title>\n  <style>\n    * {\n      box-sizing: border-box;\n      -webkit-tap-highlight-color: transparent;\n    }\n\n    :root {\n      --green: #087f4e;\n      --green-dark: #05663e;\n      --green-light: #e9f7f0;\n      --text: #17231d;\n      --muted: #68756f;\n      --border: #d9e1dc;\n      --error: #c93c3c;\n      --surface: #ffffff;\n      --background: #f5f8f6;\n    }\n\n    body {\n      margin: 0;\n      min-height: 100vh;\n      background: var(--background);\n      color: var(--text);\n      font-family: Tahoma, Arial, sans-serif;\n      -webkit-font-smoothing: antialiased;\n    }\n\n    .app-header {\n      background: var(--green);\n      color: white;\n      padding: max(18px, env(safe-area-inset-top)) 20px 22px;\n    }\n\n    .header-content {\n      max-width: 560px;\n      margin: 0 auto;\n    }\n\n    .back-button {\n      width: 42px;\n      height: 42px;\n      display: grid;\n      place-items: center;\n      border: 0;\n      border-radius: 50%;\n      background: rgba(255, 255, 255, 0.15);\n      color: white;\n      font-size: 25px;\n      cursor: pointer;\n      margin-bottom: 12px;\n    }\n\n    h1 {\n      margin: 0;\n      font-size: 24px;\n      line-height: 1.4;\n    }\n\n    .subtitle {\n      margin: 6px 0 0;\n      color: rgba(255, 255, 255, 0.85);\n      font-size: 14px;\n      line-height: 1.6;\n    }\n\n    main {\n      max-width: 560px;\n      margin: 0 auto;\n      padding: 22px 18px calc(28px + env(safe-area-inset-bottom));\n    }\n\n    .card {\n      background: var(--surface);\n      border-radius: 20px;\n      padding: 22px 18px;\n      box-shadow: 0 8px 28px rgba(25, 54, 39, 0.07);\n    }\n\n    .section-title {\n      margin: 0 0 18px;\n      font-size: 17px;\n      font-weight: 700;\n    }\n\n    .field {\n      margin-bottom: 18px;\n    }\n\n    label {\n      display: block;\n      margin-bottom: 8px;\n      font-size: 14px;\n      font-weight: 700;\n    }\n\n    .optional {\n      color: var(--muted);\n      font-size: 12px;\n      font-weight: 400;\n    }\n\n    input,\n    select {\n      width: 100%;\n      height: 52px;\n      border: 1px solid var(--border);\n      border-radius: 12px;\n      background: white;\n      color: var(--text);\n      padding: 0 14px;\n      font: inherit;\n      font-size: 16px;\n      outline: none;\n      transition: border-color 0.2s, box-shadow 0.2s;\n    }\n\n    input::placeholder {\n      color: #9aa49f;\n    }\n\n    input:focus,\n    select:focus {\n      border-color: var(--green);\n      box-shadow: 0 0 0 3px rgba(8, 127, 78, 0.11);\n    }\n\n    .input-wrap {\n      position: relative;\n    }\n\n    .input-wrap input {\n      padding-left: 44px;\n    }\n\n    .input-icon {\n      position: absolute;\n      left: 14px;\n      top: 50%;\n      transform: translateY(-50%);\n      color: var(--muted);\n      font-size: 17px;\n      pointer-events: none;\n    }\n\n    .phone-row {\n      display: grid;\n      grid-template-columns: 116px 1fr;\n      gap: 10px;\n    }\n\n    .phone-row input {\n      direction: ltr;\n      text-align: left;\n    }\n\n    .field-error {\n      display: none;\n      margin-top: 6px;\n      color: var(--error);\n      font-size: 12px;\n    }\n\n    .field.invalid input,\n    .field.invalid select {\n      border-color: var(--error);\n    }\n\n    .field.invalid .field-error {\n      display: block;\n    }\n\n    .save-button {\n      width: 100%;\n      min-height: 54px;\n      border: 0;\n      border-radius: 14px;\n      background: var(--green);\n      color: white;\n      font: inherit;\n      font-size: 16px;\n      font-weight: 700;\n      cursor: pointer;\n      margin-top: 6px;\n      box-shadow: 0 7px 16px rgba(8, 127, 78, 0.2);\n      transition: background 0.2s, transform 0.1s;\n    }\n\n    .save-button:active {\n      background: var(--green-dark);\n      transform: scale(0.99);\n    }\n\n    .save-button:disabled {\n      opacity: 0.65;\n      cursor: not-allowed;\n    }\n\n    .privacy-note {\n      margin: 14px 4px 0;\n      color: var(--muted);\n      text-align: center;\n      font-size: 12px;\n      line-height: 1.7;\n    }\n\n    .success-message {\n      display: none;\n      align-items: center;\n      gap: 10px;\n      background: var(--green-light);\n      color: var(--green-dark);\n      border-radius: 12px;\n      padding: 13px 14px;\n      margin-bottom: 18px;\n      font-size: 14px;\n      font-weight: 700;\n    }\n\n    .success-message.show {\n      display: flex;\n    }\n\n    @media (max-width: 360px) {\n      .phone-row {\n        grid-template-columns: 102px 1fr;\n      }\n\n      .card {\n        padding: 20px 15px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <header class=\"app-header\">\n    <div class=\"header-content\">\n      <button class=\"back-button\" type=\"button\" aria-label=\"رجوع\">‹</button>\n      <h1>عنوان التوصيل</h1>\n      <p class=\"subtitle\">أدخل تفاصيل العنوان لتسهيل وصول طلبك</p>\n    </div>\n  </header>\n\n  <main>\n    <form class=\"card\" id=\"addressForm\" novalidate>\n      <div class=\"success-message\" id=\"successMessage\" role=\"status\">\n        <span>✓</span>\n        <span>تم حفظ عنوان التوصيل بنجاح</span>\n      </div>\n\n      <h2 class=\"section-title\">معلومات العنوان</h2>\n\n      <div class=\"field\">\n        <label for=\"building\">المبنى أو الفيلا</label>\n        <div class=\"input-wrap\">\n          <input id=\"building\" name=\"building\" type=\"text\" placeholder=\"مثال: مبنى 12، فيلا 5\" required>\n          <span class=\"input-icon\" aria-hidden=\"true\">⌂</span>\n        </div>\n        <div class=\"field-error\">يرجى إدخال المبنى أو الفيلا</div>\n      </div>\n\n      <div class=\"field\">\n        <label for=\"street\">الشارع</label>\n        <div class=\"input-wrap\">\n          <input id=\"street\" name=\"street\" type=\"text\" placeholder=\"اسم الشارع\" required>\n          <span class=\"input-icon\" aria-hidden=\"true\">⌁</span>\n        </div>\n        <div class=\"field-error\">يرجى إدخال اسم الشارع</div>\n      </div>\n\n      <div class=\"field\">\n        <label for=\"area\">المنطقة</label>\n        <div class=\"input-wrap\">\n          <input id=\"area\" name=\"area\" type=\"text\" placeholder=\"اسم المنطقة\" required>\n          <span class=\"input-icon\" aria-hidden=\"true\">◎</span>\n        </div>\n        <div class=\"field-error\">يرجى إدخال اسم المنطقة</div>\n      </div>\n\n      <div class=\"field\">\n        <label for=\"emirate\">الإمارة</label>\n        <select id=\"emirate\" name=\"emirate\" required>\n          <option value=\"dubai\" selected>دبي</option>\n          <option value=\"abu-dhabi\">أبوظبي</option>\n          <option value=\"sharjah\">الشارقة</option>\n          <option value=\"ajman\">عجمان</option>\n          <option value=\"umm-al-quwain\">أم القيوين</option>\n          <option value=\"ras-al-khaimah\">رأس الخيمة</option>\n          <option value=\"fujairah\">الفجيرة</option>\n        </select>\n      </div>\n\n      <div class=\"field\">\n        <label for=\"makani\">رقم-location <span class=\"optional\">(اختياري)</span></label>\n        <div class=\"input-wrap\">\n          <input id=\"makani\" name=\"makani\" type=\"text\" inputmode=\"numeric\" placeholder=\"أدخل رقم المبنى\">\n          <span class=\"input-icon\" aria-hidden=\"true\">#</span>\n        </div>\n      </div>\n\n      <div class=\"field\">\n        <label for=\"phone\">رقم الهاتف</label>\n        <div class=\"phone-row\">\n          <select aria-label=\"رمز الدولة\">\n            <option value=\"+971\">+971</option>\n            <option value=\"+966\">+966</option>\n            <option value=\"+965\">+965</option>\n            <option value=\"+968\">+968</option>\n          </select>\n          <input id=\"phone\" name=\"phone\" type=\"tel\" inputmode=\"tel\" autocomplete=\"tel\" placeholder=\"050 123 4567\" required>\n        </div>\n        <div class=\"field-error\">يرجى إدخال رقم هاتف صحيح</div>\n      </div>\n\n      <button class=\"save-button\" id=\"saveButton\" type=\"submit\">حفظ العنوان</button>\n      <p class=\"privacy-note\">سيتم استخدام هذا العنوان لتوصيل طلباتك فقط</p>\n    </form>\n  </main>\n\n  <script>\n    const form = document.getElementById('addressForm');\n    const phone = document.getElementById('phone');\n    const successMessage = document.getElementById('successMessage');\n    const saveButton = document.getElementById('saveButton');\n\n    form.addEventListener('submit', function (event) {\n      event.preventDefault();\n      let valid = true;\n\n      form.querySelectorAll('[required]').forEach(function (element) {\n        const field = element.closest('.field');\n        const isPhone = element === phone;\n        const phoneDigits = phone.value.replace(/\\D/g, '');\n        const isValid = isPhone\n          ? phoneDigits.length >= 9\n          : element.value.trim() !== '';\n\n        field.classList.toggle('invalid', !isValid);\n        if (!isValid) valid = false;\n      });\n\n      if (!valid) {\n        successMessage.classList.remove('show');\n        return;\n      }\n\n      saveButton.disabled = true;\n      saveButton.textContent = 'جارٍ الحفظ...';\n\n      setTimeout(function () {\n        successMessage.classList.add('show');\n        saveButton.textContent = 'تم حفظ العنوان';\n        successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });\n      }, 500);\n    });\n\n    form.querySelectorAll('input, select').forEach(function (element) {\n      element.addEventListener('input', function () {\n        element.closest('.field').classList.remove('invalid');\n      });\n    });\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 327,
+    "output": 2718
+  },
+  "ms": 13307,
+  "finish": "stop",
+  "reasoningTokens": 29,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 82,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 227.328125,
+        "y": 75,
+        "width": 142.671875,
+        "height": 27
+      },
+      "message": "Arabic falls back from Tahoma, Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>عنوان التوصيل</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 223.765625,
+        "y": 616.984375,
+        "width": 45,
+        "height": 14
+      },
+      "message": "\"(اختياري)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"optional\">(اختياري)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 78.984375,
+        "y": 879.984375,
+        "width": 232.015625,
+        "height": 14
+      },
+      "message": "\"سيتم استخدام هذا العنوان لتوصيل طلباتك ف…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"privacy-note\">سيتم استخدام هذا العنوان لتوصيل طلباتك فقط</p>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 50,
+        "y": 278.984375,
+        "width": 10.28125,
+        "height": 20
+      },
+      "message": "left: 14px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<span class=\"input-icon\" aria-hidden=\"true\">⌂</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 50,
+        "y": 372.484375,
+        "width": 10,
+        "height": 21
+      },
+      "message": "left: 14px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<span class=\"input-icon\" aria-hidden=\"true\">⌁</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 50,
+        "y": 466.484375,
+        "width": 15,
+        "height": 21
+      },
+      "message": "left: 14px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<span class=\"input-icon\" aria-hidden=\"true\">◎</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 50,
+        "y": 654.984375,
+        "width": 9.46875,
+        "height": 20
+      },
+      "message": "left: 14px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<span class=\"input-icon\" aria-hidden=\"true\">#</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 36,
+        "y": 262.984375,
+        "width": 318,
+        "height": 52
+      },
+      "message": "padding-right: 14px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<input id=\"building\" name=\"building\" type=\"text\" placeholder=\"مثال: مبنى 12، فيلا 5\" required=\"\">"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 36,
+        "y": 356.984375,
+        "width": 318,
+        "height": 52
+      },
+      "message": "padding-right: 14px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<input id=\"street\" name=\"street\" type=\"text\" placeholder=\"اسم الشارع\" required=\"\">"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 36,
+        "y": 450.984375,
+        "width": 318,
+        "height": 52
+      },
+      "message": "padding-right: 14px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<input id=\"area\" name=\"area\" type=\"text\" placeholder=\"اسم المنطقة\" required=\"\">"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 36,
+        "y": 638.984375,
+        "width": 318,
+        "height": 52
+      },
+      "message": "padding-right: 14px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<input id=\"makani\" name=\"makani\" type=\"text\" inputmode=\"numeric\" placeholder=\"أدخل رقم المبنى\">"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 947
+}

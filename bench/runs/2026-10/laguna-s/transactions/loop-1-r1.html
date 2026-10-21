@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المعاملات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :lang(ar) {
+      --type-body-size: 16px;
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+      font-size: var(--type-body-size);
+      margin: 0;
+      padding: 16px;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .balance {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .filter {
+      margin-bottom: 16px;
+    }
+
+    .filter select {
+      padding: 8px;
+      font-size: var(--type-label-size);
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: start;
+      border-bottom: 1px solid #eee;
+      font-size: var(--type-label-size);
+    }
+
+    th {
+      background-color: #fafafa;
+      font-weight: 600;
+    }
+
+    .amount.income {
+      color: #2e7d32;
+    }
+
+    .amount.expense {
+      color: #c62828;
+    }
+
+    .merchant {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .merchant bdi {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="balance">الرصيد: <bdi dir="ltr">1,234.500 ر.ع.</bdi></div>
+
+  <div class="filter">
+    <label for="period">عرض:</label>
+    <select id="period">
+      <option>هذا الشهر</option>
+      <option>الشهر الماضي</option>
+      <option>آخر 3 أشهر</option>
+    </select>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>التاريخ</th>
+        <th>التاجر</th>
+        <th>المبلغ</th>
+        <th>النوع</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><bdi dir="ltr">2025-03-28</bdi></td>
+        <td class="merchant"><bdi>Lulu Hypermarket</bdi></td>
+        <td class="amount expense"><bdi dir="ltr">-12.500 ر.ع.</bdi></td>
+        <td>صرف</td>
+      </tr>
+      <tr>
+        <td><bdi dir="ltr">2025-03-27</bdi></td>
+        <td class="merchant"><bdi>نتفلكس</bdi></td>
+        <td class="amount expense"><bdi dir="ltr">-29.990 ر.ع.</bdi></td>
+        <td>صرف</td>
+      </tr>
+      <tr>
+        <td><bdi dir="ltr">2025-03-25</bdi></td>
+        <td class="merchant"><bdi>سوبرماركت المراعي</bdi></td>
+        <td class="amount expense"><bdi dir="ltr">-45.750 ر.ع.</bdi></td>
+        <td>صرف</td>
+      </tr>
+      <tr>
+        <td><bdi dir="ltr">2025-03-22</bdi></td>
+        <td class="merchant"><bdi>أبواب للمطاعم</bdi></td>
+        <td class="amount expense"><bdi dir="ltr">-18.300 ر.ع.</bdi></td>
+        <td>صرف</td>
+      </tr>
+      <tr>
+        <td><bdi dir="ltr">2025-03-20</bdi></td>
+        <td class="merchant"><bdi>Netflix</bdi></td>
+        <td class="amount expense"><bdi dir="ltr">-29.990 ر.ع.</bdi></td>
+        <td>اشتراك</td>
+      </tr>
+      <tr>
+        <td><bdi dir="ltr">2025-03-18</bdi></td>
+        <td class="merchant"><bdi>تواصل للاتصالات</bdi></td>
+        <td class="amount income"><bdi dir="ltr">+500.000 ر.ع.</bdi></td>
+        <td>إيداع</td>
+      </tr>
+      <tr>
+        <td><bdi dir="ltr">2025-03-15</bdi></td>
+        <td class="merchant"><bdi>مطعم نجد</bdi></td>
+        <td class="amount expense"><bdi dir="ltr">-32.400 ر.ع.</bdi></td>
+        <td>صرف</td>
+      </tr>
+      <tr>
+        <td><bdi dir="ltr">2025-03-10</bdi></td>
+        <td class="merchant"><bdi>أدوات منزلية</bdi></td>
+        <td class="amount expense"><bdi dir="ltr">-15.250 ر.ع.</bdi></td>
+        <td>صرف</td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

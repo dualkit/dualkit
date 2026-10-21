@@ -1,0 +1,95 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "profile",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T17:10:59.678Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>الملف الشخصي</title>\n<style>\n  body {\n    font-family: Arial, sans-serif;\n    background-color: #f0f0f0;\n    margin: 0;\n    padding: 20px;\n    direction: rtl;\n  }\n  .phone {\n    max-width: 375px;\n    margin: 0 auto;\n    background: #fff;\n    border-radius: 10px;\n    padding: 20px;\n    box-shadow: 0 2px 5px rgba(0,0,0,0.1);\n  }\n  h2 {\n    text-align: center;\n    margin-bottom: 20px;\n  }\n  .row {\n    display: flex;\n    justify-content: space-between;\n    align-items: flex-start;\n    padding: 15px 0;\n    border-bottom: 1px solid #eee;\n  }\n  .label {\n    font-weight: bold;\n    margin-bottom: 4px;\n  }\n  .value {\n    flex: 1;\n    margin: 0 10px;\n  }\n  .edit {\n    background: none;\n    border: none;\n    color: #007AFF;\n    font-size: 16px;\n    cursor: pointer;\n  }\n</style>\n</head>\n<body>\n  <div class=\"phone\">\n    <h2>الملف الشخصي</h2>\n    <div class=\"row\">\n      <div>\n        <div class=\"label\">الاسم:</div>\n        <div>Layla Al Mansouri</div>\n        <div class=\"label\">البريد الإلكتروني:</div>\n        <div>layla@example.com</div>\n      </div>\n      <button class=\"edit\">تعديل</button>\n    </div>\n    <div class=\"row\">\n      <div>\n        <div class=\"label\">رقم الهاتف:</div>\n        <div>+971 50 123 4567</div>\n      </div>\n      <button class=\"edit\">تعديل</button>\n    </div>\n    <div class=\"row\">\n      <div>\n        <div class=\"label\">الآيبان:</div>\n        <div>AE07 0331 2345 6789 0123 456</div>\n      </div>\n      <button class=\"edit\">تعديل</button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 166,
+    "output": 4090
+  },
+  "ms": 42271,
+  "finish": "stop",
+  "reasoningTokens": 3512,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 62,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 119.5625,
+        "y": 330.90625,
+        "width": 230.4375,
+        "height": 17
+      },
+      "message": "\"AE07\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div>AE07 0331 2345 6789 0123 456</div>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 220.5,
+        "y": 258.90625,
+        "width": 129.5,
+        "height": 17
+      },
+      "message": "\"+971 50 123 4567\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div>+971 50 123 4567</div>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 119.5625,
+        "y": 330.90625,
+        "width": 230.4375,
+        "height": 17
+      },
+      "message": "\"AE07 0331 2345 6789 0123 456\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div>AE07 0331 2345 6789 0123 456</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 115.15625,
+        "y": 59.90625,
+        "width": 159.671875,
+        "height": 27
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h2>الملف الشخصي</h2>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 46,
+        "y": 124.90625,
+        "width": 36,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"edit\">تعديل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

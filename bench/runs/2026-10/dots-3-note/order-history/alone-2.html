@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تاريخ الطلب</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    padding: 16px;
+  }
+  .order {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .order-number {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 4px;
+  }
+  .date, .total {
+    margin: 2px 0;
+  }
+  .status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
+  .delivered { background: #e6f7ee; color: #2e7d32; }
+  .onway { background: #fff3cd; color: #856404; }
+  .cancelled { background: #f8d7da; color: #721c24; }
+</style>
+</head>
+<body>
+  <h2>تاريخ الطلب</h2>
+
+  <div class="order">
+    <div class="order-number">رقم الطلب: #A-10293</div>
+    <div class="date">التاريخ: 2023-12-01 (ميلادي) / 1445-06-18 (هجري)</div>
+    <div class="total">الإجمالي: 250 ريال</div>
+    <div class="status delivered">تم التسليم</div>
+  </div>
+
+  <div class="order">
+    <div class="order-number">رقم الطلب: #B-45678</div>
+    <div class="date">التاريخ: 2023-12-05 (ميلادي) / 1445-06-22 (هجري)</div>
+    <div class="total">الإجمالي: 120 ريال</div>
+    <div class="status onway">في العبوة</div>
+  </div>
+
+  <div class="order">
+    <div class="order-number">رقم الطلب: #C-12345</div>
+    <div class="date">التاريخ: 2023-12-10 (ميلادي) / 1445-06-27 (هجري)</div>
+    <div class="total">الإجمالي: 300 ريال</div>
+    <div class="status cancelled">ملغي</div>
+  </div>
+
+  <div class="order">
+    <div class="order-number">رقم الطلب: #D-67890</div>
+    <div class="date">التاريخ: 2023-12-12 (ميلادي) / 1445-06-29 (هجري)</div>
+    <div class="total">الإجمالي: 80 ريال</div>
+    <div class="status delivered">تم التسليم</div>
+  </div>
+</body>
+</html>

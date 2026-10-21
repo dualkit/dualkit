@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ملخص الدفع</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f3f4f6;
+      --card-bg: #ffffff;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --primary: #047857;
+      --primary-hover: #065f46;
+      --border-color: #e5e7eb;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif, -apple-system;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    /* Arabic type pairing & rules */
+    :lang(ar) {
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    .phone-screen {
+      width: 100%;
+      max-width: 400px;
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid var(--border-color);
+      gap: 16px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border-radius: 8px;
+      color: var(--text-main);
+      transition: background-color 0.2s;
+    }
+
+    .back-btn:hover {
+      background-color: var(--bg-color);
+    }
+
+    /* Flip directional icon for RTL */
+    .back-btn svg {
+      transform: scaleX(-1);
+    }
+
+    h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    /* Main content body */
+    .content {
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* Amount Due Card */
+    .amount-card {
+      background-color: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .amount-label {
+      font-size: 14px;
+      color: var(--primary);
+      font-weight: 500;
+    }
+
+    .amount-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #064e3b;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Details Section */
+    .details-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background-color: #f9fafb;
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid var(--border-color);
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .detail-label {
+      color: var(--text-muted);
+    }
+
+    .detail-val {
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .dates-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
+    }
+
+    .date-hijri {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Items count line */
+    .items-line {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-main);
+      padding: 0 4px;
+    }
+
+    /* Form control for SMS receipt */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label[for="phone"] {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .phone-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="tel"] {
+      width: 100%;
+      padding: 12px 16px;
+      padding-inline-start: 60px; /* space for prefix */
+      font-size: 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      outline: none;
+      background: #ffffff;
+      font-family: inherit;
+      direction: ltr;
+      text-align: left;
+      font-variant-numeric: tabular-nums;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input[type="tel"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(4, 120, 87, 0.1);
+    }
+
+    .phone-prefix {
+      position: absolute;
+      inset-inline-start: 12px;
+      font-size: 15px;
+      color: var(--text-muted);
+      font-weight: 500;
+      direction: ltr;
+      pointer-events: none;
+      border-inline-end: 1px solid var(--border-color);
+      padding-inline-end: 8px;
+    }
+
+    /* Action button */
+    .actions {
+      margin-top: 8px;
+    }
+
+    .pay-btn {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.05s;
+      font-family: inherit;
+    }
+
+    .pay-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .pay-btn:active {
+      transform: scale(0.99);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-screen">
+    <header>
+      <button class="back-btn" aria-label="رجوع">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <h1>ملخص الدفع</h1>
+    </header>
+
+    <div class="content">
+      <!-- Amount Card -->
+      <div class="amount-card">
+        <span class="amount-label">المبلغ المستحق</span>
+        <div class="amount-value"><bdi>1,234.50 د.إ</bdi></div>
+      </div>
+
+      <!-- Details Group -->
+      <div class="details-group">
+        <div class="detail-row">
+          <span class="detail-label">تاريخ الاستحقاق</span>
+          <div class="dates-container">
+            <span class="detail-val"><bdi dir="ltr">3 November 2026</bdi></span>
+            <span class="date-hijri"><bdi dir="ltr">21 Jumada al-Ula 1448 AH</bdi></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Items Count Line -->
+      <div class="items-line" id="items-count">
+        <!-- Filled dynamically via Intl.PluralRules script below -->
+        لديك 3 عناصر في هذا الطلب
+      </div>
+
+      <!-- Phone Number Field -->
+      <div class="form-group">
+        <label for="phone">رقم الجوال لإرسال الإيصال</label>
+        <div class="phone-input-wrapper">
+          <span class="phone-prefix" dir="ltr">+971</span>
+          <input 
+            type="tel" 
+            id="phone" 
+            dir="ltr" 
+            inputmode="numeric" 
+            autocomplete="tel" 
+            placeholder="<bdi dir='ltr'>50 123 4567</bdi>" 
+            maxlength="12"
+          >
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button class="pay-btn" type="button">إتمام الدفع</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Robust Arabic Pluralization demonstration (Intl.PluralRules)
+    const count = 3;
+    const arabicPlurals = {
+      zero: 'لا توجد عناصر في هذا الطلب',
+      one: 'لديك عنصر واحد في هذا الطلب',
+      two: 'لديك عنصران في هذا الطلب',
+      few: `لديك ${count} عناصر في هذا الطلب`,
+      many: `لديك ${count} عنصرًا في هذا الطلب`,
+      other: `لديك ${count} عنصر في هذا الطلب`
+    };
+
+    const pr = new Intl.PluralRules('ar');
+    const form = pr.select(count);
+    const lineElement = document.getElementById('items-count');
+    if (lineElement && arabicPlurals[form]) {
+      lineElement.textContent = arabicPlurals[form];
+    }
+  </script>
+</body>
+</html>

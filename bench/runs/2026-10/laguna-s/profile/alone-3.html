@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - تطبيق الدفع الإماراتي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            direction: rtl;
+            text-align: right;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .phone-frame {
+            width: 100%;
+            max-width: 414px;
+            background-color: #000;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .screen-container {
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 30px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 600px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0073e6, #005bb5);
+            color: white;
+            padding: 25px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 18px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Profile Section */
+        .profile-section {
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0073e6, #005bb5);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 5px;
+        }
+
+        .profile-email {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        /* Details List */
+        .details-list {
+            background-color: #ffffff;
+            margin: 0 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+
+        .edit-button {
+            background-color: #0073e6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .edit-button:hover {
+            background-color: #005bb5;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            padding: 20px;
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen-container">
+            <!-- Header -->
+            <div class="header">
+                <button class="back-button">←</button>
+                <h1>الملف الشخصي</h1>
+                <div style="width: 40px;"></div>
+            </div>
+
+            <!-- Profile Section -->
+            <div class="profile-section">
+                <div class="profile-image">ل</div>
+                <h2 class="profile-name">ليلى المنصوري</h2>
+                <p class="profile-email">layla@example.com</p>
+            </div>
+
+            <!-- Details List -->
+            <div class="details-list">
+                <div class="detail-item">
+                    <div>
+                        <div class="detail-label">رقم الهاتف</div>
+                        <div class="detail-value">+971 50 123 4567</div>
+                    </div>
+                    <button class="edit-button">تعديل</button>
+                </div>
+
+                <div class="detail-item">
+                    <div>
+                        <div class="detail-label">رقم الحساب البنكي (IBAN)</div>
+                        <div class="detail-value">AE07 0331 2345 6789 0123 456</div>
+                    </div>
+                    <button class="edit-button">تعديل</button>
+                </div>
+
+                <div class="detail-item">
+                    <div>
+                        <div class="detail-label">البريد الإلكتروني</div>
+                        <div class="detail-value">layla@example.com</div>
+                    </div>
+                    <button class="edit-button">تعديل</button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                تطبيق الدفع الإماراتي &copy; 2024
+            </div>
+        </div>
+    </div>
+</body>
+</html>

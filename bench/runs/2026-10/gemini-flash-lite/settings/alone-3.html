@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق بانك البحرين - الإعدادات</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        bankPrimary: '#0A2540',
+                        bankRed: '#CE1126',
+                        bankGold: '#D4AF37',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f1f5f9;
+        }
+        /* Custom Toggle Switch Styles */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #0A2540;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #0A2540;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-0 sm:p-4">
+
+    <!-- Phone Frame Container -->
+    <div class="w-full sm:w-[390px] h-screen sm:h-[844px] bg-slate-50 sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative border-0 sm:border-[10px] border-slate-900">
+
+        <!-- iOS Status Bar (Simulated) -->
+        <div class="bg-bankPrimary text-white px-6 pt-3 pb-2 flex justify-between items-center text-xs select-none">
+            <span>9:41</span>
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full text-base"></i>
+            </div>
+        </div>
+
+        <!-- App Header -->
+        <div class="bg-bankPrimary text-white px-6 py-4 flex items-center justify-between shadow-md">
+            <button class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <h1 class="text-lg font-bold">الإعدادات</h1>
+            <div class="w-8"></div> <!-- Spacer for symmetry -->
+        </div>
+
+        <!-- Main Scrollable Content -->
+        <div class="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-20">
+
+            <!-- GROUP 1: Account -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2">الحساب</h2>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden divide-y divide-slate-100">
+                    
+                    <!-- Name Row -->
+                    <div onclick="alert('الانتقال إلى شاشة تعديل الاسم')" class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer transition">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-9 h-9 rounded-xl bg-blue-50 text-bankPrimary flex items-center justify-center">
+                                <i class="fa-regular fa-user"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-400">الاسم الكامل</p>
+                                <p class="text-sm font-bold text-slate-800">محمد أحمد إبراهيم</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-left text-slate-300 text-sm"></i>
+                    </div>
+
+                    <!-- Phone Row -->
+                    <div onclick="alert('الانتقال إلى شاشة تعديل رقم الهاتف')" class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer transition">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-9 h-9 rounded-xl bg-blue-50 text-bankPrimary flex items-center justify-center">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-400">رقم الهاتف المحمول</p>
+                                <p class="text-sm font-bold text-slate-800 tracking-wider">+973 3600 1234</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse">
+                            <span class="text-xs bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full font-semibold">مؤكد</span>
+                            <i class="fa-solid fa-chevron-left text-slate-300 text-sm"></i>
+                        </div>
+                    </div>
+
+                    <!-- Language Row -->
+                    <div onclick="alert('الانتقال إلى شاشة اختيار اللغة')" class="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer transition">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-9 h-9 rounded-xl bg-blue-50 text-bankPrimary flex items-center justify-center">
+                                <i class="fa-solid fa-globe"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-slate-400">لغة التطبيق</p>
+                                <p class="text-sm font-bold text-slate-800">العربية</p>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-left text-slate-300 text-sm"></i>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- GROUP 2: Security -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2">الأمان</h2>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden divide-y divide-slate-100">
+                    
+                    <!-- Face ID Toggle -->
+                    <div class="flex items-center justify-between p-4">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                                <i class="fa-solid fa-face-smile"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-800">معرف الوجه (Face ID)</p>
+                                <p class="text-xs text-slate-400">تسجيل الدخول السريع بأمان</p>
+                            </div>
+                        </div>
+                        <!-- Toggle Switch -->
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-[-100%] peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bankPrimary"></div>
+                        </label>
+                    </div>
+
+                    <!-- Two-Step Login Toggle -->
+                    <div class="flex items-center justify-between p-4">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-800">تسجيل الدخول بخطوتين</p>
+                                <p class="text-xs text-slate-400">حماية إضافية لحسابك المصرفي</p>
+                            </div>
+                        </div>
+                        <!-- Toggle Switch -->
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-[-100%] peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bankPrimary"></div>
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- GROUP 3: Notifications -->
+            <div>
+                <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2">الإشعارات</h2>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden divide-y divide-slate-100">
+                    
+                    <!-- Transfers Toggle -->
+                    <div class="flex items-center justify-between p-4">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-800">التحويلات المالية</p>
+                                <p class="text-xs text-slate-400">تنبيهات الإيداع والسحب والتحويل</p>
+                            </div>
+                        </div>
+                        <!-- Toggle Switch -->
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-[-100%] peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bankPrimary"></div>
+                        </label>
+                    </div>
+
+                    <!-- Offers Toggle -->
+                    <div class="flex items-center justify-between p-4">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <i class="fa-solid fa-tag"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-800">العروض والمنتجات</p>
+                                <p class="text-xs text-slate-400">عروض القروض والبطاقات الائتمانية</p>
+                            </div>
+                        </div>
+                        <!-- Toggle Switch -->
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-[-100%] peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bankPrimary"></div>
+                        </label>
+                    </div>
+
+                    <!-- Statements Toggle -->
+                    <div class="flex items-center justify-between p-4">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-800">كشف الحساب الشهري</p>
+                                <p class="text-xs text-slate-400">إشعار صدور الكشف الإلكتروني</p>
+                            </div>
+                        </div>
+                        <!-- Toggle Switch -->
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-[-100%] peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bankPrimary"></div>
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Version Tag -->
+            <div class="text-center pt-2">
+                <p class="text-xs text-slate-400">الإصدار 3.4.2 (4508)</p>
+                <p class="text-[10px] text-slate-300 mt-1">مرخص من مصرف البحرين المركزي</p>
+            </div>
+
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-6 py-3 flex justify-between items-center text-slate-400">
+            <button class="flex flex-col items-center space-y-1 hover:text-bankPrimary transition">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px] font-medium">الرئيسية</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 hover:text-bankPrimary transition">
+                <i class="fa-solid fa-wallet text-lg"></i>
+                <span class="text-[10px] font-medium">الحسابات</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 hover:text-bankPrimary transition">
+                <i class="fa-solid fa-arrow-right-arrow-left text-lg"></i>
+                <span class="text-[10px] font-medium">التحويل</span>
+            </button>
+            <button class="flex flex-col items-center space-y-1 text-bankPrimary">
+                <i class="fa-solid fa-gear text-lg"></i>
+                <span class="text-[10px] font-bold">الإعدادات</span>
+            </button>
+        </div>
+
+        <!-- iOS Home Indicator (Simulated) -->
+        <div class="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-slate-300 rounded-full sm:hidden"></div>
+
+    </div>
+
+</body>
+</html>

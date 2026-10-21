@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>الطلبات السابقة</title>
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --card-bg: #ffffff;
+      --text: #1a1a1a;
+      --muted: #707070;
+      --border: #e0e0e0;
+      --delivered: #2e7d32;
+      --on-way: #1565c0;
+      --cancelled: #c62828;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.7;
+      padding: 16px;
+    }
+
+    header {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: start;
+    }
+
+    .order-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .order-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .order-number {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .status-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      color: #fff;
+    }
+
+    .status-delivered { background-color: var(--delivered); }
+    .status-on-way { background-color: var(--on-way); }
+    .status-cancelled { background-color: var(--cancelled); }
+
+    .order-dates {
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .order-total {
+      font-weight: 600;
+      font-size: 15px;
+      margin-top: 4px;
+    }
+
+    .amount {
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body>
+  <header>الطلبات السابقة</header>
+  <div class="order-list">
+    <!-- Order 1 -->
+    <div class="order-card">
+      <div class="order-header">
+        <span class="order-number">#A-10293</span>
+        <span class="status-badge status-delivered">تم التسليم</span>
+      </div>
+      <div class="order-dates">
+        <span>٢٥ أكتوبر ٢٠٢٣</span>
+        <span>٢٦ ربيع الأول ١٤٤٥ هـ</span>
+      </div>
+      <div class="order-total">المجموع: <span class="amount">١٬٢٩٩.٠٠ ر.س</span></div>
+    </div>
+
+    <!-- Order 2 -->
+    <div class="order-card">
+      <div class="order-header">
+        <span class="order-number">#A-10292</span>
+        <span class="status-badge status-on-way">في الطريق</span>
+      </div>
+      <div class="order-dates">
+        <span>٢٠ أكتوبر ٢٠٢٣</span>
+        <span>٢١ ربيع الأول ١٤٤٥ هـ</span>
+      </div>
+      <div class="order-total">المجموع: <span class="amount">٨٦٩.٩٠ ر.س</span></div>
+    </div>
+
+    <!-- Order 3 -->
+    <div class="order-card">
+      <div class="order-header">
+        <span class="order-number">#A-10291</span>
+        <span class="status-badge status-cancelled">ملغاة</span>
+      </div>
+      <div class="order-dates">
+        <span>١٥ أكتوبر ٢٠٢٣</span>
+        <span>١٦ ربيع الأول ١٤٤٥ هـ</span>
+      </div>
+      <div class="order-total">المجموع: <span class="amount">٨٩٩.٠٠ ر.س</span></div>
+    </div>
+
+    <!-- Order 4 -->
+    <div class="order-card">
+      <div class="order-header">
+        <span class="order-number">#A-10290</span>
+        <span class="status-badge status-delivered">تم التسليم</span>
+      </div>
+      <div class="order-dates">
+        <span>١٠ أكتوبر ٢٠٢٣</span>
+        <span>١١ ربيع الأول ١٤٤٥ هـ</span>
+      </div>
+      <div class="order-total">المجموع: <span class="amount">١٬٠٩٩.٩٠ ر.س</span></div>
+    </div>
+  </div>
+</body>
+</html>

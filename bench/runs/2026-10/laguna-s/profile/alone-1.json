@@ -1,0 +1,151 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "profile",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T17:13:27.575Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>الملف الشخصي - تطبيق الدفع</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f5f5f5;\n            color: #333;\n            direction: rtl;\n            text-align: right;\n            padding: 20px;\n        }\n\n        .profile-container {\n            max-width: 400px;\n            margin: 0 auto;\n            background: #fff;\n            border-radius: 12px;\n            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);\n            overflow: hidden;\n        }\n\n        .profile-header {\n            background: #0077b6;\n            color: #fff;\n            padding: 20px;\n            text-align: center;\n        }\n\n        .profile-header h1 {\n            font-size: 20px;\n            font-weight: 600;\n        }\n\n        .profile-body {\n            padding: 20px;\n        }\n\n        .profile-item {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            padding: 15px 0;\n            border-bottom: 1px solid #eee;\n        }\n\n        .profile-item:last-child {\n            border-bottom: none;\n        }\n\n        .profile-label {\n            font-size: 14px;\n            color: #555;\n            margin-bottom: 4px;\n        }\n\n        .profile-value {\n            font-size: 16px;\n            color: #222;\n            font-weight: 500;\n        }\n\n        .edit-btn {\n            background: #0077b6;\n            color: #fff;\n            border: none;\n            padding: 6px 14px;\n            border-radius: 6px;\n            font-size: 13px;\n            cursor: pointer;\n            transition: background 0.2s;\n        }\n\n        .edit-btn:hover {\n            background: #005f8a;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"profile-container\">\n        <div class=\"profile-header\">\n            <h1>الملف الشخصي</h1>\n        </div>\n        <div class=\"profile-body\">\n            <div class=\"profile-item\">\n                <div>\n                    <div class=\"profile-label\">الاسم</div>\n                    <div class=\"profile-value\">ليلى المنصوري</div>\n                </div>\n                <button class=\"edit-btn\">تعديل</button>\n            </div>\n            <div class=\"profile-item\">\n                <div>\n                    <div class=\"profile-label\">البريد الإلكتروني</div>\n                    <div class=\"profile-value\">layla@example.com</div>\n                </div>\n                <button class=\"edit-btn\">تعديل</button>\n            </div>\n            <div class=\"profile-item\">\n                <div>\n                    <div class=\"profile-label\">رقم الهاتف</div>\n                    <div class=\"profile-value\">+971 50 123 4567</div>\n                </div>\n                <button class=\"edit-btn\">تعديل</button>\n            </div>\n            <div class=\"profile-item\">\n                <div>\n                    <div class=\"profile-label\">رقم الحساب البنكي (IBAN)</div>\n                    <div class=\"profile-value\">AE07 0331 2345 6789 0123 456</div>\n                </div>\n                <button class=\"edit-btn\">تعديل</button>\n            </div>\n        </div>\n    </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 177,
+    "output": 1027
+  },
+  "ms": 22517,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 25,
+  "score": 50,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 119.5625,
+        "y": 347,
+        "width": 230.4375,
+        "height": 17
+      },
+      "message": "\"AE07\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"profile-value\">AE07 0331 2345 6789 0123 456</div>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 220.5,
+        "y": 278,
+        "width": 129.5,
+        "height": 17
+      },
+      "message": "\"+971 50 123 4567\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"profile-value\">+971 50 123 4567</div>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 119.5625,
+        "y": 347,
+        "width": 230.4375,
+        "height": 17
+      },
+      "message": "\"AE07 0331 2345 6789 0123 456\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"profile-value\">AE07 0331 2345 6789 0123 456</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 127.71875,
+        "y": 41,
+        "width": 134.5625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الملف الشخصي</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 54,
+        "y": 131,
+        "width": 31,
+        "height": 15
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 54,
+        "y": 131,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 54,
+        "y": 200.5,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 54,
+        "y": 269.5,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 54,
+        "y": 338.5,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

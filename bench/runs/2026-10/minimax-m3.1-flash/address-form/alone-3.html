@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b8f55">
+  <title>عنوان التوصيل</title>
+  <style>
+    :root {
+      --green: #087f4d;
+      --green-dark: #05633c;
+      --green-light: #e9f7ef;
+      --text: #17211c;
+      --muted: #6b756f;
+      --line: #dfe5e1;
+      --background: #f7f9f8;
+      --error: #c93636;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: Tahoma, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: 100%;
+      min-height: 100vh;
+      max-width: 520px;
+      margin: 0 auto;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      padding: max(18px, env(safe-area-inset-top)) 20px 16px;
+      background: #fff;
+      border-bottom: 1px solid #edf0ee;
+    }
+
+    .back {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      background: #f3f6f4;
+      color: var(--text);
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    h1 {
+      margin: 14px 0 5px;
+      font-size: 24px;
+      line-height: 1.4;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    form {
+      flex: 1;
+      padding: 22px 20px calc(28px + env(safe-area-inset-bottom));
+    }
+
+    .section {
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .optional {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    input,
+    select {
+      width: 100%;
+      height: 52px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+      color: var(--text);
+      padding: 0 14px;
+      font: inherit;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    input::placeholder {
+      color: #9aa39e;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(8, 127, 77, .1);
+    }
+
+    input.invalid {
+      border-color: var(--error);
+    }
+
+    select {
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #53615a 50%),
+        linear-gradient(135deg, #53615a 50%, transparent 50%);
+      background-position:
+        calc(18px) calc(24px),
+        calc(13px) calc(24px);
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      padding-left: 38px;
+    }
+
+    .error-message {
+      display: none;
+      margin-top: 6px;
+      color: var(--error);
+      font-size: 12px;
+    }
+
+    .error-message.visible {
+      display: block;
+    }
+
+    .save-button {
+      width: 100%;
+      min-height: 54px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--green);
+      color: #fff;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(8, 127, 77, .18);
+      transition: background .2s, transform .1s;
+    }
+
+    .save-button:hover {
+      background: var(--green-dark);
+    }
+
+    .save-button:active {
+      transform: scale(.99);
+    }
+
+    .save-button:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    .success {
+      display: none;
+      margin-bottom: 18px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .success.visible {
+      display: block;
+    }
+
+    @media (min-width: 521px) {
+      .page {
+        border-inline: 1px solid #edf0ee;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <button class="back" type="button" aria-label="العودة">‹</button>
+      <h1>عنوان التوصيل</h1>
+      <p class="subtitle">أدخل تفاصيل العنوان حتى نوصل طلبك إلى.location الصحيح.</p>
+    </header>
+
+    <form id="addressForm" novalidate>
+      <div class="success" id="successMessage" role="status">تم حفظ عنوان التوصيل بنجاح.</div>
+
+      <section class="section" aria-labelledby="locationTitle">
+        <h2 class="section-title" id="locationTitle">معلومات الموقع</h2>
+
+        <div class="field">
+          <label for="emirate">الإمارة</label>
+          <select id="emirate" name="emirate">
+            <option value="dubai" selected>دبي</option>
+            <option value="abu-dhabi">أبوظبي</option>
+            <option value="sharjah">الشارقة</option>
+            <option value="ajman">عجمان</option>
+            <option value="umm-al-quwain">أم القيوين</option>
+            <option value="ras-al-khaimah">رأس الخيمة</option>
+            <option value="fujairah">الفجيرة</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="building">رقم المبنى أو الفيلا</label>
+          <input id="building" name="building" type="text" inputmode="numeric" placeholder="مثال: مبنى 12" autocomplete="address-line2" required>
+          <div class="error-message" id="buildingError">يرجى إدخال رقم المبنى أو الفيلا.</div>
+        </div>
+
+        <div class="field">
+          <label for="street">الشارع</label>
+          <input id="street" name="street" type="text" placeholder="اسم الشارع" autocomplete="address-line1" required>
+          <div class="error-message" id="streetError">يرجى إدخال اسم الشارع.</div>
+        </div>
+
+        <div class="field">
+          <label for="area">المنطقة</label>
+          <input id="area" name="area" type="text" placeholder="مثال: دبي مول" autocomplete="address-level3" required>
+          <div class="error-message" id="areaError">يرجى إدخال اسم المنطقة.</div>
+        </div>
+
+        <div class="field">
+          <label for="makani">رقم makani <span class="optional">(اختياري)</span></label>
+          <input id="makani" name="makani" type="text" inputmode="numeric" placeholder="أدخل رقم makeni" autocomplete="off">
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="contactTitle">
+        <h2 class="section-title" id="contactTitle">بيانات التواصل</h2>
+
+        <div class="field">
+          <label for="phone">رقم الهاتف</label>
+          <input id="phone" name="phone" type="tel" placeholder="050 123 4567" autocomplete="tel" required>
+          <div class="error-message" id="phoneError">يرجى إدخال رقم هاتف صحيح.</div>
+        </div>
+      </section>
+
+      <button class="save-button" id="saveButton" type="submit">حفظ العنوان</button>
+    </form>
+  </main>
+
+  <script>
+    const form = document.getElementById('addressForm');
+    const successMessage = document.getElementById('successMessage');
+    const saveButton = document.getElementById('saveButton');
+
+    function showError(id, messageId, show) {
+      const field = document.getElementById(id);
+      const error = document.getElementById(messageId);
+      field.classList.toggle('invalid', show);
+      field.setAttribute('aria-invalid', show ? 'true' : 'false');
+      error.classList.toggle('visible', show);
+      return !show;
+    }
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      successMessage.classList.remove('visible');
+
+      const building = document.getElementById('building');
+      const street = document.getElementById('street');
+      const area = document.getElementById('area');
+      const phone = document.getElementById('phone');
+
+      const validBuilding = showError('building', 'buildingError', !building.value.trim());
+      const validStreet = showError('street', 'streetError', !street.value.trim());
+      const validArea = showError('area', 'areaError', !area.value.trim());
+      const validPhone = showError('phone', 'phoneError', phone.value.replace(/\D/g, '').length < 10);
+
+      if (!validBuilding || !validStreet || !validArea || !validPhone) {
+        const firstInvalid = form.querySelector('.invalid');
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+
+      saveButton.disabled = true;
+      saveButton.textContent = 'جارٍ الحفظ...';
+
+      setTimeout(function () {
+        saveButton.disabled = false;
+        saveButton.textContent = 'حفظ العنوان';
+        successMessage.classList.add('visible');
+        successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 500);
+    });
+
+    document.querySelectorAll('input').forEach(function (input) {
+      input.addEventListener('input', function () {
+        input.classList.remove('invalid');
+        input.setAttribute('aria-invalid', 'false');
+        const error = document.getElementById(input.id + 'Error');
+        if (error) error.classList.remove('visible');
+      });
+    });
+  </script>
+</body>
+</html>

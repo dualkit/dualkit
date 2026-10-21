@@ -1,0 +1,95 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "settings",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-10-21T17:40:25.171Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>الإعدادات</title>\n  <style>\n    :root {\n      --bg: #f5f7fa;\n      --card: #ffffff;\n      --text-primary: #1a1a1a;\n      --text-secondary: #6b7280;\n      --border: #e5e7eb;\n      --accent: #0e7490;\n      --toggle-on: #0e7490;\n      --toggle-off: #cbd5e1;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;\n      background-color: var(--bg);\n      color: var(--text-primary);\n      line-height: 1.6;\n      font-size: 16px;\n      padding-bottom: env(safe-area-inset-bottom, 20px);\n    }\n\n    :lang(ar) {\n      font-family: 'IBM Plex Sans Arabic', 'Inter', sans-serif;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n\n    .header {\n      padding: 20px 16px;\n      font-size: 20px;\n      font-weight: 600;\n      color: var(--text-primary);\n    }\n\n    .settings-group {\n      background-color: var(--card);\n      margin: 12px 16px;\n      border-radius: 12px;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);\n      overflow: hidden;\n    }\n\n    .group-title {\n      padding: 12px 16px;\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--text-secondary);\n      text-transform: uppercase;\n      letter-spacing: 0.05em;\n    }\n\n    .settings-row {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      padding: 14px 16px;\n      border-bottom: 1px solid var(--border);\n      gap: 12px;\n    }\n\n    .settings-row:last-child {\n      border-bottom: none;\n    }\n\n    .row-label {\n      display: flex;\n      flex-direction: column;\n      flex: 1;\n      min-width: 0;\n    }\n\n    .row-title {\n      font-size: 16px;\n      font-weight: 500;\n      color: var(--text-primary);\n      margin-bottom: 2px;\n    }\n\n    .row-subtitle {\n      font-size: 14px;\n      color: var(--text-secondary);\n    }\n\n    .row-action {\n      display: flex;\n      align-items: center;\n      gap: 8px;\n    }\n\n    .chevron {\n      width: 20px;\n      height: 20px;\n      fill: var(--text-secondary);\n      flex-shrink: 0;\n    }\n\n    .toggle-switch {\n      position: relative;\n      display: inline-block;\n      width: 44px;\n      height: 24px;\n      flex-shrink: 0;\n    }\n\n    .toggle-switch input {\n      opacity: 0;\n      width: 0;\n      height: 0;\n    }\n\n    .slider {\n      position: absolute;\n      cursor: pointer;\n      top: 0;\n      left: 0;\n      right: 0;\n      bottom: 0;\n      background-color: var(--toggle-off);\n      transition: 0.25s;\n      border-radius: 24px;\n    }\n\n    .slider:before {\n      position: absolute;\n      content: \"\";\n      height: 18px;\n      width: 18px;\n      left: 3px;\n      bottom: 3px;\n      background-color: white;\n      transition: 0.25s;\n      border-radius: 50%;\n    }\n\n    input:checked + .slider {\n      background-color: var(--toggle-on);\n    }\n\n    input:checked + .slider:before {\n      transform: translateX(20px);\n    }\n\n    .phone-value {\n      font-family: 'SF Mono', 'Courier New', monospace;\n      direction: ltr;\n      unicode-bidi: embed;\n    }\n\n    .language-value {\n      font-weight: 500;\n      color: var(--accent);\n    }\n\n    .divider {\n      height: 1px;\n      background-color: var(--border);\n      margin: 0 16px;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"header\">الإعدادات</div>\n\n  <!-- Account Group -->\n  <div class=\"settings-group\">\n    <div class=\"group-title\">الحساب</div>\n\n    <div class=\"settings-row\">\n      <div class=\"row-label\">\n        <div class=\"row-title\">اسم الحساب</div>\n        <div class=\"row-subtitle\">محمد على أحمد</div>\n      </div>\n      <div class=\"row-action\">\n        <svg class=\"chevron\" viewBox=\"0 0 24 24\">\n          <path d=\"M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.59Z\" />\n        </svg>\n      </div>\n    </div>\n\n    <div class=\"settings-row\">\n      <div class=\"row-label\">\n        <div class=\"row-title\">رقم الهاتف</div>\n        <div class=\"row-subtitle\">\n          <span class=\"phone-value\">+973 3600 1234</span>\n        </div>\n      </div>\n      <div class=\"row-action\">\n        <svg class=\"chevron\" viewBox=\"0 0 24 24\">\n          <path d=\"M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.59Z\" />\n        </svg>\n      </div>\n    </div>\n\n    <div class=\"settings-row\">\n      <div class=\"row-label\">\n        <div class=\"row-title\">اللغة</div>\n        <div class=\"row-subtitle language-value\">العربية</div>\n      </div>\n      <div class=\"row-action\">\n        <svg class=\"chevron\" viewBox=\"0 0 24 24\">\n          <path d=\"M8.59 16.59L13.17 12L8.59 7.41L10 6L16 12L10 18L8.59 16.59Z\" />\n        </svg>\n      </div>\n    </div>\n  </div>\n\n  <!-- Security Group -->\n  <div class=\"settings-group\">\n    <div class=\"group-title\">الأمان</div>\n\n    <div class=\"settings-row\">\n      <div class=\"row-label\">\n        <div class=\"row-title\">تفعيل الوجه (Face ID)</div>\n        <div class=\"row-subtitle\">استخدام التعرف على الوجه لتسجيل الدخول</div>\n      </div>\n      <label class=\"toggle-switch\">\n        <input type=\"checkbox\" checked />\n        <span class=\"slider\"></span>\n      </label>\n    </div>\n\n    <div class=\"settings-row\">\n      <div class=\"row-label\">\n        <div class=\"row-title\">تسجيل الدخول الثنائي</div>\n        <div class=\"row-subtitle\">طلب رمز تحقق عند تسجيل الدخول</div>\n      </div>\n      <label class=\"toggle-switch\">\n        <input type=\"checkbox\" checked />\n        <span class=\"slider\"></span>\n      </label>\n    </div>\n  </div>\n\n  <!-- Notifications Group -->\n  <div class=\"settings-group\">\n    <div class=\"group-title\">الإشعارات</div>\n\n    <div class=\"settings-row\">\n      <div class=\"row-label\">\n        <div class=\"row-title\">التحويلات البنكية</div>\n        <div class=\"row-subtitle\">إشعار عند إتمام أي تحويل</div>\n      </div>\n      <label class=\"toggle-switch\">\n        <input type=\"checkbox\" checked />\n        <span class=\"slider\"></span>\n      </label>\n    </div>\n\n    <div class=\"settings-row\">\n      <div class=\"row-label\">\n        <div class=\"row-title\">العروض والعروض الخاصة</div>\n        <div class=\"row-subtitle\">إشعار بأحدث العروض المتاحة</div>\n      </div>\n      <label class=\"toggle-switch\">\n        <input type=\"checkbox\" />\n        <span class=\"slider\"></span>\n      </label>\n    </div>\n\n    <div class=\"settings-row\">\n      <div class=\"row-label\">\n        <div class=\"row-title\">كشوفات الحساب</div>\n        <div class=\"row-subtitle\">إرسال الكشوفات الشهرية تلقائيًا</div>\n      </div>\n      <label class=\"toggle-switch\">\n        <input type=\"checkbox\" checked />\n        <span class=\"slider\"></span>\n      </label>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6489,
+    "output": 2467
+  },
+  "ms": 67914,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 56,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 240.375,
+        "y": 262.96875,
+        "width": 117.625,
+        "height": 16
+      },
+      "message": "\"+973 3600 1234\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"phone-value\">+973 3600 1234</span>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 312,
+        "y": 101,
+        "width": 46,
+        "height": 16
+      },
+      "message": "0.7px letter-spacing on \"الحساب\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"group-title\">الحساب</div>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 324,
+        "y": 406.75,
+        "width": 34,
+        "height": 16
+      },
+      "message": "0.7px letter-spacing on \"الأمان\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"group-title\">الأمان</div>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 299,
+        "y": 629.515625,
+        "width": 59,
+        "height": 16
+      },
+      "message": "0.7px letter-spacing on \"الإشعارات\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"group-title\">الإشعارات</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 294,
+        "y": 26,
+        "width": 80,
+        "height": 22
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"header\">الإعدادات</div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 919
+}

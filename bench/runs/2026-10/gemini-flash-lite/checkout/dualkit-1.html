@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إتمام الطلب - البقالة السريعة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0A5C36;
+      --primary-hover: #08492b;
+      --bg-color: #f3f4f6;
+      --surface: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --border-color: #e5e7eb;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    :lang(ar) {
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.6;
+    }
+
+    /* Phone Frame Container */
+    .phone-frame {
+      width: 100%;
+      max-width: 414px;
+      background-color: var(--surface);
+      border-radius: 36px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      height: 860px;
+      overflow: hidden;
+      position: relative;
+      border: 8px solid #1f2937;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      transition: background-color 0.2s;
+    }
+
+    .back-btn:hover {
+      background-color: var(--bg-color);
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .header-spacer {
+      width: 40px; /* balances the back button */
+    }
+
+    /* Scrollable Content */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Delivery Info Card */
+    .delivery-card {
+      background-color: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .delivery-icon {
+      font-size: 24px;
+    }
+
+    .delivery-info h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .delivery-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* Section Title */
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    /* Cart Items List */
+    .cart-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background-color: var(--surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+    }
+
+    .item-image {
+      width: 64px;
+      height: 64px;
+      background-color: #e5e7eb;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 12px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .item-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .item-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .item-price {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Quantity Stepper */
+    .stepper {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: var(--surface);
+    }
+
+    .stepper-btn {
+      background: none;
+      border: none;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-main);
+      font-size: 16px;
+      transition: background-color 0.1s;
+    }
+
+    .stepper-btn:hover {
+      background-color: var(--bg-color);
+    }
+
+    .stepper-value {
+      width: 28px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Promo Code Section */
+    .promo-section {
+      display: flex;
+      gap: 8px;
+    }
+
+    .promo-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .promo-input:focus {
+      border-color: var(--primary);
+    }
+
+    .promo-btn {
+      padding: 0 16px;
+      background-color: #e5e7eb;
+      border: none;
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .promo-btn:hover {
+      background-color: #d1d5db;
+    }
+
+    /* Summary Card */
+    .summary-card {
+      background-color: #f9fafb;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .summary-row.total {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      border-top: 1px dashed var(--border-color);
+      padding-top: 10px;
+      margin-top: 2px;
+    }
+
+    .summary-row.total .price {
+      color: var(--primary);
+    }
+
+    /* Bottom Action Area */
+    .footer-action {
+      padding: 16px 20px;
+      background-color: var(--surface);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      padding: 14px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: background-color 0.2s;
+    }
+
+    .checkout-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .secure-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-frame">
+    <!-- Header -->
+    <header class="header">
+      <button class="back-btn" aria-label="السابق">
+        <!-- Arrow pointing right in RTL for back navigation -->
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-directional">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+      <h1 class="header-title">إتمام الطلب</h1>
+      <div class="header-spacer"></div>
+    </header>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Delivery Info -->
+      <div class="delivery-card">
+        <span class="delivery-icon">🚚</span>
+        <div class="delivery-info">
+          <h4>التوصيل السريع خلال 30 دقيقة</h4>
+          <p>إلى العنوان: دبي مارينا، برج الممشى</p>
+        </div>
+      </div>
+
+      <!-- Cart Items Section -->
+      <div>
+        <h2 class="section-title">عناصر السلة (3)</h2>
+        <div class="cart-list">
+          
+          <!-- Item 1 -->
+          <div class="cart-item">
+            <div class="item-image">
+              <span>صورة</span>
+            </div>
+            <div class="item-details">
+              <span class="item-name">حليب المراعي طازج 2 لتر</span>
+              <span class="item-price"><bdi>14.75 د.إ</bdi></span>
+            </div>
+            <div class="stepper">
+              <button class="stepper-btn" aria-label="تقليل الكمية">-</button>
+              <span class="stepper-value">1</span>
+              <button class="stepper-btn" aria-label="زيادة الكمية">+</button>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="cart-item">
+            <div class="item-image">
+              <span>صورة</span>
+            </div>
+            <div class="item-details">
+              <span class="item-name">خبز عربي أبيض كبير (حزمة)</span>
+              <span class="item-price"><bdi>6.00 د.إ</bdi></span>
+            </div>
+            <div class="stepper">
+              <button class="stepper-btn" aria-label="تقليل الكمية">-</button>
+              <span class="stepper-value">2</span>
+              <button class="stepper-btn" aria-label="زيادة الكمية">+</button>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="cart-item">
+            <div class="item-image">
+              <span>صورة</span>
+            </div>
+            <div class="item-details">
+              <span class="item-name">موز إكوادوري طازج (1 كيلو)</span>
+              <span class="item-price"><bdi>8.50 د.إ</bdi></span>
+            </div>
+            <div class="stepper">
+              <button class="stepper-btn" aria-label="تقليل الكمية">-</button>
+              <span class="stepper-value">1</span>
+              <button class="stepper-btn" aria-label="زيادة الكمية">+</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Promo Code -->
+      <div>
+        <h2 class="section-title">رمز القسيمة</h2>
+        <div class="promo-section">
+          <input type="text" class="promo-input" placeholder="أدخل رمز الخصم هنا" dir="auto">
+          <button class="promo-btn">تطبيق</button>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-card">
+        <div class="summary-row">
+          <span>المجموع الفرعي</span>
+          <span><bdi>29.25 د.إ</bdi></span>
+        </div>
+        <div class="summary-row">
+          <span>رسوم التوصيل</span>
+          <span><bdi>7.00 د.إ</bdi></span>
+        </div>
+        <div class="summary-row">
+          <span>ضريبة القيمة المضافة (5%)</span>
+          <span><bdi>1.81 د.إ</bdi></span>
+        </div>
+        <div class="summary-row total">
+          <span>الإجمالي الكلي</span>
+          <span class="price"><bdi>38.06 د.إ</bdi></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Action -->
+    <footer class="footer-action">
+      <button class="checkout-btn">إتمام الطلب</button>
+      <div class="secure-note">
+        <span>🔒</span>
+        <span>دفع آمن ومشفّر بالكامل</span>
+      </div>
+    </footer>
+  </div>
+
+</body>
+</html>

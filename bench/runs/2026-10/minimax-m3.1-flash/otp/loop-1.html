@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#075b45">
+  <title>التحقق من الهوية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-900: #063f32;
+      --green-800: #075b45;
+      --green-700: #08745a;
+      --green-100: #e8f5f0;
+      --green-50: #f4faf7;
+      --ink: #15231f;
+      --muted: #697873;
+      --border: #d8e2de;
+      --danger: #b42318;
+      --white: #ffffff;
+      --label-size: 14px;
+      --caption-size: 14px;
+      --body-size: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: #e9efec;
+      color: var(--ink);
+      font-family: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: var(--body-size);
+      line-height: 1.6;
+      letter-spacing: 0;
+    }
+
+    :lang(ar) {
+      --label-size: 14px;
+      --caption-size: 14px;
+      --body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    button,
+    input {
+      font: inherit;
+      letter-spacing: inherit;
+    }
+
+    .phone {
+      position: relative;
+      width: 100%;
+      min-height: 100dvh;
+      margin: 0 auto;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 85% 5%, rgba(8, 116, 90, 0.12), transparent 28rem),
+        var(--white);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: max(18px, env(safe-area-inset-top)) 24px 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--green-900);
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--green-800);
+      box-shadow: 0 8px 20px rgba(7, 91, 69, 0.18);
+    }
+
+    .brand-mark svg {
+      width: 23px;
+      height: 23px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .back-button {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .back-button svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .back-button:dir(rtl) svg {
+      transform: scaleX(-1);
+    }
+
+    main {
+      width: min(100%, 460px);
+      margin: 0 auto;
+      padding: 44px 24px max(28px, env(safe-area-inset-bottom));
+    }
+
+    .security-icon {
+      display: grid;
+      width: 64px;
+      height: 64px;
+      margin-bottom: 26px;
+      place-items: center;
+      border-radius: 20px;
+      background: var(--green-100);
+      color: var(--green-800);
+    }
+
+    .security-icon svg {
+      width: 31px;
+      height: 31px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      color: var(--ink);
+      font-size: clamp(28px, 7vw, 36px);
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .description {
+      max-width: 390px;
+      margin: 0 0 32px;
+      color: var(--muted);
+      font-size: var(--body-size);
+      line-height: 1.8;
+    }
+
+    .description bdi {
+      color: var(--ink);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .otp-label {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--ink);
+      font-size: var(--label-size);
+      font-weight: 600;
+    }
+
+    .otp-fields {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 8px;
+      direction: ltr;
+    }
+
+    .otp-fields input {
+      width: 100%;
+      min-width: 0;
+      aspect-ratio: 1 / 1.15;
+      padding: 0;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      outline: none;
+      background: var(--white);
+      color: var(--ink);
+      font-size: clamp(21px, 6vw, 28px);
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+      caret-color: var(--green-700);
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .otp-fields input:focus {
+      border-color: var(--green-700);
+      box-shadow: 0 0 0 4px rgba(8, 116, 90, 0.11);
+      transform: translateY(-1px);
+    }
+
+    .otp-fields input:not(:placeholder-shown) {
+      border-color: var(--green-700);
+      background: var(--green-50);
+    }
+
+    .status {
+      min-height: 28px;
+      margin: 12px 0 0;
+      color: var(--danger);
+      font-size: var(--caption-size);
+    }
+
+    .resend-row {
+      display: flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      margin: 5px 0 24px;
+      color: var(--muted);
+      font-size: var(--label-size);
+    }
+
+    .resend-button {
+      padding: 7px 12px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--green-700);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .resend-button:disabled {
+      color: var(--muted);
+      cursor: default;
+    }
+
+    .verify-button {
+      display: flex;
+      width: 100%;
+      min-height: 54px;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      border-radius: 15px;
+      background: var(--green-800);
+      color: var(--white);
+      font-size: 17px;
+      font-weight: 700;
+      box-shadow: 0 12px 26px rgba(7, 91, 69, 0.2);
+      cursor: pointer;
+      transition: background 160ms ease, transform 160ms ease, opacity 160ms ease;
+    }
+
+    .verify-button:hover {
+      background: var(--green-700);
+    }
+
+    .verify-button:active {
+      transform: translateY(1px);
+    }
+
+    .verify-button:disabled {
+      opacity: 0.48;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .helper {
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: var(--caption-size);
+      text-align: center;
+    }
+
+    .helper a {
+      color: var(--green-700);
+      font-weight: 700;
+      text-underline-offset: 3px;
+    }
+
+    .spacer {
+      height: 10px;
+    }
+
+    @media (min-width: 520px) {
+      .phone {
+        max-width: 430px;
+        min-height: 780px;
+        margin-block: 20px;
+        border-radius: 28px;
+        box-shadow: 0 24px 70px rgba(28, 50, 43, 0.18);
+      }
+    }
+
+    @media (max-height: 700px) {
+      main {
+        padding-top: 26px;
+      }
+
+      .security-icon {
+        width: 56px;
+        height: 56px;
+        margin-bottom: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <header class="header">
+      <div class="brand" aria-label="بنك تجريبي">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 9.5 12 4l8 5.5"></path>
+            <path d="M6 10v8M10 10v8M14 10v8M18 10v8M4 20h16"></path>
+          </svg>
+        </span>
+        <span>بنك تجريبي</span>
+      </div>
+
+      <button class="back-button" type="button" aria-label="رجوع">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m15 18-6-6 6-6"></path>
+        </svg>
+      </button>
+    </header>
+
+    <main>
+      <div class="security-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M7 10V8a5 5 0 0 1 10 0v2"></path>
+          <rect x="5" y="10" width="14" height="10" rx="2"></rect>
+          <path d="M12 14v2"></path>
+        </svg>
+      </div>
+
+      <h1>أدخل الرمز</h1>
+      <p class="description">
+        أرسلنا رمزًا مكونًا من 6 أرقام إلى الرقم
+        <bdi dir="ltr">+966 55 123 4567</bdi>
+      </p>
+
+      <form id="otp-form" novalidate>
+        <label class="otp-label" for="code-1">رمز التحقق</label>
+
+        <div class="otp-fields" id="otp-fields">
+          <input id="code-1" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" placeholder=" " aria-label="الرقم الأول من رمز التحقق">
+          <input id="code-2" type="text" inputmode="numeric" maxlength="1" placeholder=" " aria-label="الرقم الثاني من رمز التحقق">
+          <input id="code-3" type="text" inputmode="numeric" maxlength="1" placeholder=" " aria-label="الرقم الثالث من رمز التحقق">
+          <input id="code-4" type="text" inputmode="numeric" maxlength="1" placeholder=" " aria-label="الرقم الرابع من رمز التحقق">
+          <input id="code-5" type="text" inputmode="numeric" maxlength="1" placeholder=" " aria-label="الرقم الخامس من رمز التحقق">
+          <input id="code-6" type="text" inputmode="numeric" maxlength="1" placeholder=" " aria-label="الرقم السادس من رمز التحقق">
+        </div>
+
+        <p class="status" id="status" role="alert" aria-live="polite"></p>
+
+        <div class="resend-row">
+          <span id="countdown">إعادة الإرسال خلال <bdi dir="ltr">0:45</bdi></span>
+          <button class="resend-button" id="resend" type="button" hidden>إعادة إرسال الرمز</button>
+        </div>
+
+        <button class="verify-button" id="verify" type="submit" disabled>تأكيد الرمز</button>
+      </form>
+
+      <p class="helper">
+        لم تستلم الرمز؟ <a href="tel:8000000000">تواصل مع خدمة العملاء</a>
+      </p>
+    </main>
+  </div>
+
+  <script>
+    const fields = Array.from(document.querySelectorAll("#otp-fields input"));
+    const form = document.getElementById("otp-form");
+    const status = document.getElementById("status");
+    const verifyButton = document.getElementById("verify");
+    const countdownText = document.getElementById("countdown");
+    const resendButton = document.getElementById("resend");
+    let remaining = 45;
+    let timer;
+
+    function updateCompletion() {
+      const complete = fields.every((field) => field.value.trim() !== "");
+      verifyButton.disabled = !complete;
+    }
+
+    fields.forEach((field, index) => {
+      field.addEventListener("input", () => {
+        field.value = field.value.replace(/\D/g, "").slice(0, 1);
+        status.textContent = "";
+
+        if (field.value && index < fields.length - 1) {
+          fields[index + 1].focus();
+        }
+
+        updateCompletion();
+      });
+
+      field.addEventListener("keydown", (event) => {
+        if (event.key === "Backspace" && !field.value && index > 0) {
+          fields[index - 1].focus();
+        }
+
+        if (event.key === "ArrowLeft" && index < fields.length - 1) {
+          fields[index + 1].focus();
+        }
+
+        if (event.key === "ArrowRight" && index > 0) {
+          fields[index - 1].focus();
+        }
+      });
+
+      field.addEventListener("paste", (event) => {
+        const pasted = (event.clipboardData.getData("text") || "").replace(/\D/g, "");
+        if (pasted.length) {
+          event.preventDefault();
+          pasted.split("").slice(0, fields.length).forEach((digit, digitIndex) => {
+            fields[digitIndex].value = digit;
+          });
+          fields[Math.min(pasted.length, fields.length) - 1].focus();
+          updateCompletion();
+        }
+      });
+    });
+
+    function renderCountdown() {
+      if (remaining <= 0) {
+        clearInterval(timer);
+        countdownText.hidden = true;
+        resendButton.hidden = false;
+        resendButton.disabled = false;
+        return;
+      }
+
+      const minutes = Math.floor(remaining / 60);
+      const seconds = String(remaining % 60).padStart(2, "0");
+      countdownText.innerHTML = `إعادة الإرسال خلال <bdi dir="ltr">${minutes}:${seconds}</bdi>`;
+      remaining -= 1;
+    }
+
+    resendButton.addEventListener("click", () => {
+      remaining = 45;
+      countdownText.hidden = false;
+      resendButton.hidden = true;
+      renderCountdown();
+      timer = setInterval(renderCountdown, 1000);
+      fields[0].focus();
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const code = fields.map((field) => field.value).join("");
+
+      if (code.length !== 6) {
+        status.textContent = "يرجى إدخال الرمز بالكامل المكوّن من 6 أرقام.";
+        return;
+      }
+
+      verifyButton.disabled = true;
+      verifyButton.textContent = "جارٍ التحقق...";
+
+      setTimeout(() => {
+        verifyButton.textContent = "تأكيد الرمز";
+        verifyButton.disabled = false;
+        status.style.color = "var(--green-700)";
+        status.textContent = "تم التحقق من الرمز بنجاح.";
+      }, 900);
+    });
+
+    renderCountdown();
+    timer = setInterval(renderCountdown, 1000);
+  </script>
+</body>
+</html>

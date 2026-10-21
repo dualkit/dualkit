@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إتمام الطلب - بقالة الإمارات</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#e6f7ef',
+                            500: '#00A859',
+                            600: '#008b4a',
+                            700: '#006e3b',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 font-cairo flex justify-center items-center min-h-screen p-0 sm:py-6">
+
+    <!-- Phone Container -->
+    <div class="w-full sm:max-w-[390px] h-screen sm:h-[844px] bg-white sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border border-gray-200">
+
+        <!-- Top Header -->
+        <div class="bg-white px-5 pt-4 pb-3 flex items-center justify-between border-b border-gray-100 sticky top-0 z-10">
+            <button class="w-9 h-9 rounded-full bg-gray-50 flex items-center justify-center text-gray-700 hover:bg-gray-100 transition">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <h1 class="text-lg font-bold text-gray-800">إتمام الطلب</h1>
+            <div class="w-9"></div> <!-- Spacer for symmetry -->
+        </div>
+
+        <!-- Scrollable Content Area -->
+        <div class="flex-1 overflow-y-auto px-5 py-4 space-y-6 pb-28">
+
+            <!-- Delivery Address Card -->
+            <div class="bg-brand-50/60 rounded-2xl p-4 border border-brand-500/20 flex items-center justify-between">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="w-10 h-10 rounded-xl bg-brand-500 text-white flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500">التوصيل إلى المنزل</p>
+                        <p class="text-sm font-bold text-gray-800">برج خليفة، وسط مدينة دبي، دبي</p>
+                    </div>
+                </div>
+                <button class="text-brand-600 text-xs font-bold hover:underline">تغيير</button>
+            </div>
+
+            <!-- Cart Items Section -->
+            <div>
+                <h2 class="text-sm font-bold text-gray-500 mb-3">منتجات السلة (3)</h2>
+                <div class="space-y-3">
+                    
+                    <!-- Item 1 -->
+                    <div class="flex items-center justify-between bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 flex-shrink-0">
+                                <i class="fa-solid fa-bottle-droplet text-2xl text-blue-500"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800">حليب مراعي كامل الدسم</h3>
+                                <p class="text-xs text-gray-400 mb-1">2 لتر</p>
+                                <span class="text-sm font-bold text-brand-600">14.75 د.إ</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse bg-gray-50 rounded-lg p-1 border border-gray-200">
+                            <button class="w-7 h-7 bg-white rounded-md shadow-xs flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold">-</button>
+                            <span class="text-sm font-bold w-5 text-center">1</span>
+                            <button class="w-7 h-7 bg-brand-500 text-white rounded-md shadow-xs flex items-center justify-center hover:bg-brand-600 font-bold">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="flex items-center justify-between bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 flex-shrink-0">
+                                <i class="fa-solid fa-bowl-food text-2xl text-amber-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800">تمر خضري فاخر</h3>
+                                <p class="text-xs text-gray-400 mb-1">1 كيلو</p>
+                                <span class="text-sm font-bold text-brand-600">35.00 د.إ</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse bg-gray-50 rounded-lg p-1 border border-gray-200">
+                            <button class="w-7 h-7 bg-white rounded-md shadow-xs flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold">-</button>
+                            <span class="text-sm font-bold w-5 text-center">1</span>
+                            <button class="w-7 h-7 bg-brand-500 text-white rounded-md shadow-xs flex items-center justify-center hover:bg-brand-600 font-bold">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="flex items-center justify-between bg-white p-3 rounded-2xl border border-gray-100 shadow-sm">
+                        <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center text-gray-400 flex-shrink-0">
+                                <i class="fa-solid fa-seedling text-2xl text-emerald-600"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800">أرز بسمتي هندي</h3>
+                                <p class="text-xs text-gray-400 mb-1">5 كيلو</p>
+                                <span class="text-sm font-bold text-brand-600">42.50 د.إ</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2 space-x-reverse bg-gray-50 rounded-lg p-1 border border-gray-200">
+                            <button class="w-7 h-7 bg-white rounded-md shadow-xs flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold">-</button>
+                            <span class="text-sm font-bold w-5 text-center">1</span>
+                            <button class="w-7 h-7 bg-brand-500 text-white rounded-md shadow-xs flex items-center justify-center hover:bg-brand-600 font-bold">+</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Promo Code Section -->
+            <div class="flex space-x-2 space-x-reverse">
+                <div class="relative flex-1">
+                    <input type="text" placeholder="أدخل رمز القسيمة (مثال: UAE50)" class="w-full bg-gray-50 border border-gray-200 rounded-xl py-3 px-4 text-xs text-gray-800 focus:outline-none focus:border-brand-500 placeholder-gray-400">
+                </div>
+                <button class="bg-gray-900 text-white font-bold px-5 rounded-xl text-xs hover:bg-gray-800 transition">تطبيق</button>
+            </div>
+
+            <!-- Cost Breakdown -->
+            <div class="bg-gray-50 rounded-2xl p-4 space-y-2.5 border border-gray-100">
+                <div class="flex justify-between text-xs text-gray-600">
+                    <span>المجموع الفرعي</span>
+                    <span class="font-bold text-gray-800">92.25 د.إ</span>
+                </div>
+                <div class="flex justify-between text-xs text-gray-600">
+                    <span>رسوم التوصيل</span>
+                    <span class="font-bold text-gray-800">10.00 د.إ</span>
+                </div>
+                <div class="flex justify-between text-xs text-gray-600">
+                    <span>ضريبة القيمة المضافة (5%)</span>
+                    <span class="font-bold text-gray-800">5.11 د.إ</span>
+                </div>
+                <div class="border-t border-gray-200 pt-2.5 flex justify-between text-sm">
+                    <span class="font-bold text-gray-900">المجموع الكلي</span>
+                    <span class="font-bold text-brand-600 text-base">107.36 د.إ</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sticky Footer Checkout Button -->
+        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-lg">
+            <button class="w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-3.5 px-4 rounded-2xl shadow-md shadow-brand-500/20 transition flex items-center justify-between">
+                <span>تأكيد الطلب ودفع 107.36 د.إ</span>
+                <i class="fa-solid fa-chevron-left text-sm"></i>
+            </button>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل الطلبات</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            direction: rtl;
+            text-align: right;
+        }
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #007a33;
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .order-list {
+            padding: 15px;
+        }
+        .order-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .order-number {
+            font-weight: bold;
+            font-size: 16px;
+            color: #007a33;
+        }
+        .order-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-delivered {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status-on-way {
+            background-color: #fff8e1;
+            color: #ff8f00;
+        }
+        .status-cancelled {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        .order-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .detail-label {
+            color: #666;
+            font-weight: 500;
+        }
+        .detail-value {
+            color: #333;
+            font-weight: 600;
+        }
+        .order-total {
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #007a33;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            سجل الطلبات
+        </header>
+        <div class="order-list">
+            <!-- طلب 1 -->
+            <div class="order-card">
+                <div class="order-header">
+                    <span class="order-number">#A-10293</span>
+                    <span class="order-status status-delivered">تم التوصيل</span>
+                </div>
+                <div class="order-details">
+                    <span class="detail-label">التاريخ (ميلادي):</span>
+                    <span class="detail-value">15 مارس 2024</span>
+                </div>
+                <div class="order-details">
+                    <span class="detail-label">التاريخ (هجري):</span>
+                    <span class="detail-value">02 شعبان 1445</span>
+                </div>
+                <div class="order-total">
+                    249.99 ر.س
+                </div>
+            </div>
+            <!-- طلب 2 -->
+            <div class="order-card">
+                <div class="order-header">
+                    <span class="order-number">#A-10292</span>
+                    <span class="order-status status-on-way">في الطريق</span>
+                </div>
+                <div class="order-details">
+                    <span class="detail-label">التاريخ (ميلادي):</span>
+                    <span class="detail-value">10 مارس 2024</span>
+                </div>
+                <div class="order-details">
+                    <span class="detail-label">التاريخ (هجري):</span>
+                    <span class="detail-value">25 رمضان 1445</span>
+                </div>
+                <div class="order-total">
+                    129.50 ر.س
+                </div>
+            </div>
+            <!-- طلب 3 -->
+            <div class="order-card">
+                <div class="order-header">
+                    <span class="order-number">#A-10291</span>
+                    <span class="order-status status-cancelled">ملغى</span>
+                </div>
+                <div class="order-details">
+                    <span class="detail-label">التاريخ (ميلادي):</span>
+                    <span class="detail-value">05 مارس 2024</span>
+                </div>
+                <div class="order-details">
+                    <span class="detail-label">التاريخ (هجري):</span>
+                    <span class="detail-value">20 رمضان 1445</span>
+                </div>
+                <div class="order-total">
+                    89.99 ر.س
+                </div>
+            </div>
+            <!-- طلب 4 -->
+            <div class="order-card">
+                <div class="order-header">
+                    <span class="order-number">#A-10290</span>
+                    <span class="order-status status-delivered">تم التوصيل</span>
+                </div>
+                <div class="order-details">
+                    <span class="detail-label">التاريخ (ميلادي):</span>
+                    <span class="detail-value">28 فبراير 2024</span>
+                </div>
+                <div class="order-details">
+                    <span class="detail-label">التاريخ (هجري):</span>
+                    <span class="detail-value">15 رجب 1445</span>
+                </div>
+                <div class="order-total">
+                    359.75 ر.س
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

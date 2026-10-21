@@ -1,0 +1,95 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "payment-summary",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T16:44:11.169Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"theme-color\" content=\"#0b806b\">\n  <title>ملخص الدفع</title>\n  <style>\n    :root {\n      --primary: #0b806b;\n      --primary-dark: #086655;\n      --text: #172321;\n      --muted: #687572;\n      --border: #dce5e2;\n      --surface: #ffffff;\n      --background: #f5f8f7;\n    }\n\n    * {\n      box-sizing: border-box;\n    }\n\n    body {\n      margin: 0;\n      min-height: 100vh;\n      background: var(--background);\n      color: var(--text);\n      font-family: Tahoma, Arial, sans-serif;\n      -webkit-font-smoothing: antialiased;\n    }\n\n    .phone {\n      width: 100%;\n      max-width: 430px;\n      min-height: 100vh;\n      margin: 0 auto;\n      background: var(--surface);\n      display: flex;\n      flex-direction: column;\n    }\n\n    .header {\n      height: 72px;\n      display: grid;\n      grid-template-columns: 44px 1fr 44px;\n      align-items: center;\n      padding: 0 20px;\n      border-bottom: 1px solid #edf1f0;\n      background: rgba(255, 255, 255, 0.96);\n    }\n\n    .header h1 {\n      margin: 0;\n      font-size: 19px;\n      font-weight: 700;\n      text-align: center;\n    }\n\n    .back-button {\n      width: 44px;\n      height: 44px;\n      border: 0;\n      border-radius: 12px;\n      background: #f0f5f4;\n      color: var(--text);\n      display: grid;\n      place-items: center;\n      cursor: pointer;\n    }\n\n    .back-button:active {\n      transform: scale(0.96);\n    }\n\n    .back-button svg {\n      width: 22px;\n      height: 22px;\n    }\n\n    .content {\n      flex: 1;\n      padding: 32px 24px 28px;\n    }\n\n    .summary-card {\n      text-align: center;\n      padding: 8px 0 26px;\n    }\n\n    .amount-label {\n      margin: 0 0 9px;\n      color: var(--muted);\n      font-size: 14px;\n    }\n\n    .amount {\n      margin: 0;\n      direction: ltr;\n      font-size: 36px;\n      line-height: 1.25;\n      font-weight: 700;\n      letter-spacing: -0.5px;\n    }\n\n    .amount span {\n      margin-left: 7px;\n      font-size: 20px;\n      color: var(--muted);\n      font-weight: 600;\n    }\n\n    .due-date {\n      margin-top: 17px;\n      padding: 15px 16px;\n      border: 1px solid var(--border);\n      border-radius: 16px;\n      background: #fbfcfc;\n    }\n\n    .due-date-label {\n      margin: 0 0 6px;\n      color: var(--muted);\n      font-size: 13px;\n    }\n\n    .gregorian-date {\n      margin: 0;\n      font-size: 16px;\n      font-weight: 700;\n    }\n\n    .hijri-date {\n      margin: 5px 0 0;\n      color: var(--primary);\n      font-size: 14px;\n      font-weight: 600;\n    }\n\n    .items-row {\n      display: flex;\n      align-items: center;\n      gap: 12px;\n      margin: 0 0 24px;\n      padding: 16px;\n      border-radius: 15px;\n      background: #f0f6f4;\n    }\n\n    .items-icon {\n      width: 40px;\n      height: 40px;\n      flex: 0 0 40px;\n      border-radius: 12px;\n      background: #dceee9;\n      color: var(--primary);\n      display: grid;\n      place-items: center;\n    }\n\n    .items-icon svg {\n      width: 22px;\n      height: 22px;\n    }\n\n    .items-text {\n      margin: 0;\n      font-size: 15px;\n      font-weight: 600;\n    }\n\n    .field-label {\n      display: block;\n      margin-bottom: 9px;\n      font-size: 14px;\n      font-weight: 700;\n    }\n\n    .phone-field {\n      direction: ltr;\n      display: flex;\n      align-items: center;\n      height: 54px;\n      border: 1px solid #cfdad7;\n      border-radius: 14px;\n      background: #fff;\n      overflow: hidden;\n      transition: border-color 0.2s, box-shadow 0.2s;\n    }\n\n    .phone-field:focus-within {\n      border-color: var(--primary);\n      box-shadow: 0 0 0 3px rgba(11, 128, 107, 0.1);\n    }\n\n    .country-code {\n      height: 100%;\n      padding: 0 14px;\n      border-left: 1px solid var(--border);\n      display: flex;\n      align-items: center;\n      gap: 7px;\n      color: #3c4b47;\n      font-size: 14px;\n      font-weight: 700;\n    }\n\n    .flag {\n      font-size: 20px;\n      line-height: 1;\n    }\n\n    .phone-field input {\n      min-width: 0;\n      flex: 1;\n      height: 100%;\n      padding: 0 15px;\n      border: 0;\n      outline: 0;\n      background: transparent;\n      color: var(--text);\n      font-family: inherit;\n      font-size: 16px;\n      text-align: left;\n    }\n\n    .hint {\n      margin: 8px 2px 0;\n      color: var(--muted);\n      font-size: 12px;\n    }\n\n    .footer {\n      padding: 18px 24px 24px;\n      border-top: 1px solid #edf1f0;\n      background: #fff;\n    }\n\n    .pay-button {\n      width: 100%;\n      min-height: 54px;\n      border: 0;\n      border-radius: 14px;\n      background: var(--primary);\n      color: #fff;\n      font-family: inherit;\n      font-size: 17px;\n      font-weight: 700;\n      cursor: pointer;\n      box-shadow: 0 8px 20px rgba(11, 128, 107, 0.2);\n      transition: background 0.2s, transform 0.15s;\n    }\n\n    .pay-button:hover {\n      background: var(--primary-dark);\n    }\n\n    .pay-button:active {\n      transform: translateY(1px);\n    }\n\n    .secure-note {\n      margin: 11px 0 0;\n      color: var(--muted);\n      font-size: 12px;\n      text-align: center;\n    }\n\n    @media (min-width: 431px) {\n      .phone {\n        min-height: 100vh;\n        box-shadow: 0 0 28px rgba(20, 45, 39, 0.08);\n      }\n    }\n  </style>\n</head>\n<body>\n  <main class=\"phone\">\n    <header class=\"header\">\n      <button class=\"back-button\" type=\"button\" aria-label=\"رجوع\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n          <path d=\"M9 6l6 6-6 6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n        </svg>\n      </button>\n      <h1>ملخص الدفع</h1>\n      <span aria-hidden=\"true\"></span>\n    </header>\n\n    <section class=\"content\">\n      <div class=\"summary-card\">\n        <p class=\"amount-label\">المبلغ المستحق</p>\n        <p class=\"amount\">1,234.50 <span>درهم</span></p>\n\n        <div class=\"due-date\">\n          <p class=\"due-date-label\">تاريخ الاستحقاق</p>\n          <p class=\"gregorian-date\">3 نوفمبر 2026</p>\n          <p class=\"hijri-date\">22 ربيع الأول 1448 هـ</p>\n        </div>\n      </div>\n\n      <div class=\"items-row\">\n        <div class=\"items-icon\" aria-hidden=\"true\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\">\n            <path d=\"M4 7.5h16v12H4z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"/>\n            <path d=\"M8 7.5V6a4 4 0 018 0v1.5\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n          </svg>\n        </div>\n        <p class=\"items-text\">يحتوي طلبك على 3 منتجات</p>\n      </div>\n\n      <form id=\"paymentForm\">\n        <label class=\"field-label\" for=\"phoneNumber\">رقم الهاتف لإرسال الإيصال عبر الرسائل القصيرة</label>\n        <div class=\"phone-field\">\n          <div class=\"country-code\" aria-label=\"رمز دولة الإمارات العربية المتحدة\">\n            <span class=\"flag\" aria-hidden=\"true\">🇦🇪</span>\n            <span>+971</span>\n          </div>\n          <input\n            id=\"phoneNumber\"\n            name=\"phoneNumber\"\n            type=\"tel\"\n            inputmode=\"tel\"\n            value=\"050 123 4567\"\n            aria-describedby=\"phoneHint\"\n            required\n          >\n        </div>\n        <p class=\"hint\" id=\"phoneHint\">سنرسل تفاصيل الدفع والإيصال إلى هذا الرقم.</p>\n      </form>\n    </section>\n\n    <footer class=\"footer\">\n      <button class=\"pay-button\" type=\"submit\" form=\"paymentForm\">ادفع الآن</button>\n      <p class=\"secure-note\">ستتم عملية الدفع بشكل آمن ومشفّر</p>\n    </footer>\n  </main>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 365,
+    "output": 2423
+  },
+  "ms": 22689,
+  "finish": "stop",
+  "reasoningTokens": 101,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 74,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 252.0625,
+        "y": 154,
+        "width": 43,
+        "height": 22
+      },
+      "message": "-0.5px letter-spacing on \"درهم\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<span>درهم</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 146.859375,
+        "y": 25,
+        "width": 96.28125,
+        "height": 21
+      },
+      "message": "Arabic falls back from Tahoma, Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>ملخص الدفع</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 152.6875,
+        "y": 215,
+        "width": 84.625,
+        "height": 15
+      },
+      "message": "\"تاريخ الاستحقاق\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"due-date-label\">تاريخ الاستحقاق</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 137.65625,
+        "y": 501,
+        "width": 226.34375,
+        "height": 14
+      },
+      "message": "\"سنرسل تفاصيل الدفع والإيصال إلى هذا الرق…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"hint\" id=\"phoneHint\">سنرسل تفاصيل الدفع والإيصال إلى هذا الرقم.</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 105.15625,
+        "y": 806,
+        "width": 179.671875,
+        "height": 14
+      },
+      "message": "\"ستتم عملية الدفع بشكل آمن ومشفّر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"secure-note\">ستتم عملية الدفع بشكل آمن ومشفّر</p>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

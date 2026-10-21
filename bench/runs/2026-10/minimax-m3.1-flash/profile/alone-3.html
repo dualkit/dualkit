@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d594d">
+  <title>الملف الشخصي | رحال</title>
+  <style>
+    :root {
+      --primary: #0d594d;
+      --primary-dark: #08463d;
+      --primary-soft: #e8f4f1;
+      --accent: #d6a84b;
+      --text: #17211f;
+      --muted: #71807c;
+      --line: #e7ecea;
+      --surface: #ffffff;
+      --background: #f5f8f7;
+      --shadow: 0 14px 40px rgba(19, 62, 54, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--background);
+      color: var(--text);
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--background);
+    }
+
+    .header {
+      position: relative;
+      overflow: hidden;
+      padding: max(24px, env(safe-area-inset-top)) 20px 72px;
+      color: #fff;
+      background: linear-gradient(145deg, #12695b 0%, #0c5046 100%);
+    }
+
+    .header::after {
+      position: absolute;
+      left: -48px;
+      bottom: -80px;
+      width: 220px;
+      height: 220px;
+      border: 38px solid rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .topbar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+    }
+
+    .back-button,
+    .more-button {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 14px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      place-items: center;
+    }
+
+    .back-button svg {
+      transform: scaleX(-1);
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .profile-summary {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .avatar {
+      position: relative;
+      display: grid;
+      width: 92px;
+      height: 92px;
+      margin-bottom: 16px;
+      border: 4px solid rgba(255, 255, 255, 0.22);
+      border-radius: 50%;
+      color: var(--primary-dark);
+      background: linear-gradient(145deg, #f3d99d, #d6a84b);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.16);
+      font-size: 30px;
+      font-weight: 700;
+      place-items: center;
+    }
+
+    .verified {
+      position: absolute;
+      right: -1px;
+      bottom: 1px;
+      display: grid;
+      width: 25px;
+      height: 25px;
+      border: 3px solid var(--primary);
+      border-radius: 50%;
+      color: #fff;
+      background: #31a276;
+      place-items: center;
+    }
+
+    .verified svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    h1 {
+      margin: 0 0 7px;
+      font-size: 23px;
+      font-weight: 700;
+    }
+
+    .profile-subtitle {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 14px;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      margin-top: -42px;
+      padding: 0 16px max(28px, env(safe-area-inset-bottom));
+    }
+
+    .card {
+      overflow: hidden;
+      border: 1px solid rgba(221, 230, 227, 0.9);
+      border-radius: 22px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0;
+      padding: 19px 20px 15px;
+      color: var(--primary);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .section-title svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-height: 83px;
+      padding: 14px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .row-icon {
+      display: grid;
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      color: var(--primary);
+      background: var(--primary-soft);
+      place-items: center;
+    }
+
+    .row-icon svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .row-content {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .row-label {
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .row-value {
+      overflow-wrap: anywhere;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.6;
+      direction: ltr;
+      text-align: right;
+      unicode-bidi: plaintext;
+    }
+
+    .row-value.rtl-value {
+      direction: rtl;
+      text-align: right;
+    }
+
+    .edit-button {
+      flex: 0 0 auto;
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 10px;
+      color: var(--primary);
+      background: var(--primary-soft);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .edit-button:active {
+      transform: scale(0.96);
+      background: #d8ebe6;
+    }
+
+    .security-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 16px 18px;
+    }
+
+    .security-icon {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      color: #247a61;
+      background: #e6f5ef;
+      place-items: center;
+    }
+
+    .security-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .security-title {
+      margin: 0 0 4px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .security-text {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    @media (min-width: 481px) {
+      body {
+        padding: 24px 0;
+      }
+
+      .app {
+        min-height: calc(100vh - 48px);
+        overflow: hidden;
+        border-radius: 28px;
+        box-shadow: 0 25px 70px rgba(20, 55, 49, 0.14);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="header">
+      <div class="topbar">
+        <button class="back-button" type="button" aria-label="الرجوع">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="brand">رحال</div>
+        <button class="more-button" type="button" aria-label="المزيد من الخيارات">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <circle cx="5" cy="12" r="1.8"/>
+            <circle cx="12" cy="12" r="1.8"/>
+            <circle cx="19" cy="12" r="1.8"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="profile-summary">
+        <div class="avatar" aria-hidden="true">
+          لم
+          <span class="verified">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M7 12.5l3.1 3.1L17.5 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </div>
+        <h1>ليلى المنصوري</h1>
+        <p class="profile-subtitle">حساب موثّق وآمن</p>
+      </div>
+    </header>
+
+    <section class="content" aria-labelledby="account-info-title">
+      <div class="card">
+        <h2 class="section-title" id="account-info-title">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M12 11v5M12 8h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          معلومات الحساب
+        </h2>
+
+        <div class="info-row">
+          <div class="row-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/>
+              <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="row-content">
+            <div class="row-label">البريد الإلكتروني</div>
+            <div class="row-value" dir="ltr">layla@example.com</div>
+          </div>
+          <button class="edit-button" type="button" aria-label="تعديل البريد الإلكتروني">تعديل</button>
+        </div>
+
+        <div class="info-row">
+          <div class="row-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M8.2 3.5 10 7.4 8.1 9.1a15 15 0 0 0 6.8 6.8l1.7-1.9 3.9 1.8-.8 3.1c-.2.7-.8 1.1-1.5 1C10 18.6 5.4 14 4.1 6.8c-.1-.7.3-1.3 1-1.5l3.1-.8Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="row-content">
+            <div class="row-label">رقم الهاتف</div>
+            <div class="row-value" dir="ltr">+971 50 123 4567</div>
+          </div>
+          <button class="edit-button" type="button" aria-label="تعديل رقم الهاتف">تعديل</button>
+        </div>
+
+        <div class="info-row">
+          <div class="row-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M7 9h4M7 12h6M7 15h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <circle cx="17" cy="13" r="2" stroke="currentColor" stroke-width="1.6"/>
+            </svg>
+          </div>
+          <div class="row-content">
+            <div class="row-label">رقم الآيبان</div>
+            <div class="row-value" dir="ltr">AE07 0331 2345 6789 0123 456</div>
+          </div>
+          <button class="edit-button" type="button" aria-label="تعديل رقم الآيبان">تعديل</button>
+        </div>
+      </div>
+
+      <div class="card security-card">
+        <div class="security-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 3 5 6v5c0 4.7 2.9 8.1 7 10 4.1-1.9 7-5.3 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <p class="security-title">بياناتك محمية</p>
+          <p class="security-text">تُشفّر معلوماتك الحساسة وتُحفظ بأمان على جهازك.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

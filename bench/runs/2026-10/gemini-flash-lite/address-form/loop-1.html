@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عنوان التوصيل - توصيل دبي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --primary: #059669;
+      --primary-hover: #047857;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #cbd5e1;
+      --border-focus: #059669;
+      --error: #dc2626;
+      
+      /* Type tokens for Arabic */
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+    }
+
+    :lang(ar) {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      letter-spacing: 0;
+      text-transform: none;
+      line-height: 1.7;
+    }
+
+    :lang(en) {
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-size: var(--type-body-size);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    .phone-shell {
+      width: 100%;
+      max-width: 414px;
+      background-color: var(--card-bg);
+      border-radius: 32px;
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 8px solid #1e293b;
+    }
+
+    /* App Header */
+    .app-header {
+      padding: 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+
+    .back-btn:hover {
+      background-color: #f1f5f9;
+    }
+
+    .lang-switch {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      padding: 4px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    /* Form Container */
+    .form-container {
+      padding: 24px;
+      overflow-y: auto;
+      max-height: 750px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: var(--type-label-size);
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .required::after {
+      content: " *";
+      color: var(--error);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: var(--type-body-size);
+      font-family: inherit;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background-color: #ffffff;
+      color: var(--text-main);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+
+    /* Fix placeholder alignment for Arabic hints in auto-dir inputs */
+    input:placeholder-shown {
+      direction: rtl;
+    }
+
+    .hint {
+      font-size: var(--type-caption-size);
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    /* Phone Input Layout (LTR enforcement inside RTL) */
+    .phone-input-wrapper {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background-color: #ffffff;
+      overflow: hidden;
+      direction: ltr;
+    }
+
+    .phone-input-wrapper:focus-within {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+
+    .country-code {
+      padding: 12px 14px;
+      background-color: #f1f5f9;
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: var(--type-body-size);
+      border-inline-end: 1px solid var(--border-color);
+      user-select: none;
+    }
+
+    .phone-input-wrapper input {
+      border: none;
+      border-radius: 0;
+      box-shadow: none !important;
+    }
+
+    /* Makani & LTR fields */
+    .ltr-field {
+      direction: ltr;
+      text-align: left;
+    }
+
+    /* Submit Button */
+    .submit-container {
+      margin-top: 32px;
+      padding-bottom: 20px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.2);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    /* Utility */
+    .icon-directional:dir(rtl) {
+      transform: scaleX(-1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-shell" id="appRoot">
+    <!-- Header -->
+    <header class="app-header">
+      <button class="back-btn" aria-label="السابق">
+        <svg class="icon-directional" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <h1 class="header-title" id="pageTitle">عنوان التوصيل</h1>
+      <button class="lang-switch" id="langToggle" onclick="toggleLanguage()">English</button>
+    </header>
+
+    <!-- Form -->
+    <div class="form-container">
+      <form id="addressForm" onsubmit="event.preventDefault(); alert('تم حفظ العنوان بنجاح!');">
+        
+        <!-- Emirate Picker -->
+        <div class="form-group">
+          <label for="emirate" class="required" id="lblEmirate">الإمارة</label>
+          <select id="emirate" required>
+            <option value="DXB" selected>دبي (Dubai)</option>
+            <option value="AUH">أبوظبي (Abu Dhabi)</option>
+            <option value="SHJ">الشارقة (Sharjah)</option>
+            <option value="AJM">عجمان (Ajman)</option>
+            <option value="UAQ">أم القيوين (Umm Al Quwain)</option>
+            <option value="RAK">رأس الخيمة (Ras Al Khaimah)</option>
+            <option value="FUJ">الفجيرة (Fujairah)</option>
+          </select>
+        </div>
+
+        <!-- Area -->
+        <div class="form-group">
+          <label for="area" class="required" id="lblArea">المنطقة</label>
+          <input type="text" id="area" placeholder="مثال: دبي مارينا، البرشاء" required autocomplete="address-level2" dir="auto">
+        </div>
+
+        <!-- Street -->
+        <div class="form-group">
+          <label for="street" class="required" id="lblStreet">الشارع</label>
+          <input type="text" id="street" placeholder="مثال: شارع الملك سلمان بن عبد العزيز آل سعود" required autocomplete="street-address" dir="auto">
+        </div>
+
+        <!-- Building / Villa -->
+        <div class="form-group">
+          <label for="building" class="required" id="lblBuilding">المبنى أو الفيلا</label>
+          <input type="text" id="building" placeholder="مثال: برج الممشى، شقة رقم 402" required dir="auto">
+        </div>
+
+        <!-- Makani Number -->
+        <div class="form-group">
+          <label for="makani" id="lblMakani">رقم مكاني (اختياري)</label>
+          <input type="text" id="makani" class="ltr-field" placeholder="30005 95782" inputmode="numeric" maxlength="11">
+          <div class="hint" id="hintMakani">رقم المبنى المؤلف من 10 أرقام الموجود على مدخل المبنى</div>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="form-group">
+          <label for="phone" class="required" id="lblPhone">رقم الهاتف المتحرك</label>
+          <div class="phone-input-wrapper">
+            <span class="country-code">+971</span>
+            <input type="tel" id="phone" inputmode="tel" autocomplete="tel" placeholder="050 123 4567" required dir="ltr">
+          </div>
+          <div class="hint" id="hintPhone">مثال: <bdi dir="ltr">050 123 4567</bdi></div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit-container">
+          <button type="submit" class="btn-primary" id="btnSubmit">حفظ العنوان</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let currentLang = 'ar';
+
+    const translations = {
+      ar: {
+        title: "عنوان التوصيل",
+        langBtn: "English",
+        emirate: "الإمارة",
+        area: "المنطقة",
+        areaPlaceholder: "مثال: دبي مارينا، البرشاء",
+        street: "الشارع",
+        streetPlaceholder: "مثال: شارع الملك سلمان بن عبد العزيز آل سعود",
+        building: "المبنى أو الفيلا",
+        buildingPlaceholder: "مثال: برج الممشى، شقة رقم 402",
+        makani: "رقم مكاني (اختياري)",
+        makaniHint: "رقم المبنى المؤلف من 10 أرقام الموجود على مدخل المبنى",
+        phone: "رقم الهاتف المتحرك",
+        phoneHint: "مثال: ",
+        submit: "حفظ العنوان"
+      },
+      en: {
+        title: "Delivery Address",
+        langBtn: "العربية",
+        emirate: "Emirate",
+        area: "Area",
+        areaPlaceholder: "e.g. Dubai Marina, Al Barsha",
+        street: "Street",
+        streetPlaceholder: "e.g. King Salman Bin Abdulaziz Al Saud St",
+        building: "Building or Villa",
+        buildingPlaceholder: "e.g. Marina Tower, Apt 402",
+        makani: "Makani Number (Optional)",
+        makaniHint: "10-digit building coordinate found at the entrance",
+        phone: "Mobile Phone Number",
+        phoneHint: "e.g. ",
+        submit: "Save address"
+      }
+    };
+
+    function toggleLanguage() {
+      const root = document.getElementById('appRoot');
+      const langToggle = document.getElementById('langToggle');
+      const pageTitle = document.getElementById('pageTitle');
+      const lblEmirate = document.getElementById('lblEmirate');
+      const area = document.getElementById('area');
+      const lblArea = document.getElementById('lblArea');
+      const street = document.getElementById('street');
+      const lblStreet = document.getElementById('lblStreet');
+      const building = document.getElementById('building');
+      const lblBuilding = document.getElementById('lblBuilding');
+      const lblMakani = document.getElementById('lblMakani');
+      const hintMakani = document.getElementById('hintMakani');
+      const lblPhone = document.getElementById('lblPhone');
+      const hintPhone = document.getElementById('hintPhone');
+      const btnSubmit = document.getElementById('btnSubmit');
+
+      if (currentLang === 'ar') {
+        currentLang = 'en';
+        root.setAttribute('lang', 'en');
+        root.setAttribute('dir', 'ltr');
+        
+        langToggle.textContent = translations.en.langBtn;
+        pageTitle.textContent = translations.en.title;
+        lblEmirate.textContent = translations.en.emirate;
+        lblArea.textContent = translations.en.area;
+        area.placeholder = translations.en.areaPlaceholder;
+        lblStreet.textContent = translations.en.street;
+        street.placeholder = translations.en.streetPlaceholder;
+        lblBuilding.textContent = translations.en.building;
+        building.placeholder = translations.en.buildingPlaceholder;
+        lblMakani.textContent = translations.en.makani;
+        hintMakani.textContent = translations.en.makaniHint;
+        lblPhone.textContent = translations.en.phone;
+        hintPhone.innerHTML = `${translations.en.phoneHint} <bdi dir="ltr">050 123 4567</bdi>`;
+        btnSubmit.textContent = translations.en.submit;
+      } else {
+        currentLang = 'ar';
+        root.setAttribute('lang', 'ar');
+        root.setAttribute('dir', 'rtl');
+        
+        langToggle.textContent = translations.ar.langBtn;
+        pageTitle.textContent = translations.ar.title;
+        lblEmirate.textContent = translations.ar.emirate;
+        lblArea.textContent = translations.ar.area;
+        area.placeholder = translations.ar.areaPlaceholder;
+        lblStreet.textContent = translations.ar.street;
+        street.placeholder = translations.ar.streetPlaceholder;
+        lblBuilding.textContent = translations.ar.building;
+        building.placeholder = translations.ar.buildingPlaceholder;
+        lblMakani.textContent = translations.ar.makani;
+        hintMakani.textContent = translations.ar.makaniHint;
+        lblPhone.textContent = translations.ar.phone;
+        hintPhone.innerHTML = `${translations.ar.phoneHint} <bdi dir="ltr">050 123 4567</bdi>`;
+        btnSubmit.textContent = translations.ar.submit;
+      }
+    }
+  </script>
+</body>
+</html>

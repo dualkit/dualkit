@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دردشة الدعم - كويتيل</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      color: #333;
+      direction: rtl;
+      text-align: right;
+      padding: 16px;
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+
+    .chat-container {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background-color: #0078d4;
+      color: white;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .messages-wrapper {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      line-height: 1.6;
+      font-size: 15px;
+      word-wrap: break-word;
+    }
+
+    .customer-message {
+      background-color: #e4f2ff;
+      border-bottom-right-radius: 4px;
+      align-self: flex-end;
+    }
+
+    .agent-message {
+      background-color: #f0f0f0;
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+    }
+
+    .message-time {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+      text-align: left;
+    }
+
+    .agent-name {
+      font-weight: 600;
+      color: #0078d4;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .input-area {
+      display: flex;
+      padding: 12px;
+      background-color: #f9f9f9;
+      border-top: 1px solid #ddd;
+      gap: 8px;
+    }
+
+    .text-field {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .text-field:focus {
+      border-color: #0078d4;
+    }
+
+    .send-button {
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .send-button:hover {
+      background-color: #005a9e;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 3px;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">دردشة الدعم الفني - كويتيل</div>
+    
+    <div class="messages-wrapper scrollbar-thin">
+      <!-- Message 1 - Customer -->
+      <div class="message customer-message">
+        <span class="message-time">٩:٠٠ ص</span>
+        <div>مرحباً، أحتاج مساعدة في تفعيل خدمة 5G على هاتفي.</div>
+      </div>
+
+      <!-- Message 2 - Agent -->
+      <div class="message agent-message">
+        <span class="message-time">٩:٠٢ ص</span>
+        <span class="agent-name">سارة (وكيلة دعم)</span>
+        <div>مرحباً بك! بالطبع، يسعدني مساعدتك. هل هاتفك يدعم شبكة 5G؟</div>
+      </div>
+
+      <!-- Message 3 - Customer -->
+      <div class="message customer-message">
+        <span class="message-time">٩:٠٣ ص</span>
+        <div>نعم، هاتفي يدعم 5G، لكن لم أستقبل رسالة تفعيل بعد.</div>
+      </div>
+
+      <!-- Message 4 - Agent -->
+      <div class="message agent-message">
+        <span class="message-time">٩:٠٥ ص</span>
+        <span class="agent-name">سارة (وكيلة دعم)</span>
+        <div>سأتحقق من حسابك الآن. هل لديك رقم الطلب؟</div>
+      </div>
+
+      <!-- Message 5 - Customer -->
+      <div class="message customer-message">
+        <span class="message-time">٩:٠٦ ص</span>
+        <div>نعم، رقم الطلب الخاص بي هو TX-48213.</div>
+      </div>
+
+      <!-- Message 6 - Agent -->
+      <div class="message agent-message">
+        <span class="message-time">٩:٠٨ ص</span>
+        <span class="agent-name">سارة (وكيلة دعم)</span>
+        <div>شكراً لك. تم العثور على طلبك بنجاح. سأقوم بإرسال رسالة تفعيل eSIM خلال دقيقة.</div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" class="text-field" placeholder="اكتب رسالتك هنا..." />
+      <button class="send-button">إرسال</button>
+    </div>
+  </div>
+</body>
+</html>

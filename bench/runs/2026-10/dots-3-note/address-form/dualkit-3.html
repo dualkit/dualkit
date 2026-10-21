@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عنوان التوصيل</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #f5f5f5;
+      --color-card: #ffffff;
+      --color-text: #333333;
+      --color-border: #cccccc;
+      --color-primary: #007AFF;
+      --color-primary-text: #ffffff;
+      --radius: 8px;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: var(--spacing-md);
+      background-color: var(--color-bg);
+      font-family: 'Noto Arabic', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--color-text);
+      direction: rtl;
+      text-align: start;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0 0 var(--spacing-lg) 0;
+      text-align: start;
+    }
+
+    form {
+      background-color: var(--color-card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: var(--spacing-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+
+    label {
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: start;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      font-size: 1rem;
+      font-family: inherit;
+      background-color: #fff;
+      transition: border-color 0.2s;
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+
+    input[dir="ltr"],
+    select[dir="ltr"] {
+      direction: ltr;
+      text-align: start;
+    }
+
+    button {
+      padding: 0.75rem;
+      background-color: var(--color-primary);
+      color: var(--color-primary-text);
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: var(--spacing-sm);
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    /* Ensure placeholder text in LTR inputs is not reordered */
+    input::placeholder {
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>عنوان التوصيل</h1>
+    <form>
+      <div class="field">
+        <label for="building">مبنى أو فيلا</label>
+        <input type="text" id="building" name="building" placeholder="مثلا: مبنى 12">
+      </div>
+
+      <div class="field">
+        <label for="street">شارع</label>
+        <input type="text" id="street" name="street" placeholder="اسم الشارع">
+      </div>
+
+      <div class="field">
+        <label for="area">منطقة</label>
+        <input type="text" id="area" name="area" placeholder="المنطقة">
+      </div>
+
+      <div class="field">
+        <label for="makani">رقم مكاني</label>
+        <input type="text" id="makani" name="makani" placeholder="1234567890" dir="ltr" inputmode="numeric">
+      </div>
+
+      <div class="field">
+        <label for="emirate">الإمارة</label>
+        <select id="emirate" name="emirate">
+          <option value="dubai" selected>دبي</option>
+          <option value="abudhabi">أبوظبي</option>
+          <option value="sharjah">الشارقة</option>
+          <option value="ajman">عجمان</option>
+          <option value="rak">الخيمة</option>
+          <option value="fujairah">الفجيرة</option>
+          <option value="umq">أم القيوين</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="phone">رقم الهاتف</label>
+        <input type="tel" id="phone" name="phone" placeholder="050 123 4567" dir="ltr" inputmode="tel" autocomplete="tel">
+      </div>
+
+      <button type="submit">حفظ عنوان</button>
+    </form>
+  </div>
+</body>
+</html>

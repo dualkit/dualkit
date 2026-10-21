@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ملخص الدفع</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    :lang(ar) {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      letter-spacing: 0;
+      line-height: 1.7;
+    }
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-0 sm:p-4">
+
+  <!-- Mobile Phone Shell -->
+  <div class="w-full max-w-[420px] bg-white sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col min-h-screen sm:min-h-[844px]">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white sticky top-0 z-10">
+      <button class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 text-slate-700 hover:bg-slate-200 transition" aria-label="رجوع">
+        <svg class="w-5 h-5 rtl:-scale-x-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      <h1 class="text-base font-semibold text-slate-900">ملخص الدفع</h1>
+      <div class="w-10"></div>
+    </header>
+
+    <!-- Content Body -->
+    <main class="flex-1 flex flex-col pb-8">
+
+      <!-- Amount Due Card -->
+      <div class="p-6 bg-emerald-900 text-white rounded-2xl mx-6 mt-6 shadow-md">
+        <span class="text-emerald-200 text-sm block mb-1 font-medium">المبلغ المستحق</span>
+        <div class="text-3xl font-bold tracking-tight tabular-nums">
+          <bdi>1,234.50 د.إ</bdi>
+        </div>
+      </div>
+
+      <!-- Transaction Details -->
+      <div class="px-6 mt-6 space-y-4">
+        <!-- Due Date -->
+        <div class="flex justify-between items-center py-3 border-b border-slate-100">
+          <span class="text-slate-500 text-sm">تاريخ الاستحقاق</span>
+          <div class="text-start">
+            <div class="font-medium text-slate-800 text-sm"><bdi>3 نوفمبر 2026</bdi></div>
+            <div class="text-slate-400 text-sm"><bdi>22 جمادى الأولى 1448 هـ</bdi></div>
+          </div>
+        </div>
+
+        <!-- Items Count -->
+        <div class="flex justify-between items-center py-3 border-b border-slate-100">
+          <span class="text-slate-500 text-sm">تفاصيل الطلب</span>
+          <span class="font-medium text-slate-800 text-sm">لديك 3 عناصر في هذا الطلب</span>
+        </div>
+      </div>
+
+      <!-- SMS Receipt Section -->
+      <div class="px-6 mt-6">
+        <label for="phone" class="block text-sm font-medium text-slate-700 mb-2">
+          إرسال الإيصال عبر الرسائل النصية
+        </label>
+        <div class="relative">
+          <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none text-slate-400 text-sm font-medium">
+            <bdi dir="ltr">+971</bdi>
+          </div>
+          <input type="tel" id="phone" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="050 123 4567"
+            class="w-full ps-16 pe-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 text-sm tabular-nums">
+        </div>
+        <p class="text-slate-400 text-sm mt-1.5">مثال: <bdi dir="ltr">050 123 4567</bdi></p>
+      </div>
+
+    </main>
+
+    <!-- Sticky Bottom Action Footer -->
+    <footer class="p-6 bg-white border-t border-slate-100 mt-auto">
+      <button class="w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/20 transition active:scale-[0.99] text-base">
+        إتمام الدفع
+      </button>
+    </footer>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f8fb">
+  <title>ملخص الدفع</title>
+  <style>
+    :root {
+      --primary: #173f36;
+      --primary-hover: #0f3029;
+      --accent: #c9f25f;
+      --text: #17201e;
+      --muted: #6e7b77;
+      --line: #e5eae8;
+      --surface: #ffffff;
+      --background: #f4f7f6;
+      --danger: #c63d3d;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: #e8eceb;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      color: var(--text);
+      background: var(--background);
+      font-family: "Noto Sans Arabic", Tahoma, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      letter-spacing: 0;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0 auto;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(201, 242, 95, 0.13), transparent 31%),
+        var(--background);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: max(18px, env(safe-area-inset-top)) 20px 12px;
+    }
+
+    .topbar h1 {
+      flex: 1;
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .icon-button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      place-items: center;
+      padding: 0;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      box-shadow: 0 4px 14px rgba(23, 63, 54, 0.05);
+      cursor: pointer;
+      transition: transform 150ms ease, background 150ms ease;
+    }
+
+    .icon-button:active {
+      transform: scale(0.95);
+      background: #f0f3f2;
+    }
+
+    .icon-button svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2;
+    }
+
+    .icon-button svg.directional {
+      transform: scaleX(-1);
+    }
+
+    main {
+      padding: 14px 20px max(28px, env(safe-area-inset-bottom));
+    }
+
+    .amount-card {
+      position: relative;
+      overflow: hidden;
+      padding: 28px 24px 24px;
+      color: #fff;
+      text-align: center;
+      background: linear-gradient(145deg, #173f36 0%, #24574a 100%);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 18px 38px rgba(23, 63, 54, 0.18);
+    }
+
+    .amount-card::after {
+      position: absolute;
+      top: -52px;
+      inset-inline-end: -40px;
+      width: 150px;
+      height: 150px;
+      content: "";
+      background: rgba(201, 242, 95, 0.09);
+      border-radius: 50%;
+    }
+
+    .amount-label {
+      margin: 0 0 7px;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .amount {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-size: clamp(32px, 9vw, 40px);
+      font-weight: 700;
+      line-height: 1.35;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .amount .currency {
+      margin-inline-start: 7px;
+      font-size: 0.7em;
+      font-weight: 600;
+    }
+
+    .order-count {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 16px 0 0;
+      padding: 7px 12px;
+      color: #f6ffe8;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      font-size: 14px;
+    }
+
+    .order-count svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: var(--accent);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+
+    .details-card {
+      margin-top: 16px;
+      padding: 6px 20px;
+      background: var(--surface);
+      border: 1px solid rgba(23, 63, 54, 0.05);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 10px 30px rgba(23, 63, 54, 0.06);
+    }
+
+    .detail-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 22px;
+      padding: 18px 0;
+    }
+
+    .detail-row + .detail-row {
+      border-top: 1px solid var(--line);
+    }
+
+    .detail-label {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .detail-value {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: end;
+    }
+
+    .calendar-value {
+      display: grid;
+      gap: 2px;
+    }
+
+    .calendar-value span {
+      display: block;
+    }
+
+    .calendar-value .hijri {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .field-section {
+      margin-top: 16px;
+      padding: 22px 20px;
+      background: var(--surface);
+      border: 1px solid rgba(23, 63, 54, 0.05);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 10px 30px rgba(23, 63, 54, 0.05);
+    }
+
+    .field-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 5px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .field-title svg {
+      width: 21px;
+      height: 21px;
+      flex: 0 0 21px;
+      fill: none;
+      stroke: var(--primary);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+
+    .field-description {
+      margin: 0 0 17px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .phone-wrap {
+      display: flex;
+      align-items: stretch;
+      direction: ltr;
+    }
+
+    .country-code {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 74px;
+      padding: 0 12px;
+      color: var(--text);
+      background: #eef2f1;
+      border: 1px solid var(--line);
+      border-inline-end: 0;
+      border-radius: 12px 0 0 12px;
+      font-size: 15px;
+      font-weight: 600;
+      direction: ltr;
+    }
+
+    .phone-input {
+      width: 100%;
+      min-width: 0;
+      padding: 13px 14px;
+      color: var(--text);
+      text-align: left;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-inline-start: 0;
+      border-radius: 0 12px 12px 0;
+      outline: none;
+      direction: ltr;
+      font-variant-numeric: tabular-nums;
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+    }
+
+    .phone-input::placeholder {
+      color: #a1aaa7;
+    }
+
+    .phone-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(23, 63, 54, 0.09);
+    }
+
+    .field-error {
+      min-height: 24px;
+      margin: 7px 0 0;
+      color: var(--danger);
+      font-size: 14px;
+    }
+
+    .pay-button {
+      width: 100%;
+      min-height: 56px;
+      margin-top: 12px;
+      padding: 14px 20px;
+      color: #10251f;
+      background: var(--accent);
+      border: 0;
+      border-radius: 15px;
+      box-shadow: 0 10px 24px rgba(138, 181, 43, 0.2);
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 150ms ease, background 150ms ease, box-shadow 150ms ease;
+    }
+
+    .pay-button:active {
+      transform: translateY(1px) scale(0.99);
+      background: #bde74c;
+      box-shadow: 0 5px 14px rgba(138, 181, 43, 0.18);
+    }
+
+    .pay-button:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+      box-shadow: none;
+    }
+
+    .secure-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin: 13px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .secure-note svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
+    }
+
+    .status-message {
+      margin: 12px 0 0;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    @media (max-width: 350px) {
+      .topbar,
+      main {
+        padding-inline: 16px;
+      }
+
+      .amount-card {
+        padding-inline: 18px;
+      }
+
+      .detail-row {
+        gap: 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <h1>ملخص الدفع</h1>
+      <button class="icon-button" type="button" aria-label="الرجوع">
+        <svg class="directional" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19 12H5"></path>
+          <path d="m11 18-6-6 6-6"></path>
+        </svg>
+      </button>
+    </header>
+
+    <main>
+      <section class="amount-card" aria-labelledby="amount-label">
+        <p class="amount-label" id="amount-label">المبلغ المستحق</p>
+        <p class="amount" aria-label="1,234.50 درهم إماراتي">
+          1,234.50 <span class="currency">د.إ</span>
+        </p>
+        <p class="order-count">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 7h16l-1 13H5L4 7Z"></path>
+            <path d="M9 9V6a3 3 0 0 1 6 0v3"></path>
+          </svg>
+          يحتوي طلبك على 3 عناصر
+        </p>
+      </section>
+
+      <section class="details-card" aria-label="تفاصيل الدفع">
+        <div class="detail-row">
+          <p class="detail-label">تاريخ الاستحقاق</p>
+          <div class="detail-value calendar-value">
+            <span>3 نوفمبر 2026</span>
+            <span class="hijri">20 ربيع الآخر 1448 هـ</span>
+          </div>
+        </div>
+
+        <div class="detail-row">
+          <p class="detail-label">طريقة الدفع</p>
+          <p class="detail-value">بطاقة بنكية</p>
+        </div>
+      </section>
+
+      <section class="field-section" aria-labelledby="phone-title">
+        <h2 class="field-title" id="phone-title">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="6" y="2" width="12" height="20" rx="2"></rect>
+            <path d="M9 6h6"></path>
+            <path d="M10 18h4"></path>
+          </svg>
+          إرسال الإيصال
+        </h2>
+        <p class="field-description">أدخل رقم الهاتف لإرسال الإيصال عبر رسالة نصية.</p>
+
+        <form id="paymentForm" novalidate>
+          <label for="phone" hidden>رقم الهاتف</label>
+          <div class="phone-wrap">
+            <span class="country-code" aria-hidden="true">+971</span>
+            <input
+              class="phone-input"
+              id="phone"
+              name="phone"
+              type="tel"
+              inputmode="tel"
+              autocomplete="tel"
+              dir="ltr"
+              placeholder="050 123 4567"
+              aria-describedby="phoneError"
+            >
+          </div>
+          <p class="field-error" id="phoneError" role="alert"></p>
+
+          <button class="pay-button" id="payButton" type="submit">ادفع الآن</button>
+          <p class="status-message" id="statusMessage" role="status" aria-live="polite"></p>
+        </form>
+
+        <p class="secure-note">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="5" y="10" width="14" height="11" rx="2"></rect>
+            <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+          </svg>
+          تتم معالجة الدفع بشكل آمن
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const form = document.getElementById("paymentForm");
+    const phoneInput = document.getElementById("phone");
+    const phoneError = document.getElementById("phoneError");
+    const statusMessage = document.getElementById("statusMessage");
+    const payButton = document.getElementById("payButton");
+
+    function normalizeDigits(value) {
+      return value.replace(/[٠-٩]/g, digit => String(digit.charCodeAt(0) - 0x0660));
+    }
+
+    function validatePhone(value) {
+      const digits = normalizeDigits(value).replace(/\D/g, "");
+      if (/^0/.test(digits)) return digits.length === 10 && digits.startsWith("05");
+      if (/^971/.test(digits)) return digits.length === 13 && digits.startsWith("9715");
+      if (/^\+971/.test(value.replace(/\s/g, ""))) {
+        const withoutPrefix = digits.replace(/^971/, "");
+        return withoutPrefix.length === 9 && withoutPrefix.startsWith("5");
+      }
+      return false;
+    }
+
+    phoneInput.addEventListener("input", () => {
+      phoneError.textContent = "";
+      statusMessage.textContent = "";
+    });
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+
+      if (!validatePhone(phoneInput.value)) {
+        phoneError.textContent = "أدخل رقم هاتف إماراتي صحيح، مثل 050 123 4567.";
+        phoneInput.setAttribute("aria-invalid", "true");
+        phoneInput.focus();
+        return;
+      }
+
+      phoneInput.removeAttribute("aria-invalid");
+      payButton.disabled = true;
+      payButton.textContent = "جارٍ تنفيذ الدفع…";
+
+      window.setTimeout(() => {
+        payButton.disabled = false;
+        payButton.textContent = "ادفع الآن";
+        statusMessage.textContent = "تم تسجيل طلب الدفع بنجاح.";
+      }, 900);
+    });
+  </script>
+</body>
+</html>

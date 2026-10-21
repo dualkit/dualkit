@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>دعم زين</title>
+  <style>
+    :root {
+      --purple: #6d28d9;
+      --purple-dark: #4c1d95;
+      --purple-light: #f1eafe;
+      --text: #211a2b;
+      --muted: #8d8798;
+      --line: #eeeaf2;
+      --background: #f7f6f9;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Tahoma, Arial, sans-serif;
+      background: #e9e7ed;
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100dvh;
+    }
+
+    .phone {
+      position: relative;
+      width: min(100%, 430px);
+      height: min(100dvh, 850px);
+      min-height: 620px;
+      overflow: hidden;
+      background: var(--background);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 18px 60px rgba(41, 28, 56, 0.18);
+    }
+
+    .status-bar {
+      height: 30px;
+      flex: 0 0 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 18px 0;
+      background: white;
+      font-size: 12px;
+      font-weight: 700;
+      direction: ltr;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .signal {
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 10px;
+    }
+
+    .signal i {
+      display: block;
+      width: 2px;
+      border-radius: 2px;
+      background: #17131c;
+    }
+
+    .signal i:nth-child(1) { height: 4px; }
+    .signal i:nth-child(2) { height: 6px; }
+    .signal i:nth-child(3) { height: 8px; }
+    .signal i:nth-child(4) { height: 10px; }
+
+    .battery {
+      width: 20px;
+      height: 10px;
+      border: 1.5px solid #17131c;
+      border-radius: 3px;
+      padding: 1px;
+      position: relative;
+    }
+
+    .battery::after {
+      content: "";
+      position: absolute;
+      right: -4px;
+      top: 2px;
+      width: 2px;
+      height: 4px;
+      border-radius: 0 2px 2px 0;
+      background: #17131c;
+    }
+
+    .battery::before {
+      content: "";
+      display: block;
+      width: 75%;
+      height: 100%;
+      border-radius: 1px;
+      background: #17131c;
+    }
+
+    .app-header {
+      flex: 0 0 auto;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 12px 16px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .back-button,
+    .call-button {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .back-button {
+      transform: scaleX(-1);
+    }
+
+    .call-button {
+      background: var(--purple-light);
+      color: var(--purple);
+    }
+
+    .agent-avatar {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(145deg, #9a67ee, #5b21b6);
+      box-shadow: 0 4px 12px rgba(91, 33, 182, 0.2);
+    }
+
+    .online-dot {
+      position: absolute;
+      left: -1px;
+      bottom: 0;
+      width: 12px;
+      height: 12px;
+      border: 2px solid white;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    .agent-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .agent-info h1 {
+      margin: 0 0 3px;
+      font-size: 16px;
+      line-height: 1.2;
+    }
+
+    .agent-info p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .verified {
+      color: var(--purple);
+      font-size: 11px;
+      margin-inline-start: 4px;
+    }
+
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 16px 18px;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(109, 40, 217, 0.035), transparent 30%),
+        var(--background);
+    }
+
+    .date {
+      width: fit-content;
+      margin: 0 auto 20px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      color: #918a9d;
+      background: #ebe8ef;
+      font-size: 11px;
+    }
+
+    .message-row {
+      display: flex;
+      margin-bottom: 13px;
+    }
+
+    .message-row.customer {
+      justify-content: flex-start;
+    }
+
+    .message-row.agent {
+      justify-content: flex-end;
+    }
+
+    .bubble {
+      max-width: 80%;
+      padding: 11px 13px 8px;
+      border-radius: 17px;
+      font-size: 14px;
+      line-height: 1.65;
+      box-shadow: 0 2px 5px rgba(37, 25, 49, 0.04);
+    }
+
+    .agent .bubble {
+      color: #33283f;
+      background: white;
+      border: 1px solid #ece8f0;
+      border-top-left-radius: 5px;
+    }
+
+    .customer .bubble {
+      color: white;
+      background: linear-gradient(145deg, #7c3aed, #5b21b6);
+      border-top-right-radius: 5px;
+      box-shadow: 0 5px 14px rgba(91, 33, 182, 0.15);
+    }
+
+    .bubble strong {
+      font-weight: 700;
+    }
+
+    .bubble .latin {
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-family: Arial, sans-serif;
+      letter-spacing: 0.1px;
+    }
+
+    .time {
+      display: block;
+      margin-top: 3px;
+      font-size: 10px;
+      opacity: 0.65;
+      text-align: left;
+      direction: ltr;
+    }
+
+    .composer {
+      flex: 0 0 auto;
+      padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .input-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      height: 44px;
+      padding: 0 14px;
+      border: 1px solid #ded9e5;
+      border-radius: 24px;
+      background: #faf9fb;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      font: inherit;
+      font-size: 14px;
+    }
+
+    .input-wrap input::placeholder {
+      color: #a49daa;
+    }
+
+    .send-button {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 0;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: var(--purple);
+      box-shadow: 0 5px 14px rgba(109, 40, 217, 0.25);
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    .send-button:active {
+      transform: scale(0.94);
+      background: var(--purple-dark);
+    }
+
+    .send-button svg {
+      width: 21px;
+      height: 21px;
+      transform: scaleX(-1);
+    }
+
+    @media (max-width: 430px) {
+      body {
+        display: block;
+        background: var(--background);
+      }
+
+      .phone {
+        width: 100%;
+        height: 100dvh;
+        min-height: 0;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone" aria-label="محادثة دعم زين">
+    <div class="status-bar" aria-hidden="true">
+      <span>9:41</span>
+      <div class="status-icons">
+        <span class="signal"><i></i><i></i><i></i><i></i></span>
+        <span>5G</span>
+        <span class="battery"></span>
+      </div>
+    </div>
+
+    <header class="app-header">
+      <button class="back-button" type="button" aria-label="رجوع">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="agent-avatar" aria-label="سارة">س<span class="online-dot"></span></div>
+
+      <div class="agent-info">
+        <h1>سارة <span class="verified">موثّقة</span></h1>
+        <p>دعم زين • متصلة الآن</p>
+      </div>
+
+      <button class="call-button" type="button" aria-label="الاتصال بصوت">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </header>
+
+    <section class="chat-area" aria-live="polite" aria-label="الرسائل">
+      <div class="date">اليوم</div>
+
+      <article class="message-row customer">
+        <div class="bubble">
+          مرحباً، طلبت تفعيل خدمة <span class="latin">5G</span> على خطّي، لكن الشبكة ما زالت تقني.
+          <span class="time">10:12 ص</span>
+        </div>
+      </article>
+
+      <article class="message-row agent">
+        <div class="bubble">
+          أهلاً فيك! أنا سارة، وأقدر أساعدك بهذا الطلب. هل Enriched بيانات Line؟ أعتذر، هل يمكنك مشاركة رقم الطلب <strong class="latin">TX-48213</strong>؟
+          <span class="time">10:14 ص</span>
+        </div>
+      </article>
+
+      <article class="message-row customer">
+        <div class="bubble">
+          بالتأكيد، رقم الطلب هو <strong class="latin">TX-48213</strong>.
+          <span class="time">10:16 ص</span>
+        </div>
+      </article>
+
+      <article class="message-row agent">
+        <div class="bubble">
+          شكراً لك. وجدت الطلب، وأنا فعّلت <span class="latin">5G</span> على خطك. قد تحتاج إلى إعادة تشغيل الهاتف، ثم إعادة الاتصال بشبكة زين.
+          <span class="time">10:18 ص</span>
+        </div>
+      </article>
+
+      <article class="message-row customer">
+        <div class="bubble">
+          أعدت تشغيل الهاتف، لكن ما زال يعرض <span class="latin">4G</span>. هل المشكلة من الجهاز؟
+          <span class="time">10:22 ص</span>
+        </div>
+      </article>
+
+      <article class="message-row agent">
+        <div class="bubble">
+          غالباً لا. تأكد من تحديث نظام التشغيل ومن إعدادات الشبكة واختيار <strong class="latin">5G</strong>. سأرسل لك خطوة تفعيل <span class="latin">eSIM</span>، وبعدها أخبرني بالنتيجة.
+          <span class="time">10:24 ص</span>
+        </div>
+      </article>
+    </section>
+
+    <form class="composer" onsubmit="event.preventDefault(); this.querySelector('input').value = '';">
+      <label class="input-wrap">
+        <input type="text" inputmode="text" autocomplete="off" placeholder="اكتب رسالتك هنا..." aria-label="اكتب رسالتك">
+      </label>
+      <button class="send-button" type="submit" aria-label="إرسال الرسالة">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </form>
+  </main>
+</body>
+</html>

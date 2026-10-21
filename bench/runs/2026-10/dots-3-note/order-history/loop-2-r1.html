@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>طلاتي — تاريخ الطلب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'IBM Plex Arabic';
+    src: url('https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@400;500;600;700&display=swap') format('woff2');
+    unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+    size-adjust: 112%;
+  }
+
+  :root{
+    --bg:#f4f5f7;
+    --surface:#ffffff;
+    --ink:#1f2430;
+    --ink-soft:#6b7280;
+    --ink-mute:#9aa3b2;
+    --line:#eceef2;
+    --green:#16a34a;
+    --green-bg:#e7f5ec;
+    --amber:#d97706;
+    --amber-bg:#fef3e4;
+    --red:#dc2626;
+    --red-bg:#fdecec;
+    --brand:#7c3aed;
+    --radius:18px;
+  }
+
+  /* ---------- Arabic type pairing ---------- */
+  :lang(ar){
+    --type-label-size: 14px;
+    --type-caption-size: 14px;
+    --type-body-size: 16px;
+    letter-spacing: 0;
+    text-transform: none;
+    font-style: normal;
+    line-height: 1.7;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{ margin:0; padding:0; }
+
+  body{
+    font-family:'IBM Plex Arabic','IBM Plex Sans Arabic',system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    font-size:var(--type-body-size);
+    line-height:1.7;
+    -webkit-text-size-adjust:100%;
+    text-size-adjust:100%;
+  }
+
+  /* Latin runs inside Arabic keep the brand face and stay isolated */
+  bdi{ font-family:inherit; }
+
+  .page{
+    max-width:414px;
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--bg);
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky;
+    top:0;
+    z-index:10;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    background:rgba(255,255,255,.85);
+    backdrop-filter:saturate(160%) blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar .icon-btn{
+    flex:none;
+    width:38px;height:38px;
+    display:grid;place-items:center;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--surface);
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .icon-directional:dir(rtl){ transform:scaleX(-1); }
+  .topbar .title{
+    flex:1;
+    font-size:18px;
+    font-weight:700;
+    text-align:start;
+  }
+  .topbar .title .sub{
+    display:block;
+    font-size:var(--type-caption-size);
+    font-weight:500;
+    color:var(--ink-soft);
+  }
+
+  /* Language switcher */
+  .lang{
+    flex:none;
+    display:inline-flex;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:3px;
+    gap:2px;
+  }
+  .lang button{
+    border:0;
+    background:transparent;
+    font:inherit;
+    font-size:14px;
+    font-weight:600;
+    padding:6px 12px;
+    border-radius:999px;
+    cursor:pointer;
+    color:var(--ink-soft);
+    font-family:inherit;
+  }
+  .lang button.active{
+    background:var(--ink);
+    color:#fff;
+  }
+
+  /* ---------- Content ---------- */
+  .content{
+    flex:1;
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    box-shadow:0 1px 2px rgba(16,24,40,.03);
+  }
+
+  /* order head: number + status */
+  .card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .order-no{
+    font-size:17px;
+    font-weight:700;
+    letter-spacing:.2px;
+  }
+  .badge{
+    flex:none;
+    font-size:14px;
+    font-weight:700;
+    padding:6px 12px;
+    border-radius:999px;
+    line-height:1.4;
+    white-space:nowrap;
+  }
+  .badge.delivered{ background:var(--green-bg); color:var(--green); }
+  .badge.transit  { background:var(--amber-bg); color:var(--amber); }
+  .badge.cancelled { background:var(--red-bg);   color:var(--red);   }
+
+  /* dates */
+  .dates{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .dates .greg{
+    font-size:15px;
+    font-weight:600;
+  }
+  .dates .hijri{
+    font-size:var(--type-caption-size);
+    color:var(--ink-soft);
+    font-weight:500;
+  }
+  .dates .hijri .dot{ color:var(--ink-mute); margin-inline:6px; }
+
+  /* total */
+  .total{
+    font-size:20px;
+    font-weight:700;
+    font-variant-numeric:tabular-nums;
+    color:var(--ink);
+  }
+  .total .cur{ font-size:14px; font-weight:600; color:var(--ink-soft); margin-inline:4px; }
+
+  /* footer link */
+  .foot{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:4px;
+    font-size:14px;
+    font-weight:600;
+    color:var(--brand);
+    background:0;
+    border:0;
+    padding:0;
+    cursor:pointer;
+    font-family:inherit;
+    line-height:1.5;
+  }
+  .foot .chevron:dir(rtl){ transform:scaleX(-1); }
+
+  /* reduce motion */
+  @media (prefers-reduced-motion:reduce){
+    *{ animation:none!important; transition:none!important; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <button class="icon-btn" aria-label="رجوع" type="button">
+        <svg class="icon-directional" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l7-7-7-7"/></svg>
+      </button>
+
+      <div class="title">
+        طلباتي
+        <span class="sub">تاريخ الطلب</span>
+      </div>
+
+      <div class="lang" role="group" aria-label="chg language">
+        <button id="langAr" class="active" type="button" aria-pressed="true">العربية</button>
+        <button id="langEn" type="button" aria-pressed="false">English</button>
+      </div>
+    </header>
+
+    <!-- Order list -->
+    <main class="content">
+
+      <!-- Order 1: delivered -->
+      <article class="card">
+        <div class="card-head">
+          <span class="order-no"><bdi dir="ltr">#A-10293</bdi></span>
+          <span class="badge delivered">تم التسليم</span>
+        </div>
+        <div class="dates">
+          <span class="greg">١٥ مارس ٢٠٢٦</span>
+          <span class="hijri">٢٥ رمضان ١٤٤٧ هـ <span class="dot">•</span> ١٤٤٧</span>
+        </div>
+        <div class="total">١,٢٥٠.٠٠ <span class="cur">ر.س</span></div>
+        <button class="foot">
+          عرض التفاصيل
+          <svg class="chevron icon-directional" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </article>
+
+      <!-- Order 2: on the way -->
+      <article class="card">
+        <div class="card-head">
+          <span class="order-no"><bdi dir="ltr">#A-10294</bdi></span>
+          <span class="badge transit">قيد التوصيل</span>
+        </div>
+        <div class="dates">
+          <span class="greg">١٨ مارس ٢٠٢٦</span>
+          <span class="hijri">٢٨ رمضان ١٤٤٧ هـ <span class="dot">•</span> ١٤٤٧</span>
+        </div>
+        <div class="total">٨٧٥.٥٠ <span class="cur">ر.س</span></div>
+        <button class="foot">
+          عرض التفاصيل
+          <svg class="chevron icon-directional" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </article>
+
+      <!-- Order 3: cancelled -->
+      <article class="card">
+        <div class="card-head">
+          <span class="order-no"><bdi dir="ltr">#A-10295</bdi></span>
+          <span class="badge cancelled">ملغي</span>
+        </div>
+        <div class="dates">
+          <span class="greg">٢٠ مارس ٢٠٢٦</span>
+          <span class="hijri">١ شعبان ١٤٤٧ هـ <span class="dot">•</span> ١٤٤٧</span>
+        </div>
+        <div class="total">٣٢٠.٠٠ <span class="cur">ر.س</span></div>
+        <button class="foot">
+          عرض التفاصيل
+          <svg class="chevron icon-directional" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </article>
+
+      <!-- Order 4: delivered -->
+      <article class="card">
+        <div class="card-head">
+          <span class="order-no"><bdi dir="ltr">#A-10296</bdi></span>
+          <span class="badge delivered">تم التسليم</span>
+        </div>
+        <div class="dates">
+          <span class="greg">٢٢ مارس ٢٠٢٦</span>
+          <span class="hijri">٣ شعبان ١٤٤٧ هـ <span class="dot">•</span> ١٤٤٧</span>
+        </div>
+        <div class="total">٢,١٠٠.٠٠ <span class="cur">ر.س</span></div>
+        <button class="foot">
+          عرض التفاصيل
+          <svg class="chevron icon-directional" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </article>
+
+    </main>
+  </div>
+
+<script>
+(function(){
+  var html = document.documentElement;
+  var ar = document.getElementById('langAr');
+  var en = document.getElementById('langEn');
+
+  function apply(lang){
+    var isAr = lang === 'ar';
+    html.setAttribute('lang', lang);
+    html.setAttribute('dir', isAr ? 'rtl' : 'ltr');
+    ar.classList.toggle('active', isAr);
+    en.classList.toggle('active', !isAr);
+    ar.setAttribute('aria-pressed', isAr ? 'true' : 'false');
+    en.setAttribute('aria-pressed', isAr ? 'false' : 'true');
+  }
+
+  ar.addEventListener('click', function(){ apply('ar'); });
+  en.addEventListener('click', function(){ apply('en'); });
+})();
+</script>
+</body>
+</html>

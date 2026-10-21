@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0c6b53">
+  <title>سجل الطلبات</title>
+  <style>
+    :root {
+      --primary: #08775b;
+      --primary-dark: #075b48;
+      --primary-soft: #eaf7f2;
+      --text: #17231f;
+      --muted: #72807b;
+      --line: #e8eeeb;
+      --surface: #ffffff;
+      --background: #f5f8f7;
+      --blue: #2869c7;
+      --blue-soft: #edf5ff;
+      --red: #d84a4a;
+      --red-soft: #fff0f0;
+      --orange: #b86b11;
+      --orange-soft: #fff6e8;
+      --shadow: 0 6px 22px rgba(19, 52, 43, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--background);
+      color: var(--text);
+      font-family: "SF Arabic", "Noto Sans Arabic", Tahoma, Arial, sans-serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--background);
+      overflow-x: hidden;
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-row {
+      height: 66px;
+      display: grid;
+      grid-template-columns: 42px 1fr 42px;
+      align-items: center;
+      padding: 0 18px;
+    }
+
+    .header-title {
+      text-align: center;
+      font-size: 19px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .icon-button {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: var(--text);
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .icon-button:active {
+      background: #f0f4f2;
+    }
+
+    .icon-button svg {
+      width: 23px;
+      height: 23px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .profile-button {
+      justify-self: end;
+      width: 36px;
+      height: 36px;
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .content {
+      padding: 18px 16px 32px;
+    }
+
+    .search-box {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 15px;
+      margin-bottom: 16px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(19, 52, 43, 0.03);
+    }
+
+    .search-box svg {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 auto;
+      fill: none;
+      stroke: var(--muted);
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .search-box input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .search-box input::placeholder {
+      color: #9ba6a2;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding-bottom: 17px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tab {
+      flex: 0 0 auto;
+      min-height: 38px;
+      padding: 0 17px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--surface);
+      color: #65716d;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .tab.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .orders-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .order-card {
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .order-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 16px 13px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .order-number {
+      margin: 0 0 7px;
+      direction: ltr;
+      text-align: right;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.1px;
+    }
+
+    .order-date {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 11.5px;
+      line-height: 1.5;
+    }
+
+    .order-date span {
+      white-space: nowrap;
+    }
+
+    .date-dot {
+      width: 3px;
+      height: 3px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: #aab3b0;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex: 0 0 auto;
+      min-height: 29px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 800;
+    }
+
+    .status svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .status.delivered {
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .status.way {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .status.cancelled {
+      color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .order-body {
+      padding: 14px 16px 15px;
+    }
+
+    .products {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin-bottom: 13px;
+    }
+
+    .product-stack {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: flex-end;
+      padding-left: 3px;
+    }
+
+    .product-thumb {
+      width: 52px;
+      height: 52px;
+      display: grid;
+      place-items: center;
+      margin-left: -8px;
+      overflow: hidden;
+      border: 2px solid #fff;
+      border-radius: 12px;
+      background: #edf1ef;
+    }
+
+    .product-thumb:last-child {
+      margin-left: 0;
+    }
+
+    .product-thumb svg {
+      width: 35px;
+      height: 35px;
+      fill: none;
+      stroke: #56645f;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .product-count {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .product-caption {
+      color: var(--muted);
+      font-size: 11.5px;
+    }
+
+    .order-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 13px;
+      border-top: 1px solid var(--line);
+    }
+
+    .total-label {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .total {
+      font-size: 16px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .total em {
+      color: var(--primary);
+      font-style: normal;
+      font-size: 12px;
+    }
+
+    .details-button {
+      min-height: 36px;
+      padding: 0 14px;
+      border: 1px solid #cfe3dc;
+      border-radius: 11px;
+      background: #fff;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .details-button:active {
+      background: var(--primary-soft);
+    }
+
+    .empty-space {
+      height: 12px;
+    }
+
+    @media (max-width: 360px) {
+      .content {
+        padding-inline: 12px;
+      }
+
+      .order-head,
+      .order-body {
+        padding-inline: 13px;
+      }
+
+      .order-date {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="app-header">
+      <div class="header-row">
+        <button class="icon-button" type="button" aria-label="رجوع">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 18l6-6-6-6"></path>
+          </svg>
+        </button>
+
+        <h1 class="header-title">سجل الطلبات</h1>
+
+        <button class="icon-button profile-button" type="button" aria-label="الملف الشخصي">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="3.5"></circle>
+            <path d="M5.5 20c.8-3.4 3-5 6.5-5s5.7 1.6 6.5 5"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <section class="content">
+      <label class="search-box">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="m16.2 16.2 4.3 4.3"></path>
+        </svg>
+        <input type="search" placeholder="ابحث برقم الطلب" aria-label="ابحث برقم الطلب">
+      </label>
+
+      <nav class="tabs" aria-label="تصفية الطلبات">
+        <button class="tab active" type="button">الكل</button>
+        <button class="tab" type="button">تم التوصيل</button>
+        <button class="tab" type="button">قيد التوصيل</button>
+        <button class="tab" type="button">ملغي</button>
+      </nav>
+
+      <div class="orders-list">
+        <article class="order-card">
+          <div class="order-head">
+            <div>
+              <h2 class="order-number">#A-10293</h2>
+              <p class="order-date">
+                <span>12 مايو 2025</span>
+                <i class="date-dot"></i>
+                <span>6 شوال 1446</span>
+              </p>
+            </div>
+            <span class="status delivered">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="m8 12 2.5 2.5L16 9"></path>
+              </svg>
+              تم التوصيل
+            </span>
+          </div>
+          <div class="order-body">
+            <div class="products">
+              <div class="product-stack" aria-hidden="true">
+                <span class="product-thumb">
+                  <svg viewBox="0 0 40 40">
+                    <path d="M9 13h22l-2 20H11L9 13Z"></path>
+                    <path d="M14 14V9a6 6 0 0 1 12 0v5"></path>
+                  </svg>
+                </span>
+                <span class="product-thumb">
+                  <svg viewBox="0 0 40 40">
+                    <path d="M8 16h24v16H8z"></path>
+                    <path d="M14 16v-4h12v4M8 22h24"></path>
+                  </svg>
+                </span>
+              </div>
+              <div>
+                <span class="product-count">منتجان</span>
+                <span class="product-caption">تم تسليم الطلب بنجاح</span>
+              </div>
+            </div>
+            <div class="order-footer">
+              <div>
+                <span class="total-label">إجمالي الطلب</span>
+                <span class="total">248.50 <em>ر.س</em></span>
+              </div>
+              <button class="details-button" type="button">عرض التفاصيل</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="order-card">
+          <div class="order-head">
+            <div>
+              <h2 class="order-number">#A-10276</h2>
+              <p class="order-date">
+                <span>10 مايو 2025</span>
+                <i class="date-dot"></i>
+                <span>4 شوال 1446</span>
+              </p>
+            </div>
+            <span class="status way">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 6h11v11H3zM14 10h4l3 4v3h-7z"></path>
+                <circle cx="7" cy="18" r="2"></circle>
+                <circle cx="18" cy="18" r="2"></circle>
+              </svg>
+              في الطريق
+            </span>
+          </div>
+          <div class="order-body">
+            <div class="products">
+              <div class="product-stack" aria-hidden="true">
+                <span class="product-thumb">
+                  <svg viewBox="0 0 40 40">
+                    <path d="M11 9h18l-2 23H13L11 9Z"></path>
+                    <path d="M15 9v5h10V9"></path>
+                  </svg>
+                </span>
+                <span class="product-thumb">
+                  <svg viewBox="0 0 40 40">
+                    <rect x="7" y="11" width="26" height="19" rx="3"></rect>
+                    <path d="M13 11V8h14v3"></path>
+                  </svg>
+                </span>
+                <span class="product-thumb">
+                  <svg viewBox="0 0 40 40">
+                    <circle cx="20" cy="20" r="12"></circle>
+                    <path d="M15 18h10M15 23h7"></path>
+                  </svg>
+                </span>
+              </div>
+              <div>
+                <span class="product-count">3 منتجات</span>
+                <span class="product-caption">يصل طلبك اليوم</span>
+              </div>
+            </div>
+            <div class="order-footer">
+              <div>
+                <span class="total-label">إجمالي الطلب</span>
+                <span class="total">415.00 <em>ر.س</em></span>
+              </div>
+              <button class="details-button" type="button">تتبع الطلب</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="order-card">
+          <div class="order-head">
+            <div>
+              <h2 class="order-number">#A-10241</h2>
+              <p class="order-date">
+                <span>5 مايو 2025</span>
+                <i class="date-dot"></i>
+                <span>28 رمضان 1446</span>
+              </p>
+            </div>
+            <span class="status delivered">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="m8 12 2.5 2.5L16 9"></path>
+              </svg>
+              تم التوصيل
+            </span>
+          </div>
+          <div class="order-body">
+            <div class="products">
+              <div class="product-stack" aria-hidden="true">
+                <span class="product-thumb">
+                  <svg viewBox="0 0 40 40">
+                    <path d="M8 14h24v18H8z"></path>
+                    <path d="M13 14v-5h14v5M8 21h24"></path>
+                  </svg>
+                </span>
+                <span class="product-thumb">
+                  <svg viewBox="0 0 40 40">
+                    <circle cx="20" cy="20" r="12"></circle>
+                    <path d="M14 20h12M20 14v12"></path>
+                  </svg>
+                </span>
+              </div>
+              <div>
+                <span class="product-count">منتجان</span>
+                <span class="product-caption">تم تسليم الطلب بنجاح</span>
+              </div>
+            </div>
+            <div class="order-footer">
+              <div>
+                <span class="total-label">إجمالي الطلب</span>
+                <span class="total">179.00 <em>ر.س</em></span>
+              </div>
+              <button class="details-button" type="button">عرض التفاصيل</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="order-card">
+          <div class="order-head">
+            <div>
+              <h2 class="order-number">#A-10188</h2>
+              <p class="order-date">
+                <span>29 أبريل 2025</span>
+                <i class="date-dot"></i>
+                <span>21 رمضان 1446</span>
+              </p>
+            </div>
+            <span class="status cancelled">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="m9 9 6 6M15 9l-6 6"></path>
+              </svg>
+              ملغي
+            </span>
+          </div>
+          <div class="order-body">
+            <div class="products">
+              <div class="product-stack" aria-hidden="true">
+                <span class="product-thumb">
+                  <svg viewBox="0 0 40 40">
+                    <path d="M10 12h20l-2 20H12L10 12Z"></path>
+                    <path d="M15 12v-4h10v4"></path>
+                  </svg>
+                </span>
+              </div>
+              <div>
+                <span class="product-count">منتج واحد</span>
+                <span class="product-caption">تم إلغاء الطلب بناءً على طلبك</span>
+              </div>
+            </div>
+            <div class="order-footer">
+              <div>
+                <span class="total-label">إجمالي الطلب</span>
+                <span class="total">89.00 <em>ر.س</em></span>
+              </div>
+              <button class="details-button" type="button">عرض التفاصيل</button>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="empty-space"></div>
+    </section>
+  </main>
+</body>
+</html>

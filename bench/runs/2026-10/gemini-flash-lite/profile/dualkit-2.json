@@ -1,0 +1,137 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "profile",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T16:48:26.597Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>الملف الشخصي</title>\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n    <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n    <style>\n        :root {\n            --bg-app: #f4f6f9;\n            --bg-card: #ffffff;\n            --text-main: #0f172a;\n            --text-muted: #64748b;\n            --primary: #0284c7;\n            --primary-hover: #0369a1;\n            --border-color: #e2e8f0;\n        }\n        * {\n            box-sizing: border-box;\n            margin: 0;\n            padding: 0;\n        }\n        body {\n            font-family: 'IBM Plex Sans Arabic', sans-serif;\n            background-color: var(--bg-app);\n            color: var(--text-main);\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            min-height: 100vh;\n            padding: 16px;\n        }\n        :lang(ar) {\n            letter-spacing: 0;\n            line-height: 1.6;\n        }\n        .phone-container {\n            width: 100%;\n            max-width: 390px;\n            background-color: var(--bg-card);\n            border-radius: 36px;\n            box-shadow: 0 20px 40px rgba(0,0,0,0.08);\n            overflow: hidden;\n            border: 8px solid #1e293b;\n            display: flex;\n            flex-direction: column;\n            min-height: 780px;\n        }\n        .app-header {\n            padding: 24px 20px 16px;\n            background: #ffffff;\n            border-bottom: 1px solid var(--border-color);\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n        .app-header h1 {\n            font-size: 18px;\n            font-weight: 600;\n        }\n        .content-section {\n            padding: 20px;\n            flex: 1;\n            display: flex;\n            flex-direction: column;\n            gap: 12px;\n        }\n        .section-title {\n            font-size: 14px;\n            font-weight: 600;\n            color: var(--text-muted);\n            margin-bottom: 4px;\n            text-transform: uppercase;\n        }\n        .card-item {\n            background: #ffffff;\n            border: 1px solid var(--border-color);\n            border-radius: 14px;\n            padding: 16px;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            box-shadow: 0 1px 3px rgba(0,0,0,0.02);\n        }\n        .item-info {\n            display: flex;\n            flex-direction: column;\n            gap: 4px;\n            overflow: hidden;\n            padding-inline-end: 12px;\n        }\n        .item-label {\n            font-size: 13px;\n            color: var(--text-muted);\n        }\n        .item-value {\n            font-size: 15px;\n            font-weight: 500;\n            color: var(--text-main);\n            word-break: break-all;\n        }\n        .edit-btn {\n            background: #f0f9ff;\n            border: none;\n            color: var(--primary);\n            font-family: inherit;\n            font-size: 14px;\n            font-weight: 600;\n            cursor: pointer;\n            padding: 8px 14px;\n            border-radius: 8px;\n            transition: background 0.2s, color 0.2s;\n            flex-shrink: 0;\n        }\n        .edit-btn:hover {\n            background: var(--primary);\n            color: #ffffff;\n        }\n        bdi[dir=\"ltr\"] {\n            unicode-bidi: isolate;\n            text-align: left;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"phone-container\">\n        <!-- Header -->\n        <header class=\"app-header\">\n            <h1>الملف الشخصي</h1>\n            <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m15 18-6-6 6-6\"/></svg>\n        </header>\n\n        <!-- Content -->\n        <div class=\"content-section\">\n            <div class=\"section-title\">بيانات الحساب</div>\n\n            <!-- Name Item -->\n            <div class=\"card-item\">\n                <div class=\"item-info\">\n                    <span class=\"item-label\">الاسم الكامل</span>\n                    <span class=\"item-value\">ليلى المنصوري</span>\n                </div>\n                <button class=\"edit-btn\" aria-label=\"تعديل الاسم\">تعديل</button>\n            </div>\n\n            <!-- Email Item -->\n            <div class=\"card-item\">\n                <div class=\"item-info\">\n                    <span class=\"item-label\">البريد الإلكتروني</span>\n                    <span class=\"item-value\"><bdi dir=\"ltr\">layla@example.com</bdi></span>\n                </div>\n                <button class=\"edit-btn\" aria-label=\"تعديل البريد الإلكتروني\">تعديل</button>\n            </div>\n\n            <div class=\"section-title\" style=\"margin-top: 12px;\">معلومات الاتصال والدفع</div>\n\n            <!-- Phone Item -->\n            <div class=\"card-item\">\n                <div class=\"item-info\">\n                    <span class=\"item-label\">رقم الهاتف المتحرك</span>\n                    <span class=\"item-value\"><bdi dir=\"ltr\">+971 50 123 4567</bdi></span>\n                </div>\n                <button class=\"edit-btn\" aria-label=\"تعديل رقم الهاتف\">تعديل</button>\n            </div>\n\n            <!-- IBAN Item -->\n            <div class=\"card-item\">\n                <div class=\"item-info\">\n                    <span class=\"item-label\">رقم الحساب المصرفي (IBAN)</span>\n                    <span class=\"item-value\"><bdi dir=\"ltr\">AE07 0331 2345 6789 0123 456</bdi></span>\n                </div>\n                <button class=\"edit-btn\" aria-label=\"تعديل رقم الحساب\">تعديل</button>\n            </div>\n        </div>\n    </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6520,
+    "output": 1803
+  },
+  "ms": 12505,
+  "finish": "STOP",
+  "reasoningTokens": 3380,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 85,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 266,
+        "y": 185.1875,
+        "width": 63,
+        "height": 19
+      },
+      "message": "\"الاسم الكامل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"item-label\">الاسم الكامل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 259,
+        "y": 279.984375,
+        "width": 70,
+        "height": 19
+      },
+      "message": "\"البريد الإلكتروني\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"item-label\">البريد الإلكتروني</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 232,
+        "y": 425.171875,
+        "width": 97,
+        "height": 19
+      },
+      "message": "\"رقم الهاتف المتحرك\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"item-label\">رقم الهاتف المتحرك</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 186,
+        "y": 519.96875,
+        "width": 143,
+        "height": 19
+      },
+      "message": "\"رقم الحساب المصرفي (IBAN)\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"item-label\">رقم الحساب المصرفي (IBAN)</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 233,
+        "y": 185.1875,
+        "width": 96,
+        "height": 48.796875
+      },
+      "message": "padding-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"item-info\">\n                    <span class=\"item-label\">الاسم الكامل</span>\n                    <span class=\"item-value\">ليلى المنصوري</span>\n     "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 181,
+        "y": 279.984375,
+        "width": 148,
+        "height": 48.796875
+      },
+      "message": "padding-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"item-info\">\n                    <span class=\"item-label\">البريد الإلكتروني</span>\n                    <span class=\"item-value\"><bdi dir=\"ltr\">layla@"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 188,
+        "y": 425.171875,
+        "width": 141,
+        "height": 48.796875
+      },
+      "message": "padding-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"item-info\">\n                    <span class=\"item-label\">رقم الهاتف المتحرك</span>\n                    <span class=\"item-value\"><bdi dir=\"ltr\">+971 "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 122,
+        "y": 519.96875,
+        "width": 207,
+        "height": 72.796875
+      },
+      "message": "padding-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"item-info\">\n                    <span class=\"item-label\">رقم الحساب المصرفي (IBAN)</span>\n                    <span class=\"item-value\"><bdi dir=\"ltr"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

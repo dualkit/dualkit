@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الملف</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 375px;
+      background-color: #fff;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .info-group {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .value {
+      display: block;
+      margin-bottom: 8px;
+    }
+    .edit-btn {
+      background-color: #007AFF;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .edit-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>الملف</h1>
+
+    <!-- Name and Email group -->
+    <div class="info-group">
+      <span class="label">الاسم</span>
+      <span class="value">Layla Al Mansouri</span>
+      <span class="label">البريد الإلكتروني</span>
+      <span class="value">layla@example.com</span>
+      <button class="edit-btn">تعديل</button>
+    </div>
+
+    <!-- Phone group -->
+    <div class="info-group">
+      <span class="label">رقم الهاتف</span>
+      <span class="value">+971 50 123 4567</span>
+      <button class="edit-btn">تعديل</button>
+    </div>
+
+    <!-- IBAN group -->
+    <div class="info-group">
+      <span class="label">رقم IBAN</span>
+      <span class="value">AE07 0331 2345 6789 0123 456</span>
+      <button class="edit-btn">تعديل</button>
+    </div>
+  </div>
+</body>
+</html>

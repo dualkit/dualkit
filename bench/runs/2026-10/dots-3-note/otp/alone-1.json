@@ -1,0 +1,67 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "otp",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T16:54:04.580Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>One-time Code</title>\n<style>\nbody {\n  font-family: Arial, sans-serif;\n  background-color: #f5f5f5;\n  margin: 0;\n  padding: 0;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: 100vh;\n}\n.container {\n  background-color: #fff;\n  padding: 20px;\n  border-radius: 10px;\n  box-shadow: 0 2px 10px rgba(0,0,0,0.1);\n  width: 90%;\n  max-width: 360px;\n  text-align: center;\n}\n.title {\n  font-size: 24px;\n  margin-bottom: 10px;\n  color: #333;\n}\n.subtitle {\n  font-size: 16px;\n  color: #666;\n  margin-bottom: 20px;\n}\n.code-inputs {\n  display: flex;\n  justify-content: space-between;\n  margin-bottom: 20px;\n}\n.code-input {\n  width: 40px;\n  height: 50px;\n  font-size: 24px;\n  text-align: center;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n}\n.countdown {\n  margin-bottom: 20px;\n  font-size: 14px;\n  color: #888;\n}\nbutton {\n  width: 100%;\n  padding: 12px;\n  background-color: #007AFF;\n  color: white;\n  border: none;\n  border-radius: 5px;\n  font-size: 16px;\n  cursor: pointer;\n}\nbutton:hover {\n  background-color: #0056b3;\n}\n</style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"title\">أدخل الرمز</div>\n    <div class=\"subtitle\">أرسلنا رمزًا مكونًا من 6 أرقام إلى +966 55 123 4567</div>\n    <div class=\"code-inputs\">\n      <input type=\"text\" class=\"code-input\" maxlength=\"1\">\n      <input type=\"text\" class=\"code-input\" maxlength=\"1\">\n      <input type=\"text\" class=\"code-input\" maxlength=\"1\">\n      <input type=\"text\" class=\"code-input\" maxlength=\"1\">\n      <input type=\"text\" class=\"code-input\" maxlength=\"1\">\n      <input type=\"text\" class=\"code-input\" maxlength=\"1\">\n    </div>\n    <div class=\"countdown\">أرسل مرة أخرى خلال 0:45</div>\n    <button>تَأكيد</button>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 151,
+    "output": 5266
+  },
+  "ms": 57350,
+  "finish": "stop",
+  "reasoningTokens": 4457,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 82,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 38.75,
+        "y": 337,
+        "width": 312.484375,
+        "height": 35
+      },
+      "message": "\"أرسلنا رمزًا مكونًا من 6 أرقام إلى +966 …\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"subtitle\">أرسلنا رمزًا مكونًا من 6 أرقام إلى +966 55 123 4567</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 139.65625,
+        "y": 298,
+        "width": 110.671875,
+        "height": 27
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"title\">أدخل الرمز</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 180,
+        "y": 516,
+        "width": 30,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button>تَأكيد</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

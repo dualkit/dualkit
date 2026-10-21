@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>البروفايل</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-text: #1a1a1a;
+      --color-muted: #666;
+      --color-primary: #0066cc;
+      --color-border: #e0e0e0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+      background-color: #f5f5f5;
+      color: var(--color-text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :lang(ar) {
+      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+    }
+
+    .container {
+      max-width: 480px;
+      margin-inline: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .field {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .field-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      flex: 1;
+      margin-inline-start: 0.5rem;
+    }
+
+    .label {
+      font-size: 0.875rem; /* 14px */
+      color: var(--color-muted);
+      margin-inline-end: 0.5rem;
+    }
+
+    .value {
+      font-size: 1rem; /* 16px */
+    }
+
+    .value-multiline {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .edit {
+      background: none;
+      border: none;
+      color: var(--color-primary);
+      font-size: 0.875rem; /* 14px */
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+
+    .edit:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Isolation for Latin runs */
+    .isolate {
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Personal info (name + email) -->
+    <div class="field">
+      <div class="field-content">
+        <span class="label">الاسم والبريد الإلكتروني</span>
+        <div class="value-multiline">
+          <span class="value">ليلا المنصوري</span>
+          <span class="value"><bdi dir="ltr" class="isolate">layla@example.com</bdi></span>
+        </div>
+      </div>
+      <button class="edit">تعديل</button>
+    </div>
+
+    <!-- Phone -->
+    <div class="field">
+      <div class="field-content">
+        <span class="label">رقم الهاتف</span>
+        <span class="value"><bdi dir="ltr" class="isolate">+971 50 123 4567</bdi></span>
+      </div>
+      <button class="edit">تعديل</button>
+    </div>
+
+    <!-- IBAN -->
+    <div class="field">
+      <div class="field-content">
+        <span class="label">الآيبان</span>
+        <span class="value"><bdi dir="ltr" class="isolate">AE07 0331 2345 6789 0123 456</bdi></span>
+      </div>
+      <button class="edit">تعديل</button>
+    </div>
+  </div>
+</body>
+</html>

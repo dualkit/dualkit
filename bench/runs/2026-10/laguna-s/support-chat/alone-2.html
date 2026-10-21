@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دعم العملاء - كويتيل</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            max-width: 480px;
+            margin: 0 auto;
+            padding-bottom: 80px;
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0078d4, #005a9e);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            margin-left: 12px;
+            cursor: pointer;
+        }
+
+        .agent-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .agent-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 12px;
+            overflow: hidden;
+        }
+
+        .agent-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .agent-name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .agent-status {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+        /* Chat container */
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            line-height: 1.5;
+            font-size: 15px;
+            position: relative;
+        }
+
+        .message.customer {
+            background-color: #dcf8c6;
+            color: #0d3a1d;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.agent {
+            background-color: #ffffff;
+            color: #333;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        }
+
+        .message-time {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-top: 4px;
+            text-align: left;
+        }
+
+        /* Input area */
+        .input-area {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .input-area input[type="text"] {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 16px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .input-area input[type="text"]:focus {
+            border-color: #0078d4;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #0078d4, #005a9e);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            transition: transform 0.1s;
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Scrollbar */
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 3px;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-btn">←</button>
+        <div class="agent-info">
+            <div class="agent-avatar">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230078d4'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2.22c-2.98 0-6.14.99-6.14 2.22v2.22h12.28v-2.22c0-1.23-3.16-2.22-6.14-2.22z'/%3E%3C/svg%3E" alt="وكيل">
+            </div>
+            <div>
+                <div class="agent-name">سارة</div>
+                <div class="agent-status">متصلة الآن</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat messages -->
+    <div class="chat-container">
+        <!-- Message 1 - Customer -->
+        <div class="message customer">
+            <div>مرحباً، أريد الاستفسار عن طلبي رقم <strong>TX-48213</strong> الخاص بترقية شبكة 5G.</div>
+            <div class="message-time">10:15 ص</div>
+        </div>
+
+        <!-- Message 2 - Agent -->
+        <div class="message agent">
+            <div>مرحباً بك! بالتأكيد، سأتطلع لمساعدتك في ما يخص طلبك رقم <strong>TX-48213</strong>.</div>
+            <div class="message-time">10:16 ص</div>
+        </div>
+
+        <!-- Message 3 - Agent -->
+        <div class="message agent">
+            <div>لقد تم استلام طلبك لترقية إلى 5G بنجاح، وهو قيد المعالجة حالياً. هل قمت بتفعيل eSIM بعد؟</div>
+            <div class="message-time">10:16 ص</div>
+        </div>
+
+        <!-- Message 4 - Customer -->
+        <div class="message customer">
+            <div>نعم، قمت بتفعيل eSIM على هاتفي، لكن لا أزال أواجه مشكلة في الاتصال بالشبكة 5G.</div>
+            <div class="message-time">10:18 ص</div>
+        </div>
+
+        <!-- Message 5 - Agent -->
+        <div class="message agent">
+            <div>شكراً لتواصلك. سأقوم بإعادة تشغيل إعدادات الشبكة عن بُعد الآن، وقد يستغرق ذلك بضع دقائق. سأخبرك عندما يكون جاهزاً.</div>
+            <div class="message-time">10:19 ص</div>
+        </div>
+
+        <!-- Message 6 - Agent -->
+        <div class="message agent">
+            <div>تم إنهاء العملية بنجاح! يرجى تشغيل الهاتف مرة أخرى واختبار اتصال 5G. إذا استمرت المشكلة، أرسل لي لقطة شاشة من إعدادات الشبكة.</div>
+            <div class="message-time">10:22 ص</div>
+        </div>
+    </div>
+
+    <!-- Input area -->
+    <div class="input-area">
+        <input type="text" placeholder="اكتب رسالتك هنا...">
+        <button class="send-btn">إرسال</button>
+    </div>
+</body>
+</html>

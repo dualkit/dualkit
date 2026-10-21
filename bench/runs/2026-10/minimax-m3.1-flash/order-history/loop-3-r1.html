@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f8fa">
+  <title>طلباتي — Saudi Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --text: #18211d;
+      --muted: #68716c;
+      --line: #e6e9e6;
+      --green: #087a55;
+      --green-soft: #e8f5ef;
+      --amber: #9a5a00;
+      --amber-soft: #fff3db;
+      --red: #a63434;
+      --red-soft: #fceaea;
+      --shadow: 0 8px 28px rgba(27, 45, 37, 0.055);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: #e8ebe9;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--bg);
+      overflow: hidden;
+      box-shadow: 0 0 50px rgba(20, 35, 29, 0.08);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 64px;
+      padding: max(12px, env(safe-area-inset-top)) 20px 12px;
+      border-bottom: 1px solid rgba(224, 228, 225, 0.9);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(14px);
+    }
+
+    .icon-button {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      cursor: pointer;
+    }
+
+    .icon-button svg {
+      width: 21px;
+      height: 21px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .back-button svg {
+      transform: scaleX(-1);
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    main {
+      padding: 20px 16px 110px;
+    }
+
+    .intro {
+      margin: 0 4px 18px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 9px;
+      margin-bottom: 18px;
+      padding-bottom: 2px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .filter-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter {
+      flex: 0 0 auto;
+      min-height: 39px;
+      padding: 7px 15px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .filter.active {
+      border-color: var(--green);
+      background: var(--green);
+      color: #fff;
+    }
+
+    .orders {
+      display: grid;
+      gap: 13px;
+    }
+
+    .order-card {
+      padding: 17px 16px 15px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .order-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .order-number {
+      margin: 0 0 3px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .order-number bdi {
+      color: var(--text);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .order-date {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .status {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 6px;
+      min-height: 30px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    .status svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .status.delivered {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .status.way {
+      background: var(--amber-soft);
+      color: var(--amber);
+    }
+
+    .status.cancelled {
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .order-body {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 14px;
+    }
+
+    .total-label {
+      margin: 0 0 2px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .total {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 750;
+      line-height: 1.45;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .details-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 38px;
+      padding: 6px 12px;
+      border: 1px solid #d5dfda;
+      border-radius: 11px;
+      background: #f8faf9;
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .details-button svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .details-button svg {
+      transform: scaleX(-1);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 20;
+      inset-inline: 0;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 8px 12px max(8px, env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      min-height: 52px;
+      padding: 5px 2px;
+      border: 0;
+      background: transparent;
+      color: #7a837e;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .nav-item svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-item.active {
+      color: var(--green);
+    }
+
+    @media (min-width: 431px) {
+      body {
+        padding: 24px 0;
+      }
+
+      .app {
+        min-height: calc(100vh - 48px);
+        border-radius: 24px;
+      }
+
+      .bottom-nav {
+        bottom: 24px;
+        border-radius: 0 0 24px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <button class="icon-button back-button" type="button" aria-label="الرجوع">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6"></path>
+        </svg>
+      </button>
+      <h1 class="page-title">طلباتي</h1>
+      <button class="icon-button" type="button" aria-label="البحث في الطلبات">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5"></circle>
+          <path d="M16 16l4 4"></path>
+        </svg>
+      </button>
+    </header>
+
+    <main>
+      <p class="intro" id="ordersIntro">4 طلبات</p>
+
+      <nav class="filter-row" aria-label="تصفية الطلبات">
+        <button class="filter active" type="button" data-filter="all">الكل</button>
+        <button class="filter" type="button" data-filter="delivered">تم التوصيل</button>
+        <button class="filter" type="button" data-filter="way">في الطريق</button>
+        <button class="filter" type="button" data-filter="cancelled">ملغاة</button>
+      </nav>
+
+      <section class="orders" id="orders" aria-label="سجل الطلبات"></section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="التنقل الرئيسي">
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"></path><path d="M5.5 10v10h13V10M9.5 20v-6h5v6"></path></svg>
+        <span>الرئيسية</span>
+      </button>
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"></path><path d="M9 9V6a3 3 0 0 1 6 0v3"></path></svg>
+        <span>المتجر</span>
+      </button>
+      <button class="nav-item" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v14H5z"></path><path d="M8 9h8M8 13h5"></path></svg>
+        <span>الطلبات</span>
+      </button>
+      <button class="nav-item active" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg>
+        <span>حسابي</span>
+      </button>
+    </nav>
+  </div>
+
+  <script>
+    const orderData = [
+      {
+        number: "#A-10293",
+        date: "2025-05-18T12:00:00+03:00",
+        total: 286.5,
+        status: "delivered"
+      },
+      {
+        number: "#A-10284",
+        date: "2025-05-16T12:00:00+03:00",
+        total: 149,
+        status: "way"
+      },
+      {
+        number: "#A-10271",
+        date: "2025-05-14T12:00:00+03:00",
+        total: 421.75,
+        status: "cancelled"
+      },
+      {
+        number: "#A-10263",
+        date: "2025-05-12T12:00:00+03:00",
+        total: 98.25,
+        status: "delivered"
+      }
+    ];
+
+    const statusContent = {
+      delivered: {
+        label: "تم التوصيل",
+        icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 2.6 2.6L16.5 9"></path></svg>'
+      },
+      way: {
+        label: "في الطريق",
+        icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z"></path><circle cx="7" cy="18" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg>'
+      },
+      cancelled: {
+        label: "ملغاة",
+        icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="m9 9 6 6m0-6-6 6"></path></svg>'
+      }
+    };
+
+    const countCopy = {
+      zero: "لا توجد طلبات",
+      one: "طلب واحد",
+      two: "طلبان",
+      few: "{count} طلبات",
+      many: "{count} طلبًا",
+      other: "{count} طلب"
+    };
+
+    const westernDigits = new Intl.NumberFormat("ar-SA-u-nu-latn");
+    const moneyFormatter = new Intl.NumberFormat("ar-SA-u-nu-latn", {
+      style: "currency",
+      currency: "SAR",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    const gregorianFormatter = new Intl.DateTimeFormat("ar-SA-u-nu-latn-ca-gregory", {
+      timeZone: "Asia/Riyadh",
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    });
+    const hijriFormatter = new Intl.DateTimeFormat("ar-SA-u-nu-latn-ca-islamic-umalqura", {
+      timeZone: "Asia/Riyadh",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+
+    function pluralize(count) {
+      const category = new Intl.PluralRules("ar").select(count);
+      return countCopy[category].replace("{count}", westernDigits.format(count));
+    }
+
+    function renderOrders(filter = "all") {
+      const container = document.getElementById("orders");
+      const visibleOrders = orderData.filter(order => filter === "all" || order.status === filter);
+
+      container.innerHTML = visibleOrders.map(order => {
+        const date = new Date(order.date);
+        const status = statusContent[order.status];
+        const amount = moneyFormatter.format(order.total).replace("SAR", "ر.س");
+
+        return `
+          <article class="order-card" data-status="${order.status}">
+            <div class="order-head">
+              <div>
+                <p class="order-number">طلب رقم <bdi dir="ltr">${order.number}</bdi></p>
+                <p class="order-date">
+                  <bdi>${gregorianFormatter.format(date)}</bdi>
+                  <span aria-hidden="true"> · </span>
+                  <bdi>${hijriFormatter.format(date)}</bdi>
+                </p>
+              </div>
+              <span class="status ${order.status}">${status.icon}<span>${status.label}</span></span>
+            </div>
+            <div class="order-body">
+              <div>
+                <p class="total-label">إجمالي الطلب</p>
+                <p class="total"><bdi>${amount}</bdi></p>
+              </div>
+              <button class="details-button" type="button" aria-label="عرض تفاصيل الطلب ${order.number}">
+                <span>التفاصيل</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"></path></svg>
+              </button>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    document.getElementById("ordersIntro").textContent = pluralize(orderData.length);
+    renderOrders();
+
+    document.querySelectorAll(".filter").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".filter").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        renderOrders(button.dataset.filter);
+      });
+    });
+  </script>
+</body>
+</html>

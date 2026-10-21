@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عنوان التوصيل</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      font-size: var(--type-body-size);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      background-color: #f0f2f5;
+      direction: rtl;
+      text-align: start;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .form-card {
+      width: 100%;
+      max-width: 440px;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .form-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #111827;
+      margin-block-end: 24px;
+      text-align: start;
+    }
+
+    .form-field {
+      margin-block-end: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: var(--type-label-size);
+      font-weight: 500;
+      color: #374151;
+      margin-block-end: 8px;
+      text-align: start;
+    }
+
+    .form-input,
+    .form-select {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px;
+      font-family: inherit;
+      font-weight: 400;
+      background-color: #f9fafb;
+      border: 1.5px solid #e5e7eb;
+      border-radius: 12px;
+      color: #111827;
+      text-align: start;
+      transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input::placeholder,
+    .form-select::placeholder {
+      color: #9ca3af;
+    }
+
+    /* Fix: Right-align Arabic hint in LTR fields */
+    #makani::placeholder,
+    #phone::placeholder {
+      direction: rtl;
+      text-align: right;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: #16a34a;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+    }
+
+    .form-select {
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .form-button {
+      width: 100%;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      font-family: inherit;
+      color: #ffffff;
+      background-color: #16a34a;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      margin-block-start: 8px;
+    }
+
+    .form-button:hover {
+      background-color: #15803d;
+    }
+
+    .form-button:active {
+      transform: scale(0.98);
+    }
+
+    #phone,
+    #makani {
+      direction: ltr;
+      text-align: start;
+    }
+  </style>
+</head>
+<body>
+  <main class="form-card">
+    <h1 class="form-title">عنوان التوصيل</h1>
+    <form onsubmit="return false">
+      <div class="form-field">
+        <label class="form-label" for="building">رقم المبنى أو الفلا</label>
+        <input class="form-input" type="text" id="building" placeholder="رقم المبنى أو الفلا" autocomplete="address-line1">
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="street">الشارع</label>
+        <input class="form-input" type="text" id="street" placeholder="اسم الشارع" autocomplete="street-address">
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="area">المنطقة</label>
+        <input class="form-input" type="text" id="area" placeholder="اسم المنطقة" autocomplete="address-level2">
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="makani">رقم مكاني</label>
+        <input class="form-input" type="text" id="makani" inputmode="numeric" dir="ltr" placeholder="رقم مكاني">
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="emirate">الإمارة</label>
+        <select class="form-select" id="emirate">
+          <option value="dubai" selected>دبي</option>
+          <option value="abudhabi">أبوظبي</option>
+          <option value="sharjah">الشارقة</option>
+          <option value="ajman">عجمان</option>
+          <option value="raskhaimah">رأس الخيمة</option>
+          <option value="fujairah">الفجيرة</option>
+          <option value="ummquwain">أم القيوين</option>
+        </select>
+      </div>
+
+      <div class="form-field">
+        <label class="form-label" for="phone">رقم الهاتف</label>
+        <input class="form-input" type="tel" id="phone" inputmode="tel" dir="ltr" placeholder="⁦050 123 4567⁩" autocomplete="tel">
+      </div>
+
+      <button class="form-button" type="submit">حفظ عنوان</button>
+    </form>
+  </main>
+</body>
+</html>

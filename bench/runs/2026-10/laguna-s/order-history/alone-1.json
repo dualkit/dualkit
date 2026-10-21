@@ -1,0 +1,263 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "order-history",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T17:16:31.136Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>سجل الطلبات - تطبيق التسوق السعودي</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f5f5f5;\n            color: #333;\n            direction: rtl;\n            text-align: right;\n            padding: 20px;\n        }\n        .header {\n            text-align: center;\n            margin-bottom: 25px;\n        }\n        .header h1 {\n            font-size: 24px;\n            color: #c0392b;\n            font-weight: bold;\n        }\n        .order-list {\n            display: flex;\n            flex-direction: column;\n            gap: 15px;\n        }\n        .order-card {\n            background: #fff;\n            border-radius: 12px;\n            padding: 18px;\n            box-shadow: 0 4px 10px rgba(0,0,0,0.08);\n            border-right: 5px solid #ccc;\n        }\n        .order-card.delivered {\n            border-right-color: #27ae60;\n        }\n        .order-card.onway {\n            border-right-color: #2980b9;\n        }\n        .order-card.cancelled {\n            border-right-color: #c0392b;\n        }\n        .order-header {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            margin-bottom: 10px;\n        }\n        .order-number {\n            font-size: 16px;\n            font-weight: bold;\n            color: #2c3e50;\n        }\n        .status-badge {\n            padding: 5px 12px;\n            border-radius: 20px;\n            font-size: 13px;\n            font-weight: bold;\n            color: #fff;\n        }\n        .status-badge.delivered {\n            background-color: #27ae60;\n        }\n        .status-badge.onway {\n            background-color: #2980b9;\n        }\n        .status-badge.cancelled {\n            background-color: #c0392b;\n        }\n        .order-details {\n            font-size: 14px;\n            color: #555;\n            line-height: 1.8;\n        }\n        .order-details span {\n            display: inline-block;\n            min-width: 110px;\n        }\n        .order-total {\n            margin-top: 10px;\n            font-size: 16px;\n            font-weight: bold;\n            color: #c0392b;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"header\">\n        <h1>سجل الطلبات</h1>\n    </div>\n    <div class=\"order-list\">\n        <!-- طلب تم التوصيل -->\n        <div class=\"order-card delivered\">\n            <div class=\"order-header\">\n                <div class=\"order-number\">رقم الطلب: #A-10293</div>\n                <div class=\"status-badge delivered\">تم التوصيل</div>\n            </div>\n            <div class=\"order-details\">\n                <div><span>التاريخ (ميلادي):</span> 15 مارس 2024</div>\n                <div><span>التاريخ (هجري):</span> 2 شعبان 1445</div>\n            </div>\n            <div class=\"order-total\">المجموع: ٢٩٩.٩٩ ر.س</div>\n        </div>\n\n        <!-- طلب في الطريق -->\n        <div class=\"order-card onway\">\n            <div class=\"order-header\">\n                <div class=\"order-number\">رقم الطلب: #A-10294</div>\n                <div class=\"status-badge onway\">في الطريق</div>\n            </div>\n            <div class=\"order-details\">\n                <div><span>التاريخ (ميلادي):</span> 18 مارس 2024</div>\n                <div><span>التاريخ (هجري):</span> 5 شعبان 1445</div>\n            </div>\n            <div class=\"order-total\">المجموع: ١٤٩.٥٠ ر.س</div>\n        </div>\n\n        <!-- طلب آخر في الطريق -->\n        <div class=\"order-card onway\">\n            <div class=\"order-header\">\n                <div class=\"order-number\">رقم الطلب: #A-10295</div>\n                <div class=\"status-badge onway\">في الطريق</div>\n            </div>\n            <div class=\"order-details\">\n                <div><span>التاريخ (ميلادي):</span> 20 مارس 2024</div>\n                <div><span>التاريخ (هجري):</span> 7 شعبان 1445</div>\n            </div>\n            <div class=\"order-total\">المجموع: ٤٩٩.٠٠ ر.س</div>\n        </div>\n\n        <!-- طلب ملغى -->\n        <div class=\"order-card cancelled\">\n            <div class=\"order-header\">\n                <div class=\"order-number\">رقم الطلب: #A-10292</div>\n                <div class=\"status-badge cancelled\">ملغى</div>\n            </div>\n            <div class=\"order-details\">\n                <div><span>التاريخ (ميلادي):</span> 10 مارس 2024</div>\n                <div><span>التاريخ (هجري):</span> 25 رجب 1445</div>\n            </div>\n            <div class=\"order-total\">المجموع: ١٩٩.٩٩ ر.س</div>\n        </div>\n    </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 138,
+    "output": 1635
+  },
+  "ms": 29316,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 25,
+  "score": 39,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 192.5,
+        "y": 95,
+        "width": 154.5,
+        "height": 17
+      },
+      "message": "\"#A-10293\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #A-10293</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 192.5,
+        "y": 260.375,
+        "width": 154.5,
+        "height": 17
+      },
+      "message": "\"#A-10294\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #A-10294</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 192.5,
+        "y": 425.75,
+        "width": 154.5,
+        "height": 17
+      },
+      "message": "\"#A-10295\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #A-10295</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 192.5,
+        "y": 591.125,
+        "width": 154.5,
+        "height": 17
+      },
+      "message": "\"#A-10292\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #A-10292</div>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 195.875,
+        "y": 187.375,
+        "width": 151.125,
+        "height": 17
+      },
+      "message": "\"المجموع: ٢٩٩.٩٩ ر.س\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<div class=\"order-total\">المجموع: ٢٩٩.٩٩ ر.س</div>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 195.875,
+        "y": 352.75,
+        "width": 151.125,
+        "height": 17
+      },
+      "message": "\"المجموع: ١٤٩.٥٠ ر.س\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<div class=\"order-total\">المجموع: ١٤٩.٥٠ ر.س</div>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 195.875,
+        "y": 518.125,
+        "width": 151.125,
+        "height": 17
+      },
+      "message": "\"المجموع: ٤٩٩.٠٠ ر.س\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<div class=\"order-total\">المجموع: ٤٩٩.٠٠ ر.س</div>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 195.875,
+        "y": 683.5,
+        "width": 151.125,
+        "height": 17
+      },
+      "message": "\"المجموع: ١٩٩.٩٩ ر.س\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<div class=\"order-total\">المجموع: ١٩٩.٩٩ ر.س</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 125.15625,
+        "y": 20,
+        "width": 139.671875,
+        "height": 27
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>سجل الطلبات</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 96,
+        "width": 60.625,
+        "height": 15
+      },
+      "message": "\"تم التوصيل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"status-badge delivered\">تم التوصيل</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 261.375,
+        "width": 61.625,
+        "height": 15
+      },
+      "message": "\"في الطريق\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"status-badge onway\">في الطريق</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 426.75,
+        "width": 61.625,
+        "height": 15
+      },
+      "message": "\"في الطريق\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"status-badge onway\">في الطريق</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 592.125,
+        "width": 28,
+        "height": 15
+      },
+      "message": "\"ملغى\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"status-badge cancelled\">ملغى</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 73,
+        "width": 350,
+        "height": 150.375
+      },
+      "message": "border-right-width: 5px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"order-card delivered\">\n            <div class=\"order-header\">\n                <div class=\"order-number\">رقم الطلب: #A-10293</div>\n                <d"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 238.375,
+        "width": 350,
+        "height": 150.375
+      },
+      "message": "border-right-width: 5px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"order-card onway\">\n            <div class=\"order-header\">\n                <div class=\"order-number\">رقم الطلب: #A-10294</div>\n                <div c"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 403.75,
+        "width": 350,
+        "height": 150.375
+      },
+      "message": "border-right-width: 5px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"order-card onway\">\n            <div class=\"order-header\">\n                <div class=\"order-number\">رقم الطلب: #A-10295</div>\n                <div c"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 569.125,
+        "width": 350,
+        "height": 150.375
+      },
+      "message": "border-right-width: 5px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"order-card cancelled\">\n            <div class=\"order-header\">\n                <div class=\"order-number\">رقم الطلب: #A-10292</div>\n                <d"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإعدادات</title>
+<style>
+  body { font-family: 'Arial', sans-serif; background: #f5f5f5; margin:0; padding:0; direction: rtl; }
+  .container { max-width: 375px; margin: 0 auto; background: #fff; min-height: 100vh; }
+  .group { margin-bottom: 20px; }
+  .group-title { font-size: 16px; color: #999; padding: 10px 15px; border-bottom: 1px solid #eee; }
+  .row { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid #eee; }
+  .row-label { font-size: 16px; }
+  .row-value { display: flex; align-items: center; }
+  .chevron { margin-left: 8px; color: #ccc; }
+  .toggle { position: relative; display: inline-block; width: 40px; height: 20px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; border-radius: 20px; transition: .4s; }
+  .slider:before { content: ""; position: absolute; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; border-radius: 50%; transition: .4s; }
+  input:checked + .slider { background-color: #007AFF; }
+  input:checked + .slider:before { transform: translateX(20px); }
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Account Group -->
+  <div class="group">
+    <div class="group-title">الحساب</div>
+    <div class="row">
+      <div class="row-label">الاسم</div>
+      <div class="row-value"><span>أحمد</span><span class="chevron">›</span></div>
+    </div>
+    <div class="row">
+      <div class="row-label">رقم الهاتف</div>
+      <div class="row-value"><span>+973 3600 1234</span><span class="chevron">›</span></div>
+    </div>
+    <div class="row">
+      <div class="row-label">اللغة</div>
+      <div class="row-value"><span>العربية</span><span class="chevron">›</span></div>
+    </div>
+  </div>
+
+  <!-- Security Group -->
+  <div class="group">
+    <div class="group-title">الأمان</div>
+    <div class="row">
+      <div class="row-label">Face ID</div>
+      <label class="toggle">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="row">
+      <div class="row-label">تسجيل الدخول بخطوتين</div>
+      <label class="toggle">
+        <input type="checkbox">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Notifications Group -->
+  <div class="group">
+    <div class="group-title">الإشعارات</div>
+    <div class="row">
+      <div class="row-label">الحوالت</div>
+      <label class="toggle">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="row">
+      <div class="row-label">Offers</div>
+      <label class="toggle">
+        <input type="checkbox">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="row">
+      <div class="row-label">الكشوف</div>
+      <label class="toggle">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+</div>
+</body>
+</html>

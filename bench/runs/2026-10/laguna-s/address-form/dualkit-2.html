@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نموذج عنوان التسليم</title>
+  <style>
+    :root {
+      --type-body-size: 16px;
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --color-text: #1a1a1a;
+      --color-muted: #6b7280;
+      --color-border: #d1d5db;
+      --color-primary: #059669;
+      --color-primary-hover: #047857;
+      --radius: 8px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', sans-serif;
+      font-size: var(--type-body-size);
+      color: var(--color-text);
+      background-color: #f9fafb;
+      line-height: 1.6;
+      padding: 16px;
+    }
+
+    .form-container {
+      max-width: 480px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+
+    .form-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: var(--color-text);
+    }
+
+    .field-group {
+      margin-bottom: 20px);
+    }
+
+    .field-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: var(--type-label-size);
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--color-text);
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: var(--type-body-size);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      background-color: #ffffff;
+      color: var(--color-text);
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);
+    }
+
+    .hint {
+      font-size: var(--type-caption-size);
+      color: var(--color-muted);
+      margin-top: 6px;
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 14px;
+      font-size: var(--type-label-size);
+      font-weight: 600;
+      color: #ffffff;
+      background-color: var(--color-primary);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      margin-top: 12px;
+    }
+
+    .submit-button:hover {
+      background-color: var(--color-primary_hover);
+    }
+
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1 class="form-title">عنوان التسليم</h1>
+    <form id="addressForm">
+      <div class="field-group">
+        <label for="building-villa">المبنى أو الفيلا</label>
+        <input type="text" id="building-villa" name="building_villa" placeholder="مثال: المبنى ١٢ أو الفيلا ٥">
+      </div>
+
+      <div class="field-group">
+        <label for="street">الشارع</label>
+        <input type="text" id="street" name="street" placeholder="مثال: شارع التوحيد">
+      </div>
+
+      <div class="field-group">
+        <label for="area">المنطقة</label>
+        <input type="text" id="area" name="area" placeholder="مثال: دبي الهامرة">
+      </div>
+
+      <div class="field-group">
+        <label for="makani">رقم المكاني</label>
+        <input type="text" id="makani" name="makani" inputmode="numeric" placeholder="مثال: ٣٣٣٣٣٣٣٣٣٣٣٣٣٣٣٣">
+      </div>
+
+      <div class="field-group">
+        <label for="emirate">الإمارة</label>
+        <select id="emirate" name="emirate">
+          <option value="dubai">دبي</option>
+          <option value="abu-dhabi">أبوظبي</option>
+          <option value="sharjah">الشارقة</option>
+          <option value="ajman">عجمان</option>
+          <option value="umm-al-quwain">أم القيوين</option>
+          <option value="ras-al-khaimah">رأس الخيمة</option>
+          <option value="fujairah">الفجيرة</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label for="phone">رقم الهاتف</label>
+        <div class="input-wrapper">
+          <input type="tel" id="phone" name="phone" inputmode="tel" dir="ltr" placeholder="050 123 4567">
+        </div>
+        <p class="hint">مثال: <bdi dir="ltr">050 123 4567</bdi></p>
+      </div>
+
+      <button type="submit" class="submit-button">حفظ العنوان</button>
+    </form>
+  </div>
+</body>
+</html>

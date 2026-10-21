@@ -1,0 +1,319 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "booking",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-10-21T16:54:15.354Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>حجز موعد - عيادة الدوحة التخصصية</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <style>\n        :lang(ar) {\n            font-family: 'IBM Plex Sans Arabic', sans-serif;\n            letter-spacing: 0;\n            text-transform: none;\n            line-height: 1.7;\n        }\n        body {\n            background-color: #0f172a;\n            font-family: 'IBM Plex Sans Arabic', sans-serif;\n        }\n        /* Custom scrollbar for time slots if needed */\n        .no-scrollbar::-webkit-scrollbar {\n            display: none;\n        }\n        .no-scrollbar {\n            -ms-overflow-style: none;\n            scrollbar-width: none;\n        }\n    </style>\n</head>\n<body class=\"flex items-center justify-center min-h-screen p-0 sm:p-4\">\n\n    <!-- Phone Screen Container -->\n    <div class=\"w-full max-w-sm bg-slate-50 sm:rounded-[40px] shadow-2xl flex flex-col h-screen sm:h-[844px] overflow-hidden border border-slate-800 relative\">\n        \n        <!-- Status Bar Sim -->\n        <div class=\"bg-white px-6 pt-3 pb-2 flex justify-between items-center text-xs text-slate-500 font-medium select-none\">\n            <span><bdi dir=\"ltr\">09:41</bdi></span>\n            <div class=\"flex items-center gap-1.5\">\n                <span>٥G</span>\n                <div class=\"w-5 h-2.5 border border-slate-400 rounded-sm p-0.5 flex items-center\">\n                    <div class=\"h-full w-full bg-slate-700 rounded-2xs\"></div>\n                </div>\n            </div>\n        </div>\n\n        <!-- Top Navigation Bar -->\n        <header class=\"bg-white px-5 py-3 flex items-center justify-between border-b border-slate-100\">\n            <button class=\"w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition-colors\" aria-label=\"رجوع\">\n                <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"></path>\n                </svg>\n            </button>\n            <h1 class=\"text-base font-bold text-slate-900\">حجز موعد جديد</h1>\n            <div class=\"w-10\"></div> <!-- Spacer for balance -->\n        </header>\n\n        <!-- Scrollable Content Area -->\n        <main class=\"flex-1 overflow-y-auto px-5 py-4 space-y-5\">\n            \n            <!-- Doctor Profile Card -->\n            <div class=\"bg-white p-4 rounded-2xl shadow-xs border border-slate-100 flex items-center gap-4\">\n                <div class=\"relative\">\n                    <div class=\"w-16 h-16 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-700 font-bold text-xl border border-teal-100\">\n                        د.أ\n                    </div>\n                    <div class=\"absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full\"></div>\n                </div>\n                <div>\n                    <div class=\"inline-block px-2.5 py-0.5 bg-teal-50 text-teal-700 rounded-full text-xs font-medium mb-1\">\n                        استشاري أمراض القلب\n                    </div>\n                    <h2 class=\"text-base font-bold text-slate-900\">د. أحمد الشمري</h2>\n                    <p class=\"text-xs text-slate-500\">عيادة أمراض القلب والشرايين - الدور الثاني</p>\n                </div>\n            </div>\n\n            <!-- Calendar Section -->\n            <section class=\"bg-white p-4 rounded-2xl shadow-xs border border-slate-100\">\n                \n                <!-- Month Navigation Header -->\n                <div class=\"flex items-center justify-between mb-4\">\n                    <button class=\"p-2 rounded-lg hover:bg-slate-100 text-slate-600 transition-colors\" aria-label=\"الشهر السابق\">\n                        <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"></path>\n                        </svg>\n                    </button>\n                    <div class=\"text-sm font-bold text-slate-900\">مارس <bdi dir=\"ltr\">2025</bdi></div>\n                    <button class=\"p-2 rounded-lg hover:bg-slate-100 text-slate-600 transition-colors\" aria-label=\"الشهر التالي\">\n                        <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 19l-7-7 7-7\"></path>\n                        </svg>\n                    </button>\n                </div>\n\n                <!-- Days of Week (Starting on Saturday per GCC convention) -->\n                <div class=\"grid grid-cols-7 gap-1 text-center mb-2\">\n                    <div class=\"text-xs font-semibold text-slate-400 py-1\">سبت</div>\n                    <div class=\"text-xs font-semibold text-slate-400 py-1\">أحد</div>\n                    <div class=\"text-xs font-semibold text-slate-400 py-1\">اثنين</div>\n                    <div class=\"text-xs font-semibold text-slate-400 py-1\">ثلاثاء</div>\n                    <div class=\"text-xs font-semibold text-slate-400 py-1\">أربعاء</div>\n                    <div class=\"text-xs font-semibold text-slate-400 py-1\">خميس</div>\n                    <div class=\"text-xs font-semibold text-slate-400 py-1 text-rose-400\">جمعة</div>\n                </div>\n\n                <!-- Calendar Grid (March 2025 starting on Saturday) -->\n                <div class=\"grid grid-cols-7 gap-1 text-center text-xs\">\n                    <!-- Padding for previous month if any (Mar 1 is Saturday, so 0 offset needed) -->\n                    \n                    <!-- Week 1 -->\n                    <button class=\"py-2.5 rounded-xl text-slate-300 cursor-not-allowed\" disabled>٢٨</button>\n                    <button class=\"py-2.5 rounded-xl text-slate-300 cursor-not-allowed\" disabled>١</button>\n                    <button class=\"py-2.5 rounded-xl text-slate-300 cursor-not-allowed\" disabled>٢</button>\n                    <button class=\"py-2.5 rounded-xl text-slate-300 cursor-not-allowed\" disabled>٣</button>\n                    <button class=\"py-2.5 rounded-xl text-slate-300 cursor-not-allowed\" disabled>٤</button>\n                    <button class=\"py-2.5 rounded-xl text-slate-300 cursor-not-allowed\" disabled>٥</button>\n                    <button class=\"py-2.5 rounded-xl text-slate-300 cursor-not-allowed\" disabled>٦</button>\n\n                    <!-- Actual Month Days (March 1 Sat to 31 Mon) -->\n                    <!-- Row 1: Mar 1 (Sat) to Mar 7 (Fri) -->\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">١</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٢</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٣</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٤</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٥</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٦</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-400 hover:bg-slate-100 transition-colors\">٧</button>\n\n                    <!-- Row 2 -->\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٨</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٩</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">١٠</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">١١</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">١٢</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">١٣</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-400 hover:bg-slate-100 transition-colors\">١٤</button>\n\n                    <!-- Row 3 (Today marked & Selected) -->\n                    <!-- 15 is today -->\n                    <div class=\"relative flex items-center justify-center\">\n                        <button class=\"w-full py-2.5 rounded-xl font-bold bg-teal-600 text-white shadow-md shadow-teal-600/30 transition-all\">١٥</button>\n                        <span class=\"absolute bottom-1 w-1 h-1 bg-white rounded-full\"></span>\n                    </div>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">١٦</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">١٧</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">١٨</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">١٩</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٢٠</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-400 hover:bg-slate-100 transition-colors\">٢١</button>\n\n                    <!-- Row 4 -->\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٢٢</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٢٣</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٢٤</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٢٥</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٢٦</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٢٧</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-400 hover:bg-slate-100 transition-colors\">٢٨</button>\n\n                    <!-- Row 5 -->\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٢٩</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٣٠</button>\n                    <button class=\"py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors\">٣١</button>\n                </div>\n            </section>\n\n            <!-- Time Slots Section (9:00 to 12:00 every 30 mins) -->\n            <section class=\"bg-white p-4 rounded-2xl shadow-xs border border-slate-100\">\n                <div class=\"flex items-center justify-between mb-3\">\n                    <h3 class=\"text-sm font-bold text-slate-900\">الأوقات المتاحة للصباح</h3>\n                    <span class=\"text-xs text-teal-700 font-medium bg-teal-50 px-2 py-0.5 rounded-md\">الفترة الصباحية</span>\n                </div>\n                \n                <div class=\"grid grid-cols-3 gap-2.5\">\n                    <!-- Slot 1 -->\n                    <button class=\"py-2.5 px-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:border-teal-600 hover:text-teal-700 transition-all text-center\">\n                        <bdi dir=\"ltr\">09:00 ص</bdi>\n                    </button>\n                    <!-- Slot 2 -->\n                    <button class=\"py-2.5 px-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:border-teal-600 hover:text-teal-700 transition-all text-center\">\n                        <bdi dir=\"ltr\">09:30 ص</bdi>\n                    </button>\n                    <!-- Slot 3 (Selected) -->\n                    <button class=\"py-2.5 px-3 rounded-xl border-2 border-teal-600 bg-teal-50 text-xs font-bold text-teal-800 transition-all text-center shadow-xs\">\n                        <bdi dir=\"ltr\">10:00 ص</bdi>\n                    </button>\n                    <!-- Slot 4 -->\n                    <button class=\"py-2.5 px-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:border-teal-600 hover:text-teal-700 transition-all text-center\">\n                        <bdi dir=\"ltr\">10:30 ص</bdi>\n                    </button>\n                    <!-- Slot 5 -->\n                    <button class=\"py-2.5 px-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:border-teal-600 hover:text-teal-700 transition-all text-center\">\n                        <bdi dir=\"ltr\">11:00 ص</bdi>\n                    </button>\n                    <!-- Slot 6 -->\n                    <button class=\"py-2.5 px-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:border-teal-600 hover:text-teal-700 transition-all text-center\">\n                        <bdi dir=\"ltr\">11:30 ص</bdi>\n                    </button>\n                    <!-- Slot 7 -->\n                    <button class=\"py-2.5 px-3 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:border-teal-600 hover:text-teal-700 transition-all text-center col-span-3\">\n                        <bdi dir=\"ltr\">12:00 م</bdi>\n                    </button>\n                </div>\n            </section>\n\n        </main>\n\n        <!-- Footer / Action Area -->\n        <footer class=\"bg-white px-5 py-4 border-t border-slate-100 flex flex-col gap-3\">\n            <div class=\"flex items-center justify-between text-xs text-slate-500 px-1\">\n                <span>الموعد المختار:</span>\n                <span class=\"font-semibold text-slate-800\"><bdi dir=\"ltr\">١٥ مارس ٢٠٢٥، 10:00 ص</bdi></span>\n            </div>\n            <button class=\"w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-3.5 px-4 rounded-2xl shadow-lg shadow-teal-700/25 transition-all text-sm\">\n                تأكيد الحجز\n            </button>\n        </footer>\n\n        <!-- Home Indicator Sim -->\n        <div class=\"bg-white pb-2 pt-1 flex justify-center\">\n            <div class=\"w-32 h-1 bg-slate-300 rounded-full\"></div>\n        </div>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6498,
+    "output": 4534
+  },
+  "ms": 20198,
+  "finish": "STOP",
+  "reasoningTokens": 2361,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 83,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 28,
+        "y": 731.609375,
+        "width": 122,
+        "height": 18
+      },
+      "message": "\"١٥ مارس ٢٠٢٥، 10:00 ص\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">١٥ مارس ٢٠٢٥، 10:00 ص</bdi>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 154,
+        "y": 144.390625,
+        "width": 105,
+        "height": 18
+      },
+      "message": "\"استشاري أمراض القلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"inline-block px-2.5 py-0.5 bg-teal-50 text-teal-700 rounded-full text-xs font-medium mb-1\">\n                        استشاري أمراض القلب\n            "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 82,
+        "y": 190.390625,
+        "width": 187,
+        "height": 18
+      },
+      "message": "\"عيادة أمراض القلب والشرايين - الدور الثا…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-slate-500\">عيادة أمراض القلب والشرايين - الدور الثاني</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 316.71875,
+        "y": 316.390625,
+        "width": 24,
+        "height": 18
+      },
+      "message": "\"سبت\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"text-xs font-semibold text-slate-400 py-1\">سبت</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 275.140625,
+        "y": 316.390625,
+        "width": 18,
+        "height": 18
+      },
+      "message": "\"أحد\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"text-xs font-semibold text-slate-400 py-1\">أحد</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 228.578125,
+        "y": 316.390625,
+        "width": 22,
+        "height": 18
+      },
+      "message": "\"اثنين\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"text-xs font-semibold text-slate-400 py-1\">اثنين</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 184.5,
+        "y": 316.390625,
+        "width": 21,
+        "height": 18
+      },
+      "message": "\"ثلاثاء\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"text-xs font-semibold text-slate-400 py-1\">ثلاثاء</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 138.9375,
+        "y": 316.390625,
+        "width": 23,
+        "height": 18
+      },
+      "message": "\"أربعاء\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"text-xs font-semibold text-slate-400 py-1\">أربعاء</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 88.859375,
+        "y": 316.390625,
+        "width": 34,
+        "height": 18
+      },
+      "message": "\"خميس\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"text-xs font-semibold text-slate-400 py-1\">خميس</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 47.78125,
+        "y": 316.390625,
+        "width": 27,
+        "height": 18
+      },
+      "message": "\"جمعة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"text-xs font-semibold text-slate-400 py-1 text-rose-400\">جمعة</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 49,
+        "y": 662.734375,
+        "width": 69,
+        "height": 18
+      },
+      "message": "\"الفترة الصباحية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-teal-700 font-medium bg-teal-50 px-2 py-0.5 rounded-md\">الفترة الصباحية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 276,
+        "y": 706.734375,
+        "width": 50,
+        "height": 18
+      },
+      "message": "\"09:00 ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<bdi dir=\"ltr\">09:00 ص</bdi>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 170,
+        "y": 706.734375,
+        "width": 50,
+        "height": 18
+      },
+      "message": "\"09:30 ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<bdi dir=\"ltr\">09:30 ص</bdi>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 63.5,
+        "y": 706.734375,
+        "width": 51,
+        "height": 18
+      },
+      "message": "\"10:00 ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<bdi dir=\"ltr\">10:00 ص</bdi>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 276,
+        "y": 760.125,
+        "width": 50,
+        "height": 18
+      },
+      "message": "\"10:30 ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<bdi dir=\"ltr\">10:30 ص</bdi>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 170,
+        "y": 760.125,
+        "width": 50,
+        "height": 18
+      },
+      "message": "\"11:00 ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<bdi dir=\"ltr\">11:00 ص</bdi>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 64,
+        "y": 760.125,
+        "width": 50,
+        "height": 18
+      },
+      "message": "\"11:30 ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<bdi dir=\"ltr\">11:30 ص</bdi>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 174,
+        "y": 812.515625,
+        "width": 42,
+        "height": 18
+      },
+      "message": "\"12:00 م\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<bdi dir=\"ltr\">12:00 م</bdi>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 296,
+        "y": 731.609375,
+        "width": 66,
+        "height": 18
+      },
+      "message": "\"الموعد المختار:\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>الموعد المختار:</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 28,
+        "y": 731.609375,
+        "width": 122,
+        "height": 18
+      },
+      "message": "\"١٥ مارس ٢٠٢٥، 10:00 ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<bdi dir=\"ltr\">١٥ مارس ٢٠٢٥، 10:00 ص</bdi>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 337,
+        "y": 193.390625,
+        "width": 16,
+        "height": 16
+      },
+      "message": "right: -4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full\"></div>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

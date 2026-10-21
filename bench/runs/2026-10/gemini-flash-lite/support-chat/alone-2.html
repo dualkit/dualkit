@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق الاتصالات - الدعم الفني</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Cairo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        /* Custom scrollbar for chat */
+        .chat-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 flex items-center justify-center min-h-screen p-0 sm:p-4">
+
+    <!-- Phone Frame -->
+    <div class="w-full sm:w-[390px] h-screen sm:h-[844px] bg-slate-50 sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border-0 sm:border-8 sm:border-slate-800">
+
+        <!-- Phone Notch / Status Bar (Simulated) -->
+        <div class="bg-indigo-700 text-white px-6 pt-3 pb-4 flex flex-col shadow-md z-10">
+            <!-- Top Status Bar Info -->
+            <div class="flex justify-between items-center text-xs text-indigo-200 mb-2">
+                <span>9:41</span>
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <i class="fa-solid fa-signal text-[10px]"></i>
+                    <span class="font-semibold text-[10px]">5G</span>
+                    <i class="fa-solid fa-battery-full text-sm"></i>
+                </div>
+            </div>
+
+            <!-- App Header / Agent Profile -->
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3 space-x-reverse">
+                    <button class="text-white focus:outline-none">
+                        <i class="fa-solid fa-arrow-right text-lg"></i>
+                    </button>
+                    <div class="relative">
+                        <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold border-2 border-indigo-400">
+                            س
+                        </div>
+                        <span class="absolute bottom-0 left-0 w-3 h-3 bg-emerald-400 border-2 border-indigo-700 rounded-full"></span>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-sm leading-tight">سارة (Sara)</h1>
+                        <p class="text-[11px] text-indigo-200">خدمة العملاء - الدعم الفني</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3 space-x-reverse text-indigo-200">
+                    <button class="hover:text-white"><i class="fa-solid fa-phone text-sm"></i></button>
+                    <button class="hover:text-white"><i class="fa-solid fa-ellipsis-vertical text-sm"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Messages Area -->
+        <div class="chat-container flex-1 p-4 overflow-y-auto space-y-4 bg-gradient-to-b from-slate-100 to-indigo-50/3k">
+
+            <!-- Date Indicator -->
+            <div class="flex justify-center">
+                <span class="bg-slate-200 text-slate-600 text-[10px] px-3 py-1 rounded-full font-medium">اليوم</span>
+            </div>
+
+            <!-- Message 1 (Customer) -->
+            <div class="flex flex-col items-end">
+                <div class="bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 max-w-[80%] shadow-sm text-sm">
+                    <p>مرحباً، أريد تفعيل شريحة eSIM جديدة على جهازي.</p>
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 mr-1">10:30 ص</span>
+            </div>
+
+            <!-- Message 2 (Agent - Sara) -->
+            <div class="flex flex-col items-start">
+                <div class="bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 max-w-[80%] shadow-sm text-sm border border-slate-100">
+                    <p>أهلاً بك! أنا سارة من خدمة العملاء. يسعدني مساعدتك في تفعيل الـ eSIM بكل سهولة.</p>
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 ml-1">10:31 ص</span>
+            </div>
+
+            <!-- Message 3 (Customer) -->
+            <div class="flex flex-col items-end">
+                <div class="bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 max-w-[80%] shadow-sm text-sm">
+                    <p>ممتاز. لقد طلبتها عبر الـ App ورقم الطلب هو TX-48213.</p>
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 mr-1">10:32 ص</span>
+            </div>
+
+            <!-- Message 4 (Agent - Sara) -->
+            <div class="flex flex-col items-start">
+                <div class="bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 max-w-[80%] shadow-sm text-sm border border-slate-100">
+                    <p>شكراً لتزويدي برقم الطلب TX-48213. هل السرعة لديك على شبكة الـ 5G مستقرة حالياً؟</p>
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 ml-1">10:33 ص</span>
+            </div>
+
+            <!-- Message 5 (Customer) -->
+            <div class="flex flex-col items-end">
+                <div class="bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 max-w-[80%] shadow-sm text-sm">
+                    <p>نعم، التغطية ممتازة وأريد فقط إتمام خطوات التثبيت.</p>
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 mr-1">10:34 ص</span>
+            </div>
+
+            <!-- Message 6 (Agent - Sara) -->
+            <div class="flex flex-col items-start">
+                <div class="bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 max-w-[80%] shadow-sm text-sm border border-slate-100">
+                    <p>عظيم! لقد أرسلت لك QR Code على البريد الإلكتروني لإتمام التفعيل. هل تحتاج أي مساعدة إضافية مع الـ Router أو الخطط؟</p>
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 ml-1">10:35 ص</span>
+            </div>
+
+        </div>
+
+        <!-- Chat Input Footer -->
+        <div class="bg-white border-t border-slate-200 p-3 flex items-center space-x-2 space-x-reverse">
+            <button class="text-slate-400 hover:text-indigo-600 p-2 focus:outline-none transition-colors">
+                <i class="fa-solid fa-paperclip text-lg"></i>
+            </button>
+            
+            <div class="flex-1 relative flex items-center">
+                <input type="text" placeholder="اكتب رسالتك هنا..." class="w-full bg-slate-100 text-slate-800 placeholder-slate-400 text-sm rounded-full py-2.5 pr-4 pl-10 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all">
+                <button class="absolute left-3 text-slate-400 hover:text-indigo-600 focus:outline-none">
+                    <i class="fa-regular fa-face-smile text-lg"></i>
+                </button>
+            </div>
+
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-md focus:outline-none transition-transform active:scale-95">
+                <i class="fa-solid fa-paper-plane text-sm transform -rotate-45 mr-0.5"></i>
+            </button>
+        </div>
+
+        <!-- Home Indicator (iOS style) -->
+        <div class="bg-white pb-2 pt-1 flex justify-center">
+            <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+        </div>
+
+    </div>
+
+</body>
+</html>

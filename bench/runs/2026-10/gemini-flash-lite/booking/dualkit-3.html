@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حجز موعد - عيادة الدوحة التخصصية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :lang(ar) {
+      font-family: 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif;
+      letter-spacing: 0;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #1f2937;
+    }
+
+    .mobile-container {
+      width: 100%;
+      max-width: 412px;
+      background-color: #ffffff;
+      min-height: 100vh;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Header */
+    header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #f3f4f6;
+      background: #ffffff;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: #4b5563;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-inline-start: 16px;
+      color: #111827;
+    }
+
+    /* Main Content Area */
+    .content {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding-bottom: 90px;
+    }
+
+    /* Doctor Profile Card */
+    .doctor-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #f8fafc;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .doctor-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #475569;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .doctor-info h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .doctor-info p {
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    /* Calendar Section */
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 12px;
+    }
+
+    .calendar-container {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .month-year {
+      font-weight: 600;
+      font-size: 16px;
+      color: #0f172a;
+    }
+
+    .cal-nav-btn {
+      background: #f1f5f9;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #334155;
+      transition: background 0.2s;
+    }
+
+    .cal-nav-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      text-align: center;
+    }
+
+    .weekday {
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      padding-bottom: 8px;
+    }
+
+    .day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      border-radius: 50%;
+      cursor: pointer;
+      color: #334155;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    .day:hover:not(.disabled) {
+      background-color: #f1f5f9;
+    }
+
+    .day.disabled {
+      color: #cbd5e1;
+      cursor: not-allowed;
+    }
+
+    .day.today {
+      border: 2px solid #0d9488;
+      font-weight: 700;
+    }
+
+    .day.selected {
+      background-color: #0d9488;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    /* Time Slots Section */
+    .time-slots-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .slots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .time-slot {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      color: #334155;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .time-slot:hover {
+      border-color: #0d9488;
+      color: #0d9488;
+    }
+
+    .time-slot.selected {
+      background-color: #f0fdfa;
+      border-color: #0d9488;
+      color: #0d9488;
+      font-weight: 600;
+    }
+
+    /* Footer Action */
+    .footer-action {
+      position: absolute;
+      bottom: 0;
+      inset-inline-start: 0;
+      inset-inline-end: 0;
+      background: #ffffff;
+      padding: 16px 20px;
+      border-top: 1px solid #f3f4f6;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.03);
+    }
+
+    .confirm-btn {
+      width: 100%;
+      background-color: #0d9488;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      text-align: center;
+    }
+
+    .confirm-btn:hover {
+      background-color: #0f766e;
+    }
+
+    .confirm-btn:disabled {
+      background-color: #94a3b8;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-container">
+    <!-- Header -->
+    <header>
+      <button class="back-btn" aria-label="الرجوع">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+      <h1 class="header-title">حجز موعد جديد</h1>
+    </header>
+
+    <!-- Main Content -->
+    <div class="content">
+      
+      <!-- Doctor Card -->
+      <div class="doctor-card">
+        <div class="doctor-avatar">د.ط</div>
+        <div class="doctor-info">
+          <h2>د. طلال الكبيسي</h2>
+          <p>استشاري أمراض الباطنة والسكري</p>
+        </div>
+      </div>
+
+      <!-- Calendar Section -->
+      <div>
+        <div class="section-title">اختر يوم الموعد</div>
+        <div class="calendar-container">
+          <div class="calendar-header">
+            <button class="cal-nav-btn" aria-label="الشهر السابق">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-directional"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+            <div class="month-year">مارس ٢٠٢٥</div>
+            <button class="cal-nav-btn" aria-label="الشهر القادم">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-directional"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+          </div>
+
+          <!-- Week starts on Saturday as requested -->
+          <div class="calendar-grid">
+            <div class="weekday">سبت</div>
+            <div class="weekday">أحد</div>
+            <div class="weekday">اثنين</div>
+            <div class="weekday">ثلاثاء</div>
+            <div class="weekday">أربعاء</div>
+            <div class="weekday">خميس</div>
+            <div class="weekday">جمعة</div>
+
+            <!-- March 2025 Grid starting on Saturday -->
+            <div class="day disabled">28</div>
+            <div class="day disabled">1</div>
+            <div class="day disabled">2</div>
+            <div class="day disabled">3</div>
+            <div class="day disabled">4</div>
+            <div class="day">5</div>
+            <div class="day">6</div>
+
+            <div class="day">7</div>
+            <div class="day">8</div>
+            <div class="day">9</div>
+            <div class="day">10</div>
+            <div class="day">11</div>
+            <div class="day">12</div>
+            <div class="day">13</div>
+
+            <div class="day">14</div>
+            <div class="day">15</div>
+            <div class="day today">16</div>
+            <div class="day selected">17</div>
+            <div class="day">18</div>
+            <div class="day">19</div>
+            <div class="day">20</div>
+
+            <div class="day">21</div>
+            <div class="day">22</div>
+            <div class="day">23</div>
+            <div class="day">24</div>
+            <div class="day">25</div>
+            <div class="day">26</div>
+            <div class="day">27</div>
+
+            <div class="day">28</div>
+            <div class="day">29</div>
+            <div class="day">30</div>
+            <div class="day">31</div>
+            <div class="day disabled">1</div>
+            <div class="day disabled">2</div>
+            <div class="day disabled">3</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Time Slots Section -->
+      <div class="time-slots-container">
+        <div class="section-title">الأوقات المتاحة (صباحاً)</div>
+        <div class="slots-grid">
+          <div class="time-slot"><bdi>09:00 ص</bdi></div>
+          <div class="time-slot"><bdi>09:30 ص</bdi></div>
+          <div class="time-slot selected"><bdi>10:00 ص</bdi></div>
+          <div class="time-slot"><bdi>10:30 ص</bdi></div>
+          <div class="time-slot"><bdi>11:00 ص</bdi></div>
+          <div class="time-slot"><bdi>11:30 ص</bdi></div>
+          <div class="time-slot"><bdi>12:00 م</bdi></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer Action -->
+    <div class="footer-action">
+      <button class="confirm-btn">تأكيد الحجز</button>
+    </div>
+  </div>
+
+</body>
+</html>

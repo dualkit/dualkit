@@ -1,0 +1,293 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "order-history",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T16:49:53.127Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>طلباتي - متجر السعودية</title>\n  <!-- Google Fonts: IBM Plex Sans Arabic & Inter -->\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <!-- Tailwind CSS CDN -->\n  <script src=\"https://cdn.tailwindcss.com\"></script>\n  <script>\n    tailwind.config = {\n      darkMode: 'class',\n      theme: {\n        extend: {\n          fontFamily: {\n            arabic: ['\"IBM Plex Sans Arabic\"', 'sans-serif'],\n            latin: ['Inter', 'sans-serif'],\n          },\n        },\n      },\n    }\n  </script>\n  <style>\n    /* Dualkit Type Pairing & RTL Rules */\n    html[lang=\"ar\"] {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n    }\n    html[lang=\"en\"] {\n      font-family: 'Inter', sans-serif;\n    }\n\n    :lang(ar) {\n      letter-spacing: 0 !important;\n      line-height: 1.7;\n    }\n\n    /* Enforce 14px floor for Arabic UI text */\n    body {\n      font-size: 16px;\n    }\n\n    .ui-text-sm {\n      font-size: 14px;\n    }\n  </style>\n</head>\n<body class=\"bg-slate-100 text-slate-900 flex justify-center items-center min-h-screen p-0 sm:p-4\">\n\n  <!-- Phone Shell Container -->\n  <div class=\"w-full max-w-sm bg-white sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col h-screen sm:h-[844px] border border-slate-200 relative\">\n\n    <!-- Status Bar -->\n    <div class=\"bg-white px-6 pt-3 pb-2 flex justify-between items-center text-xs font-semibold text-slate-600 select-none\">\n      <span>9:41</span>\n      <div class=\"flex items-center gap-1.5\">\n        <!-- Signal / Wifi / Battery Icons simulated -->\n        <span class=\"text-[10px]\">5G</span>\n        <div class=\"w-5 h-2.5 border border-slate-600 rounded-sm p-0.5 flex items-center\">\n          <div class=\"h-full w-3 bg-slate-600 rounded-2xs\"></div>\n        </div>\n      </div>\n    </div>\n\n    <!-- App Header -->\n    <header class=\"px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0 z-10\">\n      <div class=\"flex items-center gap-3\">\n        <button class=\"w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition\" aria-label=\"رجوع\">\n          <svg class=\"w-5 h-5 rtl:scale-x-[-1]\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\">\n            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 19l-7-7 7-7\"></path>\n          </svg>\n        </button>\n        <h1 id=\"page-title\" class=\"text-lg font-bold text-slate-900\">طلباتي</h1>\n      </div>\n      \n      <!-- Language Switcher & Actions -->\n      <div class=\"flex items-center gap-2\">\n        <button id=\"lang-toggle\" onclick=\"toggleLanguage()\" class=\"px-2.5 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200 hover:bg-emerald-100 transition\">\n          English\n        </button>\n      </div>\n    </header>\n\n    <!-- Filter Pills -->\n    <div class=\"px-5 py-3 bg-white flex gap-2 overflow-x-auto no-scrollbar border-b border-slate-100 shrink-0\">\n      <button id=\"filter-all\" class=\"px-4 py-1.5 ui-text-sm font-medium bg-emerald-600 text-white rounded-full whitespace-nowrap shadow-xs\">الكل</button>\n      <button id=\"filter-active\" class=\"px-4 py-1.5 ui-text-sm font-medium bg-slate-100 text-slate-600 rounded-full whitespace-nowrap hover:bg-slate-200 transition\">النشطة</button>\n      <button id=\"filter-delivered\" class=\"px-4 py-1.5 ui-text-sm font-medium bg-slate-100 text-slate-600 rounded-full whitespace-nowrap hover:bg-slate-200 transition\">المكتملة</button>\n      <button id=\"filter-cancelled\" class=\"px-4 py-1.5 ui-text-sm font-medium bg-slate-100 text-slate-600 rounded-full whitespace-nowrap hover:bg-slate-200 transition\">الملغاة</button>\n    </div>\n\n    <!-- Scrollable Order History List -->\n    <main class=\"flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50\">\n\n      <!-- Order 1: On the way -->\n      <div class=\"bg-white rounded-2xl p-4 shadow-xs border border-slate-200/80 hover:border-emerald-300 transition\">\n        <div class=\"flex justify-between items-start mb-2.5\">\n          <div>\n            <span class=\"text-xs text-slate-400 font-medium block\" data-i18n=\"orderNum\">رقم الطلب</span>\n            <span class=\"font-bold text-slate-900 text-base\"><bdi dir=\"ltr\">#A-10293</bdi></span>\n          </div>\n          <!-- Status Badge -->\n          <span class=\"inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200\">\n            <span class=\"w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse\"></span>\n            <span data-i18n=\"statusOnTheWay\">قيد التوصيل</span>\n          </span>\n        </div>\n\n        <!-- Dates: Gregorian & Umm al-Qura Hijri (Asia/Riyadh timezone standard) -->\n        <div class=\"text-slate-500 ui-text-sm mb-3 space-y-0.5\">\n          <div class=\"flex items-center gap-2\">\n            <svg class=\"w-4 h-4 text-slate-400 shrink-0\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5\"></path></svg>\n            <span>28 مارس 2025</span>\n            <span class=\"text-slate-300\">•</span>\n            <span class=\"text-emerald-700 font-medium\">٢٨ رمضان ١٤٤٦ هـ</span>\n          </div>\n        </div>\n\n        <hr class=\"border-slate-100 my-3\">\n\n        <!-- Footer: Items count & Total in SAR -->\n        <div class=\"flex justify-between items-center\">\n          <span class=\"ui-text-sm text-slate-600\"><bdi>3 منتجات</bdi></span>\n          <div class=\"text-start\">\n            <span class=\"text-xs text-slate-400 block\" data-i18n=\"totalLabel\">الإجمالي</span>\n            <span class=\"font-bold text-slate-900 text-base\"><bdi dir=\"ltr\">1,230.50 ر.س</bdi></span>\n          </div>\n        </div>\n      </div>\n\n      <!-- Order 2: Delivered -->\n      <div class=\"bg-white rounded-2xl p-4 shadow-xs border border-slate-200/80 hover:border-emerald-300 transition\">\n        <div class=\"flex justify-between items-start mb-2.5\">\n          <div>\n            <span class=\"text-xs text-slate-400 font-medium block\" data-i18n=\"orderNum\">رقم الطلب</span>\n            <span class=\"font-bold text-slate-900 text-base\"><bdi dir=\"ltr\">#B-88492</bdi></span>\n          </div>\n          <!-- Status Badge -->\n          <span class=\"inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200\">\n            <span class=\"w-1.5 h-1.5 rounded-full bg-emerald-500\"></span>\n            <span data-i18n=\"statusDelivered\">تم التوصيل</span>\n          </span>\n        </div>\n\n        <div class=\"text-slate-500 ui-text-sm mb-3 space-y-0.5\">\n          <div class=\"flex items-center gap-2\">\n            <svg class=\"w-4 h-4 text-slate-400 shrink-0\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5\"></path></svg>\n            <span>15 مارس 2025</span>\n            <span class=\"text-slate-300\">•</span>\n            <span class=\"text-emerald-700 font-medium\">١٥ رمضان ١٤٤٦ هـ</span>\n          </div>\n        </div>\n\n        <hr class=\"border-slate-100 my-3\">\n\n        <div class=\"flex justify-between items-center\">\n          <span class=\"ui-text-sm text-slate-600\"><bdi>1 عنصر</bdi></span>\n          <div class=\"text-start\">\n            <span class=\"text-xs text-slate-400 block\" data-i18n=\"totalLabel\">الإجمالي</span>\n            <span class=\"font-bold text-slate-900 text-base\"><bdi dir=\"ltr\">450.00 ر.س</bdi></span>\n          </div>\n        </div>\n      </div>\n\n      <!-- Order 3: Delivered -->\n      <div class=\"bg-white rounded-2xl p-4 shadow-xs border border-slate-200/80 hover:border-emerald-300 transition\">\n        <div class=\"flex justify-between items-start mb-2.5\">\n          <div>\n            <span class=\"text-xs text-slate-400 font-medium block\" data-i18n=\"orderNum\">رقم الطلب</span>\n            <span class=\"font-bold text-slate-900 text-base\"><bdi dir=\"ltr\">#C-33921</bdi></span>\n          </div>\n          <!-- Status Badge -->\n          <span class=\"inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200\">\n            <span class=\"w-1.5 h-1.5 rounded-full bg-emerald-500\"></span>\n            <span data-i18n=\"statusDelivered\">تم التوصيل</span>\n          </span>\n        </div>\n\n        <div class=\"text-slate-500 ui-text-sm mb-3 space-y-0.5\">\n          <div class=\"flex items-center gap-2\">\n            <svg class=\"w-4 h-4 text-slate-400 shrink-0\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5\"></path></svg>\n            <span>10 فبراير 2025</span>\n            <span class=\"text-slate-300\">•</span>\n            <span class=\"text-emerald-700 font-medium\">١١ شعبان ١٤٤٦ هـ</span>\n          </div>\n        </div>\n\n        <hr class=\"border-slate-100 my-3\">\n\n        <div class=\"flex justify-between items-center\">\n          <span class=\"ui-text-sm text-slate-600\"><bdi>5 عناصر</bdi></span>\n          <div class=\"text-start\">\n            <span class=\"text-xs text-slate-400 block\" data-i18n=\"totalLabel\">الإجمالي</span>\n            <span class=\"font-bold text-slate-900 text-base\"><bdi dir=\"ltr\">89.00 ر.س</bdi></span>\n          </div>\n        </div>\n      </div>\n\n      <!-- Order 4: Cancelled -->\n      <div class=\"bg-white rounded-2xl p-4 shadow-xs border border-slate-200/80 hover:border-emerald-300 transition opacity-85\">\n        <div class=\"flex justify-between items-start mb-2.5\">\n          <div>\n            <span class=\"text-xs text-slate-400 font-medium block\" data-i18n=\"orderNum\">رقم الطلب</span>\n            <span class=\"font-bold text-slate-900 text-base\"><bdi dir=\"ltr\">#D-99102</bdi></span>\n          </div>\n          <!-- Status Badge -->\n          <span class=\"inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200\">\n            <span class=\"w-1.5 h-1.5 rounded-full bg-rose-500\"></span>\n            <span data-i18n=\"statusCancelled\">ملغي</span>\n          </span>\n        </div>\n\n        <div class=\"text-slate-500 ui-text-sm mb-3 space-y-0.5\">\n          <div class=\"flex items-center gap-2\">\n            <svg class=\"w-4 h-4 text-slate-400 shrink-0\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5\"></path></svg>\n            <span>02 يناير 2025</span>\n            <span class=\"text-slate-300\">•</span>\n            <span class=\"text-emerald-700 font-medium\">٠٢ رجب ١٤٤٦ هـ</span>\n          </div>\n        </div>\n\n        <hr class=\"border-slate-100 my-3\">\n\n        <div class=\"flex justify-between items-center\">\n          <span class=\"ui-text-sm text-slate-600\"><bdi>2 عناصر</bdi></span>\n          <div class=\"text-start\">\n            <span class=\"text-xs text-slate-400 block\" data-i18n=\"totalLabel\">الإجمالي</span>\n            <span class=\"font-bold text-slate-900 text-base\"><bdi dir=\"ltr\">340.00 ر.س</bdi></span>\n          </div>\n        </div>\n      </div>\n\n    </main>\n\n    <!-- Bottom Navigation Bar -->\n    <nav class=\"bg-white border-t border-slate-200 px-6 py-2 flex justify-between items-center text-xs text-slate-500 shrink-0\">\n      <a href=\"#\" class=\"flex flex-col items-center gap-1 hover:text-emerald-600 transition\">\n        <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25\"></path></svg>\n        <span data-i18n=\"navHome\">الرئيسية</span>\n      </a>\n      <a href=\"#\" class=\"flex flex-col items-center gap-1 text-emerald-600 font-medium\">\n        <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z\"></path></svg>\n        <span data-i18n=\"navOrders\">الطلبات</span>\n      </a>\n      <a href=\"#\" class=\"flex flex-col items-center gap-1 hover:text-emerald-600 transition\">\n        <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z\"></path></svg>\n        <span data-i18n=\"navProfile\">حسابي</span>\n      </a>\n    </nav>\n\n    <!-- Home Indicator Bar -->\n    <div class=\"bg-white pb-2 pt-1 flex justify-center\">\n      <div class=\"w-32 h-1 bg-slate-300 rounded-full\"></div>\n    </div>\n\n  </div>\n\n  <!-- Language Switcher Script Demonstrating Bilingual Switch Capability -->\n  <script>\n    const translations = {\n      ar: {\n        pageTitle: \"طلباتي\",\n        filterAll: \"الكل\",\n        filterActive: \"النشطة\",\n        filterDelivered: \"المكتملة\",\n        filterCancelled: \"الملغاة\",\n        orderNum: \"رقم الطلب\",\n        statusOnTheWay: \"قيد التوصيل\",\n        statusDelivered: \"تم التوصيل\",\n        statusCancelled: \"ملغي\",\n        totalLabel: \"الإجمالي\",\n        navHome: \"الرئيسية\",\n        navOrders: \"الطلبات\",\n        navProfile: \"حسابي\",\n        langToggleBtn: \"English\"\n      },\n      en: {\n        pageTitle: \"My Orders\",\n        filterAll: \"All\",\n        filterActive: \"Active\",\n        filterDelivered: \"Delivered\",\n        filterCancelled: \"Cancelled\",\n        orderNum: \"Order ID\",\n        statusOnTheWay: \"On the way\",\n        statusDelivered: \"Delivered\",\n        statusCancelled: \"Cancelled\",\n        totalLabel: \"Total\",\n        navHome: \"Home\",\n        navOrders: \"Orders\",\n        navProfile: \"Profile\",\n        langToggleBtn: \"العربية\"\n      }\n    };\n\n    let currentLang = 'ar';\n\n    function toggleLanguage() {\n      currentLang = currentLang === 'ar' ? 'en' : 'ar';\n      const html = document.documentElement;\n      \n      html.setAttribute('lang', currentLang);\n      html.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');\n\n      // Update static text elements\n      document.getElementById('page-title').textContent = translations[currentLang].pageTitle;\n      document.getElementById('filter-all').textContent = translations[currentLang].filterAll;\n      document.getElementById('filter-active').textContent = translations[currentLang].filterActive;\n      document.getElementById('filter-delivered').textContent = translations[currentLang].filterDelivered;\n      document.getElementById('filter-cancelled').textContent = translations[currentLang].filterCancelled;\n      document.getElementById('lang-toggle').textContent = translations[currentLang].langToggleBtn;\n\n      // Update data-i18n fields\n      document.querySelectorAll('[data-i18n]').forEach(el => {\n        const key = el.getAttribute('data-i18n');\n        if (translations[currentLang][key]) {\n          el.textContent = translations[currentLang][key];\n        }\n      });\n    }\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6480,
+    "output": 6410
+  },
+  "ms": 21083,
+  "finish": "STOP",
+  "reasoningTokens": 2173,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 76,
+  "missing": [
+    "four orders"
+  ],
+  "findings": [
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 126,
+        "y": 250.375,
+        "width": 96,
+        "height": 21
+      },
+      "message": "\"٢٨ رمضان ١٤٤٦ هـ\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"text-emerald-700 font-medium\">٢٨ رمضان ١٤٤٦ هـ</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 129,
+        "y": 445.546875,
+        "width": 93,
+        "height": 21
+      },
+      "message": "\"١٥ رمضان ١٤٤٦ هـ\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"text-emerald-700 font-medium\">١٥ رمضان ١٤٤٦ هـ</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 140,
+        "y": 640.71875,
+        "width": 88,
+        "height": 21
+      },
+      "message": "\"١١ شعبان ١٤٤٦ هـ\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"text-emerald-700 font-medium\">١١ شعبان ١٤٤٦ هـ</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 152,
+        "y": 835.890625,
+        "width": 81,
+        "height": 21
+      },
+      "message": "\"٠٢ رجب ١٤٤٦ هـ\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"text-emerald-700 font-medium\">٠٢ رجب ١٤٤٦ هـ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 304,
+        "y": 195.1875,
+        "width": 49,
+        "height": 18
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 font-medium block\" data-i18n=\"orderNum\">رقم الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 202.1875,
+        "width": 60,
+        "height": 18
+      },
+      "message": "\"قيد التوصيل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span data-i18n=\"statusOnTheWay\">قيد التوصيل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 104,
+        "y": 297.171875,
+        "width": 35,
+        "height": 18
+      },
+      "message": "\"الإجمالي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block\" data-i18n=\"totalLabel\">الإجمالي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 304,
+        "y": 390.359375,
+        "width": 49,
+        "height": 18
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 font-medium block\" data-i18n=\"orderNum\">رقم الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 397.359375,
+        "width": 54,
+        "height": 18
+      },
+      "message": "\"تم التوصيل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span data-i18n=\"statusDelivered\">تم التوصيل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 89,
+        "y": 492.34375,
+        "width": 35,
+        "height": 18
+      },
+      "message": "\"الإجمالي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block\" data-i18n=\"totalLabel\">الإجمالي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 304,
+        "y": 585.53125,
+        "width": 49,
+        "height": 18
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 font-medium block\" data-i18n=\"orderNum\">رقم الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 592.53125,
+        "width": 54,
+        "height": 18
+      },
+      "message": "\"تم التوصيل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span data-i18n=\"statusDelivered\">تم التوصيل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 79,
+        "y": 687.515625,
+        "width": 35,
+        "height": 18
+      },
+      "message": "\"الإجمالي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block\" data-i18n=\"totalLabel\">الإجمالي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 304,
+        "y": 780.703125,
+        "width": 49,
+        "height": 18
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 font-medium block\" data-i18n=\"orderNum\">رقم الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 787.703125,
+        "width": 25,
+        "height": 18
+      },
+      "message": "\"ملغي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span data-i18n=\"statusCancelled\">ملغي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 89,
+        "y": 882.6875,
+        "width": 35,
+        "height": 18
+      },
+      "message": "\"الإجمالي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block\" data-i18n=\"totalLabel\">الإجمالي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 325,
+        "y": 799.609375,
+        "width": 37,
+        "height": 18
+      },
+      "message": "\"الرئيسية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span data-i18n=\"navHome\">الرئيسية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 174,
+        "y": 799.609375,
+        "width": 35,
+        "height": 18
+      },
+      "message": "\"الطلبات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span data-i18n=\"navOrders\">الطلبات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 28,
+        "y": 799.609375,
+        "width": 30,
+        "height": 18
+      },
+      "message": "\"حسابي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span data-i18n=\"navProfile\">حسابي</span>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

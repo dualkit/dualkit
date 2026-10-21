@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حجز موعد - عيادات الدوحة التخصصية</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :lang(ar) {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      letter-spacing: 0;
+      line-height: 1.6;
+    }
+    /* Disable tap highlight on mobile */
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 flex items-center justify-center min-h-screen p-0 sm:p-4">
+
+  <!-- Mobile Frame Container -->
+  <div class="w-full max-w-md bg-slate-50 sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col h-screen sm:h-[844px] relative">
+    
+    <!-- Top Header -->
+    <header class="bg-white px-5 pt-6 pb-4 border-b border-slate-100 flex items-center justify-between sticky top-0 z-10">
+      <button class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition-colors" aria-label="الرجوع">
+        <svg class="w-5 h-5 rtl:-scale-x-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <h1 class="text-base font-semibold text-slate-800">حجز موعد طبي</h1>
+      <div class="w-10"></div> <!-- Spacer for balance -->
+    </header>
+
+    <!-- Scrollable Content Area -->
+    <main class="flex-1 overflow-y-auto px-5 py-5 space-y-6">
+
+      <!-- Doctor Profile Card -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1594824813589-72c67e7c9f6a?auto=format&fit=crop&q=80&w=200" alt="د. حصة آل ثاني" class="w-16 h-16 rounded-full object-cover border-2 border-emerald-500">
+          <span class="absolute bottom-0 end-0 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"></span>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between">
+            <h2 class="text-base font-bold text-slate-900 truncate">د. حصة آل ثاني</h2>
+            <span class="text-sm font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
+              <bdi>300 ر.ق</bdi>
+            </span>
+          </div>
+          <p class="text-sm text-slate-500 truncate mt-0.5">أخصائية طب الأسرة</p>
+          <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">
+            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            مجمع عيادات الوجبة، الدوحة
+          </p>
+        </div>
+      </div>
+
+      <!-- Calendar Section (Week starts on Saturday per GCC standard) -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+        <!-- Month Header & Navigation -->
+        <div class="flex items-center justify-between mb-4">
+          <h3 id="current-month-year" class="text-base font-bold text-slate-800">مارس 2025</h3>
+          <div class="flex items-center gap-1">
+            <button id="prev-month" class="p-2 rounded-lg hover:bg-slate-100 text-slate-600 transition-colors" aria-label="الشهر السابق">
+              <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+            <button id="next-month" class="p-2 rounded-lg hover:bg-slate-100 text-slate-600 transition-colors" aria-label="الشهر القادم">
+              <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Weekdays Header (Saturday Start) -->
+        <div class="grid grid-cols-7 gap-1 mb-2 text-center">
+          <div class="text-xs font-medium text-slate-400 py-1">سبت</div>
+          <div class="text-xs font-medium text-slate-400 py-1">أحد</div>
+          <div class="text-xs font-medium text-slate-400 py-1">اثنين</div>
+          <div class="text-xs font-medium text-slate-400 py-1">ثلاثاء</div>
+          <div class="text-xs font-medium text-slate-400 py-1">أربعاء</div>
+          <div class="text-xs font-medium text-slate-400 py-1">خميس</div>
+          <div class="text-xs font-medium text-rose-500 py-1">جمعة</div>
+        </div>
+
+        <!-- Days Grid -->
+        <div id="calendar-grid" class="grid grid-cols-7 gap-1 text-center">
+          <!-- Populated via JavaScript -->
+        </div>
+      </div>
+
+      <!-- Time Slots Section (9:00 to 12:00 every 30 mins) -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-100">
+        <h3 class="text-sm font-bold text-slate-800 mb-3">اختر وقت الزيارة</h3>
+        <div class="grid grid-cols-3 gap-2.5" id="time-slots-container">
+          <!-- Time slots -->
+          <button class="time-slot py-2.5 px-3 text-sm font-medium border border-slate-200 rounded-xl text-slate-700 hover:border-emerald-500 hover:text-emerald-600 transition-all text-center" data-time="09:00">
+            <bdi>09:00 ص</bdi>
+          </button>
+          <button class="time-slot py-2.5 px-3 text-sm font-medium border border-slate-200 rounded-xl text-slate-700 hover:border-emerald-500 hover:text-emerald-600 transition-all text-center" data-time="09:30">
+            <bdi>09:30 ص</bdi>
+          </button>
+          <button class="time-slot py-2.5 px-3 text-sm font-medium border border-slate-200 rounded-xl text-slate-700 hover:border-emerald-500 hover:text-emerald-600 transition-all text-center" data-time="10:00">
+            <bdi>10:00 ص</bdi>
+          </button>
+          <button class="time-slot py-2.5 px-3 text-sm font-medium border border-slate-200 rounded-xl text-slate-700 hover:border-emerald-500 hover:text-emerald-600 transition-all text-center" data-time="10:30">
+            <bdi>10:30 ص</bdi>
+          </button>
+          <button class="time-slot py-2.5 px-3 text-sm font-medium border border-slate-200 rounded-xl text-slate-700 hover:border-emerald-500 hover:text-emerald-600 transition-all text-center" data-time="11:00">
+            <bdi>11:00 ص</bdi>
+          </button>
+          <button class="time-slot py-2.5 px-3 text-sm font-medium border border-slate-200 rounded-xl text-slate-700 hover:border-emerald-500 hover:text-emerald-600 transition-all text-center" data-time="11:30">
+            <bdi>11:30 ص</bdi>
+          </button>
+          <button class="time-slot py-2.5 px-3 text-sm font-medium border border-slate-200 rounded-xl text-slate-700 hover:border-emerald-500 hover:text-emerald-600 transition-all text-center" data-time="12:00">
+            <bdi>12:00 م</bdi>
+          </button>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Footer CTA Action Bar -->
+    <footer class="bg-white px-5 py-4 border-t border-slate-100 flex items-center justify-between gap-4">
+      <div>
+        <span class="text-xs text-slate-400 block">إجمالي الرسوم</span>
+        <span class="text-base font-bold text-slate-900"><bdi>300 ر.ق</bdi></span>
+      </div>
+      <button id="confirm-btn" disabled class="flex-1 bg-emerald-600 text-white font-semibold py-3 px-6 rounded-2xl shadow-lg shadow-emerald-600/20 opacity-50 cursor-not-allowed hover:bg-emerald-700 transition-all">
+        تأكيد الحجز
+      </button>
+    </footer>
+
+  </div>
+
+  <script>
+    // Simple interactive calendar generator with Saturday start
+    const calendarGrid = document.getElementById('calendar-grid');
+    const confirmBtn = document.getElementById('confirm-btn');
+    let selectedDate = null;
+    let selectedTime = null;
+
+    // Generate days for March 2025 (Saturday start)
+    // March 1, 2025 is Saturday. Total 31 days.
+    function renderCalendar() {
+      calendarGrid.innerHTML = '';
+      
+      // March 2025 starts on Saturday (Day index 0 in Sat-start week)
+      // Empty padding if needed (0 for Saturday)
+      const paddingDays = 0; 
+      const totalDays = 31;
+      const today = 15; // Marked today
+
+      for (let i = 0; i < paddingDays; i++) {
+        const emptyDiv = document.createElement('div');
+        calendarGrid.appendChild(emptyDiv);
+      }
+
+      for (let day = 1; day <= totalDays; day++) {
+        const btn = document.createElement('button');
+        btn.className = `h-10 w-10 mx-auto rounded-xl text-sm font-medium flex items-center justify-center transition-all relative ${
+          day === today ? 'border-2 border-emerald-500 text-emerald-700 font-bold' : 'text-slate-700 hover:bg-slate-100'
+        }`;
+        btn.textContent = day;
+        btn.dataset.day = day;
+
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#calendar-grid button').forEach(b => {
+            b.classList.remove('bg-emerald-600', 'text-white', 'shadow-md', 'shadow-emerald-600/30');
+            if(parseInt(b.dataset.day) === today && !b.classList.contains('selected')) {
+              // keep today outline
+            }
+          });
+          btn.classList.add('bg-emerald-600', 'text-white', 'shadow-md', 'shadow-emerald-600/30');
+          selectedDate = day;
+          checkSelection();
+        });
+
+        calendarGrid.appendChild(btn);
+      }
+    }
+
+    // Time slot selection
+    const timeSlots = document.querySelectorAll('.time-slot');
+    timeSlots.forEach(slot => {
+      slot.addEventListener('click', () => {
+        timeSlots.forEach(s => s.classList.remove('border-emerald-600', 'bg-emerald-50', 'text-emerald-700', 'font-bold'));
+        slot.classList.add('border-emerald-600', 'bg-emerald-50', 'text-emerald-700', 'font-bold');
+        selectedTime = slot.dataset.time;
+        checkSelection();
+      });
+    });
+
+    function checkSelection() {
+      if (selectedDate && selectedTime) {
+        confirmBtn.removeAttribute('disabled');
+        confirmBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    confirmBtn.addEventListener('click', () => {
+      if (selectedDate && selectedTime) {
+        alert(`تم حجز الموعد بنجاح ليوم ${selectedDate} مارس 2025 الساعة ${selectedTime}`);
+      }
+    });
+
+    renderCalendar();
+  </script>
+</body>
+</html>

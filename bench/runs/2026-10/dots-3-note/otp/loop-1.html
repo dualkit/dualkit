@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أدخل الرمز</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #007AFF;
+      --text-color: #1a1a1a;
+      --secondary-text: #666;
+      --border-color: #ccc;
+      --background: #f5f5f5;
+      --container-bg: #fff;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans Arabic', sans-serif;
+      background-color: var(--background);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      direction: rtl;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      background-color: var(--container-bg);
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+      padding: 32px 24px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-color);
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--secondary-text);
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    .subtitle bdi {
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    .otp-container {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .otp-box {
+      width: 40px;
+      height: 48px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s;
+      background-color: #fff;
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+    }
+
+    .otp-box:focus {
+      border-color: var(--primary-color);
+    }
+
+    .countdown {
+      font-size: 14px;
+      color: var(--secondary-text);
+      margin-bottom: 16px;
+      min-height: 20px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .verify-btn {
+      width: 100%;
+      padding: 16px;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-family: inherit;
+    }
+
+    .verify-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .verify-btn:active:not(:disabled) {
+      background-color: #0056CC;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">أدخل الرمز</h1>
+    <p class="subtitle">
+      أرسلنا رمزًا مكوّنًا من 6 أرقام إلى <bdi dir="ltr">+966 55 123 4567</bdi>
+    </p>
+
+    <div class="otp-container">
+      <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code" dir="ltr">
+      <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" dir="ltr">
+      <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" dir="ltr">
+      <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" dir="ltr">
+      <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" dir="ltr">
+      <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]" dir="ltr">
+    </div>
+
+    <div id="countdown" class="countdown">إعادة الإرسال خلال ٠:٤٥</div>
+
+    <button id="verify-btn" class="verify-btn" disabled> territories</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const inputs = document.querySelectorAll('.otp-box');
+      const verifyBtn = document.getElementById('verify-btn');
+      const countdownEl = document.getElementById('countdown');
+
+      // Auto-advance OTP boxes
+      inputs.forEach((input, index) => {
+        input.addEventListener('input', function () {
+          if (this.value.length === 1) {
+            if (index < inputs.length - 1) {
+              inputs[index + 1].focus();
+            }
+          }
+        });
+
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Backspace' && this.value.length === 0) {
+            if (index > 0) {
+              inputs[index - 1].focus();
+            }
+          }
+        });
+      });
+
+      // Enable verify button only when all boxes are filled
+      function checkVerifyEnabled() {
+        const allFilled = Array.from(inputs).every(input => input.value.length === 1);
+        verifyBtn.disabled = !allFilled;
+      }
+      inputs.forEach(input => {
+        input.addEventListener('input', checkVerifyEnabled);
+      });
+
+      // Countdown timer
+      let seconds = 45;
+      function toArabicIndic(num) {
+        return num.toString().replace(/\d/g, d => String.fromCharCode(d.charCodeAt(0) + 0x0660));
+      }
+
+      function updateCountdown() {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        const minStr = toArabicIndic(minutes);
+        const secStr = toArabicIndic(secs);
+
+        if (seconds > 0) {
+          countdownEl.textContent = `إعادة الإرسال خلال ${minStr}:${secStr}`;
+          seconds--;
+        } else {
+          countdownEl.textContent = '';
+          const resendBtn = document.createElement('button');
+          resendBtn.textContent = 'إعادة الإرسال';
+          resendBtn.className = 'verify-btn';
+          resendBtn.style.cssText = 'width:100%;padding:16px;background-color:#007AFF;color:white;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;';
+          countdownEl.appendChild(resendBtn);
+
+          resendBtn.addEventListener('click', () => {
+            seconds = 45;
+            countdownEl.innerHTML = '';
+            updateCountdown();
+            inputs.forEach(i => i.value = '');
+            inputs[0].focus();
+            checkVerifyEnabled();
+          });
+        }
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      // Focus first box on load
+      inputs[0].focus();
+    });
+  </script>
+</body>
+</html>

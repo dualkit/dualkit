@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الإعدادات - تطبيق بنك البحرين</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            direction: rtl;
+            text-align: right;
+            padding: 20px;
+        }
+
+        .phone-frame {
+            max-width: 420px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .status-bar {
+            background: #003366;
+            color: #fff;
+            padding: 8px 16px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header {
+            background: #003366;
+            color: #fff;
+            padding: 18px 20px;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header .back-btn {
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .settings-container {
+            padding: 20px 0;
+        }
+
+        .settings-group {
+            background: #fff;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .group-title {
+            background: #f0f4f8;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .settings-row:last-child {
+            border-bottom: none;
+        }
+
+        .row-left {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .row-icon {
+            width: 40px;
+            height: 40px;
+            background: #e6f0fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 12px;
+            flex-shrink: 0;
+        }
+
+        .row-icon img {
+            width: 22px;
+            height: 22px;
+        }
+
+        .row-text {
+            flex: 1;
+        }
+
+        .row-label {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 2px;
+        }
+
+        .row-value {
+            font-size: 13px;
+            color: #777;
+        }
+
+        .row-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chevron {
+            font-size: 18px;
+            color: #999;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #fff;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #003366;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .home-indicator {
+            width: 100%;
+            height: 40px;
+            background: #000;
+            border-radius: 0 0 30px 30px;
+        }
+
+        .home-indicator::before {
+            content: "";
+            display: block;
+            width: 120px;
+            height: 5px;
+            background: #333;
+            border-radius: 3px;
+            margin: 10px auto 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar">
+            <span>٩:٤١</span>
+            <span>🔋 ١٠٠٪</span>
+        </div>
+        <div class="header">
+            <span class="back-btn">←</span>
+            <span>الإعدادات</span>
+            <span style="width:24px"></span>
+        </div>
+        <div class="settings-container">
+            <!-- Account Group -->
+            <div class="settings-group">
+                <div class="group-title">الحساب</div>
+                <div class="settings-row">
+                    <div class="row-left">
+                        <div class="row-icon">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003366'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E" alt="الاسم">
+                        </div>
+                        <div class="row-text">
+                            <div class="row-label">الاسم</div>
+                            <div class="row-value">محمد علي أحمد</div>
+                        </div>
+                    </div>
+                    <div class="chevron">›</div>
+                </div>
+                <div class="settings-row">
+                    <div class="row-left">
+                        <div class="row-icon">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003366'%3E%3Cpath d='M6.62 10.79a15.05 15.05 0 016.6-1.79 15.05 15.05 0 016.6 1.79 1 1 0 01-.45 1.89 13.05 13.05 0 00-5.75-.89 13.05 13.05 0 00-5.75.89 1 1 0 01-1.25-1.89zM12 2C6.48 2 2 6.22 2 11.25 2 16 6.22 20 12 20s10-4.22 10-8.75S17.52 2 12 2zm0 16c-4.41 0-8-3.36-8-7.5S7.59 3 12 3s8 3.36 8 7.5-3.59 7.5-8 7.5z'/%3E%3C/svg%3E" alt="الهاتف">
+                        </div>
+                        <div class="row-text">
+                            <div class="row-label">رقم الهاتف</div>
+                            <div class="row-value">+٩٧٣ ٣٦٠٠ ١٢٣٤</div>
+                        </div>
+                    </div>
+                    <div class="chevron">›</div>
+                </div>
+                <div class="settings-row">
+                    <div class="row-left">
+                        <div class="row-icon">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003366'%3E%3Cpath d='M12 3c-1.1 0-2 .9-2 2v4c0 .55.45 1 1 1h2c.55 0 1-.45 1-1V5c0-1.1-.9-2-2-2zm-4 8c-1.66 0-3 1.34-3 3v4c0 1.66 1.34 3 3 3h8c1.66 0 3-1.34 3-3v-4c0-1.66-1.34-3-3-3H8zm8 2v4c0 .55-.45 1-1 1h-2c-.55 0-1-.45-1-1v-4H7v3c0 2.21 1.79 4 4 4h2c2.21 0 4-1.79 4-4v-3h-3z'/%3E%3C/svg%3E" alt="اللغة">
+                        </div>
+                        <div class="row-text">
+                            <div class="row-label">اللغة</div>
+                            <div class="row-value">العربية</div>
+                        </div>
+                    </div>
+                    <div class="chevron">›</div>
+                </div>
+            </div>
+
+            <!-- Security Group -->
+            <div class="settings-group">
+                <div class="group-title">الأمان</div>
+                <div class="settings-row">
+                    <div class="row-left">
+                        <div class="row-icon">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003366'%3E%3Cpath d='M12 17c1.66 0 3-1.34 3-3V9c0-1.66-1.34-3-3-3S9 7.34 9 9v5c0 1.66 1.34 3 3 3zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z'/%3E%3C/svg%3E" alt="Face ID">
+                        </div>
+                        <div class="row-text">
+                            <div class="row-label">Face ID</div>
+                        </div>
+                    </div>
+                    <div class="row-right">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <div class="row-left">
+                        <div class="row-icon">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003366'%3E%3Cpath d='M12 17c1.66 0 3-1.34 3-3V9c0-1.66-1.34-3-3-3S9 7.34 9 9v5c0 1.66 1.34 3 3 3zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2h4c0 1.1-.9 2-2 2z'/%3E%3C/svg%3E" alt="تسجيل الدخول ثنائي الخطوات">
+                        </div>
+                        <div class="row-text">
+                            <div class="row-label">تسجيل الدخول ثنائي الخطوات</div>
+                        </div>
+                    </div>
+                    <div class="row-right">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Group -->
+            <div class="settings-group">
+                <div class="group-title">الإشعارات</div>
+                <div class="settings-row">
+                    <div class="row-left">
+                        <div class="row-icon">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003366'%3E%3Cpath d='M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z'/%3E%3C/svg%3E" alt="التحويلات">
+                        </div>
+                        <div class="row-text">
+                            <div class="row-label">التحويلات</div>
+                        </div>
+                    </div>
+                    <div class="row-right">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <div class="row-left">
+                        <div class="row-icon">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003366'%3E%3Cpath d='M21.41 11.58l-9-9-1.42 1.41 7.59 7.59c.01-1.11.01-2.22 0-3.33l-7.59 7.59-7.59-7.59v6.82l9 9 9-9z'/%3E%3C/svg%3E" alt="العروض">
+                        </div>
+                        <div class="row-text">
+                            <div class="row-label">العروض</div>
+                        </div>
+                    </div>
+                    <div class="row-right">
+                        <label class="toggle-switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <div class="row-left">
+                        <div class="row-icon">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23003366'%3E%3Cpath d='M20 6h-1V3c0-1.1-.9-2-2-2H7C5.89 1 5 1.89 5 3v3H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-5 0H9V3h6v3zm0 12H7V8h10v10z'/%3E%3C/svg%3E" alt="كشف الحسابات">
+                        </div>
+                        <div class="row-text">
+                            <div class="row-label">كشف الحسابات</div>
+                        </div>
+                    </div>
+                    <div class="row-right">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="home-indicator"></div>
+    </div>
+</body>
+</html>

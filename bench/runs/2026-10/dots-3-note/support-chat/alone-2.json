@@ -1,0 +1,123 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "support-chat",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T17:35:09.887Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Support Chat</title>\n<style>\n  body {\n    font-family: Arial, sans-serif;\n    margin: 0;\n    padding: 0;\n    direction: rtl;\n    background: #f5f5f5;\n  }\n  .chat-container {\n    max-width: 375px;\n    margin: 0 auto;\n    height: 100vh;\n    display: flex;\n    flex-direction: column;\n    background: #fff;\n  }\n  .header {\n    background: #005a9c;\n    color: #fff;\n    padding: 12px;\n    text-align: center;\n    font-size: 1.2em;\n  }\n  .messages {\n    flex: 1;\n    overflow-y: auto;\n    padding: 10px;\n    display: flex;\n    flex-direction: column;\n  }\n  .message {\n    margin: 6px 0;\n    padding: 8px 12px;\n    border-radius: 18px;\n    max-width: 80%;\n    word-wrap: break-word;\n    position: relative;\n  }\n  .customer {\n    align-self: flex-start;\n    background: #e0e0e0;\n  }\n  .agent {\n    align-self: flex-end;\n    background: #005a9c;\n    color: #fff;\n  }\n  .name {\n    font-weight: bold;\n    margin-right: 4px;\n  }\n  .time {\n    display: block;\n    font-size: 0.7em;\n    opacity: 0.7;\n    margin-top: 4px;\n  }\n  .input-area {\n    display: flex;\n    padding: 10px;\n    border-top: 1px solid #ccc;\n    background: #fff;\n  }\n  .input-area input {\n    flex: 1;\n    padding: 10px;\n    border: 1px solid #ccc;\n    border-radius: 20px;\n    outline: none;\n    font-size: 1em;\n  }\n  .input-area button {\n    margin-left: 8px;\n    padding: 10px 15px;\n    background: #005a9c;\n    color: #fff;\n    border: none;\n    border-radius: 20px;\n    cursor: pointer;\n    font-size: 1em;\n  }\n</style>\n</head>\n<body>\n<div class=\"chat-container\">\n  <div class=\"header\">الدعم - زين كوا</div>\n  <div class=\"messages\">\n    <!-- Message 1 -->\n    <div class=\"message customer\">\n      <span class=\"text\">مرحباً، أود تفعيل خدمة 5G على خطّي.</span>\n      <span class=\"time\">10:05</span>\n    </div>\n    <!-- Message 2 -->\n    <div class=\"message agent\">\n      <span class=\"name\">Sara:</span>\n      <span class=\"text\">مرحباً، سأساعدك. يرجى تزويدي برقم الطلب TX-48213.</span>\n      <span class=\"time\">10:06</span>\n    </div>\n    <!-- Message 3 -->\n    <div class=\"message customer\">\n      <span class=\"text\">الطلب هو TX-48213، ما هي الخطوات التالية؟</span>\n      <span class=\"time\">10:07</span>\n    </div>\n    <!-- Message 4 -->\n    <div class=\"message agent\">\n      <span class=\"name\">Sara:</span>\n      <span class=\"text\">يمكنك تثبيت بطاقة eSIM من خلال تطبيقنا.</span>\n      <span class=\"time\">10:08</span>\n    </div>\n    <!-- Message 5 -->\n    <div class=\"message customer\">\n      <span class=\"text\">أين أجد رمز التفعيل لـ eSIM؟</span>\n      <span class=\"time\">10:09</span>\n    </div>\n    <!-- Message 6 -->\n    <div class=\"message agent\">\n      <span class=\"name\">Sara:</span>\n      <span class=\"text\">الرمز هو 123456، ي Expedition.</span>\n      <span class=\"time\">10:10</span>\n    </div>\n  </div>\n  <div class=\"input-area\">\n    <input type=\"text\" placeholder=\"اكتب رسالتك...\">\n    <button>أرسل</button>\n  </div>\n</div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 147,
+    "output": 8724
+  },
+  "ms": 84309,
+  "finish": "stop",
+  "reasoningTokens": 8106,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 79,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 55.234375,
+        "y": 135,
+        "width": 258.265625,
+        "height": 36
+      },
+      "message": "\"TX-48213\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"text\">مرحباً، سأساعدك. يرجى تزويدي برقم الطلب TX-48213.</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 135.296875,
+        "y": 13,
+        "width": 119.390625,
+        "height": 21
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"header\">الدعم - زين كوا</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 40.5,
+        "y": 805.5,
+        "width": 37,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button>أرسل</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 269.46875,
+        "y": 135,
+        "width": 40.03125,
+        "height": 17
+      },
+      "message": "margin-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"name\">Sara:</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 269.46875,
+        "y": 299,
+        "width": 40.03125,
+        "height": 17
+      },
+      "message": "margin-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"name\">Sara:</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 254.296875,
+        "y": 444,
+        "width": 40.03125,
+        "height": 17
+      },
+      "message": "margin-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"name\">Sara:</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 25.5,
+        "y": 794,
+        "width": 67,
+        "height": 40
+      },
+      "message": "margin-left: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button>أرسل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

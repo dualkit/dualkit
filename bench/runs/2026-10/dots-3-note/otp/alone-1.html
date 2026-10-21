@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>One-time Code</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+}
+.title {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333;
+}
+.subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+.code-inputs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.code-input {
+  width: 40px;
+  height: 50px;
+  font-size: 24px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.countdown {
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #888;
+}
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007AFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #0056b3;
+}
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">أدخل الرمز</div>
+    <div class="subtitle">أرسلنا رمزًا مكونًا من 6 أرقام إلى +966 55 123 4567</div>
+    <div class="code-inputs">
+      <input type="text" class="code-input" maxlength="1">
+      <input type="text" class="code-input" maxlength="1">
+      <input type="text" class="code-input" maxlength="1">
+      <input type="text" class="code-input" maxlength="1">
+      <input type="text" class="code-input" maxlength="1">
+      <input type="text" class="code-input" maxlength="1">
+    </div>
+    <div class="countdown">أرسل مرة أخرى خلال 0:45</div>
+    <button>تَأكيد</button>
+  </div>
+</body>
+</html>

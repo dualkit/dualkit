@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المحفظة الإلكترونية - المعاملات</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            direction: rtl;
+            text-align: right;
+            padding: 20px;
+        }
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        header h1 {
+            font-size: 22px;
+            color: #2c3e50;
+        }
+        .balance-card {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+        .balance-card .label {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-bottom: 8px;
+        }
+        .balance-card .amount {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .filter-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .filter-section label {
+            font-size: 14px;
+            color: #555;
+        }
+        .filter-section select {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: white;
+            font-size: 14px;
+            text-align: right;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        th {
+            background-color: #f0f3f7;
+            padding: 12px 10px;
+            font-size: 13px;
+            color: #555;
+            text-align: center;
+        }
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            text-align: center;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .merchant-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .amount-in {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .amount-out {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .status-in {
+            color: #27ae60;
+            font-size: 13px;
+        }
+        .status-out {
+            color: #e74c3c;
+            font-size: 13px;
+        }
+        .date {
+            color: #7f8c8d;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>المعاملات</h1>
+        </header>
+
+        <div class="balance-card">
+            <div class="label">الرصيد الحالي</div>
+            <div class="amount">ر.ع. 1,245.750</div>
+        </div>
+
+        <div class="filter-section">
+            <label for="period">فترة:</label>
+            <select id="period">
+                <option>هذا الشهر</option>
+                <option>الشهر الماضي</option>
+                <option>آخر 3 أشهر</option>
+                <option>الكل</option>
+            </select>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>التاجر</th>
+                    <th>المبلغ (ر.ع.)</th>
+                    <th>النوع</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="date">15 أكتوبر 2023</td>
+                    <td class="merchant-name">لولو هايبرماركت</td>
+                    <td class="amount-out">- 125.500</td>
+                    <td class="status-out">صرف</td>
+                </tr>
+                <tr>
+                    <td class="date">12 أكتوبر 2023</td>
+                    <td class="merchant-name">نتفلكس</td>
+                    <td class="amount-out">- 35.000</td>
+                    <td class="status-out">صرف</td>
+                </tr>
+                <tr>
+                    <td class="date">10 أكتوبر 2023</td>
+                    <td class="merchant-name">أبو ماجد للسوبرماركت</td>
+                    <td class="amount-out">- 89.250</td>
+                    <td class="status-out">صرف</td>
+                </tr>
+                <tr>
+                    <td class="date">08 أكتوبر 2023</td>
+                    <td class="merchant-name">تي دجي اوركسترا</td>
+                    <td class="amount-in">+ 2,500.000</td>
+                    <td class="status-in">إيداع</td>
+                </tr>
+                <tr>
+                    <td class="date">05 أكتوبر 2023</td>
+                    <td class="merchant-name">كي أموني</td>
+                    <td class="amount-out">- 12.750</td>
+                    <td class="status-out">صرف</td>
+                </tr>
+                <tr>
+                    <td class="date">03 أكتوبر 2023</td>
+                    <td class="merchant-name">ألكترونيك ستور</td>
+                    <td class="amount-out">- 499.000</td>
+                    <td class="status-out">صرف</td>
+                </tr>
+                <tr>
+                    <td class="date">01 أكتوبر 2023</td>
+                    <td class="merchant-name">أمانة بنك عمان</td>
+                    <td class="amount-in">+ 5,000.000</td>
+                    <td class="status-in">إيداع</td>
+                </tr>
+                <tr>
+                    <td class="date">28 سبتمبر 2023</td>
+                    <td class="merchant-name">ماكدونالدز</td>
+                    <td class="amount-out">- 22.300</td>
+                    <td class="status-out">صرف</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عنوان التوصيل</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      padding: 16px;
+      margin: 0;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: bold;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007AFF;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <form>
+    <div class="form-group">
+      <label for="building">مبنى أو فيلا</label>
+      <input type="text" id="building" name="building" placeholder="رقم المبنى أو فيلا">
+    </div>
+    <div class="form-group">
+      <label for="street">شارع</label>
+      <input type="text" id="street" name="street" placeholder="اسم الشارع">
+    </div>
+    <div class="form-group">
+      <label for="area">منطقة</label>
+      <input type="text" id="area" name="area" placeholder="المنطقة">
+    </div>
+    <div class="form-group">
+      <label for="makani">رقم مكاني</label>
+      <input type="text" id="makani" name="makani" placeholder="رقم المكان">
+    </div>
+    <div class="form-group">
+      <label for="emirate">إمارة</label>
+      <select id="emirate" name="emirate">
+        <option value="dubai" selected>دبي</option>
+        <option value="abudhabi">أبوظبي</option>
+        <option value="sharjah">الشارقة</option>
+        <option value="ajman">عجمان</option>
+        <option value="rasalkhaimah">الخليل</option>
+        <option value="fujairah">الفجيرة</option>
+        <option value="ummalkhwaima">أم القيوين</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="phone">رقم الهاتف</label>
+      <input type="tel" id="phone" name="phone" placeholder="050 123 4567">
+    </div>
+    <button type="submit">حفظ عنوان</button>
+  </form>
+</body>
+</html>

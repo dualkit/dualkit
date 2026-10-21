@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>طلباتي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f5f7;
+    --card:#ffffff;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --border:#e5e7eb;
+    --green:#16a34a;
+    --blue:#2563eb;
+    --red:#dc2626;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:'Noto Sans Arabic',system-ui,'Segoe UI',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-text-size-adjust:100%;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    min-height:100vh;
+    padding:24px 16px;
+  }
+  .phone{
+    width:100%;
+    max-width:390px;
+    background:var(--bg);
+    border-radius:28px;
+    box-shadow:0 20px 60px rgba(0,0,0,.18);
+    overflow:hidden;
+  }
+  /* top bar */
+  .topbar{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    background:#fff;
+    border-bottom:1px solid var(--border);
+  }
+  .topbar .back{
+    width:36px;height:36px;
+    border-radius:50%;
+    border:1px solid var(--border);
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;color:var(--text);flex-shrink:0;
+  }
+  .topbar .back svg{transform:scaleX(-1)}
+  .topbar h1{
+    font-size:18px;font-weight:700;margin:0;flex:1;
+  }
+  .topbar .filter{
+    width:36px;height:36px;border-radius:50%;
+    border:1px solid var(--border);background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;flex-shrink:0;
+  }
+  /* list */
+  .list{
+    padding:16px;
+    display:flex;flex-direction:column;gap:14px;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:16px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card .accent{
+    position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;
+  }
+  .card.delivered .accent{background:var(--green)}
+  .card.transit  .accent{background:var(--blue)}
+  .card.cancelled .accent{background:var(--red)}
+  .card .row{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:10px;
+  }
+  .card .order-num{font-weight:700;font-size:15px}
+  .card .order-num span{color:var(--muted);font-weight:500}
+  .badge{
+    font-size:14px;font-weight:600;
+    padding:5px 12px;border-radius:999px;white-space:nowrap;
+  }
+  .card.delivered .badge{background:#dcfce7;color:var(--green)}
+  .card.transit  .badge{background:#dbeafe;color:var(--blue)}
+  .card.cancelled .badge{background:#fee2e2;color:var(--red)}
+  .dates{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+  .dates .date-line{font-size:14px}
+  .dates .date-line small{color:var(--muted);font-size:14px;margin-inline-start:6px}
+  .dates .hijri{color:var(--muted);font-size:14px}
+  .dates .hijri small{color:#9ca3af;font-size:14px;margin-inline-start:6px}
+  .total{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:15px;font-weight:600;
+    border-top:1px dashed var(--border);padding-top:10px;
+  }
+  .total .label{color:var(--muted);font-weight:500}
+  .total .amount{font-weight:700}
+  .link{
+    margin-top:12px;
+    display:flex;align-items:center;justify-content:flex-end;
+    gap:6px;color:var(--blue);font-size:14px;font-weight:600;
+    cursor:pointer;border-top:1px solid var(--border);padding-top:10px;
+  }
+  .link svg{transform:scaleX(-1)}
+  .footer{
+    text-align:center;padding:18px 16px 22px;
+    font-size:14px;color:var(--blue);cursor:pointer;font-weight:600;
+  }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="topbar">
+      <button class="back" aria-label="رجوع">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </button>
+      <h1>طلباتي</h1>
+      <button class="filter" aria-label="تصفية">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      </button>
+    </div>
+
+    <div class="list">
+
+      <!-- Order 1: delivered -->
+      <div class="card delivered">
+        <div class="accent"></div>
+        <div class="row">
+          <div class="order-num"><span>رقم الطلب</span> <bdi dir="ltr">#A-10293</bdi></div>
+          <span class="badge">تم التسليم</span>
+        </div>
+        <div class="dates">
+          <div class="date-line">15 مارس 2025 <small>(ميلادي)</small></div>
+          <div class="hijri">15 رمضان 1446 <small>(هجري)</small></div>
+        </div>
+        <div class="total">
+          <span class="label">الإجمالي</span>
+          <span class="amount">1,234.50 ر.س</span>
+        </div>
+        <div class="link">
+          <span>تفاصيل</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <!-- Order 2: on the way -->
+      <div class="card transit">
+        <div class="accent"></div>
+        <div class="row">
+          <div class="order-num"><span>رقم الطلب</span> <bdi dir="ltr">#A-10294</bdi></div>
+          <span class="badge">جاري التوصيل</span>
+        </div>
+        <div class="dates">
+          <div class="date-line">28 مارس 2025 <small>(ميلادي)</small></div>
+          <div class="hijri">28 رمضان 1446 <small>(هجري)</small></div>
+        </div>
+        <div class="total">
+          <span class="label">الإجمالي</span>
+          <span class="amount">890.00 ر.س</span>
+        </div>
+        <div class="link">
+          <span>تفاصيل</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <!-- Order 3: delivered -->
+      <div class="card delivered">
+        <div class="accent"></div>
+        <div class="row">
+          <div class="order-num"><span>رقم الطلب</span> <bdi dir="ltr">#A-10295</bdi></div>
+          <span class="badge">تم التسليم</span>
+        </div>
+        <div class="dates">
+          <div class="date-line">5 أبريل 2025 <small>(ميلادي)</small></div>
+          <div class="hijri">5 شوال 1446 <small>(هجري)</small></div>
+        </div>
+        <div class="total">
+          <span class="label">الإجمالي</span>
+          <span class="amount">2,450.75 ر.س</span>
+        </div>
+        <div class="link">
+          <span>تفاصيل</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+
+      <!-- Order 4: cancelled -->
+      <div class="card cancelled">
+        <div class="accent"></div>
+        <div class="row">
+          <div class="order-num"><span>رقم الطلب</span> <bdi dir="ltr">#A-10296</bdi></div>
+          <span class="badge">ملغي</span>
+        </div>
+        <div class="dates">
+          <div class="date-line">20 أبريل 2025 <small>(ميلادي)</small></div>
+          <div class="hijri">20 شوال 1446 <small>(هجري)</small></div>
+        </div>
+        <div class="total">
+          <span class="label">الإجمالي</span>
+          <span class="amount">345.00 ر.س</span>
+        </div>
+        <div class="link">
+          <span>تفاصيل</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer">عرض تفاصيل كل_orders</div>
+  </div>
+</body>
+</html>

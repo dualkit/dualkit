@@ -1,0 +1,263 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "settings",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T17:41:35.120Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>الإعدادات</title>\n  <style>\n    :root {\n      --bg: #f5f7fa;\n      --card: #ffffff;\n      --text: #1a1a1a;\n      --muted: #6b7280;\n      --border: #e5e7eb;\n      --accent: #0d6efd;\n      --toggle-on: #0d6efd;\n      --toggle-off: #ccc;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n      background: var(--bg);\n      color: var(--text);\n      font-size: 16px;\n      line-height: 1.6;\n      padding: 16px;\n    }\n\n    .container {\n      max-width: 420px;\n      margin: 0 auto;\n    }\n\n    header {\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    header h1 {\n      font-size: 20px;\n      font-weight: 600;\n    }\n\n    .card {\n      background: var(--card);\n      border-radius: 12px;\n      box-shadow: 0 1px 3px rgba(0,0,0,0.05);\n      margin-bottom: 16px;\n      overflow: hidden;\n    }\n\n    .group-title {\n      font-size: 13px;\n      font-weight: 600;\n      color: var(--muted);\n      padding: 12px 16px;\n      text-transform: uppercase;\n      letter-spacing: 0.5px;\n    }\n\n    .row {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      padding: 14px 16px;\n      border-top: 1px solid var(--border);\n      gap: 12px;\n    }\n\n    .row:first-child {\n      border-top: none;\n    }\n\n    .row-label {\n      flex: 1;\n      display: flex;\n      flex-direction: column;\n      gap: 2px;\n    }\n\n    .row-label .title {\n      font-size: 15px;\n      color: var(--text);\n    }\n\n    .row-label .subtitle {\n      font-size: 13px;\n      color: var(--muted);\n    }\n\n    .row-value {\n      font-size: 14px;\n      color: var(--muted);\n      white-space: nowrap;\n    }\n\n    .chevron {\n      margin-inline-start: 8px;\n      flex-shrink: 0;\n    }\n\n    .toggle {\n      position: relative;\n      display: inline-block;\n      width: 44px;\n      height: 24px;\n      flex-shrink: 0;\n    }\n\n    .toggle input {\n      opacity: 0;\n      width: 0;\n      height: 0;\n    }\n\n    .slider {\n      position: absolute;\n      cursor: pointer;\n      inset: 0;\n      background-color: var(--toggle-off);\n      border-radius: 24px;\n      transition: 0.25s;\n    }\n\n    .slider:before {\n      content: \"\";\n      position: absolute;\n      height: 18px;\n      width: 18px;\n      left: 3px;\n      bottom: 3px;\n      background-color: white;\n      border-radius: 50%;\n      transition: 0.25s;\n    }\n\n    input:checked + .slider {\n      background-color: var(--toggle-on);\n    }\n\n    input:checked + .slider:before {\n      transform: translateX(20px);\n    }\n\n    footer {\n      text-align: center;\n      margin-top: 24px;\n      font-size: 12px;\n      color: var(--muted);\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <header>\n      <h1>الإعدادات</h1>\n    </header>\n\n    <!-- حساب -->\n    <div class=\"card\">\n      <div class=\"group-title\">الحساب</div>\n\n      <div class=\"row\">\n        <div class=\"row-label\">\n          <span class=\"title\">اسم الحساب</span>\n          <span class=\"subtitle\">محمد علي السالم</span>\n        </div>\n        <span class=\"chevron\">›</span>\n      </div>\n\n      <div class=\"row\">\n        <div class=\"row-label\">\n          <span class=\"title\">رقم الهاتف</span>\n          <span class=\"subtitle\"><bdi dir=\"ltr\">+973 3600 1234</bdi></span>\n        </div>\n        <span class=\"chevron\">›</span>\n      </div>\n\n      <div class=\"row\">\n        <div class=\"row-label\">\n          <span class=\"title\">اللغة</span>\n          <span class=\"row-value\">العربية</span>\n        </div>\n        <span class=\"chevron\">›</span>\n      </div>\n    </div>\n\n    <!-- الأمان -->\n    <div class=\"card\">\n      <div class=\"group-title\">الأمان</div>\n\n      <div class=\"row\">\n        <div class=\"row-label\">\n          <span class=\"title\">التعرف البيومتري (Face ID)</span>\n          <span class=\"subtitle\">تفعيل تسجيل الدخول باستخدام الوجه</span>\n        </div>\n        <label class=\"toggle\">\n          <input type=\"checkbox\" checked />\n          <span class=\"slider\"></span>\n        </label>\n      </div>\n\n      <div class=\"row\">\n        <div class=\"row-label\">\n          <span class=\"title\">تسجيل الدخول ثنائي العامل</span>\n          <span class=\"subtitle\">حماية الحساب بطلب رمز إضافي</span>\n        </div>\n        <label class=\"toggle\">\n          <input type=\"checkbox\" checked />\n          <span class=\"slider\"></span>\n        </label>\n      </div>\n    </div>\n\n    <!-- الإشعارات -->\n    <div class=\"card\">\n      <div class=\"group-title\">الإشعارات</div>\n\n      <div class=\"row\">\n        <div class=\"row-label\">\n          <span class=\"title\">التحويلات البنكية</span>\n          <span class=\"subtitle\">إشعار عند كل عملية تحويل</span>\n        </div>\n        <label class=\"toggle\">\n          <input type=\"checkbox\" checked />\n          <span class=\"slider\"></span>\n        </label>\n      </div>\n\n      <div class=\"row\">\n        <div class=\"row-label\">\n          <span class=\"title\">العروض الخاصة</span>\n          <span class=\"subtitle\">إشعار بعروض وعروض خاصة لك</span>\n        </div>\n        <label class=\"toggle\">\n          <input type=\"checkbox\" />\n          <span class=\"slider\"></span>\n        </label>\n      </div>\n\n      <div class=\"row\">\n        <div class=\"row-label\">\n          <span class=\"title\">كشوفات الحساب</span>\n          <span class=\"subtitle\">إشعار باستلام كشف حساب جديد</span>\n        </div>\n        <label class=\"toggle\">\n          <input type=\"checkbox\" checked />\n          <span class=\"slider\"></span>\n        </label>\n      </div>\n    </div>\n\n    <footer>\n      بنك البحرين • جميع الحقوق محفوظة\n    </footer>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6489,
+    "output": 2026
+  },
+  "ms": 43344,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 51,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 314,
+        "y": 86,
+        "width": 44,
+        "height": 15
+      },
+      "message": "0.5px letter-spacing on \"الحساب\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"group-title\">الحساب</div>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 325,
+        "y": 375.78125,
+        "width": 33,
+        "height": 15
+      },
+      "message": "0.5px letter-spacing on \"الأمان\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"group-title\">الأمان</div>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 303,
+        "y": 588.171875,
+        "width": 55,
+        "height": 15
+      },
+      "message": "0.5px letter-spacing on \"الإشعارات\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"group-title\">الإشعارات</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 155,
+        "y": 21,
+        "width": 80,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الإعدادات</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 314,
+        "y": 86,
+        "width": 44,
+        "height": 15
+      },
+      "message": "\"الحساب\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"group-title\">الحساب</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 260.765625,
+        "y": 159.796875,
+        "width": 97.234375,
+        "height": 15
+      },
+      "message": "\"محمد علي السالم\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"subtitle\">محمد علي السالم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 325,
+        "y": 375.78125,
+        "width": 33,
+        "height": 15
+      },
+      "message": "\"الأمان\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"group-title\">الأمان</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 155.546875,
+        "y": 449.578125,
+        "width": 202.453125,
+        "height": 15
+      },
+      "message": "\"تفعيل تسجيل الدخول باستخدام الوجه\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"subtitle\">تفعيل تسجيل الدخول باستخدام الوجه</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 180.546875,
+        "y": 525.375,
+        "width": 177.453125,
+        "height": 15
+      },
+      "message": "\"حماية الحساب بطلب رمز إضافي\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"subtitle\">حماية الحساب بطلب رمز إضافي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 303,
+        "y": 588.171875,
+        "width": 55,
+        "height": 15
+      },
+      "message": "\"الإشعارات\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"group-title\">الإشعارات</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 213.546875,
+        "y": 661.96875,
+        "width": 144.453125,
+        "height": 15
+      },
+      "message": "\"إشعار عند كل عملية تحويل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"subtitle\">إشعار عند كل عملية تحويل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 185.546875,
+        "y": 737.765625,
+        "width": 172.453125,
+        "height": 15
+      },
+      "message": "\"إشعار بعروض وعروض خاصة لك\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"subtitle\">إشعار بعروض وعروض خاصة لك</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 180.546875,
+        "y": 813.5625,
+        "width": 177.453125,
+        "height": 15
+      },
+      "message": "\"إشعار باستلام كشف حساب جديد\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"subtitle\">إشعار باستلام كشف حساب جديد</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 106.0625,
+        "y": 872.359375,
+        "width": 177.875,
+        "height": 14
+      },
+      "message": "\"بنك البحرين • جميع الحقوق محفوظة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<footer>\n      بنك البحرين • جميع الحقوق محفوظة\n    </footer>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 32,
+        "y": 142.390625,
+        "width": 5.328125,
+        "height": 25.59375
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"chevron\">›</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 32,
+        "y": 218.1875,
+        "width": 5.328125,
+        "height": 25.59375
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"chevron\">›</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 32,
+        "y": 294.78125,
+        "width": 5.328125,
+        "height": 25.59375
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"chevron\">›</span>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 906
+}

@@ -1,0 +1,95 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "profile",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-10-21T16:48:41.290Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>الملف الشخصي - تطبيق الدفع</title>\n    <!-- Google Fonts: IBM Plex Sans Arabic -->\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n    <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n    <!-- Tailwind CSS CDN -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <style>\n      :lang(ar) {\n        font-family: 'IBM Plex Sans Arabic', sans-serif;\n        letter-spacing: 0;\n        line-height: 1.7;\n      }\n      body {\n        font-family: 'IBM Plex Sans Arabic', sans-serif;\n        background-color: #f1f5f9;\n      }\n    </style>\n</head>\n<body class=\"flex justify-center items-center min-h-screen p-0 sm:p-4\">\n  <!-- Mobile Phone Frame Container -->\n  <div class=\"w-full max-w-sm bg-white min-h-screen sm:min-h-[800px] sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-200\">\n    \n    <!-- Header -->\n    <header class=\"flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white sticky top-0 z-10\">\n      <button class=\"w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition text-slate-700\" aria-label=\"الرجوع\">\n        <svg class=\"w-5 h-5 rtl:-scale-x-100\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\">\n          <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 19l-7-7 7-7\"/>\n        </svg>\n      </button>\n      <h1 class=\"text-base font-bold text-slate-900\">الملف الشخصي</h1>\n      <div class=\"w-10\"></div> <!-- Balance spacing -->\n    </header>\n\n    <!-- Main Content -->\n    <main class=\"flex-1 overflow-y-auto p-6 space-y-6\">\n      \n      <!-- Profile Card (Name & Email) -->\n      <div class=\"flex flex-col items-center bg-slate-50 border border-slate-200/80 rounded-2xl p-6 text-center relative\">\n        <div class=\"w-20 h-20 bg-indigo-600 text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-md mb-3\">\n          ل م\n        </div>\n        <h2 class=\"text-lg font-bold text-slate-900\">ليلى المنصوري</h2>\n        <p class=\"text-slate-600 text-sm mt-1\">\n          <bdi dir=\"ltr\">layla@example.com</bdi>\n        </p>\n        <!-- Edit action for Name & Email -->\n        <button class=\"absolute top-4 start-4 text-indigo-600 hover:text-indigo-700 text-sm font-semibold flex items-center gap-1 bg-white px-3 py-1 rounded-full border border-indigo-100 shadow-xs transition\">\n          <span>تعديل</span>\n        </button>\n      </div>\n\n      <!-- Account Details Section -->\n      <div class=\"space-y-4\">\n        <h3 class=\"text-sm font-semibold text-slate-400 uppercase tracking-wider px-1\">تفاصيل الحساب</h3>\n        \n        <!-- Phone Number Card -->\n        <div class=\"bg-white border border-slate-200 rounded-2xl p-4 flex items-center justify-between shadow-xs\">\n          <div class=\"space-y-0.5\">\n            <span class=\"text-xs font-medium text-slate-500 block\">رقم الهاتف المتحرك</span>\n            <p class=\"text-slate-900 font-semibold text-base\">\n              <bdi dir=\"ltr\">+971 50 123 4567</bdi>\n            </p>\n          </div>\n          <!-- Edit action for Phone -->\n          <button class=\"text-indigo-600 hover:bg-indigo-50 px-3 py-2 rounded-xl text-sm font-semibold transition shrink-0 ms-2\" aria-label=\"تعديل رقم الهاتف\">\n            تعديل\n          </button>\n        </div>\n\n        <!-- IBAN Card -->\n        <div class=\"bg-white border border-slate-200 rounded-2xl p-4 flex items-center justify-between shadow-xs\">\n          <div class=\"space-y-0.5 overflow-hidden\">\n            <span class=\"text-xs font-medium text-slate-500 block\">رقم الحساب المصرفي (IBAN)</span>\n            <p class=\"text-slate-900 font-mono text-sm font-semibold truncate\">\n              <bdi dir=\"ltr\">AE07 0331 2345 6789 0123 456</bdi>\n            </p>\n          </div>\n          <!-- Edit action for IBAN -->\n          <button class=\"text-indigo-600 hover:bg-indigo-50 px-3 py-2 rounded-xl text-sm font-semibold transition shrink-0 ms-2\" aria-label=\"تعديل رقم الحساب المصرفي\">\n            تعديل\n          </button>\n        </div>\n      </div>\n\n    </main>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6520,
+    "output": 1457
+  },
+  "ms": 10568,
+  "finish": "STOP",
+  "reasoningTokens": 2931,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 80,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 269,
+        "y": 318.796875,
+        "width": 89,
+        "height": 21
+      },
+      "message": "0.7px letter-spacing on \"تفاصيل الحساب\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<h3 class=\"text-sm font-semibold text-slate-400 uppercase tracking-wider px-1\">تفاصيل الحساب</h3>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 254,
+        "y": 371.796875,
+        "width": 91,
+        "height": 18
+      },
+      "message": "\"رقم الهاتف المتحرك\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs font-medium text-slate-500 block\">رقم الهاتف المتحرك</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 208,
+        "y": 466.984375,
+        "width": 137,
+        "height": 18
+      },
+      "message": "\"رقم الحساب المصرفي (IBAN)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs font-medium text-slate-500 block\">رقم الحساب المصرفي (IBAN)</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 45,
+        "y": 377.390625,
+        "width": 57,
+        "height": 36
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button class=\"text-indigo-600 hover:bg-indigo-50 px-3 py-2 rounded-xl text-sm font-semibold transition shrink-0 ms-2\" aria-label=\"تعديل رقم الهاتف\">\n          "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 45,
+        "y": 470.875,
+        "width": 57,
+        "height": 36
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button class=\"text-indigo-600 hover:bg-indigo-50 px-3 py-2 rounded-xl text-sm font-semibold transition shrink-0 ms-2\" aria-label=\"تعديل رقم الحساب المصرفي\">\n  "
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

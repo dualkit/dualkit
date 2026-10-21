@@ -1,0 +1,39 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "transactions",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T18:09:39.023Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>المعاملات</title>\n<style>\nbody {\n  font-family: Arial, sans-serif;\n  background-color: #f5f5f5;\n  margin: 0;\n  padding: 16px;\n  direction: rtl;\n}\n.container {\n  max-width: 375px;\n  margin: 0 auto;\n  background-color: #fff;\n  padding: 16px;\n  border-radius: 8px;\n  box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n}\n.balance {\n  font-size: 1.2em;\n  margin-bottom: 8px;\n}\n.filter {\n  margin-bottom: 16px;\n}\ntable {\n  width: 100%;\n  border-collapse: collapse;\n}\nth, td {\n  padding: 8px;\n  text-align: right;\n  border-bottom: 1px solid #ddd;\n}\nth {\n  background-color: #f0f0f0;\n}\n.in {\n  color: green;\n  font-weight: bold;\n}\n.out {\n  color: red;\n  font-weight: bold;\n}\n</style>\n</head>\n<body>\n<div class=\"container\">\n  <div class=\"balance\">الرقم: 1234.567 OMR</div>\n  <div class=\"filter\">\n    <label for=\"filter\">تصفية:</label>\n    <select id=\"filter\">\n      <option value=\"all\">كل الأوقات</option>\n      <option value=\"thisMonth\">هذا الشهر</option>\n      <option value=\"lastMonth\">الشهر الماضي</option>\n    </select>\n  </div>\n  <table>\n    <thead>\n      <tr>\n        <th>التاريخ</th>\n        <th>التاجر</th>\n        <th>المبلغ</th>\n        <th>النوع</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td>2024-06-01</td>\n        <td>Lulu Hypermarket</td>\n        <td>12.345 OMR</td>\n        <td class=\"out\">صادر</td>\n      </tr>\n      <tr>\n        <td>2024-06-02</td>\n        <td>Netflix</td>\n        <td>5.000 OMR</td>\n        <td class=\"out\">صادر</td>\n      </tr>\n      <tr>\n        <td>2024-06-03</td>\n        <td>Salary</td>\n        <td>1000.000 OMR</td>\n        <td class=\"in\">وارد</td>\n      </tr>\n      <tr>\n        <td>2024-06-04</td>\n        <td>Uber</td>\n        <td>3.210 OMR</td>\n        <td class=\"out\">صادر</td>\n      </tr>\n      <tr>\n        <td>2024-06-05</td>\n        <td>Starbucks</td>\n        <td>2.500 OMR</td>\n        <td class=\"out\">صادر</td>\n      </tr>\n      <tr>\n        <td>2024-06-06</td>\n        <td>Amazon</td>\n        <td>15.750 OMR</td>\n        <td class=\"out\">صادر</td>\n      </tr>\n      <tr>\n        <td>2024-06-07</td>\n        <td>Transfer from John</td>\n        <td>50.000 OMR</td>\n        <td class=\"in\">وارد</td>\n      </tr>\n      <tr>\n        <td>2024-06-08</td>\n        <td>Electricity Bill</td>\n        <td>10.000 OMR</td>\n        <td class=\"out\">صادر</td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 144,
+    "output": 7198
+  },
+  "ms": 74011,
+  "finish": "stop",
+  "reasoningTokens": 6001,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 96,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 174.1875,
+        "y": 33,
+        "width": 183.8125,
+        "height": 21
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"balance\">الرقم: 1234.567 OMR</div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نموذج عنوان التسليم</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+        }
+        h1 {
+            font-size: 22px;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #2c3e50;
+        }
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+        input[type="text"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fafafa;
+            color: #333;
+            transition: border-color 0.2s ease;
+        }
+        input[type="text"]:focus,
+        input[type="tel"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #3498db;
+            background-color: #fff;
+        }
+        .example-text {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 4px;
+        }
+        .save-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            background-color: #27ae60;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .save-btn:hover {
+            background-color: #219653;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>عنوان التسليم</h1>
+        <p class="subtitle">أدخل تفاصيل عنوانك لتسليم الطلب</p>
+        <form id="addressForm">
+            <div class="form-group">
+                <label class="required">المبنى أو الفيلا</label>
+                <input type="text" id="building" name="building" placeholder="مثال: مبنى ١٢ أو فيلا ٥" required>
+            </div>
+            <div class="form-group">
+                <label class="required">الشارع</label>
+                <input type="text" id="street" name="street" placeholder="مثال: شارع التوحيد" required>
+            </div>
+            <div class="form-group">
+                <label class="required">المنطقة</label>
+                <input type="text" id="area" name="area" placeholder="مثال: دبي الجديدة" required>
+            </div>
+            <div class="form-group">
+                <label>رقم المكاني</label>
+                <input type="text" id="makani" name="makani" placeholder="مثال: ٤٨٢٣٤">
+            </div>
+            <div class="form-group">
+                <label class="required">الإمارة</label>
+                <select id="emirate" name="emirate" required>
+                    <option value="dubai" selected>دبي</option>
+                    <option value="abu-dhabi">أبوظبي</option>
+                    <option value="sharjah">الشارقة</option>
+                    <option value="ajman">عجمان</option>
+                    <option value="umm-al-quwain">أم القيوين</option>
+                    <option value="ras-al-khaimah">رأس الخيمة</option>
+                    <option value="fujairah">الفجيرة</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="required">رقم الهاتف</label>
+                <input type="tel" id="phone" name="phone" placeholder="أدخل رقم الهاتف" required>
+                <div class="example-text">مثال: 050 123 4567</div>
+            </div>
+            <button type="submit" class="save-btn">حفظ العنوان</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('addressForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('تم حفظ العنوان بنجاح!');
+        });
+    </script>
+</body>
+</html>

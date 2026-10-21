@@ -1,0 +1,53 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "profile",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-10-21T17:15:11.877Z",
+  "reply": "<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الملف الشخصي</title>\n  <style>\n    :lang(ar) {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n    body {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      font-size: var(--type-body-size);\n      line-height: 1.7;\n      margin: 0;\n      padding: 0;\n      background-color: #f5f5f5;\n      color: #333;\n    }\n    .profile-header {\n      background-color: #0077b6;\n      color: #fff;\n      padding: 20px;\n      text-align: center;\n    }\n    .profile-header h1 {\n      font-size: 20px;\n      margin: 0;\n    }\n    .profile-section {\n      background-color: #fff;\n      padding: 16px;\n      border-bottom: 1px solid #e0e0e0;\n    }\n    .profile-item {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 12px;\n    }\n    .profile-item:last-child {\n      margin-bottom: 0;\n    }\n    .profile-label {\n      font-size: var(--type-label-size);\n      color: #555;\n    }\n    .profile-value {\n      font-size: var(--type-body-size);\n      color: #222;\n      text-align: right;\n    }\n    .edit-button {\n      background-color: #0077b6;\n      color: #fff;\n      border: none;\n      padding: 8px 12px;\n      border-radius: 6px;\n      font-size: 14px;\n      cursor: pointer;\n      text-align: center;\n    }\n    .edit-button:hover {\n      background-color: #005f8a;\n    }\n    bdi {\n      unicode-bidi: isolate;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"profile-header\">\n    <h1>الملف الشخصي</h1>\n  </div>\n\n  <div class=\"profile-section\">\n    <div class=\"profile-item\">\n      <button class=\"edit-button\">تعديل</button>\n      <div class=\"profile-value\" lang=\"ar\">ليلى المنصوري</div>\n      <div class=\"profile-label\">الاسم</div>\n    </div>\n\n    <div class=\"profile-item\">\n      <button class=\"edit-button\">تعديل</button>\n      <div class=\"profile-value\"><bdi dir=\"ltr\">layla@example.com</bdi></div>\n      <div class=\"profile-label\">البريد الإلكتروني</div>\n    </div>\n\n    <div class=\"profile-item\">\n      <button class=\"edit-button\">تعديل</button>\n      <div class=\"profile-value\"><bdi dir=\"ltr\">+971 50 123 4567</bdi></div>\n      <div class=\"profile-label\">رقم الهاتف</div>\n    </div>\n\n    <div class=\"profile-item\">\n      <button class=\"edit-button\">تعديل</button>\n      <div class=\"profile-value\"><bdi dir=\"ltr\">AE07 0331 2345 6789 0123 456</bdi></div>\n      <div class=\"profile-label\">رقم الآيبان</div>\n    </div>\n  </div>\n</body>\n</html>",
+  "usage": {
+    "input": 6507,
+    "output": 962
+  },
+  "ms": 26602,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 127.71875,
+        "y": 26,
+        "width": 134.5625,
+        "height": 22
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الملف الشخصي</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 329,
+        "y": 101,
+        "width": 33,
+        "height": 16
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"edit-button\">تعديل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

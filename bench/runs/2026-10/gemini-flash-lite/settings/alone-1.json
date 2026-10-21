@@ -1,0 +1,193 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "settings",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T16:55:14.534Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>إعدادات الحساب - بنك البحرين</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap\" rel=\"stylesheet\">\n    <style>\n        * {\n            box-sizing: border-box;\n            margin: 0;\n            padding: 0;\n            font-family: 'Cairo', sans-serif;\n        }\n\n        body {\n            background-color: #0b192c;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            min-height: 100vh;\n            color: #1e293b;\n        }\n\n        /* Phone Mockup Frame */\n        .phone-frame {\n            width: 100%;\n            max-width: 390px;\n            height: 844px;\n            background-color: #f8fafc;\n            border-radius: 40px;\n            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);\n            display: flex;\n            flex-direction: column;\n            overflow: hidden;\n            position: relative;\n            border: 8px solid #1e293b;\n        }\n\n        /* Status Bar */\n        .status-bar {\n            height: 44px;\n            background-color: #ffffff;\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            padding: 0 24px;\n            font-size: 14px;\n            font-weight: 600;\n            color: #0f172a;\n        }\n\n        /* App Header */\n        .app-header {\n            background-color: #ffffff;\n            padding: 16px 20px;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            border-bottom: 1px solid #e2e8f0;\n        }\n\n        .app-header h1 {\n            font-size: 18px;\n            font-weight: 700;\n            color: #0f172a;\n        }\n\n        .back-btn {\n            background: none;\n            border: none;\n            cursor: pointer;\n            color: #0f172a;\n            display: flex;\n            align-items: center;\n        }\n\n        /* Scrollable Content */\n        .content {\n            flex: 1;\n            overflow-y: auto;\n            padding: 20px 16px;\n        }\n\n        .content::-webkit-scrollbar {\n            display: none;\n        }\n\n        /* Section Group */\n        .section-group {\n            margin-bottom: 24px;\n        }\n\n        .section-title {\n            font-size: 13px;\n            font-weight: 700;\n            color: #64748b;\n            margin-bottom: 8px;\n            padding-right: 4px;\n            letter-spacing: 0.5px;\n        }\n\n        .card-group {\n            background-color: #ffffff;\n            border-radius: 16px;\n            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);\n            overflow: hidden;\n            border: 1px solid #f1f5f9;\n        }\n\n        /* Row Item */\n        .setting-row {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            padding: 14px 16px;\n            border-bottom: 1px solid #f1f5f9;\n            transition: background-color 0.2s;\n            cursor: pointer;\n            text-decoration: none;\n            color: inherit;\n        }\n\n        .setting-row:last-child {\n            border-bottom: none;\n        }\n\n        .setting-row:active {\n            background-color: #f8fafc;\n        }\n\n        .row-left {\n            display: flex;\n            align-items: center;\n            gap: 12px;\n        }\n\n        .row-icon {\n            width: 32px;\n            height: 32px;\n            background-color: #eff6ff;\n            border-radius: 8px;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            color: #1d4ed8;\n        }\n\n        .row-title {\n            font-size: 14px;\n            font-weight: 600;\n            color: #1e293b;\n        }\n\n        .row-right {\n            display: flex;\n            align-items: center;\n            gap: 8px;\n            color: #64748b;\n            font-size: 14px;\n        }\n\n        .row-value {\n            color: #64748b;\n            font-size: 13px;\n        }\n\n        /* Chevron Icon for Navigation */\n        .chevron {\n            width: 16px;\n            height: 16px;\n            fill: none;\n            stroke: #94a3b8;\n            stroke-width: 2;\n            stroke-linecap: round;\n            stroke-linejoin: round;\n        }\n\n        /* Toggle Switch */\n        .switch {\n            position: relative;\n            display: inline-block;\n            width: 44px;\n            height: 24px;\n        }\n\n        .switch input {\n            opacity: 0;\n            width: 0;\n            height: 0;\n        }\n\n        .slider {\n            position: absolute;\n            cursor: pointer;\n            top: 0; left: 0; right: 0; bottom: 0;\n            background-color: #cbd5e1;\n            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);\n            border-radius: 24px;\n        }\n\n        .slider:before {\n            position: absolute;\n            content: \"\";\n            height: 20px;\n            width: 20px;\n            left: 2px;\n            bottom: 2px;\n            background-color: white;\n            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);\n            border-radius: 50%;\n            box-shadow: 0 1px 3px rgba(0,0,0,0.2);\n        }\n\n        input:checked + .slider {\n            background-color: #1d4ed8;\n        }\n\n        input:checked + .slider:before {\n            transform: translateX(-20px); /* RTL translation */\n        }\n\n        /* Bahrain branding subtle tag */\n        .bh-badge {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 6px;\n            margin-top: 10px;\n            margin-bottom: 20px;\n            font-size: 12px;\n            color: #94a3b8;\n        }\n\n        .bh-badge span {\n            color: #dc2626;\n            font-weight: bold;\n        }\n\n        /* Bottom Home Indicator */\n        .home-indicator {\n            height: 24px;\n            background-color: #ffffff;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n        }\n\n        .indicator-bar {\n            width: 134px;\n            height: 5px;\n            background-color: #cbd5e1;\n            border-radius: 100px;\n        }\n    </style>\n</head>\n<body>\n\n    <div class=\"phone-frame\">\n        <!-- Status Bar -->\n        <div class=\"status-bar\">\n            <span>9:41</span>\n            <div style=\"display: flex; gap: 6px; align-items: center;\">\n                <span>5G</span>\n                <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h4.15c1.05.62 2.3 1 3.5 1 4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z\"/></svg>\n            </div>\n        </div>\n\n        <!-- App Header -->\n        <div class=\"app-header\">\n            <button class=\"back-btn\">\n                <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"9 18 15 12 9 6\"></polyline></svg>\n            </button>\n            <h1>الإعدادات</h1>\n            <div style=\"width: 20px;\"></div> <!-- Spacer -->\n        </div>\n\n        <!-- Main Content -->\n        <div class=\"content\">\n\n            <!-- Group 1: Account -->\n            <div class=\"section-group\">\n                <div class=\"section-title\">الحساب</div>\n                <div class=\"card-group\">\n                    <div class=\"setting-row\">\n                        <div class=\"row-left\">\n                            <div class=\"row-icon\">\n                                <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\"></path><circle cx=\"12\" cy=\"7\" r=\"4\"></circle></svg>\n                            </div>\n                            <span class=\"row-title\">الاسم الشخصي</span>\n                        </div>\n                        <div class=\"row-right\">\n                            <span class=\"row-value\">محمد أحمد الفلاح</span>\n                            <svg class=\"chevron\" viewBox=\"0 0 24 24\"><polyline points=\"15 18 9 12 15 6\"></polyline></svg>\n                        </div>\n                    </div>\n\n                    <div class=\"setting-row\">\n                        <div class=\"row-left\">\n                            <div class=\"row-icon\">\n                                <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z\"></path></svg>\n                            </div>\n                            <span class=\"row-title\">رقم الهواتف</span>\n                        </div>\n                        <div class=\"row-right\">\n                            <span class=\"row-value\" dir=\"ltr\">+973 3600 1234</span>\n                            <svg class=\"chevron\" viewBox=\"0 0 24 24\"><polyline points=\"15 18 9 12 15 6\"></polyline></svg>\n                        </div>\n                    </div>\n\n                    <div class=\"setting-row\">\n                        <div class=\"row-left\">\n                            <div class=\"row-icon\">\n                                <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle><line x1=\"2\" y1=\"12\" x2=\"22\" y2=\"12\"></line><path d=\"M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z\"></path></svg>\n                            </div>\n                            <span class=\"row-title\">لغة التطبيق</span>\n                        </div>\n                        <div class=\"row-right\">\n                            <span class=\"row-value\">العربية</span>\n                            <svg class=\"chevron\" viewBox=\"0 0 24 24\"><polyline points=\"15 18 9 12 15 6\"></polyline></svg>\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <!-- Group 2: Security -->\n            <div class=\"section-group\">\n                <div class=\"section-title\">الأمان</div>\n                <div class=\"card-group\">\n                    <div class=\"setting-row\">\n                        <div class=\"row-left\">\n                            <div class=\"row-icon\">\n                                <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 2a10 10 0 0 1 7.54 16.63\"></path><path d=\"M12 12v8\"></path><path d=\"M12 12H8\"></path></svg>\n                            </div>\n                            <span class=\"row-title\">بصمة الوجه (Face ID)</span>\n                        </div>\n                        <label class=\"switch\">\n                            <input type=\"checkbox\" checked>\n                            <span class=\"slider\"></span>\n                        </label>\n                    </div>\n\n                    <div class=\"setting-row\">\n                        <div class=\"row-left\">\n                            <div class=\"row-icon\">\n                                <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\" ry=\"2\"></rect><path d=\"M7 11V7a5 5 0 0 1 10 0v4\"></path></svg>\n                            </div>\n                            <span class=\"row-title\">تسجيل الدخول بخطوتين</span>\n                        </div>\n                        <label class=\"switch\">\n                            <input type=\"checkbox\" checked>\n                            <span class=\"slider\"></span>\n                        </label>\n                    </div>\n                </div>\n            </div>\n\n            <!-- Group 3: Notifications -->\n            <div class=\"section-group\">\n                <div class=\"section-title\">الإشعارات</div>\n                <div class=\"card-group\">\n                    <div class=\"setting-row\">\n                        <div class=\"row-left\">\n                            <div class=\"row-icon\">\n                                <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><polyline points=\"17 1 21 5 17 9\"></polyline><path d=\"M3 11V9a4 4 0 0 1 4-4h14\"></path><polyline points=\"7 23 3 19 7 15\"></polyline><path d=\"M21 13v2a4 4 0 0 1-4 4H3\"></path></svg>\n                            </div>\n                            <span class=\"row-title\">التحويلات</span>\n                        </div>\n                        <label class=\"switch\">\n                            <input type=\"checkbox\" checked>\n                            <span class=\"slider\"></span>\n                        </label>\n                    </div>\n\n                    <div class=\"setting-row\">\n                        <div class=\"row-left\">\n                            <div class=\"row-icon\">\n                                <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z\"></path><line x1=\"7\" y1=\"7\" x2=\"7.01\" y2=\"7\"></line></svg>\n                            </div>\n                            <span class=\"row-title\">العروض</span>\n                        </div>\n                        <label class=\"switch\">\n                            <input type=\"checkbox\">\n                            <span class=\"slider\"></span>\n                        </label>\n                    </div>\n\n                    <div class=\"setting-row\">\n                        <div class=\"row-left\">\n                            <div class=\"row-icon\">\n                                <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path><polyline points=\"14 2 14 8 20 8\"></polyline><line x1=\"16\" y1=\"13\" x2=\"8\" y2=\"13\"></line><line x1=\"16\" y1=\"17\" x2=\"8\" y2=\"17\"></line><polyline points=\"10 9 9 9 8 9\"></polyline></svg>\n                            </div>\n                            <span class=\"row-title\">كشوفات الحساب</span>\n                        </div>\n                        <label class=\"switch\">\n                            <input type=\"checkbox\" checked>\n                            <span class=\"slider\"></span>\n                        </label>\n                    </div>\n                </div>\n            </div>\n\n            <!-- Bahrain Footer Badge -->\n            <div class=\"bh-badge\">\n                مرخص من مصرف البحرين المركزي <span>🇧🇭</span>\n            </div>\n\n        </div>\n\n        <!-- Home Indicator -->\n        <div class=\"home-indicator\">\n            <div class=\"indicator-bar\"></div>\n        </div>\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 147,
+    "output": 4749
+  },
+  "ms": 13644,
+  "finish": "STOP",
+  "reasoningTokens": 1202,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 55,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 319,
+        "y": 138,
+        "width": 43,
+        "height": 24
+      },
+      "message": "0.5px letter-spacing on \"الحساب\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"section-title\">الحساب</div>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 327,
+        "y": 378,
+        "width": 35,
+        "height": 24
+      },
+      "message": "0.5px letter-spacing on \"الأمان\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"section-title\">الأمان</div>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 305,
+        "y": 557,
+        "width": 57,
+        "height": 24
+      },
+      "message": "0.5px letter-spacing on \"الإشعارات\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"section-title\">الإشعارات</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 319,
+        "y": 138,
+        "width": 43,
+        "height": 24
+      },
+      "message": "\"الحساب\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"section-title\">الحساب</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 65,
+        "y": 189,
+        "width": 98,
+        "height": 24
+      },
+      "message": "\"محمد أحمد الفلاح\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"row-value\">محمد أحمد الفلاح</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 65,
+        "y": 311,
+        "width": 35,
+        "height": 24
+      },
+      "message": "\"العربية\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"row-value\">العربية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 327,
+        "y": 378,
+        "width": 35,
+        "height": 24
+      },
+      "message": "\"الأمان\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"section-title\">الأمان</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 305,
+        "y": 557,
+        "width": 57,
+        "height": 24
+      },
+      "message": "\"الإشعارات\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"section-title\">الإشعارات</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 121,
+        "y": 797,
+        "width": 169,
+        "height": 23
+      },
+      "message": "\"مرخص من مصرف البحرين المركزي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"bh-badge\">\n                مرخص من مصرف البحرين المركزي <span>🇧🇭</span>\n            </div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 24,
+        "y": 138,
+        "width": 342,
+        "height": 24
+      },
+      "message": "padding-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"section-title\">الحساب</div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 24,
+        "y": 378,
+        "width": 342,
+        "height": 24
+      },
+      "message": "padding-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"section-title\">الأمان</div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 24,
+        "y": 557,
+        "width": 342,
+        "height": 24
+      },
+      "message": "padding-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"section-title\">الإشعارات</div>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

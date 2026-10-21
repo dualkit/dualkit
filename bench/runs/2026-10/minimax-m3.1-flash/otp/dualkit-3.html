@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f9fc">
+  <title>التحقق من الرمز</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --background: #f7f9fc;
+      --surface: #ffffff;
+      --text: #172033;
+      --muted: #687386;
+      --border: #d9e0ea;
+      --primary: #0b7d55;
+      --primary-dark: #086746;
+      --focus: rgba(11, 125, 85, 0.12);
+      --danger: #c53f3f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+      line-height: 1.7;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .page {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      padding: max(24px, env(safe-area-inset-top)) 20px max(24px, env(safe-area-inset-bottom));
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: clamp(48px, 10vh, 90px);
+    }
+
+    .back-button {
+      width: 44px;
+      height: 44px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .back-button svg {
+      width: 22px;
+      height: 22px;
+      transform: scaleX(-1);
+    }
+
+    .content {
+      width: 100%;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .brand-mark {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 24px;
+      border-radius: 15px;
+      background: var(--primary);
+      color: white;
+    }
+
+    .brand-mark svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 7vw, 34px);
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .description {
+      margin: 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .phone-number {
+      color: var(--text);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .otp-section {
+      margin-top: 36px;
+    }
+
+    .otp-label {
+      margin: 0 0 12px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .otp-fields {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 9px;
+      direction: ltr;
+    }
+
+    .otp-fields input {
+      width: 100%;
+      aspect-ratio: 0.78;
+      min-width: 0;
+      padding: 0;
+      border: 1.5px solid var(--border);
+      border-radius: 13px;
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      caret-color: var(--primary);
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .otp-fields input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--focus);
+    }
+
+    .otp-fields input.filled {
+      border-color: var(--primary);
+    }
+
+    .otp-fields input:disabled {
+      background: #f1f3f6;
+      color: #a2a9b3;
+    }
+
+    .status-row {
+      min-height: 28px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .status-row.error {
+      color: var(--danger);
+    }
+
+    .actions {
+      margin-top: 20px;
+    }
+
+    .verify-button {
+      width: 100%;
+      min-height: 54px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 160ms ease, transform 120ms ease;
+    }
+
+    .verify-button:hover {
+      background: var(--primary-dark);
+    }
+
+    .verify-button:active {
+      transform: scale(0.99);
+    }
+
+    .verify-button:disabled {
+      background: #b8c2ce;
+      cursor: not-allowed;
+    }
+
+    .resend-button {
+      width: 100%;
+      margin-top: 16px;
+      padding: 8px;
+      border: 0;
+      background: transparent;
+      color: var(--primary);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .resend-button:disabled {
+      color: var(--muted);
+      cursor: default;
+    }
+
+    .footer-note {
+      margin: 28px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 360px) {
+      .page {
+        padding-inline: 16px;
+      }
+
+      .otp-fields {
+        gap: 6px;
+      }
+
+      .otp-fields input {
+        border-radius: 11px;
+        font-size: 21px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="top-bar">
+      <button class="back-button" type="button" aria-label="العودة">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <section class="content" aria-labelledby="page-title">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 9.5h16M6.5 9.5V7.8A2.8 2.8 0 019.3 5h5.4a2.8 2.8 0 012.8 2.8v1.7M5 9.5v8.7A1.8 1.8 0 006.8 20h10.4a1.8 1.8 0 001.8-1.8V9.5M12 13v3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <h1 id="page-title">أدخل الرمز</h1>
+      <p class="description">
+        أرسلنا رمزًا مكونًا من 6 أرقام إلى
+        <bdi class="phone-number" dir="ltr">+966 55 123 4567</bdi>
+      </p>
+
+      <div class="otp-section">
+        <p class="otp-label" id="otp-label">رمز التحقق</p>
+        <div class="otp-fields" role="group" aria-labelledby="otp-label">
+          <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" pattern="[0-9]" aria-label="الرقم 1">
+          <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" pattern="[0-9]" aria-label="الرقم 2">
+          <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" pattern="[0-9]" aria-label="الرقم 3">
+          <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" pattern="[0-9]" aria-label="الرقم 4">
+          <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" pattern="[0-9]" aria-label="الرقم 5">
+          <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="1" pattern="[0-9]" aria-label="الرقم 6">
+        </div>
+        <div class="status-row" id="status" role="status" aria-live="polite"></div>
+      </div>
+
+      <div class="actions">
+        <button class="verify-button" id="verifyButton" type="button" disabled>تحقق</button>
+        <button class="resend-button" id="resendButton" type="button" disabled>إعادة الإرسال خلال 0:45</button>
+      </div>
+
+      <p class="footer-note">تأكد من Privatly من الرقم الذي سجّلته.</p>
+    </section>
+  </main>
+
+  <script>
+    const fields = [...document.querySelectorAll(".otp-fields input")];
+    const verifyButton = document.getElementById("verifyButton");
+    const resendButton = document.getElementById("resendButton");
+    const status = document.getElementById("status");
+    let remainingSeconds = 45;
+    let timer;
+
+    function updateVerification() {
+      const complete = fields.every(field => field.value !== "");
+      verifyButton.disabled = !complete;
+
+      if (complete) {
+        status.textContent = "";
+        status.classList.remove("error");
+      }
+    }
+
+    function updateCountdown() {
+      const minutes = Math.floor(remainingSeconds / 60);
+      const seconds = String(remainingSeconds % 60).padStart(2, "0");
+      resendButton.textContent = `إعادة الإرسال خلال ${minutes}:${seconds}`;
+      resendButton.disabled = true;
+
+      if (remainingSeconds <= 0) {
+        clearInterval(timer);
+        resendButton.textContent = "إعادة إرسال الرمز";
+        resendButton.disabled = false;
+      } else {
+        remainingSeconds -= 1;
+      }
+    }
+
+    fields.forEach((field, index) => {
+      field.addEventListener("input", () => {
+        field.value = field.value.replace(/\D/g, "").slice(0, 1);
+        field.classList.toggle("filled", field.value !== "");
+
+        if (field.value && index < fields.length - 1) {
+          fields[index + 1].focus();
+        }
+
+        updateVerification();
+      });
+
+      field.addEventListener("keydown", event => {
+        if (event.key === "Backspace" && !field.value && index > 0) {
+          fields[index - 1].focus();
+        }
+
+        if (event.key === "ArrowLeft" && index < fields.length - 1) {
+          fields[index + 1].focus();
+        }
+
+        if (event.key === "ArrowRight" && index > 0) {
+          fields[index - 1].focus();
+        }
+      });
+
+      field.addEventListener("paste", event => {
+        const digits = (event.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, 6);
+        if (!digits) return;
+
+        event.preventDefault();
+        digits.split("").forEach((digit, digitIndex) => {
+          if (fields[digitIndex]) {
+            fields[digitIndex].value = digit;
+            fields[digitIndex].classList.add("filled");
+          }
+        });
+
+        fields[Math.min(digits.length, 6) - 1].focus();
+        updateVerification();
+      });
+    });
+
+    verifyButton.addEventListener("click", () => {
+      if (verifyButton.disabled) return;
+      status.textContent = "تم التحقق من الرمز بنجاح.";
+      status.classList.remove("error");
+      verifyButton.textContent = "تم التحقق";
+    });
+
+    resendButton.addEventListener("click", () => {
+      remainingSeconds = 45;
+      updateCountdown();
+      timer = setInterval(updateCountdown, 1000);
+      status.textContent = "تم إرسال رمز جديد.";
+      status.classList.remove("error");
+      fields.forEach(field => {
+        field.value = "";
+        field.classList.remove("filled");
+      });
+      updateVerification();
+      fields[0].focus();
+    });
+
+    updateCountdown();
+    timer = setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>

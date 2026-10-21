@@ -1,0 +1,305 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "address-form",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-10-21T16:47:10.040Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>تطبيق بقالة دبي - إضافة عنوان التوصيل</title>\n  <!-- Google Fonts: IBM Plex Sans Arabic -->\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <!-- Tailwind CSS CDN -->\n  <script src=\"https://cdn.tailwindcss.com\"></script>\n  <script>\n    tailwind.config = {\n      theme: {\n        extend: {\n          fontFamily: {\n            arabic: ['\"IBM Plex Sans Arabic\"', 'sans-serif'],\n          },\n        },\n      },\n    }\n  </script>\n  <style>\n    :root {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n    }\n    :lang(ar) {\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n    /* Enforce 14px floor for UI text */\n    body, input, select, button, label {\n      font-size: 14px;\n    }\n    .body-text {\n      font-size: 16px;\n    }\n    /* Custom scrollbar for mobile frame */\n    .mobile-scroll::-webkit-scrollbar {\n      width: 4px;\n    }\n    .mobile-scroll::-webkit-scrollbar-thumb {\n      background: #cbd5e1;\n      border-radius: 4px;\n    }\n  </style>\n</head>\n<body class=\"bg-slate-900 text-slate-800 min-h-screen flex items-center justify-center p-0 sm:p-4 font-arabic\">\n\n  <!-- Phone Container Frame -->\n  <div class=\"w-full sm:w-[390px] h-screen sm:h-[844px] bg-slate-50 sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border-0 sm:border-8 sm:border-slate-800\">\n    \n    <!-- Status Bar (Simulated) -->\n    <div class=\"bg-white px-6 pt-3 pb-2 flex justify-between items-center text-xs text-slate-500 select-none shrink-0\">\n      <span class=\"font-semibold text-slate-700\">09:41</span>\n      <div class=\"flex items-center gap-1.5\">\n        <span>5G</span>\n        <svg class=\"w-4 h-4\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h15.3l-.62-1.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9zm0 2c3.87 0 7 3.13 7 7 0 1.66-.58 3.18-1.55 4.39L16.5 15.5l-1.42 1.42 1.83 1.83c-1.12.74-2.48 1.25-3.91 1.25s-2.79-.51-3.91-1.25l1.83-1.83L9.5 15.5l-2.95 2.89C5.58 15.18 5 13.66 5 12c0-3.87 3.13-7 7-7z\"/></svg>\n      </div>\n    </div>\n\n    <!-- App Header -->\n    <header class=\"bg-white px-4 py-3 border-b border-slate-100 flex items-center justify-between shrink-0\">\n      <div class=\"flex items-center gap-3\">\n        <!-- Back button with directional icon -->\n        <button type=\"button\" class=\"w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition-colors\" aria-label=\"الرجوع\">\n          <svg class=\"w-5 h-5 rtl:-scale-x-100\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\">\n            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 19l-7-7 7-7\"></path>\n          </svg>\n        </button>\n        <h1 class=\"font-bold text-slate-900 text-base\">إضافة عنوان التوصيل</h1>\n      </div>\n      <!-- Language Switcher badge -->\n      <button type=\"button\" class=\"text-xs font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 hover:bg-emerald-100 transition-colors\">\n        English\n      </button>\n    </header>\n\n    <!-- Scrollable Form Area -->\n    <main class=\"flex-1 overflow-y-auto mobile-scroll p-4 space-y-5 pb-8\">\n      \n      <!-- Delivery Illustration / Notice -->\n      <div class=\"bg-emerald-50 border border-emerald-100 rounded-2xl p-3.5 flex items-start gap-3 text-emerald-900\">\n        <svg class=\"w-5 h-5 text-emerald-600 shrink-0 mt-0.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\">\n          <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z\"></path>\n          <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 11a3 3 0 11-6 0 3 3 0 016 0z\"></path>\n        <div>\n          <p class=\"text-xs font-semibold leading-relaxed\">نصل إليك في أسرع وقت داخل دبي</p>\n          <p class=\"text-[11px] text-emerald-700/80 leading-normal\">يرجى التأكد من دقة بيانات العنوان لضمان وصول طلب البقالة بدقة.</p>\n        </div>\n      </div>\n\n      <form class=\"space-y-4\" onsubmit=\"event.preventDefault();\">\n        \n        <!-- Emirate Picker -->\n        <div class=\"space-y-1.5\">\n          <label for=\"emirate\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">الإمارة</label>\n          <div class=\"relative\">\n            <select id=\"emirate\" name=\"emirate\" class=\"w-full bg-white border border-slate-200 rounded-xl px-3.5 py-3 text-slate-900 appearance-none focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all cursor-pointer\">\n              <option value=\"DU\" selected>دبي (Dubai)</option>\n              <option value=\"AUH\">أبوظبي (Abu Dhabi)</option>\n              <option value=\"SHJ\">الشارقة (Sharjah)</option>\n              <option value=\"AJM\">عجمان (Ajman)</option>\n              <option value=\"UAQ\">أم القيوين (Umm Al Quwain)</option>\n              <option value=\"RAK\">رأس الخيمة (Ras Al Khaimah)</option>\n              <option value=\"FUJ\">الفجيرة (Fujairah)</option>\n            </select>\n            <div class=\"pointer-events-none absolute inset-y-0 start-0 flex items-center px-3 text-slate-500\">\n              <svg class=\"w-4 h-4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19 9l-7 7-7-7\"></path></svg>\n            </div>\n          </div>\n        </div>\n\n        <!-- Area / District -->\n        <div class=\"space-y-1.5\">\n          <label for=\"area\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">المنطقة</label>\n          <input type=\"text\" id=\"area\" name=\"area\" dir=\"auto\" placeholder=\"مثال: دبي مارينا، البرشاء، ديرة\" class=\"w-full bg-white border border-slate-200 rounded-xl px-3.5 py-3 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all\">\n        </div>\n\n        <!-- Street -->\n        <div class=\"space-y-1.5\">\n          <label for=\"street\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">الشارع</label>\n          <input type=\"text\" id=\"street\" name=\"street\" dir=\"auto\" placeholder=\"مثال: شارع الملك سلمان، شارع المرقبات\" class=\"w-full bg-white border border-slate-200 rounded-xl px-3.5 py-3 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all\">\n        </div>\n\n        <!-- Building or Villa -->\n        <div class=\"space-y-1.5\">\n          <label for=\"building\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">رقم المبنى أو الفيلا</label>\n          <input type=\"text\" id=\"building\" name=\"building\" dir=\"auto\" placeholder=\"مثال: برج مارينا ديموند 5، أو فيلا رقم 12\" class=\"w-full bg-white border border-slate-200 rounded-xl px-3.5 py-3 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all\">\n        </div>\n\n        <!-- Makani Number -->\n        <div class=\"space-y-1.5\">\n          <div class=\"flex justify-between items-center\">\n            <label for=\"makani\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">رقم مكاني (اختياري)</label>\n            <span class=\"text-[11px] text-slate-400\">10 أرقام مكانية</span>\n          </div>\n          <div dir=\"ltr\">\n            <input type=\"text\" id=\"makani\" name=\"makani\" inputmode=\"numeric\" placeholder=\"30492 88123\" maxlength=\"11\" class=\"w-full bg-white border border-slate-200 rounded-xl px-3.5 py-3 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all text-right\">\n          </div>\n          <p class=\"text-[11px] text-slate-500 leading-normal\">رقم مكاني يساعد السائق في الوصول لباب منزلك مباشرة.</p>\n        </div>\n\n        <!-- Phone Number Field -->\n        <div class=\"space-y-1.5 pt-2 border-t border-slate-100\">\n          <label for=\"phone\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">رقم الهاتف المحمول للتواصل</label>\n          <div class=\"flex items-center rounded-xl border border-slate-200 bg-white overflow-hidden focus-within:border-emerald-600 focus-within:ring-1 focus-within:ring-emerald-600 transition-all\" dir=\"ltr\">\n            <span class=\"px-3 py-3 text-slate-600 bg-slate-50 border-e border-slate-200 select-none font-medium text-sm\">+971</span>\n            <input type=\"tel\" id=\"phone\" name=\"phone\" inputmode=\"tel\" autocomplete=\"tel\" placeholder=\"050 123 4567\" class=\"w-full px-3.5 py-3 text-slate-900 placeholder:text-slate-400 focus:outline-none text-right bg-transparent\">\n          </div>\n          <p class=\"text-[11px] text-slate-500 leading-normal\">سنستخدم هذا الرقم لإرسال تحديثات حالة طلب البقالة.</p>\n        </div>\n\n      </form>\n    </main>\n\n    <!-- Bottom Action Footer -->\n    <footer class=\"bg-white px-4 py-3 border-t border-slate-100 shrink-0\">\n      <button type=\"submit\" class=\"w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-semibold py-3.5 px-4 rounded-xl shadow-lg shadow-emerald-600/20 transition-all flex items-center justify-center gap-2\">\n        <span>حفظ العنوان</span>\n        <svg class=\"w-5 h-5 rtl:rotate-180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M14 5l7 7m0 0l-7 7m7-7H3\"></path></svg>\n      </button>\n    </footer>\n\n  </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6495,
+    "output": 3567
+  },
+  "ms": 17779,
+  "finish": "STOP",
+  "reasoningTokens": 1925,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 46,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 347,
+        "y": 202.390625,
+        "width": 27,
+        "height": 18
+      },
+      "message": "0.6px letter-spacing on \"الإمارة\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<label for=\"emirate\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">الإمارة</label>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 336,
+        "y": 290.1875,
+        "width": 38,
+        "height": 18
+      },
+      "message": "0.6px letter-spacing on \"المنطقة\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<label for=\"area\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">المنطقة</label>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 344,
+        "y": 377.984375,
+        "width": 30,
+        "height": 18
+      },
+      "message": "0.6px letter-spacing on \"الشارع\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<label for=\"street\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">الشارع</label>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 287,
+        "y": 465.78125,
+        "width": 87,
+        "height": 18
+      },
+      "message": "0.6px letter-spacing on \"رقم المبنى أو الفيلا\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<label for=\"building\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">رقم المبنى أو الفيلا</label>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 285,
+        "y": 554.921875,
+        "width": 89,
+        "height": 18
+      },
+      "message": "0.6px letter-spacing on \"رقم مكاني (اختياري)\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<label for=\"makani\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">رقم مكاني (اختياري)</label>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 236,
+        "y": 675.5625,
+        "width": 138,
+        "height": 18
+      },
+      "message": "0.6px letter-spacing on \"رقم الهاتف المحمول للتواصل\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<label for=\"phone\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">رقم الهاتف المحمول للتواصل</label>"
+    },
+    {
+      "rule": "bidi/field-placeholder",
+      "title": "An Arabic hint on the wrong side of the field",
+      "severity": "warning",
+      "box": {
+        "x": 16,
+        "y": 313.1875,
+        "width": 358,
+        "height": 49.796875
+      },
+      "message": "The placeholder \"مثال: دبي مارينا، البرشاء، ديرة\" is Arabic in a left-to-right field.",
+      "fix": "Keep dir=\"ltr\" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.",
+      "snippet": "<input type=\"text\" id=\"area\" name=\"area\" dir=\"auto\" placeholder=\"مثال: دبي مارينا، البرشاء، ديرة\" class=\"w-full bg-white border border-slate-200 rounded-xl px-3"
+    },
+    {
+      "rule": "bidi/field-placeholder",
+      "title": "An Arabic hint on the wrong side of the field",
+      "severity": "warning",
+      "box": {
+        "x": 16,
+        "y": 400.984375,
+        "width": 358,
+        "height": 49.796875
+      },
+      "message": "The placeholder \"مثال: شارع الملك سلمان، شارع المرقبات\" is Arabic in a left-to-right field.",
+      "fix": "Keep dir=\"ltr\" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.",
+      "snippet": "<input type=\"text\" id=\"street\" name=\"street\" dir=\"auto\" placeholder=\"مثال: شارع الملك سلمان، شارع المرقبات\" class=\"w-full bg-white border border-slate-200 round"
+    },
+    {
+      "rule": "bidi/field-placeholder",
+      "title": "An Arabic hint on the wrong side of the field",
+      "severity": "warning",
+      "box": {
+        "x": 16,
+        "y": 488.78125,
+        "width": 358,
+        "height": 49.796875
+      },
+      "message": "The placeholder \"مثال: برج مارينا ديموند 5، أو فيلا رقم 1…\" is Arabic in a left-to-right field.",
+      "fix": "Keep dir=\"ltr\" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.",
+      "snippet": "<input type=\"text\" id=\"building\" name=\"building\" dir=\"auto\" placeholder=\"مثال: برج مارينا ديموند 5، أو فيلا رقم 12\" class=\"w-full bg-white border border-slate-2"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 169,
+        "y": 132.390625,
+        "width": 158,
+        "height": 18
+      },
+      "message": "\"نصل إليك في أسرع وقت داخل دبي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs font-semibold leading-relaxed\">نصل إليك في أسرع وقت داخل دبي</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 52,
+        "y": 150.890625,
+        "width": 275,
+        "height": 17
+      },
+      "message": "\"يرجى التأكد من دقة بيانات العنوان لضمان …\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-[11px] text-emerald-700/80 leading-normal\">يرجى التأكد من دقة بيانات العنوان لضمان وصول طلب البقالة بدقة.</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 347,
+        "y": 202.390625,
+        "width": 27,
+        "height": 18
+      },
+      "message": "\"الإمارة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"emirate\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">الإمارة</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 336,
+        "y": 290.1875,
+        "width": 38,
+        "height": 18
+      },
+      "message": "\"المنطقة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"area\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">المنطقة</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 344,
+        "y": 377.984375,
+        "width": 30,
+        "height": 18
+      },
+      "message": "\"الشارع\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"street\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">الشارع</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 287,
+        "y": 465.78125,
+        "width": 87,
+        "height": 18
+      },
+      "message": "\"رقم المبنى أو الفيلا\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"building\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">رقم المبنى أو الفيلا</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 285,
+        "y": 554.921875,
+        "width": 89,
+        "height": 18
+      },
+      "message": "\"رقم مكاني (اختياري)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"makani\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">رقم مكاني (اختياري)</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 16,
+        "y": 554.578125,
+        "width": 63,
+        "height": 17
+      },
+      "message": "\"10 أرقام مكانية\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-slate-400\">10 أرقام مكانية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 150,
+        "y": 634.0625,
+        "width": 224,
+        "height": 17
+      },
+      "message": "\"رقم مكاني يساعد السائق في الوصول لباب من…\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-[11px] text-slate-500 leading-normal\">رقم مكاني يساعد السائق في الوصول لباب منزلك مباشرة.</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 236,
+        "y": 675.5625,
+        "width": 138,
+        "height": 18
+      },
+      "message": "\"رقم الهاتف المحمول للتواصل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"phone\" class=\"block font-semibold text-slate-700 text-xs uppercase tracking-wider\">رقم الهاتف المحمول للتواصل</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 148,
+        "y": 753.359375,
+        "width": 226,
+        "height": 17
+      },
+      "message": "\"سنستخدم هذا الرقم لإرسال تحديثات حالة طل…\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-[11px] text-slate-500 leading-normal\">سنستخدم هذا الرقم لإرسال تحديثات حالة طلب البقالة.</p>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

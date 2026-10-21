@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f7f6">
+  <title>محفظتي — المعاملات</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f7f5;
+      --surface: #ffffff;
+      --text: #13231c;
+      --muted: #6c7b73;
+      --line: #e5ebe7;
+      --green: #0d7550;
+      --green-soft: #e8f5ef;
+      --orange: #c25b27;
+      --orange-soft: #fff0e8;
+      --shadow: 0 12px 30px rgba(24, 58, 42, 0.08);
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+    }
+
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(13, 117, 80, 0.08), transparent 30%),
+        var(--bg);
+      font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: var(--type-body-size);
+      line-height: 1.6;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    .app {
+      width: min(100%, 480px);
+      min-height: 100vh;
+      margin-inline: auto;
+      padding: calc(18px + env(safe-area-inset-top)) 18px calc(94px + env(safe-area-inset-bottom));
+      background: rgba(244, 247, 245, 0.94);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      color: #fff;
+      border-radius: 14px;
+      background: var(--green);
+      box-shadow: 0 8px 18px rgba(13, 117, 80, 0.22);
+    }
+
+    .brand-name {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .profile {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--surface);
+    }
+
+    .profile svg {
+      width: 22px;
+      height: 22px;
+      color: #52645a;
+    }
+
+    .page-title {
+      margin: 0 0 5px;
+      font-size: 27px;
+      line-height: 1.35;
+      font-weight: 750;
+    }
+
+    .page-subtitle {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .balance-card {
+      position: relative;
+      overflow: hidden;
+      padding: 22px;
+      color: #fff;
+      border-radius: 24px;
+      background:
+        radial-gradient(circle at 12% 15%, rgba(255, 255, 255, 0.18), transparent 24%),
+        linear-gradient(135deg, #0a6b49 0%, #0e8259 100%);
+      box-shadow: 0 18px 36px rgba(13, 117, 80, 0.24);
+    }
+
+    .balance-card::after {
+      content: "";
+      position: absolute;
+      inset-block-start: -58px;
+      inset-inline-end: -32px;
+      width: 160px;
+      height: 160px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 25px rgba(255, 255, 255, 0.04),
+        0 0 0 50px rgba(255, 255, 255, 0.025);
+      pointer-events: none;
+    }
+
+    .balance-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 8px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+
+    .balance-label svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .balance-value {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.3;
+      font-weight: 750;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0;
+    }
+
+    .balance-value small {
+      margin-inline-start: 7px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .balance-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin: 13px 0 0;
+      padding: 5px 10px;
+      color: #e9fff5;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      font-size: 14px;
+    }
+
+    .balance-note svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .transactions-section {
+      margin-top: 26px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 13px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .month-filter {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 40px;
+      padding: 7px 12px;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      box-shadow: 0 4px 12px rgba(28, 54, 41, 0.04);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .month-filter svg {
+      width: 17px;
+      height: 17px;
+      color: var(--green);
+    }
+
+    .month-filter select {
+      appearance: none;
+      padding: 0 2px;
+      color: inherit;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .table-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    thead {
+      color: var(--muted);
+      background: #f8faf9;
+      font-size: var(--type-label-size);
+    }
+
+    th,
+    td {
+      padding: 13px 12px;
+      text-align: start;
+      vertical-align: middle;
+    }
+
+    th {
+      font-size: var(--type-label-size);
+      font-weight: 600;
+    }
+
+    th:first-child,
+    td:first-child {
+      width: 78px;
+    }
+
+    th:last-child,
+    td:last-child {
+      width: 112px;
+      text-align: end;
+    }
+
+    tbody tr {
+      border-top: 1px solid var(--line);
+    }
+
+    tbody tr:first-child {
+      border-top: 0;
+    }
+
+    .date {
+      color: #435249;
+      font-size: var(--type-label-size);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .merchant {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .merchant-icon {
+      display: grid;
+      flex: 0 0 36px;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      color: var(--green);
+      border-radius: 11px;
+      background: var(--green-soft);
+    }
+
+    .merchant-icon.outgoing {
+      color: var(--orange);
+      background: var(--orange-soft);
+    }
+
+    .merchant-icon svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .merchant-copy {
+      min-width: 0;
+    }
+
+    .merchant-name {
+      display: block;
+      overflow: hidden;
+      font-size: 14px;
+      font-weight: 650;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .merchant-category {
+      display: block;
+      color: var(--muted);
+      font-size: var(--type-caption-size);
+      line-height: 1.45;
+    }
+
+    .amount {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .flow {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-top: 2px;
+      font-size: var(--type-caption-size);
+      font-weight: 600;
+    }
+
+    .flow.in {
+      color: var(--green);
+    }
+
+    .flow.out {
+      color: var(--orange);
+    }
+
+    .flow svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 10;
+      inset-inline: 0;
+      bottom: 0;
+      display: grid;
+      width: min(100%, 480px);
+      margin-inline: auto;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+      border-top: 1px solid rgba(220, 228, 223, 0.9);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(16px);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      min-height: 58px;
+      justify-content: center;
+      color: #809087;
+      border: 0;
+      background: transparent;
+      font-size: var(--type-label-size);
+      text-decoration: none;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .nav-item.active {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    @media (max-width: 370px) {
+      .app {
+        padding-inline: 12px;
+      }
+
+      th,
+      td {
+        padding-inline: 8px;
+      }
+
+      th:first-child,
+      td:first-child {
+        width: 66px;
+      }
+
+      th:last-child,
+      td:last-child {
+        width: 103px;
+      }
+
+      .merchant-icon {
+        display: none;
+      }
+
+      .balance-value {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 7.5h16M7 4.5h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-12a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M16 13.5h4v5h-4a2.5 2.5 0 0 1 0-5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <p class="brand-name">محفظتي</p>
+      </div>
+      <button class="profile" type="button" aria-label="الملف الشخصي">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M5.5 20c.6-4 2.8-6 6.5-6s5.9 2 6.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </header>
+
+    <h1 class="page-title">المعاملات</h1>
+    <p class="page-subtitle">تابع جميع حركات محفظتك في مكان واحد</p>
+
+    <section class="balance-card" aria-label="الرصيد المتاح">
+      <p class="balance-label">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M7 9h6M7 13h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        الرصيد المتاح
+      </p>
+      <p class="balance-value">
+        <bdi>2,854.750</bdi>
+        <small>ر.ع.</small>
+      </p>
+      <p class="balance-note">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        تم تحديث الرصيد اليوم
+      </p>
+    </section>
+
+    <section class="transactions-section" aria-labelledby="transactions-title">
+      <div class="section-header">
+        <h2 class="section-title" id="transactions-title">سجل المعاملات</h2>
+        <label class="month-filter">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M8 3v4M16 3v4M3 10h18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span hidden>تصفية المعاملات</span>
+          <select aria-label="تصفية حسب الشهر">
+            <option>هذا الشهر</option>
+            <option>الشهر الماضي</option>
+            <option>الأسبوع الماضي</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">التاريخ</th>
+              <th scope="col">الجهة</th>
+              <th scope="col">المبلغ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="date">12 أغسطس</td>
+              <td>
+                <div class="merchant">
+                  <span class="merchant-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M4 9.5h16v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9ZM7 9.5l1.5-5h7l1.5 5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                      <path d="M8 14h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span class="merchant-copy">
+                    <bdi class="merchant-name" lang="en" dir="ltr">Lulu Hypermarket</bdi>
+                    <span class="merchant-category">تسوق</span>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <bdi class="amount">− 18.750 ر.ع.</bdi>
+                <span class="flow out">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 19V5m0 0-5 5m5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  صادر
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="date">11 أغسطس</td>
+              <td>
+                <div class="merchant">
+                  <span class="merchant-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M4 7h16v12H4z" stroke="currentColor" stroke-width="1.7"/>
+                      <path d="m4 8 8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                  <span class="merchant-copy">
+                    <bdi class="merchant-name" lang="en" dir="ltr">Netflix</bdi>
+                    <span class="merchant-category">اشتراك رقمي</span>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <bdi class="amount">− 4.500 ر.ع.</bdi>
+                <span class="flow out">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 19V5m0 0-5 5m5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  صادر
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="date">10 أغسطس</td>
+              <td>
+                <div class="merchant">
+                  <span class="merchant-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M5 20V9l7-5 7 5v11" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                      <path d="M9 20v-6h6v6" stroke="currentColor" stroke-width="1.7"/>
+                    </svg>
+                  </span>
+                  <span class="merchant-copy">
+                    <span class="merchant-name">إيداع نقدي</span>
+                    <span class="merchant-category">فرع مسقط</span>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <bdi class="amount">+ 250.000 ر.ع.</bdi>
+                <span class="flow in">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 5v14m0 0 5-5m-5 5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  وارد
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="date">8 أغسطس</td>
+              <td>
+                <div class="merchant">
+                  <span class="merchant-icon outgoing" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M6 3h12l2 5H4l2-5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                      <path d="M5 8v12h14V8M9 12h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span class="merchant-copy">
+                    <span class="merchant-name">متجر الخوير</span>
+                    <span class="merchant-category">متاجر</span>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <bdi class="amount">− 37.250 ر.ع.</bdi>
+                <span class="flow out">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 19V5m0 0-5 5m5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  صادر
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="date">6 أغسطس</td>
+              <td>
+                <div class="merchant">
+                  <span class="merchant-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.7"/>
+                      <path d="M3 10h18" stroke="currentColor" stroke-width="1.7"/>
+                    </svg>
+                  </span>
+                  <span class="merchant-copy">
+                    <span class="merchant-name">تحويل بنكي</span>
+                    <span class="merchant-category">حوالات بنكية</span>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <bdi class="amount">+ 120.500 ر.ع.</bdi>
+                <span class="flow in">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 5v14m0 0 5-5m-5 5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  وارد
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="date">4 أغسطس</td>
+              <td>
+                <div class="merchant">
+                  <span class="merchant-icon outgoing" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M7 3h10l3 4H4l3-4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                      <path d="M5 7v14h14V7" stroke="currentColor" stroke-width="1.7"/>
+                    </svg>
+                  </span>
+                  <span class="merchant-copy">
+                    <span class="merchant-name">مطعمinesis</span>
+                    <span class="merchant-category">مطاعم</span>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <bdi class="amount">− 8.900 ر.ع.</bdi>
+                <span class="flow out">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 19V5m0 0-5 5m5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  صادر
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="date">2 أغسطس</td>
+              <td>
+                <div class="merchant">
+                  <span class="merchant-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.7"/>
+                      <path d="M5.5 20c.5-4 2.7-6 6.5-6s6 2 6.5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span class="merchant-copy">
+                    <span class="merchant-name">استرداد مبلغ</span>
+                    <span class="merchant-category">معاملة عكسية</span>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <bdi class="amount">+ 12.350 ر.ع.</bdi>
+                <span class="flow in">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 5v14m0 0 5-5m-5 5-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  وارد
+                </span>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="date">1 أغسطس</td>
+              <td>
+                <div class="merchant">
+                  <span class="merchant-icon outgoing" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path d="M5 4h14v16H5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+                      <path d="M9 8h6M9 12h6M9 16h3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+                    </svg>
+                  </span>
+                  <span class="merchant-copy">
+                    <span class="merchant-name">فواتيرservices</span>
+                    <span class="merchant-category">خدمات</span>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <bdi class="amount">− 21.100 ر.ع.</bdi>
+                <span class="flow out">
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 19V5m0 0-5 5m5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  صادر
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="التنقل الرئيسي">
+    <a class="nav-item" href="#" aria-label="الرئيسية">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="m4 10 8-6 8 6v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      الرئيسية
+    </a>
+    <a class="nav-item" href="#" aria-label="المعاملات">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M5 7h14M5 12h14M5 17h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      المعاملات
+    </a>
+    <a class="nav-item" href="#" aria-label="التحويل">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M7 7h11m0 0-3-3m3 3-3 3M17 17H6m0 0 3 3m-3-3 3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      التحويل
+    </a>
+    <a class="nav-item active" href="#" aria-label="المحفظة" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="3" y="6" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M7 6V4h10v2M16 12h5v4h-5a2 2 0 0 1 0-4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+      </svg>
+      المحفظة
+    </a>
+  </nav>
+</body>
+</html>

@@ -1,0 +1,95 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "address-form",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T16:46:16.340Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>إضافة عنوان التوصيل - بقالة دبي</title>\n    <!-- Tailwind CSS CDN -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Fonts: Cairo -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap\" rel=\"stylesheet\">\n    <script>\n        tailwind.config = {\n            theme: {\n                extend: {\n                    fontFamily: {\n                        cairo: ['Cairo', 'sans-serif'],\n                    },\n                    colors: {\n                        grocery: {\n                            50: '#f0fdf4',\n                            500: '#10b981',\n                            600: '#059669',\n                            700: '#047857',\n                        }\n                    }\n                }\n            }\n        }\n    </script>\n</head>\n<body class=\"bg-gray-100 font-cairo flex justify-center items-center min-h-screen m-0 p-0 sm:p-4\">\n\n    <!-- Mobile Frame Container -->\n    <div class=\"bg-white w-full max-w-md sm:rounded-3xl shadow-xl overflow-hidden flex flex-col h-screen sm:h-auto sm:max-h-[90vh]\">\n        \n        <!-- Header -->\n        <div class=\"bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 z-10\">\n            <button class=\"text-gray-600 hover:text-black focus:outline-none\">\n                <svg class=\"w-6 h-6 transform rotate-180\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"></path>\n                </svg>\n            </button>\n            <h1 class=\"text-lg font-bold text-gray-800\">عنوان التوصيل</h1>\n            <div class=\"w-6\"></div> <!-- Spacer for centering -->\n        </div>\n\n        <!-- Form Scrollable Area -->\n        <div class=\"flex-1 overflow-y-auto p-6 space-y-5\">\n            \n            <!-- Quick Map / Location Banner -->\n            <div class=\"bg-grocery-50 border border-grocery-500/30 rounded-2xl p-4 flex items-center gap-3\">\n                <div class=\"bg-grocery-500 text-white p-3 rounded-xl\">\n                    <svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z\"></path>\n                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 11a3 3 0 11-6 0 3 3 0 016 0z\"></path>\n                    </svg>\n                </div>\n                <div>\n                    <h2 class=\"text-sm font-bold text-gray-900\">حدد موقعك بدقة لتوصيل أسرع</h2>\n                    <p class=\"text-xs text-gray-500\">يرجى إدخال تفاصيل العنوان أدناه</p>\n                </div>\n            </div>\n\n            <form id=\"addressForm\" class=\"space-y-4\">\n                \n                <!-- Emirate Picker -->\n                <div>\n                    <label class=\"block text-sm font-semibold text-gray-700 mb-1\">الإمارة</label>\n                    <div class=\"relative\">\n                        <select id=\"emirate\" class=\"w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 appearance-none focus:outline-none focus:border-grocery-500 focus:bg-white transition\">\n                            <option value=\"Dubai\" selected>دبي (Dubai)</option>\n                            <option value=\"Abu Dhabi\">أبوظبي</option>\n                            <option value=\"Sharjah\">الشارقة</option>\n                            <option value=\"Ajman\">عجمان</option>\n                            <option value=\"Ras Al Khaimah\">رأس الخيمة</option>\n                            <option value=\"Fujairah\">الفجيرة</option>\n                            <option value=\"Umm Al Quwain\">أم القيوين</option>\n                        </select>\n                        <div class=\"absolute inset-y-0 left-0 flex items-center px-4 pointer-events-none text-gray-500\">\n                            <svg class=\"w-4 h-4\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 9l-7 7-7-7\"></path>\n                            </svg>\n                        </div>\n                    </div>\n                </div>\n\n                <!-- Area / Community -->\n                <div>\n                    <label class=\"block text-sm font-semibold text-gray-700 mb-1\">المنطقة / الحي</label>\n                    <input type=\"text\" placeholder=\"مثال: دبي مارينا، البرشاء، داون تاون\" required\n                        class=\"w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-grocery-500 focus:bg-white transition\">\n                </div>\n\n                <!-- Street -->\n                <div>\n                    <label class=\"block text-sm font-semibold text-gray-700 mb-1\">الشارع</label>\n                    <input type=\"text\" placeholder=\"مثال: شارع الشيخ زايد، شارع الأصايل\" required\n                        class=\"w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-grocery-500 focus:bg-white transition\">\n                </div>\n\n                <!-- Building or Villa -->\n                <div>\n                    <label class=\"block text-sm font-semibold text-gray-700 mb-1\">رقم المبنى أو الفيلا ورقم الشقة</label>\n                    <input type=\"text\" placeholder=\"مثال: برج الماسة، شقة رقم 402 أو فيلا رقم 12\" required\n                        class=\"w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-grocery-500 focus:bg-white transition\">\n                </div>\n\n                <!-- Makani Number -->\n                <div>\n                    <div class=\"flex justify-between items-center mb-1\">\n                        <label class=\"block text-sm font-semibold text-gray-700\">رقم مكاني (اختياري)</label>\n                        <span class=\"text-xs text-gray-400\">10 أرقام</span>\n                    </div>\n                    <input type=\"text\" maxlength=\"10\" placeholder=\"مثال: 30492 85920\" \n                        class=\"w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 tracking-widest focus:outline-none focus:border-grocery-500 focus:bg-white transition\">\n                    <p class=\"text-[11px] text-gray-400 mt-1\">يساعد رقم مكاني السائق في الوصول لباب منزلك مباشرة.</p>\n                </div>\n\n                <!-- Phone Number -->\n                <div>\n                    <label class=\"block text-sm font-semibold text-gray-700 mb-1\">رقم الهاتف للتواصل</label>\n                    <div class=\"flex gap-2\">\n                        <div class=\"flex items-center justify-center bg-gray-100 border border-gray-200 rounded-xl px-3 text-gray-600 font-medium text-sm select-none\">\n                            🇦🇪 +971\n                        </div>\n                        <input type=\"tel\" placeholder=\"050 123 4567\" required\n                            class=\"flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-grocery-500 focus:bg-white transition\">\n                    </div>\n                </div>\n\n            </form>\n        </div>\n\n        <!-- Footer / Action Button -->\n        <div class=\"p-4 bg-white border-t border-gray-100\">\n            <button type=\"submit\" form=\"addressForm\"\n                class=\"w-full bg-grocery-600 hover:bg-grocery-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-grocery-500/30 transition transform active:scale-[0.98]\">\n                حفظ العنوان\n            </button>\n        </div>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 142,
+    "output": 2311
+  },
+  "ms": 8425,
+  "finish": "STOP",
+  "reasoningTokens": 983,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 77,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 301,
+        "y": 693.5,
+        "width": 52,
+        "height": 26
+      },
+      "message": "\"🇦🇪 +971\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"flex items-center justify-center bg-gray-100 border border-gray-200 rounded-xl px-3 text-gray-600 font-medium text-sm select-none\">\n                "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 128,
+        "y": 124,
+        "width": 161,
+        "height": 23
+      },
+      "message": "\"يرجى إدخال تفاصيل العنوان أدناه\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-gray-500\">يرجى إدخال تفاصيل العنوان أدناه</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 24,
+        "y": 545,
+        "width": 42,
+        "height": 23
+      },
+      "message": "\"10 أرقام\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-gray-400\">10 أرقام</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 118,
+        "y": 623,
+        "width": 248,
+        "height": 20
+      },
+      "message": "\"يساعد رقم مكاني السائق في الوصول لباب من…\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-[11px] text-gray-400 mt-1\">يساعد رقم مكاني السائق في الوصول لباب منزلك مباشرة.</p>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 24,
+        "y": 211,
+        "width": 48,
+        "height": 50
+      },
+      "message": "left: 0px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"absolute inset-y-0 left-0 flex items-center px-4 pointer-events-none text-gray-500\">\n                            <svg class=\"w-4 h-4\" fill=\"none\" st"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

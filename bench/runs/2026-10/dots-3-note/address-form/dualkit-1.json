@@ -1,0 +1,53 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "address-form",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-10-21T17:06:47.016Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>عنوان التوصيل</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :lang(ar) {\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      --type-body-size: 16px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n\n    * { box-sizing: border-box; }\n\n    body {\n      font-family: 'IBM Plex Arabic', sans-serif;\n      font-size: var(--type-body-size);\n      margin: 0;\n      padding: 20px;\n      min-height: 100vh;\n      display: flex;\n      align-items: flex-start;\n      justify-content: center;\n      background-color: #f0f2f5;\n      direction: rtl;\n      text-align: start;\n      -webkit-text-size-adjust: 100%;\n    }\n\n    .form-card {\n      width: 100%;\n      max-width: 440px;\n      background: #ffffff;\n      border-radius: 20px;\n      padding: 28px 24px;\n      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);\n    }\n\n    .form-title {\n      font-size: 22px;\n      font-weight: 700;\n      color: #111827;\n      margin-block-end: 24px;\n      text-align: start;\n    }\n\n    .form-field {\n      margin-block-end: 18px;\n    }\n\n    .form-label {\n      display: block;\n      font-size: var(--type-label-size);\n      font-weight: 500;\n      color: #374151;\n      margin-block-end: 8px;\n      text-align: start;\n    }\n\n    .form-input,\n    .form-select {\n      width: 100%;\n      padding: 14px 16px;\n      font-size: 16px;\n      font-family: inherit;\n      font-weight: 400;\n      background-color: #f9fafb;\n      border: 1.5px solid #e5e7eb;\n      border-radius: 12px;\n      color: #111827;\n      text-align: start;\n      transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;\n    }\n\n    .form-input::placeholder {\n      color: #9ca3af;\n    }\n\n    .form-input:focus,\n    .form-select:focus {\n      outline: none;\n      border-color: #16a34a;\n      background-color: #ffffff;\n      box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);\n    }\n\n    .form-select {\n      cursor: pointer;\n      appearance: none;\n      -webkit-appearance: none;\n    }\n\n    .form-button {\n      width: 100%;\n      padding: 16px;\n      font-size: 16px;\n      font-weight: 600;\n      font-family: inherit;\n      color: #ffffff;\n      background-color: #16a34a;\n      border: none;\n      border-radius: 12px;\n      cursor: pointer;\n      transition: background-color 0.2s, transform 0.1s;\n      margin-block-start: 8px;\n    }\n\n    .form-button:hover {\n      background-color: #15803d;\n    }\n\n    .form-button:active {\n      transform: scale(0.98);\n    }\n\n    #phone,\n    #makani {\n      direction: ltr;\n      text-align: start;\n    }\n  </style>\n</head>\n<body>\n  <main class=\"form-card\">\n    <h1 class=\"form-title\">عنوان التوصيل</h1>\n    <form onsubmit=\"return false\">\n      <div class=\"form-field\">\n        <label class=\"form-label\" for=\"building\">رقم المبنى أو الفلا</label>\n        <input class=\"form-input\" type=\"text\" id=\"building\" placeholder=\"رقم المبنى أو الفلا\" autocomplete=\"address-line1\">\n      </div>\n\n      <div class=\"form-field\">\n        <label class=\"form-label\" for=\"street\">الشارع</label>\n        <input class=\"form-input\" type=\"text\" id=\"street\" placeholder=\"اسم الشارع\" autocomplete=\"street-address\">\n      </div>\n\n      <div class=\"form-field\">\n        <label class=\"form-label\" for=\"area\">المنطقة</label>\n        <input class=\"form-input\" type=\"text\" id=\"area\" placeholder=\"اسم المنطقة\" autocomplete=\"address-level2\">\n      </div>\n\n      <div class=\"form-field\">\n        <label class=\"form-label\" for=\"makani\">رقم مكاني</label>\n        <input class=\"form-input\" type=\"text\" id=\"makani\" inputmode=\"numeric\" dir=\"ltr\" placeholder=\"رقم مكاني\">\n      </div>\n\n      <div class=\"form-field\">\n        <label class=\"form-label\" for=\"emirate\">الإمارة</label>\n        <select class=\"form-select\" id=\"emirate\">\n          <option value=\"dubai\" selected>دبي</option>\n          <option value=\"abudhabi\">أبوظبي</option>\n          <option value=\"sharjah\">الشارقة</option>\n          <option value=\"ajman\">عجمان</option>\n          <option value=\"raskhaimah\">رأس الخيمة</option>\n          <option value=\"fujairah\">الفجيرة</option>\n          <option value=\"ummquwain\">أم القيوين</option>\n        </select>\n      </div>\n\n      <div class=\"form-field\">\n        <label class=\"form-label\" for=\"phone\">رقم الهاتف</label>\n        <input class=\"form-input\" type=\"tel\" id=\"phone\" inputmode=\"tel\" dir=\"ltr\" placeholder=\"⁦050 123 4567⁩\" autocomplete=\"tel\">\n      </div>\n\n      <button class=\"form-button\" type=\"submit\">حفظ عنوان</button>\n    </form>\n  </main>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6297,
+    "output": 12586
+  },
+  "ms": 115605,
+  "finish": "stop",
+  "reasoningTokens": 10626,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-placeholder",
+      "title": "An Arabic hint on the wrong side of the field",
+      "severity": "warning",
+      "box": {
+        "x": 44,
+        "y": 476.875,
+        "width": 302,
+        "height": 57.1875
+      },
+      "message": "The placeholder \"رقم مكاني\" is Arabic in a left-to-right field.",
+      "fix": "Keep dir=\"ltr\" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.",
+      "snippet": "<input class=\"form-input\" type=\"text\" id=\"makani\" inputmode=\"numeric\" dir=\"ltr\" placeholder=\"رقم مكاني\">"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 212.875,
+        "y": 68.734375,
+        "width": 133.125,
+        "height": 25
+      },
+      "message": "\"IBM Plex Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1 class=\"form-title\">عنوان التوصيل</h1>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 881
+}

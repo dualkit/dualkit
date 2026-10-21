@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إتمام الطلب - بقالة الإمارات</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Tajawal for clean Arabic typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen p-0 sm:p-4">
+
+    <!-- Phone Screen Container -->
+    <div class="w-full sm:max-w-[400px] h-screen sm:h-[844px] bg-white sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border border-gray-200">
+
+        <!-- Top Bar -->
+        <div class="bg-white px-5 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 z-20">
+            <button class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-700 hover:bg-gray-100 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            <h1 class="text-lg font-bold text-gray-800">إتمام الطلب</h1>
+            <div class="w-10"></div> <!-- Spacer for balancing alignment -->
+        </div>
+
+        <!-- Scrollable Content Area -->
+        <div class="flex-1 overflow-y-auto no-scrollbar pb-32">
+
+            <!-- Delivery Address Card -->
+            <div class="p-4 bg-emerald-50/60 border-b border-emerald-100/60 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-emerald-800 font-medium">التوصيل إلى</p>
+                        <p class="text-sm font-bold text-gray-900">دبي، مرسى دبي - برج النبض</p>
+                    </div>
+                </div>
+                <button class="text-emerald-700 text-xs font-bold hover:underline">تغيير</button>
+            </div>
+
+            <!-- Cart Items Section -->
+            <div class="p-4 space-y-4">
+                <h2 class="text-sm font-bold text-gray-500">منتجات السلة (3)</h2>
+
+                <!-- Item 1 -->
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                    <div class="w-16 h-16 bg-gray-200 rounded-xl flex-shrink-0 flex items-center justify-center text-gray-400 text-xs overflow-hidden relative">
+                        <span class="absolute inset-0 bg-emerald-100/40">🥛</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-sm font-bold text-gray-800 truncate">حليب طازج المراعي</h3>
+                        <p class="text-xs text-gray-500 mb-1">2 لتر</p>
+                        <span class="text-emerald-600 font-bold text-sm" data-base-price="12.50">12.50 د.إ</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-lg border border-gray-200 shadow-xs">
+                        <button onclick="updateQty(this, -1)" class="w-6 h-6 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded">-</button>
+                        <span class="text-xs font-bold w-4 text-center qty">1</span>
+                        <button onclick="updateQty(this, 1)" class="w-6 h-6 flex items-center justify-center text-emerald-600 hover:bg-emerald-50 rounded font-bold">+</button>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                    <div class="w-16 h-16 bg-gray-200 rounded-xl flex-shrink-0 flex items-center justify-center text-gray-400 text-xs overflow-hidden relative">
+                        <span class="absolute inset-0 bg-amber-100/40">🍞</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-sm font-bold text-gray-800 truncate">خبز عربي أبيض</h3>
+                        <p class="text-xs text-gray-500 mb-1">كيس كبير</p>
+                        <span class="text-emerald-600 font-bold text-sm" data-base-price="3.00">3.00 د.إ</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-lg border border-gray-200 shadow-xs">
+                        <button onclick="updateQty(this, -1)" class="w-6 h-6 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded">-</button>
+                        <span class="text-xs font-bold w-4 text-center qty">1</span>
+                        <button onclick="updateQty(this, 1)" class="w-6 h-6 flex items-center justify-center text-emerald-600 hover:bg-emerald-50 rounded font-bold">+</button>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                    <div class="w-16 h-16 bg-gray-200 rounded-xl flex-shrink-0 flex items-center justify-center text-gray-400 text-xs overflow-hidden relative">
+                        <span class="absolute inset-0 bg-red-100/40">🍎</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-sm font-bold text-gray-800 truncate">تفاح رويال جالا</h3>
+                        <p class="text-xs text-gray-500 mb-1">1 كيلو</p>
+                        <span class="text-emerald-600 font-bold text-sm" data-base-price="9.75">9.75 د.إ</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-lg border border-gray-200 shadow-xs">
+                        <button onclick="updateQty(this, -1)" class="w-6 h-6 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded">-</button>
+                        <span class="text-xs font-bold w-4 text-center qty">1</span>
+                        <button onclick="updateQty(this, 1)" class="w-6 h-6 flex items-center justify-center text-emerald-600 hover:bg-emerald-50 rounded font-bold">+</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Promo Code Section -->
+            <div class="px-4 mb-4">
+                <div class="flex gap-2">
+                    <div class="relative flex-1">
+                        <input type="text" placeholder="أدخل كود الخصم (مثال: UAE20)" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-emerald-500 transition">
+                    </div>
+                    <button class="bg-gray-900 text-white px-5 rounded-xl text-xs font-bold hover:bg-gray-800 transition">تطبيق</button>
+                </div>
+            </div>
+
+            <!-- Bill Breakdown -->
+            <div class="mx-4 p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-3 mb-6">
+                <div class="flex justify-between text-xs text-gray-600">
+                    <span>المجموع الفرعي</span>
+                    <span id="subtotal" class="font-bold text-gray-800">25.25 د.إ</span>
+                </div>
+                <div class="flex justify-between text-xs text-gray-600">
+                    <span>رسوم التوصيل</span>
+                    <span class="font-bold text-emerald-600">مجاني</span>
+                </div>
+                <div class="flex justify-between text-xs text-gray-600">
+                    <span>ضريبة القيمة المضافة (5%)</span>
+                    <span id="vat" class="font-bold text-gray-800">1.26 د.إ</span>
+                </div>
+                <div class="border-t border-gray-200 pt-3 flex justify-between text-sm font-bold text-gray-900">
+                    <span>المجموع الكلي</span>
+                    <span id="total" class="text-emerald-600 text-base">26.51 د.إ</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sticky Bottom Action Bar -->
+        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-lg z-20">
+            <button onclick="alert('تم إتمام طلبك بنجاح! شكراً لتسوقك معنا 🇦🇪')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-2xl font-bold text-sm shadow-md shadow-emerald-600/20 transition flex items-center justify-center gap-2">
+                <span>إتمام الطلب</span>
+                <span class="bg-emerald-700/60 px-2 py-0.5 rounded-lg text-xs" id="btn-total">26.51 د.إ</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Simple Script to Handle Dynamic Quantity & Calculation -->
+    <script>
+        function updateQty(btn, change) {
+            const container = btn.closest('.flex');
+            const qtySpan = container.querySelector('.qty');
+            let currentQty = parseInt(qtySpan.innerText);
+            
+            currentQty += change;
+            if (currentQty < 1) currentQty = 1;
+            qtySpan.innerText = currentQty;
+
+            calculateTotals();
+        }
+
+        function calculateTotals() {
+            let subtotal = 0;
+            const items = document.querySelectorAll('.space-y-4 > div');
+
+            items.forEach(item => {
+                const basePrice = parseFloat(item.querySelector('[data-base-price]').getAttribute('data-base-price'));
+                const qty = parseInt(item.querySelector('.qty').innerText);
+                subtotal += basePrice * qty;
+            });
+
+            const vat = subtotal * 0.05;
+            const total = subtotal + vat;
+
+            document.getElementById('subtotal').innerText = subtotal.toFixed(2) + ' د.إ';
+            document.getElementById('vat').innerText = vat.toFixed(2) + ' د.إ';
+            document.getElementById('total').innerText = total.toFixed(2) + ' د.إ';
+            document.getElementById('btn-total').innerText = total.toFixed(2) + ' د.إ';
+        }
+    </script>
+</body>
+</html>

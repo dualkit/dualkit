@@ -1,0 +1,81 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "support-chat",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T17:36:36.184Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>الدعم</title>\n<style>\n  * { box-sizing: border-box; }\n  body {\n    margin: 0;\n    padding: 0;\n    font-family: Arial, sans-serif;\n    height: 100vh;\n    display: flex;\n    flex-direction: column;\n    background-color: #f5f5f5;\n  }\n  .messages {\n    flex: 1;\n    overflow-y: auto;\n    padding: 10px;\n    display: flex;\n    flex-direction: column;\n  }\n  .msg {\n    max-width: 80%;\n    padding: 10px 15px;\n    margin: 5px 0;\n    border-radius: 18px;\n    position: relative;\n    word-wrap: break-word;\n  }\n  .customer {\n    align-self: flex-end;\n    background-color: #dcf8c6;\n  }\n  .agent {\n    align-self: flex-start;\n    background-color: #ffffff;\n    border: 1px solid #e0e0e0;\n  }\n  .time {\n    font-size: 0.7rem;\n    color: #888;\n    margin-top: 5px;\n    display: block;\n  }\n  .input-area {\n    display: flex;\n    padding: 10px;\n    background-color: #ffffff;\n    border-top: 1px solid #ccc;\n  }\n  input[type=\"text\"] {\n    flex: 1;\n    padding: 12px;\n    border: 1px solid #ccc;\n    border-radius: 24px;\n    outline: none;\n    font-size: 1rem;\n  }\n  button {\n    margin-left: 10px;\n    padding: 12px 20px;\n    border: none;\n    background-color: #007bff;\n    color: white;\n    border-radius: 24px;\n    cursor: pointer;\n    font-size: 1rem;\n  }\n</style>\n</head>\n<body>\n  <div class=\"messages\">\n    <div class=\"msg customer\">\n      أود تفعيل خدمة 5G على بطاقة SIM الخاصة بي\n      <span class=\"time\">10:20</span>\n    </div>\n    <div class=\"msg agent\">\n      Sara: مرحباً، يرجى تزويدي برقم الطلب\n      <span class=\"time\">10:21</span>\n    </div>\n    <div class=\"msg customer\">\n      رقم الطلب هو TX-48213\n      <span class=\"time\">10:22</span>\n    </div>\n    <div class=\"msg agent\">\n      Sara: سأقوم بتفعيل eSIM لك\n      <span class=\"time\">10:23</span>\n    </div>\n    <div class=\"msg customer\">\n      كم دقيقةستغرق عملية التفعيل؟\n      <span class=\"time\">10:24</span>\n    </div>\n    <div class=\"msg agent\">\n      Sara: ستستغرق حوالي 5 minutes\n      <span class=\"time\">10:25</span>\n    </div>\n  </div>\n  <div class=\"input-area\">\n    <input type=\"text\" placeholder=\"اكتب رسالتك...\">\n    <button>أرسل</button>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 147,
+    "output": 6288
+  },
+  "ms": 63217,
+  "finish": "stop",
+  "reasoningTokens": 5579,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 81,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 25,
+        "y": 179,
+        "width": 169.609375,
+        "height": 17
+      },
+      "message": "\"TX-48213\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"msg customer\">\n      رقم الطلب هو TX-48213\n      <span class=\"time\">10:22</span>\n    </div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 55.515625,
+        "y": 26,
+        "width": 235.484375,
+        "height": 36
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"msg customer\">\n      أود تفعيل خدمة 5G على بطاقة SIM الخاصة بي\n      <span class=\"time\">10:20</span>\n    </div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 40,
+        "y": 803.5,
+        "width": 37,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button>أرسل</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 790,
+        "width": 77,
+        "height": 44
+      },
+      "message": "margin-left: 10px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button>أرسل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

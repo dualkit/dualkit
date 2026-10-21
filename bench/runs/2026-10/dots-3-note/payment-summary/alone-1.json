@@ -1,0 +1,67 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "payment-summary",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T16:43:09.661Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Payment Summary</title>\n  <style>\n    body {\n      font-family: Arial, sans-serif;\n      margin: 0;\n      padding: 0;\n      background-color: #f5f5f5;\n      display: flex;\n      justify-content: center;\n      align-items: flex-start;\n      min-height: 100vh;\n    }\n    .phone-screen {\n      width: 100%;\n      max-width: 480px;\n      background-color: #fff;\n      box-shadow: 0 0 10px rgba(0,0,0,0.1);\n    }\n    .header {\n      display: flex;\n      align-items: center;\n      padding: 12px 16px;\n      border-bottom: 1px solid #ddd;\n      background-color: #fafafa;\n    }\n    .back-btn {\n      background: none;\n      border: none;\n      font-size: 24px;\n      cursor: pointer;\n      color: #333;\n    }\n    .title {\n      flex: 1;\n      text-align: center;\n      font-size: 18px;\n      font-weight: bold;\n      color: #333;\n    }\n    .content {\n      padding: 20px;\n    }\n    .amount {\n      font-size: 28px;\n      font-weight: bold;\n      color: #000;\n      margin-bottom: 12px;\n    }\n    .due-date {\n      font-size: 16px;\n      color: #555;\n      margin-bottom: 12px;\n    }\n    .items {\n      font-size: 16px;\n      color: #333;\n      margin-bottom: 20px;\n    }\n    .phone-field {\n      margin-bottom: 24px;\n    }\n    .phone-field input {\n      width: 100%;\n      padding: 12px;\n      border: 1px solid #ccc;\n      border-radius: 6px;\n      font-size: 16px;\n      box-sizing: border-box;\n    }\n    .pay-btn {\n      width: 100%;\n      padding: 16px;\n      background-color: #007bff;\n      color: white;\n      border: none;\n      border-radius: 6px;\n      font-size: 18px;\n      font-weight: bold;\n      cursor: pointer;\n      transition: background-color 0.2s;\n    }\n    .pay-btn:hover {\n      background-color: #0056b3;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"phone-screen\">\n    <div class=\"header\">\n      <button class=\"back-btn\" onclick=\"history.back()\">&larr;</button>\n      <div class=\"title\">Payment summary</div>\n    </div>\n    <div class=\"content\">\n      <div class=\"amount\">1,234.50 AED</div>\n      <div class=\"due-date\">Due date: 3 November 2026 (24 Rabi' al-Thani 1448)</div>\n      <div class=\"items\">لديك 3 عناصر في هذا الطلب</div>\n      <div class=\"phone-field\">\n        <input type=\"tel\" placeholder=\"050 123 4567\" />\n      </div>\n      <button class=\"pay-btn\">ادفع الآن</button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 190,
+    "output": 4462
+  },
+  "ms": 56222,
+  "finish": "stop",
+  "reasoningTokens": 3100,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 88,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/punctuation-flip",
+      "title": "Punctuation at the wrong end",
+      "severity": "warning",
+      "box": {
+        "x": 38.75,
+        "y": 119,
+        "width": 331.25,
+        "height": 35
+      },
+      "message": "\"Due date: 3 November 2026 (24 Rabi' al-T…\" runs right to left, so its last mark moves to the start.",
+      "fix": "Give the block the direction of its own text, with dir=\"ltr\", dir=\"rtl\" or dir=\"auto\".",
+      "snippet": "<div class=\"due-date\">Due date: 3 November 2026 (24 Rabi' al-Thani 1448)</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 181.859375,
+        "y": 168,
+        "width": 188.140625,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"items\">لديك 3 عناصر في هذا الطلب</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 162.484375,
+        "y": 291,
+        "width": 65.015625,
+        "height": 20
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"pay-btn\">ادفع الآن</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

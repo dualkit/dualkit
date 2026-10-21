@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سلة التسوق - توكيلة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            direction: rtl;
+            text-align: right;
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-arrow {
+            width: 24px;
+            height: 24px;
+            margin-left: 12px;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .cart-items {
+            background-color: #ffffff;
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .cart-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .item-image {
+            width: 70px;
+            height: 70px;
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            margin-left: 12px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .item-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .item-price {
+            font-size: 14px;
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .quantity-stepper {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin: 0 8px;
+            height: 30px;
+        }
+
+        .promo-section {
+            background-color: #ffffff;
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .promo-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .promo-field {
+            display: flex;
+        }
+
+        .promo-input {
+            flex-grow: 1;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 14px;
+            text-align: right;
+        }
+
+        .promo-btn {
+            padding: 10px 16px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .summary-section {
+            background-color: #ffffff;
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .summary-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-label {
+            color: #555;
+        }
+
+        .summary-value {
+            font-weight: 600;
+        }
+
+        .total-row {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 12px;
+            margin-top: 12px;
+            font-size: 18px;
+        }
+
+        .total-label {
+            font-weight: 700;
+        }
+
+        .total-value {
+            font-weight: 700;
+            color: #27ae60;
+        }
+
+        .place-order-btn {
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 0;
+        }
+
+        .place-order-btn:hover {
+            background-color: #d35400;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <svg class="back-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15 18L9 12L15 6" stroke="#2c3e50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="header-title">سلة التسوق</span>
+    </div>
+
+    <!-- Cart Items -->
+    <div class="cart-items">
+        <!-- Item 1 -->
+        <div class="cart-item">
+            <div class="item-image">صورة المنتج</div>
+            <div class="item-details">
+                <div class="item-name">تفاح أحمر مستورد</div>
+                <div class="item-price">٢٥.٠٠ د.إ</div>
+                <div class="quantity-stepper">
+                    <button class="quantity-btn">-</button>
+                    <input type="text" class="quantity-input" value="2" readonly>
+                    <button class="quantity-btn">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="cart-item">
+            <div class="item-image">صورة المنتج</div>
+            <div class="item-details">
+                <div class="item-name">لبن زبادي طعم الفانيليا</div>
+                <div class="item-price">٨.٥٠ د.إ</div>
+                <div class="quantity-stepper">
+                    <button class="quantity-btn">-</button>
+                    <input type="text" class="quantity-input" value="1" readonly>
+                    <button class="quantity-btn">+</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="cart-item">
+            <div class="item-image">صورة المنتج</div>
+            <div class="item-details">
+                <div class="item-name">خبز شوفاني محلي</div>
+                <div class="item-price">٦.٧٥ د.إ</div>
+                <div class="quantity-stepper">
+                    <button class="quantity-btn">-</button>
+                    <input type="text" class="quantity-input" value="3" readonly>
+                    <button class="quantity-btn">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Promo Code -->
+    <div class="promo-section">
+        <div class="promo-label">أدخل رمز الخصم</div>
+        <div class="promo-field">
+            <input type="text" class="promo-input" placeholder="رمز الخصم">
+            <button class="promo-btn">تطبيق</button>
+        </div>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="summary-section">
+        <div class="summary-row">
+            <span class="summary-label">المجموع الفرعي</span>
+            <span class="summary-value">٦٨.٢٥ د.إ</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">رسوم التوصيل</span>
+            <span class="summary-value">١٠.٠٠ د.إ</span>
+        </div>
+        <div class="summary-row">
+            <span class="summary-label">ضريبة القيمة المضافة (5%)</span>
+            <span class="summary-value">٣.٤١ د.إ</span>
+        </div>
+        <div class="summary-row total-row">
+            <span class="total-label">المجموع الكلي</span>
+            <span class="total-value">٨١.٦٦ د.إ</span>
+        </div>
+    </div>
+
+    <!-- Place Order Button -->
+    <button class="place-order-btn">تأكيد الطلب</button>
+</body>
+</html>

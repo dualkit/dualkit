@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الطلبات السابقة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    .container {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    h1 {
+      font-size: 20px;
+      margin: 0 0 16px 0;
+      color: #111;
+    }
+    .order {
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .order-number {
+      font-size: 14px;
+      font-weight: 600;
+      color: #444;
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+    .status {
+      font-size: 14px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      white-space: nowrap;
+    }
+    .status.delivered {
+      background-color: #e6f4ea;
+      color: #1d8745;
+    }
+    .status.on-the-way {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    .status.cancelled {
+      background-color: #fdecea;
+      color: #c0392b;
+    }
+    .order-details {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+    }
+    .detail-label {
+      color: #666;
+    }
+    .detail-value {
+      font-weight: 500;
+      color: #222;
+    }
+    .total {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111;
+    }
+    .date-line {
+      font-size: 14px;
+      color: #555;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>الطلبات السابقة</h1>
+
+    <div class="order">
+      <div class="order-header">
+        <bdi class="order-number">#A-10293</bdi>
+        <span class="status delivered">تم التوصيل</span>
+      </div>
+      <div class="order-details">
+        <div class="detail-row">
+          <span class="detail-label">التاريخ</span>
+          <span class="detail-value date-line">٢٥ يناير ٢٠٢٥ <span lang="ar">١٤ ربيع أول ١٤٤٦ هـ</span></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">المجموع</span>
+          <span class="detail-value total">٢٬٣٤٩٫٩٠ ر.س</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="order">
+      <div class="order-header">
+        <bdi class="order-number">#A-10292</bdi>
+        <span class="status on-the-way">في الطريق</span>
+      </div>
+      <div class="order-details">
+        <div class="detail-row">
+          <span class="detail-label">التاريخ</span>
+          <span class="detail-value date-line">٢٠ يناير ٢٠٢٥ <span lang="ar">٩ ربيع أول ١٤٤٦ هـ</span></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">المجموع</span>
+          <span class="detail-value total">١٬١٩٩٫٠٠ ر.س</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="order">
+      <div class="order-header">
+        <bdi class="order-number">#A-10291</bdi>
+        <span class="status cancelled">ألغيت</span>
+      </div>
+      <div class="order-details">
+        <div class="detail-row">
+          <span class="detail-label">التاريخ</span>
+          <span class="detail-value date-line">١٥ يناير ٢٠٢٥ <span lang="ar">٤ ربيع أول ١٤٤٦ هـ</span></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">المجموع</span>
+          <span class="detail-value total">٧٥٠٫٠٠ ر.س</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="order">
+      <div class="order-header">
+        <bdi class="order-number">#A-10290</bdi>
+        <span class="status delivered">تم التوصيل</span>
+      </div>
+      <div class="order-details">
+        <div class="detail-row">
+          <span class="detail-label">التاريخ</span>
+          <span class="detail-value date-line">١٠ يناير ٢٠٢٥ <span lang="ar">٣٠ جمادى الأولى ١٤٤٦ هـ</span></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">المجموع</span>
+          <span class="detail-value total">٣٢٩٩٫٠٠ ر.س</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

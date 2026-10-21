@@ -1,0 +1,305 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "checkout",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T16:56:49.171Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n  <meta name=\"theme-color\" content=\"#f7f8f4\">\n  <title>إتمام الطلب — فواكه</title>\n  <style>\n    :root {\n      --green: #176b45;\n      --green-dark: #0e5133;\n      --green-soft: #e8f3ec;\n      --orange: #f4a340;\n      --ink: #17221d;\n      --muted: #748078;\n      --line: #e5e9e5;\n      --surface: #ffffff;\n      --page: #f6f7f3;\n      --danger: #b9453c;\n    }\n\n    * {\n      box-sizing: border-box;\n      -webkit-tap-highlight-color: transparent;\n    }\n\n    html, body {\n      margin: 0;\n      min-height: 100%;\n      background: var(--page);\n      color: var(--ink);\n      font-family: Tahoma, Arial, sans-serif;\n    }\n\n    button, input {\n      font: inherit;\n    }\n\n    button {\n      border: 0;\n    }\n\n    .app-shell {\n      width: 100%;\n      max-width: 430px;\n      min-height: 100vh;\n      margin: 0 auto;\n      background: var(--page);\n      overflow: hidden;\n    }\n\n    .topbar {\n      position: sticky;\n      top: 0;\n      z-index: 20;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      min-height: 68px;\n      padding: 14px 20px;\n      background: rgba(246, 247, 243, 0.96);\n      border-bottom: 1px solid rgba(23, 34, 29, 0.05);\n      backdrop-filter: blur(14px);\n    }\n\n    .topbar h1 {\n      margin: 0;\n      font-size: 19px;\n      font-weight: 800;\n      letter-spacing: -0.2px;\n    }\n\n    .back-btn {\n      display: grid;\n      place-items: center;\n      width: 42px;\n      height: 42px;\n      padding: 0;\n      border-radius: 50%;\n      background: #fff;\n      color: var(--ink);\n      box-shadow: 0 3px 14px rgba(20, 44, 32, 0.08);\n      cursor: pointer;\n      transition: transform .2s ease, background .2s ease;\n    }\n\n    .back-btn:active {\n      transform: scale(.94);\n      background: #f0f2ee;\n    }\n\n    .back-btn svg {\n      width: 21px;\n      height: 21px;\n    }\n\n    main {\n      padding: 16px 16px 112px;\n    }\n\n    .delivery-card {\n      position: relative;\n      margin-bottom: 18px;\n      padding: 16px 17px;\n      overflow: hidden;\n      border-radius: 20px;\n      color: #fff;\n      background: linear-gradient(135deg, #176b45 0%, #0e5435 100%);\n      box-shadow: 0 10px 24px rgba(23, 107, 69, .18);\n    }\n\n    .delivery-card::after {\n      content: \"\";\n      position: absolute;\n      left: -28px;\n      top: -36px;\n      width: 125px;\n      height: 125px;\n      border-radius: 50%;\n      background: rgba(255, 255, 255, .07);\n    }\n\n    .delivery-label {\n      display: flex;\n      align-items: center;\n      gap: 7px;\n      margin-bottom: 8px;\n      color: #d9eee2;\n      font-size: 12px;\n      font-weight: 700;\n    }\n\n    .delivery-label svg {\n      width: 17px;\n      height: 17px;\n    }\n\n    .delivery-card h2 {\n      margin: 0 0 4px;\n      font-size: 16px;\n      font-weight: 800;\n    }\n\n    .delivery-card p {\n      margin: 0;\n      color: #e6f2eb;\n      font-size: 12px;\n    }\n\n    .section-title {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin: 0 3px 10px;\n    }\n\n    .section-title h2 {\n      margin: 0;\n      font-size: 16px;\n      font-weight: 800;\n    }\n\n    .item-count {\n      padding: 5px 10px;\n      border-radius: 999px;\n      background: var(--green-soft);\n      color: var(--green);\n      font-size: 11px;\n      font-weight: 800;\n    }\n\n    .cart-list {\n      overflow: hidden;\n      border: 1px solid var(--line);\n      border-radius: 20px;\n      background: var(--surface);\n      box-shadow: 0 6px 18px rgba(24, 41, 31, .045);\n    }\n\n    .cart-item {\n      display: grid;\n      grid-template-columns: 76px 1fr auto;\n      gap: 12px;\n      align-items: center;\n      padding: 14px;\n    }\n\n    .cart-item + .cart-item {\n      border-top: 1px solid var(--line);\n    }\n\n    .photo {\n      position: relative;\n      display: grid;\n      place-items: center;\n      width: 76px;\n      height: 76px;\n      overflow: hidden;\n      border-radius: 16px;\n      background: #f2eee4;\n    }\n\n    .photo::before {\n      content: \"\";\n      position: absolute;\n      width: 58px;\n      height: 58px;\n      border-radius: 50%;\n      background: rgba(255,255,255,.42);\n    }\n\n    .photo svg {\n      position: relative;\n      z-index: 1;\n      width: 51px;\n      height: 51px;\n      filter: drop-shadow(0 5px 4px rgba(48, 39, 21, .11));\n    }\n\n    .item-info {\n      min-width: 0;\n    }\n\n    .item-name {\n      display: block;\n      margin: 0 0 5px;\n      overflow: hidden;\n      color: var(--ink);\n      font-size: 14px;\n      font-weight: 800;\n      text-overflow: ellipsis;\n      white-space: nowrap;\n    }\n\n    .item-meta {\n      margin: 0 0 10px;\n      color: var(--muted);\n      font-size: 11px;\n      line-height: 1.5;\n    }\n\n    .stepper {\n      display: inline-grid;\n      grid-template-columns: 30px 28px 30px;\n      align-items: center;\n      overflow: hidden;\n      border: 1px solid #dce4de;\n      border-radius: 10px;\n      background: #f9faf8;\n      direction: ltr;\n    }\n\n    .stepper button {\n      height: 29px;\n      padding: 0;\n      color: var(--green);\n      background: transparent;\n      font-size: 18px;\n      font-weight: 700;\n      cursor: pointer;\n    }\n\n    .stepper button:active {\n      background: var(--green-soft);\n    }\n\n    .quantity {\n      color: var(--ink);\n      font-size: 12px;\n      font-weight: 800;\n      text-align: center;\n    }\n\n    .item-price {\n      align-self: start;\n      margin-top: 3px;\n      color: var(--green-dark);\n      font-size: 13px;\n      font-weight: 900;\n      white-space: nowrap;\n      direction: rtl;\n    }\n\n    .summary-card {\n      margin-top: 16px;\n      padding: 17px;\n      border: 1px solid var(--line);\n      border-radius: 20px;\n      background: var(--surface);\n      box-shadow: 0 6px 18px rgba(24, 41, 31, .045);\n    }\n\n    .promo-label {\n      display: block;\n      margin: 0 1px 8px;\n      font-size: 13px;\n      font-weight: 800;\n    }\n\n    .promo-row {\n      display: flex;\n      gap: 8px;\n    }\n\n    .promo-input {\n      flex: 1;\n      min-width: 0;\n      height: 46px;\n      padding: 0 13px;\n      border: 1px solid #dce2dd;\n      outline: none;\n      border-radius: 12px;\n      color: var(--ink);\n      background: #fafbf9;\n      font-size: 13px;\n      text-align: right;\n      transition: border-color .2s, box-shadow .2s;\n    }\n\n    .promo-input:focus {\n      border-color: var(--green);\n      box-shadow: 0 0 0 3px rgba(23, 107, 69, .1);\n    }\n\n    .apply-btn {\n      min-width: 74px;\n      padding: 0 13px;\n      border-radius: 12px;\n      color: #fff;\n      background: var(--green);\n      font-size: 12px;\n      font-weight: 800;\n      cursor: pointer;\n    }\n\n    .promo-message {\n      min-height: 18px;\n      margin: 6px 2px 0;\n      color: var(--green);\n      font-size: 11px;\n    }\n\n    .promo-message.error {\n      color: var(--danger);\n    }\n\n    .totals {\n      margin-top: 10px;\n      padding-top: 14px;\n      border-top: 1px dashed #dce2dd;\n    }\n\n    .total-row {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin-bottom: 10px;\n      color: #566159;\n      font-size: 13px;\n    }\n\n    .total-row:last-child {\n      margin-bottom: 0;\n    }\n\n    .total-row strong {\n      color: var(--ink);\n      font-size: 13px;\n    }\n\n    .total-row.grand {\n      margin-top: 13px;\n      padding-top: 13px;\n      border-top: 1px solid var(--line);\n      color: var(--ink);\n      font-size: 15px;\n      font-weight: 900;\n    }\n\n    .total-row.grand strong {\n      color: var(--green-dark);\n      font-size: 18px;\n    }\n\n    .free {\n      color: var(--green);\n      font-weight: 800;\n    }\n\n    .checkout-bar {\n      position: fixed;\n      z-index: 30;\n      right: 0;\n      bottom: 0;\n      left: 0;\n      width: 100%;\n      max-width: 430px;\n      margin: 0 auto;\n      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));\n      border-top: 1px solid var(--line);\n      background: rgba(255, 255, 255, .96);\n      box-shadow: 0 -8px 28px rgba(21, 42, 29, .09);\n      backdrop-filter: blur(14px);\n    }\n\n    .order-btn {\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      width: 100%;\n      min-height: 52px;\n      border-radius: 14px;\n      color: #fff;\n      background: linear-gradient(135deg, #1b7950, #0d5637);\n      box-shadow: 0 8px 18px rgba(23, 107, 69, .24);\n      font-size: 15px;\n      font-weight: 900;\n      cursor: pointer;\n      transition: transform .18s ease, opacity .18s ease;\n    }\n\n    .order-btn:active {\n      transform: translateY(1px) scale(.995);\n      opacity: .92;\n    }\n\n    .checkout-bar p {\n      margin: 7px 0 0;\n      color: var(--muted);\n      font-size: 10px;\n      text-align: center;\n    }\n\n    @media (max-width: 350px) {\n      .cart-item {\n        grid-template-columns: 66px 1fr auto;\n        gap: 9px;\n        padding: 12px;\n      }\n\n      .photo {\n        width: 66px;\n        height: 66px;\n      }\n\n      .item-meta {\n        font-size: 10px;\n      }\n\n      .item-price {\n        font-size: 12px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"app-shell\">\n    <header class=\"topbar\">\n      <h1>إتمام الطلب</h1>\n      <button class=\"back-btn\" type=\"button\" aria-label=\"العودة إلى السلة\" onclick=\"history.back()\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n          <path d=\"M5 12h14M13 6l6 6-6 6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n        </svg>\n      </button>\n    </header>\n\n    <main>\n      <section class=\"delivery-card\" aria-label=\"معلومات التوصيل\">\n        <div class=\"delivery-label\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n            <path d=\"M3 6.5h11v10H3zM14 10h3.5l3.5 3.5v3H14z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"/>\n            <circle cx=\"7\" cy=\"18\" r=\"2\" fill=\"currentColor\"/>\n            <circle cx=\"18\" cy=\"18\" r=\"2\" fill=\"currentColor\"/>\n          </svg>\n          التوصيل إلى\n        </div>\n        <h2>منزل، شارع النخيل</h2>\n        <p>دبي، الإمارات · اليوم بين 4:00 و6:00 مساءً</p>\n      </section>\n\n      <div class=\"section-title\">\n        <h2>منتجاتك</h2>\n        <span class=\"item-count\" id=\"itemCount\">3 منتجات</span>\n      </div>\n\n      <section class=\"cart-list\" aria-label=\"العربة\">\n        <article class=\"cart-item\" data-price=\"8.50\">\n          <div class=\"photo\" aria-label=\"صورة تفاح أحمر\">\n            <svg viewBox=\"0 0 64 64\" aria-hidden=\"true\">\n              <path d=\"M33 18c-3-8-12-8-17-2-7 8-4 24 5 31 6 5 13 3 16-1 4 3 11 5 16 0 8-8 8-24 1-31-6-5-14-3-17 3-1-2-2-4-4 0z\" fill=\"#e7513f\"/>\n              <path d=\"M32 19c0-7 4-11 10-12 1 7-3 11-10 12z\" fill=\"#3d8a4b\"/>\n              <path d=\"M32 19c-2-5-6-7-11-6\" fill=\"none\" stroke=\"#6d5134\" stroke-width=\"3\" stroke-linecap=\"round\"/>\n              <path d=\"M24 29c2-4 6-6 8-6\" fill=\"none\" stroke=\"#ff8d70\" stroke-width=\"3\" stroke-linecap=\"round\" opacity=\".75\"/>\n            </svg>\n          </div>\n          <div class=\"item-info\">\n            <h3 class=\"item-name\">تفاح أحمر طازج</h3>\n            <p class=\"item-meta\">للحبة · 1 كجم</p>\n            <div class=\"stepper\" aria-label=\"كمية تفاح أحمر\">\n              <button type=\"button\" data-action=\"increase\" aria-label=\"زيادة الكمية\">+</button>\n              <span class=\"quantity\">1</span>\n              <button type=\"button\" data-action=\"decrease\" aria-label=\"تقليل الكمية\">−</button>\n            </div>\n          </div>\n          <div class=\"item-price\" data-line-price>8.50 د.إ</div>\n        </article>\n\n        <article class=\"cart-item\" data-price=\"12.00\">\n          <div class=\"photo\" aria-label=\"صورة موز\">\n            <svg viewBox=\"0 0 64 64\" aria-hidden=\"true\">\n              <path d=\"M16 20c8-10 25-10 31 0 7 12-1 29-13 32-12-2-20-19-18-32z\" fill=\"#efc12f\"/>\n              <path d=\"M18 22c6-6 19-7 27-1M19 31c6-5 17-6 25-2\" fill=\"none\" stroke=\"#d9a51c\" stroke-width=\"2\" stroke-linecap=\"round\" opacity=\".7\"/>\n              <path d=\"M45 21c3-7 8-7 10-3 1 4-4 7-9 7\" fill=\"#88672d\"/>\n            </svg>\n          </div>\n          <div class=\"item-info\">\n            <h3 class=\"item-name\">موز Gundaria</h3>\n            <p class=\"item-meta\">لكل كيلو · 1 كجم</p>\n            <div class=\"stepper\" aria-label=\"كمية موز Gundaria\">\n              <button type=\"button\" data-action=\"increase\" aria-label=\"زيادة الكمية\">+</button>\n              <span class=\"quantity\">1</span>\n              <button type=\"button\" data-action=\"decrease\" aria-label=\"تقليل الكمية\">−</button>\n            </div>\n          </div>\n          <div class=\"item-price\" data-line-price>12.00 د.إ</div>\n        </article>\n\n        <article class=\"cart-item\" data-price=\"23.75\">\n          <div class=\"photo\" aria-label=\"صورة بطيخ\">\n            <svg viewBox=\"0 0 64 64\" aria-hidden=\"true\">\n              <path d=\"M9 30C11 15 24 9 38 12c10 2 17 10 18 19-6 15-18 23-33 20-8-2-13-9-14-21z\" fill=\"#4f9d4b\"/>\n              <path d=\"M15 28c8-7 25-8 37 2-6 10-16 15-28 14-5-1-8-7-9-16z\" fill=\"#e95a57\"/>\n              <path d=\"M20 30c6-2 12 2 14 8M32 28c6 0 11 3 14 8\" fill=\"none\" stroke=\"#f9d66b\" stroke-width=\"2.5\" stroke-linecap=\"round\"/>\n              <path d=\"M42 13c4-6 9-6 12-2-3 5-7 7-12 6\" fill=\"#39783c\"/>\n            </svg>\n          </div>\n          <div class=\"item-info\">\n            <h3 class=\"item-name\">بطيخ أحمر بدون بذور</h3>\n            <p class=\"item-meta\">للقطعة · 1 كجم</p>\n            <div class=\"stepper\" aria-label=\"كمية البطيخ\">\n              <button type=\"button\" data-action=\"increase\" aria-label=\"زيادة الكمية\">+</button>\n              <span class=\"quantity\">1</span>\n              <button type=\"button\" data-action=\"decrease\" aria-label=\"تقليل الكمية\">−</button>\n            </div>\n          </div>\n          <div class=\"item-price\" data-line-price>23.75 د.إ</div>\n        </article>\n      </section>\n\n      <section class=\"summary-card\" aria-label=\"ملخص الطلب\">\n        <label class=\"promo-label\" for=\"promoCode\">هل لديك رمز خصم؟</label>\n        <div class=\"promo-row\">\n          <input class=\"promo-input\" id=\"promoCode\" type=\"text\" inputmode=\"text\" placeholder=\"أدخل رمز الخصم\" autocomplete=\"off\">\n          <button class=\"apply-btn\" id=\"applyPromo\" type=\"button\">تطبيق</button>\n        </div>\n        <p class=\"promo-message\" id=\"promoMessage\" role=\"status\"></p>\n\n        <div class=\"totals\">\n          <div class=\"total-row\">\n            <span>المجموع الفرعي</span>\n            <strong id=\"subtotal\">44.25 د.إ</strong>\n          </div>\n          <div class=\"total-row\">\n            <span>التوصيل</span>\n            <strong class=\"free\" id=\"delivery\">مجاني</strong>\n          </div>\n          <div class=\"total-row\">\n            <span>ضريبة القيمة المضافة (5%)</span>\n            <strong id=\"vat\">2.21 د.إ</strong>\n          </div>\n          <div class=\"total-row grand\">\n            <span>الإجمالي</span>\n            <strong id=\"grandTotal\">46.46 د.إ</strong>\n          </div>\n        </div>\n      </section>\n    </main>\n\n    <div class=\"checkout-bar\">\n      <button class=\"order-btn\" id=\"placeOrder\" type=\"button\">إتمام الطلب</button>\n      <p>الدفع عند الاستلام متاح</p>\n    </div>\n  </div>\n\n  <script>\n    const formatAED = value => value.toFixed(2) + \" د.إ\";\n    const itemCount = document.getElementById(\"itemCount\");\n    const subtotalEl = document.getElementById(\"subtotal\");\n    const vatEl = document.getElementById(\"vat\");\n    const grandTotalEl = document.getElementById(\"grandTotal\");\n    const promoMessage = document.getElementById(\"promoMessage\");\n    let discountRate = 0;\n\n    function updateTotals() {\n      let subtotal = 0;\n      let totalQuantity = 0;\n\n      document.querySelectorAll(\".cart-item\").forEach(item => {\n        const quantity = Number(item.querySelector(\".quantity\").textContent);\n        const unitPrice = Number(item.dataset.price);\n        const lineTotal = unitPrice * quantity;\n        subtotal += lineTotal;\n        totalQuantity += quantity;\n        item.querySelector(\"[data-line-price]\").textContent = formatAED(lineTotal);\n      });\n\n      const discountedSubtotal = subtotal * (1 - discountRate);\n      const vat = discountedSubtotal * 0.05;\n      const total = discountedSubtotal + vat;\n\n      subtotalEl.textContent = formatAED(subtotal);\n      vatEl.textContent = formatAED(vat);\n      grandTotalEl.textContent = formatAED(total);\n      itemCount.textContent = totalQuantity + (totalQuantity === 1 ? \" منتج\" : totalQuantity === 2 ? \" منتجان\" : \" منتجات\");\n    }\n\n    document.querySelectorAll(\".cart-item\").forEach(item => {\n      item.querySelectorAll(\"[data-action]\").forEach(button => {\n        button.addEventListener(\"click\", () => {\n          const quantityEl = item.querySelector(\".quantity\");\n          let quantity = Number(quantityEl.textContent);\n\n          if (button.dataset.action === \"increase\") {\n            quantity++;\n          } else {\n            quantity = Math.max(1, quantity - 1);\n          }\n\n          quantityEl.textContent = quantity;\n          updateTotals();\n        });\n      });\n    });\n\n    document.getElementById(\"applyPromo\").addEventListener(\"click\", () => {\n      const code = document.getElementById(\"promoCode\").value.trim().toUpperCase();\n\n      if (code === \"FOOD10\") {\n        discountRate = 0.10;\n        promoMessage.textContent = \"تم تطبيق خصم 10% بنجاح\";\n        promoMessage.classList.remove(\"error\");\n      } else if (code === \"GULF5\") {\n        discountRate = 0.05;\n        promoMessage.textContent = \"تم تطبيق خصم 5% بنجاح\";\n        promoMessage.classList.remove(\"error\");\n      } else {\n        discountRate = 0;\n        promoMessage.textContent = code ? \"رمز الخصم غير صالح، حاول مرة أخرى\" : \"أدخل رمز الخصم أولًا\";\n        promoMessage.classList.toggle(\"error\", Boolean(code));\n      }\n\n      updateTotals();\n    });\n\n    document.getElementById(\"placeOrder\").addEventListener(\"click\", event => {\n      const button = event.currentTarget;\n      const originalText = button.textContent;\n      button.textContent = \"جارٍ إرسال الطلب...\";\n      button.disabled = true;\n\n      setTimeout(() => {\n        button.textContent = \"تم إرسال الطلب ✓\";\n        setTimeout(() => {\n          button.textContent = originalText;\n          button.disabled = false;\n        }, 1700);\n      }, 900);\n    });\n\n    updateTotals();\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 337,
+    "output": 5702
+  },
+  "ms": 24806,
+  "finish": "stop",
+  "reasoningTokens": 69,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 80,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 116,
+        "y": 612.5,
+        "width": 240,
+        "height": 46
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input class=\"promo-input\" id=\"promoCode\" type=\"text\" inputmode=\"text\" placeholder=\"أدخل رمز الخصم\" autocomplete=\"off\">"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 273.71875,
+        "y": 24.5,
+        "width": 96.28125,
+        "height": 21
+      },
+      "message": "Arabic falls back from Tahoma, Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>إتمام الطلب</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 272.65625,
+        "y": 104.5,
+        "width": 60.34375,
+        "height": 14
+      },
+      "message": "\"التوصيل إلى\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"delivery-label\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n            <path d=\"M3 6.5h11v10H3zM14 10h3.5l3.5 3.5v3H14z\" st"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 147.921875,
+        "y": 151,
+        "width": 209.078125,
+        "height": 14
+      },
+      "message": "\"دبي، الإمارات · اليوم بين 4:00 و6:00 مسا…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p>دبي، الإمارات · اليوم بين 4:00 و6:00 مساءً</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 29,
+        "y": 204,
+        "width": 41.1875,
+        "height": 12
+      },
+      "message": "\"3 منتجات\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"item-count\" id=\"itemCount\">3 منتجات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 210.03125,
+        "y": 270,
+        "width": 60.96875,
+        "height": 12
+      },
+      "message": "\"للحبة · 1 كجم\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"item-meta\">للحبة · 1 كجم</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 250,
+        "width": 42.546875,
+        "height": 15
+      },
+      "message": "\"8.50 د.إ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"item-price\" data-line-price=\"\">8.50 د.إ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 194.96875,
+        "y": 377.5,
+        "width": 76.03125,
+        "height": 12
+      },
+      "message": "\"لكل كيلو · 1 كجم\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"item-meta\">لكل كيلو · 1 كجم</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 357.5,
+        "width": 49.78125,
+        "height": 15
+      },
+      "message": "\"12.00 د.إ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"item-price\" data-line-price=\"\">12.00 د.إ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 200.03125,
+        "y": 485,
+        "width": 70.96875,
+        "height": 12
+      },
+      "message": "\"للقطعة · 1 كجم\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"item-meta\">للقطعة · 1 كجم</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 465,
+        "width": 49.78125,
+        "height": 15
+      },
+      "message": "\"23.75 د.إ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"item-price\" data-line-price=\"\">23.75 د.إ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 246.15625,
+        "y": 589.5,
+        "width": 108.84375,
+        "height": 15
+      },
+      "message": "\"هل لديك رمز خصم؟\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label class=\"promo-label\" for=\"promoCode\">هل لديك رمز خصم؟</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 55.5,
+        "y": 628.5,
+        "width": 31,
+        "height": 14
+      },
+      "message": "\"تطبيق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"apply-btn\" id=\"applyPromo\" type=\"button\">تطبيق</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 264.375,
+        "y": 707.5,
+        "width": 91.625,
+        "height": 15
+      },
+      "message": "\"المجموع الفرعي\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المجموع الفرعي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 707.5,
+        "width": 49.78125,
+        "height": 15
+      },
+      "message": "\"44.25 د.إ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<strong id=\"subtotal\">44.25 د.إ</strong>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 312,
+        "y": 732.5,
+        "width": 44,
+        "height": 15
+      },
+      "message": "\"التوصيل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>التوصيل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 732.5,
+        "width": 34,
+        "height": 15
+      },
+      "message": "\"مجاني\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<strong class=\"free\" id=\"delivery\">مجاني</strong>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 206.703125,
+        "y": 757.5,
+        "width": 149.296875,
+        "height": 15
+      },
+      "message": "\"ضريبة القيمة المضافة (5%)\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>ضريبة القيمة المضافة (5%)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 757.5,
+        "width": 42.546875,
+        "height": 15
+      },
+      "message": "\"2.21 د.إ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<strong id=\"vat\">2.21 د.إ</strong>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 148.828125,
+        "y": 821,
+        "width": 92.34375,
+        "height": 11
+      },
+      "message": "\"الدفع عند الاستلام متاح\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p>الدفع عند الاستلام متاح</p>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 952
+}

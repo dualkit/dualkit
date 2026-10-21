@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+  <title>حجز موعد</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #126c5a;
+      --primary-dark: #0c5547;
+      --primary-soft: #e8f5f1;
+      --ink: #18332d;
+      --muted: #667b75;
+      --line: #dfe9e6;
+      --surface: #ffffff;
+      --canvas: #f5f8f7;
+      --shadow: 0 8px 24px rgba(18, 72, 62, 0.08);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      letter-spacing: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+    }
+
+    button:focus-visible {
+      outline: 3px solid rgba(18, 108, 90, 0.25);
+      outline-offset: 3px;
+    }
+
+    .app {
+      width: 100%;
+      min-height: 100vh;
+      margin-inline: auto;
+      background: var(--surface);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 44px 1fr 44px;
+      align-items: center;
+      gap: 8px;
+      min-height: 68px;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(12px);
+    }
+
+    .back-button,
+    .icon-button {
+      display: inline-grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: var(--surface);
+      cursor: pointer;
+      transition: background-color 160ms ease, transform 160ms ease;
+    }
+
+    .back-button:active,
+    .icon-button:active {
+      transform: scale(0.96);
+    }
+
+    .back-button:hover,
+    .icon-button:hover {
+      background: var(--primary-soft);
+    }
+
+    .back-button svg {
+      width: 22px;
+      height: 22px;
+      transform: scaleX(-1);
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .content {
+      padding: 22px 18px 132px;
+    }
+
+    .doctor-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, #ffffff, #f3faf7);
+      box-shadow: var(--shadow);
+    }
+
+    .doctor-avatar {
+      display: grid;
+      flex: 0 0 54px;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .doctor-avatar svg {
+      width: 30px;
+      height: 30px;
+    }
+
+    .doctor-copy {
+      min-width: 0;
+    }
+
+    .doctor-label {
+      margin: 0 0 2px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .doctor-name {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .section {
+      margin-top: 24px;
+    }
+
+    .section:first-of-type {
+      margin-top: 0;
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .calendar {
+      padding: 16px 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .month-nav {
+      display: grid;
+      grid-template-columns: 40px 1fr 40px;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .month-name {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .month-nav .icon-button {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .month-nav svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .next-button svg {
+      transform: scaleX(-1);
+    }
+
+    .weekdays,
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 5px;
+    }
+
+    .weekdays {
+      margin-bottom: 8px;
+    }
+
+    .weekday {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .day {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 100%;
+      aspect-ratio: 1;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .day.empty {
+      cursor: default;
+    }
+
+    .day:not(.empty):hover {
+      background: var(--primary-soft);
+    }
+
+    .day.today {
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .day.selected {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .day.unavailable {
+      color: #b5c0bd;
+      text-decoration: line-through;
+      cursor: not-allowed;
+    }
+
+    .selected-date {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .slots {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .slot {
+      min-height: 48px;
+      padding: 8px 6px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+      cursor: pointer;
+      transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease;
+    }
+
+    .slot:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .slot.selected {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .availability-note {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .booking-bar {
+      position: fixed;
+      z-index: 20;
+      inset-inline: 0;
+      bottom: 0;
+      padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.97);
+      backdrop-filter: blur(12px);
+    }
+
+    .booking-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .summary-label {
+      color: var(--muted);
+    }
+
+    .summary-value {
+      font-weight: 700;
+      text-align: end;
+    }
+
+    .confirm-button {
+      width: 100%;
+      min-height: 52px;
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(18, 108, 90, 0.2);
+      transition: background-color 160ms ease, transform 160ms ease;
+    }
+
+    .confirm-button:hover:not(:disabled) {
+      background: var(--primary-dark);
+    }
+
+    .confirm-button:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    .confirm-button:disabled {
+      background: #b8c7c3;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 50;
+      inset-inline: 18px;
+      bottom: 112px;
+      margin: 0;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: #18332d;
+      color: #ffffff;
+      font-size: 15px;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (min-width: 620px) {
+      .app {
+        max-width: 520px;
+        border-inline: 1px solid var(--line);
+        box-shadow: 0 0 40px rgba(18, 72, 62, 0.08);
+      }
+
+      .booking-bar {
+        max-width: 520px;
+        margin-inline: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <button class="back-button" type="button" aria-label="العودة إلى الصفحة السابقة">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1 class="page-title">حجز موعد</h1>
+      <span aria-hidden="true"></span>
+    </header>
+
+    <section class="content">
+      <article class="doctor-card" aria-label="الطبيبة">
+        <div class="doctor-avatar" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 12a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9Z" fill="currentColor" opacity=".22"/>
+            <path d="M5.5 21a6.5 6.5 0 0 1 13 0" fill="currentColor" opacity=".22"/>
+            <path d="M12 7v6M9 10h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="doctor-copy">
+          <p class="doctor-label">الطبيبة المعالجة</p>
+          <p class="doctor-name">د. سارة المنصوري</p>
+        </div>
+      </article>
+
+      <section class="section" aria-labelledby="date-title">
+        <h2 class="section-title" id="date-title">اختر التاريخ</h2>
+        <div class="calendar">
+          <div class="month-nav">
+            <button class="icon-button next-button" id="next-month" type="button" aria-label="الشهر التالي">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <h3 class="month-name" id="month-name" aria-live="polite"></h3>
+            <button class="icon-button previous-button" id="previous-month" type="button" aria-label="الشهر السابق">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="weekdays" aria-hidden="true">
+            <div class="weekday">س</div>
+            <div class="weekday">ح</div>
+            <div class="weekday">ن</div>
+            <div class="weekday">ث</div>
+            <div class="weekday">ر</div>
+            <div class="weekday">خ</div>
+            <div class="weekday">ج</div>
+          </div>
+
+          <div class="days" id="calendar-days" role="grid" aria-label="أيام الشهر"></div>
+          <p class="selected-date" id="selected-date" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="time-title">
+        <h2 class="section-title" id="time-title">اختر الوقت</h2>
+        <div class="slots" id="time-slots">
+          <button class="slot" type="button" data-time="9:00 صباحًا">9:00 صباحًا</button>
+          <button class="slot" type="button" data-time="9:30 صباحًا">9:30 صباحًا</button>
+          <button class="slot" type="button" data-time="10:00 صباحًا">10:00 صباحًا</button>
+          <button class="slot" type="button" data-time="10:30 صباحًا">10:30 صباحًا</button>
+          <button class="slot" type="button" data-time="11:00 صباحًا">11:00 صباحًا</button>
+          <button class="slot" type="button" data-time="11:30 صباحًا">11:30 صباحًا</button>
+          <button class="slot" type="button" data-time="12:00 ظهرًا">12:00 ظهرًا</button>
+        </div>
+        <p class="availability-note">تتوفر المواعيد من 9:00 صباحًا حتى 12:00 ظهرًا.</p>
+      </section>
+    </section>
+
+    <footer class="booking-bar">
+      <div class="booking-summary">
+        <span class="summary-label">الموعد المحدد</span>
+        <span class="summary-value" id="booking-summary">اختر التاريخ والوقت</span>
+      </div>
+      <button class="confirm-button" id="confirm-booking" type="button" disabled>تأكيد الحجز</button>
+    </footer>
+
+    <p class="toast" id="toast" role="status" aria-live="polite"></p>
+  </main>
+
+  <script>
+    const locale = "ar-QA-u-nu-latn";
+    const monthName = document.getElementById("month-name");
+    const calendarDays = document.getElementById("calendar-days");
+    const selectedDateText = document.getElementById("selected-date");
+    const bookingSummary = document.getElementById("booking-summary");
+    const confirmButton = document.getElementById("confirm-booking");
+    const toast = document.getElementById("toast");
+
+    const today = new Date();
+    let viewDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    let selectedDate = null;
+    let selectedTime = null;
+
+    function sameDay(first, second) {
+      return first.getFullYear() === second.getFullYear() &&
+        first.getMonth() === second.getMonth() &&
+        first.getDate() === second.getDate();
+    }
+
+    function formatDate(date, options) {
+      return new Intl.DateTimeFormat(locale, options).format(date);
+    }
+
+    function selectDate(date) {
+      selectedDate = new Date(date);
+      selectedTime = null;
+
+      document.querySelectorAll(".slot").forEach(slot => {
+        slot.classList.remove("selected");
+        slot.disabled = false;
+      });
+
+      updateCalendar();
+      updateSummary();
+    }
+
+    function updateCalendar() {
+      const year = viewDate.getFullYear();
+      const month = viewDate.getMonth();
+
+      monthName.textContent = formatDate(viewDate, {
+        month: "long",
+        year: "numeric"
+      });
+
+      calendarDays.innerHTML = "";
+
+      const firstDay = new Date(year, month, 1);
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const saturdayIndex = firstDay.getDay() === 6 ? 0 : firstDay.getDay() + 1;
+
+      for (let i = 0; i < saturdayIndex; i++) {
+        const empty = document.createElement("div");
+        empty.className = "day empty";
+        empty.setAttribute("aria-hidden", "true");
+        calendarDays.appendChild(empty);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(year, month, day);
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "day";
+        button.textContent = day;
+        button.setAttribute("role", "gridcell");
+
+        if (sameDay(date, today)) {
+          button.classList.add("today");
+          button.setAttribute("aria-current", "date");
+        }
+
+        if (selectedDate && sameDay(date, selectedDate)) {
+          button.classList.add("selected");
+          button.setAttribute("aria-selected", "true");
+        }
+
+        const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        const isFriday = date.getDay() === 5;
+
+        if (isPast || isFriday) {
+          button.classList.add("unavailable");
+          button.disabled = true;
+          button.setAttribute("aria-label", day + " غير متاح");
+        } else {
+          button.setAttribute("aria-label", "اختر يوم " + day);
+          button.addEventListener("click", () => selectDate(date));
+        }
+
+        calendarDays.appendChild(button);
+      }
+    }
+
+    function updateSummary() {
+      const hasDate = Boolean(selectedDate);
+      const hasTime = Boolean(selectedTime);
+      confirmButton.disabled = !(hasDate && hasTime);
+
+      if (hasDate && hasTime) {
+        const dateLabel = formatDate(selectedDate, {
+          weekday: "long",
+          day: "numeric",
+          month: "long"
+        });
+
+        selectedDateText.textContent = dateLabel;
+        bookingSummary.textContent = dateLabel + "، " + selectedTime;
+      } else if (hasDate) {
+        selectedDateText.textContent = formatDate(selectedDate, {
+          weekday: "long",
+          day: "numeric",
+          month: "long"
+        });
+
+        bookingSummary.textContent = "اختر وقت الموعد";
+      } else {
+        selectedDateText.textContent = "";
+        bookingSummary.textContent = "اختر التاريخ والوقت";
+      }
+    }
+
+    document.querySelectorAll(".slot").forEach(slot => {
+      slot.addEventListener("click", () => {
+        document.querySelectorAll(".slot").forEach(item => {
+          item.classList.remove("selected");
+        });
+
+        slot.classList.add("selected");
+        selectedTime = slot.dataset.time;
+        updateSummary();
+      });
+    });
+
+    document.getElementById("next-month").addEventListener("click", () => {
+      viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1);
+      updateCalendar();
+    });
+
+    document.getElementById("previous-month").addEventListener("click", () => {
+      viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1);
+      updateCalendar();
+    });
+
+    confirmButton.addEventListener("click", () => {
+      if (!selectedDate || !selectedTime) return;
+
+      toast.textContent = "تم تأكيد موعدك لدى د. سارة المنصوري.";
+      toast.classList.add("show");
+
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 3200);
+    });
+
+    document.querySelector(".back-button").addEventListener("click", () => {
+      if (window.history.length > 1) {
+        window.history.back();
+      }
+    });
+
+    updateCalendar();
+    updateSummary();
+  </script>
+</body>
+</html>

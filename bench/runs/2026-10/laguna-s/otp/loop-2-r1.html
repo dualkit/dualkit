@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدخال الرمز</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic&display=swap" rel="stylesheet">
+  <style>
+    :lang(ar) {
+      --type-body-size: 16px;
+      --type-label-size: 14px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
+      font-size: var(--type-body-size);
+      margin: 0;
+      padding: 16px;
+      background-color: #f5f5f5;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 0 8px 0;
+      text-align: center;
+    }
+
+    p {
+      font-size: var(--type-body-size);
+      margin: 0 0 24px 0;
+      text-align: center;
+    }
+
+    .code-inputs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .code-inputs input {
+      width: 40px;
+      height: 48px;
+      font-size: 18px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+      color: #000;
+    }
+
+    .countdown {
+      font-size: var(--type-body-size);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .verify-button {
+      background-color: #0070ba;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: var(--type-label-size);
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    .verify-button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <h1>أدخل الرمز</h1>
+  <p>لقد أرسلنا رمزًا مكوّنًا من 6 أرقام إلى <bdi dir="ltr">+966 55 123 4567</bdi></p>
+
+  <div class="code-inputs">
+    <input type="text" inputmode="numeric" maxlength="1">
+    <input type="text" inputmode="numeric" maxlength="1">
+    <input type="text" inputmode="numeric" maxlength="1">
+    <input type="text" inputmode="numeric" maxlength="1">
+    <input type="text" inputmode="numeric" maxlength="1">
+    <input type="text" inputmode="numeric" maxlength="1">
+  </div>
+
+  <p class="countdown">إعادة الإرسال خلال <bdi dir="ltr">0:45</bdi></p>
+
+  <button class="verify-button" disabled>تحقق</button>
+
+  <script>
+    const inputs = document.querySelectorAll('.code-inputs input');
+    const button = document.querySelector('.verify-button');
+    let timeLeft = 45;
+
+    // Move focus to next input
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        if (input.value.length === 1 && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+        // Enable button when all fields filled
+        const allFilled = Array.from(inputs).every(i => i.value.length === 1);
+        button.disabled = !allFilled;
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+    });
+
+    // Countdown timer
+    const countdownElement = document.querySelector('.countdown bdi');
+    const timer = setInterval(() => {
+      timeLeft--;
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      countdownElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        countdownElement.textContent = 'انتظر...';
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - تطبيق الدفع</title>
+    <!-- Google Fonts: IBM Plex Sans Arabic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      :lang(ar) {
+        font-family: 'IBM Plex Sans Arabic', sans-serif;
+        letter-spacing: 0;
+        line-height: 1.7;
+      }
+      body {
+        font-family: 'IBM Plex Sans Arabic', sans-serif;
+        background-color: #f1f5f9;
+      }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen p-0 sm:p-4">
+  <!-- Mobile Phone Frame Container -->
+  <div class="w-full max-w-sm bg-white min-h-screen sm:min-h-[800px] sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-200">
+    
+    <!-- Header -->
+    <header class="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white sticky top-0 z-10">
+      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-slate-100 transition text-slate-700" aria-label="الرجوع">
+        <svg class="w-5 h-5 rtl:-scale-x-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <h1 class="text-base font-bold text-slate-900">الملف الشخصي</h1>
+      <div class="w-10"></div> <!-- Balance spacing -->
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto p-6 space-y-6">
+      
+      <!-- Profile Card (Name & Email) -->
+      <div class="flex flex-col items-center bg-slate-50 border border-slate-200/80 rounded-2xl p-6 text-center relative">
+        <div class="w-20 h-20 bg-indigo-600 text-white rounded-full flex items-center justify-center text-2xl font-bold shadow-md mb-3">
+          ل م
+        </div>
+        <h2 class="text-lg font-bold text-slate-900">ليلى المنصوري</h2>
+        <p class="text-slate-600 text-sm mt-1">
+          <bdi dir="ltr">layla@example.com</bdi>
+        </p>
+        <!-- Edit action for Name & Email -->
+        <button class="absolute top-4 start-4 text-indigo-600 hover:text-indigo-700 text-sm font-semibold flex items-center gap-1 bg-white px-3 py-1 rounded-full border border-indigo-100 shadow-xs transition">
+          <span>تعديل</span>
+        </button>
+      </div>
+
+      <!-- Account Details Section -->
+      <div class="space-y-4">
+        <h3 class="text-sm font-semibold text-slate-400 px-1">تفاصيل الحساب</h3>
+        
+        <!-- Phone Number Card -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center justify-between shadow-xs">
+          <div class="space-y-0.5">
+            <span class="text-sm font-medium text-slate-500 block">رقم الهاتف المتحرك</span>
+            <p class="text-slate-900 font-semibold text-base">
+              <bdi dir="ltr">+971 50 123 4567</bdi>
+            </p>
+          </div>
+          <!-- Edit action for Phone -->
+          <button class="text-indigo-600 hover:bg-indigo-50 px-3 py-2 rounded-xl text-sm font-semibold transition shrink-0 ms-2" aria-label="تعديل رقم الهاتف">
+            تعديل
+          </button>
+        </div>
+
+        <!-- IBAN Card -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 flex items-center justify-between shadow-xs">
+          <div class="space-y-0.5 overflow-hidden">
+            <span class="text-sm font-medium text-slate-500 block">رقم الحساب المصرفي (<bdi dir="ltr">IBAN</bdi>)</span>
+            <p class="text-slate-900 font-mono text-sm font-semibold truncate">
+              <bdi dir="ltr">AE07 0331 2345 6789 0123 456</bdi>
+            </p>
+          </div>
+          <!-- Edit action for IBAN -->
+          <button class="text-indigo-600 hover:bg-indigo-50 px-3 py-2 rounded-xl text-sm font-semibold transition shrink-0 ms-2" aria-label="تعديل رقم الحساب المصرفي">
+            تعديل
+          </button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>

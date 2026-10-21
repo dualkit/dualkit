@@ -1,0 +1,67 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "payment-summary",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T16:43:09.661Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>ملخص الدفع</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f5f7fa;\n            color: #1a1a1a;\n            direction: rtl;\n            text-align: right;\n            padding: 20px;\n            max-width: 480px;\n            margin: 0 auto;\n        }\n        .header {\n            display: flex;\n            align-items: center;\n            margin-bottom: 24px;\n        }\n        .back-button {\n            background: none;\n            border: none;\n            font-size: 20px;\n            cursor: pointer;\n            margin-left: 12px;\n            color: #4a4a4a;\n        }\n        .header-title {\n            font-size: 20px;\n            font-weight: 600;\n            color: #1a1a1a;\n        }\n        .card {\n            background: #ffffff;\n            border-radius: 12px;\n            padding: 20px;\n            margin-bottom: 16px;\n            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);\n        }\n        .amount-due {\n            font-size: 28px;\n            font-weight: 700;\n            color: #1a1a1a;\n            margin-bottom: 8px;\n        }\n        .due-date {\n            font-size: 15px;\n            color: #6a6a6a;\n            margin-bottom: 12px;\n        }\n        .order-info {\n            font-size: 15px;\n            color: #4a4a4a;\n        }\n        .phone-field {\n            width: 100%;\n            padding: 14px;\n            border: 1px solid #d0d0d0;\n            border-radius: 8px;\n            font-size: 16px;\n            text-align: right;\n            margin-bottom: 20px;\n            background-color: #fafafa;\n        }\n        .phone-field::placeholder {\n            color: #9a9a9a;\n        }\n        .pay-button {\n            width: 100%;\n            background-color: #0073e6;\n            color: #ffffff;\n            border: none;\n            border-radius: 8px;\n            padding: 16px;\n            font-size: 18px;\n            font-weight: 600;\n            cursor: pointer;\n            transition: background-color 0.2s;\n        }\n        .pay-button:hover {\n            background-color: #005bb5;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"header\">\n        <button class=\"back-button\" aria-label=\"رجوع\">←</button>\n        <h1 class=\"header-title\">ملخص الدفع</h1>\n    </div>\n\n    <div class=\"card\">\n        <div class=\"amount-due\">1,234.50 درهم إماراتي</div>\n        <div class=\"due-date\">تاريخ الاستحقاق: 3 نوفمبر 2026 | 14 ربيع أول 1448 هـ</div>\n        <div class=\"order-info\">لديك 3 عناصر في هذا الطلب</div>\n    </div>\n\n    <div class=\"card\">\n        <input type=\"tel\" class=\"phone-field\" placeholder=\"أدخل رقم الهاتف (مثال: 050 123 4567)\" />\n    </div>\n\n    <button class=\"pay-button\">دفع الآن</button>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 203,
+    "output": 1031
+  },
+  "ms": 29928,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 91,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 232.4375,
+        "y": 21,
+        "width": 105.5625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1 class=\"header-title\">ملخص الدفع</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 164.984375,
+        "y": 372,
+        "width": 60.015625,
+        "height": 20
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"pay-button\">دفع الآن</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 350,
+        "y": 20.5,
+        "width": 20,
+        "height": 23
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button class=\"back-button\" aria-label=\"رجوع\">←</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

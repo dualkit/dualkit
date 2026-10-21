@@ -1,0 +1,66 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "profile",
+  "condition": "loop",
+  "run": 3,
+  "at": "2026-10-21T17:53:50.910Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الملف الشخصي</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :lang(ar) {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n    body {\n      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;\n      font-size: var(--type-body-size);\n      margin: 0;\n      padding: 16px;\n      background-color: #f5f5f5;\n      color: #333;\n    }\n    .profile-header {\n      text-align: center;\n      margin-bottom: 24px;\n    }\n    .profile-header h1 {\n      font-size: 20px;\n      font-weight: 600;\n      margin: 0;\n    }\n    .profile-item {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 16px 0;\n      border-bottom: 1px solid #e0e0e0;\n    }\n    .profile-item:last-child {\n      border-bottom: none;\n    }\n    .profile-label {\n      font-size: var(--type-label-size);\n      font-weight: 500;\n    }\n    .profile-value {\n      font-size: var(--type-body-size);\n      text-align: right;\n    }\n    .edit-button {\n      background: none;\n      border: none;\n      color: #007AFF;\n      font-size: var(--type-label-size);\n      font-weight: 500;\n      cursor: pointer;\n      padding: 4px 8px;\n      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;\n    }\n    .edit-button:hover {\n      text-decoration: underline;\n    }\n    bdi {\n      unicode-bidi: isolate;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"profile-header\">\n    <h1>الملف الشخصي</h1>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">الاسم</div>\n    <div class=\"profile-value\">ليلى المنصوري</div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">البريد الإلكتروني</div>\n    <div class=\"profile-value\"><bdi dir=\"ltr\">layla@example.com</bdi></div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">رقم الهاتف</div>\n    <div class=\"profile-value\"><bdi dir=\"ltr\">+971 50 123 4567</bdi></div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">رقم الحساب البنكي (IBAN)</div>\n    <div class=\"profile-value\"><bdi dir=\"ltr\">AE07 0331 2345 6789 0123 456</bdi></div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 16301,
+    "output": 1987
+  },
+  "ms": 44259,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 29,
+  "score": 100,
+  "unreadableStylesheets": 1,
+  "pageHeight": 844,
+  "missing": [],
+  "findings": [],
+  "from": {
+    "rulesPassed": 28,
+    "score": 92
+  },
+  "rounds": [
+    {
+      "at": "2026-10-21T17:53:52.850Z",
+      "ms": 22652,
+      "usage": {
+        "input": 7603,
+        "output": 984
+      },
+      "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الملف الشخصي</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :lang(ar) {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n    body {\n      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;\n      font-size: var(--type-body-size);\n      margin: 0;\n      padding: 16px;\n      background-color: #f5f5f5;\n      color: #333;\n    }\n    .profile-header {\n      text-align: center;\n      margin-bottom: 24px;\n    }\n    .profile-header h1 {\n      font-size: 20px;\n      font-weight: 600;\n      margin: 0;\n    }\n    .profile-item {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 16px 0;\n      border-bottom: 1px solid #e0e0e0;\n    }\n    .profile-item:last-child {\n      border-bottom: none;\n    }\n    .profile-label {\n      font-size: var(--type-label-size);\n      font-weight: 500;\n    }\n    .profile-value {\n      font-size: var(--type-body-size);\n      text-align: right;\n    }\n    .edit-button {\n      background: none;\n      border: none;\n      color: #007AFF;\n      font-size: var(--type-label-size);\n      font-weight: 500;\n      cursor: pointer;\n      padding: 4px 8px;\n    }\n    .edit-button:hover {\n      text-decoration: underline;\n    }\n    bdi {\n      unicode-bidi: isolate;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"profile-header\">\n    <h1>الملف الشخصي</h1>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">الاسم</div>\n    <div class=\"profile-value\">ليلى المنصوري</div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">البريد الإلكتروني</div>\n    <div class=\"profile-value\"><bdi dir=\"ltr\">layla@example.com</bdi></div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">رقم الهاتف</div>\n    <div class=\"profile-value\"><bdi dir=\"ltr\">+971 50 123 4567</bdi></div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">رقم الحساب البنكي (IBAN)</div>\n    <div class=\"profile-value\"><bdi dir=\"ltr\">AE07 0331 2345 6789 0123 456</bdi></div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n</body>\n</html>\n```",
+      "sent": 2,
+      "ok": true,
+      "error": null,
+      "rulesPassed": 28,
+      "score": 96,
+      "missing": [],
+      "regressed": [],
+      "lostParts": [],
+      "arabicKept": 1
+    },
+    {
+      "at": "2026-10-21T17:54:17.644Z",
+      "ms": 21607,
+      "usage": {
+        "input": 8698,
+        "output": 1003
+      },
+      "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الملف الشخصي</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :lang(ar) {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n    body {\n      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;\n      font-size: var(--type-body-size);\n      margin: 0;\n      padding: 16px;\n      background-color: #f5f5f5;\n      color: #333;\n    }\n    .profile-header {\n      text-align: center;\n      margin-bottom: 24px;\n    }\n    .profile-header h1 {\n      font-size: 20px;\n      font-weight: 600;\n      margin: 0;\n    }\n    .profile-item {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 16px 0;\n      border-bottom: 1px solid #e0e0e0;\n    }\n    .profile-item:last-child {\n      border-bottom: none;\n    }\n    .profile-label {\n      font-size: var(--type-label-size);\n      font-weight: 500;\n    }\n    .profile-value {\n      font-size: var(--type-body-size);\n      text-align: right;\n    }\n    .edit-button {\n      background: none;\n      border: none;\n      color: #007AFF;\n      font-size: var(--type-label-size);\n      font-weight: 500;\n      cursor: pointer;\n      padding: 4px 8px;\n      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;\n    }\n    .edit-button:hover {\n      text-decoration: underline;\n    }\n    bdi {\n      unicode-bidi: isolate;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"profile-header\">\n    <h1>الملف الشخصي</h1>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">الاسم</div>\n    <div class=\"profile-value\">ليلى المنصوري</div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">البريد الإلكتروني</div>\n    <div class=\"profile-value\"><bdi dir=\"ltr\">layla@example.com</bdi></div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">رقم الهاتف</div>\n    <div class=\"profile-value\"><bdi dir=\"ltr\">+971 50 123 4567</bdi></div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">رقم الحساب البنكي (IBAN)</div>\n    <div class=\"profile-value\"><bdi dir=\"ltr\">AE07 0331 2345 6789 0123 456</bdi></div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n</body>\n</html>\n```",
+      "sent": 1,
+      "ok": true,
+      "error": null,
+      "rulesPassed": 29,
+      "score": 100,
+      "missing": [],
+      "regressed": [],
+      "lostParts": [],
+      "arabicKept": 1
+    }
+  ]
+}

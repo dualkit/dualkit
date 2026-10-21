@@ -1,0 +1,67 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "address-form",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T17:03:18.299Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>نموذج عنوان التسليم</title>\n    <style>\n        * {\n            box-sizing: border-box;\n            margin: 0;\n            padding: 0;\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n        }\n        body {\n            background-color: #f4f6f9;\n            color: #333;\n            padding: 20px;\n        }\n        .form-container {\n            max-width: 420px;\n            margin: 0 auto;\n            background: #fff;\n            border-radius: 12px;\n            padding: 24px;\n            box-shadow: 0 4px 12px rgba(0,0,0,0.08);\n        }\n        h1 {\n            font-size: 20px;\n            margin-bottom: 20px;\n            text-align: center;\n            color: #2c3e50;\n        }\n        .form-group {\n            margin-bottom: 18px;\n        }\n        label {\n            display: block;\n            font-size: 14px;\n            margin-bottom: 6px;\n            color: #555;\n            font-weight: 600;\n        }\n        input, select {\n            width: 100%;\n            padding: 12px 14px;\n            font-size: 15px;\n            border: 1px solid #ccc;\n            border-radius: 8px;\n            background-color: #fafafa;\n            text-align: right;\n        }\n        input:focus, select:focus {\n            outline: none;\n            border-color: #3498db;\n            background-color: #fff;\n        }\n        .example {\n            font-size: 12px;\n            color: #999;\n            margin-top: 4px;\n            text-align: right;\n        }\n        .save-btn {\n            width: 100%;\n            padding: 14px;\n            background-color: #27ae60;\n            color: #fff;\n            font-size: 16px;\n            font-weight: 600;\n            border: none;\n            border-radius: 8px;\n            cursor: pointer;\n            transition: background-color 0.2s;\n        }\n        .save-btn:hover {\n            background-color: #219653;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"form-container\">\n        <h1>عنوان التسليم</h1>\n        <form id=\"addressForm\">\n            <div class=\"form-group\">\n                <label for=\"buildingVilla\">العقار أو الفيلا</label>\n                <input type=\"text\" id=\"buildingVilla\" name=\"buildingVilla\" placeholder=\"أدخل رقم العقار أو الفيلا\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"street\">الشارع</label>\n                <input type=\"text\" id=\"street\" name=\"street\" placeholder=\"أدخل اسم أو رقم الشارع\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"area\">المنطقة</label>\n                <input type=\"text\" id=\"area\" name=\"area\" placeholder=\"أدخل اسم المنطقة\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"makani\">رقم المكاني</label>\n                <input type=\"text\" id=\"makani\" name=\"makani\" placeholder=\"أدخل رقم المكاني\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"emirate\">الإمارة</label>\n                <select id=\"emirate\" name=\"emirate\">\n                    <option value=\"دبي\" selected>دبي</option>\n                    <option value=\"أبوظبي\">أبوظبي</option>\n                    <option value=\"الشارقة\">الشارقة</option>\n                    <option value=\"الإمارات الأخرى\">باقي الإمارات</option>\n                </select>\n            </div>\n            <div class=\"form-group\">\n                <label for=\"phone\">رقم الهاتف</label>\n                <input type=\"tel\" id=\"phone\" name=\"phone\" placeholder=\"050 123 4567\">\n                <div class=\"example\">مثال: 050 123 4567</div>\n            </div>\n            <button type=\"submit\" class=\"save-btn\">حفظ العنوان</button>\n        </form>\n    </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 154,
+    "output": 1219
+  },
+  "ms": 23743,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 82,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 242.875,
+        "y": 574,
+        "width": 103.125,
+        "height": 14
+      },
+      "message": "\"مثال: 050 123 4567\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"example\">مثال: 050 123 4567</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 136.71875,
+        "y": 45,
+        "width": 116.5625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>عنوان التسليم</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 242.875,
+        "y": 574,
+        "width": 103.125,
+        "height": 14
+      },
+      "message": "\"مثال: 050 123 4567\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"example\">مثال: 050 123 4567</div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

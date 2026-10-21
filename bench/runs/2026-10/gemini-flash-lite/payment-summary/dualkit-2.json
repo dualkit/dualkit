@@ -1,0 +1,39 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "payment-summary",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T16:44:09.232Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>ملخص الدفع</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4\"></script>\n  <style>\n    :lang(ar) {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      letter-spacing: 0;\n      line-height: 1.7;\n    }\n    body {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      background-color: #f1f5f9;\n      color: #0f172a;\n    }\n  </style>\n</head>\n<body class=\"flex items-center justify-center min-h-screen p-0 sm:p-4\">\n\n  <!-- Mobile Phone Shell -->\n  <div class=\"w-full max-w-[420px] bg-white sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col min-h-screen sm:min-h-[844px]\">\n\n    <!-- Header -->\n    <header class=\"flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white sticky top-0 z-10\">\n      <button class=\"w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 text-slate-700 hover:bg-slate-200 transition\" aria-label=\"رجوع\">\n        <svg class=\"w-5 h-5 rtl:-scale-x-100\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n          <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 19l-7-7 7-7\"></path>\n        </svg>\n      </button>\n      <h1 class=\"text-base font-semibold text-slate-900\">ملخص الدفع</h1>\n      <div class=\"w-10\"></div>\n    </header>\n\n    <!-- Content Body -->\n    <main class=\"flex-1 flex flex-col pb-8\">\n\n      <!-- Amount Due Card -->\n      <div class=\"p-6 bg-emerald-900 text-white rounded-2xl mx-6 mt-6 shadow-md\">\n        <span class=\"text-emerald-200 text-sm block mb-1 font-medium\">المبلغ المستحق</span>\n        <div class=\"text-3xl font-bold tracking-tight tabular-nums\">\n          <bdi>1,234.50 د.إ</bdi>\n        </div>\n      </div>\n\n      <!-- Transaction Details -->\n      <div class=\"px-6 mt-6 space-y-4\">\n        <!-- Due Date -->\n        <div class=\"flex justify-between items-center py-3 border-b border-slate-100\">\n          <span class=\"text-slate-500 text-sm\">تاريخ الاستحقاق</span>\n          <div class=\"text-start\">\n            <div class=\"font-medium text-slate-800 text-sm\"><bdi>3 نوفمبر 2026</bdi></div>\n            <div class=\"text-slate-400 text-sm\"><bdi>22 جمادى الأولى 1448 هـ</bdi></div>\n          </div>\n        </div>\n\n        <!-- Items Count -->\n        <div class=\"flex justify-between items-center py-3 border-b border-slate-100\">\n          <span class=\"text-slate-500 text-sm\">تفاصيل الطلب</span>\n          <span class=\"font-medium text-slate-800 text-sm\">لديك 3 عناصر في هذا الطلب</span>\n        </div>\n      </div>\n\n      <!-- SMS Receipt Section -->\n      <div class=\"px-6 mt-6\">\n        <label for=\"phone\" class=\"block text-sm font-medium text-slate-700 mb-2\">\n          إرسال الإيصال عبر الرسائل النصية\n        </label>\n        <div class=\"relative\">\n          <div class=\"absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none text-slate-400 text-sm font-medium\">\n            <bdi dir=\"ltr\">+971</bdi>\n          </div>\n          <input type=\"tel\" id=\"phone\" dir=\"ltr\" inputmode=\"tel\" autocomplete=\"tel\" placeholder=\"050 123 4567\"\n            class=\"w-full ps-16 pe-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 text-sm tabular-nums\">\n        </div>\n        <p class=\"text-slate-400 text-sm mt-1.5\">مثال: <bdi dir=\"ltr\">050 123 4567</bdi></p>\n      </div>\n\n    </main>\n\n    <!-- Sticky Bottom Action Footer -->\n    <footer class=\"p-6 bg-white border-t border-slate-100 mt-auto\">\n      <button class=\"w-full py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl shadow-lg shadow-emerald-600/20 transition active:scale-[0.99] text-base\">\n        إتمام الدفع\n      </button>\n    </footer>\n\n  </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6541,
+    "output": 1452
+  },
+  "ms": 16978,
+  "finish": "STOP",
+  "reasoningTokens": 3208,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 29,
+  "score": 99,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 320,
+        "y": 440.984375,
+        "width": 46,
+        "height": 49.796875
+      },
+      "message": "padding-right: 14px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none text-slate-400 text-sm font-medium\">\n            <bdi dir=\"ltr\">+971</bdi>\n "
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

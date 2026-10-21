@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدخال الرمز</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #666666;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .code-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .code-box {
+            flex: 1;
+            height: 55px;
+            border: 1.5px solid #cccccc;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 600;
+            color: #333333;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .code-box:focus {
+            border-color: #007acc;
+        }
+
+        .resend-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .resend-text {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .resend-link {
+            color: #007acc;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .resend-link:hover {
+            text-decoration: underline;
+        }
+
+        .verify-btn {
+            width: 100%;
+            height: 50px;
+            background-color: #007acc;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .verify-btn:hover {
+            background-color: #0066b3;
+        }
+
+        .verify-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">أدخل الرمز</h1>
+        <p class="subtitle">لقد أرسلنا رمزًا مكوّنًا من 6 أرقام إلى +966 55 123 4567</p>
+
+        <div class="code-container">
+            <input type="text" maxlength="1" class="code-box" inputmode="numeric">
+            <input type="text" maxlength="1" class="code-box" inputmode="numeric">
+            <input type="text" maxlength="1" class="code-box" inputmode="numeric">
+            <input type="text" maxlength="1" class="code-box" inputmode="numeric">
+            <input type="text" maxlength="1" class="code-box" inputmode="numeric">
+            <input type="text" maxlength="1" class="code-box" inputmode="numeric">
+        </div>
+
+        <div class="resend-container">
+            <span class="resend-text">إعادة الإرسال خلال <span id="countdown">0:45</span></span>
+        </div>
+
+        <button class="verify-btn" id="verifyBtn">تحقق</button>
+    </div>
+
+    <script>
+        // Countdown timer
+        let timeLeft = 45;
+        const countdownEl = document.getElementById('countdown');
+
+        function updateCountdown() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            countdownEl.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (timeLeft > 0) {
+                timeLeft--;
+                setTimeout(updateCountdown, 1000);
+            }
+        }
+
+        updateCountdown();
+
+        // Auto-focus and move between code boxes
+        const codeBoxes = document.querySelectorAll('.code-box');
+        codeBoxes.forEach((box, index) => {
+            box.addEventListener('input', () => {
+                if (box.value.length === 1 && index < codeBoxes.length - 1) {
+                    codeBoxes[index + 1].focus();
+                }
+            });
+
+            box.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && index > 0 && !box.value) {
+                    codeBoxes[index - 1].focus();
+                }
+            });
+        });
+
+        // Verify button functionality
+        const verifyBtn = document.getElementById('verifyBtn');
+        verifyBtn.addEventListener('click', () => {
+            const code = Array.from(codeBoxes).map(box => box.value).join('');
+            if (code.length === 6) {
+                alert(`تم إدخال الرمز: ${code}`);
+            } else {
+                alert('يرجى إدخال الرمز الكامل');
+            }
+        });
+    </script>
+</body>
+</html>

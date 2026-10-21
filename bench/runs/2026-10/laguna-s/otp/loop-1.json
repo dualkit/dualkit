@@ -1,0 +1,95 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "otp",
+  "condition": "loop",
+  "run": 1,
+  "at": "2026-10-21T17:47:24.403Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>إدخال الرمز</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --bg: #f5f7fa;\n      --card: #ffffff;\n      --text: #1a1a1a;\n      --muted: #6b7280;\n      --primary: #0d6efd;\n      --border: #d1d5db;\n      --radius: 12px;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;\n      background: var(--bg);\n      color: var(--text);\n      display: flex;\n      justify-content: center;\n      align-items: flex-start;\n      min-height: 100vh;\n      padding: 24px;\n    }\n\n    .card {\n      background: var(--card);\n      border-radius: var(--radius);\n      padding: 24px;\n      width: 100%;\n      max-width: 400px;\n      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);\n    }\n\n    .title {\n      font-size: 20px;\n      font-weight: 600;\n      text-align: center;\n      margin-bottom: 8px;\n    }\n\n    .subtitle {\n      font-size: 14px;\n      color: var(--muted);\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .phone {\n      font-weight: 500;\n      color: var(--text);\n    }\n\n    .code-inputs {\n      display: flex;\n      justify-content: space-between;\n      gap: 8px;\n      margin-bottom: 24px;\n    }\n\n    .code-inputs input {\n      width: 100%;\n      height: 48px;\n      font-size: 18px;\n      text-align: center;\n      border: 1px solid var(--border);\n      border-radius: 8px;\n      background: var(--card);\n      color: var(--text);\n      direction: ltr;\n      inputMode: numeric;\n    }\n\n    .countdown {\n      font-size: 14px;\n      color: var(--muted);\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .verify-btn {\n      width: 100%;\n      padding: 12px;\n      font-size: 16px;\n      font-weight: 600;\n      color: #fff;\n      background: var(--primary);\n      border: none;\n      border-radius: 8px;\n      cursor: pointer;\n    }\n\n    .verify-btn:disabled {\n      background: #ccc;\n      cursor: not-allowed;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h1 class=\"title\">أدخل الرمز</h1>\n    <p class=\"subtitle\">\n      أرسلنا رمزًا مكوّنًا من 6 أرقام إلى <bdi dir=\"ltr\" class=\"phone\">+966 55 123 4567</bdi>\n    </p>\n\n    <div class=\"code-inputs\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n    </div>\n\n    <p class=\"countdown\">إعادة الإرسال خلال 0:45</p>\n\n    <button class=\"verify-btn\" disabled>تحقق</button>\n  </div>\n\n  <script>\n    const inputs = document.querySelectorAll('.code-inputs input');\n    const verifyBtn = document.querySelector('.verify-btn');\n    const countdownEl = document.querySelector('.countdown');\n\n    let seconds = 45;\n\n    const updateCountdown = () => {\n      const m = String(Math.floor(seconds / 60)).padStart(2, '0');\n      const s = String(seconds % 60).padStart(2, '0');\n      countdownEl.textContent = `إعادة الإرسال خلال ${m}:${s}`;\n    };\n\n    const interval = setInterval(() => {\n      seconds--;\n      if (seconds <= 0) {\n        clearInterval(interval);\n        countdownEl.textContent = 'لم يصل الرمز؟ أعد الإرسال';\n        verifyBtn.disabled = false;\n      } else {\n        updateCountdown();\n      }\n    }, 1000);\n\n    updateCountdown();\n\n    inputs.forEach((input, index) => {\n      input.addEventListener('input', () => {\n        if (input.value.length === 1 && index < inputs.length - 1) {\n          inputs[index + 1].focus();\n        }\n        if (input.value.length === 0 && index > 0) {\n          inputs[index - 1].focus();\n        }\n        const allFilled = Array.from(inputs).every(i => i.value.length === 1);\n        verifyBtn.disabled = !allFilled || seconds > 0;\n      });\n\n      input.addEventListener('keydown', (e) => {\n        if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {\n          inputs[index - 1].focus();\n        }\n      });\n    });\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 18268,
+    "output": 3124
+  },
+  "ms": 64904,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 92,
+  "unreadableStylesheets": 1,
+  "pageHeight": 844,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 148.71875,
+        "y": 49,
+        "width": 92.5625,
+        "height": 22
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1 class=\"title\">أدخل الرمز</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 177.5,
+        "y": 261,
+        "width": 35,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"verify-btn\" disabled=\"\">تحقق</button>"
+    }
+  ],
+  "from": {
+    "rulesPassed": 27,
+    "score": 82
+  },
+  "rounds": [
+    {
+      "at": "2026-10-21T17:47:26.324Z",
+      "ms": 36846,
+      "usage": {
+        "input": 8255,
+        "output": 1562
+      },
+      "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>إدخال الرمز</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --bg: #f5f7fa;\n      --card: #ffffff;\n      --text: #1a1a1a;\n      --muted: #6b7280;\n      --primary: #0d6efd;\n      --border: #d1d5db;\n      --radius: 12px;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;\n      background: var(--bg);\n      color: var(--text);\n      display: flex;\n      justify-content: center;\n      align-items: flex-start;\n      min-height: 100vh;\n      padding: 24px;\n    }\n\n    .card {\n      background: var(--card);\n      border-radius: var(--radius);\n      padding: 24px;\n      width: 100%;\n      max-width: 400px;\n      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);\n    }\n\n    .title {\n      font-size: 20px;\n      font-weight: 600;\n      text-align: center;\n      margin-bottom: 8px;\n    }\n\n    .subtitle {\n      font-size: 14px;\n      color: var(--muted);\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .phone {\n      font-weight: 500;\n      color: var(--text);\n    }\n\n    .code-inputs {\n      display: flex;\n      justify-content: space-between;\n      gap: 8px;\n      margin-bottom: 24px;\n    }\n\n    .code-inputs input {\n      width: 100%;\n      height: 48px;\n      font-size: 18px;\n      text-align: center;\n      border: 1px solid var(--border);\n      border-radius: 8px;\n      background: var(--card);\n      color: var(--text);\n      direction: ltr;\n      inputMode: numeric;\n    }\n\n    .countdown {\n      font-size: 14px;\n      color: var(--muted);\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .verify-btn {\n      width: 100%;\n      padding: 12px;\n      font-size: 16px;\n      font-weight: 600;\n      color: #fff;\n      background: var(--primary);\n      border: none;\n      border-radius: 8px;\n      cursor: pointer;\n    }\n\n    .verify-btn:disabled {\n      background: #ccc;\n      cursor: not-allowed;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h1 class=\"title\">أدخل الرمز</h1>\n    <p class=\"subtitle\">\n      أرسلنا رمزًا مكوّنًا من 6 أرقام إلى <bdi dir=\"ltr\" class=\"phone\">+966 55 123 4567</bdi>\n    </p>\n\n    <div class=\"code-inputs\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n    </div>\n\n    <p class=\"countdown\">إعادة الإرسال خلال 0:45</p>\n\n    <button class=\"verify-btn\" disabled>تحقق</button>\n  </div>\n\n  <script>\n    const inputs = document.querySelectorAll('.code-inputs input');\n    const verifyBtn = document.querySelector('.verify-btn');\n    const countdownEl = document.querySelector('.countdown');\n\n    let seconds = 45;\n\n    const updateCountdown = () => {\n      const m = String(Math.floor(seconds / 60)).padStart(2, '0');\n      const s = String(seconds % 60).padStart(2, '0');\n      countdownEl.textContent = `إعادة الإرسال خلال ${m}:${s}`;\n    };\n\n    const interval = setInterval(() => {\n      seconds--;\n      if (seconds <= 0) {\n        clearInterval(interval);\n        countdownEl.textContent = 'لم يصل الرمز؟ أعد الإرسال';\n        verifyBtn.disabled = false;\n      } else {\n        updateCountdown();\n      }\n    }, 1000);\n\n    updateCountdown();\n\n    inputs.forEach((input, index) => {\n      input.addEventListener('input', () => {\n        if (input.value.length === 1 && index < inputs.length - 1) {\n          inputs[index + 1].focus();\n        }\n        if (input.value.length === 0 && index > 0) {\n          inputs[index - 1].focus();\n        }\n        const allFilled = Array.from(inputs).every(i => i.value.length === 1);\n        verifyBtn.disabled = !allFilled || seconds > 0;\n      });\n\n      input.addEventListener('keydown', (e) => {\n        if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {\n          inputs[index - 1].focus();\n        }\n      });\n    });\n  </script>\n</body>\n</html>\n```",
+      "sent": 3,
+      "ok": true,
+      "error": null,
+      "rulesPassed": 28,
+      "score": 92,
+      "missing": [],
+      "regressed": [],
+      "lostParts": [],
+      "arabicKept": 1
+    },
+    {
+      "at": "2026-10-21T17:48:05.238Z",
+      "ms": 28058,
+      "usage": {
+        "input": 10013,
+        "output": 1562
+      },
+      "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>إدخال الرمز</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --bg: #f5f7fa;\n      --card: #ffffff;\n      --text: #1a1a1a;\n      --muted: #6b7280;\n      --primary: #0d6efd;\n      --border: #d1d5db;\n      --radius: 12px;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;\n      background: var(--bg);\n      color: var(--text);\n      display: flex;\n      justify-content: center;\n      align-items: flex-start;\n      min-height: 100vh;\n      padding: 24px;\n    }\n\n    .card {\n      background: var(--card);\n      border-radius: var(--radius);\n      padding: 24px;\n      width: 100%;\n      max-width: 400px;\n      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);\n    }\n\n    .title {\n      font-size: 20px;\n      font-weight: 600;\n      text-align: center;\n      margin-bottom: 8px;\n    }\n\n    .subtitle {\n      font-size: 14px;\n      color: var(--muted);\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .phone {\n      font-weight: 500;\n      color: var(--text);\n    }\n\n    .code-inputs {\n      display: flex;\n      justify-content: space-between;\n      gap: 8px;\n      margin-bottom: 24px;\n    }\n\n    .code-inputs input {\n      width: 100%;\n      height: 48px;\n      font-size: 18px;\n      text-align: center;\n      border: 1px solid var(--border);\n      border-radius: 8px;\n      background: var(--card);\n      color: var(--text);\n      direction: ltr;\n      inputMode: numeric;\n    }\n\n    .countdown {\n      font-size: 14px;\n      color: var(--muted);\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .verify-btn {\n      width: 100%;\n      padding: 12px;\n      font-size: 16px;\n      font-weight: 600;\n      color: #fff;\n      background: var(--primary);\n      border: none;\n      border-radius: 8px;\n      cursor: pointer;\n    }\n\n    .verify-btn:disabled {\n      background: #ccc;\n      cursor: not-allowed;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"card\">\n    <h1 class=\"title\">أدخل الرمز</h1>\n    <p class=\"subtitle\">\n      أرسلنا رمزًا مكوّنًا من 6 أرقام إلى <bdi dir=\"ltr\" class=\"phone\">+966 55 123 4567</bdi>\n    </p>\n\n    <div class=\"code-inputs\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" />\n    </div>\n\n    <p class=\"countdown\">إعادة الإرسال خلال 0:45</p>\n\n    <button class=\"verify-btn\" disabled>تحقق</button>\n  </div>\n\n  <script>\n    const inputs = document.querySelectorAll('.code-inputs input');\n    const verifyBtn = document.querySelector('.verify-btn');\n    const countdownEl = document.querySelector('.countdown');\n\n    let seconds = 45;\n\n    const updateCountdown = () => {\n      const m = String(Math.floor(seconds / 60)).padStart(2, '0');\n      const s = String(seconds % 60).padStart(2, '0');\n      countdownEl.textContent = `إعادة الإرسال خلال ${m}:${s}`;\n    };\n\n    const interval = setInterval(() => {\n      seconds--;\n      if (seconds <= 0) {\n        clearInterval(interval);\n        countdownEl.textContent = 'لم يصل الرمز؟ أعد الإرسال';\n        verifyBtn.disabled = false;\n      } else {\n        updateCountdown();\n      }\n    }, 1000);\n\n    updateCountdown();\n\n    inputs.forEach((input, index) => {\n      input.addEventListener('input', () => {\n        if (input.value.length === 1 && index < inputs.length - 1) {\n          inputs[index + 1].focus();\n        }\n        if (input.value.length === 0 && index > 0) {\n          inputs[index - 1].focus();\n        }\n        const allFilled = Array.from(inputs).every(i => i.value.length === 1);\n        verifyBtn.disabled = !allFilled || seconds > 0;\n      });\n\n      input.addEventListener('keydown', (e) => {\n        if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {\n          inputs[index - 1].focus();\n        }\n      });\n    });\n  </script>\n</body>\n</html>\n```",
+      "sent": 2,
+      "ok": true,
+      "error": null,
+      "rulesPassed": 28,
+      "score": 92,
+      "missing": [],
+      "regressed": [],
+      "lostParts": [],
+      "arabicKept": 1
+    }
+  ]
+}

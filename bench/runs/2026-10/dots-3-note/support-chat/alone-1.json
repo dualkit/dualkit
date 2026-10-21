@@ -1,0 +1,109 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "support-chat",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T17:33:55.297Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\">\n<head>\n<meta charset=\"UTF-8\">\n<title>الدعم</title>\n<style>\n  body {\n    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    direction: rtl;\n    background: #f4f6f8;\n    margin: 0;\n    padding: 0;\n  }\n  .chat {\n    max-width: 400px;\n    margin: 0 auto;\n    height: 100vh;\n    display: flex;\n    flex-direction: column;\n  }\n  .header {\n    background: #0084ff;\n    color: #fff;\n    padding: 12px;\n    text-align: center;\n    font-size: 1.2rem;\n  }\n  .messages {\n    flex: 1;\n    overflow-y: auto;\n    padding: 10px;\n    display: flex;\n    flex-direction: column;\n  }\n  .msg {\n    margin: 8px;\n    padding: 10px 14px;\n    border-radius: 18px;\n    max-width: 80%;\n    word-wrap: break-word;\n    position: relative;\n  }\n  .customer {\n    background: #e4e6eb;\n    align-self: flex-start;\n  }\n  .agent {\n    background: #0084ff;\n    color: #fff;\n    align-self: flex-end;\n  }\n  .time {\n    display: block;\n    font-size: 0.7rem;\n    opacity: 0.7;\n    margin-top: 4px;\n  }\n  .input-row {\n    display: flex;\n    padding: 10px;\n    background: #fff;\n    border-top: 1px solid #ccc;\n  }\n  input {\n    flex: 1;\n    padding: 10px;\n    border: 1px solid #ccc;\n    border-radius: 20px;\n    outline: none;\n  }\n  button {\n    margin-right: 8px;\n    padding: 10px 16px;\n    background: #0084ff;\n    color: #fff;\n    border: none;\n    border-radius: 20px;\n    cursor: pointer;\n  }\n</style>\n</head>\n<body>\n  <div class=\"chat\">\n    <div class=\"header\">الدعم</div>\n    <div class=\"messages\">\n      <div class=\"msg customer\">\n        السلام عليكم، أود معرفة تفاصيل خدمة 5G.\n        <span class=\"time\">10:00</span>\n      </div>\n      <div class=\"msg agent\">\n        مرحباً بك، هذا سارة من الدعم. كيف يمكنني مساعدتك؟\n        <span class=\"time\">10:01</span>\n      </div>\n      <div class=\"msg customer\">\n        أنا أستخدم eSIM وأريد تفعيلها.\n        <span class=\"time\">10:02</span>\n      </div>\n      <div class=\"msg agent\">\n        نحن ندعم eSIM. من فضلك أخبرني برقم الطلب TX-48213.\n        <span class=\"time\">10:03</span>\n      </div>\n      <div class=\"msg customer\">\n        رقم الطلب هو TX-48213.\n        <span class=\"time\">10:04</span>\n      </div>\n      <div class=\"msg agent\">\n        شكرًا، سأقوم بتفعيل eSIM لك.\n        <span class=\"time\">10:05</span>\n      </div>\n    </div>\n    <div class=\"input-row\">\n      <input type=\"text\" placeholder=\"اكتب رسالتك...\">\n      <button>أرسل</button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 147,
+    "output": 6790
+  },
+  "ms": 72590,
+  "finish": "stop",
+  "reasoningTokens": 6171,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 67,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 62.53125,
+        "y": 308,
+        "width": 265.46875,
+        "height": 36
+      },
+      "message": "\"TX-48213\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"msg agent\">\n        نحن ندعم eSIM. من فضلك أخبرني برقم الطلب TX-48213.\n        <span class=\"time\">10:03</span>\n      </div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 183.9375,
+        "y": 398,
+        "width": 174.0625,
+        "height": 17
+      },
+      "message": "\"TX-48213\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"msg customer\">\n        رقم الطلب هو TX-48213.\n        <span class=\"time\">10:04</span>\n      </div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 172.5,
+        "y": 13,
+        "width": 45,
+        "height": 21
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"header\">الدعم</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 26,
+        "y": 808,
+        "width": 31,
+        "height": 15
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button>أرسل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 26,
+        "y": 808,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"أرسل\" is 13.3333px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button>أرسل</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 10,
+        "y": 797,
+        "width": 63,
+        "height": 37
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button>أرسل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

@@ -1,0 +1,53 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "profile",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T17:15:40.449Z",
+  "reply": "<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>الملف الشخصي</title>\n  <style>\n    :root {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      --color-text: #1a1a1a;\n      --color-muted: #6b7280;\n      --color-border: #e5e7eb;\n      --color-primary: #2563eb;\n      --line-height-body: 1.7;\n      --line-height-label: 1.6;\n    }\n\n    :lang(ar) {\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      --type-body-size: 16px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'Inter', 'IBM Plex Sans Arabic', sans-serif;\n      font-size: var(--type-body-size);\n      line-height: var(--line-height-body);\n      color: var(--color-text);\n      background-color: #f9fafb;\n      padding: 16px;\n    }\n\n    .profile-header {\n      text-align: center;\n      margin-bottom: 24px;\n    }\n\n    .profile-header h1 {\n      font-size: 20px;\n      font-weight: 600;\n      margin-bottom: 4px;\n    }\n\n    .profile-header p {\n      font-size: var(--type-caption-size);\n      color: var(--color-muted);\n    }\n\n    .profile-section {\n      background-color: #ffffff;\n      border-radius: 12px;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);\n      margin-bottom: 16px;\n      overflow: hidden;\n    }\n\n    .profile-item {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 16px;\n      border-bottom: 1px solid var(--color-border);\n    }\n\n    .profile-item:last-child {\n      border-bottom: none;\n    }\n\n    .profile-label {\n      font-size: var(--type-label-size);\n      color: var(--color-muted);\n      line-height: var(--line-height-label);\n    }\n\n    .profile-value {\n      font-size: var(--type-body-size);\n      font-weight: 500;\n      color: var(--color-text);\n      line-height: var(--line-height-body);\n    }\n\n    .profile-value bdi {\n      display: inline-block;\n      direction: ltr;\n      text-align: right;\n    }\n\n    .edit-action {\n      background: none;\n      border: none;\n      color: var(--color-primary);\n      font-size: var(--type-label-size);\n      font-weight: 600;\n      cursor: pointer;\n      padding: 4px 8px;\n      border-radius: 6px;\n      transition: background-color 0.2s ease;\n    }\n\n    .edit-action:hover {\n      background-color: rgba(37, 99, 235, 0.05);\n    }\n\n    @media (max-width: 480px) {\n      body {\n        padding: 12px;\n      }\n\n      .profile-item {\n        padding: 14px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"profile-header\">\n    <h1>الملف الشخصي</h1>\n    <p>إدارة حسابك وإعداداتك</p>\n  </div>\n\n  <div class=\"profile-section\">\n    <div class=\"profile-item\">\n      <div>\n        <div class=\"profile-label\">الاسم</div>\n        <div class=\"profile-value\">ليلى المنصوري</div>\n      </div>\n      <button class=\"edit-action\">تعديل</button>\n    </div>\n\n    <div class=\"profile-item\">\n      <div>\n        <div class=\"profile-label\">البريد الإلكتروني</div>\n        <div class=\"profile-value\"><bdi dir=\"ltr\">layla@example.com</bdi></div>\n      </div>\n      <button class=\"edit-action\">تعديل</button>\n    </div>\n\n    <div class=\"profile-item\">\n      <div>\n        <div class=\"profile-label\">رقم الهاتف</div>\n        <div class=\"profile-value\"><bdi dir=\"ltr\">+971 50 123 4567</bdi></div>\n      </div>\n      <button class=\"edit-action\">تعديل</button>\n    </div>\n\n    <div class=\"profile-item\">\n      <div>\n        <div class=\"profile-label\">رقم الحساب البنكي (IBAN)</div>\n        <div class=\"profile-value\"><bdi dir=\"ltr\">AE07 0331 2345 6789 0123 456</bdi></div>\n      </div>\n      <button class=\"edit-action\">تعديل</button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6507,
+    "output": 1371
+  },
+  "ms": 30977,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 127.71875,
+        "y": 18,
+        "width": 134.5625,
+        "height": 22
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الملف الشخصي</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 127.6875,
+        "width": 33,
+        "height": 16
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"edit-action\">تعديل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

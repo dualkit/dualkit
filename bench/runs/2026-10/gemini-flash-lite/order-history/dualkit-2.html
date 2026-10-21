@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>طلباتي - متجر السعودية</title>
+  <!-- Google Fonts: IBM Plex Sans Arabic & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            arabic: ['"IBM Plex Sans Arabic"', 'sans-serif'],
+            latin: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    /* Dualkit Type Pairing & RTL Rules */
+    html[lang="ar"] {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+    }
+    html[lang="en"] {
+      font-family: 'Inter', sans-serif;
+    }
+
+    :lang(ar) {
+      letter-spacing: 0 !important;
+      line-height: 1.7;
+    }
+
+    /* Enforce 14px floor for Arabic UI text */
+    body {
+      font-size: 16px;
+    }
+
+    .ui-text-sm {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 flex justify-center items-center min-h-screen p-0 sm:p-4">
+
+  <!-- Phone Shell Container -->
+  <div class="w-full max-w-sm bg-white sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col h-screen sm:h-[844px] border border-slate-200 relative">
+
+    <!-- Status Bar -->
+    <div class="bg-white px-6 pt-3 pb-2 flex justify-between items-center text-xs font-semibold text-slate-600 select-none">
+      <span>9:41</span>
+      <div class="flex items-center gap-1.5">
+        <!-- Signal / Wifi / Battery Icons simulated -->
+        <span class="text-[10px]">5G</span>
+        <div class="w-5 h-2.5 border border-slate-600 rounded-sm p-0.5 flex items-center">
+          <div class="h-full w-3 bg-slate-600 rounded-2xs"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- App Header -->
+    <header class="px-5 py-3 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0 z-10">
+      <div class="flex items-center gap-3">
+        <button class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition" aria-label="رجوع">
+          <svg class="w-5 h-5 rtl:scale-x-[-1]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <h1 id="page-title" class="text-lg font-bold text-slate-900">طلباتي</h1>
+      </div>
+      
+      <!-- Language Switcher & Actions -->
+      <div class="flex items-center gap-2">
+        <button id="lang-toggle" onclick="toggleLanguage()" class="px-2.5 py-1 text-xs font-medium bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200 hover:bg-emerald-100 transition">
+          English
+        </button>
+      </div>
+    </header>
+
+    <!-- Filter Pills -->
+    <div class="px-5 py-3 bg-white flex gap-2 overflow-x-auto no-scrollbar border-b border-slate-100 shrink-0">
+      <button id="filter-all" class="px-4 py-1.5 ui-text-sm font-medium bg-emerald-600 text-white rounded-full whitespace-nowrap shadow-xs">الكل</button>
+      <button id="filter-active" class="px-4 py-1.5 ui-text-sm font-medium bg-slate-100 text-slate-600 rounded-full whitespace-nowrap hover:bg-slate-200 transition">النشطة</button>
+      <button id="filter-delivered" class="px-4 py-1.5 ui-text-sm font-medium bg-slate-100 text-slate-600 rounded-full whitespace-nowrap hover:bg-slate-200 transition">المكتملة</button>
+      <button id="filter-cancelled" class="px-4 py-1.5 ui-text-sm font-medium bg-slate-100 text-slate-600 rounded-full whitespace-nowrap hover:bg-slate-200 transition">الملغاة</button>
+    </div>
+
+    <!-- Scrollable Order History List -->
+    <main class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50">
+
+      <!-- Order 1: On the way -->
+      <div class="bg-white rounded-2xl p-4 shadow-xs border border-slate-200/80 hover:border-emerald-300 transition">
+        <div class="flex justify-between items-start mb-2.5">
+          <div>
+            <span class="text-xs text-slate-400 font-medium block" data-i18n="orderNum">رقم الطلب</span>
+            <span class="font-bold text-slate-900 text-base"><bdi dir="ltr">#A-10293</bdi></span>
+          </div>
+          <!-- Status Badge -->
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+            <span data-i18n="statusOnTheWay">قيد التوصيل</span>
+          </span>
+        </div>
+
+        <!-- Dates: Gregorian & Umm al-Qura Hijri (Asia/Riyadh timezone standard) -->
+        <div class="text-slate-500 ui-text-sm mb-3 space-y-0.5">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"></path></svg>
+            <span>28 مارس 2025</span>
+            <span class="text-slate-300">•</span>
+            <span class="text-emerald-700 font-medium">٢٨ رمضان ١٤٤٦ هـ</span>
+          </div>
+        </div>
+
+        <hr class="border-slate-100 my-3">
+
+        <!-- Footer: Items count & Total in SAR -->
+        <div class="flex justify-between items-center">
+          <span class="ui-text-sm text-slate-600"><bdi>3 منتجات</bdi></span>
+          <div class="text-start">
+            <span class="text-xs text-slate-400 block" data-i18n="totalLabel">الإجمالي</span>
+            <span class="font-bold text-slate-900 text-base"><bdi dir="ltr">1,230.50 ر.س</bdi></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order 2: Delivered -->
+      <div class="bg-white rounded-2xl p-4 shadow-xs border border-slate-200/80 hover:border-emerald-300 transition">
+        <div class="flex justify-between items-start mb-2.5">
+          <div>
+            <span class="text-xs text-slate-400 font-medium block" data-i18n="orderNum">رقم الطلب</span>
+            <span class="font-bold text-slate-900 text-base"><bdi dir="ltr">#B-88492</bdi></span>
+          </div>
+          <!-- Status Badge -->
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span data-i18n="statusDelivered">تم التوصيل</span>
+          </span>
+        </div>
+
+        <div class="text-slate-500 ui-text-sm mb-3 space-y-0.5">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"></path></svg>
+            <span>15 مارس 2025</span>
+            <span class="text-slate-300">•</span>
+            <span class="text-emerald-700 font-medium">١٥ رمضان ١٤٤٦ هـ</span>
+          </div>
+        </div>
+
+        <hr class="border-slate-100 my-3">
+
+        <div class="flex justify-between items-center">
+          <span class="ui-text-sm text-slate-600"><bdi>1 عنصر</bdi></span>
+          <div class="text-start">
+            <span class="text-xs text-slate-400 block" data-i18n="totalLabel">الإجمالي</span>
+            <span class="font-bold text-slate-900 text-base"><bdi dir="ltr">450.00 ر.س</bdi></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order 3: Delivered -->
+      <div class="bg-white rounded-2xl p-4 shadow-xs border border-slate-200/80 hover:border-emerald-300 transition">
+        <div class="flex justify-between items-start mb-2.5">
+          <div>
+            <span class="text-xs text-slate-400 font-medium block" data-i18n="orderNum">رقم الطلب</span>
+            <span class="font-bold text-slate-900 text-base"><bdi dir="ltr">#C-33921</bdi></span>
+          </div>
+          <!-- Status Badge -->
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span data-i18n="statusDelivered">تم التوصيل</span>
+          </span>
+        </div>
+
+        <div class="text-slate-500 ui-text-sm mb-3 space-y-0.5">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"></path></svg>
+            <span>10 فبراير 2025</span>
+            <span class="text-slate-300">•</span>
+            <span class="text-emerald-700 font-medium">١١ شعبان ١٤٤٦ هـ</span>
+          </div>
+        </div>
+
+        <hr class="border-slate-100 my-3">
+
+        <div class="flex justify-between items-center">
+          <span class="ui-text-sm text-slate-600"><bdi>5 عناصر</bdi></span>
+          <div class="text-start">
+            <span class="text-xs text-slate-400 block" data-i18n="totalLabel">الإجمالي</span>
+            <span class="font-bold text-slate-900 text-base"><bdi dir="ltr">89.00 ر.س</bdi></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order 4: Cancelled -->
+      <div class="bg-white rounded-2xl p-4 shadow-xs border border-slate-200/80 hover:border-emerald-300 transition opacity-85">
+        <div class="flex justify-between items-start mb-2.5">
+          <div>
+            <span class="text-xs text-slate-400 font-medium block" data-i18n="orderNum">رقم الطلب</span>
+            <span class="font-bold text-slate-900 text-base"><bdi dir="ltr">#D-99102</bdi></span>
+          </div>
+          <!-- Status Badge -->
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>
+            <span data-i18n="statusCancelled">ملغي</span>
+          </span>
+        </div>
+
+        <div class="text-slate-500 ui-text-sm mb-3 space-y-0.5">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"></path></svg>
+            <span>02 يناير 2025</span>
+            <span class="text-slate-300">•</span>
+            <span class="text-emerald-700 font-medium">٠٢ رجب ١٤٤٦ هـ</span>
+          </div>
+        </div>
+
+        <hr class="border-slate-100 my-3">
+
+        <div class="flex justify-between items-center">
+          <span class="ui-text-sm text-slate-600"><bdi>2 عناصر</bdi></span>
+          <div class="text-start">
+            <span class="text-xs text-slate-400 block" data-i18n="totalLabel">الإجمالي</span>
+            <span class="font-bold text-slate-900 text-base"><bdi dir="ltr">340.00 ر.س</bdi></span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bg-white border-t border-slate-200 px-6 py-2 flex justify-between items-center text-xs text-slate-500 shrink-0">
+      <a href="#" class="flex flex-col items-center gap-1 hover:text-emerald-600 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"></path></svg>
+        <span data-i18n="navHome">الرئيسية</span>
+      </a>
+      <a href="#" class="flex flex-col items-center gap-1 text-emerald-600 font-medium">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"></path></svg>
+        <span data-i18n="navOrders">الطلبات</span>
+      </a>
+      <a href="#" class="flex flex-col items-center gap-1 hover:text-emerald-600 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path></svg>
+        <span data-i18n="navProfile">حسابي</span>
+      </a>
+    </nav>
+
+    <!-- Home Indicator Bar -->
+    <div class="bg-white pb-2 pt-1 flex justify-center">
+      <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+    </div>
+
+  </div>
+
+  <!-- Language Switcher Script Demonstrating Bilingual Switch Capability -->
+  <script>
+    const translations = {
+      ar: {
+        pageTitle: "طلباتي",
+        filterAll: "الكل",
+        filterActive: "النشطة",
+        filterDelivered: "المكتملة",
+        filterCancelled: "الملغاة",
+        orderNum: "رقم الطلب",
+        statusOnTheWay: "قيد التوصيل",
+        statusDelivered: "تم التوصيل",
+        statusCancelled: "ملغي",
+        totalLabel: "الإجمالي",
+        navHome: "الرئيسية",
+        navOrders: "الطلبات",
+        navProfile: "حسابي",
+        langToggleBtn: "English"
+      },
+      en: {
+        pageTitle: "My Orders",
+        filterAll: "All",
+        filterActive: "Active",
+        filterDelivered: "Delivered",
+        filterCancelled: "Cancelled",
+        orderNum: "Order ID",
+        statusOnTheWay: "On the way",
+        statusDelivered: "Delivered",
+        statusCancelled: "Cancelled",
+        totalLabel: "Total",
+        navHome: "Home",
+        navOrders: "Orders",
+        navProfile: "Profile",
+        langToggleBtn: "العربية"
+      }
+    };
+
+    let currentLang = 'ar';
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'ar' ? 'en' : 'ar';
+      const html = document.documentElement;
+      
+      html.setAttribute('lang', currentLang);
+      html.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+
+      // Update static text elements
+      document.getElementById('page-title').textContent = translations[currentLang].pageTitle;
+      document.getElementById('filter-all').textContent = translations[currentLang].filterAll;
+      document.getElementById('filter-active').textContent = translations[currentLang].filterActive;
+      document.getElementById('filter-delivered').textContent = translations[currentLang].filterDelivered;
+      document.getElementById('filter-cancelled').textContent = translations[currentLang].filterCancelled;
+      document.getElementById('lang-toggle').textContent = translations[currentLang].langToggleBtn;
+
+      // Update data-i18n fields
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[currentLang][key]) {
+          el.textContent = translations[currentLang][key];
+        }
+      });
+    }
+  </script>
+</body>
+</html>

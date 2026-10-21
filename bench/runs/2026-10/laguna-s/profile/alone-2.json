@@ -1,0 +1,151 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "profile",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T17:13:52.087Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>ملف الملف الشخصي</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f5f5f5;\n            color: #333;\n            display: flex;\n            justify-content: center;\n            align-items: flex-start;\n            min-height: 100vh;\n            padding: 20px;\n        }\n        .phone-frame {\n            width: 375px;\n            height: 812px;\n            background-color: #000;\n            border-radius: 40px;\n            padding: 20px;\n            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);\n            display: flex;\n            flex-direction: column;\n            overflow: hidden;\n        }\n        .screen {\n            flex: 1;\n            background-color: #f5f5f5;\n            border-radius: 25px;\n            display: flex;\n            flex-direction: column;\n            overflow: hidden;\n        }\n        header {\n            background-color: #0a4d2a;\n            color: #fff;\n            padding: 20px;\n            text-align: center;\n            font-size: 20px;\n            font-weight: bold;\n        }\n        .profile-container {\n            padding: 20px;\n        }\n        .profile-header {\n            text-align: center;\n            margin-bottom: 30px;\n        }\n        .avatar {\n            width: 100px;\n            height: 100px;\n            border-radius: 50%;\n            background-color: #0a4d2a;\n            color: #fff;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            font-size: 36px;\n            font-weight: bold;\n            margin: 0 auto 15px;\n        }\n        .profile-name {\n            font-size: 22px;\n            font-weight: bold;\n            margin-bottom: 5px;\n        }\n        .profile-email {\n            font-size: 14px;\n            color: #666;\n        }\n        .info-section {\n            background-color: #fff;\n            border-radius: 15px;\n            padding: 15px;\n            margin-bottom: 15px;\n            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);\n        }\n        .info-section-title {\n            font-size: 16px;\n            font-weight: bold;\n            color: #0a4d2a;\n            margin-bottom: 15px;\n            padding-bottom: 10px;\n            border-bottom: 1px solid #eee;\n        }\n        .info-item {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            padding: 12px 0;\n            border-bottom: 1px solid #f0f0f0;\n        }\n        .info-item:last-child {\n            border-bottom: none;\n        }\n        .info-label {\n            font-size: 14px;\n            color: #555;\n        }\n        .info-value {\n            font-size: 14px;\n            color: #333;\n            font-weight: 500;\n        }\n        .edit-btn {\n            background-color: #0a4d2a;\n            color: #fff;\n            border: none;\n            padding: 6px 14px;\n            border-radius: 8px;\n            font-size: 13px;\n            cursor: pointer;\n            transition: background-color 0.2s;\n        }\n        .edit-btn:hover {\n            background-color: #083d22;\n        }\n        footer {\n            text-align: center;\n            padding: 15px;\n            font-size: 12px;\n            color: #888;\n            background-color: #fff;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"phone-frame\">\n        <div class=\"screen\">\n            <header>\n                الملف الشخصي\n            </header>\n            <div class=\"profile-container\">\n                <div class=\"profile-header\">\n                    <div class=\"avatar\">ل</div>\n                    <div class=\"profile-name\">ليلى المنصوري</div>\n                    <div class=\"profile-email\">layla@example.com</div>\n                </div>\n                <div class=\"info-section\">\n                    <div class=\"info-section-title\">بيانات الاتصال</div>\n                    <div class=\"info-item\">\n                        <span class=\"info-label\">رقم الهاتف</span>\n                        <div style=\"display: flex; align-items: center; gap: 10px;\">\n                            <span class=\"info-value\">+971 50 123 4567</span>\n                            <button class=\"edit-btn\">تعديل</button>\n                        </div>\n                    </div>\n                    <div class=\"info-item\">\n                        <span class=\"info-label\">البريد الإلكتروني</span>\n                        <div style=\"display: flex; align-items: center; gap: 10px;\">\n                            <span class=\"info-value\">layla@example.com</span>\n                            <button class=\"edit-btn\">تعديل</button>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"info-section\">\n                    <div class=\"info-section-title\">معلومات الدفع</div>\n                    <div class=\"info-item\">\n                        <span class=\"info-label\">رقم الحساب البنكي (IBAN)</span>\n                        <div style=\"display: flex; align-items: center; gap: 10px;\">\n                            <span class=\"info-value\">AE07 0331 2345 6789 0123 456</span>\n                            <button class=\"edit-btn\">تعديل</button>\n                        </div>\n                    </div>\n                </div>\n                <footer>\n                    تطبيق مدفوعات الإمارات\n                </footer>\n            </div>\n        </div>\n    </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 177,
+    "output": 1634
+  },
+  "ms": 34433,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 25,
+  "score": 50,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 156.984375,
+        "y": 591,
+        "width": 69.296875,
+        "height": 48
+      },
+      "message": "\"AE07\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"info-value\">AE07 0331 2345 6789 0123 456</span>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 174.453125,
+        "y": 388,
+        "width": 78.265625,
+        "height": 32
+      },
+      "message": "\"+971 50 123 4567\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"info-value\">+971 50 123 4567</span>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 156.984375,
+        "y": 591,
+        "width": 69.296875,
+        "height": 48
+      },
+      "message": "\"AE07 0331 2345 6789 0123 456\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"info-value\">AE07 0331 2345 6789 0123 456</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 127.71875,
+        "y": 61,
+        "width": 134.5625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<header>\n                الملف الشخصي\n            </header>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 89,
+        "y": 396.5,
+        "width": 31,
+        "height": 15
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 89,
+        "y": 396.5,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 74.734375,
+        "y": 453.5,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 89,
+        "y": 607.5,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 133.15625,
+        "y": 696,
+        "width": 123.671875,
+        "height": 14
+      },
+      "message": "\"تطبيق مدفوعات الإمارات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<footer>\n                    تطبيق مدفوعات الإمارات\n                </footer>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 852
+}

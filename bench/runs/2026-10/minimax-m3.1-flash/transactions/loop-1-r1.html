@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b5d55">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>المعاملات | محفظة عُمان</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --brand: #0b5d55;
+      --brand-dark: #07453f;
+      --brand-soft: #e7f4f1;
+      --page: #f4f7f6;
+      --card: #ffffff;
+      --text: #172321;
+      --muted: #6d7a77;
+      --line: #e4eae8;
+      --income: #14745a;
+      --income-soft: #e8f6f1;
+      --expense: #b64242;
+      --expense-soft: #fceeee;
+      --shadow: 0 12px 30px rgba(24, 55, 49, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--page);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--page);
+      color: var(--text);
+      font-family: "IBM Plex Sans Arabic", Tahoma, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    button {
+      color: inherit;
+    }
+
+    .app {
+      width: min(100%, 430px);
+      min-height: 100vh;
+      margin-inline: auto;
+      background: var(--page);
+      padding-bottom: max(24px, env(safe-area-inset-bottom));
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: calc(20px + env(safe-area-inset-top)) 20px 18px;
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .brand-mark svg {
+      width: 23px;
+      height: 23px;
+    }
+
+    .brand-name {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .brand-subtitle {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 14px;
+    }
+
+    .profile {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      background: #d6a64b;
+      color: #3f2b08;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    main {
+      padding: 18px 14px 0;
+    }
+
+    .page-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-inline: 4px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.35;
+    }
+
+    .page-heading p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .filter {
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .filter-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .filter select {
+      min-height: 42px;
+      appearance: none;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+      padding: 7px 34px 7px 12px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(24, 55, 49, 0.04);
+    }
+
+    .filter::after {
+      position: absolute;
+      inset-inline-start: 12px;
+      top: 50%;
+      width: 7px;
+      height: 7px;
+      border-right: 2px solid var(--brand);
+      border-bottom: 2px solid var(--brand);
+      content: "";
+      transform: translateY(-70%) rotate(45deg);
+      pointer-events: none;
+    }
+
+    .balance-card {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 18px;
+      border-radius: 20px;
+      background: var(--brand-dark);
+      color: #fff;
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .balance-card::after {
+      position: absolute;
+      inset-inline-end: -42px;
+      top: -58px;
+      width: 150px;
+      height: 150px;
+      border: 28px solid rgba(255, 255, 255, 0.055);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .balance-label {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 5px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 14px;
+    }
+
+    .balance {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.35;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .balance-meta {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 8px 0 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 14px;
+    }
+
+    .trend {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #b8eadc;
+      font-weight: 700;
+    }
+
+    .trend svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .transactions-card {
+      overflow: hidden;
+      border: 1px solid rgba(216, 225, 222, 0.8);
+      border-radius: 20px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+
+    .card-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 17px 16px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .card-heading h2 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .transaction-count {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    th {
+      padding: 11px 8px;
+      background: #fafcfb;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+      text-align: start;
+    }
+
+    th:first-child,
+    td:first-child {
+      width: 76px;
+    }
+
+    th:nth-child(2) {
+      width: auto;
+    }
+
+    th:last-child,
+    td:last-child {
+      width: 112px;
+    }
+
+    td {
+      padding: 14px 8px;
+      border-top: 1px solid var(--line);
+      vertical-align: middle;
+    }
+
+    tbody tr:first-child td {
+      border-top: 0;
+    }
+
+    .date {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      white-space: nowrap;
+    }
+
+    .date-day {
+      display: block;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .merchant {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .merchant-icon {
+      display: grid;
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .merchant-icon.market {
+      background: #fff2dc;
+      color: #9a6112;
+    }
+
+    .merchant-icon.media {
+      background: #f0eafa;
+      color: #67419c;
+    }
+
+    .merchant-icon.fuel {
+      background: #e8f0fb;
+      color: #3867a5;
+    }
+
+    .merchant-icon.transfer {
+      background: #f4eaf7;
+      color: #784b86;
+    }
+
+    .merchant-text {
+      min-width: 0;
+    }
+
+    .merchant-name {
+      display: block;
+      overflow: hidden;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.45;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .category {
+      display: block;
+      overflow: hidden;
+      margin-top: 1px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .amount-cell {
+      text-align: end;
+      white-space: nowrap;
+    }
+
+    .amount {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .amount.income {
+      color: var(--income);
+    }
+
+    .amount.expense {
+      color: var(--text);
+    }
+
+    .flow {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 3px;
+      font-size: 14px;
+    }
+
+    .flow::before {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      content: "";
+    }
+
+    .flow.income {
+      color: var(--income);
+    }
+
+    .flow.expense {
+      color: var(--expense);
+    }
+
+    .empty-state {
+      display: none;
+      padding: 34px 18px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .empty-state strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--text);
+    }
+
+    .note {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 14px 5px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .note svg {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      color: var(--brand);
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 360px) {
+      .topbar {
+        padding-inline: 14px;
+      }
+
+      main {
+        padding-inline: 10px;
+      }
+
+      .page-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .filter,
+      .filter select {
+        width: 100%;
+      }
+
+      th:first-child,
+      td:first-child {
+        width: 66px;
+      }
+
+      th:last-child,
+      td:last-child {
+        width: 100px;
+      }
+
+      .merchant {
+        gap: 7px;
+      }
+
+      .merchant-icon {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 3.5 20 8v8l-8 4.5L4 16V8l8-4.5Z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="m4.5 8.2 7.5 4.2 7.5-4.2M12 12.4v8" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">محفظة عُمان</div>
+          <p class="brand-subtitle">حسابك في مكان واحد</p>
+        </div>
+      </div>
+      <div class="profile" aria-label="الملف الشخصي">م</div>
+    </header>
+
+    <main>
+      <div class="page-heading">
+        <div>
+          <h1>المعاملات</h1>
+          <p>سجل جميع حركات محفظتك</p>
+        </div>
+
+        <div class="filter">
+          <label class="filter-label" for="month-filter">تصفية المعاملات حسب الشهر</label>
+          <select id="month-filter">
+            <option value="current">هذا الشهر</option>
+            <option value="last">الشهر الماضي</option>
+            <option value="all">كل الفترات</option>
+          </select>
+        </div>
+      </div>
+
+      <section class="balance-card" aria-labelledby="balance-label">
+        <p class="balance-label" id="balance-label">الرصيد المتاح</p>
+        <p class="balance"><bdi>284.730 ر.ع</bdi></p>
+        <p class="balance-meta">
+          <span class="trend">
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="m3 10 4-4 3 3 3-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10.5 5H13v2.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <bdi>+8.4%</bdi>
+          </span>
+          <span>مقارنة بالشهر الماضي</span>
+        </p>
+      </section>
+
+      <section class="transactions-card" aria-labelledby="transactions-title">
+        <div class="card-heading">
+          <h2 id="transactions-title">نشاط المحفظة</h2>
+          <span class="transaction-count" id="transaction-count">8 معاملات</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">التاريخ</th>
+                <th scope="col">الجهة</th>
+                <th scope="col">المبلغ</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-body">
+              <tr data-period="current">
+                <td class="date"><span class="date-day">18</span> أغسطس</td>
+                <td>
+                  <div class="merchant">
+                    <span class="merchant-icon market" aria-hidden="true">لو</span>
+                    <span class="merchant-text">
+                      <bdi class="merchant-name" dir="ltr">Lulu Hypermarket</bdi>
+                      <span class="category">التسوق</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="amount-cell">
+                  <bdi class="amount expense">36.750 ر.ع</bdi>
+                  <span class="flow expense">صادر</span>
+                </td>
+              </tr>
+
+              <tr data-period="current">
+                <td class="date"><span class="date-day">16</span> أغسطس</td>
+                <td>
+                  <div class="merchant">
+                    <span class="merchant-icon media" aria-hidden="true">N</span>
+                    <span class="merchant-text">
+                      <bdi class="merchant-name" dir="ltr">Netflix</bdi>
+                      <span class="category">اشتراك ترفيه</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="amount-cell">
+                  <bdi class="amount expense">5.800 ر.ع</bdi>
+                  <span class="flow expense">صادر</span>
+                </td>
+              </tr>
+
+              <tr data-period="current">
+                <td class="date"><span class="date-day">14</span> أغسطس</td>
+                <td>
+                  <div class="merchant">
+                    <span class="merchant-icon" aria-hidden="true">أ</span>
+                    <span class="merchant-text">
+                      <span class="merchant-name">أوتو منتزه</span>
+                      <span class="category">الوقود</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="amount-cell">
+                  <bdi class="amount expense">16.400 ر.ع</bdi>
+                  <span class="flow expense">صادر</span>
+                </td>
+              </tr>
+
+              <tr data-period="current">
+                <td class="date"><span class="date-day">12</span> أغسطس</td>
+                <td>
+                  <div class="merchant">
+                    <span class="merchant-icon transfer" aria-hidden="true">↙</span>
+                    <span class="merchant-text">
+                      <span class="merchant-name">تحويل من سالم</span>
+                      <span class="category">تحويل بنكي</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="amount-cell">
+                  <bdi class="amount income">125.000 ر.ع</bdi>
+                  <span class="flow income">وارد</span>
+                </td>
+              </tr>
+
+              <tr data-period="current">
+                <td class="date"><span class="date-day">10</span> أغسطس</td>
+                <td>
+                  <div class="merchant">
+                    <span class="merchant-icon" aria-hidden="true">م</span>
+                    <span class="merchant-text">
+                      <span class="merchant-name">مركز بركاء الطبي</span>
+                      <span class="category">خدمات صحية</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="amount-cell">
+                  <bdi class="amount expense">22.250 ر.ع</bdi>
+                  <span class="flow expense">صادر</span>
+                </td>
+              </tr>
+
+              <tr data-period="current">
+                <td class="date"><span class="date-day">8</span> أغسطس</td>
+                <td>
+                  <div class="merchant">
+                    <span class="merchant-icon market" aria-hidden="true">ن</span>
+                    <span class="merchant-text">
+                      <span class="merchant-name">نقطة صيدلية نوفا</span>
+                      <span class="category">صيدلية</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="amount-cell">
+                  <bdi class="amount expense">7.320 ر.ع</bdi>
+                  <span class="flow expense">صادر</span>
+                </td>
+              </tr>
+
+              <tr data-period="current">
+                <td class="date"><span class="date-day">5</span> أغسطس</td>
+                <td>
+                  <div class="merchant">
+                    <span class="merchant-icon transfer" aria-hidden="true">↗</span>
+                    <span class="merchant-text">
+                      <span class="merchant-name">تحويل إلى فاطمة</span>
+                      <span class="category">تحويل بنكي</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="amount-cell">
+                  <bdi class="amount expense">45.000 ر.ع</bdi>
+                  <span class="flow expense">صادر</span>
+                </td>
+              </tr>
+
+              <tr data-period="current">
+                <td class="date"><span class="date-day">2</span> أغسطس</td>
+                <td>
+                  <div class="merchant">
+                    <span class="merchant-icon" aria-hidden="true">ر</span>
+                    <span class="merchant-text">
+                      <span class="merchant-name">روضة الخوض</span>
+                      <span class="category">تعليم</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="amount-cell">
+                  <bdi class="amount expense">18.500 ر.ع</bdi>
+                  <span class="flow expense">صادر</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="empty-state" id="empty-state" hidden>
+          <strong>لا توجد معاملات في هذه الفترة</strong>
+          <span>اختر شهرًا آخر لعرض نشاط المحفظة.</span>
+        </div>
+      </section>
+
+      <p class="note">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/>
+          <path d="M12 10.5v5M12 7.5h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>قد تستغرق بعض المعاملات عدة ساعات حتى تظهر في السجل.</span>
+      </p>
+    </main>
+  </div>
+
+  <script>
+    const filter = document.getElementById("month-filter");
+    const rows = [...document.querySelectorAll("#transactions-body tr")];
+    const count = document.getElementById("transaction-count");
+    const emptyState = document.getElementById("empty-state");
+    const table = document.querySelector(".table-wrap");
+
+    filter.addEventListener("change", () => {
+      const selected = filter.value;
+      let visible = 0;
+
+      rows.forEach((row) => {
+        const show = selected === "all" || row.dataset.period === selected;
+        row.hidden = !show;
+        if (show) visible++;
+      });
+
+      count.textContent = visible === 1 ? "معاملة واحدة" : `${visible} معاملات`;
+      table.hidden = visible === 0;
+      emptyState.hidden = visible !== 0;
+    });
+  </script>
+</body>
+</html>

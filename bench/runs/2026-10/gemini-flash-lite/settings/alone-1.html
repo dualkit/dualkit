@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعدادات الحساب - بنك البحرين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: #0b192c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+        /* Phone Mockup Frame */
+        .phone-frame {
+            width: 100%;
+            max-width: 390px;
+            height: 844px;
+            background-color: #f8fafc;
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            border: 8px solid #1e293b;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 44px;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        /* App Header */
+        .app-header {
+            background-color: #ffffff;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .app-header h1 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Scrollable Content */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 16px;
+        }
+
+        .content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Section Group */
+        .section-group {
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 8px;
+            padding-right: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .card-group {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 1px solid #f1f5f9;
+        }
+
+        /* Row Item */
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: background-color 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+
+        .setting-row:active {
+            background-color: #f8fafc;
+        }
+
+        .row-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .row-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #eff6ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1d4ed8;
+        }
+
+        .row-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .row-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .row-value {
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        /* Chevron Icon for Navigation */
+        .chevron {
+            width: 16px;
+            height: 16px;
+            fill: none;
+            stroke: #94a3b8;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #cbd5e1;
+            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        input:checked + .slider {
+            background-color: #1d4ed8;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(-20px); /* RTL translation */
+        }
+
+        /* Bahrain branding subtle tag */
+        .bh-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .bh-badge span {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        /* Bottom Home Indicator */
+        .home-indicator {
+            height: 24px;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .indicator-bar {
+            width: 134px;
+            height: 5px;
+            background-color: #cbd5e1;
+            border-radius: 100px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <div style="display: flex; gap: 6px; align-items: center;">
+                <span>5G</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h4.15c1.05.62 2.3 1 3.5 1 4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
+            </div>
+        </div>
+
+        <!-- App Header -->
+        <div class="app-header">
+            <button class="back-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+            <h1>الإعدادات</h1>
+            <div style="width: 20px;"></div> <!-- Spacer -->
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+
+            <!-- Group 1: Account -->
+            <div class="section-group">
+                <div class="section-title">الحساب</div>
+                <div class="card-group">
+                    <div class="setting-row">
+                        <div class="row-left">
+                            <div class="row-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            </div>
+                            <span class="row-title">الاسم الشخصي</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-value">محمد أحمد الفلاح</span>
+                            <svg class="chevron" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </div>
+                    </div>
+
+                    <div class="setting-row">
+                        <div class="row-left">
+                            <div class="row-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            </div>
+                            <span class="row-title">رقم الهواتف</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-value" dir="ltr">+973 3600 1234</span>
+                            <svg class="chevron" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </div>
+                    </div>
+
+                    <div class="setting-row">
+                        <div class="row-left">
+                            <div class="row-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                            </div>
+                            <span class="row-title">لغة التطبيق</span>
+                        </div>
+                        <div class="row-right">
+                            <span class="row-value">العربية</span>
+                            <svg class="chevron" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 2: Security -->
+            <div class="section-group">
+                <div class="section-title">الأمان</div>
+                <div class="card-group">
+                    <div class="setting-row">
+                        <div class="row-left">
+                            <div class="row-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 1 7.54 16.63"></path><path d="M12 12v8"></path><path d="M12 12H8"></path></svg>
+                            </div>
+                            <span class="row-title">بصمة الوجه (Face ID)</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-row">
+                        <div class="row-left">
+                            <div class="row-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            </div>
+                            <span class="row-title">تسجيل الدخول بخطوتين</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Group 3: Notifications -->
+            <div class="section-group">
+                <div class="section-title">الإشعارات</div>
+                <div class="card-group">
+                    <div class="setting-row">
+                        <div class="row-left">
+                            <div class="row-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
+                            </div>
+                            <span class="row-title">التحويلات</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-row">
+                        <div class="row-left">
+                            <div class="row-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                            </div>
+                            <span class="row-title">العروض</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="setting-row">
+                        <div class="row-left">
+                            <div class="row-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            </div>
+                            <span class="row-title">كشوفات الحساب</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bahrain Footer Badge -->
+            <div class="bh-badge">
+                مرخص من مصرف البحرين المركزي <span>🇧🇭</span>
+            </div>
+
+        </div>
+
+        <!-- Home Indicator -->
+        <div class="home-indicator">
+            <div class="indicator-bar"></div>
+        </div>
+    </div>
+
+</body>
+</html>

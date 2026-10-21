@@ -1,0 +1,123 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "otp",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T17:00:57.838Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>أدخل الرمز</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --color-primary: #0052c2;\n      --color-bg: #f5f5f5;\n      --color-text: #333;\n      --color-border: #ccc;\n      --color-disabled: #e0e0e0;\n    }\n\n    * {\n      box-sizing: border-box;\n    }\n\n    body {\n      font-family: 'Noto Sans', sans-serif;\n      background-color: var(--color-bg);\n      color: var(--color-text);\n      margin: 0;\n      padding: 2rem;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      min-height: 100vh;\n      text-align: start;\n      -webkit-text-size-adjust: 100%;\n      text-size-adjust: 100%;\n    }\n\n    .container {\n      max-width: 400px;\n      width: 100%;\n    }\n\n    h1 {\n      font-size: 1.5rem;\n      font-weight: 700;\n      margin-block-end: 0.5rem;\n      line-height: 1.4;\n    }\n\n    .subtitle {\n      font-size: 1rem;\n      margin-block-end: 2rem;\n      line-height: 1.6;\n      color: #555;\n    }\n\n    .subtitle bdi {\n      white-space: nowrap;\n    }\n\n    .otp-container {\n      display: flex;\n      justify-content: space-between;\n      gap: 0.5rem;\n      margin-block-end: 2rem;\n      dir: ltr;\n    }\n\n    .otp-box {\n      width: 2.5rem;\n      height: 2.5rem;\n      border: 1px solid var(--color-border);\n      border-radius: 0.5rem;\n      text-align: center;\n      font-size: 1.5rem;\n      font-weight: 500;\n      background: #fff;\n      color: var(--color-text);\n      transition: border-color 0.2s, box-shadow 0.2s;\n      font-variant-numeric: tabular-nums;\n    }\n\n    .otp-box:focus {\n      outline: none;\n      border-color: var(--color-primary);\n      box-shadow: 0 0 0 2px rgba(0, 82, 194, 0.2);\n    }\n\n    .countdown {\n      text-align: center;\n      margin-block-end: 1.5rem;\n      font-size: 0.9rem;\n      color: #666;\n    }\n\n    .countdown button {\n      background: none;\n      border: none;\n      color: var(--color-primary);\n      font-family: inherit;\n      font-size: inherit;\n      cursor: pointer;\n      text-decoration: none;\n      padding: 0.25rem 0.5rem;\n      border-radius: 0.25rem;\n      transition: background-color 0.2s;\n    }\n\n    .countdown button:disabled {\n      color: #999;\n      cursor: not-allowed;\n    }\n\n    .countdown button:not(:disabled):hover {\n      background-color: rgba(0, 82, 194, 0.1);\n    }\n\n    .verify-btn {\n      width: 100%;\n      padding: 0.75rem;\n      background-color: var(--color-primary);\n      color: #fff;\n      border: none;\n      border-radius: 0.5rem;\n      font-size: 1rem;\n      font-weight: 500;\n      cursor: pointer;\n      transition: background-color 0.2s;\n      font-family: inherit;\n    }\n\n    .verify-btn:hover:not(:disabled) {\n      background-color: #003e8c;\n    }\n\n    .verify-btn:disabled {\n      background-color: var(--color-disabled);\n      color: #999;\n      cursor: not-allowed;\n    }\n\n    @media (max-width: 360px) {\n      .otp-box {\n        width: 2rem;\n        height: 2rem;\n        font-size: 1.25rem;\n      }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>أدخل الرمز</h1>\n    <p class=\"subtitle\">\n      أرسلنا رمزًا مكونًا من 6 أرقام إلى <bdi dir=\"ltr\">+966 55 123 4567</bdi>\n    </p>\n\n    <form class=\"otp-form\" autocomplete=\"off\" novalidate>\n      <div class=\"otp-container\">\n        <input type=\"text\" class=\"otp-box\" maxlength=\"1\" inputmode=\"numeric\" pattern=\"[0-9]*\" autocomplete=\"one-time-code\">\n        <input type=\"text\" class=\"otp-box\" maxlength=\"1\" inputmode=\"numeric\" pattern=\"[0-9]*\" autocomplete=\"one-time-code\">\n        <input type=\"text\" class=\"otp-box\" maxlength=\"1\" inputmode=\"numeric\" pattern=\"[0-9]*\" autocomplete=\"one-time-code\">\n        <input type=\"text\" class=\"otp-box\" maxlength=\"1\" inputmode=\"numeric\" pattern=\"[0-9]*\" autocomplete=\"one-time-code\">\n        <input type=\"text\" class=\"otp-box\" maxlength=\"1\" inputmode=\"numeric\" pattern=\"[0-9]*\" autocomplete=\"one-time-code\">\n        <input type=\"text\" class=\"otp-box\" maxlength=\"1\" inputmode=\"numeric\" pattern=\"[0-9]*\" autocomplete=\"one-time-code\">\n      </div>\n    </form>\n\n    <div class=\"countdown\">\n      <button id=\"resend-btn\" disabled>إعادة الإرسال بعد <span id=\"timer\">0:45</span></button>\n    </div>\n\n    <button class=\"verify-btn\" id=\"verify-btn\" disabled>acco</button>\n  </div>\n\n  <script>\n    document.addEventListener('DOMContentLoaded', () => {\n      const otpInputs = document.querySelectorAll('.otp-box');\n      const resendBtn = document.getElementById('resend-btn');\n      const verifyBtn = document.getElementById('verify-btn');\n      const otpForm = document.querySelector('.otp-form');\n\n      let timeLeft = 45;\n      let countdownInterval = null;\n      let currentTimerSpan = document.getElementById('timer');\n\n      // Focus first input on load\n      otpInputs[0].focus();\n\n      // OTP navigation\n      otpInputs.forEach((input, index) => {\n        input.addEventListener('input', () => {\n          // Allow only digits\n          input.value = input.value.replace(/[^0-9]/g, '');\n          if (input.value.length === 1) {\n            if (index < otpInputs.length - 1) {\n              otpInputs[index + 1].focus();\n            }\n          }\n          toggleVerifyButton();\n        });\n\n        input.addEventListener('keydown', (e) => {\n          if (e.key === 'Backspace' && input.value === '' && index > 0) {\n            otpInputs[index - 1].focus();\n          }\n        });\n\n        // Prevent non-numeric characters\n        input.addEventListener('paste', (e) => {\n          e.preventDefault();\n          const paste = (e.clipboardData || window.clipboardData).getData('text');\n          const digits = paste.replace(/[^0-9]/g, '').slice(0, 1);\n          input.value = digits;\n          if (digits.length === 1 && index < otpInputs.length - 1) {\n            otpInputs[index + 1].focus();\n          }\n          toggleVerifyButton();\n        });\n      });\n\n      function toggleVerifyButton() {\n        const allFilled = Array.from(otpInputs).every(input => input.value.length === 1);\n        verifyBtn.disabled = !allFilled;\n      }\n\n      function formatTime(seconds) {\n        const mins = Math.floor(seconds / 60);\n        const secs = seconds % 60;\n        return `${mins}:${secs.toString().padStart(2, '0')}`;\n      }\n\n      function updateCountdown() {\n        if (timeLeft <= 0) {\n          resendBtn.disabled = false;\n          resendBtn.innerHTML = 'إعادة الإرسال';\n          resendBtn.onclick = handleResend;\n          if (countdownInterval) {\n            clearInterval(countdownInterval);\n            countdownInterval = null;\n          }\n          return;\n        }\n        currentTimerSpan.textContent = formatTime(timeLeft);\n        timeLeft--;\n      }\n\n      function startCountdown() {\n        if (countdownInterval) {\n          clearInterval(countdownInterval);\n        }\n        timeLeft = 45;\n        currentTimerSpan.textContent = formatTime(timeLeft);\n        resendBtn.disabled = true;\n        resendBtn.innerHTML = 'إعادة الإرسال بعد <span id=\"timer\">0:45</span>';\n        currentTimerSpan = document.getElementById('timer');\n        countdownInterval = setInterval(() => {\n          updateCountdown();\n          if (timeLeft < 0) {\n            clearInterval(countdownInterval);\n            countdownInterval = null;\n          }\n        }, 1000);\n      }\n\n      function handleResend() {\n        // Reset OTP fields\n        otpInputs.forEach(input => input.value = '');\n        otpInputs[0].focus();\n        toggleVerifyButton();\n        startCountdown();\n      }\n\n      // Verify button click\n      verifyBtn.addEventListener('click', () => {\n        const code = Array.from(otpInputs).map(input => input.value).join('');\n        // In a real app, send code to server\n        console.log('Code submitted:', code);\n        alert('acco: ' + code);\n      });\n\n      // Start the countdown on page load\n      startCountdown();\n    });\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6304,
+    "output": 9243
+  },
+  "ms": 90455,
+  "finish": "stop",
+  "reasoningTokens": 6954,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 84,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 318,
+        "y": 180.859375,
+        "width": 40,
+        "height": 40
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"text\" class=\"otp-box\" maxlength=\"1\" inputmode=\"numeric\" pattern=\"[0-9]*\" autocomplete=\"one-time-code\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 260.8125,
+        "y": 180.859375,
+        "width": 40,
+        "height": 40
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"text\" class=\"otp-box\" maxlength=\"1\" inputmode=\"numeric\" pattern=\"[0-9]*\" autocomplete=\"one-time-code\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 203.625,
+        "y": 180.859375,
+        "width": 40,
+        "height": 40
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"text\" class=\"otp-box\" maxlength=\"1\" inputmode=\"numeric\" pattern=\"[0-9]*\" autocomplete=\"one-time-code\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 146.4375,
+        "y": 180.859375,
+        "width": 40,
+        "height": 40
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"text\" class=\"otp-box\" maxlength=\"1\" inputmode=\"numeric\" pattern=\"[0-9]*\" autocomplete=\"one-time-code\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 89.25,
+        "y": 180.859375,
+        "width": 40,
+        "height": 40
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"text\" class=\"otp-box\" maxlength=\"1\" inputmode=\"numeric\" pattern=\"[0-9]*\" autocomplete=\"one-time-code\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 32.0625,
+        "y": 180.859375,
+        "width": 40,
+        "height": 40
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"text\" class=\"otp-box\" maxlength=\"1\" inputmode=\"numeric\" pattern=\"[0-9]*\" autocomplete=\"one-time-code\">"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 248,
+        "y": 48.078125,
+        "width": 110,
+        "height": 33
+      },
+      "message": "Arabic falls back from Noto Sans, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>أدخل الرمز</h1>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

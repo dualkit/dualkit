@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدعم الفني - الاتصالات الكويتية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :lang(ar) {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            letter-spacing: 0;
+            text-transform: none;
+            font-style: normal;
+            line-height: 1.7;
+        }
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            background-color: #0f172a;
+        }
+        /* Enforce the 14px floor for all UI text and prevent small Arabic text */
+        .ui-text {
+            font-size: 14px;
+        }
+        .chat-bubble-user {
+            background-color: #047857;
+            color: #ffffff;
+            border-start-end-radius: 4px;
+        }
+        .chat-bubble-agent {
+            background-color: #ffffff;
+            color: #1e293b;
+            border-start-start-radius: 4px;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-0 sm:p-6">
+
+    <!-- Mobile Screen Container -->
+    <div class="w-full sm:max-w-[400px] h-screen sm:h-[840px] bg-slate-50 flex flex-col sm:rounded-[32px] overflow-hidden shadow-2xl border border-slate-800">
+        
+        <!-- App Header -->
+        <header class="bg-white border-b border-slate-200 px-4 py-3.5 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="relative">
+                    <div class="w-10 h-10 rounded-full bg-brand-50 text-brand-700 font-bold flex items-center justify-center text-lg border border-brand-500/20">
+                        س
+                    </div>
+                    <span class="absolute bottom-0 end-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full"></span>
+                </div>
+                <div>
+                    <h1 class="font-bold text-slate-900 ui-text leading-tight">سارة</h1>
+                    <p class="text-xs text-slate-500">خدمة العملاء • متصل الآن</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button class="p-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors" aria-label="اتصال">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Chat Messages Area -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-100/60">
+            
+            <!-- Date Divider -->
+            <div class="flex justify-center my-2">
+                <span class="bg-slate-200/80 text-slate-600 text-xs px-3 py-1 rounded-full">اليوم</span>
+            </div>
+
+            <!-- Message 1: Customer -->
+            <div class="flex flex-col items-end">
+                <div class="chat-bubble-user max-w-[85%] rounded-2xl px-4 py-3 ui-text">
+                    السلام عليكم، عندي مشكلة في تفعيل خط الـ <bdi dir="ltr">eSIM</bdi> الجديد.
+                </div>
+                <span class="text-[11px] text-slate-400 mt-1 px-1">١٠:١٥ ص</span>
+            </div>
+
+            <!-- Message 2: Agent (Sara) -->
+            <div class="flex flex-col items-start">
+                <div class="chat-bubble-agent max-w-[85%] rounded-2xl px-4 py-3 ui-text border border-slate-100">
+                    وعليكم السلام ورحمة الله. أهلاً بك! معك سارة من خدمة العملاء. يرجى تزويدي برقم الطلب للتحقق من النظام.
+                </div>
+                <span class="text-[11px] text-slate-400 mt-1 px-1">١٠:١٦ ص</span>
+            </div>
+
+            <!-- Message 3: Customer -->
+            <div class="flex flex-col items-end">
+                <div class="chat-bubble-user max-w-[85%] rounded-2xl px-4 py-3 ui-text">
+                    رقم الطلب هو <bdi dir="ltr">TX-48213</bdi>.
+                </div>
+                <span class="text-[11px] text-slate-400 mt-1 px-1">١٠:١٧ ص</span>
+            </div>
+
+            <!-- Message 4: Agent (Sara) -->
+            <div class="flex flex-col items-start">
+                <div class="chat-bubble-agent max-w-[85%] rounded-2xl px-4 py-3 ui-text border border-slate-100">
+                    شكراً لك. لقد قمنا بمراجعة الطلب، والسبب هو تأكيد الهوية بالبطاقة المدنية. يرجى إعادة محاولة التوثيق عبر الرابط المرسل لك.
+                </div>
+                <span class="text-[11px] text-slate-400 mt-1 px-1">١٠:١٨ ص</span>
+            </div>
+
+            <!-- Message 5: Customer -->
+            <div class="flex flex-col items-end">
+                <div class="chat-bubble-user max-w-[85%] rounded-2xl px-4 py-3 ui-text">
+                    تمام، تم التوثيق بنجاح. هل سيعمل جهازي على شبكة الـ <bdi dir="ltr">5G</bdi> تلقائياً الآن؟
+                </div>
+                <span class="text-[11px] text-slate-400 mt-1 px-1">١٠:٢٠ ص</span>
+            </div>
+
+            <!-- Message 6: Agent (Sara) -->
+            <div class="flex flex-col items-start">
+                <div class="chat-bubble-agent max-w-[85%] rounded-2xl px-4 py-3 ui-text border border-slate-100">
+                    نعم، فور اكتمال التفعيل في النظام سيعمل مباشرة. هل تحتاج لأي مساعدة أخرى في باقات الكويت اليوم؟
+                </div>
+                <span class="text-[11px] text-slate-400 mt-1 px-1">١٠:٢١ ص</span>
+            </div>
+
+        </div>
+
+        <!-- Chat Input Footer -->
+        <footer class="bg-white border-t border-slate-200 p-3 shrink-0">
+            <form class="flex items-center gap-2" onsubmit="event.preventDefault();">
+                <button type="button" class="p-2 text-slate-400 hover:text-slate-600 transition-colors" aria-label="إرفاق ملف">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/>
+                    </svg>
+                </button>
+                <input 
+                    type="text" 
+                    dir="auto" 
+                    placeholder="اكتب رسالتك هنا..." 
+                    class="flex-1 bg-slate-100 border border-slate-200 rounded-full px-4 py-2.5 ui-text text-slate-900 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all"
+                >
+                <button 
+                    type="submit" 
+                    class="bg-brand-600 hover:bg-brand-700 text-white p-2.5 rounded-full transition-colors flex items-center justify-center shadow-sm"
+                    aria-label="إرسال"
+                >
+                    <!-- Send icon mirrored for RTL reading direction -->
+                    <svg class="w-5 h-5 rtl:-scale-x-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+                    </svg>
+                </button>
+            </form>
+        </footer>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "transactions",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T17:43:06.979Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>محفظة - المعاملات</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f5f7fa;\n            color: #333;\n            direction: rtl;\n            text-align: right;\n            padding: 20px;\n        }\n\n        .container {\n            max-width: 420px;\n            margin: 0 auto;\n        }\n\n        .header {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            margin-bottom: 20px;\n        }\n\n        .header h1 {\n            font-size: 22px;\n            color: #1a1a2e;\n        }\n\n        .balance-card {\n            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);\n            color: #fff;\n            border-radius: 16px;\n            padding: 20px;\n            margin-bottom: 20px;\n            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);\n        }\n\n        .balance-card .label {\n            font-size: 14px;\n            opacity: 0.85;\n            margin-bottom: 8px;\n        }\n\n        .balance-card .amount {\n            font-size: 28px;\n            font-weight: 700;\n        }\n\n        .filter-section {\n            background-color: #fff;\n            border-radius: 12px;\n            padding: 14px 16px;\n            margin-bottom: 16px;\n            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n        }\n\n        .filter-section .filter-label {\n            font-size: 14px;\n            color: #555;\n        }\n\n        .filter-toggle {\n            background-color: #e6f0ff;\n            color: #1e3c72;\n            border: none;\n            border-radius: 20px;\n            padding: 6px 14px;\n            font-size: 13px;\n            cursor: pointer;\n            transition: background-color 0.2s;\n        }\n\n        .filter-toggle:hover {\n            background-color: #d0e4ff;\n        }\n\n        .transactions-table {\n            width: 100%;\n            border-collapse: collapse;\n            background-color: #fff;\n            border-radius: 12px;\n            overflow: hidden;\n            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);\n        }\n\n        .transactions-table th {\n            background-color: #f0f4f8;\n            padding: 12px 10px;\n            font-size: 13px;\n            color: #555;\n            font-weight: 600;\n        }\n\n        .transactions-table td {\n            padding: 12px 10px;\n            border-bottom: 1px solid #f0f0f0;\n            font-size: 14px;\n        }\n\n        .transactions-table tr:last-child td {\n            border-bottom: none;\n        }\n\n        .merchant-name {\n            font-weight: 500;\n            color: #222;\n        }\n\n        .amount-in {\n            color: #27ae60;\n            font-weight: 600;\n        }\n\n        .amount-out {\n            color: #e74c3c;\n            font-weight: 600;\n        }\n\n        .status-badge {\n            display: inline-block;\n            padding: 3px 10px;\n            border-radius: 12px;\n            font-size: 12px;\n            font-weight: 600;\n        }\n\n        .status-in {\n            background-color: #e6f9f0;\n            color: #27ae60;\n        }\n\n        .status-out {\n            background-color: #fdecea;\n            color: #e74c3c;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header\">\n            <h1>المعاملات</h1>\n        </div>\n\n        <div class=\"balance-card\">\n            <div class=\"label\">الرصيد الحالي</div>\n            <div class=\"amount\">3,247.850 ر.ع.</div>\n        </div>\n\n        <div class=\"filter-section\">\n            <span class=\"filter-label\">تصفية حسب الفترة</span>\n            <button class=\"filter-toggle\">هذا الشهر</button>\n        </div>\n\n        <table class=\"transactions-table\">\n            <thead>\n                <tr>\n                    <th>التاريخ</th>\n                    <th>اسم التاجر</th>\n                    <th>المبلغ (ر.ع.)</th>\n                    <th>الحالة</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr>\n                    <td>15 أكتوبر 2023</td>\n                    <td class=\"merchant-name\">لولو هايبرماركت</td>\n                    <td class=\"amount-out\">- 125.750</td>\n                    <td><span class=\"status-badge status-out\">صادر</span></td>\n                </tr>\n                <tr>\n                    <td>14 أكتوبر 2023</td>\n                    <td class=\"merchant-name\">نتفلكس</td>\n                    <td class=\"amount-out\">- 35.000</td>\n                    <td><span class=\"status-badge status-out\">صادر</span></td>\n                </tr>\n                <tr>\n                    <td>13 أكتوبر 2023</td>\n                    <td class=\"merchant-name\">مطعم الأمانة</td>\n                    <td class=\"amount-out\">- 42.300</td>\n                    <td><span class=\"status-badge status-out\">صادر</span></td>\n                </tr>\n                <tr>\n                    <td>12 أكتوبر 2023</td>\n                    <td class=\"merchant-name\">تحويل بنكي</td>\n                    <td class=\"amount-in\">+ 500.000</td>\n                    <td><span class=\"status-badge status-in\">وارد</span></td>\n                </tr>\n                <tr>\n                    <td>11 أكتوبر 2023</td>\n                    <td class=\"merchant-name\">أبل مووزيك</td>\n                    <td class=\"amount-out\">- 12.990</td>\n                    <td><span class=\"status-badge status-out\">صادر</span></td>\n                </tr>\n                <tr>\n                    <td>10 أكتوبر 2023</td>\n                    <td class=\"merchant-name\">سوق المواصف</td>\n                    <td class=\"amount-out\">- 88.500</td>\n                    <td><span class=\"status-badge status-out\">صادر</span></td>\n                </tr>\n                <tr>\n                    <td>9 أكتوبر 2023</td>\n                    <td class=\"merchant-name\">رواتر ديجيتال</td>\n                    <td class=\"amount-in\">+ 1,200.000</td>\n                    <td><span class=\"status-badge status-in\">وارد</span></td>\n                </tr>\n                <tr>\n                    <td>8 أكتوبر 2023</td>\n                    <td class=\"merchant-name\">مقهى السماء الزرقاء</td>\n                    <td class=\"amount-out\">- 18.750</td>\n                    <td><span class=\"status-badge status-out\">صادر</span></td>\n                </tr>\n            </tbody>\n        </table>\n    </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 157,
+    "output": 2122
+  },
+  "ms": 39081,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 80,
+  "missing": [
+    "English merchant"
+  ],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 280,
+        "y": 20,
+        "width": 90,
+        "height": 25
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>المعاملات</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 203,
+        "width": 54.625,
+        "height": 15
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"filter-toggle\">هذا الشهر</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 203,
+        "width": 54.625,
+        "height": 15
+      },
+      "message": "\"هذا الشهر\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"filter-toggle\">هذا الشهر</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 326,
+        "y": 266,
+        "width": 34,
+        "height": 15
+      },
+      "message": "\"التاريخ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th>التاريخ</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 219.4375,
+        "y": 266,
+        "width": 58.625,
+        "height": 15
+      },
+      "message": "\"اسم التاجر\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th>اسم التاجر</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 99,
+        "y": 266,
+        "width": 64.5,
+        "height": 15
+      },
+      "message": "\"المبلغ (ر.ع.)\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th>المبلغ (ر.ع.)</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 44.015625,
+        "y": 266,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"الحالة\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th>الحالة</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 40.015625,
+        "y": 314,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"صادر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-out\">صادر</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 40.015625,
+        "y": 371,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"صادر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-out\">صادر</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 40.015625,
+        "y": 428,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"صادر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-out\">صادر</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 45.015625,
+        "y": 485,
+        "width": 20,
+        "height": 14
+      },
+      "message": "\"وارد\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-in\">وارد</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 40.015625,
+        "y": 542,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"صادر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-out\">صادر</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 40.015625,
+        "y": 599,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"صادر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-out\">صادر</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 45.015625,
+        "y": 656,
+        "width": 20,
+        "height": 14
+      },
+      "message": "\"وارد\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-in\">وارد</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 40.015625,
+        "y": 713,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"صادر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status-badge status-out\">صادر</span>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

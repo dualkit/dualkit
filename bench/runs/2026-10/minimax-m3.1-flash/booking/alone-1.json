@@ -1,0 +1,319 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "booking",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T17:02:19.572Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n  <title>حجز موعد – عيادة قطرية</title>\n  <style>\n    :root {\n      --navy: #123b4a;\n      --teal: #0e8f83;\n      --teal-dark: #087367;\n      --mint: #e8f6f3;\n      --sand: #f5efe3;\n      --cream: #fbfaf6;\n      --ink: #17313a;\n      --muted: #71828a;\n      --line: #e7ecec;\n      --white: #ffffff;\n      --shadow: 0 12px 36px rgba(18, 59, 74, 0.10);\n    }\n\n    * {\n      box-sizing: border-box;\n    }\n\n    html,\n    body {\n      margin: 0;\n      min-height: 100%;\n    }\n\n    body {\n      font-family: Tahoma, Arial, sans-serif;\n      color: var(--ink);\n      background: #dfe8e7;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      min-height: 100vh;\n    }\n\n    button {\n      font: inherit;\n    }\n\n    .phone {\n      width: 390px;\n      max-width: 100vw;\n      min-height: 844px;\n      background: var(--cream);\n      box-shadow: 0 24px 70px rgba(9, 43, 55, 0.24);\n      overflow: hidden;\n      position: relative;\n    }\n\n    .top-area {\n      background:\n        radial-gradient(circle at 12% 25%, rgba(255,255,255,.16) 0 4px, transparent 5px),\n        radial-gradient(circle at 85% 72%, rgba(255,255,255,.12) 0 18px, transparent 19px),\n        linear-gradient(145deg, #123b4a, #0b6f70);\n      color: white;\n      padding: 22px 20px 28px;\n      border-radius: 0 0 30px 30px;\n      position: relative;\n    }\n\n    .header {\n      display: flex;\n      align-items: center;\n      gap: 13px;\n      margin-bottom: 23px;\n    }\n\n    .back {\n      width: 38px;\n      height: 38px;\n      border: 1px solid rgba(255,255,255,.2);\n      border-radius: 50%;\n      color: white;\n      background: rgba(255,255,255,.1);\n      display: grid;\n      place-items: center;\n      cursor: pointer;\n    }\n\n    .back svg {\n      width: 20px;\n      transform: rotate(90deg);\n    }\n\n    .header-copy {\n      flex: 1;\n    }\n\n    .eyebrow {\n      margin: 0 0 4px;\n      color: #bfe4df;\n      font-size: 12px;\n    }\n\n    h1 {\n      margin: 0;\n      font-size: 23px;\n      font-weight: 700;\n    }\n\n    .clinic-mark {\n      width: 43px;\n      height: 43px;\n      border-radius: 14px;\n      background: rgba(255,255,255,.15);\n      border: 1px solid rgba(255,255,255,.2);\n      display: grid;\n      place-items: center;\n      font-size: 22px;\n    }\n\n    .content {\n      padding: 0 18px 24px;\n    }\n\n    .doctor-card {\n      margin-top: -14px;\n      position: relative;\n      z-index: 2;\n      background: white;\n      border-radius: 18px;\n      box-shadow: var(--shadow);\n      padding: 16px;\n      display: flex;\n      align-items: center;\n      gap: 12px;\n    }\n\n    .avatar {\n      width: 52px;\n      height: 52px;\n      flex: 0 0 auto;\n      border-radius: 16px;\n      background: linear-gradient(145deg, var(--sand), #ead8b9);\n      color: var(--navy);\n      display: grid;\n      place-items: center;\n      font-size: 25px;\n    }\n\n    .doctor-info {\n      min-width: 0;\n      flex: 1;\n    }\n\n    .doctor-info small {\n      color: var(--muted);\n      font-size: 12px;\n    }\n\n    .doctor-info h2 {\n      margin: 3px 0 4px;\n      font-size: 16px;\n    }\n\n    .specialty {\n      color: var(--teal-dark);\n      font-size: 12px;\n      display: flex;\n      align-items: center;\n      gap: 5px;\n    }\n\n    .specialty::before {\n      content: \"\";\n      width: 6px;\n      height: 6px;\n      border-radius: 50%;\n      background: var(--teal);\n    }\n\n    .section {\n      margin-top: 24px;\n    }\n\n    .section-title {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin-bottom: 14px;\n    }\n\n    .section-title h3 {\n      font-size: 16px;\n      margin: 0;\n    }\n\n    .section-title span {\n      color: var(--muted);\n      font-size: 12px;\n    }\n\n    .calendar {\n      background: white;\n      border: 1px solid var(--line);\n      border-radius: 20px;\n      padding: 16px 14px 14px;\n      box-shadow: 0 8px 25px rgba(18, 59, 74, .06);\n    }\n\n    .month-nav {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin-bottom: 14px;\n      direction: rtl;\n    }\n\n    .month-label {\n      font-weight: 700;\n      font-size: 16px;\n    }\n\n    .nav-buttons {\n      display: flex;\n      gap: 7px;\n    }\n\n    .month-btn {\n      width: 32px;\n      height: 32px;\n      border: 1px solid var(--line);\n      border-radius: 10px;\n      background: #f8faf9;\n      color: var(--navy);\n      cursor: pointer;\n      display: grid;\n      place-items: center;\n    }\n\n    .month-btn:active {\n      background: var(--mint);\n    }\n\n    .month-btn svg {\n      width: 16px;\n      height: 16px;\n    }\n\n    .next svg {\n      transform: rotate(180deg);\n    }\n\n    .weekdays,\n    .days {\n      display: grid;\n      grid-template-columns: repeat(7, 1fr);\n      direction: ltr;\n      gap: 3px;\n    }\n\n    .weekdays {\n      margin-bottom: 7px;\n    }\n\n    .weekday {\n      text-align: center;\n      color: #8a989d;\n      font-size: 10px;\n      font-weight: 700;\n      direction: rtl;\n      padding: 5px 0;\n    }\n\n    .day {\n      aspect-ratio: 1;\n      border: 0;\n      background: transparent;\n      color: var(--ink);\n      border-radius: 12px;\n      position: relative;\n      font-size: 12px;\n      cursor: pointer;\n      display: grid;\n      place-items: center;\n    }\n\n    .day:hover:not(:disabled) {\n      background: var(--mint);\n    }\n\n    .day:disabled {\n      color: #cbd2d3;\n      cursor: default;\n    }\n\n    .day.today {\n      color: var(--teal-dark);\n      font-weight: 700;\n    }\n\n    .day.today::after {\n      content: \"\";\n      width: 4px;\n      height: 4px;\n      border-radius: 50%;\n      background: var(--teal);\n      position: absolute;\n      bottom: 4px;\n    }\n\n    .day.selected {\n      background: var(--teal);\n      color: white;\n      font-weight: 700;\n      box-shadow: 0 5px 12px rgba(14, 143, 131, .25);\n    }\n\n    .day.selected::after {\n      background: white;\n    }\n\n    .calendar-note {\n      margin: 12px 2px 0;\n      color: var(--muted);\n      font-size: 11px;\n      display: flex;\n      align-items: center;\n      gap: 6px;\n    }\n\n    .calendar-note::before {\n      content: \"\";\n      width: 5px;\n      height: 5px;\n      border-radius: 50%;\n      background: var(--teal);\n    }\n\n    .time-row {\n      display: flex;\n      gap: 9px;\n      overflow-x: auto;\n      padding: 2px 2px 8px;\n      scrollbar-width: none;\n    }\n\n    .time-row::-webkit-scrollbar {\n      display: none;\n    }\n\n    .time {\n      min-width: 72px;\n      border: 1px solid #d9e4e2;\n      background: white;\n      color: var(--navy);\n      border-radius: 12px;\n      padding: 11px 8px;\n      font-size: 13px;\n      font-weight: 700;\n      cursor: pointer;\n      white-space: nowrap;\n    }\n\n    .time.selected {\n      color: white;\n      background: var(--teal);\n      border-color: var(--teal);\n      box-shadow: 0 5px 12px rgba(14, 143, 131, .22);\n    }\n\n    .summary {\n      margin-top: 20px;\n      border-radius: 16px;\n      background: var(--mint);\n      padding: 13px 14px;\n      display: flex;\n      gap: 10px;\n      align-items: flex-start;\n      color: #31545d;\n      font-size: 12px;\n      line-height: 1.7;\n    }\n\n    .summary-icon {\n      flex: 0 0 auto;\n      width: 27px;\n      height: 27px;\n      background: white;\n      color: var(--teal-dark);\n      border-radius: 9px;\n      display: grid;\n      place-items: center;\n    }\n\n    .confirm {\n      width: 100%;\n      border: 0;\n      background: linear-gradient(135deg, var(--teal), var(--teal-dark));\n      color: white;\n      border-radius: 15px;\n      padding: 15px;\n      margin-top: 19px;\n      font-size: 16px;\n      font-weight: 700;\n      box-shadow: 0 10px 22px rgba(14, 143, 131, .25);\n      cursor: pointer;\n    }\n\n    .confirm:active {\n      transform: translateY(1px);\n    }\n\n    .confirm:disabled {\n      opacity: .55;\n      cursor: not-allowed;\n    }\n\n    .privacy {\n      text-align: center;\n      color: #94a0a4;\n      font-size: 10px;\n      margin: 10px 0 0;\n    }\n\n    .toast {\n      position: fixed;\n      left: 50%;\n      bottom: 24px;\n      transform: translate(-50%, 20px);\n      background: var(--navy);\n      color: white;\n      padding: 12px 18px;\n      border-radius: 12px;\n      font-size: 13px;\n      opacity: 0;\n      pointer-events: none;\n      transition: .25s ease;\n      z-index: 5;\n      width: max-content;\n      max-width: 85vw;\n    }\n\n    .toast.show {\n      opacity: 1;\n      transform: translate(-50%, 0);\n    }\n\n    @media (max-width: 430px) {\n      body {\n        display: block;\n        background: var(--cream);\n      }\n\n      .phone {\n        width: 100%;\n        min-height: 100vh;\n        box-shadow: none;\n      }\n    }\n  </style>\n</head>\n<body>\n  <main class=\"phone\">\n    <header class=\"top-area\">\n      <div class=\"header\">\n        <button class=\"back\" aria-label=\"رجوع\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <path d=\"m15 18-6-6 6-6\"/>\n          </svg>\n        </button>\n        <div class=\"header-copy\">\n          <p class=\"eyebrow\">عيادة الدوحة التخصصية</p>\n          <h1>حجز موعد</h1>\n        </div>\n        <div class=\"clinic-mark\" aria-hidden=\"true\">✚</div>\n      </div>\n    </header>\n\n    <div class=\"content\">\n      <section class=\"doctor-card\" aria-label=\"بيانات الطبيب\">\n        <div class=\"avatar\" aria-hidden=\"true\">♙</div>\n        <div class=\"doctor-info\">\n          <small>الطبيب المعالج</small>\n          <h2>د. سارة المريخي</h2>\n          <div class=\"specialty\">استشارية طب الأسرة</div>\n        </div>\n      </section>\n\n      <section class=\"section\">\n        <div class=\"section-title\">\n          <h3>اختر التاريخ</h3>\n          <span id=\"selectedDateLabel\">اختر يومًا من التقويم</span>\n        </div>\n\n        <div class=\"calendar\">\n          <div class=\"month-nav\">\n            <div class=\"month-label\" id=\"monthLabel\"></div>\n            <div class=\"nav-buttons\">\n              <button class=\"month-btn prev\" id=\"prevMonth\" aria-label=\"الشهر السابق\">\n                <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                  <path d=\"m15 18-6-6 6-6\"/>\n                </svg>\n              </button>\n              <button class=\"month-btn next\" id=\"nextMonth\" aria-label=\"الشهر التالي\">\n                <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                  <path d=\"m15 18-6-6 6-6\"/>\n                </svg>\n              </button>\n            </div>\n          </div>\n\n          <div class=\"weekdays\" aria-hidden=\"true\">\n            <div class=\"weekday\">سبت</div>\n            <div class=\"weekday\">أحد</div>\n            <div class=\"weekday\">إثنين</div>\n            <div class=\"weekday\">ثلاثاء</div>\n            <div class=\"weekday\">أربعاء</div>\n            <div class=\"weekday\">خميس</div>\n            <div class=\"weekday\">جمعة</div>\n          </div>\n\n          <div class=\"days\" id=\"days\"></div>\n\n          <p class=\"calendar-note\">النقطة الخضراء indicate اليوم الحالي</p>\n        </div>\n      </section>\n\n      <section class=\"section\">\n        <div class=\"section-title\">\n          <h3>اختر الوقت</h3>\n          <span>المواعيد المتاحة</span>\n        </div>\n        <div class=\"time-row\" id=\"timeRow\">\n          <button class=\"time\" data-time=\"09:00\">9:00 ص</button>\n          <button class=\"time\" data-time=\"09:30\">9:30 ص</button>\n          <button class=\"time\" data-time=\"10:00\">10:00 ص</button>\n          <button class=\"time\" data-time=\"10:30\">10:30 ص</button>\n          <button class=\"time\" data-time=\"11:00\">11:00 ص</button>\n          <button class=\"time\" data-time=\"11:30\">11:30 ص</button>\n          <button class=\"time\" data-time=\"12:00\">12:00 م</button>\n        </div>\n      </section>\n\n      <div class=\"summary\">\n        <div class=\"summary-icon\" aria-hidden=\"true\">✓</div>\n        <div>سيتم تأكيد الموعد لدى الاستقبال، ويُرسل رقم الحجز إلى هاتفك بعد إتمام العملية.</div>\n      </div>\n\n      <button class=\"confirm\" id=\"confirmBtn\" disabled>تأكيد الحجز</button>\n      <p class=\"privacy\">بالضغط على تأكيد الحجز، أنت توافق على سياسة حجز المواعيد.</p>\n    </div>\n  </main>\n\n  <div class=\"toast\" id=\"toast\" role=\"status\" aria-live=\"polite\"></div>\n\n  <script>\n    const monthNames = [\n      \"يناير\", \"فبراير\", \"مارس\", \"أبريل\", \"مايو\", \"يونيو\",\n      \"يوليو\", \"أغسطس\", \"سبتمبر\", \"أكتوبر\", \"نوفمبر\", \"ديسمبر\"\n    ];\n\n    const today = new Date();\n    let viewYear = today.getFullYear();\n    let viewMonth = today.getMonth();\n    let selectedDate = null;\n    let selectedTime = null;\n\n    const daysElement = document.getElementById(\"days\");\n    const monthLabel = document.getElementById(\"monthLabel\");\n    const selectedDateLabel = document.getElementById(\"selectedDateLabel\");\n    const confirmButton = document.getElementById(\"confirmBtn\");\n    const toast = document.getElementById(\"toast\");\n\n    function sameDay(a, b) {\n      return a.getFullYear() === b.getFullYear() &&\n             a.getMonth() === b.getMonth() &&\n             a.getDate() === b.getDate();\n    }\n\n    function renderCalendar() {\n      monthLabel.textContent = `${monthNames[viewMonth]} ${viewYear}`;\n      daysElement.innerHTML = \"\";\n\n      const firstDay = new Date(viewYear, viewMonth, 1);\n      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();\n      const offset = (firstDay.getDay() + 1) % 7;\n\n      for (let i = 0; i < offset; i++) {\n        const empty = document.createElement(\"div\");\n        daysElement.appendChild(empty);\n      }\n\n      for (let day = 1; day <= daysInMonth; day++) {\n        const date = new Date(viewYear, viewMonth, day);\n        const button = document.createElement(\"button\");\n        button.className = \"day\";\n        button.textContent = day;\n        button.setAttribute(\"aria-label\", `${day} ${monthNames[viewMonth]}`);\n\n        if (sameDay(date, today)) button.classList.add(\"today\");\n        if (selectedDate && sameDay(date, selectedDate)) button.classList.add(\"selected\");\n\n        const past = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());\n        button.disabled = past;\n\n        button.addEventListener(\"click\", () => {\n          selectedDate = date;\n          selectedDateLabel.textContent = `${day} ${monthNames[viewMonth]}`;\n          renderCalendar();\n          updateButton();\n        });\n\n        daysElement.appendChild(button);\n      }\n    }\n\n    document.getElementById(\"prevMonth\").addEventListener(\"click\", () => {\n      viewMonth--;\n      if (viewMonth < 0) {\n        viewMonth = 11;\n        viewYear--;\n      }\n      renderCalendar();\n    });\n\n    document.getElementById(\"nextMonth\").addEventListener(\"click\", () => {\n      viewMonth++;\n      if (viewMonth > 11) {\n        viewMonth = 0;\n        viewYear++;\n      }\n      renderCalendar();\n    });\n\n    document.querySelectorAll(\".time\").forEach(button => {\n      button.addEventListener(\"click\", () => {\n        document.querySelectorAll(\".time\").forEach(item => item.classList.remove(\"selected\"));\n        button.classList.add(\"selected\");\n        selectedTime = button.dataset.time;\n        updateButton();\n      });\n    });\n\n    function updateButton() {\n      confirmButton.disabled = !(selectedDate && selectedTime);\n    }\n\n    confirmButton.addEventListener(\"click\", () => {\n      if (!selectedDate || !selectedTime) return;\n      const formattedDate = selectedDate.toLocaleDateString(\"ar-QA\", {\n        day: \"numeric\",\n        month: \"long\",\n        year: \"numeric\"\n      });\n      toast.textContent = `تم تأكيد موعدك يوم ${formattedDate} الساعة ${selectedTime}`;\n      toast.classList.add(\"show\");\n      setTimeout(() => toast.classList.remove(\"show\"), 3200);\n    });\n\n    renderCalendar();\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 329,
+    "output": 4817
+  },
+  "ms": 26064,
+  "finish": "stop",
+  "reasoningTokens": 233,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 84,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 205.328125,
+        "y": 22,
+        "width": 113.671875,
+        "height": 14
+      },
+      "message": "Arabic falls back from Tahoma, Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<p class=\"eyebrow\">عيادة الدوحة التخصصية</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 205.328125,
+        "y": 22,
+        "width": 113.671875,
+        "height": 14
+      },
+      "message": "\"عيادة الدوحة التخصصية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"eyebrow\">عيادة الدوحة التخصصية</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 215.65625,
+        "y": 123,
+        "width": 76.34375,
+        "height": 14
+      },
+      "message": "\"الطبيب المعالج\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small>الطبيب المعالج</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 172.328125,
+        "y": 164,
+        "width": 108.671875,
+        "height": 14
+      },
+      "message": "\"استشارية طب الأسرة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"specialty\">استشارية طب الأسرة</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 18,
+        "y": 220.5,
+        "width": 99.015625,
+        "height": 14
+      },
+      "message": "\"اختر يومًا من التقويم\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span id=\"selectedDateLabel\">اختر يومًا من التقويم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 44.34375,
+        "y": 319,
+        "width": 21,
+        "height": 11
+      },
+      "message": "\"سبت\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">سبت</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 94.5625,
+        "y": 319,
+        "width": 14,
+        "height": 11
+      },
+      "message": "\"أحد\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">أحد</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 138.28125,
+        "y": 319,
+        "width": 20,
+        "height": 11
+      },
+      "message": "\"إثنين\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">إثنين</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 184.984375,
+        "y": 319,
+        "width": 20,
+        "height": 11
+      },
+      "message": "\"ثلاثاء\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">ثلاثاء</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 229.703125,
+        "y": 319,
+        "width": 24,
+        "height": 11
+      },
+      "message": "\"أربعاء\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">أربعاء</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 274.421875,
+        "y": 319,
+        "width": 28,
+        "height": 11
+      },
+      "message": "\"خميس\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">خميس</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 324.140625,
+        "y": 319,
+        "width": 22,
+        "height": 11
+      },
+      "message": "\"جمعة\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">جمعة</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 176.828125,
+        "y": 631.296875,
+        "width": 167.171875,
+        "height": 12
+      },
+      "message": "\"النقطة الخضراء indicate اليوم الحالي\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"calendar-note\">النقطة الخضراء indicate اليوم الحالي</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 18,
+        "y": 685.796875,
+        "width": 78.34375,
+        "height": 14
+      },
+      "message": "\"المواعيد المتاحة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المواعيد المتاحة</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 311.171875,
+        "y": 730.296875,
+        "width": 45.65625,
+        "height": 15
+      },
+      "message": "\"9:00 ص\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"time\" data-time=\"09:00\">9:00 ص</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 230.171875,
+        "y": 730.296875,
+        "width": 45.65625,
+        "height": 15
+      },
+      "message": "\"9:30 ص\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"time\" data-time=\"09:30\">9:30 ص</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 145.5625,
+        "y": 730.296875,
+        "width": 52.875,
+        "height": 15
+      },
+      "message": "\"10:00 ص\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"time\" data-time=\"10:00\">10:00 ص</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 64.5625,
+        "y": 730.296875,
+        "width": 52.875,
+        "height": 15
+      },
+      "message": "\"10:30 ص\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"time\" data-time=\"10:30\">10:30 ص</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": -16.09375,
+        "y": 730.296875,
+        "width": 52.171875,
+        "height": 15
+      },
+      "message": "\"11:00 ص\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"time\" data-time=\"11:00\">11:00 ص</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 40.328125,
+        "y": 801.296875,
+        "width": 280.671875,
+        "height": 34.390625
+      },
+      "message": "\"سيتم تأكيد الموعد لدى الاستقبال، ويُرسل …\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>سيتم تأكيد الموعد لدى الاستقبال، ويُرسل رقم الحجز إلى هاتفك بعد إتمام العملية.</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 65.09375,
+        "y": 930.078125,
+        "width": 259.796875,
+        "height": 11
+      },
+      "message": "\"بالضغط على تأكيد الحجز، أنت توافق على سي…\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"privacy\">بالضغط على تأكيد الحجز، أنت توافق على سياسة حجز المواعيد.</p>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 965
+}

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المحفظة الإلكترونية - المعاملات</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            direction: rtl;
+            text-align: right;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            color: #1a3c6e;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #1a3c6e, #2e7d32);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        /* Balance Card */
+        .balance-card {
+            background: linear-gradient(135deg, #1a3c6e, #2e7d32);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 16px rgba(26, 60, 110, 0.25);
+        }
+
+        .balance-card .label {
+            font-size: 14px;
+            opacity: 0.85;
+            margin-bottom: 8px;
+        }
+
+        .balance-card .amount {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .balance-card .currency {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        /* Filter */
+        .filter-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .filter-section .filter-label {
+            font-size: 15px;
+            color: #1a3c6e;
+            font-weight: 600;
+        }
+
+        .filter-dropdown {
+            padding: 8px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background-color: #ffffff;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Transactions Table */
+        .table-container {
+            background-color: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background-color: #f0f4f8;
+            padding: 12px 14px;
+            font-size: 13px;
+            color: #555;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        td {
+            padding: 13px 14px;
+            border-bottom: 1px solid #eef1f5;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Transaction Type Badges */
+        .type-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .type-income {
+            background-color: #e6f4ea;
+            color: #2e7d32;
+        }
+
+        .type-expense {
+            background-color: #fdecea;
+            color: #c62828;
+        }
+
+        /* Amount Styling */
+        .amount-income {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        .amount-expense {
+            color: #c62828;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .balance-card .amount {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>المعاملات</h1>
+            <div class="logo">محفظة</div>
+        </div>
+
+        <!-- Balance -->
+        <div class="balance-card">
+            <div class="label">الرصيد الحالي</div>
+            <div class="amount">524.876 <span class="currency">ر.ع.</span></div>
+        </div>
+
+        <!-- Filter -->
+        <div class="filter-section">
+            <span class="filter-label">تصفية حسب الفترة</span>
+            <select class="filter-dropdown">
+                <option>هذا الشهر</option>
+                <option>الشهر الماضي</option>
+                <option>آخر 90 يوم</option>
+                <option>السنة الكاملة</option>
+            </select>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>التاريخ</th>
+                        <th>اسم التاجر</th>
+                        <th>المبلغ (ر.ع.)</th>
+                        <th>النوع</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>١٥ مارس ٢٠٢٤</td>
+                        <td>Lulu Hypermarket</td>
+                        <td class="amount-expense">٢٥.٩٠٠</td>
+                        <td><span class="type-badge type-expense">صرف</span></td>
+                    </tr>
+                    <tr>
+                        <td>١٤ مارس ٢٠٢٤</td>
+                        <td>Netflix</td>
+                        <td class="amount-expense">٨.٩٩٠</td>
+                        <td><span class="type-badge type-expense">صرف</span></td>
+                    </tr>
+                    <tr>
+                        <td>١٣ مارس ٢٠٢٤</td>
+                        <td>تيب توب للتجارة</td>
+                        <td class="amount-income">١٠٠٠.٠٠٠</td>
+                        <td><span class="type-badge type-income">إيداع</span></td>
+                    </tr>
+                    <tr>
+                        <td>١٢ مارس ٢٠٢٤</td>
+                        <td>مطعم البحر الأحمر</td>
+                        <td class="amount-expense">٣٢.٥٠٠</td>
+                        <td><span class="type-badge type-expense">صرف</span></td>
+                    </tr>
+                    <tr>
+                        <td>١١ مارس ٢٠٢٤</td>
+                        <td>أوبر كاب</td>
+                        <td class="amount-expense">٦.٧٥٠</td>
+                        <td><span class="type-badge type-expense">صرف</span></td>
+                    </tr>
+                    <tr>
+                        <td>١٠ مارس ٢٠٢٤</td>
+                        <td>دفع فاتورة كهرباء</td>
+                        <td class="amount-expense">٤٥.٠٠٠</td>
+                        <td><span class="type-badge type-expense">صرف</span></td>
+                    </tr>
+                    <tr>
+                        <td>٩ مارس ٢٠٢٤</td>
+                        <td>سوقر ماركت</td>
+                        <td class="amount-expense">١٧.٣٠٠</td>
+                        <td><span class="type-badge type-expense">صرف</span></td>
+                    </tr>
+                    <tr>
+                        <td>٨ مارس ٢٠٢٤</td>
+                        <td>تحويل بنكي من أبو بكر</td>
+                        <td class="amount-income">٢٠٠.٠٠٠</td>
+                        <td><span class="type-badge type-income">إيداع</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

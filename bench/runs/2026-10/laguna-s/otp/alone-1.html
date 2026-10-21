@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>البنك الأهلي - إدخال الرمز</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding-top: 60px;
+        }
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px 20px;
+            text-align: center;
+        }
+        .title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .code-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        .code-box {
+            width: 45px;
+            height: 55px;
+            border: 1.5px solid #ccc;
+            border-radius: 10px;
+            font-size: 20px;
+            text-align: center;
+            line-height: 55px;
+            transition: all 0.2s;
+            background: #fafafa;
+        }
+        .code-box:focus {
+            outline: none;
+            border-color: #007bff;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+        }
+        .countdown {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+        .countdown span {
+            color: #007bff;
+            font-weight: 600;
+        }
+        .verify-btn {
+            width: 100%;
+            height: 50px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .verify-btn:hover {
+            background-color: #0069d9;
+        }
+        .verify-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">أدخل الرمز</div>
+        <div class="subtitle">لقد أرسلنا رمزًا مكوّنًا من 6 أرقام إلى +966 55 123 4567</div>
+        <div class="code-container">
+            <input type="text" maxlength="1" class="code-box" id="code1">
+            <input type="text" maxlength="1" class="code-box" id="code2">
+            <input type="text" maxlength="1" class="code-box" id="code3">
+            <input type="text" maxlength="1" class="code-box" id="code4">
+            <input type="text" maxlength="1" class="code-box" id="code5">
+            <input type="text" maxlength="1" class="code-box" id="code6">
+        </div>
+        <div class="countdown">إعادة الإرسال خلال <span id="timer">0:45</span></div>
+        <button class="verify-btn" id="verifyBtn">تحقق</button>
+    </div>
+
+    <script>
+        const boxes = document.querySelectorAll('.code-box');
+        const timerEl = document.getElementById('timer');
+        const verifyBtn = document.getElementById('verifyBtn');
+        let seconds = 45;
+
+        // Move to next box automatically
+        boxes.forEach((box, index) => {
+            box.addEventListener('input', () => {
+                if (box.value.length === 1 && index < boxes.length - 1) {
+                    boxes[index + 1].focus();
+                }
+                checkCodeComplete();
+            });
+
+            box.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && index > 0 && !box.value) {
+                    boxes[index - 1].focus();
+                }
+            });
+        });
+
+        function checkCodeComplete() {
+            const code = Array.from(boxes).every(b => b.value.length === 1);
+            verifyBtn.disabled = !code;
+        }
+
+        // Countdown timer
+        const countdown = setInterval(() => {
+            seconds--;
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            timerEl.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
+            if (seconds <= 0) {
+                clearInterval(countdown);
+                timerEl.textContent = 'يمكنك إعادة الإرسال الآن';
+                timerEl.style.color = '#28a745';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

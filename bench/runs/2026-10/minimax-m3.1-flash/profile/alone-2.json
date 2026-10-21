@@ -1,0 +1,165 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "profile",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T16:50:03.184Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <meta name=\"theme-color\" content=\"#0d775f\" />\n  <title>الملف الشخصي</title>\n  <style>\n    * {\n      box-sizing: border-box;\n      -webkit-tap-highlight-color: transparent;\n    }\n\n    :root {\n      --primary: #08785f;\n      --primary-dark: #075f4d;\n      --primary-soft: #eaf7f2;\n      --background: #f6f8f7;\n      --card: #ffffff;\n      --text: #17211e;\n      --muted: #6c7773;\n      --border: #e5eae8;\n      --danger: #b42318;\n    }\n\n    body {\n      margin: 0;\n      min-height: 100vh;\n      font-family: Tahoma, Arial, sans-serif;\n      color: var(--text);\n      background: var(--background);\n      direction: rtl;\n    }\n\n    .app-header {\n      position: relative;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      min-height: 180px;\n      padding: 30px 20px 56px;\n      color: #fff;\n      text-align: center;\n      background:\n        radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.16), transparent 26%),\n        linear-gradient(135deg, #0a8b6d, #05634f);\n      border-radius: 0 0 34px 34px;\n    }\n\n    .back-button {\n      position: absolute;\n      top: 20px;\n      right: 20px;\n      width: 42px;\n      height: 42px;\n      display: grid;\n      place-items: center;\n      border: 0;\n      border-radius: 50%;\n      color: #fff;\n      background: rgba(255, 255, 255, 0.14);\n      cursor: pointer;\n    }\n\n    .back-button svg {\n      width: 22px;\n      height: 22px;\n      transform: rotate(90deg);\n    }\n\n    .header-title {\n      margin: 0 0 8px;\n      font-size: 24px;\n      font-weight: 700;\n    }\n\n    .header-subtitle {\n      margin: 0;\n      color: rgba(255, 255, 255, 0.82);\n      font-size: 14px;\n    }\n\n    main {\n      width: min(100%, 560px);\n      margin: -32px auto 0;\n      padding: 0 16px 32px;\n    }\n\n    .profile-card {\n      position: relative;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      margin-bottom: 18px;\n      padding: 25px 20px 24px;\n      background: var(--card);\n      border: 1px solid rgba(224, 230, 227, 0.9);\n      border-radius: 24px;\n      box-shadow: 0 12px 32px rgba(24, 63, 52, 0.08);\n    }\n\n    .avatar {\n      width: 78px;\n      height: 78px;\n      display: grid;\n      place-items: center;\n      margin-bottom: 14px;\n      border: 5px solid #f2faf7;\n      border-radius: 50%;\n      color: #fff;\n      font-size: 27px;\n      font-weight: 700;\n      background: linear-gradient(145deg, #18a27f, #08705a);\n      box-shadow: 0 5px 15px rgba(8, 120, 95, 0.22);\n    }\n\n    .profile-name {\n      margin: 0;\n      font-size: 21px;\n      font-weight: 700;\n    }\n\n    .verified {\n      display: inline-flex;\n      align-items: center;\n      gap: 5px;\n      margin-top: 7px;\n      padding: 5px 10px;\n      color: var(--primary);\n      font-size: 12px;\n      font-weight: 700;\n      background: var(--primary-soft);\n      border-radius: 999px;\n    }\n\n    .verified svg {\n      width: 14px;\n      height: 14px;\n    }\n\n    .details-card {\n      overflow: hidden;\n      background: var(--card);\n      border: 1px solid var(--border);\n      border-radius: 20px;\n      box-shadow: 0 8px 24px rgba(24, 63, 52, 0.05);\n    }\n\n    .detail-row {\n      display: grid;\n      grid-template-columns: 44px 1fr auto;\n      gap: 12px;\n      align-items: center;\n      min-height: 86px;\n      padding: 15px 16px;\n    }\n\n    .detail-row + .detail-row {\n      border-top: 1px solid var(--border);\n    }\n\n    .icon-box {\n      width: 44px;\n      height: 44px;\n      display: grid;\n      place-items: center;\n      color: var(--primary);\n      background: var(--primary-soft);\n      border-radius: 13px;\n    }\n\n    .icon-box svg {\n      width: 21px;\n      height: 21px;\n    }\n\n    .detail-content {\n      min-width: 0;\n    }\n\n    .detail-label {\n      display: block;\n      margin-bottom: 5px;\n      color: var(--muted);\n      font-size: 12px;\n      font-weight: 400;\n    }\n\n    .detail-value {\n      display: block;\n      overflow-wrap: anywhere;\n      font-size: 14px;\n      font-weight: 700;\n      line-height: 1.6;\n    }\n\n    .detail-value.ltr {\n      direction: ltr;\n      text-align: right;\n    }\n\n    .edit-button {\n      padding: 7px 12px;\n      border: 1px solid #c7e3db;\n      border-radius: 10px;\n      color: var(--primary);\n      font-family: inherit;\n      font-size: 13px;\n      font-weight: 700;\n      background: #fff;\n      cursor: pointer;\n    }\n\n    .edit-button:active {\n      background: var(--primary-soft);\n      transform: scale(0.97);\n    }\n\n    .security-note {\n      display: flex;\n      align-items: flex-start;\n      gap: 10px;\n      margin: 18px 2px 0;\n      padding: 14px;\n      color: #596560;\n      font-size: 12px;\n      line-height: 1.7;\n      background: #eef3f1;\n      border-radius: 14px;\n    }\n\n    .security-note svg {\n      flex: 0 0 auto;\n      width: 18px;\n      height: 18px;\n      margin-top: 2px;\n      color: var(--primary);\n    }\n\n    @media (max-width: 370px) {\n      .detail-row {\n        grid-template-columns: 40px 1fr auto;\n        gap: 9px;\n        padding-inline: 12px;\n      }\n\n      .icon-box {\n        width: 40px;\n        height: 40px;\n      }\n\n      .edit-button {\n        padding-inline: 9px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <header class=\"app-header\">\n    <button class=\"back-button\" type=\"button\" aria-label=\"رجوع\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n        <path d=\"M9 5l7 7-7 7\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      </svg>\n    </button>\n    <h1 class=\"header-title\">الملف الشخصي</h1>\n    <p class=\"header-subtitle\">إدارة معلوماتك وبياناتك الشخصية</p>\n  </header>\n\n  <main>\n    <section class=\"profile-card\" aria-label=\"بيانات الملف الشخصي\">\n      <div class=\"avatar\" aria-hidden=\"true\">ل م</div>\n      <h2 class=\"profile-name\">ليلى المنصوري</h2>\n      <span class=\"verified\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n          <path d=\"M12 2.5l2.2 1.7 2.8-.2 1 2.6 2.4 1.4-.8 2.7.8 2.7-2.4 1.4-1 2.6-2.8-.2L12 21.5l-2.2-1.7-2.8.2-1-2.6-2.4-1.4.8-2.7-.8-2.7L6 8.1l1-2.6 2.8.2L12 2.5z\" fill=\"currentColor\" opacity=\".15\"/>\n          <path d=\"M8.5 12l2.2 2.2 4.8-5\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n        </svg>\n        حساب موثّق\n      </span>\n    </section>\n\n    <section class=\"details-card\" aria-label=\"معلومات التواصل والحساب\">\n      <article class=\"detail-row\">\n        <div class=\"icon-box\" aria-hidden=\"true\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\">\n            <path d=\"M4 6.5h16v11H4z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"/>\n            <path d=\"M5 7l7 6 7-6\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n          </svg>\n        </div>\n        <div class=\"detail-content\">\n          <span class=\"detail-label\">البريد الإلكتروني</span>\n          <span class=\"detail-value ltr\" dir=\"ltr\">layla@example.com</span>\n        </div>\n        <button class=\"edit-button\" type=\"button\" aria-label=\"تعديل البريد الإلكتروني\">تعديل</button>\n      </article>\n\n      <article class=\"detail-row\">\n        <div class=\"icon-box\" aria-hidden=\"true\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\">\n            <path d=\"M7.2 3.5l2.1 4.1-1.8 1.8a14 14 0 007.1 7.1l1.8-1.8 4.1 2.1-.8 3.2c-.2.8-.9 1.3-1.7 1.3C9.6 21 3 14.4 2.7 6c0-.8.5-1.5 1.3-1.7l3.2-.8z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n          </svg>\n        </div>\n        <div class=\"detail-content\">\n          <span class=\"detail-label\">رقم الهاتف</span>\n          <span class=\"detail-value ltr\" dir=\"ltr\">+971 50 123 4567</span>\n        </div>\n        <button class=\"edit-button\" type=\"button\" aria-label=\"تعديل رقم الهاتف\">تعديل</button>\n      </article>\n\n      <article class=\"detail-row\">\n        <div class=\"icon-box\" aria-hidden=\"true\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\">\n            <rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2.5\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n            <path d=\"M7 9h4M7 13h7M15 9h2\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n            <path d=\"M3 9h18\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n          </svg>\n        </div>\n        <div class=\"detail-content\">\n          <span class=\"detail-label\">رقم الآيبان</span>\n          <span class=\"detail-value ltr\" dir=\"ltr\">AE07 0331 2345 6789 0123 456</span>\n        </div>\n        <button class=\"edit-button\" type=\"button\" aria-label=\"تعديل رقم الآيبان\">تعديل</button>\n      </article>\n    </section>\n\n    <div class=\"security-note\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n        <path d=\"M12 3l7 3v5c0 4.6-2.8 8.2-7 10-4.2-1.8-7-5.4-7-10V6l7-3z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"/>\n        <path d=\"M9.5 12l1.7 1.7 3.5-3.7\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      </svg>\n      <span>تُحفظ بياناتك بشكل آمن. تأكد من تحديث معلومات الاتصال عند تغيير أرقامك.</span>\n    </div>\n  </main>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 337,
+    "output": 3112
+  },
+  "ms": 17554,
+  "finish": "stop",
+  "reasoningTokens": 50,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 83,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 244.234375,
+        "y": 45,
+        "width": 92,
+        "height": 55
+      },
+      "message": "Arabic falls back from Tahoma, Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1 class=\"header-title\">الملف الشخصي</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 154.828125,
+        "y": 302,
+        "width": 61.34375,
+        "height": 14
+      },
+      "message": "\"حساب موثّق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"verified\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n          <path d=\"M12 2.5l2.2 1.7 2.8-.2 1 2.6 2.4 1.4-.8 2.7.8 2.7-2."
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 219.65625,
+        "y": 387.296875,
+        "width": 81.34375,
+        "height": 14
+      },
+      "message": "\"البريد الإلكتروني\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"detail-label\">البريد الإلكتروني</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 46,
+        "y": 400.5,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-button\" type=\"button\" aria-label=\"تعديل البريد الإلكتروني\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 245.65625,
+        "y": 473.796875,
+        "width": 55.34375,
+        "height": 14
+      },
+      "message": "\"رقم الهاتف\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"detail-label\">رقم الهاتف</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 46,
+        "y": 487,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-button\" type=\"button\" aria-label=\"تعديل رقم الهاتف\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 247.65625,
+        "y": 553,
+        "width": 53.34375,
+        "height": 14
+      },
+      "message": "\"رقم الآيبان\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"detail-label\">رقم الآيبان</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 46,
+        "y": 577.390625,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-button\" type=\"button\" aria-label=\"تعديل رقم الآيبان\">تعديل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 47.984375,
+        "y": 667.78125,
+        "width": 282.015625,
+        "height": 34.390625
+      },
+      "message": "\"تُحفظ بياناتك بشكل آمن. تأكد من تحديث مع…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>تُحفظ بياناتك بشكل آمن. تأكد من تحديث معلومات الاتصال عند تغيير أرقامك.</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 328,
+        "y": 20,
+        "width": 42,
+        "height": 42
+      },
+      "message": "right: 20px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<button class=\"back-button\" type=\"button\" aria-label=\"رجوع\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n        <path d=\"M9 5l7 7-7 7\" strok"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

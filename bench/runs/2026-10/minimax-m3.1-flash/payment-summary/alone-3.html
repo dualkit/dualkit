@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b806b">
+  <title>ملخص الدفع</title>
+  <style>
+    :root {
+      --primary: #0b806b;
+      --primary-dark: #086655;
+      --text: #172321;
+      --muted: #687572;
+      --border: #dce5e2;
+      --surface: #ffffff;
+      --background: #f5f8f7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--background);
+      color: var(--text);
+      font-family: Tahoma, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .phone {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      height: 72px;
+      display: grid;
+      grid-template-columns: 44px 1fr 44px;
+      align-items: center;
+      padding: 0 20px;
+      border-bottom: 1px solid #edf1f0;
+      background: rgba(255, 255, 255, 0.96);
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .back-button {
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 12px;
+      background: #f0f5f4;
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .back-button:active {
+      transform: scale(0.96);
+    }
+
+    .back-button svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .content {
+      flex: 1;
+      padding: 32px 24px 28px;
+    }
+
+    .summary-card {
+      text-align: center;
+      padding: 8px 0 26px;
+    }
+
+    .amount-label {
+      margin: 0 0 9px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .amount {
+      margin: 0;
+      direction: ltr;
+      font-size: 36px;
+      line-height: 1.25;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .amount span {
+      margin-left: 7px;
+      font-size: 20px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .due-date {
+      margin-top: 17px;
+      padding: 15px 16px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: #fbfcfc;
+    }
+
+    .due-date-label {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .gregorian-date {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .hijri-date {
+      margin: 5px 0 0;
+      color: var(--primary);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .items-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 24px;
+      padding: 16px;
+      border-radius: 15px;
+      background: #f0f6f4;
+    }
+
+    .items-icon {
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+      border-radius: 12px;
+      background: #dceee9;
+      color: var(--primary);
+      display: grid;
+      place-items: center;
+    }
+
+    .items-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .items-text {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .phone-field {
+      direction: ltr;
+      display: flex;
+      align-items: center;
+      height: 54px;
+      border: 1px solid #cfdad7;
+      border-radius: 14px;
+      background: #fff;
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .phone-field:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(11, 128, 107, 0.1);
+    }
+
+    .country-code {
+      height: 100%;
+      padding: 0 14px;
+      border-left: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #3c4b47;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .flag {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .phone-field input {
+      min-width: 0;
+      flex: 1;
+      height: 100%;
+      padding: 0 15px;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 16px;
+      text-align: left;
+    }
+
+    .hint {
+      margin: 8px 2px 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .footer {
+      padding: 18px 24px 24px;
+      border-top: 1px solid #edf1f0;
+      background: #fff;
+    }
+
+    .pay-button {
+      width: 100%;
+      min-height: 54px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--primary);
+      color: #fff;
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(11, 128, 107, 0.2);
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .pay-button:hover {
+      background: var(--primary-dark);
+    }
+
+    .pay-button:active {
+      transform: translateY(1px);
+    }
+
+    .secure-note {
+      margin: 11px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (min-width: 431px) {
+      .phone {
+        min-height: 100vh;
+        box-shadow: 0 0 28px rgba(20, 45, 39, 0.08);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <header class="header">
+      <button class="back-button" type="button" aria-label="رجوع">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1>ملخص الدفع</h1>
+      <span aria-hidden="true"></span>
+    </header>
+
+    <section class="content">
+      <div class="summary-card">
+        <p class="amount-label">المبلغ المستحق</p>
+        <p class="amount">1,234.50 <span>درهم</span></p>
+
+        <div class="due-date">
+          <p class="due-date-label">تاريخ الاستحقاق</p>
+          <p class="gregorian-date">3 نوفمبر 2026</p>
+          <p class="hijri-date">22 ربيع الأول 1448 هـ</p>
+        </div>
+      </div>
+
+      <div class="items-row">
+        <div class="items-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 7.5h16v12H4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <path d="M8 7.5V6a4 4 0 018 0v1.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <p class="items-text">يحتوي طلبك على 3 منتجات</p>
+      </div>
+
+      <form id="paymentForm">
+        <label class="field-label" for="phoneNumber">رقم الهاتف لإرسال الإيصال عبر الرسائل القصيرة</label>
+        <div class="phone-field">
+          <div class="country-code" aria-label="رمز دولة الإمارات العربية المتحدة">
+            <span class="flag" aria-hidden="true">🇦🇪</span>
+            <span>+971</span>
+          </div>
+          <input
+            id="phoneNumber"
+            name="phoneNumber"
+            type="tel"
+            inputmode="tel"
+            value="050 123 4567"
+            aria-describedby="phoneHint"
+            required
+          >
+        </div>
+        <p class="hint" id="phoneHint">سنرسل تفاصيل الدفع والإيصال إلى هذا الرقم.</p>
+      </form>
+    </section>
+
+    <footer class="footer">
+      <button class="pay-button" type="submit" form="paymentForm">ادفع الآن</button>
+      <p class="secure-note">ستتم عملية الدفع بشكل آمن ومشفّر</p>
+    </footer>
+  </main>
+</body>
+</html>

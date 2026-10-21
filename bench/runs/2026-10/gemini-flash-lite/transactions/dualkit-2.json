@@ -1,0 +1,153 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "transactions",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T16:58:02.493Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>المعاملات - محفظة عمان</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :lang(ar) {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.6;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      background-color: #0f172a;\n      min-height: 100vh;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      padding: 16px;\n    }\n\n    .phone-frame {\n      width: 100%;\n      max-width: 393px;\n      height: 852px;\n      background: #f8fafc;\n      border-radius: 48px;\n      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);\n      display: flex;\n      flex-direction: column;\n      overflow: hidden;\n      position: relative;\n      border: 8px solid #1e293b;\n    }\n\n    /* Status Bar */\n    .status-bar {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 16px 24px 8px;\n      font-size: 14px;\n      font-weight: 600;\n      color: #0f172a;\n      background: #ffffff;\n    }\n\n    /* App Header */\n    .app-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 16px 20px;\n      background: #ffffff;\n      border-bottom: 1px solid #e2e8f0;\n    }\n\n    .app-title {\n      font-size: 18px;\n      font-weight: 700;\n      color: #0f172a;\n    }\n\n    .icon-btn {\n      background: #f1f5f9;\n      border: none;\n      width: 40px;\n      height: 40px;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      cursor: pointer;\n      color: #475569;\n    }\n\n    /* Main Scrollable Area */\n    .content-area {\n      flex: 1;\n      overflow-y: auto;\n      padding: 20px;\n      display: flex;\n      flex-direction: column;\n      gap: 20px;\n    }\n\n    /* Balance Card */\n    .balance-card {\n      background: linear-gradient(135deg, #065f46 0%, #047857 100%);\n      color: #ffffff;\n      padding: 24px;\n      border-radius: 24px;\n      box-shadow: 0 10px 25px -5px rgba(6, 95, 70, 0.3);\n    }\n\n    .balance-label {\n      font-size: 14px;\n      opacity: 0.9;\n      margin-bottom: 6px;\n    }\n\n    .balance-amount {\n      font-size: 28px;\n      font-weight: 700;\n      margin-bottom: 16px;\n      font-variant-numeric: tabular-nums;\n    }\n\n    .balance-footer {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      font-size: 14px;\n      border-top: 1px solid rgba(255, 255, 255, 0.2);\n      padding-top: 12px;\n    }\n\n    /* Filter Section */\n    .filter-section {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n\n    .section-title {\n      font-size: 16px;\n      font-weight: 700;\n      color: #0f172a;\n    }\n\n    .filter-chip {\n      background: #ffffff;\n      border: 1px solid #cbd5e1;\n      padding: 6px 14px;\n      border-radius: 20px;\n      font-size: 14px;\n      color: #334155;\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      cursor: pointer;\n      font-weight: 500;\n      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);\n    }\n\n    /* Transactions List */\n    .transactions-list {\n      display: flex;\n      flex-direction: column;\n      gap: 12px;\n      padding-bottom: 20px;\n    }\n\n    .tx-item {\n      background: #ffffff;\n      padding: 14px 16px;\n      border-radius: 16px;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);\n      border: 1px solid #f1f5f9;\n    }\n\n    .tx-left {\n      display: flex;\n      align-items: center;\n      gap: 14px;\n    }\n\n    .tx-icon {\n      width: 44px;\n      height: 44px;\n      border-radius: 12px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-size: 18px;\n      flex-shrink: 0;\n    }\n\n    .tx-icon.out {\n      background: #fef2f2;\n      color: #dc2626;\n    }\n\n    .tx-icon.in {\n      background: #f0fdf4;\n      color: #16a34a;\n    }\n\n    .tx-details {\n      display: flex;\n      flex-direction: column;\n      gap: 2px;\n    }\n\n    .tx-merchant {\n      font-size: 14px;\n      font-weight: 600;\n      color: #0f172a;\n    }\n\n    .tx-date {\n      font-size: 14px;\n      color: #64748b;\n    }\n\n    .tx-amount-wrapper {\n      text-align: end;\n    }\n\n    .tx-amount {\n      font-size: 15px;\n      font-weight: 700;\n      font-variant-numeric: tabular-nums;\n    }\n\n    .tx-amount.out {\n      color: #dc2626;\n    }\n\n    .tx-amount.in {\n      color: #16a34a;\n    }\n\n    .tx-status {\n      font-size: 14px;\n      color: #94a3b8;\n    }\n\n    /* Bottom Navigation Bar */\n    .bottom-nav {\n      background: #ffffff;\n      border-top: 1px solid #e2e8f0;\n      display: flex;\n      justify-content: space-around;\n      padding: 12px 0 24px;\n    }\n\n    .nav-item {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      gap: 4px;\n      text-decoration: none;\n      color: #94a3b8;\n      font-size: 14px;\n      font-weight: 500;\n    }\n\n    .nav-item.active {\n      color: #059669;\n    }\n\n    .nav-item svg {\n      width: 24px;\n      height: 24px;\n    }\n  </style>\n</head>\n<body>\n\n  <div class=\"phone-frame\">\n    <!-- Status Bar -->\n    <div class=\"status-bar\">\n      <span>٩:٤١</span>\n      <div style=\"display: flex; gap: 6px; align-items: center;\">\n        <span>٥G</span>\n        <span>100%</span>\n      </div>\n    </div>\n\n    <!-- App Header -->\n    <header class=\"app-header\">\n      <h1 class=\"app-title\">المعاملات</h1>\n      <button class=\"icon-btn\" aria-label=\"البحث\">\n        <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg>\n      </button>\n    </header>\n\n    <!-- Content Area -->\n    <div class=\"content-area\">\n      <!-- Balance Card -->\n      <div class=\"balance-card\">\n        <div class=\"balance-label\">الرصيد المتاح</div>\n        <div class=\"balance-amount\"><bdi dir=\"ltr\">1,450.750</bdi> ر.ع.</div>\n        <div class=\"balance-footer\">\n          <span>رقم الحساب: <bdi dir=\"ltr\">OM83 3000 ... 4012</bdi></span>\n          <span>عمانتل</span>\n        </div>\n      </div>\n\n      <!-- Filter Section -->\n      <div class=\"filter-section\">\n        <h2 class=\"section-title\">سجل الحركات</h2>\n        <button class=\"filter-chip\">\n          <span>هذا الشهر</span>\n          <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m6 9 6 6 6-6\"/></svg>\n        </button>\n      </div>\n\n      <!-- Transactions List (8 items) -->\n      <div class=\"transactions-list\">\n        \n        <!-- 1 -->\n        <div class=\"tx-item\">\n          <div class=\"tx-left\">\n            <div class=\"tx-icon out\">🛒</div>\n            <div class=\"tx-details\">\n              <span class=\"tx-merchant\"><bdi dir=\"ltr\">Lulu Hypermarket</bdi></span>\n              <span class=\"tx-date\">٢٨ أكتوبر ٢٠٢٣</span>\n            </div>\n          </div>\n          <div class=\"tx-amount-wrapper\">\n            <div class=\"tx-amount out\">-<bdi dir=\"ltr\">45.200</bdi> ر.ع.</div>\n            <span class=\"tx-status\">مكتملة</span>\n          </div>\n        </div>\n\n        <!-- 2 -->\n        <div class=\"tx-item\">\n          <div class=\"tx-left\">\n            <div class=\"tx-icon out\">🎬</div>\n            <div class=\"tx-details\">\n              <span class=\"tx-merchant\"><bdi dir=\"ltr\">Netflix</bdi></span>\n              <span class=\"tx-date\">٢٧ أكتوبر ٢٠٢٣</span>\n            </div>\n          </div>\n          <div class=\"tx-amount-wrapper\">\n            <div class=\"tx-amount out\">-<bdi dir=\"ltr\">4.500</bdi> ر.ع.</div>\n            <span class=\"tx-status\">مكتملة</span>\n          </div>\n        </div>\n\n        <!-- 3 -->\n        <div class=\"tx-item\">\n          <div class=\"tx-left\">\n            <div class=\"tx-icon in\">📥</div>\n            <div class=\"tx-details\">\n              <span class=\"tx-merchant\">تحويل من صالح بن محمد</span>\n              <span class=\"tx-date\">٢٥ أكتوبر ٢٠٢٣</span>\n            </div>\n          </div>\n          <div class=\"tx-amount-wrapper\">\n            <div class=\"tx-amount in\">+<bdi dir=\"ltr\">120.000</bdi> ر.ع.</div>\n            <span class=\"tx-status\">مكتملة</span>\n          </div>\n        </div>\n\n        <!-- 4 -->\n        <div class=\"tx-item\">\n          <div class=\"tx-left\">\n            <div class=\"tx-icon out\">⛽</div>\n            <div class=\"tx-details\">\n              <span class=\"tx-merchant\"><bdi dir=\"ltr\">Shell Oman</bdi></span>\n              <span class=\"tx-date\">٢٤ أكتوبر ٢٠٢٣</span>\n            </div>\n          </div>\n          <div class=\"tx-amount-wrapper\">\n            <div class=\"tx-amount out\">-<bdi dir=\"ltr\">15.000</bdi> ر.ع.</div>\n            <span class=\"tx-status\">مكتملة</span>\n          </div>\n        </div>\n\n        <!-- 5 -->\n        <div class=\"tx-item\">\n          <div class=\"tx-left\">\n            <div class=\"tx-icon in\">💼</div>\n            <div class=\"tx-details\">\n              <span class=\"tx-merchant\"><bdi dir=\"ltr\">Oman Arab Bank</bdi> (راتب)</span>\n              <span class=\"tx-date\">٢٤ أكتوبر ٢٠٢٣</span>\n            </div>\n          </div>\n          <div class=\"tx-amount-wrapper\">\n            <div class=\"tx-amount in\">+<bdi dir=\"ltr\">850.000</bdi> ر.ع.</div>\n            <span class=\"tx-status\">مكتملة</span>\n          </div>\n        </div>\n\n        <!-- 6 -->\n        <div class=\"tx-item\">\n          <div class=\"tx-left\">\n            <div class=\"tx-icon out\">☕</div>\n            <div class=\"tx-details\">\n              <span class=\"tx-merchant\"><bdi dir=\"ltr\">Starbucks</bdi></span>\n              <span class=\"tx-date\">٢٢ أكتوبر ٢٠٢٣</span>\n            </div>\n          </div>\n          <div class=\"tx-amount-wrapper\">\n            <div class=\"tx-amount out\">-<bdi dir=\"ltr\">2.350</bdi> ر.ع.</div>\n            <span class=\"tx-status\">مكتملة</span>\n          </div>\n        </div>\n\n        <!-- 7 -->\n        <div class=\"tx-item\">\n          <div class=\"tx-left\">\n            <div class=\"tx-icon out\">🍽️</div>\n            <div class=\"tx-details\">\n              <span class=\"tx-merchant\">مطعم المائدة العمانية</span>\n              <span class=\"tx-date\">٢٠ أكتوبر ٢٠٢٣</span>\n            </div>\n          </div>\n          <div class=\"tx-amount-wrapper\">\n            <div class=\"tx-amount out\">-<bdi dir=\"ltr\">18.600</bdi> ر.ع.</div>\n            <span class=\"tx-status\">مكتملة</span>\n          </div>\n        </div>\n\n        <!-- 8 -->\n        <div class=\"tx-item\">\n          <div class=\"tx-left\">\n            <div class=\"tx-icon out\">📱</div>\n            <div class=\"tx-details\">\n              <span class=\"tx-merchant\"><bdi dir=\"ltr\">Omantel</bdi></span>\n              <span class=\"tx-date\">١٩ أكتوبر ٢٠٢٣</span>\n            </div>\n          </div>\n          <div class=\"tx-amount-wrapper\">\n            <div class=\"tx-amount out\">-<bdi dir=\"ltr\">12.000</bdi> ر.ع.</div>\n            <span class=\"tx-status\">مكتملة</span>\n          </div>\n        </div>\n\n      </div>\n    </div>\n\n    <!-- Bottom Navigation Bar -->\n    <nav class=\"bottom-nav\">\n      <a href=\"#\" class=\"nav-item\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/><polyline points=\"9 22 9 12 15 12 15 22\"/></svg>\n        <span>الرئيسية</span>\n      </a>\n      <a href=\"#\" class=\"nav-item active\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"/><polyline points=\"14 2 14 8 20 8\"/><line x1=\"16\" y1=\"13\" x2=\"8\" y2=\"13\"/><line x1=\"16\" y1=\"17\" x2=\"8\" y2=\"17\"/><polyline points=\"10 9 9 9 8 9\"/></svg>\n        <span>المعاملات</span>\n      </a>\n      <a href=\"#\" class=\"nav-item\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"1\" y=\"4\" width=\"22\" height=\"16\" rx=\"2\" ry=\"2\"/><line x1=\"1\" y1=\"10\" x2=\"23\" y2=\"10\"/></svg>\n        <span>البطاقات</span>\n      </a>\n      <a href=\"#\" class=\"nav-item\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\"/><circle cx=\"12\" cy=\"7\" r=\"4\"/></svg>\n        <span>حسابي</span>\n      </a>\n    </nav>\n  </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6496,
+    "output": 4627
+  },
+  "ms": 17595,
+  "finish": "STOP",
+  "reasoningTokens": 2374,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 84,
+  "missing": [
+    "eight rows"
+  ],
+  "findings": [
+    {
+      "rule": "bidi/punctuation-flip",
+      "title": "Punctuation at the wrong end",
+      "severity": "warning",
+      "box": {
+        "x": 237,
+        "y": 842.328125,
+        "width": 34,
+        "height": 21
+      },
+      "message": "\"Oman Arab Bank (راتب)\" runs right to left, so its last mark moves to the start.",
+      "fix": "Give the block the direction of its own text, with dir=\"ltr\", dir=\"rtl\" or dir=\"auto\".",
+      "snippet": "<span class=\"tx-merchant\"><bdi dir=\"ltr\">Oman Arab Bank</bdi> (راتب)</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 196,
+        "y": 453.15625,
+        "width": 75,
+        "height": 21
+      },
+      "message": "\"٢٨ أكتوبر ٢٠٢٣\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"tx-date\">٢٨ أكتوبر ٢٠٢٣</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 196,
+        "y": 544.75,
+        "width": 75,
+        "height": 21
+      },
+      "message": "\"٢٧ أكتوبر ٢٠٢٣\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"tx-date\">٢٧ أكتوبر ٢٠٢٣</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 196,
+        "y": 659.53125,
+        "width": 75,
+        "height": 21
+      },
+      "message": "\"٢٥ أكتوبر ٢٠٢٣\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"tx-date\">٢٥ أكتوبر ٢٠٢٣</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 196,
+        "y": 751.9375,
+        "width": 75,
+        "height": 21
+      },
+      "message": "\"٢٤ أكتوبر ٢٠٢٣\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"tx-date\">٢٤ أكتوبر ٢٠٢٣</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 196,
+        "y": 866.71875,
+        "width": 75,
+        "height": 21
+      },
+      "message": "\"٢٤ أكتوبر ٢٠٢٣\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"tx-date\">٢٤ أكتوبر ٢٠٢٣</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 196,
+        "y": 959.125,
+        "width": 75,
+        "height": 21
+      },
+      "message": "\"٢٢ أكتوبر ٢٠٢٣\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"tx-date\">٢٢ أكتوبر ٢٠٢٣</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 199,
+        "y": 1050.71875,
+        "width": 72,
+        "height": 21
+      },
+      "message": "\"٢٠ أكتوبر ٢٠٢٣\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"tx-date\">٢٠ أكتوبر ٢٠٢٣</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 199,
+        "y": 1142.3125,
+        "width": 72,
+        "height": 21
+      },
+      "message": "\"١٩ أكتوبر ٢٠٢٣\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"tx-date\">١٩ أكتوبر ٢٠٢٣</span>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 884
+}

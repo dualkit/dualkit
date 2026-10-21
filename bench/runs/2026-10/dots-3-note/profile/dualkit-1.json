@@ -1,0 +1,81 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "profile",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-10-21T17:12:21.012Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no\">\n<title>الملف الشخصي</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n<style>\n  :root {\n    --bg: #f4f5f7;\n    --surface: #ffffff;\n    --primary: #0b7a6b;\n    --primary-soft: #e7f3f1;\n    --text: #1c2733;\n    --text-muted: #6b7280;\n    --border: #eceef1;\n    --danger: #c0392b;\n  }\n\n  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }\n\n  body {\n    margin: 0;\n    font-family: 'Inter', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;\n    background: var(--bg);\n    color: var(--text);\n    display: flex;\n    justify-content: center;\n    align-items: flex-start;\n    min-height: 100vh;\n  }\n\n  .screen {\n    width: 100%;\n    max-width: 412px;\n    background: var(--bg);\n    min-height: 100vh;\n    display: flex;\n    flex-direction: column;\n    box-shadow: 0 0 0 1px rgba(0,0,0,0.04), 0 24px 48px rgba(0,0,0,0.08);\n  }\n\n  /* Arabic type tokens */\n  :lang(ar) {\n    --type-label-size: 14px;\n    --type-caption-size: 14px;\n    --type-body-size: 16px;\n    letter-spacing: 0;\n    text-transform: none;\n    font-style: normal;\n    line-height: 1.7;\n  }\n\n  /* Top bar */\n  .topbar {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding-inline: 18px;\n    padding-block: 14px;\n    background: var(--surface);\n    border-block-start: 1px solid var(--border);\n  }\n  .topbar-title {\n    font-size: 18px;\n    font-weight: 600;\n    color: var(--text);\n  }\n  .icon-btn {\n    background: none;\n    border: none;\n    cursor: pointer;\n    color: var(--text);\n    padding: 6px;\n    border-radius: 8px;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n  }\n  .icon-btn:active { background: var(--bg); }\n  .back-arrow { transform: none; }\n  :dir(rtl) .back-arrow { transform: scaleX(-1); }\n\n  /* Profile header */\n  .profile {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    padding: 28px 18px 22px;\n    background: var(--surface);\n    border-block-end: 1px solid var(--border);\n  }\n  .avatar {\n    width: 80px;\n    height: 80px;\n    border-radius: 50%;\n    background: var(--primary-soft);\n    color: var(--primary);\n    font-size: 30px;\n    font-weight: 600;\n    display: inline-flex;\n    align-items: center;\n    justify-content: center;\n    margin-inline-end: auto;\n    margin-inline-start: auto;\n    margin-block-end: 14px;\n  }\n  .profile-name {\n    font-size: 20px;\n    font-weight: 600;\n    margin: 0 0 4px;\n  }\n  .profile-role {\n    font-size: 14px;\n    color: var(--text-muted);\n    margin: 0;\n  }\n\n  /* Info list */\n  .info {\n    flex: 1;\n    padding: 18px;\n    display: flex;\n    flex-direction: column;\n    gap: 12px;\n  }\n  .field {\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: 14px;\n    padding: 16px 18px;\n    display: flex;\n    flex-direction: column;\n    gap: 10px;\n  }\n  .field-head {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n  }\n  .field-label {\n    font-size: 13px;\n    font-weight: 500;\n    color: var(--text-muted);\n  }\n  .edit-btn {\n    background: none;\n    border: none;\n    cursor: pointer;\n    color: var(--primary);\n    font-size: 14px;\n    font-weight: 600;\n    font-family: inherit;\n    padding: 4px 8px;\n    border-radius: 8px;\n    display: inline-flex;\n    align-items: center;\n    gap: 4px;\n  }\n  .edit-btn:active { background: var(--primary-soft); }\n  .field-value {\n    font-size: 16px;\n    font-weight: 500;\n    color: var(--text);\n    word-break: break-all;\n  }\n\n  /* Bottom action */\n  .footer {\n    padding: 14px 18px 26px;\n  }\n  .logout-btn {\n    width: 100%;\n    background: var(--surface);\n    border: 1px solid var(--border);\n    color: var(--danger);\n    font-size: 16px;\n    font-weight: 600;\n    font-family: inherit;\n    padding-block: 14px;\n    border-radius: 12px;\n    cursor: pointer;\n  }\n  .logout-btn:active { background: #fdecea; }\n</style>\n</head>\n<body>\n\n<div class=\"screen\" dir=\"rtl\" lang=\"ar\">\n\n  <header class=\"topbar\">\n    <button class=\"icon-btn back-arrow\" aria-label=\"السابق\">\n      <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M15 18l-6-6 6-6\"/></svg>\n    </button>\n    <h1 class=\"topbar-title\">الملف الشخصي</h1>\n    <span style=\"width:32px\"></span>\n  </header>\n\n  <section class=\"profile\">\n    <div class=\"avatar\">ل</div>\n    <h2 class=\"profile-name\">لينا المنصوري</h2>\n    <p class=\"profile-role\">عميل مُسجّل</p>\n  </section>\n\n  <div class=\"info\">\n\n    <div class=\"field\">\n      <div class=\"field-head\">\n        <span class=\"field-label\">الاسم</span>\n        <button class=\"edit-btn\">تعديل</button>\n      </div>\n      <div class=\"field-value\">لينا المنصوري</div>\n    </div>\n\n    <div class=\"field\">\n      <div class=\"field-head\">\n        <span class=\"field-label\">البريد الإلكتروني</span>\n        <button class=\"edit-btn\">تعديل</button>\n      </div>\n      <div class=\"field-value\"><bdi dir=\"ltr\">layla@example.com</bdi></div>\n    </div>\n\n    <div class=\"field\">\n      <div class=\"field-head\">\n        <span class=\"field-label\">رقم الهاتف</span>\n        <button class=\"edit-btn\">تعديل</button>\n      </div>\n      <div class=\"field-value\"><bdi dir=\"ltr\">+971 50 123 4567</bdi></div>\n    </div>\n\n    <div class=\"field\">\n      <div class=\"field-head\">\n        <span class=\"field-label\">رقم IBAN</span>\n        <button class=\"edit-btn\">تعديل</button>\n      </div>\n      <div class=\"field-value\"><bdi dir=\"ltr\">AE07 0331 2345 6789 0123 456</bdi></div>\n    </div>\n\n  </div>\n\n  <div class=\"footer\">\n    <button class=\"logout-btn\">تسجيل الخروج</button>\n  </div>\n\n</div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6319,
+    "output": 9063
+  },
+  "ms": 94468,
+  "finish": "stop",
+  "reasoningTokens": 6900,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 88,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 323,
+        "y": 333.328125,
+        "width": 30,
+        "height": 16
+      },
+      "message": "\"الاسم\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"field-label\">الاسم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 270,
+        "y": 448.3125,
+        "width": 83,
+        "height": 16
+      },
+      "message": "\"البريد الإلكتروني\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"field-label\">البريد الإلكتروني</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 295,
+        "y": 563.296875,
+        "width": 58,
+        "height": 16
+      },
+      "message": "\"رقم الهاتف\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"field-label\">رقم الهاتف</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 299,
+        "y": 678.28125,
+        "width": 54,
+        "height": 16
+      },
+      "message": "\"رقم IBAN\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"field-label\">رقم IBAN</span>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 872
+}

@@ -1,0 +1,431 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "profile",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T16:47:57.497Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>الملف الشخصي - تطبيق الدفع</title>\n    <!-- Tailwind CSS CDN -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Fonts - Cairo -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap\" rel=\"stylesheet\">\n    <!-- Font Awesome Icons -->\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">\n    <script>\n        tailwind.config = {\n            theme: {\n                extend: {\n                    fontFamily: {\n                        cairo: ['Cairo', 'sans-serif'],\n                    },\n                    colors: {\n                        uaeGreen: '#00732F',\n                        appBg: '#F8FAFC',\n                    }\n                }\n            }\n        }\n    </script>\n</head>\n<body class=\"bg-slate-900 flex justify-center items-center min-h-screen font-cairo p-4\">\n\n    <!-- Phone Frame -->\n    <div class=\"w-[390px] h-[844px] bg-appBg rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative border-[8px] border-slate-800\">\n        \n        <!-- Status Bar -->\n        <div class=\"bg-white px-6 pt-3 pb-2 flex justify-between items-center text-xs text-slate-800 font-semibold select-none\">\n            <span>9:41</span>\n            <div class=\"flex items-center space-x-2 space-x-reverse\">\n                <i class=\"fa-solid fa-signal\"></i>\n                <i class=\"fa-solid fa-wifi\"></i>\n                <i class=\"fa-solid fa-battery-full text-uaeGreen\"></i>\n            </div>\n        </div>\n\n        <!-- App Header -->\n        <div class=\"bg-white px-6 py-4 flex items-center justify-between border-b border-slate-100\">\n            <button class=\"w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-slate-100 transition\">\n                <i class=\"fa-solid fa-arrow-right\"></i>\n            </button>\n            <h1 class=\"text-lg font-bold text-slate-800\">الملف الشخصي</h1>\n            <div class=\"w-10\"></div> <!-- Spacer -->\n        </div>\n\n        <!-- Scrollable Content -->\n        <div class=\"flex-1 overflow-y-auto px-6 py-6 space-y-6\">\n\n            <!-- Profile Card -->\n            <div class=\"bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center relative\">\n                <div class=\"absolute top-4 left-4 bg-emerald-50 text-uaeGreen text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1\">\n                    <i class=\"fa-solid fa-shield-check\"></i> حساب موثق\n                </div>\n                <div class=\"relative mb-3\">\n                    <div class=\"w-24 h-24 rounded-full bg-gradient-to-tr from-uaeGreen to-emerald-400 flex items-center text-white justify-center text-3xl font-bold shadow-md\">\n                        ل.م\n                    </div>\n                    <button class=\"absolute bottom-0 right-0 bg-slate-900 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs border-2 border-white shadow\">\n                        <i class=\"fa-solid fa-camera\"></i>\n                    </button>\n                </div>\n                <h2 class=\"text-xl font-bold text-slate-800\">ليلى المنصوري</h2>\n                <p class=\"text-sm text-slate-500 mt-0.5\">layla@example.com</p>\n            </div>\n\n            <!-- Account Details Section -->\n            <div class=\"space-y-3\">\n                <h3 class=\"text-xs font-bold text-slate-400 uppercase tracking-wider px-1\">معلومات الحساب</h3>\n\n                <!-- Email Field -->\n                <div class=\"bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-lg bg-slate-50 text-slate-600 flex items-center justify-center\">\n                            <i class=\"fa-regular fa-envelope\"></i>\n                        </div>\n                        <div>\n                            <span class=\"text-xs text-slate-400 block\">البريد الإلكتروني</span>\n                            <span class=\"text-sm font-semibold text-slate-800\" dir=\"ltr\">layla@example.com</span>\n                        </div>\n                    </div>\n                    <button class=\"text-uaeGreen text-xs font-bold bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition flex items-center gap-1\">\n                        <i class=\"fa-solid fa-pen text-[10px]\"></i> تعديل\n                    </button>\n                </div>\n\n                <!-- Phone Field -->\n                <div class=\"bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-lg bg-slate-50 text-slate-600 flex items-center justify-center\">\n                            <i class=\"fa-solid fa-phone\"></i>\n                        </div>\n                        <div>\n                            <span class=\"text-xs text-slate-400 block\">رقم الهاتف المتحرك</span>\n                            <span class=\"text-sm font-semibold text-slate-800\" dir=\"ltr\">+971 50 123 4567</span>\n                        </div>\n                    </div>\n                    <button class=\"text-uaeGreen text-xs font-bold bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition flex items-center gap-1\">\n                        <i class=\"fa-solid fa-pen text-[10px]\"></i> تعديل\n                    </button>\n                </div>\n\n                <!-- IBAN Field -->\n                <div class=\"bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-lg bg-slate-50 text-slate-600 flex items-center justify-center\">\n                            <i class=\"fa-solid fa-building-columns\"></i>\n                        </div>\n                        <div>\n                            <span class=\"text-xs text-slate-400 block\">رقم الحساب المصرفي الدولي (IBAN)</span>\n                            <span class=\"text-sm font-semibold text-slate-800 font-mono tracking-tight\" dir=\"ltr\">AE07 0331 2345 6789 0123 456</span>\n                        </div>\n                    </div>\n                    <button class=\"text-uaeGreen text-xs font-bold bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition flex items-center gap-1 shrink-0\">\n                        <i class=\"fa-solid fa-pen text-[10px]\"></i> تعديل\n                    </button>\n                </div>\n\n            </div>\n\n            <!-- Additional Settings / Security -->\n            <div class=\"space-y-3\">\n                <h3 class=\"text-xs font-bold text-slate-400 uppercase tracking-wider px-1\">الأمان والخصوصية</h3>\n                <div class=\"bg-white rounded-xl shadow-sm border border-slate-100 divide-y divide-slate-100\">\n                    <div class=\"p-4 flex items-center justify-between\">\n                        <div class=\"flex items-center space-x-3 space-x-reverse text-slate-700\">\n                            <i class=\"fa-solid fa-lock text-slate-400 w-5\"></i>\n                            <span class=\"text-sm font-medium\">تغيير رمز المرور</span>\n                        </div>\n                        <i class=\"fa-solid fa-chevron-left text-xs text-slate-400\"></i>\n                    </div>\n                    <div class=\"p-4 flex items-center justify-between\">\n                        <div class=\"flex items-center space-x-3 space-x-reverse text-slate-700\">\n                            <i class=\"fa-solid fa-fingerprint text-slate-400 w-5\"></i>\n                            <span class=\"text-sm font-medium\">المصادقة البيومترية (Face ID)</span>\n                        </div>\n                        <div class=\"w-11 h-6 bg-uaeGreen rounded-full relative p-0.5 cursor-pointer\">\n                            <div class=\"w-5 h-5 bg-white rounded-full shadow-md transform -translate-x-5 transition\"></div>\n                        </div>\n                    </div>\n                </div>\n            </div>\n\n            <!-- Logout Button -->\n            <button class=\"w-full py-3 px-4 rounded-xl border border-rose-100 bg-rose-50/50 text-rose-600 font-semibold text-sm hover:bg-rose-100/50 transition flex items-center justify-center gap-2\">\n                <i class=\"fa-solid fa-arrow-right-from-bracket\"></i> تسجيل الخروج\n            </button>\n\n        </div>\n\n        <!-- Bottom Navigation Bar -->\n        <div class=\"bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center text-slate-400\">\n            <button class=\"flex flex-col items-center gap-1 hover:text-uaeGreen transition\">\n                <i class=\"fa-solid fa-house text-lg\"></i>\n                <span class=\"text-[10px]\">الرئيسية</span>\n            </button>\n            <button class=\"flex flex-col items-center gap-1 hover:text-uaeGreen transition\">\n                <i class=\"fa-solid fa-arrow-right-arrow-left text-lg\"></i>\n                <span class=\"text-[10px]\">التحويلات</span>\n            </button>\n            <button class=\"flex flex-col items-center gap-1 hover:text-uaeGreen transition\">\n                <i class=\"fa-solid fa-wallet text-lg\"></i>\n                <span class=\"text-[10px]\">المحافظ</span>\n            </button>\n            <button class=\"flex flex-col items-center gap-1 text-uaeGreen font-bold\">\n                <i class=\"fa-solid fa-user text-lg\"></i>\n                <span class=\"text-[10px]\">حسابي</span>\n            </button>\n        </div>\n\n        <!-- Home Indicator -->\n        <div class=\"bg-white pb-2 flex justify-center\">\n            <div class=\"w-32 h-1 bg-slate-300 rounded-full\"></div>\n        </div>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 167,
+    "output": 2773
+  },
+  "ms": 9669,
+  "finish": "STOP",
+  "reasoningTokens": 532,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 25,
+  "score": 47,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 246,
+        "y": 385,
+        "width": 92,
+        "height": 23
+      },
+      "message": "0.6px letter-spacing on \"معلومات الحساب\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<h3 class=\"text-xs font-bold text-slate-400 uppercase tracking-wider px-1\">معلومات الحساب</h3>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 241,
+        "y": 723,
+        "width": 97,
+        "height": 23
+      },
+      "message": "0.6px letter-spacing on \"الأمان والخصوصية\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<h3 class=\"text-xs font-bold text-slate-400 uppercase tracking-wider px-1\">الأمان والخصوصية</h3>"
+    },
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 315,
+        "y": 88,
+        "width": 14,
+        "height": 16
+      },
+      "message": "\"arrow-right\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-arrow-right\"></i>"
+    },
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 65,
+        "y": 774,
+        "width": 8,
+        "height": 16
+      },
+      "message": "\"chevron-left\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-chevron-left text-xs text-slate-400\"></i>"
+    },
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 232,
+        "y": 906,
+        "width": 14,
+        "height": 14
+      },
+      "message": "\"arrow-right-from-bracket\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-arrow-right-from-bracket\"></i>"
+    },
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 229.5,
+        "y": 781,
+        "width": 16,
+        "height": 28
+      },
+      "message": "\"arrow-right-arrow-left\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-arrow-right-arrow-left text-lg\"></i>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 149.171875,
+        "y": 602,
+        "width": 137,
+        "height": 39
+      },
+      "message": "Line height is 1.33 on \"رقم الحساب المصرفي الدولي (IBAN)\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<span class=\"text-xs text-slate-400 block\">رقم الحساب المصرفي الدولي (IBAN)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 75,
+        "y": 174,
+        "width": 65,
+        "height": 23
+      },
+      "message": "\"حساب موثق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"absolute top-4 left-4 bg-emerald-50 text-uaeGreen text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1\">\n                    <i cl"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 246,
+        "y": 385,
+        "width": 92,
+        "height": 23
+      },
+      "message": "\"معلومات الحساب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<h3 class=\"text-xs font-bold text-slate-400 uppercase tracking-wider px-1\">معلومات الحساب</h3>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 197,
+        "y": 430,
+        "width": 76,
+        "height": 23
+      },
+      "message": "\"البريد الإلكتروني\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block\">البريد الإلكتروني</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 77,
+        "y": 442,
+        "width": 32,
+        "height": 23
+      },
+      "message": "\"تعديل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"text-uaeGreen text-xs font-bold bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition flex items-center gap-1\">\n                  "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 177,
+        "y": 516,
+        "width": 96,
+        "height": 23
+      },
+      "message": "\"رقم الهاتف المتحرك\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block\">رقم الهاتف المتحرك</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 77,
+        "y": 528,
+        "width": 32,
+        "height": 23
+      },
+      "message": "\"تعديل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"text-uaeGreen text-xs font-bold bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition flex items-center gap-1\">\n                  "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 149.171875,
+        "y": 602,
+        "width": 137,
+        "height": 39
+      },
+      "message": "\"رقم الحساب المصرفي الدولي (IBAN)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block\">رقم الحساب المصرفي الدولي (IBAN)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 77,
+        "y": 634,
+        "width": 32,
+        "height": 23
+      },
+      "message": "\"تعديل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"text-uaeGreen text-xs font-bold bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition flex items-center gap-1 shrink-0\">\n         "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 241,
+        "y": 723,
+        "width": 97,
+        "height": 23
+      },
+      "message": "\"الأمان والخصوصية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<h3 class=\"text-xs font-bold text-slate-400 uppercase tracking-wider px-1\">الأمان والخصوصية</h3>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 309,
+        "y": 811,
+        "width": 33,
+        "height": 19
+      },
+      "message": "\"الرئيسية\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px]\">الرئيسية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 218,
+        "y": 811,
+        "width": 39,
+        "height": 19
+      },
+      "message": "\"التحويلات\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px]\">التحويلات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 130,
+        "y": 811,
+        "width": 36,
+        "height": 19
+      },
+      "message": "\"المحافظ\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px]\">المحافظ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 48,
+        "y": 811,
+        "width": 30,
+        "height": 19
+      },
+      "message": "\"حسابي\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px]\">حسابي</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 65,
+        "y": 174,
+        "width": 89,
+        "height": 24
+      },
+      "message": "left: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"absolute top-4 left-4 bg-emerald-50 text-uaeGreen text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1\">\n                    <i cl"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 215,
+        "y": 250,
+        "width": 28,
+        "height": 28
+      },
+      "message": "right: 0px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<button class=\"absolute bottom-0 right-0 bg-slate-900 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs border-2 border-white shadow\">\n  "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 70,
+        "y": 38,
+        "width": 15,
+        "height": 12
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<i class=\"fa-solid fa-wifi\"></i>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 48,
+        "y": 38,
+        "width": 14,
+        "height": 12
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<i class=\"fa-solid fa-battery-full text-uaeGreen\"></i>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 155,
+        "y": 434,
+        "width": 118,
+        "height": 40
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <span class=\"text-xs text-slate-400 block\">البريد الإلكتروني</span>\n                            <span class=\"text-sm font-semi"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 160,
+        "y": 520,
+        "width": 113,
+        "height": 40
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <span class=\"text-xs text-slate-400 block\">رقم الهاتف المتحرك</span>\n                            <span class=\"text-sm font-sem"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 135,
+        "y": 606,
+        "width": 151.171875,
+        "height": 80
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <span class=\"text-xs text-slate-400 block\">رقم الحساب المصرفي الدولي (IBAN)</span>\n                            <span class=\"te"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 212,
+        "y": 772,
+        "width": 81,
+        "height": 20
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"text-sm font-medium\">تغيير رمز المرور</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 126,
+        "y": 827,
+        "width": 167,
+        "height": 20
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"text-sm font-medium\">المصادقة البيومترية (Face ID)</span>"
+    }
+  ],
+  "unreadableStylesheets": 2,
+  "pageHeight": 876
+}

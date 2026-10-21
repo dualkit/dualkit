@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>إدخال الرمز</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #1a1a1a;
+      --muted: #6b7280;
+      --primary: #0d6efd;
+      --border: #d1d5db;
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .phone {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .code-inputs {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .code-inputs input {
+      width: 100%;
+      height: 48px;
+      font-size: 18px;
+      text-align: center;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+      direction: ltr;
+      inputMode: numeric;
+    }
+
+    .countdown {
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .verify-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--primary);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .verify-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1 class="title">أدخل الرمز</h1>
+    <p class="subtitle">
+      أرسلنا رمزًا مكوّنًا من 6 أرقام إلى <bdi dir="ltr" class="phone">+966 55 123 4567</bdi>
+    </p>
+
+    <div class="code-inputs">
+      <input type="text" inputmode="numeric" maxlength="1" />
+      <input type="text" inputmode="numeric" maxlength="1" />
+      <input type="text" inputmode="numeric" maxlength="1" />
+      <input type="text" inputmode="numeric" maxlength="1" />
+      <input type="text" inputmode="numeric" maxlength="1" />
+      <input type="text" inputmode="numeric" maxlength="1" />
+    </div>
+
+    <p class="countdown">إعادة الإرسال خلال 0:45</p>
+
+    <button class="verify-btn" disabled>تحقق</button>
+  </div>
+
+  <script>
+    const inputs = document.querySelectorAll('.code-inputs input');
+    const verifyBtn = document.querySelector('.verify-btn');
+    const countdownEl = document.querySelector('.countdown');
+
+    let seconds = 45;
+
+    const updateCountdown = () => {
+      const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+      const s = String(seconds % 60).padStart(2, '0');
+      countdownEl.textContent = `إعادة الإرسال خلال ${m}:${s}`;
+    };
+
+    const interval = setInterval(() => {
+      seconds--;
+      if (seconds <= 0) {
+        clearInterval(interval);
+        countdownEl.textContent = 'لم يصل الرمز؟ أعد الإرسال';
+        verifyBtn.disabled = false;
+      } else {
+        updateCountdown();
+      }
+    }, 1000);
+
+    updateCountdown();
+
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        if (input.value.length === 1 && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+        if (input.value.length === 0 && index > 0) {
+          inputs[index - 1].focus();
+        }
+        const allFilled = Array.from(inputs).every(i => i.value.length === 1);
+        verifyBtn.disabled = !allFilled || seconds > 0;
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && input.value.length === 0 && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

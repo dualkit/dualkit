@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رمز التحقق - التطبيق البنكي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :lang(ar) {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f0f4f8;
+      color: #1e293b;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    /* Smartphone frame simulation */
+    .phone-frame {
+      width: 100%;
+      max-width: 390px;
+      height: 800px;
+      background-color: #ffffff;
+      border-radius: 40px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      border: 8px solid #1e293b;
+    }
+
+    /* Status bar */
+    .status-bar {
+      height: 44px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-inline: 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    /* App Header */
+    .app-header {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: #0f172a;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+    }
+
+    .back-btn:hover {
+      background-color: #f1f5f9;
+    }
+
+    .back-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+    
+    .back-btn svg:dir(rtl) {
+      transform: scaleX(-1);
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #006C35; /* Saudi green accent */
+    }
+
+    /* Main Content */
+    .content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 12px;
+      text-align: start;
+    }
+
+    p.subtitle {
+      font-size: 15px;
+      color: #64748b;
+      margin-bottom: 32px;
+      text-align: start;
+      line-height: 1.6;
+    }
+
+    /* OTP Inputs Container */
+    .otp-container {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      direction: ltr; /* Digits flow naturally left-to-right */
+    }
+
+    .otp-input {
+      width: 48px;
+      height: 56px;
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      background-color: #f8fafc;
+      color: #0f172a;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .otp-input:focus {
+      border-color: #006C35;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 4px rgba(0, 108, 53, 0.1);
+    }
+
+    /* Timer / Resend */
+    .timer-section {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    .resend-link {
+      color: #006C35;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .resend-link:hover {
+      text-decoration: underline;
+    }
+
+    .resend-link.disabled {
+      color: #94a3b8;
+      cursor: not-allowed;
+      text-decoration: none;
+    }
+
+    /* Action Button */
+    .verify-btn {
+      width: 100%;
+      padding: 16px;
+      background-color: #006C35;
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      margin-top: auto;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 108, 53, 0.2);
+    }
+
+    .verify-btn:hover {
+      background-color: #005a2c;
+    }
+
+    .verify-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Security badge at bottom */
+    .security-notice {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .security-notice svg {
+      width: 16px;
+      height: 16px;
+      fill: #64748b;
+    }
+  </style>
+</head>
+<body lang="ar" dir="rtl">
+
+  <div class="phone-frame">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>09:41</span>
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h15.3l-.62-1.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"/></svg>
+        <span style="font-size: 12px;">5G</span>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+      <button class="back-btn" aria-label="الرجوع">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <span class="brand-title">مصرف الإنماء</span>
+      <div style="width: 40px;"></div> <!-- Spacer for symmetry -->
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="content">
+      <h1>أدخل رمز التحقق</h1>
+      <p class="subtitle">
+        أرسلنا رمزاً مكوناً من 6 أرقام إلى رقم الجوال المسجل <bdi dir="ltr">+966 55 123 4567</bdi>
+      </p>
+
+      <!-- 6-digit OTP Inputs -->
+      <div class="otp-container">
+        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" autofocus>
+        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*">
+      </div>
+
+      <!-- Timer & Resend -->
+      <div class="timer-section">
+        <span>إعادة الإرسال خلال </span>
+        <bdi dir="ltr" style="font-weight: 600; color: #0f172a;">0:45</bdi>
+      </div>
+
+      <!-- Security Notice -->
+      <div class="security-notice">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+        <span>اتصال مشفر وآمن</span>
+      </div>
+
+      <!-- Verify Button -->
+      <button class="verify-btn" type="button">تحقق</button>
+    </main>
+  </div>
+
+  <script>
+    // Simple auto-advance behavior for OTP inputs
+    const inputs = document.querySelectorAll('.otp-input');
+
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        const value = e.target.value;
+        if (value && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

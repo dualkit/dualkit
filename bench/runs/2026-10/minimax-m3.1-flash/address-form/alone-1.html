@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b8f55">
+  <title>عنوان التوصيل</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --green: #087f4e;
+      --green-dark: #05663e;
+      --green-light: #e9f7f0;
+      --text: #17231d;
+      --muted: #68756f;
+      --border: #d9e1dc;
+      --error: #c93c3c;
+      --surface: #ffffff;
+      --background: #f5f8f6;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--background);
+      color: var(--text);
+      font-family: Tahoma, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app-header {
+      background: var(--green);
+      color: white;
+      padding: max(18px, env(safe-area-inset-top)) 20px 22px;
+    }
+
+    .header-content {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .back-button {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      font-size: 25px;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.4;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    main {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 22px 18px calc(28px + env(safe-area-inset-bottom));
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 22px 18px;
+      box-shadow: 0 8px 28px rgba(25, 54, 39, 0.07);
+    }
+
+    .section-title {
+      margin: 0 0 18px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .optional {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    input,
+    select {
+      width: 100%;
+      height: 52px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: white;
+      color: var(--text);
+      padding: 0 14px;
+      font: inherit;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input::placeholder {
+      color: #9aa49f;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(8, 127, 78, 0.11);
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      padding-left: 44px;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 17px;
+      pointer-events: none;
+    }
+
+    .phone-row {
+      display: grid;
+      grid-template-columns: 116px 1fr;
+      gap: 10px;
+    }
+
+    .phone-row input {
+      direction: ltr;
+      text-align: left;
+    }
+
+    .field-error {
+      display: none;
+      margin-top: 6px;
+      color: var(--error);
+      font-size: 12px;
+    }
+
+    .field.invalid input,
+    .field.invalid select {
+      border-color: var(--error);
+    }
+
+    .field.invalid .field-error {
+      display: block;
+    }
+
+    .save-button {
+      width: 100%;
+      min-height: 54px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--green);
+      color: white;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+      box-shadow: 0 7px 16px rgba(8, 127, 78, 0.2);
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .save-button:active {
+      background: var(--green-dark);
+      transform: scale(0.99);
+    }
+
+    .save-button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .privacy-note {
+      margin: 14px 4px 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .success-message {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      background: var(--green-light);
+      color: var(--green-dark);
+      border-radius: 12px;
+      padding: 13px 14px;
+      margin-bottom: 18px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .success-message.show {
+      display: flex;
+    }
+
+    @media (max-width: 360px) {
+      .phone-row {
+        grid-template-columns: 102px 1fr;
+      }
+
+      .card {
+        padding: 20px 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-content">
+      <button class="back-button" type="button" aria-label="رجوع">‹</button>
+      <h1>عنوان التوصيل</h1>
+      <p class="subtitle">أدخل تفاصيل العنوان لتسهيل وصول طلبك</p>
+    </div>
+  </header>
+
+  <main>
+    <form class="card" id="addressForm" novalidate>
+      <div class="success-message" id="successMessage" role="status">
+        <span>✓</span>
+        <span>تم حفظ عنوان التوصيل بنجاح</span>
+      </div>
+
+      <h2 class="section-title">معلومات العنوان</h2>
+
+      <div class="field">
+        <label for="building">المبنى أو الفيلا</label>
+        <div class="input-wrap">
+          <input id="building" name="building" type="text" placeholder="مثال: مبنى 12، فيلا 5" required>
+          <span class="input-icon" aria-hidden="true">⌂</span>
+        </div>
+        <div class="field-error">يرجى إدخال المبنى أو الفيلا</div>
+      </div>
+
+      <div class="field">
+        <label for="street">الشارع</label>
+        <div class="input-wrap">
+          <input id="street" name="street" type="text" placeholder="اسم الشارع" required>
+          <span class="input-icon" aria-hidden="true">⌁</span>
+        </div>
+        <div class="field-error">يرجى إدخال اسم الشارع</div>
+      </div>
+
+      <div class="field">
+        <label for="area">المنطقة</label>
+        <div class="input-wrap">
+          <input id="area" name="area" type="text" placeholder="اسم المنطقة" required>
+          <span class="input-icon" aria-hidden="true">◎</span>
+        </div>
+        <div class="field-error">يرجى إدخال اسم المنطقة</div>
+      </div>
+
+      <div class="field">
+        <label for="emirate">الإمارة</label>
+        <select id="emirate" name="emirate" required>
+          <option value="dubai" selected>دبي</option>
+          <option value="abu-dhabi">أبوظبي</option>
+          <option value="sharjah">الشارقة</option>
+          <option value="ajman">عجمان</option>
+          <option value="umm-al-quwain">أم القيوين</option>
+          <option value="ras-al-khaimah">رأس الخيمة</option>
+          <option value="fujairah">الفجيرة</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="makani">رقم-location <span class="optional">(اختياري)</span></label>
+        <div class="input-wrap">
+          <input id="makani" name="makani" type="text" inputmode="numeric" placeholder="أدخل رقم المبنى">
+          <span class="input-icon" aria-hidden="true">#</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="phone">رقم الهاتف</label>
+        <div class="phone-row">
+          <select aria-label="رمز الدولة">
+            <option value="+971">+971</option>
+            <option value="+966">+966</option>
+            <option value="+965">+965</option>
+            <option value="+968">+968</option>
+          </select>
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="050 123 4567" required>
+        </div>
+        <div class="field-error">يرجى إدخال رقم هاتف صحيح</div>
+      </div>
+
+      <button class="save-button" id="saveButton" type="submit">حفظ العنوان</button>
+      <p class="privacy-note">سيتم استخدام هذا العنوان لتوصيل طلباتك فقط</p>
+    </form>
+  </main>
+
+  <script>
+    const form = document.getElementById('addressForm');
+    const phone = document.getElementById('phone');
+    const successMessage = document.getElementById('successMessage');
+    const saveButton = document.getElementById('saveButton');
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      let valid = true;
+
+      form.querySelectorAll('[required]').forEach(function (element) {
+        const field = element.closest('.field');
+        const isPhone = element === phone;
+        const phoneDigits = phone.value.replace(/\D/g, '');
+        const isValid = isPhone
+          ? phoneDigits.length >= 9
+          : element.value.trim() !== '';
+
+        field.classList.toggle('invalid', !isValid);
+        if (!isValid) valid = false;
+      });
+
+      if (!valid) {
+        successMessage.classList.remove('show');
+        return;
+      }
+
+      saveButton.disabled = true;
+      saveButton.textContent = 'جارٍ الحفظ...';
+
+      setTimeout(function () {
+        successMessage.classList.add('show');
+        saveButton.textContent = 'تم حفظ العنوان';
+        successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 500);
+    });
+
+    form.querySelectorAll('input, select').forEach(function (element) {
+      element.addEventListener('input', function () {
+        element.closest('.field').classList.remove('invalid');
+      });
+    });
+  </script>
+</body>
+</html>

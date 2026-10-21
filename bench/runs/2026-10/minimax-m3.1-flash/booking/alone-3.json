@@ -1,0 +1,361 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "booking",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T17:03:13.227Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n  <meta name=\"theme-color\" content=\"#0b766e\">\n  <title>حجز موعد - عيادة الدوحة</title>\n  <style>\n    :root {\n      --primary: #0b766e;\n      --primary-dark: #075c56;\n      --primary-soft: #e7f5f2;\n      --accent: #d89b37;\n      --text: #183a38;\n      --muted: #6d8582;\n      --line: #e1ecea;\n      --background: #f5f9f8;\n      --white: #ffffff;\n      --danger: #c94d4d;\n      --shadow: 0 12px 35px rgba(21, 72, 67, 0.09);\n    }\n\n    * {\n      box-sizing: border-box;\n      -webkit-tap-highlight-color: transparent;\n    }\n\n    html,\n    body {\n      margin: 0;\n      min-height: 100%;\n      font-family: Tahoma, Arial, sans-serif;\n      color: var(--text);\n      background: var(--background);\n    }\n\n    body {\n      display: flex;\n      justify-content: center;\n    }\n\n    .app {\n      width: 100%;\n      max-width: 430px;\n      min-height: 100vh;\n      background: var(--background);\n      overflow: hidden;\n    }\n\n    .app-header {\n      position: relative;\n      padding: calc(22px + env(safe-area-inset-top)) 22px 24px;\n      color: var(--white);\n      background:\n        radial-gradient(circle at 15% 15%, rgba(255,255,255,.15) 0 8%, transparent 9%),\n        linear-gradient(135deg, var(--primary), #119287);\n      border-radius: 0 0 28px 28px;\n      box-shadow: 0 8px 24px rgba(11, 118, 110, 0.2);\n    }\n\n    .header-top {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin-bottom: 18px;\n    }\n\n    .brand {\n      display: flex;\n      align-items: center;\n      gap: 10px;\n    }\n\n    .logo {\n      width: 42px;\n      height: 42px;\n      display: grid;\n      place-items: center;\n      border: 1px solid rgba(255,255,255,.35);\n      border-radius: 14px;\n      background: rgba(255,255,255,.14);\n      backdrop-filter: blur(8px);\n    }\n\n    .logo svg {\n      width: 25px;\n      height: 25px;\n    }\n\n    .brand strong {\n      display: block;\n      font-size: 15px;\n    }\n\n    .brand small {\n      display: block;\n      margin-top: 3px;\n      color: rgba(255,255,255,.78);\n      font-size: 11px;\n    }\n\n    .back-button {\n      width: 40px;\n      height: 40px;\n      display: grid;\n      place-items: center;\n      border: 0;\n      border-radius: 13px;\n      color: white;\n      background: rgba(255,255,255,.12);\n      cursor: pointer;\n    }\n\n    .back-button svg {\n      width: 20px;\n      height: 20px;\n    }\n\n    .app-header h1 {\n      margin: 0;\n      font-size: 24px;\n      line-height: 1.4;\n    }\n\n    .app-header p {\n      margin: 6px 0 0;\n      color: rgba(255,255,255,.82);\n      font-size: 13px;\n    }\n\n    main {\n      padding: 18px 16px calc(28px + env(safe-area-inset-bottom));\n    }\n\n    .card {\n      background: var(--white);\n      border: 1px solid rgba(16, 115, 107, .07);\n      border-radius: 22px;\n      box-shadow: var(--shadow);\n    }\n\n    .doctor-card {\n      display: flex;\n      align-items: center;\n      gap: 13px;\n      padding: 15px;\n      margin-bottom: 16px;\n    }\n\n    .doctor-avatar {\n      position: relative;\n      flex: 0 0 58px;\n      width: 58px;\n      height: 58px;\n      display: grid;\n      place-items: center;\n      border-radius: 18px;\n      color: var(--primary);\n      background: var(--primary-soft);\n    }\n\n    .doctor-avatar svg {\n      width: 36px;\n      height: 36px;\n    }\n\n    .online-dot {\n      position: absolute;\n      left: -2px;\n      bottom: -2px;\n      width: 15px;\n      height: 15px;\n      border: 3px solid white;\n      border-radius: 50%;\n      background: #36b37e;\n    }\n\n    .doctor-info {\n      min-width: 0;\n      flex: 1;\n    }\n\n    .doctor-info .label {\n      color: var(--muted);\n      font-size: 11px;\n    }\n\n    .doctor-info h2 {\n      margin: 3px 0 4px;\n      font-size: 16px;\n    }\n\n    .doctor-info p {\n      margin: 0;\n      color: var(--muted);\n      font-size: 12px;\n    }\n\n    .verified {\n      display: inline-flex;\n      align-items: center;\n      gap: 4px;\n      margin-right: 5px;\n      color: var(--primary);\n      font-size: 11px;\n      font-weight: bold;\n    }\n\n    .verified svg {\n      width: 13px;\n      height: 13px;\n    }\n\n    .calendar-card {\n      padding: 18px 14px 15px;\n      margin-bottom: 16px;\n    }\n\n    .month-header {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin-bottom: 17px;\n      padding: 0 4px;\n    }\n\n    .month-header h2 {\n      min-width: 130px;\n      margin: 0;\n      text-align: center;\n      font-size: 17px;\n    }\n\n    .month-nav {\n      display: flex;\n      gap: 7px;\n    }\n\n    .month-nav button {\n      width: 36px;\n      height: 36px;\n      display: grid;\n      place-items: center;\n      border: 1px solid var(--line);\n      border-radius: 11px;\n      color: var(--primary);\n      background: #fbfdfd;\n      cursor: pointer;\n      transition: .2s ease;\n    }\n\n    .month-nav button:active {\n      transform: scale(.92);\n      background: var(--primary-soft);\n    }\n\n    .month-nav svg {\n      width: 17px;\n      height: 17px;\n    }\n\n    .weekdays,\n    .days {\n      display: grid;\n      grid-template-columns: repeat(7, 1fr);\n    }\n\n    .weekdays {\n      margin-bottom: 8px;\n    }\n\n    .weekday {\n      color: #8a9c9a;\n      text-align: center;\n      font-size: 11px;\n      font-weight: bold;\n    }\n\n    .day {\n      position: relative;\n      height: 39px;\n      display: grid;\n      place-items: center;\n      margin: 1px;\n      border: 0;\n      border-radius: 12px;\n      color: var(--text);\n      background: transparent;\n      font-family: inherit;\n      font-size: 13px;\n      cursor: pointer;\n    }\n\n    .day.muted {\n      color: #b9c5c3;\n    }\n\n    .day.today {\n      color: white;\n      background: var(--primary);\n      font-weight: bold;\n      box-shadow: 0 5px 12px rgba(11, 118, 110, .25);\n    }\n\n    .day.today::after {\n      content: \"\";\n      position: absolute;\n      bottom: 3px;\n      width: 3px;\n      height: 3px;\n      border-radius: 50%;\n      background: white;\n    }\n\n    .day.selected:not(.today) {\n      color: var(--primary);\n      background: var(--primary-soft);\n      font-weight: bold;\n      box-shadow: inset 0 0 0 1px rgba(11, 118, 110, .15);\n    }\n\n    .day.unavailable {\n      color: #c3cdcb;\n      text-decoration: line-through;\n      cursor: not-allowed;\n    }\n\n    .day.empty {\n      visibility: hidden;\n    }\n\n    .section-title {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin: 20px 4px 11px;\n    }\n\n    .section-title h2 {\n      margin: 0;\n      font-size: 16px;\n    }\n\n    .selected-date {\n      color: var(--muted);\n      font-size: 12px;\n    }\n\n    .slots-card {\n      padding: 16px;\n    }\n\n    .slots {\n      display: grid;\n      grid-template-columns: repeat(3, 1fr);\n      gap: 10px;\n    }\n\n    .slot {\n      min-height: 45px;\n      border: 1px solid #d8e6e4;\n      border-radius: 13px;\n      color: var(--text);\n      background: #fff;\n      font-family: inherit;\n      font-size: 13px;\n      font-weight: bold;\n      cursor: pointer;\n      transition: .18s ease;\n    }\n\n    .slot:active {\n      transform: scale(.96);\n    }\n\n    .slot.selected {\n      border-color: var(--primary);\n      color: white;\n      background: var(--primary);\n      box-shadow: 0 6px 14px rgba(11, 118, 110, .2);\n    }\n\n    .slot.unavailable {\n      color: #b3bfbd;\n      background: #f5f7f7;\n      text-decoration: line-through;\n      cursor: not-allowed;\n    }\n\n    .notice {\n      display: flex;\n      align-items: flex-start;\n      gap: 8px;\n      margin: 14px 4px 18px;\n      color: var(--muted);\n      font-size: 11px;\n      line-height: 1.7;\n    }\n\n    .notice svg {\n      flex: 0 0 16px;\n      width: 16px;\n      height: 16px;\n      margin-top: 2px;\n      color: var(--accent);\n    }\n\n    .confirm-button {\n      width: 100%;\n      min-height: 54px;\n      border: 0;\n      border-radius: 16px;\n      color: white;\n      background: linear-gradient(135deg, var(--primary), #119287);\n      box-shadow: 0 10px 22px rgba(11, 118, 110, .24);\n      font-family: inherit;\n      font-size: 16px;\n      font-weight: bold;\n      cursor: pointer;\n      transition: .2s ease;\n    }\n\n    .confirm-button:active {\n      transform: translateY(1px);\n      box-shadow: 0 6px 14px rgba(11, 118, 110, .22);\n    }\n\n    .confirm-button:disabled {\n      opacity: .48;\n      box-shadow: none;\n      cursor: not-allowed;\n    }\n\n    .toast {\n      position: fixed;\n      right: 20px;\n      left: 20px;\n      bottom: calc(20px + env(safe-area-inset-bottom));\n      z-index: 10;\n      max-width: 390px;\n      margin: auto;\n      padding: 14px 18px;\n      border-radius: 15px;\n      color: white;\n      background: #173f3c;\n      box-shadow: 0 12px 30px rgba(0,0,0,.2);\n      text-align: center;\n      font-size: 13px;\n      opacity: 0;\n      transform: translateY(20px);\n      pointer-events: none;\n      transition: .25s ease;\n    }\n\n    .toast.show {\n      opacity: 1;\n      transform: translateY(0);\n    }\n\n    @media (max-width: 360px) {\n      .slots {\n        grid-template-columns: repeat(2, 1fr);\n      }\n\n      .app-header {\n        padding-right: 18px;\n        padding-left: 18px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"app\">\n    <header class=\"app-header\">\n      <div class=\"header-top\">\n        <div class=\"brand\">\n          <div class=\"logo\" aria-hidden=\"true\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\">\n              <path d=\"M12 21s-7-4.3-7-11a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 6.7-7 11-7 11Z\" fill=\"currentColor\" opacity=\".95\"/>\n              <path d=\"M12 8v7M8.5 11.5h7\" stroke=\"#0b766e\" stroke-width=\"1.7\" stroke-linecap=\"round\"/>\n            </svg>\n          </div>\n          <div>\n            <strong>عيادة الدوحة</strong>\n            <small>رعاية طبية متكاملة</small>\n          </div>\n        </div>\n        <button class=\"back-button\" type=\"button\" aria-label=\"رجوع\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <path d=\"M9 18 15 12 9 6\"/>\n          </svg>\n        </button>\n      </div>\n      <h1>حجز موعد</h1>\n      <p>اختر التاريخ والوقت المناسب لزيارتك</p>\n    </header>\n\n    <main>\n      <section class=\"doctor-card card\" aria-label=\"بيانات الطبيب\">\n        <div class=\"doctor-avatar\">\n          <svg viewBox=\"0 0 48 48\" fill=\"none\" aria-hidden=\"true\">\n            <circle cx=\"24\" cy=\"16\" r=\"9\" fill=\"currentColor\" opacity=\".25\"/>\n            <path d=\"M10 43c1-10 6-15 14-15s13 5 14 15\" fill=\"currentColor\" opacity=\".25\"/>\n            <path d=\"M19 13.5c1.4-1.2 3-1.8 4.7-1.8 3.5 0 6.3 2.5 6.3 6 0 2.4-1.2 4.5-3.1 5.7l.5 3.2-4.2-2.2c-4 .3-7-2.8-7-6.7 0-1.6.6-3 1.8-4.2Z\" fill=\"currentColor\"/>\n            <path d=\"m25 28 1.2 5.2-4.2-2.2\" fill=\"currentColor\"/>\n          </svg>\n          <span class=\"online-dot\"></span>\n        </div>\n        <div class=\"doctor-info\">\n          <span class=\"label\">الطبيب المعالج</span>\n          <h2>د. مريم أحمد الكواري</h2>\n          <p>\n            <span class=\"verified\">\n              <svg viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n                <path d=\"m5 10 3 3 7-7\"/>\n                <circle cx=\"10\" cy=\"10\" r=\"8\"/>\n              </svg>\n              أخصائية طب الأسرة\n            </span>\n            <span>• 12 سنة خبرة</span>\n          </p>\n        </div>\n      </section>\n\n      <section class=\"calendar-card card\">\n        <div class=\"month-header\">\n          <h2 id=\"monthTitle\"></h2>\n          <div class=\"month-nav\">\n            <button id=\"prevMonth\" type=\"button\" aria-label=\"الشهر السابق\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <path d=\"m9 18 6-6-6-6\"/>\n              </svg>\n            </button>\n            <button id=\"nextMonth\" type=\"button\" aria-label=\"الشهر التالي\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <path d=\"m15 18-6-6 6-6\"/>\n              </svg>\n            </button>\n          </div>\n        </div>\n\n        <div class=\"weekdays\" aria-hidden=\"true\">\n          <div class=\"weekday\">السبت</div>\n          <div class=\"weekday\">الأحد</div>\n          <div class=\"weekday\">الاثنين</div>\n          <div class=\"weekday\">الثلاثاء</div>\n          <div class=\"weekday\">الأربعاء</div>\n          <div class=\"weekday\">الخميس</div>\n          <div class=\"weekday\">الجمعة</div>\n        </div>\n\n        <div class=\"days\" id=\"calendarDays\" role=\"grid\" aria-label=\"أيام الشهر\"></div>\n      </section>\n\n      <div class=\"section-title\">\n        <h2>اختر الوقت</h2>\n        <span class=\"selected-date\" id=\"selectedDate\"></span>\n      </div>\n\n      <section class=\"slots-card card\">\n        <div class=\"slots\" id=\"timeSlots\">\n          <button class=\"slot\" type=\"button\" data-time=\"09:00\">9:00 ص</button>\n          <button class=\"slot\" type=\"button\" data-time=\"09:30\">9:30 ص</button>\n          <button class=\"slot\" type=\"button\" data-time=\"10:00\">10:00 ص</button>\n          <button class=\"slot\" type=\"button\" data-time=\"10:30\">10:30 ص</button>\n          <button class=\"slot\" type=\"button\" data-time=\"11:00\">11:00 ص</button>\n          <button class=\"slot\" type=\"button\" data-time=\"11:30\">11:30 ص</button>\n          <button class=\"slot\" type=\"button\" data-time=\"12:00\">12:00 م</button>\n        </div>\n\n        <div class=\"notice\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\">\n            <circle cx=\"12\" cy=\"12\" r=\"9\"/>\n            <path d=\"M12 11v5M12 8h.01\"/>\n          </svg>\n          <span>يُرجى الحضور قبل الموعد بـ 15 دقيقة. سيتم تأكيد الحجز عبر رسالة نصية.</span>\n        </div>\n\n        <button class=\"confirm-button\" id=\"confirmButton\" type=\"button\" disabled>\n          تأكيد الحجز\n        </button>\n      </section>\n    </main>\n  </div>\n\n  <div class=\"toast\" id=\"toast\" role=\"status\" aria-live=\"polite\"></div>\n\n  <script>\n    const arabicMonths = [\n      \"يناير\", \"فبراير\", \"مارس\", \"أبريل\", \"مايو\", \"يونيو\",\n      \"يوليو\", \"أغسطس\", \"سبتمبر\", \"أكتوبر\", \"نوفمبر\", \"ديسمبر\"\n    ];\n\n    const today = new Date();\n    let viewYear = today.getFullYear();\n    let viewMonth = today.getMonth();\n    let selectedDate = new Date(today);\n    let selectedTime = \"\";\n\n    const monthTitle = document.getElementById(\"monthTitle\");\n    const calendarDays = document.getElementById(\"calendarDays\");\n    const selectedDateLabel = document.getElementById(\"selectedDate\");\n    const confirmButton = document.getElementById(\"confirmButton\");\n    const toast = document.getElementById(\"toast\");\n\n    function sameDay(a, b) {\n      return a.getFullYear() === b.getFullYear() &&\n        a.getMonth() === b.getMonth() &&\n        a.getDate() === b.getDate();\n    }\n\n    function updateDateLabel() {\n      selectedDateLabel.textContent = `${selectedDate.getDate()} ${arabicMonths[selectedDate.getMonth()]}`;\n    }\n\n    function renderCalendar() {\n      monthTitle.textContent = `${arabicMonths[viewMonth]} ${viewYear}`;\n      calendarDays.innerHTML = \"\";\n\n      const firstDay = new Date(viewYear, viewMonth, 1);\n      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();\n      const daysInPreviousMonth = new Date(viewYear, viewMonth, 0).getDate();\n\n      // Saturday = 0\n      const offset = (firstDay.getDay() + 1) % 7;\n\n      for (let i = 0; i < offset; i++) {\n        const empty = document.createElement(\"div\");\n        empty.className = \"day empty\";\n        empty.setAttribute(\"role\", \"gridcell\");\n        calendarDays.appendChild(empty);\n      }\n\n      for (let day = 1; day <= daysInMonth; day++) {\n        const button = document.createElement(\"button\");\n        const date = new Date(viewYear, viewMonth, day);\n        button.type = \"button\";\n        button.className = \"day\";\n        button.textContent = day;\n        button.setAttribute(\"role\", \"gridcell\");\n        button.setAttribute(\"aria-label\", `${day} ${arabicMonths[viewMonth]}`);\n\n        if (sameDay(date, today)) button.classList.add(\"today\");\n        if (sameDay(date, selectedDate)) button.classList.add(\"selected\");\n        if (date < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {\n          button.classList.add(\"unavailable\");\n          button.disabled = true;\n        }\n\n        button.addEventListener(\"click\", () => {\n          selectedDate = date;\n          selectedTime = \"\";\n          document.querySelectorAll(\".slot\").forEach(slot => {\n            slot.classList.remove(\"selected\");\n          });\n          confirmButton.disabled = true;\n          updateDateLabel();\n          renderCalendar();\n        });\n\n        calendarDays.appendChild(button);\n      }\n    }\n\n    document.getElementById(\"prevMonth\").addEventListener(\"click\", () => {\n      viewMonth--;\n      if (viewMonth < 0) {\n        viewMonth = 11;\n        viewYear--;\n      }\n      renderCalendar();\n    });\n\n    document.getElementById(\"nextMonth\").addEventListener(\"click\", () => {\n      viewMonth++;\n      if (viewMonth > 11) {\n        viewMonth = 0;\n        viewYear++;\n      }\n      renderCalendar();\n    });\n\n    document.querySelectorAll(\".slot\").forEach(slot => {\n      slot.addEventListener(\"click\", () => {\n        document.querySelectorAll(\".slot\").forEach(item => item.classList.remove(\"selected\"));\n        slot.classList.add(\"selected\");\n        selectedTime = slot.dataset.time;\n        confirmButton.disabled = false;\n      });\n    });\n\n    confirmButton.addEventListener(\"click\", () => {\n      if (!selectedTime) return;\n      const time = selectedTime === \"12:00\" ? \"12:00 ظهراً\" : `${selectedTime.replace(\":\", \":\")} صباحاً`;\n      toast.textContent = `تم تأكيد موعدك يوم ${selectedDate.getDate()} ${arabicMonths[selectedDate.getMonth()]} الساعة ${time}`;\n      toast.classList.add(\"show\");\n      setTimeout(() => toast.classList.remove(\"show\"), 3500);\n    });\n\n    updateDateLabel();\n    renderCalendar();\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 329,
+    "output": 5497
+  },
+  "ms": 27027,
+  "finish": "stop",
+  "reasoningTokens": 145,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 82,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 236.828125,
+        "y": 26,
+        "width": 79.171875,
+        "height": 17
+      },
+      "message": "Arabic falls back from Tahoma, Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<strong>عيادة الدوحة</strong>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 230.875,
+        "y": 47,
+        "width": 85.125,
+        "height": 12
+      },
+      "message": "\"رعاية طبية متكاملة\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small>رعاية طبية متكاملة</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 168.546875,
+        "y": 121.59375,
+        "width": 199.453125,
+        "height": 15
+      },
+      "message": "\"اختر التاريخ والوقت المناسب لزيارتك\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p>اختر التاريخ والوقت المناسب لزيارتك</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 221.9375,
+        "y": 198.59375,
+        "width": 65.0625,
+        "height": 12
+      },
+      "message": "\"الطبيب المعالج\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"label\">الطبيب المعالج</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 173.875,
+        "y": 238.59375,
+        "width": 91.125,
+        "height": 12
+      },
+      "message": "\"أخصائية طب الأسرة\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"verified\">\n              <svg viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n                <path d=\"m5 10 3 3 7-7\"></pat"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 98.953125,
+        "y": 240.59375,
+        "width": 71.578125,
+        "height": 14
+      },
+      "message": "\"• 12 سنة خبرة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>• 12 سنة خبرة</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 320.578125,
+        "y": 358.59375,
+        "width": 30,
+        "height": 12
+      },
+      "message": "\"السبت\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">السبت</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 277.71875,
+        "y": 358.59375,
+        "width": 22,
+        "height": 12
+      },
+      "message": "\"الأحد\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">الأحد</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 228.859375,
+        "y": 358.59375,
+        "width": 26,
+        "height": 12
+      },
+      "message": "\"الاثنين\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">الاثنين</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 181.5,
+        "y": 358.59375,
+        "width": 27,
+        "height": 12
+      },
+      "message": "\"الثلاثاء\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">الثلاثاء</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 133.140625,
+        "y": 358.59375,
+        "width": 30,
+        "height": 12
+      },
+      "message": "\"الأربعاء\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">الأربعاء</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 83.28125,
+        "y": 358.59375,
+        "width": 36,
+        "height": 12
+      },
+      "message": "\"الخميس\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">الخميس</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 39.421875,
+        "y": 358.59375,
+        "width": 30,
+        "height": 12
+      },
+      "message": "\"الجمعة\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"weekday\">الجمعة</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 20,
+        "y": 664.09375,
+        "width": 45.703125,
+        "height": 14
+      },
+      "message": "\"21 أكتوبر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"selected-date\" id=\"selectedDate\">21 أكتوبر</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 283.5,
+        "y": 723.59375,
+        "width": 45.65625,
+        "height": 15
+      },
+      "message": "\"9:00 ص\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"slot\" type=\"button\" data-time=\"09:00\">9:00 ص</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 172.171875,
+        "y": 723.59375,
+        "width": 45.65625,
+        "height": 15
+      },
+      "message": "\"9:30 ص\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"slot\" type=\"button\" data-time=\"09:30\">9:30 ص</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 57.234375,
+        "y": 723.59375,
+        "width": 52.875,
+        "height": 15
+      },
+      "message": "\"10:00 ص\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"slot\" type=\"button\" data-time=\"10:00\">10:00 ص</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 279.890625,
+        "y": 778.59375,
+        "width": 52.875,
+        "height": 15
+      },
+      "message": "\"10:30 ص\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"slot\" type=\"button\" data-time=\"10:30\">10:30 ص</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 168.921875,
+        "y": 778.59375,
+        "width": 52.171875,
+        "height": 15
+      },
+      "message": "\"11:00 ص\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"slot\" type=\"button\" data-time=\"11:00\">11:00 ص</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 57.578125,
+        "y": 778.59375,
+        "width": 52.171875,
+        "height": 15
+      },
+      "message": "\"11:30 ص\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"slot\" type=\"button\" data-time=\"11:30\">11:30 ص</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 283.890625,
+        "y": 833.59375,
+        "width": 44.875,
+        "height": 15
+      },
+      "message": "\"12:00 م\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"slot\" type=\"button\" data-time=\"12:00\">12:00 م</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 62.125,
+        "y": 880.59375,
+        "width": 266.875,
+        "height": 30.6875
+      },
+      "message": "\"يُرجى الحضور قبل الموعد بـ 15 دقيقة. سيت…\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>يُرجى الحضور قبل الموعد بـ 15 دقيقة. سيتم تأكيد الحجز عبر رسالة نصية.</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 298,
+        "y": 240.59375,
+        "width": 15,
+        "height": 15
+      },
+      "message": "left: -2px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<span class=\"online-dot\"></span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 173.875,
+        "y": 238.59375,
+        "width": 108.125,
+        "height": 13
+      },
+      "message": "margin-right: 5px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"verified\">\n              <svg viewBox=\"0 0 20 20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n                <path d=\"m5 10 3 3 7-7\"></pat"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 1032
+}

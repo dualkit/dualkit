@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سلة التسوق</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-bg: #f9fafb;
+      --color-card: #ffffff;
+      --color-text: #1f2937;
+      --color-muted: #6b7280;
+      --color-border: #e5e7eb;
+      --color-primary: #16a34a;
+      --color-primary_hover: #15883f;
+      --color-accent: #eab308;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1);
+      --type-body-size: 16px;
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-line-height: 1.7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'IBM Plex Sans Arabic', sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-size: var(--type-body-size);
+      line-height: var(--type-line-height);
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text);
+      font-size: 20px;
+    }
+
+    .back-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: var(--color-text);
+    }
+
+    h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .cart-items {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background-color: var(--color-card);
+      border-radius: var(--radius);
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .item-image {
+      width: 64px;
+      height: 64px;
+      background-color: var(--color-border);
+      border-radius: 8px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-muted);
+      font-size: 14px;
+    }
+
+    .item-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .item-name {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .item-price {
+      font-size: 14px;
+      color: var(--color-muted);
+    }
+
+    .quantity-stepper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .qty-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      background-color: var(--color-bg);
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text);
+    }
+
+    .qty-value {
+      font-size: 14px;
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .promo-section {
+      background-color: var(--color-card);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .promo-section label {
+      display: block;
+      font-size: var(--type-label-size);
+      margin-bottom: 8px;
+    }
+
+    .promo-input-wrapper {
+      display: flex;
+      gap: 8px;
+    }
+
+    .promo-input {
+      flex: 1;
+      padding: 10px 12px;
+      font-size: 14px;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      background-color: var(--color-bg);
+      text-align: right;
+      direction: ltr;
+    }
+
+    .promo-btn {
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-card);
+      background-color: var(--color-primary);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: 'Segoe UI', 'IBM Plex Sans Arabic', sans-serif;
+    }
+
+    .summary-section {
+      background-color: var(--color-card);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+    }
+
+    .summary-label {
+      color: var(--color-muted);
+    }
+
+    .summary-value {
+      font-weight: 500;
+    }
+
+    .total-row {
+      font-size: 16px;
+      font-weight: 700;
+      padding: 12px 0;
+      border-top: 2px solid var(--color-border);
+      margin-top: 8px;
+    }
+
+    .total-label {
+      color: var(--color-text);
+    }
+
+    .total-value {
+      color: var(--color-primary);
+    }
+
+    .place-order-btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--color-card);
+      background-color: var(--color-primary);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(22, 160, 92, 0.3);
+      font-family: 'Segoe UI', 'IBM Plex Sans Arabic', sans-serif;
+    }
+
+    .place-order-btn:hover {
+      background-color: var(--color_primary_hover);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="back-btn" aria-label="رجوع">
+      <svg viewBox="0 0 24 24">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+      </svg>
+    </button>
+    <h1>سلة التسوق</h1>
+  </header>
+
+  <div class="cart-items">
+    <div class="cart-item">
+      <div class="item-image">صورة المنتج</div>
+      <div class="item-details">
+        <div class="item-name">تفاح أحمر</div>
+        <div class="item-price">د.إ 12.50</div>
+        <div class="quantity-stepper">
+          <button class="qty-btn" aria-label="إنقاص الكمية">−</button>
+          <span class="qty-value">2</span>
+          <button class="qty-btn" aria-label="زيادة الكمية">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-item">
+      <div class="item-image">صورة المنتج</div>
+      <div class="item-details">
+        <div class="item-name">حليب كامل الدسم</div>
+        <div class="item-price">د.إ 8.75</div>
+        <div class="quantity-stepper">
+          <button class="qty-btn" aria-label="إنقاص الكمية">−</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" aria-label="زيادة الكمية">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-item">
+      <div class="item-image">صورة المنتج</div>
+      <div class="item-details">
+        <div class="item-name">خبز شوفاني</div>
+        <div class="item-price">د.إ 6.00</div>
+        <div class="quantity-stepper">
+          <button class="qty-btn" aria-label="إنقاص الكمية">−</button>
+          <span class="qty-value">1</span>
+          <button class="qty-btn" aria-label="زيادة الكمية">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="promo-section">
+    <label for="promo-code">كود الخصم</label>
+    <div class="promo-input-wrapper">
+      <input type="text" id="promo-code" class="promo-input" placeholder="أدخل كود الخصم" />
+      <button class="promo-btn">تطبيق</button>
+    </div>
+  </div>
+
+  <div class="summary-section">
+    <div class="summary-row">
+      <span class="summary-label">المجموع الفرعي</span>
+      <span class="summary-value">د.إ 33.75</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-label">رسوم التوصيل</span>
+      <span class="summary-value">د.إ 15.00</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-label">ضريبة القيمة المضافة (5%)</span>
+      <span class="summary-value">د.إ 1.69</span>
+    </div>
+    <div class="summary-row total-row">
+      <span class="total-label">الإجمالي</span>
+      <span class="total-value">د.إ 50.44</span>
+    </div>
+  </div>
+
+  <button class="place-order-btn">إتمام الطلب</button>
+</body>
+</html>

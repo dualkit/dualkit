@@ -1,0 +1,67 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "settings",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T17:37:25.580Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n    <title>الإعدادات - تطبيق بنك البحرين</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f5f5f7;\n            color: #333;\n            direction: rtl;\n            text-align: right;\n            padding: 20px;\n            max-width: 414px;\n            margin: 0 auto;\n            min-height: 100vh;\n        }\n\n        .header {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            padding: 15px 0;\n            border-bottom: 1px solid #e0e0e0;\n            margin-bottom: 20px;\n        }\n\n        .header h1 {\n            font-size: 22px;\n            font-weight: 600;\n            color: #1a1a1a;\n        }\n\n        .back-button {\n            background: none;\n            border: none;\n            font-size: 18px;\n            cursor: pointer;\n            color: #007AFF;\n        }\n\n        .settings-group {\n            background: #fff;\n            border-radius: 12px;\n            margin-bottom: 20px;\n            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);\n            overflow: hidden;\n        }\n\n        .group-title {\n            background-color: #f9f9fb;\n            padding: 14px 18px;\n            font-size: 16px;\n            font-weight: 600;\n            color: #555;\n            border-bottom: 1px solid #eee;\n        }\n\n        .settings-row {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            padding: 16px 18px;\n            border-bottom: 1px solid #f0f0f0;\n        }\n\n        .settings-row:last-child {\n            border-bottom: none;\n        }\n\n        .row-label {\n            display: flex;\n            align-items: center;\n            gap: 12px;\n        }\n\n        .row-label .icon {\n            font-size: 20px;\n            width: 24px;\n            text-align: center;\n        }\n\n        .row-label .label-text {\n            font-size: 16px;\n            color: #333;\n        }\n\n        .row-value {\n            font-size: 15px;\n            color: #666;\n        }\n\n        .chevron {\n            font-size: 18px;\n            color: #ccc;\n            margin-left: 8px;\n        }\n\n        .toggle-container {\n            position: relative;\n            display: inline-block;\n            width: 50px;\n            height: 28px;\n        }\n\n        .toggle-container input {\n            opacity: 0;\n            width: 0;\n            height: 0;\n        }\n\n        .slider {\n            position: absolute;\n            cursor: pointer;\n            top: 0;\n            left: 0;\n            right: 0;\n            bottom: 0;\n            background-color: #ccc;\n            transition: .3s;\n            border-radius: 28px;\n        }\n\n        .slider:before {\n            position: absolute;\n            content: \"\";\n            height: 22px;\n            width: 22px;\n            left: 3px;\n            bottom: 3px;\n            background-color: white;\n            transition: .3s;\n            border-radius: 50%;\n        }\n\n        input:checked + .slider {\n            background-color: #007AFF;\n        }\n\n        input:checked + .slider:before {\n            transform: translateX(22px);\n        }\n\n        .row-with-toggle {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            padding: 16px 18px;\n            border-bottom: 1px solid #f0f0f0;\n        }\n\n        .row-with-toggle:last-child {\n            border-bottom: none;\n        }\n\n        .row-with-toggle .row-label {\n            gap: 12px;\n        }\n\n        .row-with-toggle .row-label .icon {\n            font-size: 20px;\n            width: 24px;\n            text-align: center;\n        }\n\n        .row-with-toggle .row-label .label-text {\n            font-size: 16px;\n            color: #333;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"header\">\n        <h1>الإعدادات</h1>\n        <button class=\"back-button\">←</button>\n    </div>\n\n    <!-- Account Group -->\n    <div class=\"settings-group\">\n        <div class=\"group-title\">الحساب</div>\n        <div class=\"settings-row\">\n            <div class=\"row-label\">\n                <span class=\"icon\">👤</span>\n                <span class=\"label-text\">الاسم</span>\n            </div>\n            <span class=\"row-value\">محمد علي أحمد</span>\n        </div>\n        <div class=\"settings-row\">\n            <div class=\"row-label\">\n                <span class=\"icon\">📱</span>\n                <span class=\"label-text\">رقم الهاتف</span>\n            </div>\n            <span class=\"row-value\">+973 3600 1234</span>\n        </div>\n        <div class=\"settings-row\">\n            <div class=\"row-label\">\n                <span class=\"icon\">🌐</span>\n                <span class=\"label-text\">اللغة</span>\n            </div>\n            <span class=\"row-value\">العربية <span class=\"chevron\">›</span></span>\n        </div>\n    </div>\n\n    <!-- Security Group -->\n    <div class=\"settings-group\">\n        <div class=\"group-title\">الأمان</div>\n        <div class=\"row-with-toggle\">\n            <div class=\"row-label\">\n                <span class=\"icon\">👁️</span>\n                <span class=\"label-text\">مصادقة الوجه (Face ID)</span>\n            </div>\n            <label class=\"toggle-container\">\n                <input type=\"checkbox\" checked>\n                <span class=\"slider\"></span>\n            </label>\n        </div>\n        <div class=\"row-with-toggle\">\n            <div class=\"row-label\">\n                <span class=\"icon\">🔐</span>\n                <span class=\"label-text\">تسجيل الدخول ثنائي الخطوات</span>\n            </div>\n            <label class=\"toggle-container\">\n                <input type=\"checkbox\" checked>\n                <span class=\"slider\"></span>\n            </label>\n        </div>\n    </div>\n\n    <!-- Notifications Group -->\n    <div class=\"settings-group\">\n        <div class=\"group-title\">الإشعارات</div>\n        <div class=\"row-with-toggle\">\n            <div class=\"row-label\">\n                <span class=\"icon\">💸</span>\n                <span class=\"label-text\">التحويلات</span>\n            </div>\n            <label class=\"toggle-container\">\n                <input type=\"checkbox\" checked>\n                <span class=\"slider\"></span>\n            </label>\n        </div>\n        <div class=\"row-with-toggle\">\n            <div class=\"row-label\">\n                <span class=\"icon\">🎁</span>\n                <span class=\"label-text\">العروض</span>\n            </div>\n            <label class=\"toggle-container\">\n                <input type=\"checkbox\">\n                <span class=\"slider\"></span>\n            </label>\n        </div>\n        <div class=\"row-with-toggle\">\n            <div class=\"row-label\">\n                <span class=\"icon\">🧾</span>\n                <span class=\"label-text\">البيانات</span>\n            </div>\n            <label class=\"toggle-container\">\n                <input type=\"checkbox\" checked>\n                <span class=\"slider\"></span>\n            </label>\n        </div>\n    </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 159,
+    "output": 2113
+  },
+  "ms": 43719,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 85,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 38,
+        "y": 221.5,
+        "width": 108.890625,
+        "height": 17
+      },
+      "message": "\"+973 3600 1234\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"row-value\">+973 3600 1234</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 283,
+        "y": 35,
+        "width": 87,
+        "height": 25
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الإعدادات</h1>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 46,
+        "y": 276.5,
+        "width": 6,
+        "height": 20
+      },
+      "message": "margin-left: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"chevron\">›</span>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

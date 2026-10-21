@@ -1,0 +1,263 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "order-history",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T16:55:17.826Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n  <title>الطلبات السابقة | مِتجر</title>\n  <style>\n    :root {\n      --primary: #146c4b;\n      --primary-dark: #0e5238;\n      --primary-soft: #eaf6f0;\n      --text: #18201d;\n      --muted: #68736e;\n      --line: #e7ebe8;\n      --surface: #ffffff;\n      --canvas: #f6f8f7;\n      --warning: #9a5b00;\n      --warning-soft: #fff5df;\n      --danger: #b42318;\n      --danger-soft: #fef0ee;\n      --blue: #285ea8;\n      --blue-soft: #eef5ff;\n      --radius: 20px;\n      --shadow: 0 8px 30px rgba(26, 52, 42, 0.06);\n    }\n\n    * { box-sizing: border-box; }\n\n    html, body {\n      margin: 0;\n      min-height: 100%;\n      background: #e8ecea;\n      color: var(--text);\n      font-family: \"Noto Sans Arabic\", \"Segoe UI\", Tahoma, Arial, sans-serif;\n      -webkit-font-smoothing: antialiased;\n    }\n\n    body {\n      display: grid;\n      place-items: center;\n      min-height: 100vh;\n      padding: 24px 12px;\n    }\n\n    button, input { font: inherit; }\n    button { -webkit-tap-highlight-color: transparent; }\n\n    .phone {\n      width: min(100%, 430px);\n      min-height: min(844px, calc(100vh - 48px));\n      overflow: hidden;\n      background: var(--canvas);\n      border: 1px solid rgba(24, 32, 29, 0.07);\n      border-radius: 32px;\n      box-shadow: 0 28px 70px rgba(24, 32, 29, 0.18);\n    }\n\n    .status-bar {\n      height: 30px;\n      padding: 7px 22px 0;\n      display: flex;\n      align-items: flex-start;\n      justify-content: space-between;\n      color: #fff;\n      font-size: 12px;\n      font-weight: 700;\n      direction: ltr;\n    }\n\n    .status-icons {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n    }\n\n    .app-header {\n      color: #fff;\n      background: linear-gradient(145deg, #116b4a 0%, #0b563a 100%);\n      padding: 12px 20px 24px;\n      border-end-start-radius: 28px;\n      border-end-end-radius: 28px;\n      box-shadow: 0 12px 30px rgba(20, 108, 75, 0.18);\n    }\n\n    .header-row {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      gap: 16px;\n    }\n\n    .back-button {\n      width: 40px;\n      height: 40px;\n      display: grid;\n      place-items: center;\n      flex: 0 0 auto;\n      color: #fff;\n      background: rgba(255, 255, 255, 0.12);\n      border: 1px solid rgba(255, 255, 255, 0.14);\n      border-radius: 13px;\n      cursor: pointer;\n    }\n\n    .back-button svg { transform: scaleX(-1); }\n\n    .header-title {\n      flex: 1;\n      min-width: 0;\n    }\n\n    .header-title h1 {\n      margin: 0;\n      font-size: 22px;\n      font-weight: 750;\n      line-height: 1.45;\n    }\n\n    .header-title p {\n      margin: 2px 0 0;\n      color: rgba(255, 255, 255, 0.72);\n      font-size: 14px;\n    }\n\n    .profile {\n      width: 40px;\n      height: 40px;\n      display: grid;\n      place-items: center;\n      flex: 0 0 auto;\n      color: var(--primary-dark);\n      background: #fff;\n      border-radius: 50%;\n    }\n\n    main {\n      padding: 20px 16px 32px;\n    }\n\n    .summary {\n      display: grid;\n      grid-template-columns: repeat(3, 1fr);\n      gap: 8px;\n      margin-bottom: 20px;\n    }\n\n    .summary-item {\n      padding: 13px 8px;\n      text-align: center;\n      background: var(--surface);\n      border: 1px solid var(--line);\n      border-radius: 15px;\n      box-shadow: 0 3px 14px rgba(26, 52, 42, 0.035);\n    }\n\n    .summary-item strong {\n      display: block;\n      color: var(--primary-dark);\n      font-size: 19px;\n      font-weight: 750;\n      font-variant-numeric: tabular-nums;\n    }\n\n    .summary-item span {\n      display: block;\n      margin-top: 2px;\n      color: var(--muted);\n      font-size: 13px;\n    }\n\n    .section-heading {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin: 0 2px 12px;\n    }\n\n    .section-heading h2 {\n      margin: 0;\n      font-size: 18px;\n      font-weight: 750;\n    }\n\n    .section-heading span {\n      color: var(--muted);\n      font-size: 14px;\n    }\n\n    .orders {\n      display: grid;\n      gap: 12px;\n    }\n\n    .order-card {\n      position: relative;\n      overflow: hidden;\n      background: var(--surface);\n      border: 1px solid var(--line);\n      border-radius: var(--radius);\n      box-shadow: var(--shadow);\n    }\n\n    .order-card::before {\n      content: \"\";\n      position: absolute;\n      inset-block: 0;\n      inset-inline-start: 0;\n      width: 4px;\n      background: var(--accent, var(--primary));\n    }\n\n    .order-card.delivered { --accent: var(--primary); }\n    .order-card.transit { --accent: var(--blue); }\n    .order-card.cancelled { --accent: #b84a42; }\n\n    .order-top {\n      padding: 16px 16px 13px;\n    }\n\n    .order-meta {\n      display: flex;\n      align-items: flex-start;\n      justify-content: space-between;\n      gap: 12px;\n    }\n\n    .order-number {\n      margin: 0;\n      font-size: 17px;\n      font-weight: 750;\n      line-height: 1.5;\n    }\n\n    .order-number bdi {\n      font-family: \"Segoe UI\", Arial, sans-serif;\n      font-variant-numeric: tabular-nums;\n    }\n\n    .status {\n      display: inline-flex;\n      align-items: center;\n      gap: 6px;\n      flex: 0 0 auto;\n      padding: 6px 10px;\n      border-radius: 999px;\n      font-size: 13px;\n      font-weight: 700;\n      line-height: 1.4;\n    }\n\n    .status svg { width: 15px; height: 15px; }\n\n    .delivered .status {\n      color: var(--primary-dark);\n      background: var(--primary-soft);\n    }\n\n    .transit .status {\n      color: var(--blue);\n      background: var(--blue-soft);\n    }\n\n    .cancelled .status {\n      color: var(--danger);\n      background: var(--danger-soft);\n    }\n\n    .date-line {\n      display: flex;\n      align-items: center;\n      flex-wrap: wrap;\n      gap: 5px 8px;\n      margin-top: 10px;\n      color: var(--muted);\n      font-size: 14px;\n      line-height: 1.7;\n    }\n\n    .date-line svg {\n      width: 16px;\n      height: 16px;\n      color: #8a9690;\n    }\n\n    .date-separator {\n      width: 3px;\n      height: 3px;\n      background: #bdc5c1;\n      border-radius: 50%;\n    }\n\n    .order-bottom {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      gap: 12px;\n      padding: 12px 16px;\n      background: #fafbfa;\n      border-top: 1px solid var(--line);\n    }\n\n    .total-label {\n      display: block;\n      color: var(--muted);\n      font-size: 13px;\n    }\n\n    .total {\n      display: block;\n      margin-top: 1px;\n      font-size: 17px;\n      font-weight: 750;\n      font-variant-numeric: tabular-nums;\n    }\n\n    .details-button {\n      display: inline-flex;\n      align-items: center;\n      gap: 5px;\n      padding: 8px 12px;\n      color: var(--primary-dark);\n      background: #fff;\n      border: 1px solid #dce4df;\n      border-radius: 11px;\n      font-size: 14px;\n      font-weight: 700;\n      cursor: pointer;\n    }\n\n    .details-button svg {\n      width: 15px;\n      height: 15px;\n      transform: scaleX(-1);\n    }\n\n    .cancelled .details-button {\n      color: #735d5a;\n      border-color: #e7dcda;\n    }\n\n    .empty-state {\n      display: none;\n      padding: 42px 20px;\n      text-align: center;\n      color: var(--muted);\n    }\n\n    .empty-state.visible { display: block; }\n\n    .empty-icon {\n      width: 54px;\n      height: 54px;\n      display: grid;\n      place-items: center;\n      margin: 0 auto 12px;\n      color: var(--primary);\n      background: var(--primary-soft);\n      border-radius: 50%;\n    }\n\n    .empty-state h3 {\n      margin: 0 0 6px;\n      color: var(--text);\n      font-size: 17px;\n    }\n\n    .empty-state p {\n      margin: 0;\n      font-size: 14px;\n      line-height: 1.7;\n    }\n\n    .toast {\n      position: absolute;\n      inset-inline: 20px;\n      bottom: 18px;\n      padding: 12px 16px;\n      color: #fff;\n      background: rgba(24, 32, 29, 0.93);\n      border-radius: 13px;\n      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);\n      font-size: 14px;\n      text-align: center;\n      opacity: 0;\n      transform: translateY(12px);\n      pointer-events: none;\n      transition: 180ms ease;\n    }\n\n    .toast.show {\n      opacity: 1;\n      transform: translateY(0);\n    }\n\n    @media (max-width: 460px) {\n      body { padding: 0; background: var(--canvas); }\n      .phone {\n        min-height: 100vh;\n        border: 0;\n        border-radius: 0;\n        box-shadow: none;\n      }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"phone\">\n    <div class=\"status-bar\" aria-hidden=\"true\">\n      <span>9:41</span>\n      <div class=\"status-icons\">\n        <svg width=\"17\" height=\"12\" viewBox=\"0 0 17 12\" fill=\"currentColor\">\n          <rect x=\"0\" y=\"8\" width=\"3\" height=\"4\" rx=\"1\"/><rect x=\"4\" y=\"6\" width=\"3\" height=\"6\" rx=\"1\"/>\n          <rect x=\"8\" y=\"3\" width=\"3\" height=\"9\" rx=\"1\"/><rect x=\"12\" y=\"0\" width=\"3\" height=\"12\" rx=\"1\"/>\n        </svg>\n        <svg width=\"16\" height=\"12\" viewBox=\"0 0 16 12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\">\n          <path d=\"M1 4.2A10.5 10.5 0 0 1 15 4.2M3.5 6.7a6.8 6.8 0 0 1 9 0M6 9.2a3 3 0 0 1 4 0\"/>\n          <circle cx=\"8\" cy=\"11\" r=\".8\" fill=\"currentColor\" stroke=\"none\"/>\n        </svg>\n        <svg width=\"25\" height=\"12\" viewBox=\"0 0 25 12\" fill=\"none\">\n          <rect x=\".5\" y=\".5\" width=\"21\" height=\"11\" rx=\"3\" stroke=\"currentColor\"/>\n          <rect x=\"2\" y=\"2\" width=\"17\" height=\"8\" rx=\"2\" fill=\"currentColor\"/>\n          <path d=\"M23 4v4\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/>\n        </svg>\n      </div>\n    </div>\n\n    <header class=\"app-header\">\n      <div class=\"header-row\">\n        <button class=\"back-button\" type=\"button\" aria-label=\"العودة إلى الصفحة الرئيسية\">\n          <svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <path d=\"m15 18-6-6 6-6\"/>\n          </svg>\n        </button>\n        <div class=\"header-title\">\n          <h1>الطلبات السابقة</h1>\n          <p>تابع طلباتك وتعرّف على حالة الشحن</p>\n        </div>\n        <div class=\"profile\" aria-label=\"الملف الشخصي\">\n          <svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\">\n            <circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4.5 21a7.5 7.5 0 0 1 15 0\"/>\n          </svg>\n        </div>\n      </div>\n    </header>\n\n    <main>\n      <section class=\"summary\" aria-label=\"ملخص الطلبات\">\n        <div class=\"summary-item\">\n          <strong>4</strong>\n          <span>إجمالي الطلبات</span>\n        </div>\n        <div class=\"summary-item\">\n          <strong>2</strong>\n          <span>تم توصيلها</span>\n        </div>\n        <div class=\"summary-item\">\n          <strong>1</strong>\n          <span>قيد الشحن</span>\n        </div>\n      </section>\n\n      <div class=\"section-heading\">\n        <h2>قائمة الطلبات</h2>\n        <span>4 طلبات</span>\n      </div>\n\n      <section class=\"orders\" aria-label=\"الطلبات\">\n        <article class=\"order-card delivered\" data-status=\"delivered\">\n          <div class=\"order-top\">\n            <div class=\"order-meta\">\n              <h3 class=\"order-number\">طلب <bdi dir=\"ltr\">#A-10293</bdi></h3>\n              <span class=\"status\">\n                <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                  <circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m8 12 2.6 2.6L16.5 9\"/>\n                </svg>\n                تم التوصيل\n              </span>\n            </div>\n            <div class=\"date-line\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M16 3v4M8 3v4M3 10h18\"/>\n              </svg>\n              <span>١٢ مايو ٢٠٢٥</span>\n              <span class=\"date-separator\"></span>\n              <span>٥ رمضان ١٤٤٦ هـ</span>\n            </div>\n          </div>\n          <div class=\"order-bottom\">\n            <div>\n              <span class=\"total-label\">إجمالي الطلب</span>\n              <strong class=\"total\"><bdi>٢٤٩٫٥٠ ر.س</bdi></strong>\n            </div>\n            <button class=\"details-button\" type=\"button\" data-order=\"A-10293\">\n              تفاصيل الطلب\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <path d=\"m9 18 6-6-6-6\"/>\n              </svg>\n            </button>\n          </div>\n        </article>\n\n        <article class=\"order-card transit\" data-status=\"transit\">\n          <div class=\"order-top\">\n            <div class=\"order-meta\">\n              <h3 class=\"order-number\">طلب <bdi dir=\"ltr\">#A-10276</bdi></h3>\n              <span class=\"status\">\n                <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                  <path d=\"M3 6h11v11H3zM14 10h4l3 3v4h-7z\"/><circle cx=\"7\" cy=\"18\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>\n                </svg>\n                في الطريق\n              </span>\n            </div>\n            <div class=\"date-line\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M16 3v4M8 3v4M3 10h18\"/>\n              </svg>\n              <span>٧ مايو ٢٠٢٥</span>\n              <span class=\"date-separator\"></span>\n              <span>٢٨ رمضان ١٤٤٦ هـ</span>\n            </div>\n          </div>\n          <div class=\"order-bottom\">\n            <div>\n              <span class=\"total-label\">إجمالي الطلب</span>\n              <strong class=\"total\"><bdi>١٨٩٫٠٠ ر.س</bdi></strong>\n            </div>\n            <button class=\"details-button\" type=\"button\" data-order=\"A-10276\">\n              تفاصيل الطلب\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <path d=\"m9 18 6-6-6-6\"/>\n              </svg>\n            </button>\n          </div>\n        </article>\n\n        <article class=\"order-card delivered\" data-status=\"delivered\">\n          <div class=\"order-top\">\n            <div class=\"order-meta\">\n              <h3 class=\"order-number\">طلب <bdi dir=\"ltr\">#A-10188</bdi></h3>\n              <span class=\"status\">\n                <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                  <circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m8 12 2.6 2.6L16.5 9\"/>\n                </svg>\n                تم التوصيل\n              </span>\n            </div>\n            <div class=\"date-line\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M16 3v4M8 3v4M3 10h18\"/>\n              </svg>\n              <span>٢٨ أبريل ٢٠٢٥</span>\n              <span class=\"date-separator\"></span>\n              <span>١٩ رمضان ١٤٤٦ هـ</span>\n            </div>\n          </div>\n          <div class=\"order-bottom\">\n            <div>\n              <span class=\"total-label\">إجمالي الطلب</span>\n              <strong class=\"total\"><bdi>٣١٥٫٧٥ ر.س</bdi></strong>\n            </div>\n            <button class=\"details-button\" type=\"button\" data-order=\"A-10188\">\n              تفاصيل الطلب\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <path d=\"m9 18 6-6-6-6\"/>\n              </svg>\n            </button>\n          </div>\n        </article>\n\n        <article class=\"order-card cancelled\" data-status=\"cancelled\">\n          <div class=\"order-top\">\n            <div class=\"order-meta\">\n              <h3 class=\"order-number\">طلب <bdi dir=\"ltr\">#A-10054</bdi></h3>\n              <span class=\"status\">\n                <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\">\n                  <circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"m8.5 8.5 7 7m0-7-7 7\"/>\n                </svg>\n                ملغي\n              </span>\n            </div>\n            <div class=\"date-line\">\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"2\"/><path d=\"M16 3v4M8 3v4M3 10h18\"/>\n              </svg>\n              <span>١٥ أبريل ٢٠٢٥</span>\n              <span class=\"date-separator\"></span>\n              <span>٦ رمضان ١٤٤٦ هـ</span>\n            </div>\n          </div>\n          <div class=\"order-bottom\">\n            <div>\n              <span class=\"total-label\">إجمالي الطلب</span>\n              <strong class=\"total\"><bdi>٧٦٫٠٠ ر.س</bdi></strong>\n            </div>\n            <button class=\"details-button\" type=\"button\" data-order=\"A-10054\">\n              تفاصيل الطلب\n              <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <path d=\"m9 18 6-6-6-6\"/>\n              </svg>\n            </button>\n          </div>\n        </article>\n      </section>\n\n      <section class=\"empty-state\" aria-live=\"polite\">\n        <div class=\"empty-icon\">\n          <svg width=\"25\" height=\"25\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <path d=\"M3 6h18v14H3zM3 9h18M8 3v4M16 3v4\"/>\n          </svg>\n        </div>\n        <h3>لا توجد طلبات لعرضها</h3>\n        <p>ستظهر هنا جميع طلباتك السابقة.</p>\n      </section>\n    </main>\n\n    <div class=\"toast\" role=\"status\" aria-live=\"polite\">سيتم فتح تفاصيل الطلب <bdi id=\"toastOrder\"></bdi></div>\n  </div>\n\n  <script>\n    const toast = document.querySelector('.toast');\n    const toastOrder = document.getElementById('toastOrder');\n    let toastTimer;\n\n    document.querySelectorAll('.details-button').forEach(button => {\n      button.addEventListener('click', () => {\n        toastOrder.textContent = '#' + button.dataset.order;\n        toast.classList.add('show');\n        clearTimeout(toastTimer);\n        toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);\n      });\n    });\n\n    document.querySelector('.back-button').addEventListener('click', () => {\n      toastOrder.textContent = '';\n      toast.lastChild.textContent = ' العودة إلى الصفحة الرئيسية';\n      toast.classList.add('show');\n      clearTimeout(toastTimer);\n      toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);\n    });\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6152,
+    "output": 5838
+  },
+  "ms": 26411,
+  "finish": "stop",
+  "reasoningTokens": 94,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 72,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 18,
+        "y": 225.890625,
+        "width": 48.6875,
+        "height": 16
+      },
+      "message": "\"4 طلبات\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span>4 طلبات</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 240.59375,
+        "y": 276.890625,
+        "width": 74.671875,
+        "height": 19
+      },
+      "message": "\"#A-10293\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">#A-10293</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 240.59375,
+        "y": 445.875,
+        "width": 74.671875,
+        "height": 19
+      },
+      "message": "\"#A-10276\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">#A-10276</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 240.59375,
+        "y": 614.859375,
+        "width": 74.671875,
+        "height": 19
+      },
+      "message": "\"#A-10188\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">#A-10188</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 240.59375,
+        "y": 783.84375,
+        "width": 74.671875,
+        "height": 19
+      },
+      "message": "\"#A-10054\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">#A-10054</bdi>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 165.875,
+        "y": 45,
+        "width": 148.125,
+        "height": 25
+      },
+      "message": "\"Noto Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الطلبات السابقة</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 274.1875,
+        "y": 173.890625,
+        "width": 85.625,
+        "height": 15
+      },
+      "message": "\"إجمالي الطلبات\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>إجمالي الطلبات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 166.6875,
+        "y": 173.890625,
+        "width": 56.625,
+        "height": 15
+      },
+      "message": "\"تم توصيلها\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>تم توصيلها</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43.6875,
+        "y": 173.890625,
+        "width": 58.625,
+        "height": 15
+      },
+      "message": "\"قيد الشحن\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>قيد الشحن</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 280.890625,
+        "width": 60.625,
+        "height": 15
+      },
+      "message": "\"تم التوصيل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status\">\n                <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"roun"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 278.375,
+        "y": 363.875,
+        "width": 78.625,
+        "height": 15
+      },
+      "message": "\"إجمالي الطلب\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"total-label\">إجمالي الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 449.875,
+        "width": 61.625,
+        "height": 15
+      },
+      "message": "\"في الطريق\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status\">\n                <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\""
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 278.375,
+        "y": 532.859375,
+        "width": 78.625,
+        "height": 15
+      },
+      "message": "\"إجمالي الطلب\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"total-label\">إجمالي الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 618.859375,
+        "width": 60.625,
+        "height": 15
+      },
+      "message": "\"تم التوصيل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status\">\n                <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"roun"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 278.375,
+        "y": 701.84375,
+        "width": 78.625,
+        "height": 15
+      },
+      "message": "\"إجمالي الطلب\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"total-label\">إجمالي الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 787.84375,
+        "width": 28,
+        "height": 15
+      },
+      "message": "\"ملغي\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status\">\n                <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\">\n                  <c"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 278.375,
+        "y": 870.828125,
+        "width": 78.625,
+        "height": 15
+      },
+      "message": "\"إجمالي الطلب\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"total-label\">إجمالي الطلب</span>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 953
+}

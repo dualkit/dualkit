@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f8f5" />
+  <title>عنوان التوصيل</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
+
+    :root {
+      --background: #f4f6f2;
+      --surface: #ffffff;
+      --surface-soft: #f8faf7;
+      --ink: #17372b;
+      --muted: #68766f;
+      --primary: #176b4a;
+      --primary-dark: #10563a;
+      --primary-soft: #e7f3ed;
+      --line: #dce4df;
+      --danger: #b42318;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --shadow: 0 14px 38px rgba(24, 65, 49, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      color-scheme: light;
+      background: var(--background);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 90% 4%, rgba(205, 235, 218, 0.7), transparent 28%),
+        var(--background);
+      font-family: "IBM Plex Sans Arabic", sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      letter-spacing: 0;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 18px 18px 34px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .back-button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      place-items: center;
+      color: var(--ink);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      box-shadow: 0 6px 18px rgba(23, 55, 43, 0.06);
+      cursor: pointer;
+    }
+
+    .back-button svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .secure-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .secure-label svg {
+      width: 17px;
+      height: 17px;
+      color: var(--primary);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 24px;
+      color: #fff;
+      background: linear-gradient(135deg, #176b4a 0%, #0f563b 100%);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      position: absolute;
+      inset: -58px -35px auto auto;
+      width: 155px;
+      height: 155px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .hero-icon {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 18px;
+      place-items: center;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 15px;
+    }
+
+    .hero-icon svg {
+      width: 25px;
+      height: 25px;
+    }
+
+    h1 {
+      position: relative;
+      z-index: 1;
+      margin: 0 0 6px;
+      font-size: 25px;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .hero p {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 15px;
+    }
+
+    .form-card {
+      margin-top: 18px;
+      padding: 24px 20px 22px;
+      background: var(--surface);
+      border: 1px solid rgba(220, 228, 223, 0.8);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 20px;
+      font-size: 18px;
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .section-heading::before {
+      width: 4px;
+      height: 22px;
+      background: var(--primary);
+      border-radius: 999px;
+      content: "";
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    .field:last-of-type {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      color: #354a41;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .optional {
+      margin-inline-start: 4px;
+      color: #8a958f;
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    input,
+    select {
+      width: 100%;
+      height: 54px;
+      padding: 0 15px;
+      color: var(--ink);
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    input::placeholder {
+      color: #99a39e;
+    }
+
+    input:focus,
+    select:focus {
+      background: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(23, 107, 74, 0.1);
+    }
+
+    select {
+      padding-inline-end: 46px;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .select-wrap::after {
+      position: absolute;
+      inset-inline-end: 16px;
+      top: 50%;
+      width: 9px;
+      height: 9px;
+      border-right: 2px solid var(--primary);
+      border-bottom: 2px solid var(--primary);
+      transform: translateY(-70%) rotate(45deg);
+      pointer-events: none;
+      content: "";
+    }
+
+    .phone-wrap {
+      display: flex;
+      direction: ltr;
+      align-items: stretch;
+    }
+
+    .country-code {
+      display: flex;
+      min-width: 90px;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      color: var(--ink);
+      background: #edf2ee;
+      border: 1px solid var(--line);
+      border-inline-end: 0;
+      border-radius: var(--radius-md) 0 0 var(--radius-md);
+      font-weight: 600;
+    }
+
+    .phone-wrap input {
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      text-align: left;
+    }
+
+    .hint {
+      margin: 7px 2px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .makani-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 132px;
+      gap: 10px;
+    }
+
+    .map-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 54px;
+      padding: 0 12px;
+      color: var(--primary);
+      background: var(--primary-soft);
+      border: 1px solid #cbe4d7;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .map-button svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .save-button {
+      width: 100%;
+      min-height: 56px;
+      margin-top: 24px;
+      padding: 12px 20px;
+      color: #fff;
+      background: var(--primary);
+      border: 0;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 22px rgba(23, 107, 74, 0.2);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    .save-button:hover {
+      background: var(--primary-dark);
+      box-shadow: 0 12px 26px rgba(23, 107, 74, 0.25);
+    }
+
+    .save-button:active {
+      transform: translateY(1px);
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .privacy-note svg {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 10;
+      inset-inline: 20px;
+      bottom: 22px;
+      max-width: 440px;
+      margin: auto;
+      padding: 14px 18px;
+      color: #fff;
+      background: #17372b;
+      border-radius: 14px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+      font-size: 14px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(18px);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 370px) {
+      .page {
+        padding-inline: 12px;
+      }
+
+      .form-card {
+        padding-inline: 16px;
+      }
+
+      .makani-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <button class="back-button" type="button" aria-label="الرجوع إلى صفحة الدفع">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <span class="secure-label">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 10V7a5 5 0 0 1 10 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <rect x="5" y="10" width="14" height="10" rx="3" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        عنوان آمن
+      </span>
+    </header>
+
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <circle cx="12" cy="10" r="2.6" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+      </div>
+      <h1 id="page-title">عنوان التوصيل</h1>
+      <p>أدخل تفاصيل العنوان لتوصيل طلبك إلى المكان الصحيح.</p>
+    </section>
+
+    <form class="form-card" id="addressForm" novalidate>
+      <h2 class="section-heading">بيانات العنوان</h2>
+
+      <div class="field">
+        <label for="emirate">الإمارة</label>
+        <div class="input-wrap select-wrap">
+          <select id="emirate" name="emirate" required>
+            <option value="dubai" selected>دبي</option>
+            <option value="abu-dhabi">أبوظبي</option>
+            <option value="sharjah">الشارقة</option>
+            <option value="ajman">عجمان</option>
+            <option value="umm-al-quwain">أم القيوين</option>
+            <option value="ras-al-khaimah">رأس الخيمة</option>
+            <option value="fujairah">الفجيرة</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="building">المبنى أو الفيلا</label>
+        <div class="input-wrap">
+          <input id="building" name="building" type="text" placeholder="مثال: برج النخيل، فيلا 12" autocomplete="address-line1" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="street">الشارع</label>
+        <div class="input-wrap">
+          <input id="street" name="street" type="text" placeholder="اسم الشارع" autocomplete="address-line2" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="area">المنطقة</label>
+        <div class="input-wrap">
+          <input id="area" name="area" type="text" placeholder="مثال: دبي مول، بر دبي" autocomplete="address-level3" required />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="makani-row">
+          <div>
+            <label for="makani">رقم-location مقهى</label>
+            <div class="input-wrap">
+              <input id="makani" name="makani" type="text" inputmode="numeric" placeholder="أدخل رقم المبنى" required />
+            </div>
+          </div>
+          <button class="map-button" type="button" id="locateButton">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+            حدد موقعك
+          </button>
+        </div>
+        <p class="hint">يمكنك العثور على الرقم من خرائط «إ懵».</p>
+      </div>
+
+      <div class="field">
+        <label for="phone">رقم الهاتف</label>
+        <div class="phone-wrap">
+          <span class="country-code" dir="ltr" aria-label="رمز دولة الإمارات العربية المتحدة">+971</span>
+          <input id="phone" name="phone" type="tel" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="050 123 4567" value="050 123 4567" required />
+        </div>
+        <p class="hint">سنتواصل مع هذا الرقم إذا احتجنا إلى توضيح موقع التسليم.</p>
+      </div>
+
+      <button class="save-button" type="submit">حفظ العنوان</button>
+      <p class="privacy-note">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <rect x="5" y="10" width="14" height="10" rx="3" stroke="currentColor" stroke-width="2"/>
+          <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        لن نشارك عنوانك خارج إطار عملية التوصيل.
+      </p>
+    </form>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const form = document.getElementById('addressForm');
+    const toast = document.getElementById('toast');
+    const locateButton = document.getElementById('locateButton');
+    const makaniInput = document.getElementById('makani');
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      window.clearTimeout(showToast.timer);
+      showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 3200);
+    }
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const phone = document.getElementById('phone');
+      const digits = phone.value.replace(/\D/g, '');
+      if (digits.length < 9 || digits.length > 12) {
+        phone.setCustomValidity('أدخل رقم هاتف إماراتي صحيحًا');
+        phone.reportValidity();
+        return;
+      }
+
+      phone.setCustomValidity('');
+      showToast('تم حفظ عنوان التوصيل بنجاح');
+    });
+
+    document.getElementById('phone').addEventListener('input', function (event) {
+      event.target.setCustomValidity('');
+    });
+
+    locateButton.addEventListener('click', function () {
+      if (!navigator.geolocation) {
+        showToast('تحديد الموقع غير متاح في هذا الجهاز');
+        return;
+      }
+
+      locateButton.disabled = true;
+      locateButton.textContent = 'جارٍ التحديد...';
+
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          locateButton.disabled = false;
+          locateButton.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            تم تحديد الموقع`;
+          showToast('تم تحديد موقعك. يرجى مراجعة رقم-location مقهى');
+        },
+        function () {
+          locateButton.disabled = false;
+          locateButton.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+            حدد موقعك`;
+          showToast('تعذر تحديد الموقع. اسمح بالوصول إلى الموقع وحاول مجددًا');
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    });
+  </script>
+</body>
+</html>

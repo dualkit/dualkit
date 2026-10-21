@@ -1,0 +1,24 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "profile",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-10-21T17:14:27.182Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html dir=\"rtl\" lang=\"ar\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>البروفايل</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --color-text: #1a1a1a;\n      --color-muted: #666;\n      --color-primary: #0066cc;\n      --color-border: #e0e0e0;\n    }\n\n    * {\n      box-sizing: border-box;\n    }\n\n    body {\n      margin: 0;\n      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;\n      background-color: #f5f5f5;\n      color: var(--color-text);\n      -webkit-font-smoothing: antialiased;\n    }\n\n    :lang(ar) {\n      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;\n      font-size: 16px;\n      line-height: 1.7;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n    }\n\n    .container {\n      max-width: 480px;\n      margin-inline: auto;\n      padding: 1rem;\n      display: flex;\n      flex-direction: column;\n      gap: 1rem;\n    }\n\n    .field {\n      display: flex;\n      align-items: flex-start;\n      justify-content: space-between;\n      padding: 1rem 0;\n      border-bottom: 1px solid var(--color-border);\n    }\n\n    .field-content {\n      display: flex;\n      flex-direction: column;\n      gap: 0.25rem;\n      flex: 1;\n      margin-inline-start: 0.5rem;\n    }\n\n    .label {\n      font-size: 0.875rem; /* 14px */\n      color: var(--color-muted);\n      margin-inline-end: 0.5rem;\n    }\n\n    .value {\n      font-size: 1rem; /* 16px */\n    }\n\n    .value-multiline {\n      display: flex;\n      flex-direction: column;\n      gap: 0.25rem;\n    }\n\n    .edit {\n      background: none;\n      border: none;\n      color: var(--color-primary);\n      font-size: 0.875rem; /* 14px */\n      cursor: pointer;\n      padding: 0.25rem 0.5rem;\n      border-radius: 4px;\n      font-family: inherit;\n    }\n\n    .edit:focus {\n      outline: 2px solid var(--color-primary);\n      outline-offset: 2px;\n    }\n\n    /* Isolation for Latin runs */\n    .isolate {\n      direction: ltr;\n      unicode-bidi: isolate;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <!-- Personal info (name + email) -->\n    <div class=\"field\">\n      <div class=\"field-content\">\n        <span class=\"label\">الاسم والبريد الإلكتروني</span>\n        <div class=\"value-multiline\">\n          <span class=\"value\">ليلا المنصوري</span>\n          <span class=\"value\"><bdi dir=\"ltr\" class=\"isolate\">layla@example.com</bdi></span>\n        </div>\n      </div>\n      <button class=\"edit\">تعديل</button>\n    </div>\n\n    <!-- Phone -->\n    <div class=\"field\">\n      <div class=\"field-content\">\n        <span class=\"label\">رقم الهاتف</span>\n        <span class=\"value\"><bdi dir=\"ltr\" class=\"isolate\">+971 50 123 4567</bdi></span>\n      </div>\n      <button class=\"edit\">تعديل</button>\n    </div>\n\n    <!-- IBAN -->\n    <div class=\"field\">\n      <div class=\"field-content\">\n        <span class=\"label\">الآيبان</span>\n        <span class=\"value\"><bdi dir=\"ltr\" class=\"isolate\">AE07 0331 2345 6789 0123 456</bdi></span>\n      </div>\n      <button class=\"edit\">تعديل</button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6319,
+    "output": 5483
+  },
+  "ms": 59580,
+  "finish": "stop",
+  "reasoningTokens": 4487,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 29,
+  "score": 100,
+  "missing": [],
+  "findings": [],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

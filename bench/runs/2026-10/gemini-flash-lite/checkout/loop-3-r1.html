@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إتمام الطلب - بقالة الإمارات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #10B981;
+      --primary-dark: #059669;
+      --bg: #F9FAFB;
+      --card-bg: #FFFFFF;
+      --text: #1F2937;
+      --text-muted: #6B7280;
+      --border: #E5E7EB;
+    }
+    
+    body {
+      font-family: 'IBM Plex Sans Arabic', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #E5E7EB;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .phone-frame {
+      width: 100%;
+      max-width: 414px;
+      height: 100vh;
+      max-height: 896px;
+      background-color: var(--bg);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 450px) {
+      .phone-frame {
+        height: 850px;
+        border-radius: 40px;
+        border: 8px solid #1F2937;
+      }
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text);
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    /* Scrollable Body */
+    .scroll-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-bottom: 110px;
+    }
+
+    /* Cart Items */
+    .cart-item {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .item-img {
+      width: 64px;
+      height: 64px;
+      background-color: #F3F4F6;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .item-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .item-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .item-price {
+      font-size: 14px;
+      color: var(--primary-dark);
+      font-weight: 700;
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #F3F4F6;
+      border-radius: 6px;
+      padding: 2px;
+      width: fit-content;
+    }
+
+    .stepper button {
+      background: white;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      color: var(--text);
+    }
+
+    .stepper span {
+      font-size: 14px;
+      font-weight: 600;
+      min-width: 16px;
+      text-align: center;
+    }
+
+    /* Promo Code */
+    .promo-box {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .promo-input {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+      outline: none;
+      font-family: inherit;
+      background: #FAFAFA;
+      direction: ltr;
+    }
+
+    .promo-input:placeholder-shown {
+      direction: rtl;
+    }
+
+    .promo-btn {
+      background: #E5E7EB;
+      border: none;
+      border-radius: 8px;
+      padding: 0 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text);
+      font-family: inherit;
+    }
+
+    /* Summary */
+    .summary-box {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .summary-row.total {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      margin-top: 4px;
+    }
+
+    /* Footer CTA */
+    .footer-cta {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      padding: 16px;
+      border-top: 1px solid var(--border);
+      box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.05);
+    }
+
+    .btn-primary {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+    }
+
+    bdi {
+      unicode-bidi: isolate;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <!-- Header -->
+    <div class="header">
+      <button class="back-btn" aria-label="الرجوع">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m9 18 6-6-6-6"/>
+        </svg>
+      </button>
+      <h1 class="header-title">إتمام الطلب</h1>
+    </div>
+
+    <!-- Scrollable Content -->
+    <div class="scroll-body">
+      <!-- Cart Items -->
+      <div class="cart-item">
+        <div class="item-img">صورة</div>
+        <div class="item-details">
+          <h3 class="item-name">حليب طازج المراعي 2 لتر</h3>
+          <div class="item-price"><bdi>14.75 د.إ</bdi></div>
+        </div>
+        <div class="stepper">
+          <button aria-label="تقليل الكمية">-</button>
+          <span>1</span>
+          <button aria-label="زيادة الكمية">+</button>
+        </div>
+      </div>
+
+      <div class="cart-item">
+        <div class="item-img">صورة</div>
+        <div class="item-details">
+          <h3 class="item-name">خبز أبيض التنمية</h3>
+          <div class="item-price"><bdi>4.50 د.إ</bdi></div>
+        </div>
+        <div class="stepper">
+          <button aria-label="تقليل الكمية">-</button>
+          <span>1</span>
+          <button aria-label="زيادة الكمية">+</button>
+        </div>
+      </div>
+
+      <div class="cart-item">
+        <div class="item-img">صورة</div>
+        <div class="item-details">
+          <h3 class="item-name">طماطم محلية طازجة 1 كغ</h3>
+          <div class="item-price"><bdi>8.00 د.إ</bdi></div>
+        </div>
+        <div class="stepper">
+          <button aria-label="تقليل الكمية">-</button>
+          <span>2</span>
+          <button aria-label="زيادة الكمية">+</button>
+        </div>
+      </div>
+
+      <!-- Promo Code Field -->
+      <div class="promo-box">
+        <input type="text" class="promo-input" placeholder="أدخل رمز القسيمة" dir="ltr">
+        <button class="promo-btn">تطبيق</button>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-box">
+        <div class="summary-row">
+          <span>المجموع الفرعي</span>
+          <span><bdi>27.25 د.إ</bdi></span>
+        </div>
+        <div class="summary-row">
+          <span>رسوم التوصيل</span>
+          <span><bdi>10.00 د.إ</bdi></span>
+        </div>
+        <div class="summary-row">
+          <span>ضريبة القيمة المضافة (5%)</span>
+          <span><bdi>1.86 د.إ</bdi></span>
+        </div>
+        <div class="summary-row total">
+          <span>المجموع الكلي</span>
+          <span><bdi>39.11 د.إ</bdi></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer CTA -->
+    <div class="footer-cta">
+      <button class="btn-primary">إتمام الطلب</button>
+    </div>
+  </div>
+</body>
+</html>

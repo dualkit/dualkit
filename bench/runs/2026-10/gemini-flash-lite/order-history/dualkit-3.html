@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>طلباتي - متجر السعودية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      font-size: var(--type-body-size);
+      background-color: #f8fafc;
+      color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Phone Frame Container */
+    .phone-container {
+      width: 100%;
+      max-width: 430px;
+      height: 100vh;
+      max-height: 932px;
+      background-color: #ffffff;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @media (min-width: 434px) {
+      .phone-container {
+        border-radius: 40px;
+        border: 8px solid #1e293b;
+        height: 884px;
+      }
+    }
+
+    /* App Bar */
+    .app-bar {
+      padding: 16px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .app-bar h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #334155;
+    }
+
+    .back-btn:hover {
+      background-color: #f1f5f9;
+    }
+
+    /* Tabs Filter */
+    .tabs-container {
+      display: flex;
+      gap: 8px;
+      padding: 12px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      overflow-x: auto;
+    }
+
+    .tab {
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: var(--type-label-size);
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #475569;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+    }
+
+    /* Content Area */
+    .content-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Order Card */
+    .order-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .order-id {
+      font-weight: 600;
+      font-size: 15px;
+      color: #1e293b;
+    }
+
+    /* Status Badges */
+    .badge {
+      font-size: var(--type-label-size);
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge.delivered {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+
+    .badge.on-the-way {
+      background-color: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .badge.cancelled {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+
+    /* Order Details Meta */
+    .order-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: var(--type-caption-size);
+      color: #64748b;
+      border-top: 1px dashed #e2e8f0;
+      border-bottom: 1px dashed #e2e8f0;
+      padding: 10px 0;
+    }
+
+    .date-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .date-label {
+      color: #475569;
+    }
+
+    .date-value {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Order Footer */
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .order-total {
+      font-size: 15px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .order-total span {
+      color: #0284c7;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .action-btn {
+      background-color: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: var(--type-label-size);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .action-btn:hover {
+      background-color: #e2e8f0;
+    }
+
+    /* Bottom Nav Bar */
+    .bottom-nav {
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .nav-item.active {
+      color: #0284c7;
+    }
+
+    .nav-item svg {
+      width: 22px;
+      height: 22px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-container">
+    <!-- App Bar -->
+    <header class="app-bar">
+      <button class="back-btn" aria-label="الرجوع">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m9 18 6-6-6-6"/>
+        </svg>
+      </button>
+      <h1>طلباتي</h1>
+      <div style="width: 24px;"></div> <!-- Spacer -->
+    </header>
+
+    <!-- Filter Tabs -->
+    <div class="tabs-container">
+      <button class="tab">الكل</button>
+      <button class="tab active">النشطة</button>
+      <button class="tab">السابقة</button>
+      <button class="tab">الملغاة</button>
+    </div>
+
+    <!-- Orders List -->
+    <main class="content-scroll">
+
+      <!-- Order 1: On the way -->
+      <article class="order-card">
+        <div class="order-header">
+          <div class="order-id">طلب رقم <bdi dir="ltr">#SA-8501</bdi></div>
+          <span class="badge on-the-way">قيد التوصيل</span>
+        </div>
+        <div class="order-meta">
+          <div class="date-row">
+            <span class="date-label">تاريخ الهجري:</span>
+            <span class="date-value"><bdi>١٨ رمضان ١٤٤٥ هـ</bdi></span>
+          </div>
+          <div class="date-row">
+            <span class="date-label">تاريخ الميلادي:</span>
+            <span class="date-value"><bdi dir="ltr">29 مارس 2024</bdi></span>
+          </div>
+        </div>
+        <div class="order-footer">
+          <div class="order-total">الإجمالي: <span>1,250.00 ر.س</span></div>
+          <button class="action-btn">تتبع الطلب</button>
+        </div>
+      </article>
+
+      <!-- Order 2: Delivered -->
+      <article class="order-card">
+        <div class="order-header">
+          <div class="order-id">طلب رقم <bdi dir="ltr">#SA-8492</bdi></div>
+          <span class="badge delivered">تم التوصيل</span>
+        </div>
+        <div class="order-meta">
+          <div class="date-row">
+            <span class="date-label">تاريخ الهجري:</span>
+            <span class="date-value"><bdi>١٤ رمضان ١٤٤٥ هـ</bdi></span>
+          </div>
+          <div class="date-row">
+            <span class="date-label">تاريخ الميلادي:</span>
+            <span class="date-value"><bdi dir="ltr">25 مارس 2024</bdi></span>
+          </div>
+        </div>
+        <div class="order-footer">
+          <div class="order-total">الإجمالي: <span>345.00 ر.س</span></div>
+          <button class="action-btn">إعادة الطلب</button>
+        </div>
+      </article>
+
+      <!-- Order 3: Delivered -->
+      <article class="order-card">
+        <div class="order-header">
+          <div class="order-id">طلب رقم <bdi dir="ltr">#SA-8310</bdi></div>
+          <span class="badge delivered">تم التوصيل</span>
+        </div>
+        <div class="order-meta">
+          <div class="date-row">
+            <span class="date-label">تاريخ الهجري:</span>
+            <span class="date-value"><bdi>٢ شوال ١٤٤٥ هـ</bdi></span>
+          </div>
+          <div class="date-row">
+            <span class="date-label">تاريخ الميلادي:</span>
+            <span class="date-value"><bdi dir="ltr">11 أبريل 2024</bdi></span>
+          </div>
+        </div>
+        <div class="order-footer">
+          <div class="order-total">الإجمالي: <span>89.50 ر.س</span></div>
+          <button class="action-btn">إعادة الطلب</button>
+        </div>
+      </article>
+
+      <!-- Order 4: Cancelled -->
+      <article class="order-card">
+        <div class="order-header">
+          <div class="order-id">طلب رقم <bdi dir="ltr">#SA-8194</bdi></div>
+          <span class="badge cancelled">ملغي</span>
+        </div>
+        <div class="order-meta">
+          <div class="date-row">
+            <span class="date-label">تاريخ الهجري:</span>
+            <span class="date-value"><bdi>٥ شعبان ١٤٤٥ هـ</bdi></span>
+          </div>
+          <div class="date-row">
+            <span class="date-label">تاريخ الميلادي:</span>
+            <span class="date-value"><bdi dir="ltr">15 فبراير 2024</bdi></span>
+          </div>
+        </div>
+        <div class="order-footer">
+          <div class="order-total">الإجمالي: <span>420.00 ر.س</span></div>
+          <button class="action-btn">تفاصيل الطلب</button>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        الرئيسية
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+        الأقسام
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        السلة
+      </a>
+      <a href="#" class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/></svg>
+        طلباتي
+      </a>
+      <a href="#" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        حسابي
+      </a>
+    </nav>
+  </div>
+
+</body>
+</html>

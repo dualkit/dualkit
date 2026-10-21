@@ -1,0 +1,137 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "checkout",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T17:23:37.243Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Checkout</title>\n  <style>\n    body {\n      font-family: 'Arial', sans-serif;\n      background-color: #f5f5f5;\n      margin: 0;\n      padding: 0;\n      display: flex;\n      justify-content: center;\n    }\n    .container {\n      width: 100%;\n      max-width: 480px;\n      background: #fff;\n      padding: 16px;\n      box-sizing: border-box;\n    }\n    header {\n      display: flex;\n      align-items: center;\n      margin-bottom: 16px;\n    }\n    .back-arrow {\n      background: none;\n      border: none;\n      font-size: 24px;\n      margin-left: 8px;\n      cursor: pointer;\n    }\n    .title {\n      font-size: 20px;\n      font-weight: bold;\n    }\n    .item {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      padding: 12px 0;\n      border-bottom: 1px solid #eee;\n    }\n    .photo-placeholder {\n      width: 60px;\n      height: 60px;\n      background-color: #ddd;\n      border-radius: 8px;\n      margin-left: 12px;\n    }\n    .item-info {\n      flex: 1;\n      display: flex;\n      flex-direction: column;\n    }\n    .item-name {\n      font-size: 16px;\n      margin-bottom: 8px;\n    }\n    .stepper {\n      display: flex;\n      align-items: center;\n    }\n    .stepper button {\n      width: 30px;\n      height: 30px;\n      border: none;\n      background: #f0f0f0;\n      border-radius: 4px;\n      font-size: 18px;\n      cursor: pointer;\n    }\n    .stepper input {\n      width: 40px;\n      height: 30px;\n      text-align: center;\n      margin: 0 4px;\n      border: 1px solid #ccc;\n      border-radius: 4px;\n    }\n    .item-price {\n      font-size: 16px;\n      font-weight: bold;\n    }\n    .promo {\n      margin: 16px 0;\n    }\n    .promo input {\n      width: 100%;\n      padding: 10px;\n      border: 1px solid #ccc;\n      border-radius: 4px;\n      box-sizing: border-box;\n    }\n    .summary {\n      margin-top: 16px;\n    }\n    .summary .row {\n      display: flex;\n      justify-content: space-between;\n      padding: 6px 0;\n      border-bottom: 1px dashed #ccc;\n    }\n    .summary .total {\n      font-weight: bold;\n      font-size: 18px;\n      margin-top: 8px;\n    }\n    .place-order {\n      width: 100%;\n      padding: 12px;\n      background: #4CAF50;\n      color: white;\n      border: none;\n      border-radius: 4px;\n      font-size: 16px;\n      margin-top: 16px;\n      cursor: pointer;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <header>\n      <button class=\"back-arrow\">←</button>\n      <h1 class=\"title\">إتمام الطلب</h1>\n    </header>\n\n    <!-- Item 1 -->\n    <div class=\"item\">\n      <div class=\"photo-placeholder\"></div>\n      <div class=\"item-info\">\n        <div class=\"item-name\">تفاح</div>\n        <div class=\"stepper\">\n          <button class=\"decrease\">-</button>\n          <input type=\"number\" value=\"1\" min=\"0\">\n          <button class=\"increase\">+</button>\n        </div>\n      </div>\n      <div class=\"item-price\">10.00 د.إ</div>\n    </div>\n\n    <!-- Item 2 -->\n    <div class=\"item\">\n      <div class=\"photo-placeholder\"></div>\n      <div class=\"item-info\">\n        <div class=\"item-name\">حليب</div>\n        <div class=\"stepper\">\n          <button class=\"decrease\">-</button>\n          <input type=\"number\" value=\"2\" min=\"0\">\n          <button class=\"increase\">+</button>\n        </div>\n      </div>\n      <div class=\"item-price\">5.00 د.إ</div>\n    </div>\n\n    <!-- Item 3 -->\n    <div class=\"item\">\n      <div class=\"photo-placeholder\"></div>\n      <div class=\"item-info\">\n        <div class=\"item-name\">بروتين</div>\n        <div class=\"stepper\">\n          <button class=\"decrease\">-</button>\n          <input type=\"number\" value=\"1\" min=\"0\">\n          <button class=\"increase\">+</button>\n        </div>\n      </div>\n      <div class=\"item-price\">20.00 د.إ</div>\n    </div>\n\n    <!-- Promo code -->\n    <div class=\"promo\">\n      <input type=\"text\" placeholder=\"رمز الخصم\">\n    </div>\n\n    <!-- Summary -->\n    <div class=\"summary\">\n      <div class=\"row subtotal\">\n        <span>الإجمالي الفرعي</span>\n        <span>0.00 د.إ</span>\n      </div>\n      <div class=\"row delivery\">\n        <span>الdelivery</span>\n        <span>10.00 د.إ</span>\n      </div>\n      <div class=\"row vat\">\n        <span>ضريبة القيمة المضافة (5%)</span>\n        <span>0.00 د.إ</span>\n      </div>\n      <div class=\"row total\">\n        <span>الإجمالي</span>\n        <span>0.00 د.إ</span>\n      </div>\n    </div>\n\n    <!-- Place order -->\n    <button class=\"place-order\">Place order</button>\n  </div>\n\n  <script>\n    document.addEventListener('DOMContentLoaded', function() {\n      const items = document.querySelectorAll('.item');\n      const subtotalEl = document.querySelector('.subtotal span:last-child');\n      const vatEl = document.querySelector('.vat span:last-child');\n      const totalEl = document.querySelector('.total span:last-child');\n\n      function updateTotals() {\n        let subtotal = 0;\n        items.forEach(item => {\n          const price = parseFloat(item.querySelector('.item-price').textContent);\n          const quantity = parseInt(item.querySelector('input').value);\n          subtotal += price * quantity;\n        });\n        const delivery = 10;\n        const vat = subtotal * 0.05;\n        const total = subtotal + delivery + vat;\n        subtotalEl.textContent = subtotal.toFixed(2) + ' د.إ';\n        vatEl.textContent = vat.toFixed(2) + ' د.إ';\n        totalEl.textContent = total.toFixed(2) + ' د.إ';\n      }\n\n      items.forEach(item => {\n        const decBtn = item.querySelector('.decrease');\n        const incBtn = item.querySelector('.increase');\n        const input = item.querySelector('input');\n\n        decBtn.addEventListener('click', () => {\n          if (input.value > 0) {\n            input.value--;\n            updateTotals();\n          }\n        });\n        incBtn.addEventListener('click', () => {\n          input.value++;\n          updateTotals();\n        });\n        input.addEventListener('change', updateTotals);\n      });\n\n      updateTotals();\n    });\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 148,
+    "output": 6179
+  },
+  "ms": 63728,
+  "finish": "stop",
+  "reasoningTokens": 4700,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 81,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 222,
+        "y": 121.78125,
+        "width": 46,
+        "height": 34
+      },
+      "message": "This number field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"number\" value=\"1\" min=\"0\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 222,
+        "y": 207.78125,
+        "width": 46,
+        "height": 34
+      },
+      "message": "This number field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"number\" value=\"2\" min=\"0\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 222,
+        "y": 293.78125,
+        "width": 46,
+        "height": 34
+      },
+      "message": "This number field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"number\" value=\"1\" min=\"0\">"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 227.4375,
+        "y": 30.390625,
+        "width": 102.5625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1 class=\"title\">إتمام الطلب</h1>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 338,
+        "y": 26.390625,
+        "width": 36,
+        "height": 30
+      },
+      "message": "margin-left: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button class=\"back-arrow\">←</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 314,
+        "y": 95.28125,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo-placeholder\"></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 314,
+        "y": 181.28125,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo-placeholder\"></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 314,
+        "y": 267.28125,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo-placeholder\"></div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

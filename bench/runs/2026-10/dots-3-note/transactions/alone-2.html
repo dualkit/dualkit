@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المعاملات</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 16px;
+  direction: rtl;
+}
+.container {
+  max-width: 375px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.balance {
+  font-size: 1.2em;
+  margin-bottom: 8px;
+}
+.filter {
+  margin-bottom: 16px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 8px;
+  text-align: right;
+  border-bottom: 1px solid #ddd;
+}
+th {
+  background-color: #f0f0f0;
+}
+.in {
+  color: green;
+  font-weight: bold;
+}
+.out {
+  color: red;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="balance">الرقم: 1234.567 OMR</div>
+  <div class="filter">
+    <label for="filter">تصفية:</label>
+    <select id="filter">
+      <option value="all">كل الأوقات</option>
+      <option value="thisMonth">هذا الشهر</option>
+      <option value="lastMonth">الشهر الماضي</option>
+    </select>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>التاريخ</th>
+        <th>التاجر</th>
+        <th>المبلغ</th>
+        <th>النوع</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2024-06-01</td>
+        <td>Lulu Hypermarket</td>
+        <td>12.345 OMR</td>
+        <td class="out">صادر</td>
+      </tr>
+      <tr>
+        <td>2024-06-02</td>
+        <td>Netflix</td>
+        <td>5.000 OMR</td>
+        <td class="out">صادر</td>
+      </tr>
+      <tr>
+        <td>2024-06-03</td>
+        <td>Salary</td>
+        <td>1000.000 OMR</td>
+        <td class="in">وارد</td>
+      </tr>
+      <tr>
+        <td>2024-06-04</td>
+        <td>Uber</td>
+        <td>3.210 OMR</td>
+        <td class="out">صادر</td>
+      </tr>
+      <tr>
+        <td>2024-06-05</td>
+        <td>Starbucks</td>
+        <td>2.500 OMR</td>
+        <td class="out">صادر</td>
+      </tr>
+      <tr>
+        <td>2024-06-06</td>
+        <td>Amazon</td>
+        <td>15.750 OMR</td>
+        <td class="out">صادر</td>
+      </tr>
+      <tr>
+        <td>2024-06-07</td>
+        <td>Transfer from John</td>
+        <td>50.000 OMR</td>
+        <td class="in">وارد</td>
+      </tr>
+      <tr>
+        <td>2024-06-08</td>
+        <td>Electricity Bill</td>
+        <td>10.000 OMR</td>
+        <td class="out">صادر</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

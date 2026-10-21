@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سجل الطلبات</title>
+  <style>
+    :root {
+      --primary: #146c5b;
+      --primary-dark: #0d5547;
+      --primary-soft: #e8f4f1;
+      --text: #17211f;
+      --muted: #687572;
+      --border: #e3e9e7;
+      --surface: #ffffff;
+      --background: #f5f7f6;
+      --amber: #a76500;
+      --amber-soft: #fff4df;
+      --red: #b43b3b;
+      --red-soft: #fdeeee;
+      --shadow: 0 10px 30px rgba(23, 33, 31, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: Tahoma, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding-bottom: 30px;
+      background: var(--background);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 42px 1fr 42px;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(227, 233, 231, 0.85);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+    }
+
+    .icon-button {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      place-items: center;
+      border: 0;
+      border-radius: 14px;
+      background: #f3f6f5;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .icon-button svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      text-align: center;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .profile {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #d8eee8, #b9ded5);
+      color: var(--primary-dark);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    main {
+      padding: 22px 16px;
+    }
+
+    .intro {
+      margin-bottom: 20px;
+    }
+
+    .intro h2 {
+      margin: 0 0 5px;
+      font-size: 24px;
+      line-height: 1.4;
+    }
+
+    .intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .summary-item {
+      padding: 12px 6px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--surface);
+      text-align: center;
+    }
+
+    .summary-item strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--primary-dark);
+      font-size: 18px;
+    }
+
+    .summary-item span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 2px 12px;
+    }
+
+    .section-title h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .count {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .orders {
+      display: grid;
+      gap: 12px;
+    }
+
+    .order-card {
+      position: relative;
+      overflow: hidden;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .order-card::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 4px;
+      content: "";
+      background: var(--status-color);
+    }
+
+    .order-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .order-number {
+      margin: 0 0 5px;
+      direction: ltr;
+      text-align: right;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+    }
+
+    .order-date {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .status {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--status-bg);
+      color: var(--status-color);
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .delivered {
+      --status-color: var(--primary);
+      --status-bg: var(--primary-soft);
+    }
+
+    .on-way {
+      --status-color: var(--amber);
+      --status-bg: var(--amber-soft);
+    }
+
+    .cancelled {
+      --status-color: var(--red);
+      --status-bg: var(--red-soft);
+    }
+
+    .order-details {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 13px;
+      border-top: 1px solid #edf0ef;
+    }
+
+    .items {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .total {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .total strong {
+      color: var(--primary-dark);
+      font-size: 17px;
+    }
+
+    .details-button {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 13px;
+      padding: 10px;
+      border: 0;
+      border-radius: 12px;
+      background: #f4f7f6;
+      color: var(--primary-dark);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .details-button svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .empty-space {
+      height: 12px;
+    }
+
+    @media (max-width: 360px) {
+      .summary {
+        gap: 5px;
+      }
+
+      .order-card {
+        padding: 14px;
+      }
+
+      .order-head {
+        gap: 7px;
+      }
+
+      .status {
+        padding: 6px 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <button class="icon-button" type="button" aria-label="الرجوع">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+      <h1>سجل الطلبات</h1>
+      <div class="profile" aria-label="الملف الشخصي">م</div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <h2>طلباتك في مكان واحد</h2>
+        <p>تابع حالة الطلبات، وتاريخ الشراء، وإجمالي المبلغ بسهولة.</p>
+      </section>
+
+      <section class="summary" aria-label="ملخص الطلبات">
+        <div class="summary-item">
+          <strong>4</strong>
+          <span>إجمالي الطلبات</span>
+        </div>
+        <div class="summary-item">
+          <strong>2</strong>
+          <span>تم التوصيل</span>
+        </div>
+        <div class="summary-item">
+          <strong>1</strong>
+          <span>قيد التوصيل</span>
+        </div>
+      </section>
+
+      <div class="section-title">
+        <h3>أحدث الطلبات</h3>
+        <span class="count">4 طلبات</span>
+      </div>
+
+      <section class="orders" aria-label="قائمة الطلبات">
+        <article class="order-card delivered">
+          <div class="order-head">
+            <div>
+              <h4 class="order-number">#A-10293</h4>
+              <p class="order-date">٢٢ مايو ٢٠٢٥ &nbsp;•&nbsp; ١٤ شوال ١٤٤٦هـ</p>
+            </div>
+            <span class="status"><span class="status-dot"></span>تم التوصيل</span>
+          </div>
+          <div class="order-details">
+            <p class="items">٣ منتجات</p>
+            <div class="total"><strong>١٨٥٫٥٠</strong><span>ر.س</span></div>
+          </div>
+          <button class="details-button" type="button">
+            عرض تفاصيل الطلب
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+        </article>
+
+        <article class="order-card on-way">
+          <div class="order-head">
+            <div>
+              <h4 class="order-number">#A-10276</h4>
+              <p class="order-date">١٨ مايو ٢٠٢٥ &nbsp;•&nbsp; ١٠ شوال ١٤٤٦هـ</p>
+            </div>
+            <span class="status"><span class="status-dot"></span>في الطريق</span>
+          </div>
+          <div class="order-details">
+            <p class="items">٢ منتجات</p>
+            <div class="total"><strong>٢٤٩٫٩٥</strong><span>ر.س</span></div>
+          </div>
+          <button class="details-button" type="button">
+            عرض تفاصيل الطلب
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+        </article>
+
+        <article class="order-card cancelled">
+          <div class="order-head">
+            <div>
+              <h4 class="order-number">#A-10241</h4>
+              <p class="order-date">١٢ مايو ٢٠٢٥ &nbsp;•&nbsp; ٤ شوال ١٤٤٦هـ</p>
+            </div>
+            <span class="status"><span class="status-dot"></span>ملغي</span>
+          </div>
+          <div class="order-details">
+            <p class="items">منتج واحد</p>
+            <div class="total"><strong>٧٩٫٠٠</strong><span>ر.س</span></div>
+          </div>
+          <button class="details-button" type="button">
+            عرض تفاصيل الطلب
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+        </article>
+
+        <article class="order-card delivered">
+          <div class="order-head">
+            <div>
+              <h4 class="order-number">#A-10198</h4>
+              <p class="order-date">٢٧ أبريل ٢٠٢٥ &nbsp;•&nbsp; ١٩ رمضان ١٤٤٦هـ</p>
+            </div>
+            <span class="status"><span class="status-dot"></span>تم التوصيل</span>
+          </div>
+          <div class="order-details">
+            <p class="items">٤ منتجات</p>
+            <div class="total"><strong>٣١٢٫٢٥</strong><span>ر.س</span></div>
+          </div>
+          <button class="details-button" type="button">
+            عرض تفاصيل الطلب
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+        </article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "settings",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T18:03:41.200Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>الإعدادات</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n<style>\n  :root {\n    --bg: #f1f3f5;\n    --card: #ffffff;\n    --text: #1a1a1a;\n    --text-secondary: #8e8e93;\n    --accent: #007aff;\n    --border: #e5e5ea;\n    --toggle-off: #e5e5ea;\n    --toggle-on: #34c759;\n    --danger: #ff3b30;\n  }\n  * { margin: 0; padding: 0; box-sizing: border-box; }\n  body {\n    font-family: 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;\n    background: #d4d6d8;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    min-height: 100vh;\n    padding: 24px;\n    -webkit-font-smoothing: antialiased;\n  }\n  .phone {\n    width: 375px;\n    height: 812px;\n    background: var(--bg);\n    border-radius: 40px;\n    border: 10px solid #1c1c1e;\n    box-shadow: 0 20px 60px rgba(0,0,0,0.45);\n    overflow: hidden;\n    position: relative;\n    display: flex;\n    flex-direction: column;\n  }\n  .status-bar {\n    height: 44px;\n    background: #fff;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding: 0 24px;\n    font-size: 14px;\n    font-weight: 600;\n    color: var(--text);\n    flex-shrink: 0;\n  }\n  .status-bar .right { display: flex; gap: 6px; align-items: center; }\n  .status-bar svg { width: 16px; height: 11px; }\n\n  .scroll {\n    flex: 1;\n    overflow-y: auto;\n    padding: 8px 0 24px;\n    -webkit-overflow-scrolling: touch;\n  }\n  .scroll::-webkit-scrollbar { display: none; }\n\n  .header {\n    background: #fff;\n    padding: 12px 20px;\n    text-align: center;\n    border-bottom: 1px solid var(--border);\n    position: sticky;\n    top: 0;\n    z-index: 10;\n    flex-shrink: 0;\n  }\n  .header h1 {\n    font-size: 17px;\n    font-weight: 600;\n    color: var(--text);\n    letter-spacing: 0.3px;\n  }\n\n  .group {\n    margin: 16px 16px 0;\n    background: var(--card);\n    border-radius: 12px;\n    overflow: hidden;\n    border: 1px solid var(--border);\n  }\n  .group-title {\n    font-size: 13px;\n    font-weight: 600;\n    color: var(--text-secondary);\n    padding: 10px 16px 4px;\n    letter-spacing: 0.4px;\n  }\n  .row {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding: 12px 16px;\n    border-bottom: 1px solid var(--border);\n    min-height: 48px;\n    gap: 12px;\n  }\n  .row:last-child { border-bottom: none; }\n  .row-label {\n    font-size: 16px;\n    color: var(--text);\n    font-weight: 500;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n  .row-value {\n    font-size: 16px;\n    color: var(--text-secondary);\n    display: flex;\n    align-items: center;\n    gap: 4px;\n    flex-shrink: 0;\n  }\n  .chevron {\n    width: 8px;\n    height: 14px;\n    color: var(--text-secondary);\n    flex-shrink: 0;\n  }\n\n  .toggle {\n    width: 44px;\n    height: 26px;\n    background: var(--toggle-off);\n    border-radius: 13px;\n    position: relative;\n    cursor: pointer;\n    transition: background 0.2s ease;\n    flex-shrink: 0;\n    -webkit-tap-highlight-color: transparent;\n  }\n  .toggle.on { background: var(--toggle-on); }\n  .toggle::after {\n    content: '';\n    position: absolute;\n    top: 2px;\n    inset-inline-start: 2px;\n    width: 22px;\n    height: 22px;\n    background: #fff;\n    border-radius: 50%;\n    box-shadow: 0 1px 3px rgba(0,0,0,0.2);\n    transition: transform 0.2s ease;\n  }\n  .toggle.on::after { transform: translateX(18px); }\n\n  .logout {\n    margin: 24px 16px 0;\n    background: var(--card);\n    border-radius: 12px;\n    padding: 16px;\n    text-align: center;\n    border: 1px solid var(--border);\n    cursor: pointer;\n    -webkit-tap-highlight-color: transparent;\n  }\n  .logout span {\n    font-size: 16px;\n    color: var(--danger);\n    font-weight: 500;\n  }\n</style>\n</head>\n<body>\n<div class=\"phone\">\n  <div class=\"status-bar\">\n    <span>9:41</span>\n    <div class=\"right\">\n      <svg viewBox=\"0 0 16 11\"><rect x=\"0\" y=\"2\" width=\"3\" height=\"7\" rx=\"1\" fill=\"#000\"/><rect x=\"5\" y=\"4\" width=\"3\" height=\"5\" rx=\"1\" fill=\"#000\" opacity=\".5\"/><rect x=\"10\" y=\"6\" width=\"3\" height=\"3\" rx=\"1\" fill=\"#000\" opacity=\".3\"/></svg>\n      <svg viewBox=\"0 0 16 11\"><path d=\"M2 9a7 7 0 015-6.3V2a9 9 0 00-7 7h1zm3-2.3a5 5 0 013.7 1.1l.9-.9A7 7 0 003 8h1v1a6 6 0 006-6v-1A5 5 0 015 6.7z\" fill=\"#000\"/></svg>\n      <svg viewBox=\"0 0 16 11\"><rect x=\"1\" y=\"1\" width=\"14\" height=\"9\" rx=\"2\" fill=\"none\" stroke=\"#000\" stroke-width=\"1.5\"/><rect x=\"2.5\" y=\"2.5\" width=\"11\" height=\"6\" rx=\"1\" fill=\"#000\"/></svg>\n    </div>\n  </div>\n\n  <div class=\"scroll\">\n    <div class=\"header\">\n      <h1>الإعدادات</h1>\n    </div>\n\n    <!-- Account group -->\n    <div class=\"group\">\n      <div class=\"group-title\">الحساب</div>\n      <div class=\"row\">\n        <span class=\"row-label\">الاسم</span>\n        <span class=\"row-value\">أحمد محمد</span>\n      </div>\n      <div class=\"row\">\n        <span class=\"row-label\">رقم الهاتف</span>\n        <span class=\"row-value\" dir=\"ltr\"><bdi>+973 3600 1234</bdi></span>\n      </div>\n      <div class=\"row\" style=\"cursor:pointer\">\n        <span class=\"row-label\">اللغة</span>\n        <span class=\"row-value\">\n          <span>العربية</span>\n          <svg class=\"chevron\" viewBox=\"0 0 8 14\" fill=\"none\"><path d=\"M7 1L1 7l6 6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>\n        </span>\n      </div>\n    </div>\n\n    <!-- Security group -->\n    <div class=\"group\">\n      <div class=\"group-title\">الأمان</div>\n      <div class=\"row\">\n        <span class=\"row-label\">Face ID</span>\n        <div class=\"toggle on\" onclick=\"this.classList.toggle('on')\"></div>\n      </div>\n      <div class=\"row\">\n        <span class=\"row-label\">المدخل خطوتين</span>\n        <div class=\"toggle on\" onclick=\"this.classList.toggle('on')\"></div>\n      </div>\n    </div>\n\n    <!-- Notifications group -->\n    <div class=\"group\">\n      <div class=\"group-title\">الإشعارات</div>\n      <div class=\"row\">\n        <span class=\"row-label\">التحويلات</span>\n        <div class=\"toggle on\" onclick=\"this.classList.toggle('on')\"></div>\n      </div>\n      <div class=\"row\">\n        <span class=\"row-label\">الOffers</span>\n        <div class=\"toggle on\" onclick=\"this.classList.toggle('on')\"></div>\n      </div>\n      <div class=\"row\">\n        <span class=\"row-label\">الكشوفات</span>\n        <div class=\"toggle on\" onclick=\"this.classList.toggle('on')\"></div>\n      </div>\n    </div>\n\n    <!-- Logout -->\n    <div class=\"logout\" onclick=\"alert('تسجيل الخروج')\">\n      <span>تسجيل الخروج</span>\n    </div>\n  </div>\n</div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6301,
+    "output": 6829
+  },
+  "ms": 74693,
+  "finish": "stop",
+  "reasoningTokens": 4442,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 58,
+  "missing": [
+    "toggles"
+  ],
+  "findings": [
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 279,
+        "y": 174,
+        "width": 44,
+        "height": 28
+      },
+      "message": "0.4px letter-spacing on \"الحساب\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"group-title\">الحساب</div>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 292,
+        "y": 410,
+        "width": 31,
+        "height": 28
+      },
+      "message": "0.4px letter-spacing on \"الأمان\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"group-title\">الأمان</div>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 268,
+        "y": 587,
+        "width": 55,
+        "height": 28
+      },
+      "message": "0.4px letter-spacing on \"الإشعارات\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"group-title\">الإشعارات</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 279,
+        "y": 174,
+        "width": 44,
+        "height": 28
+      },
+      "message": "\"الحساب\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"group-title\">الحساب</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 292,
+        "y": 410,
+        "width": 31,
+        "height": 28
+      },
+      "message": "\"الأمان\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"group-title\">الأمان</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 268,
+        "y": 587,
+        "width": 55,
+        "height": 28
+      },
+      "message": "\"الإشعارات\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"group-title\">الإشعارات</div>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 860
+}

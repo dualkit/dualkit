@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الملف شخصي</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+    direction: rtl;
+  }
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  .field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .label {
+    font-weight: bold;
+    color: #555;
+    margin-left: 10px;
+  }
+  .value {
+    flex: 1;
+    text-align: center;
+    color: #333;
+  }
+  .edit {
+    background: none;
+    border: none;
+    color: #007AFF;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .edit:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>الملف شخصي</h1>
+    <div class="field">
+      <span class="label">الاسم</span>
+      <span class="value">Layla Al Mansouri</span>
+      <button class="edit">تعديل</button>
+    </div>
+    <div class="field">
+      <span class="label">البريد الإلكتروني</span>
+      <span class="value">layla@example.com</span>
+      <button class="edit">تعديل</button>
+    </div>
+    <div class="field">
+      <span class="label">رقم الهاتف</span>
+      <span class="value">+971 50 123 4567</span>
+      <button class="edit">تعديل</button>
+    </div>
+    <div class="field">
+      <span class="label">الرقم الآي بي أن</span>
+      <span class="value">AE07 0331 2345 6789 0123 456</span>
+    </div>
+  </div>
+</body>
+</html>

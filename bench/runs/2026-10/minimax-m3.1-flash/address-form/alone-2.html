@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d8f55">
+  <title>عنوان التوصيل</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #f4f6f5;
+      color: #17221d;
+      font-family: Tahoma, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 24px 20px 32px;
+      background: #fff;
+    }
+
+    .header {
+      margin-bottom: 26px;
+    }
+
+    .header h1 {
+      margin: 0 0 7px;
+      font-size: 24px;
+      line-height: 1.4;
+      color: #10251c;
+    }
+
+    .header p {
+      margin: 0;
+      color: #6d7c75;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    form {
+      display: grid;
+      gap: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #263a31;
+    }
+
+    input,
+    select {
+      width: 100%;
+      height: 52px;
+      border: 1px solid #d8dfdc;
+      border-radius: 12px;
+      background: #fff;
+      color: #17221d;
+      padding: 0 15px;
+      font: inherit;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input::placeholder {
+      color: #a0aaa5;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #0d8f55;
+      box-shadow: 0 0 0 3px rgba(13, 143, 85, 0.12);
+    }
+
+    select {
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #64756d 50%),
+        linear-gradient(135deg, #64756d 50%, transparent 50%);
+      background-position:
+        18px calc(50% - 2px),
+        13px calc(50% - 2px);
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+      padding-left: 42px;
+    }
+
+    .phone-wrap {
+      position: relative;
+    }
+
+    .phone-wrap input {
+      padding-left: 54px;
+      direction: ltr;
+      text-align: left;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+    }
+
+    .phone-prefix {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      color: #68776f;
+      font-size: 14px;
+      direction: ltr;
+      pointer-events: none;
+    }
+
+    .button {
+      width: 100%;
+      min-height: 54px;
+      margin-top: 8px;
+      border: 0;
+      border-radius: 13px;
+      background: #0d8f55;
+      color: #fff;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(13, 143, 85, 0.2);
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .button:hover {
+      background: #0a7847;
+    }
+
+    .button:active {
+      transform: translateY(1px);
+    }
+
+    .button:focus-visible {
+      outline: 3px solid rgba(13, 143, 85, 0.3);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 360px) {
+      .page {
+        padding: 20px 16px 28px;
+      }
+
+      .header h1 {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <h1>عنوان التوصيل</h1>
+      <p>أدخل تفاصيل العنوان لتسهيل عملية التوصيل.</p>
+    </header>
+
+    <form>
+      <div class="field">
+        <label for="building">المبنى أو الفيلا</label>
+        <input id="building" name="building" type="text" placeholder="مثال: مبنى 12، شقة 304" autocomplete="street-address">
+      </div>
+
+      <div class="field">
+        <label for="street">الشارع</label>
+        <input id="street" name="street" type="text" placeholder="اسم الشارع" autocomplete="address-line2">
+      </div>
+
+      <div class="field">
+        <label for="area">المنطقة</label>
+        <input id="area" name="area" type="text" placeholder="اسم المنطقة" autocomplete="address-level3">
+      </div>
+
+      <div class="field">
+        <label for="emirate">الإمارة</label>
+        <select id="emirate" name="emirate" autocomplete="address-level1">
+          <option value="dubai" selected>دبي</option>
+          <option value="abu-dhabi">أبوظبي</option>
+          <option value="sharjah">الشارقة</option>
+          <option value="ajman">عجمان</option>
+          <option value="umm-al-quwain">أم القيوين</option>
+          <option value="ras-al-khaimah">رأس الخيمة</option>
+          <option value="fujairah">الفجيرة</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="makani">رقم المكناني</label>
+        <input id="makani" name="makani" type="text" inputmode="numeric" placeholder="أدخل رقم المكناني">
+      </div>
+
+      <div class="field">
+        <label for="phone">رقم الهاتف</label>
+        <div class="phone-wrap">
+          <span class="phone-prefix">+971</span>
+          <input id="phone" name="phone" type="tel" placeholder="050 123 4567" autocomplete="tel">
+        </div>
+      </div>
+
+      <button class="button" type="submit">حفظ العنوان</button>
+    </form>
+  </main>
+</body>
+</html>

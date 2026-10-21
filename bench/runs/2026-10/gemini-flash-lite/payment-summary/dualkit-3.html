@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ملخص الدفع</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :lang(ar) {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+    body {
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .phone-frame {
+      width: 100%;
+      max-width: 390px;
+      height: 844px;
+      background: #ffffff;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+      border-radius: 40px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <!-- Header -->
+    <header style="display: flex; align-items: center; padding: 20px; border-bottom: 1px solid #f1f5f9;">
+      <button style="background: none; border: none; cursor: pointer; padding: 8px; margin-inline-end: 12px; display: flex; align-items: center; justify-content: center;" aria-label="رجوع">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: scaleX(-1); color: #0f172a;"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <h1 style="font-size: 18px; font-weight: 600; margin: 0; color: #0f172a;">ملخص الدفع</h1>
+    </header>
+
+    <!-- Main Content -->
+    <main style="padding: 24px; flex: 1; display: flex; flex-direction: column; gap: 24px; overflow-y: auto;">
+      
+      <!-- Amount Card -->
+      <div style="background: #f8fafc; border-radius: 20px; padding: 24px; text-align: center; border: 1px solid #e2e8f0;">
+        <span style="font-size: 14px; color: #64748b; display: block; margin-bottom: 8px;">المبلغ المستحق</span>
+        <div class="tabular" style="font-size: 32px; font-weight: 700; color: #0f172a;">
+          1,234.50 <span style="font-size: 20px; font-weight: 500; color: #475569;">د.إ</span>
+        </div>
+      </div>
+
+      <!-- Details Section -->
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <!-- Due Date -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9;">
+          <span style="font-size: 14px; color: #64748b; padding-top: 2px;">تاريخ الاستحقاق</span>
+          <div style="text-align: end;">
+            <div style="font-size: 14px; font-weight: 500; color: #0f172a;" class="tabular">
+              <bdi>3 نوفمبر 2026</bdi>
+            </div>
+            <div style="font-size: 14px; color: #64748b; margin-top: 2px;" class="tabular">
+              <bdi>21 جمادى الآخرة 1448 هـ</bdi>
+            </div>
+          </div>
+        </div>
+
+        <!-- Items Count (Plural form 'few' for 3 items) -->
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9;">
+          <span style="font-size: 14px; color: #64748b;">تفاصيل الطلب</span>
+          <span style="font-size: 14px; font-weight: 500; color: #0f172a;" class="tabular">
+            لديك <bdi>3</bdi> عناصر في هذا الطلب
+          </span>
+        </div>
+      </div>
+
+      <!-- SMS Receipt Section -->
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+        <label for="phone-input" style="font-size: 14px; font-weight: 500; color: #0f172a;">
+          إرسال الإيصال عبر الرسائل النصية
+        </label>
+        <div style="display: flex; align-items: center; background: #fff; border: 1px solid #cbd5e1; border-radius: 12px; overflow: hidden;">
+          <span style="padding: 0 12px; font-size: 14px; font-weight: 500; color: #475569; background: #f1f5f9; border-inline-end: 1px solid #cbd5e1; height: 48px; display: flex; align-items: center;" class="tabular" dir="ltr">+971</span>
+          <input id="phone-input" type="tel" dir="ltr" inputmode="tel" placeholder="050 123 4567" style="border: none; outline: none; padding: 0 12px; width: 100%; font-size: 16px; height: 48px; font-family: inherit; background: transparent;" class="tabular">
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Footer Action -->
+    <footer style="padding: 24px; border-top: 1px solid #f1f5f9; background: #fff;">
+      <button style="width: 100%; background: #0f172a; color: #fff; border: none; border-radius: 16px; height: 52px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#1e293b'" onmouseout="this.style.background='#0f172a'">
+        إتمام الدفع
+      </button>
+    </footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>الطلبات السابقة</title>
+  <style>
+    :root {
+      --type-body-size: 16px;
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --color-text: #1a1a1a;
+      --color-muted: #6b7280;
+      --color-border: #e5e7eb;
+      --color-bg: #ffffff;
+      --color-delivered: #16a34a;
+      --color-onway: #2563eb;
+      --color-cancelled: #dc2626;
+    }
+
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
+      font-size: var(--type-body-size);
+      line-height: 1.7;
+      color: var(--color-text);
+      background-color: var(--color-bg);
+      padding: 16px;
+    }
+
+    header {
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 16px;
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .order-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .order-card {
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 16px;
+      background-color: var(--color-bg);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .order-number {
+      font-weight: 600;
+      font-size: var(--type-label-size);
+    }
+
+    .status-badge {
+      font-size: var(--type-caption-size);
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .status-delivered {
+      color: var(--color-delivered);
+      background-color: #dcfce7;
+    }
+
+    .status-onway {
+      color: var(--color-onway);
+      background-color: #dbeafe;
+    }
+
+    .status-cancelled {
+      color: var(--color-cancelled);
+      background-color: #fee2e2;
+    }
+
+    .order-details {
+      margin-top: 8px;
+    }
+
+    .order-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--type-body-size);
+      margin-bottom: 4px;
+    }
+
+    .order-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .label {
+      color: var(--color-muted);
+    }
+
+    .value {
+      font-weight: 500;
+    }
+
+    .amount {
+      font-weight: 600;
+    }
+
+    .date-line {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .gregorian {
+      font-size: var(--type-body-size);
+    }
+
+    .hijri {
+      font-size: var(--type-caption-size);
+      color: var(--color-muted);
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>الطلبات السابقة</h1>
+  </header>
+
+  <div class="order-list">
+    <!-- Order 1 -->
+    <div class="order-card">
+      <div class="order-header">
+        <span class="order-number">رقم الطلب: <bdi dir="ltr">#A-10293</bdi></span>
+        <span class="status-badge status-delivered">تم التسليم</span>
+      </div>
+      <div class="order-details">
+        <div class="order-row">
+          <span class="label">التاريخ</span>
+          <span class="value date-line">
+            <span class="gregorian">١٢ فبراير ٢٠٢٥</span>
+            <span class="hijri">٢٧ جمادى الأولى ١٤٤٦ هـ</span>
+          </span>
+        </div>
+        <div class="order-row">
+          <span class="label">المجموع</span>
+          <span class="value amount"><bdi>١٬٢٩٩.٠٠</bdi> ر.س</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order 2 -->
+    <div class="order-card">
+      <div class="order-header">
+        <span class="order-number">رقم الطلب: <bdi dir="ltr">#A-10292</bdi></span>
+        <span class="status-badge status-onway">في الطريق</span>
+      </div>
+      <div class="order-details">
+        <div class="order-row">
+          <span class="label">التاريخ</span>
+          <span class="value date-line">
+            <span class="gregorian">١٠ فبراير ٢٠٢٥</span>
+            <span class="hijri">٢٥ جمادى الأولى ١٤٤٦ هـ</span>
+          </span>
+        </div>
+        <div class="order-row">
+          <span class="label">المجموع</span>
+          <span class="value amount"><bdi>٨٩٩.٩٩</bdi> ر.س</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order 3 -->
+    <div class="order-card">
+      <div class="order-header">
+        <span class="order-number">رقم الطلب: <bdi dir="ltr">#A-10291</bdi></span>
+        <span class="status-badge status-cancelled">ألغيت</span>
+      </div>
+      <div class="order-details">
+        <div class="order-row">
+          <span class="label">التاريخ</span>
+          <span class="value date-line">
+            <span class="gregorian">٥ فبراير ٢٠٢٥</span>
+            <span class="hijri">٢٠ جمادى الأولى ١٤٤٦ هـ</span>
+          </span>
+        </div>
+        <div class="order-row">
+          <span class="label">المجموع</span>
+          <span class="value amount"><bdi>٣٢٠.٠٠</bdi> ر.س</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order 4 -->
+    <div class="order-card">
+      <div class="order-header">
+        <span class="order-number">رقم الطلب: <bdi dir="ltr">#A-10290</bdi></span>
+        <span class="status-badge status-delivered">تم التسليم</span>
+      </div>
+      <div class="order-details">
+        <div class="order-row">
+          <span class="label">التاريخ</span>
+          <span class="value date-line">
+            <span class="gregorian">٢٨ يناير ٢٠٢٥</span>
+            <span class="hijri">١٥ جمادى الأولى ١٤٤٦ هـ</span>
+          </span>
+        </div>
+        <div class="order-row">
+          <span class="label">المجموع</span>
+          <span class="value amount"><bdi>٢٬١٥٠.٧٥</bdi> ر.س</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

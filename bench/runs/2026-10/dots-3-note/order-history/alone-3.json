@@ -1,0 +1,95 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "order-history",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T17:17:24.512Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>تاريخ الطلب</title>\n<style>\nbody {\n  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n  background-color: #f5f5f5;\n  margin: 0;\n  padding: 16px;\n}\n.order-card {\n  background: #fff;\n  border-radius: 8px;\n  padding: 16px;\n  margin-bottom: 16px;\n  box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n}\n.order-number {\n  font-weight: bold;\n  font-size: 1.1em;\n  margin-bottom: 8px;\n}\n.date {\n  color: #555;\n  margin-bottom: 4px;\n}\n.total {\n  color: #333;\n  font-weight: bold;\n  margin-bottom: 4px;\n}\n.status {\n  font-weight: bold;\n}\n.status.delivered { color: #4CAF50; }\n.status.onway { color: #FF9800; }\n.status.cancelled { color: #F44336; }\n</style>\n</head>\n<body>\n<div class=\"order-card\">\n  <div class=\"order-number\">رقم الطلب: #A-10293</div>\n  <div class=\"date\">التاريخ: 2025-10-12 (ميلادي) / 1447-07-19 (هجري)</div>\n  <div class=\"total\">الإجمالي: 1,250 SAR</div>\n  <div class=\"status delivered\">الحالة: تم التسليم</div>\n</div>\n<div class=\"order-card\">\n  <div class=\"order-number\">رقم الطلب: #A-10294</div>\n  <div class=\"date\">التاريخ: 2025-10-15 (ميلادي) / 1447-07-22 (هجري)</div>\n  <div class=\"total\">الإجمالي: 2,300 SAR</div>\n  <div class=\"status onway\">الحالة: في طريق التسليم</div>\n</div>\n<div class=\"order-card\">\n  <div class=\"order-number\">رقم الطلب: #A-10295</div>\n  <div class=\"date\">التاريخ: 2025-10-18 (ميلادي) / 1447-07-25 (هجري)</div>\n  <div class=\"total\">الإجمالي: 500 SAR</div>\n  <div class=\"status cancelled\">الحالة: ملغى</div>\n</div>\n<div class=\"order-card\">\n  <div class=\"order-number\">رقم الطلب: #A-10296</div>\n  <div class=\"date\">التاريخ: 2025-10-20 (ميلادي) / 1447-07-27 (هجري)</div>\n  <div class=\"total\">الإجمالي: 3,400 SAR</div>\n  <div class=\"status delivered\">الحالة: تم التسليم</div>\n</div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 129,
+    "output": 5030
+  },
+  "ms": 49817,
+  "finish": "stop",
+  "reasoningTokens": 4043,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 66,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 186.078125,
+        "y": 32,
+        "width": 171.921875,
+        "height": 20
+      },
+      "message": "\"#A-10293\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #A-10293</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 186.078125,
+        "y": 193,
+        "width": 171.921875,
+        "height": 20
+      },
+      "message": "\"#A-10294\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #A-10294</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 186.078125,
+        "y": 354,
+        "width": 171.921875,
+        "height": 20
+      },
+      "message": "\"#A-10295\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #A-10295</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 186.078125,
+        "y": 515,
+        "width": 171.921875,
+        "height": 20
+      },
+      "message": "\"#A-10296\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #A-10296</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 186.078125,
+        "y": 32,
+        "width": 171.921875,
+        "height": 20
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #A-10293</div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

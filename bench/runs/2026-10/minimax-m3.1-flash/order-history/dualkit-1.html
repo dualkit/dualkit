@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f766e">
+  <title>سجل الطلبات | متجر تاج</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --brand: #0f766e;
+      --brand-dark: #115e59;
+      --brand-soft: #e7f5f2;
+      --ink: #172321;
+      --muted: #667370;
+      --line: #e5e9e7;
+      --surface: #ffffff;
+      --background: #f5f7f6;
+      --success: #18794e;
+      --success-bg: #e8f5ee;
+      --warning: #a15c07;
+      --warning-bg: #fff3df;
+      --danger: #b42318;
+      --danger-bg: #feeceb;
+      --shadow: 0 8px 28px rgba(19, 42, 38, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--background);
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(15, 118, 110, 0.08), transparent 30rem),
+        var(--background);
+      font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Tahoma, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: 100%;
+      min-height: 100vh;
+      padding-bottom: calc(32px + env(safe-area-inset-bottom));
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 68px;
+      padding: 12px 20px;
+      color: #fff;
+      background: var(--brand);
+      box-shadow: 0 4px 18px rgba(15, 118, 110, 0.18);
+    }
+
+    .header-title {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .icon-button {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      place-items: center;
+      color: inherit;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 14px;
+      cursor: pointer;
+    }
+
+    .icon-button svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    main {
+      width: min(100%, 520px);
+      margin: 0 auto;
+      padding: 22px 16px 0;
+    }
+
+    .intro {
+      margin-bottom: 20px;
+    }
+
+    .intro h1 {
+      margin: 0 0 5px;
+      font-size: 27px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin: 0 -16px 18px;
+      padding: 0 16px 4px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .filters::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter {
+      flex: 0 0 auto;
+      min-height: 40px;
+      padding: 8px 16px;
+      color: #52605d;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+
+    .filter[aria-selected="true"] {
+      color: #fff;
+      background: var(--brand);
+      border-color: var(--brand);
+    }
+
+    .order-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .order-card {
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid rgba(226, 231, 228, 0.92);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .order-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 17px 17px 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .order-number {
+      margin: 0 0 4px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .order-number bdi {
+      color: var(--ink);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .date {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .date span {
+      display: block;
+    }
+
+    .date bdi {
+      color: #53605e;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 6px;
+      min-height: 32px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+    }
+
+    .status::before {
+      width: 7px;
+      height: 7px;
+      flex: 0 0 auto;
+      background: currentColor;
+      border-radius: 50%;
+      content: "";
+    }
+
+    .status-delivered {
+      color: var(--success);
+      background: var(--success-bg);
+    }
+
+    .status-way {
+      color: var(--warning);
+      background: var(--warning-bg);
+    }
+
+    .status-cancelled {
+      color: var(--danger);
+      background: var(--danger-bg);
+    }
+
+    .order-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 15px 17px 17px;
+    }
+
+    .total-label {
+      display: block;
+      margin-bottom: 1px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .total {
+      color: var(--ink);
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.5;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .details-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 42px;
+      padding: 8px 14px;
+      color: var(--brand-dark);
+      background: var(--brand-soft);
+      border: 0;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .details-button svg {
+      width: 17px;
+      height: 17px;
+      transition: transform 160ms ease;
+    }
+
+    .details-button[aria-expanded="true"] svg {
+      transform: rotate(-90deg);
+    }
+
+    .order-details {
+      display: none;
+      padding: 0 17px 16px;
+      color: #475451;
+      font-size: 14px;
+    }
+
+    .order-details.open {
+      display: block;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--line);
+    }
+
+    .detail-row bdi {
+      color: var(--ink);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .empty-state {
+      display: none;
+      padding: 38px 20px;
+      color: var(--muted);
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+    }
+
+    .empty-state.visible {
+      display: block;
+    }
+
+    .empty-icon {
+      display: grid;
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 12px;
+      place-items: center;
+      color: var(--brand);
+      background: var(--brand-soft);
+      border-radius: 50%;
+    }
+
+    .empty-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .empty-state h2 {
+      margin: 0 0 5px;
+      color: var(--ink);
+      font-size: 18px;
+    }
+
+    .empty-state p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    @media (max-width: 360px) {
+      .app-header {
+        padding-inline: 16px;
+      }
+
+      main {
+        padding-inline: 12px;
+      }
+
+      .filters {
+        margin-inline: -12px;
+        padding-inline: 12px;
+      }
+
+      .intro h1 {
+        font-size: 24px;
+      }
+
+      .order-top,
+      .order-bottom {
+        padding-inline: 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <h1 class="header-title">سجل الطلبات</h1>
+      <button class="icon-button" type="button" aria-label="مساعدة">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9.1 9a3 3 0 1 1 4.7 2.47c-1.05.78-1.8 1.35-1.8 2.53" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="12" cy="17.5" r="1" fill="currentColor"/>
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+      </button>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="page-title">
+        <h2 id="page-title">طلباتك السابقة</h2>
+        <p>تابع حالة الطلبات ومبالغها وتواريخها.</p>
+      </section>
+
+      <div class="filters" role="tablist" aria-label="تصفية الطلبات">
+        <button class="filter" type="button" role="tab" aria-selected="true" data-filter="all">الكل</button>
+        <button class="filter" type="button" role="tab" aria-selected="false" data-filter="delivered">تم التوصيل</button>
+        <button class="filter" type="button" role="tab" aria-selected="false" data-filter="on-the-way">في الطريق</button>
+        <button class="filter" type="button" role="tab" aria-selected="false" data-filter="cancelled">ملغي</button>
+      </div>
+
+      <section class="order-list" id="order-list" aria-live="polite">
+        <article class="order-card" data-status="delivered">
+          <div class="order-top">
+            <div>
+              <p class="order-number">رقم الطلب <bdi>#A-10293</bdi></p>
+              <p class="date">
+                <span>التاريخ الميلادي: <bdi class="gregorian-date">18 يونيو 2025</bdi></span>
+                <span>التاريخ الهجري: <bdi class="hijri-date">12 ذو الحجة 1446</bdi></span>
+              </p>
+            </div>
+            <span class="status status-delivered">تم التوصيل</span>
+          </div>
+          <div class="order-bottom">
+            <div>
+              <span class="total-label">إجمالي الطلب</span>
+              <span class="total"><bdi>289.50 ر.س</bdi></span>
+            </div>
+            <button class="details-button" type="button" aria-expanded="false">
+              التفاصيل
+              <svg class="icon-directional" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m14.5 6-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="order-details">
+            <div class="detail-row"><span>طريقة الدفع</span><bdi>مدى</bdi></div>
+            <div class="detail-row"><span>عدد المنتجات</span><bdi>4 منتجات</bdi></div>
+          </div>
+        </article>
+
+        <article class="order-card" data-status="on-the-way">
+          <div class="order-top">
+            <div>
+              <p class="order-number">رقم الطلب <bdi>#A-10247</bdi></p>
+              <p class="date">
+                <span>التاريخ الميلادي: <bdi class="gregorian-date">2 مايو 2025</bdi></span>
+                <span>التاريخ الهجري: <bdi class="hijri-date">4 شوال 1446</bdi></span>
+              </p>
+            </div>
+            <span class="status status-way">في الطريق</span>
+          </div>
+          <div class="order-bottom">
+            <div>
+              <span class="total-label">إجمالي الطلب</span>
+              <span class="total"><bdi>156.00 ر.س</bdi></span>
+            </div>
+            <button class="details-button" type="button" aria-expanded="false">
+              التفاصيل
+              <svg class="icon-directional" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m14.5 6-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="order-details">
+            <div class="detail-row"><span>طريقة الدفع</span><bdi>Apple Pay</bdi></div>
+            <div class="detail-row"><span>عدد المنتجات</span><bdi>3 منتجات</bdi></div>
+          </div>
+        </article>
+
+        <article class="order-card" data-status="delivered">
+          <div class="order-top">
+            <div>
+              <p class="order-number">رقم الطلب <bdi>#A-10186</bdi></p>
+              <p class="date">
+                <span>التاريخ الميلادي: <bdi class="gregorian-date">20 أبريل 2025</bdi></span>
+                <span>التاريخ الهجري: <bdi class="hijri-date">21 رمضان 1446</bdi></span>
+              </p>
+            </div>
+            <span class="status status-delivered">تم التوصيل</span>
+          </div>
+          <div class="order-bottom">
+            <div>
+              <span class="total-label">إجمالي الطلب</span>
+              <span class="total"><bdi>432.25 ر.س</bdi></span>
+            </div>
+            <button class="details-button" type="button" aria-expanded="false">
+              التفاصيل
+              <svg class="icon-directional" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m14.5 6-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="order-details">
+            <div class="detail-row"><span>طريقة الدفع</span><bdi>فيزا</bdi></div>
+            <div class="detail-row"><span>عدد المنتجات</span><bdi>6 منتجات</bdi></div>
+          </div>
+        </article>
+
+        <article class="order-card" data-status="cancelled">
+          <div class="order-top">
+            <div>
+              <p class="order-number">رقم الطلب <bdi>#A-10124</bdi></p>
+              <p class="date">
+                <span>التاريخ الميلادي: <bdi class="gregorian-date">8 مارس 2025</bdi></span>
+                <span>التاريخ الهجري: <bdi class="hijri-date">9 رمضان 1446</bdi></span>
+              </p>
+            </div>
+            <span class="status status-cancelled">ملغي</span>
+          </div>
+          <div class="order-bottom">
+            <div>
+              <span class="total-label">إجمالي الطلب</span>
+              <span class="total"><bdi>94.00 ر.س</bdi></span>
+            </div>
+            <button class="details-button" type="button" aria-expanded="false">
+              التفاصيل
+              <svg class="icon-directional" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="m14.5 6-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="order-details">
+            <div class="detail-row"><span>سبب الإلغاء</span><bdi>طلب العميل</bdi></div>
+            <div class="detail-row"><span>عدد المنتجات</span><bdi>منتجان</bdi></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="empty-state" id="empty-state" role="status">
+        <div class="empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M5 7.5h14v12H5zM8 4h8l1.5 3.5h-11L8 4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2>لا توجد طلبات ضمن هذا التصنيف</h2>
+        <p>جرّب اختيار تصنيف آخر لعرض الطلبات.</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const orderDates = [
+      { gregorian: "2025-06-18T12:00:00+03:00", hijri: "12 ذو الحجة 1446" },
+      { gregorian: "2025-05-02T12:00:00+03:00", hijri: "4 شوال 1446" },
+      { gregorian: "2025-04-20T12:00:00+03:00", hijri: "21 رمضان 1446" },
+      { gregorian: "2025-03-08T12:00:00+03:00", hijri: "9 رمضان 1446" }
+    ];
+
+    const cards = [...document.querySelectorAll(".order-card")];
+
+    cards.forEach((card, index) => {
+      const date = new Date(orderDates[index].gregorian);
+      const gregorian = new Intl.DateTimeFormat("ar-SA-u-ca-gregory-nu-latn", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "Asia/Riyadh"
+      }).format(date);
+
+      card.querySelector(".gregorian-date").textContent = gregorian;
+      card.querySelector(".hijri-date").textContent = orderDates[index].hijri;
+
+      const button = card.querySelector(".details-button");
+      const details = card.querySelector(".order-details");
+
+      button.addEventListener("click", () => {
+        const isOpen = details.classList.toggle("open");
+        button.setAttribute("aria-expanded", String(isOpen));
+      });
+    });
+
+    const filterButtons = [...document.querySelectorAll(".filter")];
+    const emptyState = document.getElementById("empty-state");
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const selectedFilter = button.dataset.filter;
+
+        filterButtons.forEach((item) => {
+          item.setAttribute("aria-selected", String(item === button));
+        });
+
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const shouldShow = selectedFilter === "all" || card.dataset.status === selectedFilter;
+          card.hidden = !shouldShow;
+          if (shouldShow) visibleCount++;
+        });
+
+        emptyState.classList.toggle("visible", visibleCount === 0);
+      });
+    });
+  </script>
+</body>
+</html>

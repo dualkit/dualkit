@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f8fa">
+  <title>الإعدادات</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7f9;
+      --surface: #ffffff;
+      --text: #142b3d;
+      --muted: #6f7e89;
+      --line: #e8edf0;
+      --brand: #0f6b4f;
+      --brand-soft: #e8f4ef;
+      --focus: #d7ebe2;
+      --danger: #bd3c42;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      color: var(--text);
+      font-family: Tahoma, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    button {
+      color: inherit;
+      font: inherit;
+    }
+
+    .app {
+      width: min(100%, 480px);
+      min-height: 100vh;
+      margin-inline: auto;
+      padding-bottom: calc(32px + env(safe-area-inset-bottom));
+    }
+
+    .topbar {
+      position: sticky;
+      z-index: 10;
+      top: 0;
+      display: grid;
+      grid-template-columns: 44px 1fr 44px;
+      align-items: center;
+      min-height: 64px;
+      padding: 8px 12px;
+      border-bottom: 1px solid rgba(232, 237, 240, 0.85);
+      background: rgba(245, 247, 249, 0.92);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 21px;
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: center;
+    }
+
+    .icon-button {
+      display: grid;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      place-items: center;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .icon-button:hover,
+    .icon-button:focus-visible {
+      background: var(--focus);
+      outline: none;
+    }
+
+    .icon-button svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .back-icon {
+      transform: scaleX(-1);
+    }
+
+    .content {
+      padding: 20px 16px 0;
+    }
+
+    .section {
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      margin: 0 4px 9px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+      line-height: 1.6;
+    }
+
+    .group {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--surface);
+      box-shadow: 0 5px 20px rgba(20, 43, 61, 0.045);
+    }
+
+    .row {
+      display: flex;
+      min-height: 68px;
+      align-items: center;
+      gap: 13px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .row:last-child {
+      border-bottom: 0;
+    }
+
+    .row-button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      text-align: start;
+      cursor: pointer;
+    }
+
+    .row-button:focus-visible,
+    .switch:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: -3px;
+    }
+
+    .row-icon {
+      display: grid;
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 13px;
+      color: var(--brand);
+      background: var(--brand-soft);
+    }
+
+    .row-icon svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    .row-copy {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .row-label {
+      display: block;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.55;
+    }
+
+    .row-value {
+      display: block;
+      overflow: hidden;
+      margin-top: 1px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .row-value.ltr {
+      direction: ltr;
+      text-align: right;
+      unicode-bidi: isolate;
+    }
+
+    .chevron {
+      flex: 0 0 auto;
+      width: 19px;
+      height: 19px;
+      color: #9aa7af;
+      transform: scaleX(-1);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-flex;
+      flex: 0 0 auto;
+      width: 50px;
+      height: 30px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: #cdd5da;
+      cursor: pointer;
+      transition: background-color 180ms ease;
+    }
+
+    .switch::after {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 2px 5px rgba(20, 43, 61, 0.24);
+      content: "";
+      transition: transform 180ms ease;
+    }
+
+    .switch[aria-checked="true"] {
+      background: var(--brand);
+    }
+
+    .switch[aria-checked="true"]::after {
+      transform: translateX(-20px);
+    }
+
+    .privacy-note {
+      margin: 10px 8px 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 20;
+      right: 16px;
+      bottom: calc(20px + env(safe-area-inset-bottom));
+      left: 16px;
+      width: fit-content;
+      max-width: calc(100% - 32px);
+      margin-inline: auto;
+      padding: 11px 16px;
+      border-radius: 12px;
+      color: #ffffff;
+      background: #19384b;
+      box-shadow: 0 8px 28px rgba(20, 43, 61, 0.25);
+      font-size: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (min-width: 600px) {
+      body {
+        padding: 24px 0;
+      }
+
+      .app {
+        min-height: calc(100vh - 48px);
+        overflow: hidden;
+        border-radius: 24px;
+        box-shadow: 0 18px 50px rgba(20, 43, 61, 0.12);
+      }
+
+      .topbar {
+        border-radius: 24px 24px 0 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .switch,
+      .switch::after,
+      .toast {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <button class="icon-button" type="button" aria-label="الرجوع">
+        <svg class="back-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1>الإعدادات</h1>
+      <span aria-hidden="true"></span>
+    </header>
+
+    <div class="content">
+      <section class="section" aria-labelledby="account-title">
+        <h2 class="section-title" id="account-title">الحساب</h2>
+        <div class="group">
+          <button class="row row-button" type="button" data-setting="الاسم">
+            <span class="row-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="row-copy">
+              <span class="row-label">الاسم</span>
+              <span class="row-value">محمد أحمد</span>
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div class="row">
+            <span class="row-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1l-2.23 2.2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="row-copy">
+              <span class="row-label">رقم الهاتف</span>
+              <bdi class="row-value ltr">+973 3600 1234</bdi>
+            </span>
+          </div>
+
+          <button class="row row-button" type="button" data-setting="اللغة">
+            <span class="row-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M3.5 9h17M3.5 15h17M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="row-copy">
+              <span class="row-label">اللغة</span>
+              <span class="row-value">العربية</span>
+            </span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="security-title">
+        <h2 class="section-title" id="security-title">الأمان</h2>
+        <div class="group">
+          <div class="row">
+            <span class="row-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 3 5 6v5c0 4.6 2.9 8.1 7 10 4.1-1.9 7-5.4 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M9.5 11.5 11 13l3.5-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="row-copy">
+              <span class="row-label">معرّف الوجه</span>
+              <span class="row-value">تسجيل الدخول باستخدام Face ID</span>
+            </span>
+            <button class="switch" type="button" role="switch" aria-checked="true" aria-label="معرّف الوجه" data-name="معرّف الوجه"></button>
+          </div>
+
+          <div class="row">
+            <span class="row-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="4" y="3" width="16" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/>
+                <path d="M8 7h8M8 11h8M8 15h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="row-copy">
+              <span class="row-label">تسجيل الدخول بخطوتين</span>
+              <span class="row-value">رمز تحقق إضافي عند الدخول</span>
+            </span>
+            <button class="switch" type="button" role="switch" aria-checked="true" aria-label="تسجيل الدخول بخطوتين" data-name="تسجيل الدخول بخطوتين"></button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="notifications-title">
+        <h2 class="section-title" id="notifications-title">الإشعارات</h2>
+        <div class="group">
+          <div class="row">
+            <span class="row-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4 8h13M14 5l3 3-3 3M20 16H7M10 13l-3 3 3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <span class="row-copy">
+              <span class="row-label">التحويلات</span>
+            </span>
+            <button class="switch" type="button" role="switch" aria-checked="true" aria-label="إشعارات التحويلات" data-name="إشعارات التحويلات"></button>
+          </div>
+
+          <div class="row">
+            <span class="row-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M20 13 13 20a2 2 0 0 1-3 0L4 14V4h10l6 6a2.8 2.8 0 0 1 0 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <circle cx="8.5" cy="8.5" r="1" fill="currentColor"/>
+              </svg>
+            </span>
+            <span class="row-copy">
+              <span class="row-label">العروض</span>
+            </span>
+            <button class="switch" type="button" role="switch" aria-checked="false" aria-label="إشعارات العروض" data-name="إشعارات العروض"></button>
+          </div>
+
+          <div class="row">
+            <span class="row-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M6 3h9l4 4v14H6V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <path d="M14 3v5h5M9 12h6M9 16h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="row-copy">
+              <span class="row-label">كشوف الحساب</span>
+            </span>
+            <button class="switch" type="button" role="switch" aria-checked="true" aria-label="إشعارات كشوف الحساب" data-name="إشعارات كشوف الحساب"></button>
+          </div>
+        </div>
+        <p class="privacy-note">يمكنك تغيير إعدادات الإشعارات في أي وقت.</p>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const switches = document.querySelectorAll('.switch');
+    const toast = document.querySelector('.toast');
+    let toastTimer;
+
+    switches.forEach((control) => {
+      control.addEventListener('click', () => {
+        const enabled = control.getAttribute('aria-checked') === 'true';
+        control.setAttribute('aria-checked', String(!enabled));
+        showToast(`${control.dataset.name}: ${!enabled ? 'مفعّل' : 'غير مفعّل'}`);
+      });
+    });
+
+    document.querySelectorAll('.row-button').forEach((row) => {
+      row.addEventListener('click', () => {
+        showToast(`سيتم فتح شاشة ${row.dataset.setting}`);
+      });
+    });
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2200);
+    }
+  </script>
+</body>
+</html>

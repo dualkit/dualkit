@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>الملف الشخصي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --surface: #ffffff;
+    --primary: #0b7a6b;
+    --primary-soft: #e7f3f1;
+    --text: #1c2733;
+    --text-muted: #6b7280;
+    --border: #eceef1;
+    --danger: #c0392b;
+  }
+
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    margin: 0;
+    font-family: 'Inter', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+  }
+
+  .screen {
+    width: 100%;
+    max-width: 412px;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.04), 0 24px 48px rgba(0,0,0,0.08);
+  }
+
+  /* Arabic type tokens */
+  :lang(ar) {
+    --type-label-size: 14px;
+    --type-caption-size: 14px;
+    --type-body-size: 16px;
+    letter-spacing: 0;
+    text-transform: none;
+    font-style: normal;
+    line-height: 1.7;
+  }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: 18px;
+    padding-block: 14px;
+    background: var(--surface);
+    border-block-start: 1px solid var(--border);
+  }
+  .topbar-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text);
+    padding: 6px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon-btn:active { background: var(--bg); }
+  .back-arrow { transform: none; }
+  :dir(rtl) .back-arrow { transform: scaleX(-1); }
+
+  /* Profile header */
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 18px 22px;
+    background: var(--surface);
+    border-block-end: 1px solid var(--border);
+  }
+  .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-size: 30px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-inline-end: auto;
+    margin-inline-start: auto;
+    margin-block-end: 14px;
+  }
+  .profile-name {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .profile-role {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  /* Info list */
+  .info {
+    flex: 1;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .field {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .field-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .field-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+  .edit-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    padding: 4px 8px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .edit-btn:active { background: var(--primary-soft); }
+  .field-value {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    word-break: break-all;
+  }
+
+  /* Bottom action */
+  .footer {
+    padding: 14px 18px 26px;
+  }
+  .logout-btn {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--danger);
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    padding-block: 14px;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+  .logout-btn:active { background: #fdecea; }
+</style>
+</head>
+<body>
+
+<div class="screen" dir="rtl" lang="ar">
+
+  <header class="topbar">
+    <button class="icon-btn back-arrow" aria-label="السابق">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <h1 class="topbar-title">الملف الشخصي</h1>
+    <span style="width:32px"></span>
+  </header>
+
+  <section class="profile">
+    <div class="avatar">ل</div>
+    <h2 class="profile-name">لينا المنصوري</h2>
+    <p class="profile-role">عميل مُسجّل</p>
+  </section>
+
+  <div class="info">
+
+    <div class="field">
+      <div class="field-head">
+        <span class="field-label">الاسم</span>
+        <button class="edit-btn">تعديل</button>
+      </div>
+      <div class="field-value">لينا المنصوري</div>
+    </div>
+
+    <div class="field">
+      <div class="field-head">
+        <span class="field-label">البريد الإلكتروني</span>
+        <button class="edit-btn">تعديل</button>
+      </div>
+      <div class="field-value"><bdi dir="ltr">layla@example.com</bdi></div>
+    </div>
+
+    <div class="field">
+      <div class="field-head">
+        <span class="field-label">رقم الهاتف</span>
+        <button class="edit-btn">تعديل</button>
+      </div>
+      <div class="field-value"><bdi dir="ltr">+971 50 123 4567</bdi></div>
+    </div>
+
+    <div class="field">
+      <div class="field-head">
+        <span class="field-label">رقم IBAN</span>
+        <button class="edit-btn">تعديل</button>
+      </div>
+      <div class="field-value"><bdi dir="ltr">AE07 0331 2345 6789 0123 456</bdi></div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <button class="logout-btn">تسجيل الخروج</button>
+  </div>
+
+</div>
+
+</body>
+</html>

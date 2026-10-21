@@ -1,0 +1,39 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "transactions",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-10-21T17:45:12.552Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>المعاملات</title>\n  <style>\n    :lang(ar) {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n\n    body {\n      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif;\n      font-size: var(--type-body-size);\n      margin: 0;\n      padding: 16px;\n      background-color: #f5f5f5;\n      color: #333;\n    }\n\n    .balance {\n      font-size: 20px;\n      font-weight: 600;\n      margin-bottom: 16px;\n    }\n\n    .filter {\n      margin-bottom: 16px;\n    }\n\n    .filter select {\n      padding: 8px;\n      font-size: var(--type-label-size);\n      border: 1px solid #ccc;\n      border-radius: 4px;\n    }\n\n    table {\n      width: 100%;\n      border-collapse: collapse;\n      background-color: #fff;\n      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n    }\n\n    th, td {\n      padding: 12px;\n      text-align: start;\n      border-bottom: 1px solid #eee;\n      font-size: var(--type-label-size);\n    }\n\n    th {\n      background-color: #fafafa;\n      font-weight: 600;\n    }\n\n    .amount.income {\n      color: #2e7d32;\n    }\n\n    .amount.expense {\n      color: #c62828;\n    }\n\n    .merchant {\n      display: flex;\n      align-items: center;\n      gap: 8px;\n    }\n\n    .merchant bdi {\n      font-weight: 500;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"balance\">الرصيد: <bdi dir=\"ltr\">1,234.500 ر.ع.</bdi></div>\n\n  <div class=\"filter\">\n    <label for=\"period\">عرض:</label>\n    <select id=\"period\">\n      <option>هذا الشهر</option>\n      <option>الشهر الماضي</option>\n      <option>آخر 3 أشهر</option>\n    </select>\n  </div>\n\n  <table>\n    <thead>\n      <tr>\n        <th>التاريخ</th>\n        <th>التاجر</th>\n        <th>المبلغ</th>\n        <th>النوع</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td><bdi dir=\"ltr\">2025-03-28</bdi></td>\n        <td class=\"merchant\"><bdi>Lulu Hypermarket</bdi></td>\n        <td class=\"amount expense\"><bdi dir=\"ltr\">-12.500 ر.ع.</bdi></td>\n        <td>صرف</td>\n      </tr>\n      <tr>\n        <td><bdi dir=\"ltr\">2025-03-27</bdi></td>\n        <td class=\"merchant\"><bdi>نتفلكس</bdi></td>\n        <td class=\"amount expense\"><bdi dir=\"ltr\">-29.990 ر.ع.</bdi></td>\n        <td>صرف</td>\n      </tr>\n      <tr>\n        <td><bdi dir=\"ltr\">2025-03-25</bdi></td>\n        <td class=\"merchant\"><bdi>سوبرماركت المراعي</bdi></td>\n        <td class=\"amount expense\"><bdi dir=\"ltr\">-45.750 ر.ع.</bdi></td>\n        <td>صرف</td>\n      </tr>\n      <tr>\n        <td><bdi dir=\"ltr\">2025-03-22</bdi></td>\n        <td class=\"merchant\"><bdi>أبواب للمطاعم</bdi></td>\n        <td class=\"amount expense\"><bdi dir=\"ltr\">-18.300 ر.ع.</bdi></td>\n        <td>صرف</td>\n      </tr>\n      <tr>\n        <td><bdi dir=\"ltr\">2025-03-20</bdi></td>\n        <td class=\"merchant\"><bdi>Netflix</bdi></td>\n        <td class=\"amount expense\"><bdi dir=\"ltr\">-29.990 ر.ع.</bdi></td>\n        <td>اشتراك</td>\n      </tr>\n      <tr>\n        <td><bdi dir=\"ltr\">2025-03-18</bdi></td>\n        <td class=\"merchant\"><bdi>تواصل للاتصالات</bdi></td>\n        <td class=\"amount income\"><bdi dir=\"ltr\">+500.000 ر.ع.</bdi></td>\n        <td>إيداع</td>\n      </tr>\n      <tr>\n        <td><bdi dir=\"ltr\">2025-03-15</bdi></td>\n        <td class=\"merchant\"><bdi>مطعم نجد</bdi></td>\n        <td class=\"amount expense\"><bdi dir=\"ltr\">-32.400 ر.ع.</bdi></td>\n        <td>صرف</td>\n      </tr>\n      <tr>\n        <td><bdi dir=\"ltr\">2025-03-10</bdi></td>\n        <td class=\"merchant\"><bdi>أدوات منزلية</bdi></td>\n        <td class=\"amount expense\"><bdi dir=\"ltr\">-15.250 ر.ع.</bdi></td>\n        <td>صرف</td>\n      </tr>\n    </tbody>\n  </table>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6487,
+    "output": 1610
+  },
+  "ms": 31521,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 96,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 304.78125,
+        "y": 22,
+        "width": 69.21875,
+        "height": 22
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"balance\">الرصيد: <bdi dir=\"ltr\">1,234.500 ر.ع.</bdi></div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

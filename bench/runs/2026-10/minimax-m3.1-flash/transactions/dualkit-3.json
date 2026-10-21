@@ -1,0 +1,473 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "transactions",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-10-21T17:12:16.355Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\">\n  <meta name=\"theme-color\" content=\"#f5f7f6\">\n  <title>محفظتي — المعاملات</title>\n  <style>\n    :root {\n      color-scheme: light;\n      --bg: #f4f7f5;\n      --surface: #ffffff;\n      --text: #13231c;\n      --muted: #6c7b73;\n      --line: #e5ebe7;\n      --green: #0d7550;\n      --green-soft: #e8f5ef;\n      --orange: #c25b27;\n      --orange-soft: #fff0e8;\n      --shadow: 0 12px 30px rgba(24, 58, 42, 0.08);\n    }\n\n    * {\n      box-sizing: border-box;\n    }\n\n    html {\n      background: var(--bg);\n    }\n\n    body {\n      margin: 0;\n      min-height: 100vh;\n      color: var(--text);\n      background:\n        radial-gradient(circle at 15% 0%, rgba(13, 117, 80, 0.08), transparent 30%),\n        var(--bg);\n      font-family: \"Noto Sans Arabic\", \"Segoe UI\", Tahoma, Arial, sans-serif;\n      font-size: 16px;\n      line-height: 1.6;\n    }\n\n    button,\n    select {\n      font: inherit;\n    }\n\n    button {\n      color: inherit;\n    }\n\n    .app {\n      width: min(100%, 480px);\n      min-height: 100vh;\n      margin-inline: auto;\n      padding: calc(18px + env(safe-area-inset-top)) 18px calc(94px + env(safe-area-inset-bottom));\n      background: rgba(244, 247, 245, 0.94);\n    }\n\n    .topbar {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin-bottom: 22px;\n    }\n\n    .brand {\n      display: flex;\n      align-items: center;\n      gap: 10px;\n    }\n\n    .brand-mark {\n      display: grid;\n      width: 42px;\n      height: 42px;\n      place-items: center;\n      color: #fff;\n      border-radius: 14px;\n      background: var(--green);\n      box-shadow: 0 8px 18px rgba(13, 117, 80, 0.22);\n    }\n\n    .brand-name {\n      margin: 0;\n      font-size: 18px;\n      font-weight: 700;\n    }\n\n    .profile {\n      display: grid;\n      width: 42px;\n      height: 42px;\n      place-items: center;\n      border: 1px solid var(--line);\n      border-radius: 50%;\n      background: var(--surface);\n    }\n\n    .profile svg {\n      width: 22px;\n      height: 22px;\n      color: #52645a;\n    }\n\n    .page-title {\n      margin: 0 0 5px;\n      font-size: 27px;\n      line-height: 1.35;\n      font-weight: 750;\n    }\n\n    .page-subtitle {\n      margin: 0 0 20px;\n      color: var(--muted);\n      font-size: 14px;\n    }\n\n    .balance-card {\n      position: relative;\n      overflow: hidden;\n      padding: 22px;\n      color: #fff;\n      border-radius: 24px;\n      background:\n        radial-gradient(circle at 12% 15%, rgba(255, 255, 255, 0.18), transparent 24%),\n        linear-gradient(135deg, #0a6b49 0%, #0e8259 100%);\n      box-shadow: 0 18px 36px rgba(13, 117, 80, 0.24);\n    }\n\n    .balance-card::after {\n      content: \"\";\n      position: absolute;\n      inset-block-start: -58px;\n      inset-inline-end: -32px;\n      width: 160px;\n      height: 160px;\n      border: 1px solid rgba(255, 255, 255, 0.16);\n      border-radius: 50%;\n      box-shadow:\n        0 0 0 25px rgba(255, 255, 255, 0.04),\n        0 0 0 50px rgba(255, 255, 255, 0.025);\n      pointer-events: none;\n    }\n\n    .balance-label {\n      display: flex;\n      align-items: center;\n      gap: 8px;\n      margin: 0 0 8px;\n      color: rgba(255, 255, 255, 0.8);\n      font-size: 14px;\n    }\n\n    .balance-label svg {\n      width: 19px;\n      height: 19px;\n    }\n\n    .balance-value {\n      margin: 0;\n      font-size: 34px;\n      line-height: 1.3;\n      font-weight: 750;\n      font-variant-numeric: tabular-nums;\n      letter-spacing: 0;\n    }\n\n    .balance-value small {\n      margin-inline-start: 7px;\n      font-size: 15px;\n      font-weight: 600;\n    }\n\n    .balance-note {\n      display: inline-flex;\n      align-items: center;\n      gap: 6px;\n      margin: 13px 0 0;\n      padding: 5px 10px;\n      color: #e9fff5;\n      border-radius: 999px;\n      background: rgba(255, 255, 255, 0.12);\n      font-size: 14px;\n    }\n\n    .balance-note svg {\n      width: 16px;\n      height: 16px;\n    }\n\n    .transactions-section {\n      margin-top: 26px;\n    }\n\n    .section-header {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      gap: 12px;\n      margin-bottom: 13px;\n    }\n\n    .section-title {\n      margin: 0;\n      font-size: 19px;\n      font-weight: 700;\n    }\n\n    .month-filter {\n      position: relative;\n      display: inline-flex;\n      align-items: center;\n      gap: 7px;\n      min-height: 40px;\n      padding: 7px 12px;\n      color: var(--text);\n      border: 1px solid var(--line);\n      border-radius: 12px;\n      background: var(--surface);\n      box-shadow: 0 4px 12px rgba(28, 54, 41, 0.04);\n      font-size: 14px;\n      font-weight: 600;\n    }\n\n    .month-filter svg {\n      width: 17px;\n      height: 17px;\n      color: var(--green);\n    }\n\n    .month-filter select {\n      appearance: none;\n      padding: 0 2px;\n      color: inherit;\n      border: 0;\n      outline: 0;\n      background: transparent;\n      font-weight: 600;\n      cursor: pointer;\n    }\n\n    .table-card {\n      overflow: hidden;\n      border: 1px solid var(--line);\n      border-radius: 20px;\n      background: var(--surface);\n      box-shadow: var(--shadow);\n    }\n\n    table {\n      width: 100%;\n      border-collapse: collapse;\n      table-layout: fixed;\n    }\n\n    thead {\n      color: var(--muted);\n      background: #f8faf9;\n      font-size: 13px;\n    }\n\n    th,\n    td {\n      padding: 13px 12px;\n      text-align: start;\n      vertical-align: middle;\n    }\n\n    th {\n      font-weight: 600;\n    }\n\n    th:first-child,\n    td:first-child {\n      width: 78px;\n    }\n\n    th:last-child,\n    td:last-child {\n      width: 112px;\n      text-align: end;\n    }\n\n    tbody tr {\n      border-top: 1px solid var(--line);\n    }\n\n    tbody tr:first-child {\n      border-top: 0;\n    }\n\n    .date {\n      color: #435249;\n      font-size: 13px;\n      font-variant-numeric: tabular-nums;\n      white-space: nowrap;\n    }\n\n    .merchant {\n      display: flex;\n      align-items: center;\n      gap: 9px;\n      min-width: 0;\n    }\n\n    .merchant-icon {\n      display: grid;\n      flex: 0 0 36px;\n      width: 36px;\n      height: 36px;\n      place-items: center;\n      color: var(--green);\n      border-radius: 11px;\n      background: var(--green-soft);\n    }\n\n    .merchant-icon.outgoing {\n      color: var(--orange);\n      background: var(--orange-soft);\n    }\n\n    .merchant-icon svg {\n      width: 19px;\n      height: 19px;\n    }\n\n    .merchant-copy {\n      min-width: 0;\n    }\n\n    .merchant-name {\n      display: block;\n      overflow: hidden;\n      font-size: 14px;\n      font-weight: 650;\n      text-overflow: ellipsis;\n      white-space: nowrap;\n    }\n\n    .merchant-category {\n      display: block;\n      color: var(--muted);\n      font-size: 12px;\n      line-height: 1.45;\n    }\n\n    .amount {\n      display: block;\n      font-size: 14px;\n      font-weight: 700;\n      font-variant-numeric: tabular-nums;\n      white-space: nowrap;\n    }\n\n    .flow {\n      display: inline-flex;\n      align-items: center;\n      gap: 3px;\n      margin-top: 2px;\n      font-size: 12px;\n      font-weight: 600;\n    }\n\n    .flow.in {\n      color: var(--green);\n    }\n\n    .flow.out {\n      color: var(--orange);\n    }\n\n    .flow svg {\n      width: 13px;\n      height: 13px;\n    }\n\n    .bottom-nav {\n      position: fixed;\n      z-index: 10;\n      inset-inline: 0;\n      bottom: 0;\n      display: grid;\n      width: min(100%, 480px);\n      margin-inline: auto;\n      grid-template-columns: repeat(4, 1fr);\n      padding: 8px 12px calc(8px + env(safe-area-inset-bottom));\n      border-top: 1px solid rgba(220, 228, 223, 0.9);\n      background: rgba(255, 255, 255, 0.94);\n      backdrop-filter: blur(16px);\n    }\n\n    .nav-item {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      gap: 3px;\n      min-height: 52px;\n      justify-content: center;\n      color: #809087;\n      border: 0;\n      background: transparent;\n      font-size: 12px;\n      text-decoration: none;\n    }\n\n    .nav-item svg {\n      width: 22px;\n      height: 22px;\n    }\n\n    .nav-item.active {\n      color: var(--green);\n      font-weight: 700;\n    }\n\n    @media (max-width: 370px) {\n      .app {\n        padding-inline: 12px;\n      }\n\n      th,\n      td {\n        padding-inline: 8px;\n      }\n\n      th:first-child,\n      td:first-child {\n        width: 66px;\n      }\n\n      th:last-child,\n      td:last-child {\n        width: 103px;\n      }\n\n      .merchant-icon {\n        display: none;\n      }\n\n      .balance-value {\n        font-size: 30px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <main class=\"app\">\n    <header class=\"topbar\">\n      <div class=\"brand\">\n        <span class=\"brand-mark\" aria-hidden=\"true\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\">\n            <path d=\"M4 7.5h16M7 4.5h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-12a2 2 0 0 1 2-2Z\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n            <path d=\"M16 13.5h4v5h-4a2.5 2.5 0 0 1 0-5Z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"/>\n          </svg>\n        </span>\n        <p class=\"brand-name\">محفظتي</p>\n      </div>\n      <button class=\"profile\" type=\"button\" aria-label=\"الملف الشخصي\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n          <circle cx=\"12\" cy=\"8\" r=\"3.5\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n          <path d=\"M5.5 20c.6-4 2.8-6 6.5-6s5.9 2 6.5 6\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n        </svg>\n      </button>\n    </header>\n\n    <h1 class=\"page-title\">المعاملات</h1>\n    <p class=\"page-subtitle\">تابع جميع حركات محفظتك في مكان واحد</p>\n\n    <section class=\"balance-card\" aria-label=\"الرصيد المتاح\">\n      <p class=\"balance-label\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n          <rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"3\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n          <path d=\"M7 9h6M7 13h3\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n        </svg>\n        الرصيد المتاح\n      </p>\n      <p class=\"balance-value\">\n        <bdi>2,854.750</bdi>\n        <small>ر.ع.</small>\n      </p>\n      <p class=\"balance-note\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n          <path d=\"m5 12 4 4L19 6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n        </svg>\n        تم تحديث الرصيد اليوم\n      </p>\n    </section>\n\n    <section class=\"transactions-section\" aria-labelledby=\"transactions-title\">\n      <div class=\"section-header\">\n        <h2 class=\"section-title\" id=\"transactions-title\">سجل المعاملات</h2>\n        <label class=\"month-filter\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n            <rect x=\"3\" y=\"5\" width=\"18\" height=\"16\" rx=\"3\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n            <path d=\"M8 3v4M16 3v4M3 10h18\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n          </svg>\n          <span class=\"visually-hidden\" hidden>تصفية المعاملات</span>\n          <select aria-label=\"تصفية حسب الشهر\">\n            <option>هذا الشهر</option>\n            <option>الشهر الماضي</option>\n            <option>الأسبوع الماضي</option>\n          </select>\n        </label>\n      </div>\n\n      <div class=\"table-card\">\n        <table>\n          <thead>\n            <tr>\n              <th scope=\"col\">التاريخ</th>\n              <th scope=\"col\">الجهة</th>\n              <th scope=\"col\">المبلغ</th>\n            </tr>\n          </thead>\n          <tbody>\n            <tr>\n              <td class=\"date\">12 أغسطس</td>\n              <td>\n                <div class=\"merchant\">\n                  <span class=\"merchant-icon\" aria-hidden=\"true\">\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\">\n                      <path d=\"M4 9.5h16v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-9ZM7 9.5l1.5-5h7l1.5 5\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linejoin=\"round\"/>\n                      <path d=\"M8 14h8\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\"/>\n                    </svg>\n                  </span>\n                  <span class=\"merchant-copy\">\n                    <bdi class=\"merchant-name\" lang=\"en\" dir=\"ltr\">Lulu Hypermarket</bdi>\n                    <span class=\"merchant-category\">تسوق</span>\n                  </span>\n                </div>\n              </td>\n              <td>\n                <bdi class=\"amount\">− 18.750 ر.ع.</bdi>\n                <span class=\"flow out\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 19V5m0 0-5 5m5-5 5 5\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                  </svg>\n                  صادر\n                </span>\n              </td>\n            </tr>\n\n            <tr>\n              <td class=\"date\">11 أغسطس</td>\n              <td>\n                <div class=\"merchant\">\n                  <span class=\"merchant-icon\" aria-hidden=\"true\">\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\">\n                      <path d=\"M4 7h16v12H4z\" stroke=\"currentColor\" stroke-width=\"1.7\"/>\n                      <path d=\"m4 8 8 6 8-6\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linejoin=\"round\"/>\n                    </svg>\n                  </span>\n                  <span class=\"merchant-copy\">\n                    <bdi class=\"merchant-name\" lang=\"en\" dir=\"ltr\">Netflix</bdi>\n                    <span class=\"merchant-category\">اشتراك رقمي</span>\n                  </span>\n                </div>\n              </td>\n              <td>\n                <bdi class=\"amount\">− 4.500 ر.ع.</bdi>\n                <span class=\"flow out\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 19V5m0 0-5 5m5-5 5 5\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                  </svg>\n                  صادر\n                </span>\n              </td>\n            </tr>\n\n            <tr>\n              <td class=\"date\">10 أغسطس</td>\n              <td>\n                <div class=\"merchant\">\n                  <span class=\"merchant-icon\" aria-hidden=\"true\">\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\">\n                      <path d=\"M5 20V9l7-5 7 5v11\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linejoin=\"round\"/>\n                      <path d=\"M9 20v-6h6v6\" stroke=\"currentColor\" stroke-width=\"1.7\"/>\n                    </svg>\n                  </span>\n                  <span class=\"merchant-copy\">\n                    <span class=\"merchant-name\">إيداع نقدي</span>\n                    <span class=\"merchant-category\">فرع مسقط</span>\n                  </span>\n                </div>\n              </td>\n              <td>\n                <bdi class=\"amount\">+ 250.000 ر.ع.</bdi>\n                <span class=\"flow in\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 5v14m0 0 5-5m-5 5-5-5\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                  </svg>\n                  وارد\n                </span>\n              </td>\n            </tr>\n\n            <tr>\n              <td class=\"date\">8 أغسطس</td>\n              <td>\n                <div class=\"merchant\">\n                  <span class=\"merchant-icon outgoing\" aria-hidden=\"true\">\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\">\n                      <path d=\"M6 3h12l2 5H4l2-5Z\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linejoin=\"round\"/>\n                      <path d=\"M5 8v12h14V8M9 12h6\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\"/>\n                    </svg>\n                  </span>\n                  <span class=\"merchant-copy\">\n                    <span class=\"merchant-name\">متجر الخوير</span>\n                    <span class=\"merchant-category\">متاجر</span>\n                  </span>\n                </div>\n              </td>\n              <td>\n                <bdi class=\"amount\">− 37.250 ر.ع.</bdi>\n                <span class=\"flow out\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 19V5m0 0-5 5m5-5 5 5\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                  </svg>\n                  صادر\n                </span>\n              </td>\n            </tr>\n\n            <tr>\n              <td class=\"date\">6 أغسطس</td>\n              <td>\n                <div class=\"merchant\">\n                  <span class=\"merchant-icon\" aria-hidden=\"true\">\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\">\n                      <rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"3\" stroke=\"currentColor\" stroke-width=\"1.7\"/>\n                      <path d=\"M3 10h18\" stroke=\"currentColor\" stroke-width=\"1.7\"/>\n                    </svg>\n                  </span>\n                  <span class=\"merchant-copy\">\n                    <span class=\"merchant-name\">تحويل بنكي</span>\n                    <span class=\"merchant-category\">حوالات بنكية</span>\n                  </span>\n                </div>\n              </td>\n              <td>\n                <bdi class=\"amount\">+ 120.500 ر.ع.</bdi>\n                <span class=\"flow in\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 5v14m0 0 5-5m-5 5-5-5\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                  </svg>\n                  وارد\n                </span>\n              </td>\n            </tr>\n\n            <tr>\n              <td class=\"date\">4 أغسطس</td>\n              <td>\n                <div class=\"merchant\">\n                  <span class=\"merchant-icon outgoing\" aria-hidden=\"true\">\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\">\n                      <path d=\"M7 3h10l3 4H4l3-4Z\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linejoin=\"round\"/>\n                      <path d=\"M5 7v14h14V7\" stroke=\"currentColor\" stroke-width=\"1.7\"/>\n                    </svg>\n                  </span>\n                  <span class=\"merchant-copy\">\n                    <span class=\"merchant-name\">مطعم国家和地区</span>\n                    <span class=\"merchant-category\">مطاعم</span>\n                  </span>\n                </div>\n              </td>\n              <td>\n                <bdi class=\"amount\">− 8.900 ر.ع.</bdi>\n                <span class=\"flow out\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 19V5m0 0-5 5m5-5 5 5\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                  </svg>\n                  صادر\n                </span>\n              </td>\n            </tr>\n\n            <tr>\n              <td class=\"date\">2 أغسطس</td>\n              <td>\n                <div class=\"merchant\">\n                  <span class=\"merchant-icon\" aria-hidden=\"true\">\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\">\n                      <circle cx=\"12\" cy=\"8\" r=\"3\" stroke=\"currentColor\" stroke-width=\"1.7\"/>\n                      <path d=\"M5.5 20c.5-4 2.7-6 6.5-6s6 2 6.5 6\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\"/>\n                    </svg>\n                  </span>\n                  <span class=\"merchant-copy\">\n                    <span class=\"merchant-name\">استرداد مبلغ</span>\n                    <span class=\"merchant-category\">معاملة عكسية</span>\n                  </span>\n                </div>\n              </td>\n              <td>\n                <bdi class=\"amount\">+ 12.350 ر.ع.</bdi>\n                <span class=\"flow in\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 5v14m0 0 5-5m-5 5-5-5\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                  </svg>\n                  وارد\n                </span>\n              </td>\n            </tr>\n\n            <tr>\n              <td class=\"date\">1 أغسطس</td>\n              <td>\n                <div class=\"merchant\">\n                  <span class=\"merchant-icon outgoing\" aria-hidden=\"true\">\n                    <svg viewBox=\"0 0 24 24\" fill=\"none\">\n                      <path d=\"M5 4h14v16H5z\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linejoin=\"round\"/>\n                      <path d=\"M9 8h6M9 12h6M9 16h3\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\"/>\n                    </svg>\n                  </span>\n                  <span class=\"merchant-copy\">\n                    <span class=\"merchant-name\">فواتيرservices</span>\n                    <span class=\"merchant-category\">خدمات</span>\n                  </span>\n                </div>\n              </td>\n              <td>\n                <bdi class=\"amount\">− 21.100 ر.ع.</bdi>\n                <span class=\"flow out\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 19V5m0 0-5 5m5-5 5 5\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n                  </svg>\n                  صادر\n                </span>\n              </td>\n            </tr>\n          </tbody>\n        </table>\n      </div>\n    </section>\n  </main>\n\n  <nav class=\"bottom-nav\" aria-label=\"التنقل الرئيسي\">\n    <a class=\"nav-item\" href=\"#\" aria-label=\"الرئيسية\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n        <path d=\"m4 10 8-6 8 6v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-9Z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"/>\n      </svg>\n      الرئيسية\n    </a>\n    <a class=\"nav-item\" href=\"#\" aria-label=\"المعاملات\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n        <path d=\"M5 7h14M5 12h14M5 17h9\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n      </svg>\n      المعاملات\n    </a>\n    <a class=\"nav-item\" href=\"#\" aria-label=\"التحويل\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n        <path d=\"M7 7h11m0 0-3-3m3 3-3 3M17 17H6m0 0 3 3m-3-3 3-3\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n      </svg>\n      التحويل\n    </a>\n    <a class=\"nav-item active\" href=\"#\" aria-label=\"المحفظة\" aria-current=\"page\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n        <rect x=\"3\" y=\"6\" width=\"18\" height=\"14\" rx=\"3\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n        <path d=\"M7 6V4h10v2M16 12h5v4h-5a2 2 0 0 1 0-4Z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"/>\n      </svg>\n      المحفظة\n    </a>\n  </nav>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6171,
+    "output": 7301
+  },
+  "ms": 36785,
+  "finish": "stop",
+  "reasoningTokens": 571,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 84,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 254,
+        "y": 28.59375,
+        "width": 66,
+        "height": 20
+      },
+      "message": "\"Noto Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<p class=\"brand-name\">محفظتي</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 325,
+        "y": 424.796875,
+        "width": 34,
+        "height": 15
+      },
+      "message": "\"التاريخ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th scope=\"col\">التاريخ</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 252,
+        "y": 424.796875,
+        "width": 29,
+        "height": 15
+      },
+      "message": "\"الجهة\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th scope=\"col\">الجهة</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 424.796875,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"المبلغ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<th scope=\"col\">المبلغ</th>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 289.90625,
+        "y": 485.234375,
+        "width": 69.09375,
+        "height": 15
+      },
+      "message": "\"12 أغسطس\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<td class=\"date\">12 أغسطس</td>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 207,
+        "y": 497.125,
+        "width": 29,
+        "height": 14
+      },
+      "message": "\"تسوق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"merchant-category\">تسوق</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 495.984375,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"صادر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"flow out\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 19V5m0 0-5 5m5-5 5 5\" stroke"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 290.875,
+        "y": 560.3125,
+        "width": 68.125,
+        "height": 15
+      },
+      "message": "\"11 أغسطس\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<td class=\"date\">11 أغسطس</td>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 166.65625,
+        "y": 572.203125,
+        "width": 69.34375,
+        "height": 14
+      },
+      "message": "\"اشتراك رقمي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"merchant-category\">اشتراك رقمي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 571.0625,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"صادر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"flow out\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 19V5m0 0-5 5m5-5 5 5\" stroke"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 289.90625,
+        "y": 635.390625,
+        "width": 69.09375,
+        "height": 15
+      },
+      "message": "\"10 أغسطس\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<td class=\"date\">10 أغسطس</td>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 178.65625,
+        "y": 647.28125,
+        "width": 57.34375,
+        "height": 14
+      },
+      "message": "\"فرع مسقط\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"merchant-category\">فرع مسقط</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 646.140625,
+        "width": 20,
+        "height": 14
+      },
+      "message": "\"وارد\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"flow in\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 5v14m0 0 5-5m-5 5-5-5\" stroke"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 297.140625,
+        "y": 710.46875,
+        "width": 61.859375,
+        "height": 15
+      },
+      "message": "\"8 أغسطس\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<td class=\"date\">8 أغسطس</td>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 208,
+        "y": 722.359375,
+        "width": 28,
+        "height": 14
+      },
+      "message": "\"متاجر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"merchant-category\">متاجر</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 721.21875,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"صادر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"flow out\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 19V5m0 0-5 5m5-5 5 5\" stroke"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 297.140625,
+        "y": 785.546875,
+        "width": 61.859375,
+        "height": 15
+      },
+      "message": "\"6 أغسطس\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<td class=\"date\">6 أغسطس</td>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 174.65625,
+        "y": 797.4375,
+        "width": 61.34375,
+        "height": 14
+      },
+      "message": "\"حوالات بنكية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"merchant-category\">حوالات بنكية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 796.296875,
+        "width": 20,
+        "height": 14
+      },
+      "message": "\"وارد\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"flow in\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 5v14m0 0 5-5m-5 5-5-5\" stroke"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 297.140625,
+        "y": 860.625,
+        "width": 61.859375,
+        "height": 15
+      },
+      "message": "\"4 أغسطس\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<td class=\"date\">4 أغسطس</td>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 201,
+        "y": 872.515625,
+        "width": 35,
+        "height": 14
+      },
+      "message": "\"مطاعم\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"merchant-category\">مطاعم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 871.375,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"صادر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"flow out\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 19V5m0 0-5 5m5-5 5 5\" stroke"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 297.140625,
+        "y": 935.703125,
+        "width": 61.859375,
+        "height": 15
+      },
+      "message": "\"2 أغسطس\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<td class=\"date\">2 أغسطس</td>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 165.65625,
+        "y": 947.59375,
+        "width": 70.34375,
+        "height": 14
+      },
+      "message": "\"معاملة عكسية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"merchant-category\">معاملة عكسية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 946.453125,
+        "width": 20,
+        "height": 14
+      },
+      "message": "\"وارد\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"flow in\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 5v14m0 0 5-5m-5 5-5-5\" stroke"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 297.140625,
+        "y": 1010.78125,
+        "width": 61.859375,
+        "height": 15
+      },
+      "message": "\"1 أغسطس\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<td class=\"date\">1 أغسطس</td>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 202,
+        "y": 1022.671875,
+        "width": 34,
+        "height": 14
+      },
+      "message": "\"خدمات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"merchant-category\">خدمات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 1021.53125,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"صادر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"flow out\">\n                  <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n                    <path d=\"M12 19V5m0 0-5 5m5-5 5 5\" stroke"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 311.25,
+        "y": 814.90625,
+        "width": 42,
+        "height": 14
+      },
+      "message": "\"الرئيسية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<a class=\"nav-item\" href=\"#\" aria-label=\"الرئيسية\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n        <path d=\"m4 10 8-6 8 6v9a1 1 0 0 1-1 "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 216.75,
+        "y": 814.90625,
+        "width": 48,
+        "height": 14
+      },
+      "message": "\"المعاملات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<a class=\"nav-item\" href=\"#\" aria-label=\"المعاملات\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n        <path d=\"M5 7h14M5 12h14M5 17h9\" str"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 130.75,
+        "y": 814.90625,
+        "width": 37,
+        "height": 14
+      },
+      "message": "\"التحويل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<a class=\"nav-item\" href=\"#\" aria-label=\"التحويل\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n        <path d=\"M7 7h11m0 0-3-3m3 3-3 3M17 17"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35.75,
+        "y": 814.90625,
+        "width": 44,
+        "height": 14
+      },
+      "message": "\"المحفظة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<a class=\"nav-item active\" href=\"#\" aria-label=\"المحفظة\" aria-current=\"page\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n        <rect x=\"3\""
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 1151
+}

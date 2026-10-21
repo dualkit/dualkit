@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رمز التحقق - التطبيق البنكي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+        /* Hide number spinners */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Phone Frame -->
+    <div class="w-full max-w-[390px] h-[800px] bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col justify-between relative border-[8px] border-slate-800">
+        
+        <!-- Status Bar -->
+        <div class="w-full px-6 pt-4 pb-2 flex justify-between items-center text-slate-800 text-sm font-semibold bg-white">
+            <span>9:41</span>
+            <div class="flex items-center space-x-1 space-x-reverse">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h3.53c1.24.64 2.66 1 4.12 1 4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+                <div class="w-6 h-3 border border-slate-800 rounded-sm p-0.5 flex items-center">
+                    <div class="h-full w-full bg-slate-800 rounded-2xs"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- App Header -->
+        <div class="px-6 py-2 flex items-center justify-between">
+            <button class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+            <span class="text-xs font-bold tracking-wider text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full">مصرف الراجحي (تجريبي)</span>
+            <div class="w-10"></div> <!-- Spacer -->
+        </div>
+
+        <!-- Main Content -->
+        <div class="px-8 pt-6 flex-1 flex flex-col">
+            
+            <!-- Title & Subtitle -->
+            <div class="text-right mb-8">
+                <h1 class="text-2xl font-bold text-slate-900 mb-2">أدخل رمز التحقق</h1>
+                <p class="text-slate-500 text-sm leading-relaxed">
+                    تم إرسال رمز مكون من 6 أرقام إلى الرقم<br>
+                    <span dir="ltr" class="font-semibold text-slate-800 inline-block mt-1">+966 55 123 4567</span>
+                </p>
+            </div>
+
+            <!-- OTP Input Boxes (6 digits) -->
+            <div class="flex justify-between gap-2 mb-8" dir="ltr">
+                <input type="number" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-emerald-600 focus:bg-white focus:outline-none transition" />
+                <input type="number" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-emerald-600 focus:bg-white focus:outline-none transition" />
+                <input type="number" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-emerald-600 focus:bg-white focus:outline-none transition" />
+                <input type="number" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-emerald-600 focus:bg-white focus:outline-none transition" />
+                <input type="number" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-emerald-600 focus:bg-white focus:outline-none transition" />
+                <input type="number" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-emerald-600 focus:bg-white focus:outline-none transition" />
+            </div>
+
+            <!-- Countdown Timer -->
+            <div class="text-center mb-8">
+                <p class="text-sm text-slate-500">
+                    إعادة الإرسال خلال 
+                    <span id="countdown" class="font-bold text-emerald-700">0:45</span>
+                </p>
+            </div>
+
+            <!-- Verify Button -->
+            <button class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-4 rounded-2xl shadow-lg shadow-emerald-700/30 transition active:scale-[0.98]">
+                تحقق
+            </button>
+
+        </div>
+
+        <!-- Home Indicator -->
+        <div class="w-full pb-3 pt-2 flex justify-center bg-white">
+            <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+        </div>
+
+    </div>
+
+    <!-- Script for basic OTP interactivity -->
+    <script>
+        const inputs = document.querySelectorAll('.otp-input');
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                const value = e.target.value;
+                if (value.length > 1) {
+                    e.target.value = value.slice(0, 1);
+                }
+                if (value && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        // Simple Countdown Mock
+        let timeLeft = 45;
+        const countdownEl = document.getElementById('countdown');
+        const timer = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                countdownEl.textContent = "إرسال رمز جديد";
+                countdownEl.classList.add("underline", "cursor-pointer");
+            } else {
+                timeLeft--;
+                let seconds = timeLeft < 10 ? '0' + timeLeft : timeLeft;
+                countdownEl.textContent = `0:${seconds}`;
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

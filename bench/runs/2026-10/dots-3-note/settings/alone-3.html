@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإعدادات</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f5f5;
+    direction: rtl;
+  }
+  .container {
+    max-width: 375px;
+    margin: 0 auto;
+    background: #fff;
+    min-height: 100vh;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  .title {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 24px;
+    color: #333;
+  }
+  .group {
+    margin-bottom: 32px;
+  }
+  .group-title {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 8px;
+    text-align: right;
+  }
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 16px;
+    color: #333;
+  }
+  .item:last-child {
+    border-bottom: none;
+  }
+  .label {
+    flex: 1;
+  }
+  .value {
+    margin-left: 8px;
+  }
+  .chevron {
+    margin-left: 8px;
+    color: #ccc;
+  }
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+  }
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+  }
+  .slider:before {
+    content: "";
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  input:checked + .slider {
+    background-color: #007AFF;
+  }
+  input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+  .item.nav {
+    cursor: pointer;
+  }
+  .item.nav:hover {
+    background: #f9f9f9;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1 class="title">الإعدادات</h1>
+
+  <section class="group">
+    <h2 class="group-title">الحساب</h2>
+    <ul class="list">
+      <li class="item">
+        <span class="label">الاسم</span>
+        <span class="value">محمد أحمد</span>
+      </li>
+      <li class="item">
+        <span class="label">رقم الهاتف</span>
+        <span class="value">+973 3600 1234</span>
+      </li>
+      <li class="item nav">
+        <span class="label">اللغة</span>
+        <span class="value">العربية</span>
+        <span class="chevron">›</span>
+      </li>
+    </ul>
+  </section>
+
+  <section class="group">
+    <h2 class="group-title">الأمان</h2>
+    <ul class="list">
+      <li class="item toggle">
+        <span class="label">Face ID</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </li>
+      <li class="item toggle">
+        <span class="label">تسجيل الدخول بخطوتين</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </li>
+    </ul>
+  </section>
+
+  <section class="group">
+    <h2 class="group-title">الإشعارات</h2>
+    <ul class="list">
+      <li class="item toggle">
+        <span class="label">التحويلات</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </li>
+      <li class="item toggle">
+        <span class="label">العرض</span>
+        <label class="switch">
+          <input type="checkbox">
+          <span class="slider"></span>
+        </label>
+      </li>
+      <li class="item toggle">
+        <span class="label">الكشوفات</span>
+        <label class="switch">
+          <input type="checkbox" checked>
+          <span class="slider"></span>
+        </label>
+      </li>
+    </ul>
+  </section>
+</div>
+</body>
+</html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#075e54">
+  <title>دعم زين — سارة</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --brand: #075e54;
+      --brand-dark: #044b43;
+      --brand-soft: #e7f4f1;
+      --accent: #f5b83d;
+      --ink: #172321;
+      --muted: #687572;
+      --line: #e8eceb;
+      --surface: #ffffff;
+      --chat-bg: #f5f8f7;
+      --bubble-agent: #ffffff;
+      --bubble-user: #075e54;
+      --user-text: #ffffff;
+      --shadow: 0 10px 30px rgba(20, 48, 44, 0.08);
+      --radius: 20px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      overflow: hidden;
+      background: #dce8e5;
+      color: var(--ink);
+      font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    :lang(ar) {
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    .phone {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 430px;
+      height: 100dvh;
+      margin-inline: auto;
+      overflow: hidden;
+      background: var(--chat-bg);
+      box-shadow: var(--shadow);
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 30px;
+      padding: calc(5px + var(--safe-top)) 20px 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-icons svg {
+      display: block;
+    }
+
+    .app-header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 74px;
+      padding: 12px 16px;
+      color: #fff;
+      background: var(--brand);
+      box-shadow: 0 4px 16px rgba(7, 94, 84, 0.18);
+    }
+
+    .back-button,
+    .call-button {
+      display: grid;
+      flex: 0 0 auto;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.11);
+      cursor: pointer;
+      transition: background 160ms ease, transform 160ms ease;
+    }
+
+    .back-button:active,
+    .call-button:active {
+      transform: scale(0.94);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .back-icon {
+      transform: scaleX(-1);
+    }
+
+    .agent-avatar {
+      position: relative;
+      display: grid;
+      flex: 0 0 auto;
+      width: 45px;
+      height: 45px;
+      place-items: center;
+      border: 2px solid rgba(255, 255, 255, 0.68);
+      border-radius: 50%;
+      color: var(--brand-dark);
+      background: var(--accent);
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .online-dot {
+      position: absolute;
+      inset-inline-end: -1px;
+      inset-block-end: 1px;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--brand);
+      border-radius: 50%;
+      background: #52d273;
+    }
+
+    .agent-details {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .agent-name {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+
+    .agent-status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin: 2px 0 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .header-action {
+      padding: 6px 8px;
+      color: #fff;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .header-action svg {
+      display: block;
+    }
+
+    .conversation {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 18px 14px 20px;
+      scrollbar-width: thin;
+      scrollbar-color: #c9d5d2 transparent;
+    }
+
+    .date-divider {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 2px 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .date-divider::before,
+    .date-divider::after {
+      height: 1px;
+      flex: 1;
+      content: "";
+      background: var(--line);
+    }
+
+    .message-row {
+      display: flex;
+      margin-bottom: 12px;
+    }
+
+    .message-row.user {
+      justify-content: flex-start;
+    }
+
+    .message-row.agent {
+      justify-content: flex-end;
+    }
+
+    .message-bubble {
+      max-width: 84%;
+      padding: 10px 13px 7px;
+      border-radius: var(--radius);
+      box-shadow: 0 2px 8px rgba(28, 55, 51, 0.06);
+      animation: message-in 220ms ease-out both;
+    }
+
+    .message-row.agent .message-bubble {
+      border-start-start-radius: 6px;
+      border-end-start-radius: var(--radius);
+      border-start-end-radius: var(--radius);
+      border-end-end-radius: 6px;
+      color: var(--ink);
+      background: var(--bubble-agent);
+    }
+
+    .message-row.user .message-bubble {
+      border-start-start-radius: var(--radius);
+      border-end-start-radius: 6px;
+      border-start-end-radius: var(--radius);
+      border-end-end-radius: var(--radius);
+      color: var(--user-text);
+      background: var(--bubble-user);
+    }
+
+    .message-text {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+
+    .message-time {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      margin-top: 3px;
+      font-size: 14px;
+      line-height: 1.5;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .message-row.agent .message-time {
+      color: var(--muted);
+    }
+
+    .message-row.user .message-time {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .message-time svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .typing-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 4px 16px 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .typing-dots {
+      display: inline-flex;
+      gap: 3px;
+      padding: 10px 12px;
+      border-radius: 15px;
+      background: #fff;
+    }
+
+    .typing-dots i {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #8ca19d;
+      animation: typing 1.2s infinite ease-in-out;
+    }
+
+    .typing-dots i:nth-child(2) {
+      animation-delay: 120ms;
+    }
+
+    .typing-dots i:nth-child(3) {
+      animation-delay: 240ms;
+    }
+
+    .composer {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: flex-end;
+      gap: 9px;
+      padding: 10px 12px calc(10px + var(--safe-bottom));
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 -5px 18px rgba(32, 56, 52, 0.05);
+      backdrop-filter: blur(12px);
+    }
+
+    .input-shell {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      min-height: 48px;
+      padding: 4px 6px 4px 14px;
+      border: 1px solid #dce5e3;
+      border-radius: 24px;
+      background: #f7f9f9;
+      transition: border-color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .input-shell:focus-within {
+      border-color: #78aaa3;
+      box-shadow: 0 0 0 3px rgba(7, 94, 84, 0.1);
+    }
+
+    .attach-button {
+      display: grid;
+      flex: 0 0 auto;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      color: var(--brand);
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .message-input {
+      width: 100%;
+      min-width: 0;
+      max-height: 112px;
+      padding: 10px 8px;
+      resize: none;
+      border: 0;
+      outline: 0;
+      color: var(--ink);
+      background: transparent;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .message-input::placeholder {
+      color: #8a9794;
+      text-align: right;
+    }
+
+    .message-input:placeholder-shown {
+      direction: rtl;
+      text-align: right;
+    }
+
+    .send-button {
+      display: grid;
+      flex: 0 0 auto;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--brand);
+      box-shadow: 0 5px 12px rgba(7, 94, 84, 0.22);
+      cursor: pointer;
+      transition: transform 150ms ease, background 150ms ease, opacity 150ms ease;
+    }
+
+    .send-button:active {
+      transform: scale(0.92);
+    }
+
+    .send-button:disabled {
+      opacity: 0.45;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .send-icon {
+      transform: scaleX(-1);
+    }
+
+    @keyframes message-in {
+      from {
+        opacity: 0;
+        transform: translateY(7px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes typing {
+      0%,
+      60%,
+      100% {
+        opacity: 0.45;
+        transform: translateY(0);
+      }
+      30% {
+        opacity: 1;
+        transform: translateY(-2px);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .message-bubble {
+        max-width: 90%;
+      }
+
+      .app-header {
+        padding-inline: 12px;
+      }
+    }
+
+    @media (min-width: 500px) {
+      body {
+        padding: 18px 0;
+      }
+
+      .phone {
+        height: calc(100dvh - 36px);
+        min-height: 620px;
+        border-radius: 28px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <div class="status-bar" aria-hidden="true">
+      <span>9:41</span>
+      <span class="status-icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="none">
+          <path d="M1 9.5h2V11H1v-1.5Zm4-3h2V11H5V6.5Zm4-3h2V11H9V3.5Zm4-3h2V11h-2V.5Z" fill="currentColor"/>
+        </svg>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+          <path d="M1 4.2a10.2 10.2 0 0 1 14 0L12.8 6.3a7.8 7.8 0 0 0-9.6 0L1 4.2Zm3 3a5.8 5.8 0 0 1 8 0L9.9 9.3a2.7 2.7 0 0 0-3.8 0L4 7.2Z" fill="currentColor"/>
+        </svg>
+        <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+          <rect x=".75" y=".75" width="20.5" height="10.5" rx="3" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M23 4v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <rect x="2.5" y="2.5" width="16" height="7" rx="1.5" fill="currentColor"/>
+        </svg>
+      </span>
+    </div>
+
+    <header class="app-header">
+      <button class="back-button" type="button" aria-label="العودة">
+        <svg class="back-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="m9 18 6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="agent-avatar" aria-hidden="true">
+        س
+        <span class="online-dot"></span>
+      </div>
+
+      <div class="agent-details">
+        <h1 class="agent-name">سارة</h1>
+        <p class="agent-status">
+          <span>متصلة الآن</span>
+          <span aria-hidden="true">•</span>
+          <span>خدمة العملاء</span>
+        </p>
+      </div>
+
+      <button class="header-action" type="button" aria-label="معلومات الاتصال">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M12 10.5V17M12 7.2v.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <button class="call-button" type="button" aria-label="الاتصال بسارة">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M8.4 4.7 10 8.1 7.8 9.7c1.2 2.5 3.1 4.4 5.6 5.6l1.6-2.2 3.4 1.6v2.5c0 .7-.6 1.3-1.3 1.3C9.6 18.5 5.5 14.4 5.5 6c0-.7.6-1.3 1.3-1.3h1.6Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </header>
+
+    <section class="conversation" id="conversation" aria-label="المحادثة">
+      <div class="date-divider">اليوم</div>
+
+      <article class="message-row user">
+        <div class="message-bubble">
+          <p class="message-text">مرحبًا، هل تساعديني في تفعيل جهاز <bdi>5G</bdi>؟</p>
+          <div class="message-time">
+            <span>10:21 ص</span>
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <article class="message-row agent">
+        <div class="message-bubble">
+          <p class="message-text">أهلًا بك! بالتأكيد، يسعدني مساعدتك. هل طلبت شريحة <bdi>eSIM</bdi> جديدة؟</p>
+          <div class="message-time">
+            <span>10:22 ص</span>
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <article class="message-row user">
+        <div class="message-bubble">
+          <p class="message-text">نعم، اشتركت في باقة <bdi>5G</bdi> إضافية أمس، ورقم الطلب هو <bdi>TX-48213</bdi>.</p>
+          <div class="message-time">
+            <span>10:24 ص</span>
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <article class="message-row agent">
+        <div class="message-bubble">
+          <p class="message-text">شكرًا لك. وجدت الطلب، وسأرسل رمز التفعيل إلى جهازك خلال دقائق.</p>
+          <div class="message-time">
+            <span>10:25 ص</span>
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <article class="message-row user">
+        <div class="message-bubble">
+          <p class="message-text">ممتاز، لكن هل أحتاج إلى حذف الشريحة القديمة أولًا؟</p>
+          <div class="message-time">
+            <span>10:27 ص</span>
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <article class="message-row agent">
+        <div class="message-bubble">
+          <p class="message-text">لا حاجة لذلك. سيُفعَّل جهازك تلقائيًا بعد وصول الرمز، وستجد <bdi>eSIM</bdi> الجديدة ضمن إعدادات الشبكة.</p>
+          <div class="message-time">
+            <span>10:28 ص</span>
+            <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="m3 8 3 3 7-7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </article>
+
+      <div class="typing-note" id="typingNote" hidden>
+        <span class="typing-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>سارة تكتب...</span>
+      </div>
+    </section>
+
+    <form class="composer" id="composer">
+      <div class="input-shell">
+        <button class="attach-button" type="button" aria-label="إرفاق ملف">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M20 11.5 12.3 19a5.3 5.3 0 0 1-7.5-7.5l8-7.8a3.6 3.6 0 0 1 5 5.1l-7.8 7.7a1.8 1.8 0 0 1-2.5-2.5l7.2-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <textarea
+          class="message-input"
+          id="messageInput"
+          dir="auto"
+          rows="1"
+          maxlength="500"
+          placeholder="اكتب رسالة..."
+          aria-label="اكتب رسالة"
+        ></textarea>
+      </div>
+
+      <button class="send-button" id="sendButton" type="submit" aria-label="إرسال الرسالة" disabled>
+        <svg class="send-icon" width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="m4 4 17 8-17 8 3.2-8L4 4Z" fill="currentColor"/>
+          <path d="M7.2 12H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </form>
+  </main>
+
+  <script>
+    const input = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
+    const conversation = document.getElementById("conversation");
+    const composer = document.getElementById("composer");
+    const typingNote = document.getElementById("typingNote");
+
+    function formatTime(date) {
+      return new Intl.DateTimeFormat("ar-KW-u-nu-latn", {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true
+      }).format(date);
+    }
+
+    function resizeInput() {
+      input.style.height = "auto";
+      input.style.height = Math.min(input.scrollHeight, 112) + "px";
+      sendButton.disabled = input.value.trim().length === 0;
+    }
+
+    function scrollToLatest() {
+      conversation.scrollTo({
+        top: conversation.scrollHeight,
+        behavior: "smooth"
+      });
+    }
+
+    function createMessage(text, type) {
+      const row = document.createElement("article");
+      row.className = `message-row ${type}`;
+
+      const bubble = document.createElement("div");
+      bubble.className = "message-bubble";
+
+      const paragraph = document.createElement("p");
+      paragraph.className = "message-text";
+      paragraph.dir = "auto";
+      paragraph.textContent = text;
+
+      const time = document.createElement("div");
+      time.className = "message-time";
+
+      const timeText = document.createElement("span");
+      timeText.textContent = formatTime(new Date());
+      timeText.dir = "ltr";
+
+      const check = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      check.setAttribute("viewBox", "0 0 16 16");
+      check.setAttribute("fill", "none");
+      check.setAttribute("aria-hidden", "true");
+
+      const checkPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      checkPath.setAttribute("d", "m3 8 3 3 7-7");
+      checkPath.setAttribute("stroke", "currentColor");
+      checkPath.setAttribute("stroke-width", "1.7");
+      checkPath.setAttribute("stroke-linecap", "round");
+      checkPath.setAttribute("stroke-linejoin", "round");
+      check.appendChild(checkPath);
+
+      time.append(timeText, check);
+      bubble.append(paragraph, time);
+      row.appendChild(bubble);
+      return row;
+    }
+
+    input.addEventListener("input", resizeInput);
+
+    input.addEventListener("keydown", event => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        composer.requestSubmit();
+      }
+    });
+
+    composer.addEventListener("submit", event => {
+      event.preventDefault();
+      const text = input.value.trim();
+
+      if (!text) return;
+
+      conversation.appendChild(createMessage(text, "user"));
+      input.value = "";
+      resizeInput();
+      scrollToLatest();
+
+      typingNote.hidden = false;
+      scrollToLatest();
+
+      window.setTimeout(() => {
+        typingNote.hidden = true;
+        conversation.appendChild(
+          createMessage(
+            "وصلتني رسالتك بنجاح. هل هناك أي خطوة أخرى تحتاج إلى مساعدتي فيها؟",
+            "agent"
+          )
+        );
+        scrollToLatest();
+      }, 1300);
+    });
+
+    resizeInput();
+    scrollToLatest();
+  </script>
+</body>
+</html>

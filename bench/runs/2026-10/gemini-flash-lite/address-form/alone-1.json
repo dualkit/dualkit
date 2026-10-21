@@ -1,0 +1,221 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "address-form",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T16:46:04.041Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>إضافة عنوان التوصيل</title>\n    <!-- Tailwind CSS CDN -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Font: Tajawal for clean Arabic typography -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap\" rel=\"stylesheet\">\n    <!-- FontAwesome for icons -->\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">\n    <script>\n        tailwind.config = {\n            theme: {\n                extend: {\n                    fontFamily: {\n                        sans: ['Tajawal', 'sans-serif'],\n                    },\n                    colors: {\n                        brand: {\n                            50: '#f0fdf4',\n                            500: '#10b981',\n                            600: '#059669',\n                            700: '#047857',\n                        }\n                    }\n                }\n            }\n        }\n    </script>\n</head>\n<body class=\"bg-gray-100 flex justify-center items-center min-h-screen font-sans\">\n\n    <!-- Mobile Frame Container -->\n    <div class=\"w-full max-w-md bg-white min-h-screen sm:min-h-[auto] sm:rounded-3xl sm:shadow-2xl flex flex-col justify-between overflow-hidden relative\">\n        \n        <!-- Header -->\n        <div class=\"bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 z-10\">\n            <button class=\"w-9 h-9 rounded-full bg-gray-50 flex items-center justify-center text-gray-600 hover:bg-gray-100 transition\">\n                <i class=\"fa-solid fa-arrow-right\"></i>\n            </button>\n            <h1 class=\"text-lg font-bold text-gray-800\">عنوان التوصيل</h1>\n            <div class=\"w-9\"></div> <!-- Spacer for alignment -->\n        </div>\n\n        <!-- Form Content -->\n        <div class=\"px-6 py-6 flex-1 overflow-y-auto\">\n            \n            <!-- Location Quick Detect Banner -->\n            <div class=\"bg-brand-50 border border-brand-500/30 rounded-2xl p-4 mb-6 flex items-center gap-4 cursor-pointer hover:bg-brand-50/85 transition\">\n                <div class=\"w-10 h-10 rounded-full bg-brand-500 text-white flex items-center justify-center shrink-0 shadow-sm shadow-brand-500/30\">\n                    <i class=\"fa-solid fa-location-crosshairs text-lg\"></i>\n                </div>\n                <div>\n                    <h3 class=\"text-sm font-bold text-brand-700\">استخدام موقعي الحالي</h3>\n                    <p class=\"text-xs text-gray-500\">تحديد العنوان تلقائياً عبر نظام الجي بي إس</p>\n                </div>\n            </div>\n\n            <form id=\"addressForm\" class=\"space-y-4\">\n                \n                <!-- Emirate Picker -->\n                <div>\n                    <label class=\"block text-xs font-bold text-gray-700 mb-1.5\">الإمارة</label>\n                    <div class=\"relative\">\n                        <select class=\"w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:border-brand-500 focus:bg-white transition appearance-none\">\n                            <option value=\"Dubai\" selected>دبي</option>\n                            <option value=\"Abu Dhabi\">أبوظبي</option>\n                            <option value=\"Sharjah\">الشارقة</option>\n                            <option value=\"Ajman\">عجمان</option>\n                            <option value=\"Umm Al Quwain\">أم القيوين</option>\n                            <option value=\"Ras Al Khaimah\">رأس الخيمة</option>\n                            <option value=\"Fujairah\">الفجيرة</option>\n                        </select>\n                        <div class=\"absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400\">\n                            <i class=\"fa-solid fa-chevron-down text-xs\"></i>\n                        </div>\n                    </div>\n                </div>\n\n                <!-- Area -->\n                <div>\n                    <label class=\"block text-xs font-bold text-gray-700 mb-1.5\">المنطقة</label>\n                    <input type=\"text\" placeholder=\"مثال: دبي مارينا، البرشاء، الخليج التجاري\" \n                           class=\"w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:border-brand-500 focus:bg-white transition\">\n                </div>\n\n                <!-- Street -->\n                <div>\n                    <label class=\"block text-xs font-bold text-gray-700 mb-1.5\">الشارع</label>\n                    <input type=\"text\" placeholder=\"مثال: شارع الموهبة، شارع الشيخ زايد\" \n                           class=\"w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:border-brand-500 focus:bg-white transition\">\n                </div>\n\n                <!-- Building or Villa -->\n                <div>\n                    <label class=\"block text-xs font-bold text-gray-700 mb-1.5\">المبنى أو الفيلا</label>\n                    <input type=\"text\" placeholder=\"اسم المبنى أو رقم الفيلا، رقم الشقة\" \n                           class=\"w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:border-brand-500 focus:bg-white transition\">\n                </div>\n\n                <!-- Makani Number -->\n                <div>\n                    <div class=\"flex justify-between items-center mb-1.5\">\n                        <label class=\"block text-xs font-bold text-gray-700\">رقم مكاني (Makani)</label>\n                        <span class=\"text-[10px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full\">اختياري</span>\n                    </div>\n                    <div class=\"relative\">\n                        <input type=\"text\" placeholder=\"مثال: 30049 98923\" maxlength=\"10\"\n                               class=\"w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-800 tracking-wider focus:outline-none focus:border-brand-500 focus:bg-white transition\">\n                        <div class=\"absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-medium\">\n                            رقم مكاني\n                        </div>\n                    </div>\n                    <p class=\"text-[11px] text-gray-400 mt-1\">رقم مكون من 10 أرقام تجده عند مدخل المبنى في دبي</p>\n                </div>\n\n                <!-- Phone Number -->\n                <div>\n                    <label class=\"block text-xs font-bold text-gray-700 mb-1.5\">رقم الهاتف للتوصيل</label>\n                    <div class=\"flex items-center bg-gray-50 border border-gray-200 rounded-xl overflow-hidden focus-within:border-brand-500 focus-within:bg-white transition\">\n                        <div class=\"bg-gray-100 px-3 py-3 text-sm text-gray-600 border-l border-gray-200 flex items-center gap-1.5\">\n                            <span>🇦🇪</span>\n                            <span dir=\"ltr\">+971</span>\n                        </div>\n                        <input type=\"tel\" placeholder=\"050 123 4567\" dir=\"ltr\"\n                               class=\"w-full bg-transparent px-4 py-3 text-sm text-gray-800 focus:outline-none text-right\">\n                    </div>\n                </div>\n\n            </form>\n        </div>\n\n        <!-- Footer / CTA -->\n        <div class=\"p-6 bg-white border-t border-gray-100\">\n            <button type=\"submit\" form=\"addressForm\" \n                    class=\"w-full bg-brand-600 hover:bg-brand-700 active:scale-[0.99] text-white font-bold py-4 rounded-2xl shadow-lg shadow-brand-600/30 transition flex items-center justify-center gap-2\">\n                <span>حفظ العنوان</span>\n                <i class=\"fa-solid fa-check text-sm\"></i>\n            </button>\n        </div>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 142,
+    "output": 2228
+  },
+  "ms": 9681,
+  "finish": "STOP",
+  "reasoningTokens": 660,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 81,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 341,
+        "y": 26,
+        "width": 14,
+        "height": 16
+      },
+      "message": "\"arrow-right\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-arrow-right\"></i>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 85,
+        "y": 134,
+        "width": 208,
+        "height": 12
+      },
+      "message": "\"تحديد العنوان تلقائياً عبر نظام الجي بي …\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-gray-500\">تحديد العنوان تلقائياً عبر نظام الجي بي إس</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 333,
+        "y": 193,
+        "width": 33,
+        "height": 12
+      },
+      "message": "\"الإمارة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label class=\"block text-xs font-bold text-gray-700 mb-1.5\">الإمارة</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 320,
+        "y": 277,
+        "width": 46,
+        "height": 12
+      },
+      "message": "\"المنطقة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label class=\"block text-xs font-bold text-gray-700 mb-1.5\">المنطقة</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 330,
+        "y": 361,
+        "width": 36,
+        "height": 12
+      },
+      "message": "\"الشارع\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label class=\"block text-xs font-bold text-gray-700 mb-1.5\">الشارع</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 287,
+        "y": 445,
+        "width": 79,
+        "height": 12
+      },
+      "message": "\"المبنى أو الفيلا\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label class=\"block text-xs font-bold text-gray-700 mb-1.5\">المبنى أو الفيلا</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 265,
+        "y": 530.5,
+        "width": 101,
+        "height": 12
+      },
+      "message": "\"رقم مكاني (Makani)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label class=\"block text-xs font-bold text-gray-700\">رقم مكاني (Makani)</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 32,
+        "y": 531,
+        "width": 28,
+        "height": 10
+      },
+      "message": "\"اختياري\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full\">اختياري</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 40,
+        "y": 569,
+        "width": 52,
+        "height": 12
+      },
+      "message": "\"رقم مكاني\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-medium\">\n                            رقم مكاني\n                        </div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 130,
+        "y": 604,
+        "width": 236,
+        "height": 11
+      },
+      "message": "\"رقم مكون من 10 أرقام تجده عند مدخل المبن…\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-[11px] text-gray-400 mt-1\">رقم مكون من 10 أرقام تجده عند مدخل المبنى في دبي</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 259,
+        "y": 636.5,
+        "width": 107,
+        "height": 12
+      },
+      "message": "\"رقم الهاتف للتوصيل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label class=\"block text-xs font-bold text-gray-700 mb-1.5\">رقم الهاتف للتوصيل</label>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 40,
+        "y": 224,
+        "width": 12,
+        "height": 24
+      },
+      "message": "left: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400\">\n                            <i class=\"fa-solid fa-chevron-down text-xs\""
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 40,
+        "y": 567,
+        "width": 52,
+        "height": 16
+      },
+      "message": "left: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs font-medium\">\n                            رقم مكاني\n                        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 292,
+        "y": 657.5,
+        "width": 73,
+        "height": 44
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bg-gray-100 px-3 py-3 text-sm text-gray-600 border-l border-gray-200 flex items-center gap-1.5\">\n                            <span>🇦🇪</span>\n     "
+    }
+  ],
+  "unreadableStylesheets": 2,
+  "pageHeight": 844
+}

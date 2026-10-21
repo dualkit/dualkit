@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>البنك السعودي — إدخل الرمز</title>
+
+<!-- Load Arabic font (IBM Plex Sans Arabic) -->
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  /* ---- Arabic type tokens (dualkit-type-pairing) ---- */
+  :lang(ar) {
+    --type-label-size: 14px;
+    --type-caption-size: 14px;
+    --type-body-size: 16px;
+    letter-spacing: 0;
+    text-transform: none;
+    font-style: normal;
+    line-height: 1.7;
+  }
+
+  /* ---- Reset & base ---- */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    padding: 24px 16px;
+    direction: rtl;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ---- Card ---- */
+  .card {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 40px 28px 32px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    text-align: center;
+  }
+
+  /* ---- Logo / brand mark ---- */
+  .brand-mark {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 24px;
+    background: #0052a4;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  /* ---- Title ---- */
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+
+  /* ---- Subtitle ---- */
+  .subtitle {
+    font-size: 15px;
+    color: #555555;
+    line-height: 1.6;
+    margin-bottom: 36px;
+  }
+
+  .subtitle bdi {
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  /* ---- OTP boxes ---- */
+  .code-form {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 28px;
+    /* force LTR run for digit entry */
+    direction: ltr;
+  }
+
+  .code-form input {
+    width: 46px;
+    height: 54px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: #1a1a1a;
+    background: #ffffff;
+    border: 1.5px solid #d0d0d0;
+    border-radius: 10px;
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    -moz-appearance: textfield;
+  }
+
+  .code-form input::-webkit-outer-spin-button,
+  .code-form input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .code-form input:focus {
+    border-color: #0052a4;
+    box-shadow: 0 0 0 3px rgba(0, 82, 164, 0.15);
+  }
+
+  /* ---- Countdown ---- */
+  .countdown {
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 28px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .countdown .timer {
+    font-weight: 600;
+    color: #0052a4;
+  }
+
+  /* ---- Verify button ---- */
+  #verify-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffffff;
+    background: #0052a4;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.18s;
+  }
+
+  #verify-btn:hover:not(:disabled) { background: #004080; }
+  #verify-btn:active:not(:disabled) { background: #003566; }
+  #verify-btn:disabled { background: #cccccc; cursor: not-allowed; }
+
+  /* ---- Footer link (fixed to 14px minimum) ---- */
+  .footer-link {
+    margin-top: 24px;
+    font-size: 14px;          /* was 13px — now meets 14px floor */
+    color: #888888;
+  }
+</style>
+</head>
+<body>
+
+  <div class="card">
+    <!-- Brand mark -->
+    <div class="brand-mark">ال</div>
+
+    <!-- Title -->
+    <h1>أدخل الرمز</h1>
+
+    <!-- Subtitle -->
+    <p class="subtitle">
+      أرسلنا رمزًا مكوّنًا من 6 أرقام إلى<br>
+      <bdi dir="ltr">+966 55 123 4567</bdi>
+    </p>
+
+    <!-- OTP input boxes -->
+    <form class="code-form" id="otp-form" autocomplete="one-time-code" autocomplete="off">
+      <input type="text" inputmode="numeric" maxlength="1" data-index="0" aria-label="الرقم الأول">
+      <input type="text" inputmode="numeric" maxlength="1" data-index="1" aria-label="الرقم الثاني">
+      <input type="text" inputmode="numeric" maxlength="1" data-index="2" aria-label="الرقم الثالث">
+      <input type="text" inputmode="numeric" maxlength="1" data-index="3" aria-label="الرقم الرابع">
+      <input type="text" inputmode="numeric" maxlength="1" data-index="4" aria-label="الرقم الخامس">
+      <input type="text" inputmode="numeric" maxlength="1" data-index="5" aria-label="الرقم السادس">
+    </form>
+
+    <!-- Countdown -->
+    <p class="countdown">
+      أعد الإرسال خلال <span class="timer" id="timer">0:45</span>
+    </p>
+
+    <!-- Verify button -->
+    <button type="submit" id="verify-btn">acco</button>
+
+    <!-- Footer -->
+    <p class="footer-link">لا تlemn الرمز؟ تواصل مع الدعم</p>
+  </div>
+
+<script>
+(function () {
+  const form      = document.getElementById('otp-form');
+  const inputs    = Array.from(form.querySelectorAll('input'));
+  const verifyBtn = document.getElementById('verify-btn');
+  const timerEl   = document.getElementById('timer');
+
+  /* ---- Move focus between boxes ---- */
+  inputs.forEach((input, index) => {
+    input.addEventListener('input', function () {
+      this.value = this.value.replace(/\D/g, '').slice(0, 1);
+      if (this.value && index < inputs.length - 1) {
+        inputs[index + 1].focus();
+      }
+    });
+
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Backspace' && !this.value && index > 0) {
+        inputs[index - 1].focus();
+      }
+      if (e.key === 'ArrowRight' && index < inputs.length - 1) {
+        inputs[index + 1].focus();
+      }
+      if (e.key === 'ArrowLeft' && index > 0) {
+        inputs[index - 1].focus();
+      }
+    });
+
+    input.addEventListener('paste', function (e) {
+      e.preventDefault();
+      const data = e.clipboardData.getData('text')
+                    .replace(/\D/g, '')
+                    .slice(0, 6);
+      data.split('').forEach((ch, i) => {
+        if (inputs[i]) inputs[i].value = ch;
+      });
+      const last = Math.min(data.length, 5);
+      inputs[last]?.focus();
+    });
+  });
+
+  /* ---- Submit ---- */
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const code = inputs.map(i => i.value).join('');
+    if (code.length !== 6) return;
+
+    verifyBtn.textContent = 'acco...';
+    verifyBtn.disabled = true;
+
+    // Simulate API call
+    setTimeout(function () {
+      verifyBtn.textContent = 'acco';
+      verifyBtn.disabled = false;
+    }, 2000);
+  });
+
+  /* ---- Countdown (Western digits only) ---- */
+  let seconds = 45;
+  const tick = function () {
+    if (seconds < 0) {
+      timerEl.textContent = 'أعد الإرسال';
+      return;
+    }
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    // Always Western digits (0-9)
+    timerEl.textContent = m + ':' + (s < 10 ? '0' + s : s);
+    seconds--;
+  };
+
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+
+</body>
+</html>

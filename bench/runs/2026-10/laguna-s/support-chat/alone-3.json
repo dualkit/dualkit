@@ -1,0 +1,305 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "support-chat",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T17:28:29.085Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n    <title>دعم العملاء - كويتيل</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background: linear-gradient(135deg, #f0f4f8 0%, #e8eef2 100%);\n            min-height: 100vh;\n            display: flex;\n            justify-content: center;\n            align-items: flex-start;\n            padding: 20px;\n            color: #1a1a1a;\n        }\n\n        .phone-container {\n            width: 100%;\n            max-width: 430px;\n            background: #ffffff;\n            border-radius: 40px;\n            box-shadow: \n                0 20px 60px rgba(0, 0, 0, 0.15),\n                inset 0 0 0 1px rgba(255, 255, 255, 0.1);\n            overflow: hidden;\n            display: flex;\n            flex-direction: column;\n            height: 95vh;\n            position: relative;\n        }\n\n        /* Status bar */\n        .status-bar {\n            height: 20px;\n            background: #000;\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            padding: 0 8px;\n            font-size: 10px;\n            color: #fff;\n            font-weight: 600;\n        }\n\n        /* Header */\n        .chat-header {\n            background: linear-gradient(135deg, #1e3a8a 0%, #1a2a6c 100%);\n            padding: 16px 20px;\n            display: flex;\n            align-items: center;\n            gap: 14px;\n            position: relative;\n            border-bottom: 1px solid rgba(255, 255, 255, 0.1);\n        }\n\n        .back-btn {\n            background: none;\n            border: none;\n            color: #fff;\n            font-size: 22px;\n            cursor: pointer;\n            font-weight: bold;\n        }\n\n        .agent-avatar {\n            width: 48px;\n            height: 48px;\n            border-radius: 50%;\n            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            font-size: 22px;\n            font-weight: bold;\n            color: #1e3a8a;\n            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);\n        }\n\n        .agent-info {\n            flex: 1;\n        }\n\n        .agent-name {\n            color: #fff;\n            font-size: 18px;\n            font-weight: 700;\n        }\n\n        .agent-status {\n            color: #93c5fd;\n            font-size: 13px;\n            margin-top: 2px;\n        }\n\n        .header-icons {\n            display: flex;\n            gap: 16px;\n        }\n\n        .header-icons button {\n            background: none;\n            border: none;\n            color: #fff;\n            font-size: 18px;\n            cursor: pointer;\n        }\n\n        /* Messages container */\n        .messages-container {\n            flex: 1;\n            overflow-y: auto;\n            padding: 20px 14px;\n            display: flex;\n            flex-direction: column;\n            gap: 16px;\n            background: #f9fafb;\n        }\n\n        .message-wrapper {\n            display: flex;\n            flex-direction: column;\n            max-width: 80%;\n        }\n\n        .customer-message {\n            align-self: flex-end;\n            text-align: right;\n        }\n\n        .agent-message {\n            align-self: flex-start;\n            text-align: left;\n        }\n\n        .message-bubble {\n            padding: 12px 16px;\n            border-radius: 20px;\n            font-size: 15px;\n            line-height: 1.6;\n            word-wrap: break-word;\n            position: relative;\n        }\n\n        .customer-bubble {\n            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);\n            border-bottom-right-radius: 6px;\n            color: #166534;\n        }\n\n        .agent-bubble {\n            background: #ffffff;\n            border-bottom-left-radius: 6px;\n            color: #1f2937;\n            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);\n            border: 1px solid #f1f5f9;\n        }\n\n        .message-time {\n            font-size: 11px;\n            margin-top: 4px;\n            opacity: 0.7;\n            font-weight: 500;\n        }\n\n        .customer-time {\n            text-align: left;\n        }\n\n        .agent-time {\n            text-align: right;\n        }\n\n        /* Input area */\n        .input-area {\n            background: #ffffff;\n            padding: 12px 16px;\n            display: flex;\n            align-items: center;\n            gap: 10px;\n            border-top: 1px solid #e5e7eb;\n            position: sticky;\n            bottom: 0;\n            z-index: 10;\n        }\n\n        .input-area .attachment-btn {\n            background: none;\n            border: none;\n            font-size: 20px;\n            color: #6b7280;\n            cursor: pointer;\n        }\n\n        .input-area .emoji-btn {\n            background: none;\n            border: none;\n            font-size: 20px;\n            color: #6b7280;\n            cursor: pointer;\n        }\n\n        .message-input {\n            flex: 1;\n            padding: 12px 18px;\n            border: 1px solid #d1d5db;\n            border-radius: 24px;\n            font-size: 15px;\n            outline: none;\n            transition: border-color 0.2s;\n            background: #f9fafb;\n            color: #1f2937;\n        }\n\n        .message-input:focus {\n            border-color: #3b82f6;\n            background: #ffffff;\n        }\n\n        .send-btn {\n            background: linear-gradient(135deg, #1e3a8a 0%, #1a2a6c 100%);\n            color: #fff;\n            border: none;\n            border-radius: 50%;\n            width: 44px;\n            height: 44px;\n            font-size: 18px;\n            cursor: pointer;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);\n            transition: transform 0.1s, box-shadow 0.2s;\n        }\n\n        .send-btn:active {\n            transform: scale(0.95);\n        }\n\n        .send-btn:disabled {\n            background: #9ca3af;\n            cursor: not-allowed;\n            box-shadow: none;\n        }\n\n        /* Scrollbar */\n        .messages-container::-webkit-scrollbar {\n            width: 4px;\n        }\n\n        .messages-container::-webkit-scrollbar-track {\n            background: transparent;\n        }\n\n        .messages-container::-webkit-scrollbar-thumb {\n            background: rgba(0, 0, 0, 0.1);\n            border-radius: 10px;\n        }\n\n        /* Bottom indicator */\n        .bottom-indicator {\n            height: 20px;\n            background: #000;\n            border-radius: 0 0 0 0;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"phone-container\">\n        <!-- Status bar -->\n        <div class=\"status-bar\">\n            <span>الاتصال</span>\n            <span>100%</span>\n        </div>\n\n        <!-- Header -->\n        <div class=\"chat-header\">\n            <button class=\"back-btn\">‹</button>\n            <div class=\"agent-avatar\">س</div>\n            <div class=\"agent-info\">\n                <div class=\"agent-name\">سارة - مركز الدعم</div>\n                <div class=\"agent-status\">متصلة الآن</div>\n            </div>\n            <div class=\"header-icons\">\n                <button>⋮</button>\n            </div>\n        </div>\n\n        <!-- Messages -->\n        <div class=\"messages-container\">\n            <!-- Message 1 - Customer -->\n            <div class=\"message-wrapper customer-message\">\n                <div class=\"message-bubble customer-bubble\">\n                    <div>مرحباً، أواجه مشكلة في تفعيل خدمة 5G على هاتفي. لم تتعرف الشبكة على الخدمة رغم تفعيلها من خلال التطبيق.</div>\n                    <div class=\"message-time customer-time\">10:25 ص</div>\n                </div>\n            </div>\n\n            <!-- Message 2 - Agent -->\n            <div class=\"message-wrapper agent-message\">\n                <div class=\"message-bubble agent-bubble\">\n                    <div>مرحباً بك! أولاً، تأكد من أن هاتفك يدعم شبكة 5G وأن الإعدادات الصحيحة مفعلة. هل يمكنك التحقق من إعدادات الشبكة في إعدادات الهاتف؟</div>\n                    <div class=\"message-time agent-time\">10:27 ص</div>\n                </div>\n            </div>\n\n            <!-- Message 3 - Customer -->\n            <div class=\"message-wrapper customer-message\">\n                <div class=\"message-bubble customer-bubble\">\n                    <div>لقد تحققت من الإعدادات وهاتفي يدعم 5G، لكن لا يزال لا يعمل. طلبت eSIM جديدة قبل أسبوع، ربما هناك مشكلة في التفعيل؟</div>\n                    <div class=\"message-time customer-time\">10:29 ص</div>\n                </div>\n            </div>\n\n            <!-- Message 4 - Agent -->\n            <div class=\"message-wrapper agent-message\">\n                <div class=\"message-bubble agent-bubble\">\n                    <div>شكراً لتواصلك. تم العثور على طلب eSIM الخاص بك برقم التفعيل TX-48213. يبدو أن هناك مشكلة في ربط الخدمة بحسابك. سأعيد تفعيلها الآن من النظام.</div>\n                    <div class=\"message-time agent-time\">10:31 ص</div>\n                </div>\n            </div>\n\n            <!-- Message 5 - Customer -->\n            <div class=\"message-wrapper customer-message\">\n                <div class=\"message-bubble customer-bubble\">\n                    <div>شكراً لك سارة! هل سأحتاج إلى إعادة تشغيل الهاتف بعد إعادة التفعيل؟ وهل سيستغرق ذلك وقتاً طويلاً؟</div>\n                    <div class=\"message-time customer-time\">10:33 ص</div>\n                </div>\n            </div>\n\n            <!-- Message 6 - Agent -->\n            <div class=\"message-wrapper agent-message\">\n                <div class=\"message-bubble agent-bubble\">\n                    <div>نعم، بعد إعادة التفعيل ننصح بإعادة تشغيل الهاتف مرة واحدة. قد يستغرق ظهور إشارة 5G بضع دقائق. إذا لم تظهر الخدمة بعد 10 دقائق، أخبرني وسأتحقق مباشرة.</div>\n                    <div class=\"message-time agent-time\">10:35 ص</div>\n                </div>\n            </div>\n        </div>\n\n        <!-- Input area -->\n        <div class=\"input-area\">\n            <button class=\"attachment-btn\">📎</button>\n            <input type=\"text\" class=\"message-input\" placeholder=\"اكتب رسالتك هنا...\">\n            <button class=\"emoji-btn\">😊</button>\n            <button class=\"send-btn\" disabled>➤</button>\n        </div>\n    </div>\n\n    <script>\n        const input = document.querySelector('.message-input');\n        const sendBtn = document.querySelector('.send-btn');\n\n        input.addEventListener('input', () => {\n            sendBtn.disabled = input.value.trim() === '';\n        });\n\n        sendBtn.addEventListener('click', () => {\n            if (!sendBtn.disabled) {\n                input.value = '';\n                sendBtn.disabled = true;\n            }\n        });\n    </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 158,
+    "output": 3423
+  },
+  "ms": 64774,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 51,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 50,
+        "y": 253,
+        "width": 225.59375,
+        "height": 17.59375
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"message-time customer-time\">10:25 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 115.40625,
+        "y": 311.59375,
+        "width": 223.59375,
+        "height": 120
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div>مرحباً بك! أولاً، تأكد من أن هاتفك يدعم شبكة 5G وأن الإعدادات الصحيحة مفعلة. هل يمكنك التحقق من إعدادات الشبكة في إعدادات الهاتف؟</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 50,
+        "y": 594.1875,
+        "width": 225.59375,
+        "height": 17.59375
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"message-time customer-time\">10:29 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 50,
+        "y": 935.375,
+        "width": 225.59375,
+        "height": 17.59375
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"message-time customer-time\">10:33 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 115.40625,
+        "y": 993.96875,
+        "width": 223.59375,
+        "height": 120
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div>نعم، بعد إعادة التفعيل ننصح بإعادة تشغيل الهاتف مرة واحدة. قد يستغرق ظهور إشارة 5G بضع دقائق. إذا لم تظهر الخدمة بعد 10 دقائق، أخبرني وسأتحقق مباشرة.</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 331,
+        "y": 24.5,
+        "width": 31,
+        "height": 11
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<span>الاتصال</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 331,
+        "y": 24.5,
+        "width": 31,
+        "height": 11
+      },
+      "message": "\"الاتصال\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>الاتصال</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 209.046875,
+        "y": 84.5,
+        "width": 57.625,
+        "height": 15
+      },
+      "message": "\"متصلة الآن\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"agent-status\">متصلة الآن</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 255,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:25 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"message-time customer-time\">10:25 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 295.40625,
+        "y": 437.59375,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:27 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"message-time agent-time\">10:27 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 596.1875,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:29 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"message-time customer-time\">10:29 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 295.40625,
+        "y": 778.78125,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:31 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"message-time agent-time\">10:31 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 937.375,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:33 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"message-time customer-time\">10:33 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 295.40625,
+        "y": 1119.96875,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:35 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"message-time agent-time\">10:35 ص</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 34,
+        "y": 141,
+        "width": 257.59375,
+        "height": 141.59375
+      },
+      "message": "border-bottom-right-radius: 6px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message-bubble customer-bubble\">\n                    <div>مرحباً، أواجه مشكلة في تفعيل خدمة 5G على هاتفي. لم تتعرف الشبكة على الخدمة رغم تفعيلها من "
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 98.40625,
+        "y": 298.59375,
+        "width": 257.59375,
+        "height": 167.59375
+      },
+      "message": "border-bottom-right-radius: 20px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message-bubble agent-bubble\">\n                    <div>مرحباً بك! أولاً، تأكد من أن هاتفك يدعم شبكة 5G وأن الإعدادات الصحيحة مفعلة. هل يمكنك التحقق "
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 34,
+        "y": 482.1875,
+        "width": 257.59375,
+        "height": 141.59375
+      },
+      "message": "border-bottom-right-radius: 6px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message-bubble customer-bubble\">\n                    <div>لقد تحققت من الإعدادات وهاتفي يدعم 5G، لكن لا يزال لا يعمل. طلبت eSIM جديدة قبل أسبوع، ربم"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 98.40625,
+        "y": 639.78125,
+        "width": 257.59375,
+        "height": 167.59375
+      },
+      "message": "border-bottom-right-radius: 20px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message-bubble agent-bubble\">\n                    <div>شكراً لتواصلك. تم العثور على طلب eSIM الخاص بك برقم التفعيل TX-48213. يبدو أن هناك مشكلة في ر"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 34,
+        "y": 823.375,
+        "width": 257.59375,
+        "height": 141.59375
+      },
+      "message": "border-bottom-right-radius: 6px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message-bubble customer-bubble\">\n                    <div>شكراً لك سارة! هل سأحتاج إلى إعادة تشغيل الهاتف بعد إعادة التفعيل؟ وهل سيستغرق ذلك وقتاً ط"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 98.40625,
+        "y": 980.96875,
+        "width": 257.59375,
+        "height": 167.59375
+      },
+      "message": "border-bottom-right-radius: 20px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message-bubble agent-bubble\">\n                    <div>نعم، بعد إعادة التفعيل ننصح بإعادة تشغيل الهاتف مرة واحدة. قد يستغرق ظهور إشارة 5G بضع دقائق."
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

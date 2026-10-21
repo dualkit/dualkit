@@ -1,0 +1,207 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "checkout",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T16:50:47.889Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>إتمام الطلب - بقالة الإمارات</title>\n    <!-- Tailwind CSS CDN -->\n    <script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4\"></script>\n    <!-- Google Fonts: Tajawal for clean Arabic typography -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap\" rel=\"stylesheet\">\n    <style>\n        body {\n            font-family: 'Tajawal', sans-serif;\n        }\n        /* Hide scrollbar for Chrome, Safari and Opera */\n        .no-scrollbar::-webkit-scrollbar {\n            display: none;\n        }\n        /* Hide scrollbar for IE, Edge and Firefox */\n        .no-scrollbar {\n            -ms-overflow-style: none;  /* IE and Edge */\n            scrollbar-width: none;  /* Firefox */\n        }\n    </style>\n</head>\n<body class=\"bg-gray-100 flex justify-center items-center min-h-screen p-0 sm:p-4\">\n\n    <!-- Phone Screen Container -->\n    <div class=\"w-full sm:max-w-[400px] h-screen sm:h-[844px] bg-white sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border border-gray-200\">\n\n        <!-- Top Bar -->\n        <div class=\"bg-white px-5 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 z-20\">\n            <button class=\"w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-700 hover:bg-gray-100 transition\">\n                <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">\n                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\" />\n                </svg>\n            </button>\n            <h1 class=\"text-lg font-bold text-gray-800\">إتمام الطلب</h1>\n            <div class=\"w-10\"></div> <!-- Spacer for balancing alignment -->\n        </div>\n\n        <!-- Scrollable Content Area -->\n        <div class=\"flex-1 overflow-y-auto no-scrollbar pb-32\">\n\n            <!-- Delivery Address Card -->\n            <div class=\"p-4 bg-emerald-50/60 border-b border-emerald-100/60 flex items-center justify-between\">\n                <div class=\"flex items-center gap-3\">\n                    <div class=\"w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-sm\">\n                        <svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" fill=\"none\" viewBox=\"0 0 24 24\" stroke=\"currentColor\">\n                            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z\" />\n                            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 11a3 3 0 11-6 0 3 3 0 016 0z\" />\n                        </svg>\n                    </div>\n                    <div>\n                        <p class=\"text-xs text-emerald-800 font-medium\">التوصيل إلى</p>\n                        <p class=\"text-sm font-bold text-gray-900\">دبي، مرسى دبي - برج النبض</p>\n                    </div>\n                </div>\n                <button class=\"text-emerald-700 text-xs font-bold hover:underline\">تغيير</button>\n            </div>\n\n            <!-- Cart Items Section -->\n            <div class=\"p-4 space-y-4\">\n                <h2 class=\"text-sm font-bold text-gray-500\">منتجات السلة (3)</h2>\n\n                <!-- Item 1 -->\n                <div class=\"flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100\">\n                    <div class=\"w-16 h-16 bg-gray-200 rounded-xl flex-shrink-0 flex items-center justify-center text-gray-400 text-xs overflow-hidden relative\">\n                        <span class=\"absolute inset-0 bg-emerald-100/40\">🥛</span>\n                    </div>\n                    <div class=\"flex-1 min-w-0\">\n                        <h3 class=\"text-sm font-bold text-gray-800 truncate\">حليب طازج المراعي</h3>\n                        <p class=\"text-xs text-gray-500 mb-1\">2 لتر</p>\n                        <span class=\"text-emerald-600 font-bold text-sm\" data-base-price=\"12.50\">12.50 د.إ</span>\n                    </div>\n                    <div class=\"flex items-center gap-2 bg-white px-2 py-1 rounded-lg border border-gray-200 shadow-xs\">\n                        <button onclick=\"updateQty(this, -1)\" class=\"w-6 h-6 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded\">-</button>\n                        <span class=\"text-xs font-bold w-4 text-center qty\">1</span>\n                        <button onclick=\"updateQty(this, 1)\" class=\"w-6 h-6 flex items-center justify-center text-emerald-600 hover:bg-emerald-50 rounded font-bold\">+</button>\n                    </div>\n                </div>\n\n                <!-- Item 2 -->\n                <div class=\"flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100\">\n                    <div class=\"w-16 h-16 bg-gray-200 rounded-xl flex-shrink-0 flex items-center justify-center text-gray-400 text-xs overflow-hidden relative\">\n                        <span class=\"absolute inset-0 bg-amber-100/40\">🍞</span>\n                    </div>\n                    <div class=\"flex-1 min-w-0\">\n                        <h3 class=\"text-sm font-bold text-gray-800 truncate\">خبز عربي أبيض</h3>\n                        <p class=\"text-xs text-gray-500 mb-1\">كيس كبير</p>\n                        <span class=\"text-emerald-600 font-bold text-sm\" data-base-price=\"3.00\">3.00 د.إ</span>\n                    </div>\n                    <div class=\"flex items-center gap-2 bg-white px-2 py-1 rounded-lg border border-gray-200 shadow-xs\">\n                        <button onclick=\"updateQty(this, -1)\" class=\"w-6 h-6 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded\">-</button>\n                        <span class=\"text-xs font-bold w-4 text-center qty\">1</span>\n                        <button onclick=\"updateQty(this, 1)\" class=\"w-6 h-6 flex items-center justify-center text-emerald-600 hover:bg-emerald-50 rounded font-bold\">+</button>\n                    </div>\n                </div>\n\n                <!-- Item 3 -->\n                <div class=\"flex items-center gap-3 p-3 bg-gray-50 rounded-2xl border border-gray-100\">\n                    <div class=\"w-16 h-16 bg-gray-200 rounded-xl flex-shrink-0 flex items-center justify-center text-gray-400 text-xs overflow-hidden relative\">\n                        <span class=\"absolute inset-0 bg-red-100/40\">🍎</span>\n                    </div>\n                    <div class=\"flex-1 min-w-0\">\n                        <h3 class=\"text-sm font-bold text-gray-800 truncate\">تفاح رويال جالا</h3>\n                        <p class=\"text-xs text-gray-500 mb-1\">1 كيلو</p>\n                        <span class=\"text-emerald-600 font-bold text-sm\" data-base-price=\"9.75\">9.75 د.إ</span>\n                    </div>\n                    <div class=\"flex items-center gap-2 bg-white px-2 py-1 rounded-lg border border-gray-200 shadow-xs\">\n                        <button onclick=\"updateQty(this, -1)\" class=\"w-6 h-6 flex items-center justify-center text-gray-600 hover:bg-gray-100 rounded\">-</button>\n                        <span class=\"text-xs font-bold w-4 text-center qty\">1</span>\n                        <button onclick=\"updateQty(this, 1)\" class=\"w-6 h-6 flex items-center justify-center text-emerald-600 hover:bg-emerald-50 rounded font-bold\">+</button>\n                    </div>\n                </div>\n\n            </div>\n\n            <!-- Promo Code Section -->\n            <div class=\"px-4 mb-4\">\n                <div class=\"flex gap-2\">\n                    <div class=\"relative flex-1\">\n                        <input type=\"text\" placeholder=\"أدخل كود الخصم (مثال: UAE20)\" class=\"w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-xs focus:outline-none focus:border-emerald-500 transition\">\n                    </div>\n                    <button class=\"bg-gray-900 text-white px-5 rounded-xl text-xs font-bold hover:bg-gray-800 transition\">تطبيق</button>\n                </div>\n            </div>\n\n            <!-- Bill Breakdown -->\n            <div class=\"mx-4 p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-3 mb-6\">\n                <div class=\"flex justify-between text-xs text-gray-600\">\n                    <span>المجموع الفرعي</span>\n                    <span id=\"subtotal\" class=\"font-bold text-gray-800\">25.25 د.إ</span>\n                </div>\n                <div class=\"flex justify-between text-xs text-gray-600\">\n                    <span>رسوم التوصيل</span>\n                    <span class=\"font-bold text-emerald-600\">مجاني</span>\n                </div>\n                <div class=\"flex justify-between text-xs text-gray-600\">\n                    <span>ضريبة القيمة المضافة (5%)</span>\n                    <span id=\"vat\" class=\"font-bold text-gray-800\">1.26 د.إ</span>\n                </div>\n                <div class=\"border-t border-gray-200 pt-3 flex justify-between text-sm font-bold text-gray-900\">\n                    <span>المجموع الكلي</span>\n                    <span id=\"total\" class=\"text-emerald-600 text-base\">26.51 د.إ</span>\n                </div>\n            </div>\n\n        </div>\n\n        <!-- Sticky Bottom Action Bar -->\n        <div class=\"absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-lg z-20\">\n            <button onclick=\"alert('تم إتمام طلبك بنجاح! شكراً لتسوقك معنا 🇦🇪')\" class=\"w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-2xl font-bold text-sm shadow-md shadow-emerald-600/20 transition flex items-center justify-center gap-2\">\n                <span>إتمام الطلب</span>\n                <span class=\"bg-emerald-700/60 px-2 py-0.5 rounded-lg text-xs\" id=\"btn-total\">26.51 د.إ</span>\n            </button>\n        </div>\n\n    </div>\n\n    <!-- Simple Script to Handle Dynamic Quantity & Calculation -->\n    <script>\n        function updateQty(btn, change) {\n            const container = btn.closest('.flex');\n            const qtySpan = container.querySelector('.qty');\n            let currentQty = parseInt(qtySpan.innerText);\n            \n            currentQty += change;\n            if (currentQty < 1) currentQty = 1;\n            qtySpan.innerText = currentQty;\n\n            calculateTotals();\n        }\n\n        function calculateTotals() {\n            let subtotal = 0;\n            const items = document.querySelectorAll('.space-y-4 > div');\n\n            items.forEach(item => {\n                const basePrice = parseFloat(item.querySelector('[data-base-price]').getAttribute('data-base-price'));\n                const qty = parseInt(item.querySelector('.qty').innerText);\n                subtotal += basePrice * qty;\n            });\n\n            const vat = subtotal * 0.05;\n            const total = subtotal + vat;\n\n            document.getElementById('subtotal').innerText = subtotal.toFixed(2) + ' د.إ';\n            document.getElementById('vat').innerText = vat.toFixed(2) + ' د.إ';\n            document.getElementById('total').innerText = total.toFixed(2) + ' د.إ';\n            document.getElementById('btn-total').innerText = total.toFixed(2) + ' د.إ';\n        }\n    </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 145,
+    "output": 3348
+  },
+  "ms": 12123,
+  "finish": "STOP",
+  "reasoningTokens": 872,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 88,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 261,
+        "y": 94,
+        "width": 60,
+        "height": 12
+      },
+      "message": "\"التوصيل إلى\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-emerald-800 font-medium\">التوصيل إلى</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 17,
+        "y": 104,
+        "width": 28,
+        "height": 12
+      },
+      "message": "\"تغيير\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"text-emerald-700 text-xs font-bold hover:underline\">تغيير</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 264,
+        "y": 234,
+        "width": 20,
+        "height": 12
+      },
+      "message": "\"2 لتر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-gray-500 mb-1\">2 لتر</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 236,
+        "y": 340,
+        "width": 48,
+        "height": 12
+      },
+      "message": "\"كيس كبير\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-gray-500 mb-1\">كيس كبير</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 256,
+        "y": 446,
+        "width": 28,
+        "height": 12
+      },
+      "message": "\"1 كيلو\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-gray-500 mb-1\">1 كيلو</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 37,
+        "y": 532,
+        "width": 34,
+        "height": 12
+      },
+      "message": "\"تطبيق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"bg-gray-900 text-white px-5 rounded-xl text-xs font-bold hover:bg-gray-800 transition\">تطبيق</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 278,
+        "y": 594,
+        "width": 78,
+        "height": 12
+      },
+      "message": "\"المجموع الفرعي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المجموع الفرعي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 594,
+        "width": 45,
+        "height": 12
+      },
+      "message": "\"25.25 د.إ\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span id=\"subtotal\" class=\"font-bold text-gray-800\">25.25 د.إ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 284,
+        "y": 622,
+        "width": 72,
+        "height": 12
+      },
+      "message": "\"رسوم التوصيل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>رسوم التوصيل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 622,
+        "width": 31,
+        "height": 12
+      },
+      "message": "\"مجاني\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"font-bold text-emerald-600\">مجاني</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 222,
+        "y": 650,
+        "width": 134,
+        "height": 12
+      },
+      "message": "\"ضريبة القيمة المضافة (5%)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>ضريبة القيمة المضافة (5%)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 650,
+        "width": 37,
+        "height": 12
+      },
+      "message": "\"1.26 د.إ\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span id=\"vat\" class=\"font-bold text-gray-800\">1.26 د.إ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 132,
+        "y": 797,
+        "width": 43,
+        "height": 12
+      },
+      "message": "\"26.51 د.إ\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"bg-emerald-700/60 px-2 py-0.5 rounded-lg text-xs\" id=\"btn-total\">26.51 د.إ</span>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

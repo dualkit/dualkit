@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة عنوان التوصيل - بقالة دبي</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        grocery: {
+                            50: '#f0fdf4',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 font-cairo flex justify-center items-center min-h-screen m-0 p-0 sm:p-4">
+
+    <!-- Mobile Frame Container -->
+    <div class="bg-white w-full max-w-md sm:rounded-3xl shadow-xl overflow-hidden flex flex-col h-screen sm:h-auto sm:max-h-[90vh]">
+        
+        <!-- Header -->
+        <div class="bg-white px-6 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
+            <button class="text-gray-600 hover:text-black focus:outline-none">
+                <svg class="w-6 h-6 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+            <h1 class="text-lg font-bold text-gray-800">عنوان التوصيل</h1>
+            <div class="w-6"></div> <!-- Spacer for centering -->
+        </div>
+
+        <!-- Form Scrollable Area -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-5">
+            
+            <!-- Quick Map / Location Banner -->
+            <div class="bg-grocery-50 border border-grocery-500/30 rounded-2xl p-4 flex items-center gap-3">
+                <div class="bg-grocery-500 text-white p-3 rounded-xl">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-sm font-bold text-gray-900">حدد موقعك بدقة لتوصيل أسرع</h2>
+                    <p class="text-xs text-gray-500">يرجى إدخال تفاصيل العنوان أدناه</p>
+                </div>
+            </div>
+
+            <form id="addressForm" class="space-y-4">
+                
+                <!-- Emirate Picker -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">الإمارة</label>
+                    <div class="relative">
+                        <select id="emirate" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 appearance-none focus:outline-none focus:border-grocery-500 focus:bg-white transition">
+                            <option value="Dubai" selected>دبي (Dubai)</option>
+                            <option value="Abu Dhabi">أبوظبي</option>
+                            <option value="Sharjah">الشارقة</option>
+                            <option value="Ajman">عجمان</option>
+                            <option value="Ras Al Khaimah">رأس الخيمة</option>
+                            <option value="Fujairah">الفجيرة</option>
+                            <option value="Umm Al Quwain">أم القيوين</option>
+                        </select>
+                        <div class="absolute inset-y-0 left-0 flex items-center px-4 pointer-events-none text-gray-500">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Area / Community -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">المنطقة / الحي</label>
+                    <input type="text" placeholder="مثال: دبي مارينا، البرشاء، داون تاون" required
+                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-grocery-500 focus:bg-white transition">
+                </div>
+
+                <!-- Street -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">الشارع</label>
+                    <input type="text" placeholder="مثال: شارع الشيخ زايد، شارع الأصايل" required
+                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-grocery-500 focus:bg-white transition">
+                </div>
+
+                <!-- Building or Villa -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">رقم المبنى أو الفيلا ورقم الشقة</label>
+                    <input type="text" placeholder="مثال: برج الماسة، شقة رقم 402 أو فيلا رقم 12" required
+                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-grocery-500 focus:bg-white transition">
+                </div>
+
+                <!-- Makani Number -->
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-sm font-semibold text-gray-700">رقم مكاني (اختياري)</label>
+                        <span class="text-xs text-gray-400">10 أرقام</span>
+                    </div>
+                    <input type="text" maxlength="10" placeholder="مثال: 30492 85920" 
+                        class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 tracking-widest focus:outline-none focus:border-grocery-500 focus:bg-white transition">
+                    <p class="text-[11px] text-gray-400 mt-1">يساعد رقم مكاني السائق في الوصول لباب منزلك مباشرة.</p>
+                </div>
+
+                <!-- Phone Number -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">رقم الهاتف للتواصل</label>
+                    <div class="flex gap-2">
+                        <div class="flex items-center justify-center bg-gray-100 border border-gray-200 rounded-xl px-3 text-gray-600 font-medium text-sm select-none">
+                            🇦🇪 +971
+                        </div>
+                        <input type="tel" placeholder="050 123 4567" required
+                            class="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-gray-800 focus:outline-none focus:border-grocery-500 focus:bg-white transition">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Footer / Action Button -->
+        <div class="p-4 bg-white border-t border-gray-100">
+            <button type="submit" form="addressForm"
+                class="w-full bg-grocery-600 hover:bg-grocery-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-grocery-500/30 transition transform active:scale-[0.98]">
+                حفظ العنوان
+            </button>
+        </div>
+
+    </div>
+
+</body>
+</html>

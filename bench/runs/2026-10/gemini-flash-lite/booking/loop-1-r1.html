@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز موعد - عيادة الدوحة التخصصية</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :lang(ar) {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            letter-spacing: 0;
+            text-transform: none;
+            line-height: 1.7;
+        }
+        body {
+            background-color: #0f172a;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-0 sm:p-4">
+
+    <!-- Phone Screen Container -->
+    <div class="w-full max-w-sm bg-slate-50 sm:rounded-[40px] shadow-2xl flex flex-col h-screen sm:h-[844px] overflow-hidden border border-slate-800 relative">
+        
+        <!-- Status Bar Sim -->
+        <div class="bg-white px-6 pt-3 pb-2 flex justify-between items-center text-sm text-slate-500 font-medium select-none">
+            <span><bdi dir="ltr">09:41</bdi></span>
+            <div class="flex items-center gap-1.5">
+                <span>5G</span>
+                <div class="w-5 h-2.5 border border-slate-400 rounded-sm p-0.5 flex items-center">
+                    <div class="h-full w-full bg-slate-700 rounded-2xs"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Navigation Bar -->
+        <header class="bg-white px-5 py-3 flex items-center justify-between border-b border-slate-100">
+            <button class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition-colors" aria-label="رجوع">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+            <h1 class="text-base font-bold text-slate-900">حجز موعد جديد</h1>
+            <div class="w-10"></div>
+        </header>
+
+        <!-- Scrollable Content Area -->
+        <main class="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+            
+            <!-- Doctor Profile Card -->
+            <div class="bg-white p-4 rounded-2xl shadow-xs border border-slate-100 flex items-center gap-4">
+                <div class="relative">
+                    <div class="w-16 h-16 rounded-2xl bg-teal-50 flex items-center justify-center text-teal-700 font-bold text-xl border border-teal-100">
+                        د.أ
+                    </div>
+                    <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"></div>
+                </div>
+                <div>
+                    <div class="inline-block px-2.5 py-0.5 bg-teal-50 text-teal-700 rounded-full text-sm font-medium mb-1">
+                        استشاري أمراض القلب
+                    </div>
+                    <h2 class="text-base font-bold text-slate-900">د. أحمد الشمري</h2>
+                    <p class="text-sm text-slate-500">عيادة أمراض القلب والشرايين - الدور الثاني</p>
+                </div>
+            </div>
+
+            <!-- Calendar Section -->
+            <section class="bg-white p-4 rounded-2xl shadow-xs border border-slate-100">
+                
+                <!-- Month Navigation Header -->
+                <div class="flex items-center justify-between mb-4">
+                    <button class="p-2 rounded-lg hover:bg-slate-100 text-slate-600 transition-colors" aria-label="الشهر السابق">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <div class="text-sm font-bold text-slate-900">مارس <bdi dir="ltr">2025</bdi></div>
+                    <button class="p-2 rounded-lg hover:bg-slate-100 text-slate-600 transition-colors" aria-label="الشهر التالي">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Days of Week (Starting on Saturday per GCC convention) -->
+                <div class="grid grid-cols-7 gap-1 text-center mb-2">
+                    <div class="text-sm font-semibold text-slate-400 py-1">سبت</div>
+                    <div class="text-sm font-semibold text-slate-400 py-1">أحد</div>
+                    <div class="text-sm font-semibold text-slate-400 py-1">اثنين</div>
+                    <div class="text-sm font-semibold text-slate-400 py-1">ثلاثاء</div>
+                    <div class="text-sm font-semibold text-slate-400 py-1">أربعاء</div>
+                    <div class="text-sm font-semibold text-slate-400 py-1">خميس</div>
+                    <div class="text-sm font-semibold text-slate-400 py-1 text-rose-400">جمعة</div>
+                </div>
+
+                <!-- Calendar Grid (March 2025 starting on Saturday, using Western digits consistently) -->
+                <div class="grid grid-cols-7 gap-1 text-center text-sm">
+                    
+                    <!-- Week 1 (Overflow from Feb) -->
+                    <button class="py-2.5 rounded-xl text-slate-300 cursor-not-allowed" disabled>28</button>
+                    <button class="py-2.5 rounded-xl text-slate-300 cursor-not-allowed" disabled>1</button>
+                    <button class="py-2.5 rounded-xl text-slate-300 cursor-not-allowed" disabled>2</button>
+                    <button class="py-2.5 rounded-xl text-slate-300 cursor-not-allowed" disabled>3</button>
+                    <button class="py-2.5 rounded-xl text-slate-300 cursor-not-allowed" disabled>4</button>
+                    <button class="py-2.5 rounded-xl text-slate-300 cursor-not-allowed" disabled>5</button>
+                    <button class="py-2.5 rounded-xl text-slate-300 cursor-not-allowed" disabled>6</button>
+
+                    <!-- Row 1: Mar 1 to Mar 7 -->
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">1</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">2</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">3</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">4</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">5</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">6</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-400 hover:bg-slate-100 transition-colors">7</button>
+
+                    <!-- Row 2 -->
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">8</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">9</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">10</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">11</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">12</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">13</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-400 hover:bg-slate-100 transition-colors">14</button>
+
+                    <!-- Row 3 (Today marked & Selected - 15) -->
+                    <div class="relative flex items-center justify-center">
+                        <button class="w-full py-2.5 rounded-xl font-bold bg-teal-600 text-white shadow-md shadow-teal-600/30 transition-all">15</button>
+                        <span class="absolute bottom-1 w-1 h-1 bg-white rounded-full"></span>
+                    </div>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">16</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">17</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">18</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">19</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">20</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-400 hover:bg-slate-100 transition-colors">21</button>
+
+                    <!-- Row 4 -->
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">22</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">23</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">24</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">25</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">26</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">27</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-400 hover:bg-slate-100 transition-colors">28</button>
+
+                    <!-- Row 5 -->
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">29</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">30</button>
+                    <button class="py-2.5 rounded-xl font-medium text-slate-700 hover:bg-slate-100 transition-colors">31</button>
+                </div>
+            </section>
+
+            <!-- Time Slots Section (9:00 to 12:00 every 30 mins) -->
+            <section class="bg-white p-4 rounded-2xl shadow-xs border border-slate-100">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-sm font-bold text-slate-900">الأوقات المتاحة للصباح</h3>
+                    <span class="text-sm text-teal-700 font-medium bg-teal-50 px-2 py-0.5 rounded-md">الفترة الصباحية</span>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-2.5">
+                    <!-- Slot 1 -->
+                    <button class="py-2.5 px-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:border-teal-600 hover:text-teal-700 transition-all text-center">
+                        <bdi dir="ltr">09:00 ص</bdi>
+                    </button>
+                    <!-- Slot 2 -->
+                    <button class="py-2.5 px-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:border-teal-600 hover:text-teal-700 transition-all text-center">
+                        <bdi dir="ltr">09:30 ص</bdi>
+                    </button>
+                    <!-- Slot 3 (Selected) -->
+                    <button class="py-2.5 px-3 rounded-xl border-2 border-teal-600 bg-teal-50 text-sm font-bold text-teal-800 transition-all text-center shadow-xs">
+                        <bdi dir="ltr">10:00 ص</bdi>
+                    </button>
+                    <!-- Slot 4 -->
+                    <button class="py-2.5 px-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:border-teal-600 hover:text-teal-700 transition-all text-center">
+                        <bdi dir="ltr">10:30 ص</bdi>
+                    </button>
+                    <!-- Slot 5 -->
+                    <button class="py-2.5 px-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:border-teal-600 hover:text-teal-700 transition-all text-center">
+                        <bdi dir="ltr">11:00 ص</bdi>
+                    </button>
+                    <!-- Slot 6 -->
+                    <button class="py-2.5 px-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:border-teal-600 hover:text-teal-700 transition-all text-center">
+                        <bdi dir="ltr">11:30 ص</bdi>
+                    </button>
+                    <!-- Slot 7 -->
+                    <button class="py-2.5 px-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:border-teal-600 hover:text-teal-700 transition-all text-center col-span-3">
+                        <bdi dir="ltr">12:00 م</bdi>
+                    </button>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer / Action Area -->
+        <footer class="bg-white px-5 py-4 border-t border-slate-100 flex flex-col gap-3">
+            <div class="flex items-center justify-between text-sm text-slate-500 px-1">
+                <span>الموعد المختار:</span>
+                <span class="font-semibold text-slate-800"><bdi dir="ltr">15 مارس 2025، 10:00 ص</bdi></span>
+            </div>
+            <button class="w-full bg-teal-700 hover:bg-teal-800 text-white font-bold py-3.5 px-4 rounded-2xl shadow-lg shadow-teal-700/25 transition-all text-sm">
+                تأكيد الحجز
+            </button>
+        </footer>
+
+        <!-- Home Indicator Sim -->
+        <div class="bg-white pb-2 pt-1 flex justify-center">
+            <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+        </div>
+
+    </div>
+
+</body>
+</html>

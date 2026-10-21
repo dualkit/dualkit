@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المعاملات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --type-body-size: 16px;
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --color-text: #1a1a1a;
+      --color-muted: #6b7280;
+      --color-bg: #f9fafb;
+      --color-card: #ffffff;
+      --color-border: #e5e7eb;
+      --color-inflow: #0d9488;
+      --color-outflow: #dc2626;
+    }
+
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', 'IBM Plex Sans Arabic', sans-serif;
+      font-size: var(--type-body-size);
+      line-height: 1.6;
+      color: var(--color-text);
+      background-color: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .screen {
+      max-width: 432px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background-color: var(--color-bg);
+      padding: 16px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .balance-card {
+      background-color: var(--color-card);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid var(--color-border);
+    }
+
+    .balance-label {
+      font-size: var(--type-caption-size);
+      color: var(--color-muted);
+      margin-bottom: 8px;
+    }
+
+    .balance-amount {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .filter-bar {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .filter-label {
+      font-size: var(--type-label-size);
+      color: var(--color-text);
+    }
+
+    .filter-select {
+      font-size: var(--type-label-size);
+      padding: 6px 12px;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      background-color: var(--color-card);
+      color: var(--color-text);
+      outline: none;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--color-card);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid var(--color-border);
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: start;
+      font-size: var(--type-body-size);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--color-muted);
+      font-size: var(--type-label-size);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .merchant-name {
+      font-weight: 500;
+    }
+
+    .merchant-name[lang="en"] {
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .amount-cell {
+      text-align: end;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .amount-inflow {
+      color: var(--color-inflow);
+      font-weight: 600;
+    }
+
+    .amount-outflow {
+      color: var(--color-outflow);
+      font-weight: 600;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: var(--type-caption-size);
+      font-weight: 500;
+    }
+
+    .status-inflow {
+      background-color: #d1fae5;
+      color: var(--color-inflow);
+    }
+
+    .status-outflow {
+      background-color: #fee2e2;
+      color: var(--color-outflow);
+    }
+
+    .date-cell {
+      font-variant-numeric: tabular-nums;
+      color: var(--color-muted);
+    }
+
+    .direction-ltr {
+      direction: ltr;
+      text-align: left;
+    }
+
+    .direction-rtl {
+      direction: rtl;
+      text-align: right;
+    }
+
+    .wrap-bdi {
+      display: block;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <header>
+      <h1>المعاملات</h1>
+    </header>
+
+    <div class="balance-card">
+      <div class="balance-label">الرصيد الحالي</div>
+      <div class="balance-amount"><bdi>١٬٢٣٤٫٥٦٧</bdi> <span lang="ar">ر.ع.</span></div>
+    </div>
+
+    <div class="filter-bar">
+      <label for="filter" class="filter-label">تصفية:</label>
+      <select id="filter" class="filter-select">
+        <option value="month">هذا الشهر</option>
+        <option value="week">هذا الأسبوع</option>
+        <option value="year">هذا العام</option>
+      </select>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>التاريخ</th>
+          <th>التاجر</th>
+          <th>المبلغ</th>
+          <th>الحالة</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="date-cell"><bdi>١٢ مارس ٢٠٢٥</bdi></td>
+          <td class="merchant-name" lang="en">Lulu Hypermarket</td>
+          <td class="amount-cell"><span class="amount-outflow"><bdi>٢٣٫٤٥٦</bdi> ر.ع.</span></td>
+          <td><span class="status-badge status-outflow">صادر</span></td>
+        </tr>
+        <tr>
+          <td class="date-cell"><bdi>١١ مارس ٢٠٢٥</bdي></td>
+          <td class="merchant-name">سوبرماركت الحداد</td>
+          <td class="amount-cell"><span class="amount-outflow"><bdi>١٥٫٠٠٠</bdي> ر.ع.</span></td>
+          <td><span class="status-badge status-outflow">صادر</span></td>
+        </tr>
+        <tr>
+          <td class="date-cell"><bdi>١٠ مارس ٢٠٢٥</bdي></td>
+          <td class="merchant-name" lang="en">Netflix</td>
+          <td class="amount-cell"><span class="amount-outflow"><bdi>٢٩٫٩٠٠</bdي> ر.ع.</span></td>
+          <td><span class="status-badge status-outflow">صادر</span></td>
+        </tr>
+        <tr>
+          <td class="date-cell"><bdi>٩ مارس ٢٠٢٥</bdي></td>
+          <td class="merchant-name">تواصل</td>
+          <td class="amount-cell"><span class="amount-inflow"><bdi>٥٠٫٠٠٠</bdي> ر.ع.</span></td>
+          <td><span class="status-badge status-inflow">وارد</span></td>
+        </tr>
+        <tr>
+          <td class="date-cell"><bdi>٨ مارس ٢٠٢٥</bdي></td>
+          <td class="merchant-name">مطعم الشيخ</td>
+          <td class="amount-cell"><span class="amount-outflow"><bdi>١٢٫٧٥٠</bdي> ر.ع.</span></td>
+          <td><span class="status-badge status-outflow">صادر</span></td>
+        </tr>
+        <tr>
+          <td class="date-cell"><bdi>٧ مارس ٢٠٢٥</bdي></td>
+          <td class="merchant-name" lang="en">Amazon</td>
+          <td class="amount-cell"><span class="amount-outflow"><bdi>٨٩٫١٢٣</bdي> ر.ع.</span></td>
+          <td><span class="status-badge status-outflow">صادر</span></td>
+        </tr>
+        <tr>
+          <td class="date-cell"><bdi>٦ مارس ٢٠٢٥</bdي></td>
+          <td class="merchant-name">أوبر</td>
+          <td class="amount-cell"><span class="amount-outflow"><bdi>٦٫٥٠٠</bdي> ر.ع.</span></td>
+          <td><span class="status-badge status-outflow">صادر</span></td>
+        </tr>
+        <tr>
+          <td class="date-cell"><bdi>٥ مارس ٢٠٢٥</bdي></td>
+          <td class="merchant-name">روابط</td>
+          <td class="amount-cell"><span class="amount-inflow"><bdi>٢٠٠٫٠٠٠</bdي> ر.ع.</span></td>
+          <td><span class="status-badge status-inflow">وارد</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

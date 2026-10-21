@@ -1,0 +1,67 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "otp",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T16:44:56.391Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>تأكيد الرمز - تطبيق البنك</title>\n    <!-- Tailwind CSS -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Fonts: Cairo -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap\" rel=\"stylesheet\">\n    <script>\n        tailwind.config = {\n            theme: {\n                extend: {\n                    fontFamily: {\n                        cairo: ['Cairo', 'sans-serif'],\n                    },\n                    colors: {\n                        bankGreen: {\n                            DEFAULT: '#006C35', // Saudi Green vibe\n                            dark: '#004D25',\n                            light: '#E6F4EA'\n                        },\n                        gold: '#C5A059'\n                    }\n                }\n            }\n        }\n    </script>\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">\n</head>\n<body class=\"bg-slate-900 font-cairo flex items-center justify-center min-h-screen p-0 sm:p-4\">\n\n    <!-- Phone Container -->\n    <div class=\"w-full sm:w-[390px] h-screen sm:h-[844px] bg-white sm:rounded-[40px] shadow-2xl overflow-hidden relative flex flex-col justify-between border-0 sm:border-8 sm:border-slate-800\">\n        \n        <!-- Top Status Bar & Header -->\n        <div>\n            <!-- Status Bar Placeholder -->\n            <div class=\"flex justify-between items-center px-6 pt-4 pb-2 text-slate-800 text-sm font-semibold\">\n                <span>9:41</span>\n                <div class=\"flex items-center space-x-2 space-x-reverse\">\n                    <i class=\"fa-solid fa-signal text-xs\"></i>\n                    <i class=\"fa-solid fa-wifi text-xs\"></i>\n                    <i class=\"fa-solid fa-battery-full text-sm\"></i>\n                </div>\n            </div>\n\n            <!-- App Navigation Bar -->\n            <div class=\"flex items-center justify-between px-6 py-4\">\n                <button class=\"w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition\">\n                    <i class=\"fa-solid.fa-arrow-right fa-solid fa-chevron-right text-sm\"></i>\n                </button>\n                <div class=\"text-bankGreen font-bold text-lg\">المصرف السعودي</div>\n                <div class=\"w-10\"></div> <!-- Spacer for alignment -->\n            </div>\n        </div>\n\n        <!-- Main Content Area -->\n        <div class=\"px-6 flex-1 flex flex-col justify-start pt-6\">\n            \n            <!-- Icon Illustration -->\n            <div class=\"w-16 h-16 bg-bankGreen-light rounded-2xl flex items-center justify-center text-bankGreen text-2xl mb-6\">\n                <i class=\"fa-solid fa-shield-halved\"></i>\n            </div>\n\n            <!-- Title & Subtitle -->\n            <h1 class=\"text-2xl font-bold text-slate-900 mb-2\">أدخل الرمز</h1>\n            <p class=\"text-slate-500 text-sm leading-relaxed mb-8\">\n                تم إرسال رمز مكون من 6 أرقام إلى <span dir=\"ltr\" class=\"font-semibold text-slate-800 inline-block\">+966 55 123 4567</span>\n            </p>\n\n            <!-- 6 Code Input Boxes -->\n            <div class=\"flex justify-between gap-2 mb-8\" dir=\"ltr\">\n                <input type=\"text\" maxlength=\"1\" class=\"otp-input w-12 h-14 text-center text-xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:outline-none focus:bg-white transition\" />\n                <input type=\"text\" maxlength=\"1\" class=\"otp-input w-12 h-14 text-center text-xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:outline-none focus:bg-white transition\" />\n                <input type=\"text\" maxlength=\"1\" class=\"otp-input w-12 h-14 text-center text-xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:outline-none focus:bg-white transition\" />\n                <input type=\"text\" maxlength=\"1\" class=\"otp-input w-12 h-14 text-center text-xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:outline-none focus:bg-white transition\" />\n                <input type=\"text\" maxlength=\"1\" class=\"otp-input w-12 h-14 text-center text-xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:outline-none focus:bg-white transition\" />\n                <input type=\"text\" maxlength=\"1\" class=\"otp-input w-12 h-14 text-center text-xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:outline-none focus:bg-white transition\" />\n            </div>\n\n            <!-- Countdown Timer / Resend -->\n            <div class=\"text-center text-sm text-slate-500 mb-6\">\n                إعادة الإرسال خلال <span id=\"countdown\" class=\"font-semibold text-bankGreen\">0:45</span>\n            </div>\n\n        </div>\n\n        <!-- Bottom Action Area -->\n        <div class=\"p-6 bg-white border-t border-slate-100\">\n            <button id=\"verifyBtn\" class=\"w-full bg-bankGreen hover:bg-bankGreen-dark text-white font-bold py-4 rounded-2xl shadow-lg shadow-bankGreen/20 transition duration-200 flex items-center justify-center space-x-2 space-x-reverse\">\n                <span>تحقق</span>\n            </button>\n            \n            <!-- Home Indicator Bar -->\n            <div class=\"w-32 h-1 bg-slate-200 rounded-full mx-auto mt-6 sm:block hidden\"></div>\n        </div>\n\n    </div>\n\n    <!-- OTP Input Logic Script -->\n    <script>\n        const inputs = document.querySelectorAll('.otp-input');\n\n        inputs.forEach((input, index) => {\n            // Handle typing\n            input.addEventListener('input', (e) => {\n                const value = e.target.value;\n                if (value && index < inputs.length - 1) {\n                    inputs[index + 1].focus();\n                }\n            });\n\n            // Handle backspace\n            input.addEventListener('keydown', (e) => {\n                if (e.key === 'Backspace' && !input.value && index > 0) {\n                    inputs[index - 1].focus();\n                }\n            });\n            \n            // Allow only numbers\n            input.addEventListener('keypress', (e) => {\n                if (!/[0-9]/.test(e.key)) {\n                    e.preventDefault();\n                }\n            });\n        });\n\n        // Simple Countdown Timer Logic\n        let timeLeft = 45;\n        const countdownEl = document.getElementById('countdown');\n        \n        const timer = setInterval(() => {\n            if (timeLeft <= 0) {\n                clearInterval(timer);\n                countdownEl.innerHTML = '<a href=\"#\" class=\"text-bankGreen underline font-bold\">إعادة الإرسال الآن</a>';\n            } else {\n                timeLeft--;\n                let seconds = timeLeft < 10 ? '0' + timeLeft : timeLeft;\n                countdownEl.textContent = `0:${seconds}`;\n            }\n        }, 1000);\n    </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 154,
+    "output": 2008
+  },
+  "ms": 6705,
+  "finish": "STOP",
+  "reasoningTokens": 614,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 94,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 341.5,
+        "y": 70,
+        "width": 9,
+        "height": 20
+      },
+      "message": "\"solid.fa-arrow-right\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid.fa-arrow-right fa-solid fa-chevron-right text-sm\"></i>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 48,
+        "y": 18,
+        "width": 15,
+        "height": 16
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<i class=\"fa-solid fa-wifi text-xs\"></i>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 24,
+        "y": 16,
+        "width": 16,
+        "height": 20
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<i class=\"fa-solid fa-battery-full text-sm\"></i>"
+    }
+  ],
+  "unreadableStylesheets": 2,
+  "pageHeight": 844
+}

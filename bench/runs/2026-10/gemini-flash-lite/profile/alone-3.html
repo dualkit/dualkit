@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - تطبيق الدفع</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        uaeGreen: '#00732F',
+                        appBg: '#F8FAFC',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-900 flex justify-center items-center min-h-screen font-cairo p-4">
+
+    <!-- Phone Frame -->
+    <div class="w-[390px] h-[844px] bg-appBg rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative border-[8px] border-slate-800">
+        
+        <!-- Status Bar -->
+        <div class="bg-white px-6 pt-3 pb-2 flex justify-between items-center text-xs text-slate-800 font-semibold select-none">
+            <span>9:41</span>
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full text-uaeGreen"></i>
+            </div>
+        </div>
+
+        <!-- App Header -->
+        <div class="bg-white px-6 py-4 flex items-center justify-between border-b border-slate-100">
+            <button class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-slate-100 transition">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <h1 class="text-lg font-bold text-slate-800">الملف الشخصي</h1>
+            <div class="w-10"></div> <!-- Spacer -->
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+
+            <!-- Profile Card -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center relative">
+                <div class="absolute top-4 left-4 bg-emerald-50 text-uaeGreen text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1">
+                    <i class="fa-solid fa-shield-check"></i> حساب موثق
+                </div>
+                <div class="relative mb-3">
+                    <div class="w-24 h-24 rounded-full bg-gradient-to-tr from-uaeGreen to-emerald-400 flex items-center text-white justify-center text-3xl font-bold shadow-md">
+                        ل.م
+                    </div>
+                    <button class="absolute bottom-0 right-0 bg-slate-900 text-white w-7 h-7 rounded-full flex items-center justify-center text-xs border-2 border-white shadow">
+                        <i class="fa-solid fa-camera"></i>
+                    </button>
+                </div>
+                <h2 class="text-xl font-bold text-slate-800">ليلى المنصوري</h2>
+                <p class="text-sm text-slate-500 mt-0.5">layla@example.com</p>
+            </div>
+
+            <!-- Account Details Section -->
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">معلومات الحساب</h3>
+
+                <!-- Email Field -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-lg bg-slate-50 text-slate-600 flex items-center justify-center">
+                            <i class="fa-regular fa-envelope"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 block">البريد الإلكتروني</span>
+                            <span class="text-sm font-semibold text-slate-800" dir="ltr">layla@example.com</span>
+                        </div>
+                    </div>
+                    <button class="text-uaeGreen text-xs font-bold bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition flex items-center gap-1">
+                        <i class="fa-solid fa-pen text-[10px]"></i> تعديل
+                    </button>
+                </div>
+
+                <!-- Phone Field -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-lg bg-slate-50 text-slate-600 flex items-center justify-center">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 block">رقم الهاتف المتحرك</span>
+                            <span class="text-sm font-semibold text-slate-800" dir="ltr">+971 50 123 4567</span>
+                        </div>
+                    </div>
+                    <button class="text-uaeGreen text-xs font-bold bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition flex items-center gap-1">
+                        <i class="fa-solid fa-pen text-[10px]"></i> تعديل
+                    </button>
+                </div>
+
+                <!-- IBAN Field -->
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-lg bg-slate-50 text-slate-600 flex items-center justify-center">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 block">رقم الحساب المصرفي الدولي (IBAN)</span>
+                            <span class="text-sm font-semibold text-slate-800 font-mono tracking-tight" dir="ltr">AE07 0331 2345 6789 0123 456</span>
+                        </div>
+                    </div>
+                    <button class="text-uaeGreen text-xs font-bold bg-emerald-50 px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition flex items-center gap-1 shrink-0">
+                        <i class="fa-solid fa-pen text-[10px]"></i> تعديل
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Additional Settings / Security -->
+            <div class="space-y-3">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider px-1">الأمان والخصوصية</h3>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 divide-y divide-slate-100">
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-3 space-x-reverse text-slate-700">
+                            <i class="fa-solid fa-lock text-slate-400 w-5"></i>
+                            <span class="text-sm font-medium">تغيير رمز المرور</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-left text-xs text-slate-400"></i>
+                    </div>
+                    <div class="p-4 flex items-center justify-between">
+                        <div class="flex items-center space-x-3 space-x-reverse text-slate-700">
+                            <i class="fa-solid fa-fingerprint text-slate-400 w-5"></i>
+                            <span class="text-sm font-medium">المصادقة البيومترية (Face ID)</span>
+                        </div>
+                        <div class="w-11 h-6 bg-uaeGreen rounded-full relative p-0.5 cursor-pointer">
+                            <div class="w-5 h-5 bg-white rounded-full shadow-md transform -translate-x-5 transition"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logout Button -->
+            <button class="w-full py-3 px-4 rounded-xl border border-rose-100 bg-rose-50/50 text-rose-600 font-semibold text-sm hover:bg-rose-100/50 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> تسجيل الخروج
+            </button>
+
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <div class="bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center text-slate-400">
+            <button class="flex flex-col items-center gap-1 hover:text-uaeGreen transition">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px]">الرئيسية</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 hover:text-uaeGreen transition">
+                <i class="fa-solid fa-arrow-right-arrow-left text-lg"></i>
+                <span class="text-[10px]">التحويلات</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 hover:text-uaeGreen transition">
+                <i class="fa-solid fa-wallet text-lg"></i>
+                <span class="text-[10px]">المحافظ</span>
+            </button>
+            <button class="flex flex-col items-center gap-1 text-uaeGreen font-bold">
+                <i class="fa-solid fa-user text-lg"></i>
+                <span class="text-[10px]">حسابي</span>
+            </button>
+        </div>
+
+        <!-- Home Indicator -->
+        <div class="bg-white pb-2 flex justify-center">
+            <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,249 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "order-history",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-10-21T16:49:35.458Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>سجل الطلبات - متجر السعودية</title>\n  <!-- Google Fonts: IBM Plex Sans Arabic -->\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <!-- Tailwind CSS CDN -->\n  <script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4\"></script>\n  <style>\n    :lang(ar) {\n      font-family: 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n    /* Ensure no text-xs (12px) is used for Arabic UI per Dualkit rules */\n    .ar-text-sm {\n      font-size: 14px;\n    }\n  </style>\n</head>\n<body class=\"bg-slate-900 text-slate-100 flex items-center justify-center min-h-screen p-0 sm:p-4\">\n\n  <!-- Mobile Screen Container -->\n  <div class=\"w-full sm:max-w-[412px] h-screen sm:h-[844px] bg-slate-50 text-slate-900 sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border-0 sm:border-8 border-slate-800\">\n    \n    <!-- Phone Status Bar -->\n    <div class=\"bg-white px-6 pt-3 pb-2 flex justify-between items-center text-xs text-slate-600 font-medium shrink-0\">\n      <span><bdi dir=\"ltr\">9:41</bdi></span>\n      <div class=\"flex items-center space-x-1.5 space-x-reverse\">\n        <svg class=\"w-4 h-4\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h3.53c1.23.63 2.65 1 4.12 1 4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z\"/></svg>\n        <svg class=\"w-4 h-4\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z\"/></svg>\n      </div>\n    </div>\n\n    <!-- App Header -->\n    <header class=\"bg-white px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0\">\n      <div class=\"flex items-center space-x-3 space-x-reverse\">\n        <button class=\"w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition\" aria-label=\"رجوع\">\n          <svg class=\"w-5 h-5 rtl:-scale-x-100\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 19l-7-7 7-7\"/></svg>\n        </button>\n        <h1 class=\"text-lg font-bold text-slate-900\">سجل الطلبات</h1>\n      </div>\n      <span class=\"ar-text-sm bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full font-medium\">الرياض، SA</span>\n    </header>\n\n    <!-- Tabs Filter -->\n    <div class=\"bg-white px-6 pt-2 pb-3 border-b border-slate-100 flex space-x-2 space-x-reverse shrink-0 overflow-x-auto\">\n      <button onclick=\"filterOrders('all')\" id=\"tab-all\" class=\"px-4 py-2 rounded-full ar-text-sm font-medium bg-emerald-600 text-white transition whitespace-nowrap shadow-sm\">الكل (٤)</button>\n      <button onclick=\"filterOrders('active')\" id=\"tab-active\" class=\"px-4 py-2 rounded-full ar-text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap\">نشطة (١)</button>\n      <button onclick=\"filterOrders('completed')\" id=\"tab-completed\" class=\"px-4 py-2 rounded-full ar-text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap\">مكتملة (٢)</button>\n      <button onclick=\"filterOrders('cancelled')\" id=\"tab-cancelled\" class=\"px-4 py-2 rounded-full ar-text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap\">ملغاة (١)</button>\n    </div>\n\n    <!-- Order List -->\n    <main class=\"flex-1 overflow-y-auto p-4 space-y-4\">\n      \n      <!-- Order 1: On the Way -->\n      <div class=\"order-card bg-white rounded-2xl p-4 shadow-xs border border-slate-100 flex flex-col space-y-3\" data-category=\"active\">\n        <div class=\"flex justify-between items-start\">\n          <div>\n            <span class=\"text-xs text-slate-400 block mb-0.5\">رقم الطلب</span>\n            <span class=\"font-bold text-slate-800 ar-text-sm\"><bdi dir=\"ltr\">#A-10482</bdi></span>\n          </div>\n          <span class=\"ar-text-sm bg-amber-50 text-amber-700 px-3 py-1 rounded-full font-semibold flex items-center gap-1.5\">\n            <span class=\"w-2 h-2 rounded-full bg-amber-500 animate-pulse\"></span>\n            في الطريق\n          </span>\n        </div>\n        \n        <div class=\"border-t border-slate-100 pt-2 flex flex-col space-y-1 text-slate-600 ar-text-sm\">\n          <div class=\"flex justify-between\">\n            <span class=\"text-slate-500\">تاريخ الطلب:</span>\n            <span><bdi dir=\"ltr\">20 نوفمبر 2023</bdi> (<bdi>6 جمادى الأولى 1445 هـ</bdi>)</span>\n          </div>\n          <div class=\"flex justify-between\">\n            <span class=\"text-slate-500\">الإجمالي:</span>\n            <span class=\"font-bold text-slate-900\"><bdi dir=\"ltr\">1,250.50</bdi> ر.س</span>\n          </div>\n        </div>\n\n        <div class=\"pt-2 flex gap-2\">\n          <button class=\"flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-4 rounded-xl ar-text-sm font-medium transition text-center shadow-sm\">تتبع الشحنة</button>\n          <button class=\"bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 px-4 rounded-xl ar-text-sm font-medium transition\">التفاصيل</button>\n        </div>\n      </div>\n\n      <!-- Order 2: Delivered -->\n      <div class=\"order-card bg-white rounded-2xl p-4 shadow-xs border border-slate-100 flex flex-col space-y-3\" data-category=\"completed\">\n        <div class=\"flex justify-between items-start\">\n          <div>\n            <span class=\"text-xs text-slate-400 block mb-0.5\">رقم الطلب</span>\n            <span class=\"font-bold text-slate-800 ar-text-sm\"><bdi dir=\"ltr\">#A-10293</bdi></span>\n          </div>\n          <span class=\"ar-text-sm bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full font-semibold\">\n            تم التوصيل\n          </span>\n        </div>\n        \n        <div class=\"border-t border-slate-100 pt-2 flex flex-col space-y-1 text-slate-600 ar-text-sm\">\n          <div class=\"flex justify-between\">\n            <span class=\"text-slate-500\">تاريخ الطلب:</span>\n            <span><bdi dir=\"ltr\">24 أكتوبر 2023</bdi> (<bdi>9 ربيع الثاني 1445 هـ</bdi>)</span>\n          </div>\n          <div class=\"flex justify-between\">\n            <span class=\"text-slate-500\">الإجمالي:</span>\n            <span class=\"font-bold text-slate-900\"><bdi dir=\"ltr\">349.00</bdi> ر.س</span>\n          </div>\n        </div>\n\n        <div class=\"pt-2 flex gap-2\">\n          <button class=\"flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 py-2 px-4 rounded-xl ar-text-sm font-medium transition text-center\">إعادة الطلب</button>\n          <button class=\"bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 px-4 rounded-xl ar-text-sm font-medium transition\">التفاصيل</button>\n        </div>\n      </div>\n\n      <!-- Order 3: Delivered -->\n      <div class=\"order-card bg-white rounded-2xl p-4 shadow-xs border border-slate-100 flex flex-col space-y-3\" data-category=\"completed\">\n        <div class=\"flex justify-between items-start\">\n          <div>\n            <span class=\"text-xs text-slate-400 block mb-0.5\">رقم الطلب</span>\n            <span class=\"font-bold text-slate-800 ar-text-sm\"><bdi dir=\"ltr\">#A-10591</bdi></span>\n          </div>\n          <span class=\"ar-text-sm bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full font-semibold\">\n            تم التوصيل\n          </span>\n        </div>\n        \n        <div class=\"border-t border-slate-100 pt-2 flex flex-col space-y-1 text-slate-600 ar-text-sm\">\n          <div class=\"flex justify-between\">\n            <span class=\"text-slate-500\">تاريخ الطلب:</span>\n            <span><bdi dir=\"ltr\">1 ديسمبر 2023</bdi> (<bdi>17 جمادى الأولى 1445 هـ</bdi>)</span>\n          </div>\n          <div class=\"flex justify-between\">\n            <span class=\"text-slate-500\">الإجمالي:</span>\n            <span class=\"font-bold text-slate-900\"><bdi dir=\"ltr\">89.00</bdi> ر.س</span>\n          </div>\n        </div>\n\n        <div class=\"pt-2 flex gap-2\">\n          <button class=\"flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 py-2 px-4 rounded-xl ar-text-sm font-medium transition text-center\">إعادة الطلب</button>\n          <button class=\"bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 px-4 rounded-xl ar-text-sm font-medium transition\">التفاصيل</button>\n        </div>\n      </div>\n\n      <!-- Order 4: Cancelled -->\n      <div class=\"order-card bg-white rounded-2xl p-4 shadow-xs border border-slate-100 flex flex-col space-y-3\" data-category=\"cancelled\">\n        <div class=\"flex justify-between items-start\">\n          <div>\n            <span class=\"text-xs text-slate-400 block mb-0.5\">رقم الطلب</span>\n            <span class=\"font-bold text-slate-800 ar-text-sm\"><bdi dir=\"ltr\">#A-10612</bdi></span>\n          </div>\n          <span class=\"ar-text-sm bg-rose-50 text-rose-700 px-3 py-1 rounded-full font-semibold\">\n            ملغي\n          </span>\n        </div>\n        \n        <div class=\"border-t border-slate-100 pt-2 flex flex-col space-y-1 text-slate-600 ar-text-sm\">\n          <div class=\"flex justify-between\">\n            <span class=\"text-slate-500\">تاريخ الطلب:</span>\n            <span><bdi dir=\"ltr\">5 ديسمبر 2023</bdi> (<bdi>21 جمادى الأولى 1445 هـ</bdi>)</span>\n          </div>\n          <div class=\"flex justify-between\">\n            <span class=\"text-slate-500\">الإجمالي:</span>\n            <span class=\"font-bold text-slate-900\"><bdi dir=\"ltr\">420.00</bdi> ر.س</span>\n          </div>\n        </div>\n\n        <div class=\"pt-2 flex gap-2\">\n          <button class=\"flex-1 bg-slate-100 hover:bg-slate-200 text-slate-800 py-2 px-4 rounded-xl ar-text-sm font-medium transition text-center\">طلب مرة أخرى</button>\n          <button class=\"bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 px-4 rounded-xl ar-text-sm font-medium transition\">التفاصيل</button>\n        </div>\n      </div>\n\n    </main>\n\n    <!-- Bottom Navigation Bar -->\n    <nav class=\"bg-white border-t border-slate-200 px-6 py-3 flex justify-between items-center shrink-0\">\n      <a href=\"#\" class=\"flex flex-col items-center text-slate-400 hover:text-emerald-600 transition\">\n        <svg class=\"w-6 h-6 mb-0.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6\"/></svg>\n        <span class=\"text-xs\">الرئيسية</span>\n      </a>\n      <a href=\"#\" class=\"flex flex-col items-center text-slate-400 hover:text-emerald-600 transition\">\n        <svg class=\"w-6 h-6 mb-0.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 6h16M4 10h16M4 14h16M4 18h16\"/></svg>\n        <span class=\"text-xs\">الأقسام</span>\n      </a>\n      <a href=\"#\" class=\"flex flex-col items-center text-emerald-600 font-semibold\">\n        <svg class=\"w-6 h-6 mb-0.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4\"/></svg>\n        <span class=\"text-xs\">الطلبات</span>\n      </a>\n      <a href=\"#\" class=\"flex flex-col items-center text-slate-400 hover:text-emerald-600 transition\">\n        <svg class=\"w-6 h-6 mb-0.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z\"/></svg>\n        <span class=\"text-xs\">حسابي</span>\n      </a>\n    </nav>\n  </div>\n\n  <script>\n    function filterOrders(category) {\n      const cards = document.querySelectorAll('.order-card');\n      const tabs = ['all', 'active', 'completed', 'cancelled'];\n      \n      // Update tab styles\n      tabs.forEach(t => {\n        const btn = document.getElementById(`tab-${t}`);\n        if (t === category) {\n          btn.className = \"px-4 py-2 rounded-full ar-text-sm font-medium bg-emerald-600 text-white transition whitespace-nowrap shadow-sm\";\n        } else {\n          btn.className = \"px-4 py-2 rounded-full ar-text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 transition whitespace-nowrap\";\n        }\n      });\n\n      // Filter cards\n      cards.forEach(card => {\n        if (category === 'all' || card.dataset.category === category) {\n          card.style.display = 'flex';\n        } else {\n          card.style.display = 'none';\n        }\n      });\n    }\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6480,
+    "output": 4784
+  },
+  "ms": 15279,
+  "finish": "STOP",
+  "reasoningTokens": 1765,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 73,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 298,
+        "y": 130.390625,
+        "width": 44,
+        "height": 21
+      },
+      "message": "\"الكل (٤)\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<button onclick=\"filterOrders('all')\" id=\"tab-all\" class=\"px-4 py-2 rounded-full ar-text-sm font-medium bg-emerald-600 text-white transition whitespace-nowrap s"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 208,
+        "y": 130.390625,
+        "width": 50,
+        "height": 21
+      },
+      "message": "\"نشطة (١)\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<button onclick=\"filterOrders('active')\" id=\"tab-active\" class=\"px-4 py-2 rounded-full ar-text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 tra"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 110,
+        "y": 130.390625,
+        "width": 58,
+        "height": 21
+      },
+      "message": "\"مكتملة (٢)\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<button onclick=\"filterOrders('completed')\" id=\"tab-completed\" class=\"px-4 py-2 rounded-full ar-text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-2"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 32,
+        "y": 130.390625,
+        "width": 46,
+        "height": 21
+      },
+      "message": "\"ملغاة (١)\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<button onclick=\"filterOrders('cancelled')\" id=\"tab-cancelled\" class=\"px-4 py-2 rounded-full ar-text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-2"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 309,
+        "y": 208.1875,
+        "width": 48,
+        "height": 18
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block mb-0.5\">رقم الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 309,
+        "y": 440.15625,
+        "width": 48,
+        "height": 18
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block mb-0.5\">رقم الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 309,
+        "y": 672.125,
+        "width": 48,
+        "height": 18
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block mb-0.5\">رقم الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 309,
+        "y": 904.09375,
+        "width": 48,
+        "height": 18
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block mb-0.5\">رقم الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 329,
+        "y": 812.609375,
+        "width": 37,
+        "height": 18
+      },
+      "message": "\"الرئيسية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs\">الرئيسية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 226.671875,
+        "y": 812.609375,
+        "width": 34,
+        "height": 18
+      },
+      "message": "\"الأقسام\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs\">الأقسام</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 122.34375,
+        "y": 812.609375,
+        "width": 36,
+        "height": 18
+      },
+      "message": "\"الطلبات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs\">الطلبات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 24.015625,
+        "y": 812.609375,
+        "width": 30,
+        "height": 18
+      },
+      "message": "\"حسابي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs\">حسابي</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 314,
+        "y": 56.390625,
+        "width": 40,
+        "height": 40
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button class=\"w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition\" aria-label=\"رجوع\">\n          <"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 282,
+        "y": 121.390625,
+        "width": 76,
+        "height": 39.796875
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button onclick=\"filterOrders('all')\" id=\"tab-all\" class=\"px-4 py-2 rounded-full ar-text-sm font-medium bg-emerald-600 text-white transition whitespace-nowrap s"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 192,
+        "y": 121.390625,
+        "width": 82,
+        "height": 39.796875
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button onclick=\"filterOrders('active')\" id=\"tab-active\" class=\"px-4 py-2 rounded-full ar-text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-200 tra"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 94,
+        "y": 121.390625,
+        "width": 90,
+        "height": 39.796875
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button onclick=\"filterOrders('completed')\" id=\"tab-completed\" class=\"px-4 py-2 rounded-full ar-text-sm font-medium bg-slate-100 text-slate-600 hover:bg-slate-2"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

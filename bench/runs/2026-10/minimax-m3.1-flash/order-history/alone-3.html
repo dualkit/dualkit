@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f7f8">
+  <title>سوقنا — سجل الطلبات</title>
+  <style>
+    :root {
+      --primary: #0d7d5b;
+      --primary-dark: #086347;
+      --primary-soft: #e8f5ef;
+      --ink: #17211d;
+      --muted: #68736e;
+      --line: #e5eae7;
+      --surface: #ffffff;
+      --background: #f5f7f6;
+      --amber: #a76600;
+      --amber-soft: #fff3dc;
+      --red: #b42318;
+      --red-soft: #feeceb;
+      --blue: #1769aa;
+      --blue-soft: #e9f3fc;
+      --shadow: 0 2px 12px rgba(18, 45, 35, 0.055);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--background);
+      color: var(--ink);
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      background: var(--background);
+      overflow: hidden;
+    }
+
+    .topbar {
+      height: 60px;
+      padding: max(12px, env(safe-area-inset-top)) 20px 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .icon-button {
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .icon-button:active {
+      background: #f0f3f1;
+    }
+
+    .icon-button svg {
+      width: 23px;
+      height: 23px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    .content {
+      padding: 20px 16px 32px;
+    }
+
+    .intro {
+      margin: 0 4px 17px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 9px;
+      margin-bottom: 18px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 1px;
+    }
+
+    .filter-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--surface);
+      color: #53605a;
+      padding: 9px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .filter.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(13, 125, 91, 0.18);
+    }
+
+    .orders {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .order-card {
+      background: var(--surface);
+      border: 1px solid #edf0ee;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .order-card:active {
+      transform: scale(0.995);
+    }
+
+    .order-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .order-id {
+      margin: 0 0 7px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .order-number {
+      display: inline-block;
+      direction: ltr;
+      unicode-bidi: isolate;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      border-radius: 20px;
+      padding: 7px 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .status svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .delivered {
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .on-way {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .cancelled {
+      color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .order-body {
+      padding-top: 14px;
+    }
+
+    .date-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .date-box {
+      background: #f8faf9;
+      border-radius: 12px;
+      padding: 10px 11px;
+    }
+
+    .date-label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .date-value {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.45;
+      white-space: nowrap;
+    }
+
+    .order-summary {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .items {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .price-label {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .price {
+      font-size: 15px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .price span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .details-button {
+      width: 100%;
+      height: 42px;
+      margin-top: 15px;
+      border: 0;
+      border-radius: 11px;
+      background: #f1f5f3;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      cursor: pointer;
+    }
+
+    .details-button svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .empty-space {
+      height: 25px;
+    }
+
+    @media (max-width: 360px) {
+      .content {
+        padding-inline: 12px;
+      }
+
+      .date-value {
+        font-size: 11px;
+      }
+
+      .status {
+        padding-inline: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <button class="icon-button" type="button" aria-label="رجوع">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M9 18l6-6-6-6"></path>
+        </svg>
+      </button>
+      <h1 class="page-title">سجل الطلبات</h1>
+      <button class="icon-button" type="button" aria-label="المزيد من الخيارات">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="5" r="1"></circle>
+          <circle cx="12" cy="12" r="1"></circle>
+          <circle cx="12" cy="19" r="1"></circle>
+        </svg>
+      </button>
+    </header>
+
+    <section class="content">
+      <p class="intro">تابع مشترياتك السابقة واطلع على حالة كل طلب بسهولة.</p>
+
+      <nav class="filter-row" aria-label="تصفية الطلبات">
+        <button class="filter active" type="button">الكل <span>4</span></button>
+        <button class="filter" type="button">تم التوصيل</button>
+        <button class="filter" type="button">قيد التوصيل</button>
+        <button class="filter" type="button">ملغي</button>
+      </nav>
+
+      <section class="orders" aria-label="قائمة الطلبات">
+        <article class="order-card">
+          <div class="order-head">
+            <div>
+              <p class="order-id">رقم الطلب</p>
+              <span class="order-number">#A-10293</span>
+            </div>
+            <span class="status delivered">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M8 12.5l2.5 2.5L16.5 9"></path>
+              </svg>
+              تم التوصيل
+            </span>
+          </div>
+          <div class="order-body">
+            <div class="date-grid">
+              <div class="date-box">
+                <span class="date-label">التاريخ الميلادي</span>
+                <span class="date-value">8 يناير 2025</span>
+              </div>
+              <div class="date-box">
+                <span class="date-label">التاريخ الهجري</span>
+                <span class="date-value">18 ربيع الآخر 1446</span>
+              </div>
+            </div>
+            <div class="order-summary">
+              <p class="items">3 منتجات<br>تم التسليم إلى الرياض</p>
+              <div>
+                <span class="price-label">إجمالي الطلب</span>
+                <div class="price">248.50 <span>ر.س</span></div>
+              </div>
+            </div>
+            <button class="details-button" type="button">
+              عرض تفاصيل الطلب
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6"></path>
+              </svg>
+            </button>
+          </div>
+        </article>
+
+        <article class="order-card">
+          <div class="order-head">
+            <div>
+              <p class="order-id">رقم الطلب</p>
+              <span class="order-number">#A-10176</span>
+            </div>
+            <span class="status on-way">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z"></path>
+                <circle cx="7" cy="18" r="2"></circle>
+                <circle cx="18" cy="18" r="2"></circle>
+              </svg>
+              في الطريق إليك
+            </span>
+          </div>
+          <div class="order-body">
+            <div class="date-grid">
+              <div class="date-box">
+                <span class="date-label">التاريخ الميلادي</span>
+                <span class="date-value">16 ديسمبر 2024</span>
+              </div>
+              <div class="date-box">
+                <span class="date-label">التاريخ الهجري</span>
+                <span class="date-value">25 جمادى الأولى 1446</span>
+              </div>
+            </div>
+            <div class="order-summary">
+              <p class="items">5 منتجات<br>متوقع التوصيل غداً</p>
+              <div>
+                <span class="price-label">إجمالي الطلب</span>
+                <div class="price">419.00 <span>ر.س</span></div>
+              </div>
+            </div>
+            <button class="details-button" type="button">
+              عرض تفاصيل الطلب
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6"></path>
+              </svg>
+            </button>
+          </div>
+        </article>
+
+        <article class="order-card">
+          <div class="order-head">
+            <div>
+              <p class="order-id">رقم الطلب</p>
+              <span class="order-number">#A-09842</span>
+            </div>
+            <span class="status cancelled">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M9 9l6 6M15 9l-6 6"></path>
+              </svg>
+              طلب ملغي
+            </span>
+          </div>
+          <div class="order-body">
+            <div class="date-grid">
+              <div class="date-box">
+                <span class="date-label">التاريخ الميلادي</span>
+                <span class="date-value">29 نوفمبر 2024</span>
+              </div>
+              <div class="date-box">
+                <span class="date-label">التاريخ الهجري</span>
+                <span class="date-value">7 جمادى الأولى 1446</span>
+              </div>
+            </div>
+            <div class="order-summary">
+              <p class="items">منتج واحد<br>أُلغي بناءً على طلبك</p>
+              <div>
+                <span class="price-label">إجمالي الطلب</span>
+                <div class="price">89.00 <span>ر.س</span></div>
+              </div>
+            </div>
+            <button class="details-button" type="button">
+              عرض تفاصيل الطلب
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6"></path>
+              </svg>
+            </button>
+          </div>
+        </article>
+
+        <article class="order-card">
+          <div class="order-head">
+            <div>
+              <p class="order-id">رقم الطلب</p>
+              <span class="order-number">#A-09511</span>
+            </div>
+            <span class="status delivered">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M8 12.5l2.5 2.5L16.5 9"></path>
+              </svg>
+              تم التوصيل
+            </span>
+          </div>
+          <div class="order-body">
+            <div class="date-grid">
+              <div class="date-box">
+                <span class="date-label">التاريخ الميلادي</span>
+                <span class="date-value">12 نوفمبر 2024</span>
+              </div>
+              <div class="date-box">
+                <span class="date-label">التاريخ الهجري</span>
+                <span class="date-value">20 Rabi al-Awwal 1446</span>
+              </div>
+            </div>
+            <div class="order-summary">
+              <p class="items">7 منتجات<br>تم التسليم إلى جدة</p>
+              <div>
+                <span class="price-label">إجمالي الطلب</span>
+                <div class="price">635.75 <span>ر.س</span></div>
+              </div>
+            </div>
+            <button class="details-button" type="button">
+              عرض تفاصيل الطلب
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6"></path>
+              </svg>
+            </button>
+          </div>
+        </article>
+      </section>
+      <div class="empty-space"></div>
+    </section>
+  </main>
+</body>
+</html>

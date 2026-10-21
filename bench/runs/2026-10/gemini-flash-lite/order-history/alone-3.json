@@ -1,0 +1,711 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "order-history",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T16:49:22.504Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>سجل الطلبات - متجر السعودية</title>\n    <!-- Tailwind CSS CDN -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- FontAwesome for Icons -->\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">\n    <!-- Google Fonts: Cairo -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap\" rel=\"stylesheet\">\n    <script>\n        tailwind.config = {\n            theme: {\n                extend: {\n                    fontFamily: {\n                        cairo: ['Cairo', 'sans-serif'],\n                    },\n                    colors: {\n                        saudi: {\n                            green: '#006C35',\n                            light: '#E6F4ED',\n                            dark: '#004D25'\n                        }\n                    }\n                }\n            }\n        }\n    </script>\n</head>\n<body class=\"font-cairo bg-gray-100 flex justify-center items-center min-h-screen\">\n\n    <!-- Phone Screen Container -->\n    <div class=\"w-full max-w-[390px] h-[844px] bg-gray-50 shadow-2xl flex flex-col overflow-hidden relative border border-gray-200 rounded-[40px]\">\n        \n        <!-- Status Bar (Simulated) -->\n        <div class=\"bg-white px-6 pt-3 pb-1 flex justify-between items-center text-xs text-gray-800 font-semibold shrink-0\">\n            <span>9:41</span>\n            <div class=\"flex items-center space-x-1 space-x-reverse\">\n                <i class=\"fa-solid fa-signal\"></i>\n                <i class=\"fa-solid fa-wifi\"></i>\n                <i class=\"fa-solid fa-battery-full\"></i>\n            </div>\n        </div>\n\n        <!-- App Header -->\n        <div class=\"bg-white px-6 py-4 shadow-sm flex items-center justify-between shrink-0\">\n            <button class=\"w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-200 transition\">\n                <i class=\"fa-solid fa-arrow-right\"></i>\n            </button>\n            <h1 class=\"text-lg font-bold text-gray-900\">سجل الطلبات</h1>\n            <div class=\"w-9\"></div> <!-- Spacer for centering -->\n        </div>\n\n        <!-- Filter Tabs -->\n        <div class=\"px-6 py-3 bg-white border-b border-gray-100 flex gap-2 overflow-x-auto shrink-0 no-scrollbar\">\n            <button class=\"px-4 py-1.5 bg-saudi-green text-white text-xs font-semibold rounded-full shadow-sm\">الكل (٤)</button>\n            <button class=\"px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition\">نشطة (١)</button>\n            <button class=\"px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition\">المكتملة (٢)</button>\n            <button class=\"px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition\">الملغاة (١)</button>\n        </div>\n\n        <!-- Orders List (Scrollable Area) -->\n        <div class=\"flex-1 overflow-y-auto px-5 py-4 space-y-3.5 pb-20\">\n            \n            <!-- Order 1: On the Way -->\n            <div class=\"bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition\">\n                <div class=\"flex justify-between items-start mb-3\">\n                    <div>\n                        <span class=\"text-xs text-gray-400 font-medium\">رقم الطلب</span>\n                        <h3 class=\"text-sm font-bold text-gray-800\">#A-10293</h3>\n                    </div>\n                    <!-- Status Badge -->\n                    <span class=\"px-2.5 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold flex items-center gap-1\">\n                        <i class=\"fa-solid fa-truck-fast\"></i> في الطريق\n                    </span>\n                </div>\n                <div class=\"border-t border-gray-100 pt-2.5 pb-2.5 space-y-1\">\n                    <div class=\"flex items-center text-xs text-gray-600 gap-2\">\n                        <i class=\"fa-regular fa-calendar text-gray-400 w-4\"></i>\n                        <span>٢٥ أكتوبر ٢٠٢٣ | ١٠ ربيع الثاني ١٤٤٥ هـ</span>\n                    </div>\n                    <div class=\"flex items-center text-xs text-gray-600 gap-2\">\n                        <i class=\"fa-solid fa-tag text-gray-400 w-4\"></i>\n                        <span>المجموع: <strong class=\"text-gray-900 font-bold\">٣٥٠.٠٠ ر.س</strong></span>\n                    </div>\n                </div>\n                <div class=\"border-t border-gray-100 pt-2.5 flex justify-between items-center\">\n                    <span class=\"text-[11px] text-gray-400\">التوصيل المتوقع: غداً</span>\n                    <button class=\"text-xs text-saudi-green font-bold hover:underline flex items-center gap-1\">\n                        تتبع الطلب <i class=\"fa-solid fa-chevron-left text-[10px]\"></i>\n                    </button>\n                </div>\n            </div>\n\n            <!-- Order 2: Delivered -->\n            <div class=\"bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition\">\n                <div class=\"flex justify-between items-start mb-3\">\n                    <div>\n                        <span class=\"text-xs text-gray-400 font-medium\">رقم الطلب</span>\n                        <h3 class=\"text-sm font-bold text-gray-800\">#A-10182</h3>\n                    </div>\n                    <!-- Status Badge -->\n                    <span class=\"px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold flex items-center gap-1\">\n                        <i class=\"fa-solid fa-circle-check\"></i> تم التوصيل\n                    </span>\n                </div>\n                <div class=\"border-t border-gray-100 pt-2.5 pb-2.5 space-y-1\">\n                    <div class=\"flex items-center text-xs text-gray-600 gap-2\">\n                        <i class=\"fa-regular fa-calendar text-gray-400 w-4\"></i>\n                        <span>١٨ أكتوبر ٢٠٢٣ | ٣ ربيع الأول ١٤٤٥ هـ</span>\n                    </div>\n                    <div class=\"flex items-center text-xs text-gray-600 gap-2\">\n                        <i class=\"fa-solid fa-tag text-gray-400 w-4\"></i>\n                        <span>المجموع: <strong class=\"text-gray-900 font-bold\">١,٢٥٠.٥٠ ر.س</strong></span>\n                    </div>\n                </div>\n                <div class=\"border-t border-gray-100 pt-2.5 flex justify-between items-center\">\n                    <span class=\"text-[11px] text-gray-400\">تم التسليم بنجاح</span>\n                    <button class=\"text-xs text-saudi-green font-bold hover:underline flex items-center gap-1\">\n                        إعادة الطلب <i class=\"fa-solid fa-rotate-right text-[10px]\"></i>\n                    </button>\n                </div>\n            </div>\n\n            <!-- Order 3: Delivered -->\n            <div class=\"bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition\">\n                <div class=\"flex justify-between items-start mb-3\">\n                    <div>\n                        <span class=\"text-xs text-gray-400 font-medium\">رقم الطلب</span>\n                        <h3 class=\"text-sm font-bold text-gray-800\">#A-09941</h3>\n                    </div>\n                    <!-- Status Badge -->\n                    <span class=\"px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold flex items-center gap-1\">\n                        <i class=\"fa-solid fa-circle-check\"></i> تم التوصيل\n                    </span>\n                </div>\n                <div class=\"border-t border-gray-100 pt-2.5 pb-2.5 space-y-1\">\n                    <div class=\"flex items-center text-xs text-gray-600 gap-2\">\n                        <i class=\"fa-regular fa-calendar text-gray-400 w-4\"></i>\n                        <span>٠٥ أكتوبر ٢٠٢٣ | ٢٠ صفر ١٤٤٥ هـ</span>\n                    </div>\n                    <div class=\"flex items-center text-xs text-gray-600 gap-2\">\n                        <i class=\"fa-solid fa-tag text-gray-400 w-4\"></i>\n                        <span>المجموع: <strong class=\"text-gray-900 font-bold\">١٨٠.٠٠ ر.س</strong></span>\n                    </div>\n                </div>\n                <div class=\"border-t border-gray-100 pt-2.5 flex justify-between items-center\">\n                    <span class=\"text-[11px] text-gray-400\">تم التسليم بنجاح</span>\n                    <button class=\"text-xs text-saudi-green font-bold hover:underline flex items-center gap-1\">\n                        تقييم المنتجات <i class=\"fa-solid fa-star text-[10px]\"></i>\n                    </button>\n                </div>\n            </div>\n\n            <!-- Order 4: Cancelled -->\n            <div class=\"bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition\">\n                <div class=\"flex justify-between items-start mb-3\">\n                    <div>\n                        <span class=\"text-xs text-gray-400 font-medium\">رقم الطلب</span>\n                        <h3 class=\"text-sm font-bold text-gray-800\">#A-09822</h3>\n                    </div>\n                    <!-- Status Badge -->\n                    <span class=\"px-2.5 py-1 bg-rose-50 text-rose-600 rounded-full text-xs font-bold flex items-center gap-1\">\n                        <i class=\"fa-solid fa-circle-xmark\"></i> ملغي\n                    </span>\n                </div>\n                <div class=\"border-t border-gray-100 pt-2.5 pb-2.5 space-y-1\">\n                    <div class=\"flex items-center text-xs text-gray-600 gap-2\">\n                        <i class=\"fa-regular fa-calendar text-gray-400 w-4\"></i>\n                        <span>٠١ أكتوبر ٢٠٢٣ | ١٦ صفر ١٤٤٥ هـ</span>\n                    </div>\n                    <div class=\"flex items-center text-xs text-gray-600 gap-2\">\n                        <i class=\"fa-solid fa-tag text-gray-400 w-4\"></i>\n                        <span>المجموع: <strong class=\"text-gray-900 font-bold\">٥٢٠.٠٠ ر.س</strong></span>\n                    </div>\n                </div>\n                <div class=\"border-t border-gray-100 pt-2.5 flex justify-between items-center\">\n                    <span class=\"text-[11px] text-rose-500\">تم الإلغاء من قبل العميل</span>\n                    <button class=\"text-xs text-saudi-green font-bold hover:underline flex items-center gap-1\">\n                        التفاصيل <i class=\"fa-solid fa-chevron-left text-[10px]\"></i>\n                    </button>\n                </div>\n            </div>\n\n        </div>\n\n        <!-- Bottom Navigation Bar -->\n        <div class=\"absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-2.5 flex justify-between items-center z-10 shadow-lg\">\n            <a href=\"#\" class=\"flex flex-col items-center text-gray-400 hover:text-saudi-green transition\">\n                <i class=\"fa-solid fa-house text-lg\"></i>\n                <span class=\"text-[10px] mt-1 font-medium\">الرئيسية</span>\n            </a>\n            <a href=\"#\" class=\"flex flex-col items-center text-gray-400 hover:text-saudi-green transition\">\n                <i class=\"fa-solid fa-th-large text-lg\"></i>\n                <span class=\"text-[10px] mt-1 font-medium\">الأقسام</span>\n            </a>\n            <a href=\"#\" class=\"flex flex-col items-center text-saudi-green\">\n                <i class=\"fa-solid fa-bag-shopping text-lg\"></i>\n                <span class=\"text-[10px] mt-1 font-bold\">الطلبات</span>\n            </a>\n            <a href=\"#\" class=\"flex flex-col items-center text-gray-400 hover:text-saudi-green transition\">\n                <i class=\"fa-solid fa-user text-lg\"></i>\n                <span class=\"text-[10px] mt-1 font-medium\">حسابي</span>\n            </a>\n        </div>\n\n        <!-- Home Indicator Bar -->\n        <div class=\"absolute bottom-1 left-1/2 -translate-x-1/2 w-32 h-1 bg-gray-300 rounded-full z-20 pointer-events-none\"></div>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 127,
+    "output": 3459
+  },
+  "ms": 10301,
+  "finish": "STOP",
+  "reasoningTokens": 893,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 25,
+  "score": 32,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 289,
+        "y": 224,
+        "width": 63,
+        "height": 26
+      },
+      "message": "\"#A-10293\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<h3 class=\"text-sm font-bold text-gray-800\">#A-10293</h3>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 289,
+        "y": 412.5,
+        "width": 63,
+        "height": 26
+      },
+      "message": "\"#A-10182\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<h3 class=\"text-sm font-bold text-gray-800\">#A-10182</h3>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 289,
+        "y": 601,
+        "width": 63,
+        "height": 26
+      },
+      "message": "\"#A-09941\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<h3 class=\"text-sm font-bold text-gray-800\">#A-09941</h3>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 289,
+        "y": 789.5,
+        "width": 63,
+        "height": 26
+      },
+      "message": "\"#A-09822\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<h3 class=\"text-sm font-bold text-gray-800\">#A-09822</h3>"
+    },
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 340,
+        "y": 59,
+        "width": 14,
+        "height": 16
+      },
+      "message": "\"arrow-right\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-arrow-right\"></i>"
+    },
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 38,
+        "y": 330.25,
+        "width": 6,
+        "height": 10
+      },
+      "message": "\"chevron-left\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-chevron-left text-[10px]\"></i>"
+    },
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 38,
+        "y": 895.75,
+        "width": 6,
+        "height": 10
+      },
+      "message": "\"chevron-left\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-chevron-left text-[10px]\"></i>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 318.796875,
+        "y": 115,
+        "width": 23,
+        "height": 39
+      },
+      "message": "Line height is 1.33 on \"الكل (٤)\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<button class=\"px-4 py-1.5 bg-saudi-green text-white text-xs font-semibold rounded-full shadow-sm\">الكل (٤)</button>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 235.421875,
+        "y": 115,
+        "width": 30,
+        "height": 39
+      },
+      "message": "Line height is 1.33 on \"نشطة (١)\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<button class=\"px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition\">نشطة (١)</button>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 137.234375,
+        "y": 115,
+        "width": 45,
+        "height": 39
+      },
+      "message": "Line height is 1.33 on \"المكتملة (٢)\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<button class=\"px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition\">المكتملة (٢)</button>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 47.09375,
+        "y": 115,
+        "width": 37,
+        "height": 39
+      },
+      "message": "Line height is 1.33 on \"الملغاة (١)\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<button class=\"px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition\">الملغاة (١)</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 318.796875,
+        "y": 115,
+        "width": 23,
+        "height": 39
+      },
+      "message": "\"الكل (٤)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"px-4 py-1.5 bg-saudi-green text-white text-xs font-semibold rounded-full shadow-sm\">الكل (٤)</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 235.421875,
+        "y": 115,
+        "width": 30,
+        "height": 39
+      },
+      "message": "\"نشطة (١)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition\">نشطة (١)</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 137.234375,
+        "y": 115,
+        "width": 45,
+        "height": 39
+      },
+      "message": "\"المكتملة (٢)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition\">المكتملة (٢)</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 47.09375,
+        "y": 115,
+        "width": 37,
+        "height": 39
+      },
+      "message": "\"الملغاة (١)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"px-4 py-1.5 bg-gray-100 text-gray-600 text-xs font-semibold rounded-full hover:bg-gray-200 transition\">الملغاة (١)</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 302,
+        "y": 205,
+        "width": 50,
+        "height": 23
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-gray-400 font-medium\">رقم الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 48,
+        "y": 203,
+        "width": 57,
+        "height": 23
+      },
+      "message": "\"في الطريق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"px-2.5 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold flex items-center gap-1\">\n                        <i class=\"fa-solid fa-truck-f"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 145,
+        "y": 266,
+        "width": 183,
+        "height": 23
+      },
+      "message": "\"٢٥ أكتوبر ٢٠٢٣ | ١٠ ربيع الثاني ١٤٤٥ هـ\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>٢٥ أكتوبر ٢٠٢٣ | ١٠ ربيع الثاني ١٤٤٥ هـ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 279,
+        "y": 286,
+        "width": 49,
+        "height": 23
+      },
+      "message": "\"المجموع:\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المجموع: <strong class=\"text-gray-900 font-bold\">٣٥٠.٠٠ ر.س</strong></span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 222,
+        "y": 286,
+        "width": 57,
+        "height": 23
+      },
+      "message": "\"٣٥٠.٠٠ ر.س\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<strong class=\"text-gray-900 font-bold\">٣٥٠.٠٠ ر.س</strong>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 259,
+        "y": 325,
+        "width": 93,
+        "height": 20
+      },
+      "message": "\"التوصيل المتوقع: غداً\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">التوصيل المتوقع: غداً</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 48,
+        "y": 323.25,
+        "width": 57,
+        "height": 23
+      },
+      "message": "\"تتبع الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"text-xs text-saudi-green font-bold hover:underline flex items-center gap-1\">\n                        تتبع الطلب <i class=\"fa-solid fa-chevron-lef"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 302,
+        "y": 393.5,
+        "width": 50,
+        "height": 23
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-gray-400 font-medium\">رقم الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 48,
+        "y": 391.5,
+        "width": 59,
+        "height": 23
+      },
+      "message": "\"تم التوصيل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold flex items-center gap-1\">\n                        <i class=\"fa-solid fa-c"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 149,
+        "y": 454.5,
+        "width": 179,
+        "height": 23
+      },
+      "message": "\"١٨ أكتوبر ٢٠٢٣ | ٣ ربيع الأول ١٤٤٥ هـ\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>١٨ أكتوبر ٢٠٢٣ | ٣ ربيع الأول ١٤٤٥ هـ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 279,
+        "y": 474.5,
+        "width": 49,
+        "height": 23
+      },
+      "message": "\"المجموع:\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المجموع: <strong class=\"text-gray-900 font-bold\">١,٢٥٠.٥٠ ر.س</strong></span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 213,
+        "y": 474.5,
+        "width": 66,
+        "height": 23
+      },
+      "message": "\"١,٢٥٠.٥٠ ر.س\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<strong class=\"text-gray-900 font-bold\">١,٢٥٠.٥٠ ر.س</strong>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 285,
+        "y": 513.5,
+        "width": 67,
+        "height": 20
+      },
+      "message": "\"تم التسليم بنجاح\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">تم التسليم بنجاح</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 52,
+        "y": 511.75,
+        "width": 65,
+        "height": 23
+      },
+      "message": "\"إعادة الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"text-xs text-saudi-green font-bold hover:underline flex items-center gap-1\">\n                        إعادة الطلب <i class=\"fa-solid fa-rotate-rig"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 302,
+        "y": 582,
+        "width": 50,
+        "height": 23
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-gray-400 font-medium\">رقم الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 48,
+        "y": 580,
+        "width": 59,
+        "height": 23
+      },
+      "message": "\"تم التوصيل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold flex items-center gap-1\">\n                        <i class=\"fa-solid fa-c"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 173,
+        "y": 643,
+        "width": 155,
+        "height": 23
+      },
+      "message": "\"٠٥ أكتوبر ٢٠٢٣ | ٢٠ صفر ١٤٤٥ هـ\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>٠٥ أكتوبر ٢٠٢٣ | ٢٠ صفر ١٤٤٥ هـ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 279,
+        "y": 663,
+        "width": 49,
+        "height": 23
+      },
+      "message": "\"المجموع:\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المجموع: <strong class=\"text-gray-900 font-bold\">١٨٠.٠٠ ر.س</strong></span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 227,
+        "y": 663,
+        "width": 52,
+        "height": 23
+      },
+      "message": "\"١٨٠.٠٠ ر.س\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<strong class=\"text-gray-900 font-bold\">١٨٠.٠٠ ر.س</strong>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 285,
+        "y": 702,
+        "width": 67,
+        "height": 20
+      },
+      "message": "\"تم التسليم بنجاح\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">تم التسليم بنجاح</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 53,
+        "y": 700.25,
+        "width": 79,
+        "height": 23
+      },
+      "message": "\"تقييم المنتجات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"text-xs text-saudi-green font-bold hover:underline flex items-center gap-1\">\n                        تقييم المنتجات <i class=\"fa-solid fa-star te"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 302,
+        "y": 770.5,
+        "width": 50,
+        "height": 23
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-gray-400 font-medium\">رقم الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 48,
+        "y": 768.5,
+        "width": 31,
+        "height": 23
+      },
+      "message": "\"ملغي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"px-2.5 py-1 bg-rose-50 text-rose-600 rounded-full text-xs font-bold flex items-center gap-1\">\n                        <i class=\"fa-solid fa-circle-"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 176,
+        "y": 831.5,
+        "width": 152,
+        "height": 23
+      },
+      "message": "\"٠١ أكتوبر ٢٠٢٣ | ١٦ صفر ١٤٤٥ هـ\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>٠١ أكتوبر ٢٠٢٣ | ١٦ صفر ١٤٤٥ هـ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 279,
+        "y": 851.5,
+        "width": 49,
+        "height": 23
+      },
+      "message": "\"المجموع:\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المجموع: <strong class=\"text-gray-900 font-bold\">٥٢٠.٠٠ ر.س</strong></span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 224,
+        "y": 851.5,
+        "width": 55,
+        "height": 23
+      },
+      "message": "\"٥٢٠.٠٠ ر.س\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<strong class=\"text-gray-900 font-bold\">٥٢٠.٠٠ ر.س</strong>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 241,
+        "y": 890.5,
+        "width": 111,
+        "height": 20
+      },
+      "message": "\"تم الإلغاء من قبل العميل\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-rose-500\">تم الإلغاء من قبل العميل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 48,
+        "y": 888.75,
+        "width": 49,
+        "height": 23
+      },
+      "message": "\"التفاصيل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"text-xs text-saudi-green font-bold hover:underline flex items-center gap-1\">\n                        التفاصيل <i class=\"fa-solid fa-chevron-left "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 332,
+        "y": 816,
+        "width": 33,
+        "height": 19
+      },
+      "message": "\"الرئيسية\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] mt-1 font-medium\">الرئيسية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 228.34375,
+        "y": 816,
+        "width": 33,
+        "height": 19
+      },
+      "message": "\"الأقسام\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] mt-1 font-medium\">الأقسام</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 125.6875,
+        "y": 816,
+        "width": 32,
+        "height": 19
+      },
+      "message": "\"الطلبات\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] mt-1 font-bold\">الطلبات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 25.03125,
+        "y": 816,
+        "width": 30,
+        "height": 19
+      },
+      "message": "\"حسابي\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] mt-1 font-medium\">حسابي</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 43,
+        "y": 15,
+        "width": 15,
+        "height": 12
+      },
+      "message": "margin-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<i class=\"fa-solid fa-wifi\"></i>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 25,
+        "y": 15,
+        "width": 14,
+        "height": 12
+      },
+      "message": "margin-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<i class=\"fa-solid fa-battery-full\"></i>"
+    }
+  ],
+  "unreadableStylesheets": 2,
+  "pageHeight": 844
+}

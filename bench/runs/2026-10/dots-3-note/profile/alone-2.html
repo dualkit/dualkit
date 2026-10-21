@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الملف الشخصي</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+    direction: rtl;
+  }
+  .phone {
+    max-width: 375px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+  }
+  .label {
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+  .value {
+    flex: 1;
+    margin: 0 10px;
+  }
+  .edit {
+    background: none;
+    border: none;
+    color: #007AFF;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <h2>الملف الشخصي</h2>
+    <div class="row">
+      <div>
+        <div class="label">الاسم:</div>
+        <div>Layla Al Mansouri</div>
+        <div class="label">البريد الإلكتروني:</div>
+        <div>layla@example.com</div>
+      </div>
+      <button class="edit">تعديل</button>
+    </div>
+    <div class="row">
+      <div>
+        <div class="label">رقم الهاتف:</div>
+        <div>+971 50 123 4567</div>
+      </div>
+      <button class="edit">تعديل</button>
+    </div>
+    <div class="row">
+      <div>
+        <div class="label">الآيبان:</div>
+        <div>AE07 0331 2345 6789 0123 456</div>
+      </div>
+      <button class="edit">تعديل</button>
+    </div>
+  </div>
+</body>
+</html>

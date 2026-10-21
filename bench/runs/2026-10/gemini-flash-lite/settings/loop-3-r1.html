@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إعدادات الحساب - بنك البحرين الوطني</title>
+  <!-- Google Fonts: IBM Plex Sans Arabic & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style>
+    /* Dualkit Type Pairing & RTL Base Rules */
+    :root {
+      --font-arabic: 'IBM Plex Sans Arabic', system-ui, sans-serif;
+      --font-latin: 'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-arabic);
+      background-color: #f1f5f9;
+      color: #0f172a;
+      margin: 0;
+      padding: 0;
+    }
+
+    :lang(ar) {
+      font-family: var(--font-arabic);
+      letter-spacing: 0 !important;
+    }
+
+    :lang(en) {
+      font-family: var(--font-latin);
+    }
+
+    /* Size floor enforcement for Arabic UI (minimum 14px) */
+    :lang(ar) .text-floor-sm {
+      font-size: 14px;
+    }
+
+    /* Directional chevron flipping for RTL */
+    .icon-chevron {
+      transition: transform 0.2s ease;
+    }
+    :dir(rtl) .icon-chevron {
+      transform: scaleX(-1);
+    }
+
+    /* Custom Toggle Switch Animation */
+    .toggle-checkbox:checked + .toggle-label {
+      background-color: #0d9488; /* Teal 600 - Bahraini banking accent */
+    }
+    .toggle-checkbox:checked + .toggle-label .toggle-dot {
+      transform: translateX(1.25rem);
+    }
+    :dir(rtl) .toggle-checkbox:checked + .toggle-label .toggle-dot {
+      transform: translateX(-1.25rem);
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-0 sm:p-4">
+
+  <!-- Mobile Phone Frame -->
+  <div class="w-full sm:max-w-[412px] h-screen sm:h-[844px] bg-slate-50 sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden border border-slate-200 relative">
+
+    <!-- App Bar / Header -->
+    <header class="bg-white px-6 pt-12 pb-4 border-b border-slate-100 flex items-center justify-between sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <button id="back-btn" aria-label="رجوع / Back" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition-colors">
+          <svg class="w-5 h-5 icon-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <h1 id="header-title" class="text-lg font-bold text-slate-900">الإعدادات</h1>
+      </div>
+      <!-- Language Switcher Button -->
+      <button id="lang-toggle" class="text-sm font-semibold px-3 py-1.5 rounded-full bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 transition-colors">
+        English
+      </button>
+    </header>
+
+    <!-- Scrollable Settings Content -->
+    <main class="flex-1 overflow-y-auto px-4 py-6 space-y-6 pb-12">
+
+      <!-- GROUP 1: Account (الحساب) -->
+      <section>
+        <h2 id="section-account" class="text-sm font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">الحساب</h2>
+        <div class="bg-white rounded-2xl shadow-xs border border-slate-100 divide-y divide-slate-100 overflow-hidden">
+          
+          <!-- Name Row -->
+          <div class="p-4 flex items-center justify-between hover:bg-slate-50/80 transition-colors cursor-pointer">
+            <div class="flex flex-col">
+              <span id="label-name" class="text-sm font-medium text-slate-900">الاسم الكامل</span>
+              <span class="text-sm text-slate-500">أحمد علي آل خليفة</span>
+            </div>
+            <svg class="w-5 h-5 text-slate-400 icon-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+
+          <!-- Phone Row -->
+          <div class="p-4 flex items-center justify-between hover:bg-slate-50/80 transition-colors cursor-pointer">
+            <div class="flex flex-col">
+              <span id="label-phone" class="text-sm font-medium text-slate-900">رقم الهاتف المحمول</span>
+              <bdi dir="ltr" class="text-sm text-slate-500 text-start">+973 3600 1234</bdi>
+            </div>
+            <svg class="w-5 h-5 text-slate-400 icon-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+
+          <!-- Language Row -->
+          <div id="language-row" class="p-4 flex items-center justify-between hover:bg-slate-50/80 transition-colors cursor-pointer">
+            <div class="flex flex-col">
+              <span id="label-lang" class="text-sm font-medium text-slate-900">لغة التطبيق</span>
+              <span id="current-lang-val" class="text-sm text-slate-500">العربية</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-teal-600 font-medium">العربية / English</span>
+              <svg class="w-5 h-5 text-slate-400 icon-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- GROUP 2: Security (الأمان) -->
+      <section>
+        <h2 id="section-security" class="text-sm font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">الأمان</h2>
+        <div class="bg-white rounded-2xl shadow-xs border border-slate-100 divide-y divide-slate-100 overflow-hidden">
+          
+          <!-- Face ID Toggle -->
+          <div class="p-4 flex items-center justify-between">
+            <div class="flex flex-col pe-4">
+              <span id="label-faceid" class="text-sm font-medium text-slate-900">بصمة الوجه</span>
+              <span id="desc-faceid" class="text-sm text-slate-500">تسجيل الدخول السريع وآمن</span>
+            </div>
+            <div class="relative inline-block w-11 h-6 select-none">
+              <input type="checkbox" id="toggle-faceid" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-slate-300 appearance-none cursor-pointer transition-all duration-300 z-10" />
+              <label for="toggle-faceid" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 cursor-pointer transition-colors duration-300"></label>
+            </div>
+          </div>
+
+          <!-- Two-step Login Toggle -->
+          <div class="p-4 flex items-center justify-between">
+            <div class="flex flex-col pe-4">
+              <span id="label-2fa" class="text-sm font-medium text-slate-900">التحقق بخطوتين</span>
+              <span id="desc-2fa" class="text-sm text-slate-500">حماية إضافية عند العمليات الحساسة</span>
+            </div>
+            <div class="relative inline-block w-11 h-6 select-none">
+              <input type="checkbox" id="toggle-2fa" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-slate-300 appearance-none cursor-pointer transition-all duration-300 z-10" />
+              <label for="toggle-2fa" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 cursor-pointer transition-colors duration-300"></label>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- GROUP 3: Notifications (الإشعارات) -->
+      <section>
+        <h2 id="section-notifications" class="text-sm font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">الإشعارات</h2>
+        <div class="bg-white rounded-2xl shadow-xs border border-slate-100 divide-y divide-slate-100 overflow-hidden">
+          
+          <!-- Transfers Notification -->
+          <div class="p-4 flex items-center justify-between">
+            <div class="flex flex-col pe-4">
+              <span id="label-transfers" class="text-sm font-medium text-slate-900">التحويلات المالية</span>
+              <span id="desc-transfers" class="text-sm text-slate-500">تنبيهات الإيداع والسحب الفوري</span>
+            </div>
+            <div class="relative inline-block w-11 h-6 select-none">
+              <input type="checkbox" id="toggle-transfers" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-slate-300 appearance-none cursor-pointer transition-all duration-300 z-10" />
+              <label for="toggle-transfers" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 cursor-pointer transition-colors duration-300"></label>
+            </div>
+          </div>
+
+          <!-- Offers Notification -->
+          <div class="p-4 flex items-center justify-between">
+            <div class="flex flex-col pe-4">
+              <span id="label-offers" class="text-sm font-medium text-slate-900">العروض والخصومات</span>
+              <span id="desc-offers" class="text-sm text-slate-500">عروض بطاقات بنك البحرين الوطني</span>
+            </div>
+            <div class="relative inline-block w-11 h-6 select-none">
+              <input type="checkbox" id="toggle-offers" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-slate-300 appearance-none cursor-pointer transition-all duration-300 z-10" />
+              <label for="toggle-offers" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 cursor-pointer transition-colors duration-300"></label>
+            </div>
+          </div>
+
+          <!-- Statements Notification -->
+          <div class="p-4 flex items-center justify-between">
+            <div class="flex flex-col pe-4">
+              <span id="label-statements" class="text-sm font-medium text-slate-900">كشوفات الحساب</span>
+              <span id="desc-statements" class="text-sm text-slate-500">التقرير الشهري لحسابك المصرفي</span>
+            </div>
+            <div class="relative inline-block w-11 h-6 select-none">
+              <input type="checkbox" id="toggle-statements" checked class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-slate-300 appearance-none cursor-pointer transition-all duration-300 z-10" />
+              <label for="toggle-statements" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-300 cursor-pointer transition-colors duration-300"></label>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- App Version Footer -->
+      <div class="text-center pt-2">
+        <p class="text-sm text-slate-400">الإصدار 4.2.0 (بنوك البحرين)</p>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Dictionary for bilingual toggle demonstration (Arabic & English)
+    const translations = {
+      ar: {
+        dir: 'rtl',
+        lang: 'ar',
+        headerTitle: 'الإعدادات',
+        langToggleBtn: 'English',
+        secAccount: 'الحساب',
+        labelName: 'الاسم الكامل',
+        valName: 'أحمد علي آل خليفة',
+        labelPhone: 'رقم الهاتف المحمول',
+        labelLang: 'لغة التطبيق',
+        valLang: 'العربية',
+        secSecurity: 'الأمان',
+        labelFaceId: 'بصمة الوجه',
+        descFaceId: 'تسجيل الدخول السريع وآمن',
+        label2fa: 'التحقق بخطوتين',
+        desc2fa: 'حماية إضافية عند العمليات الحساسة',
+        secNotifications: 'الإشعارات',
+        labelTransfers: 'التحويلات المالية',
+        descTransfers: 'تنبيهات الإيداع والسحب الفوري',
+        labelOffers: 'العروض والخصومات',
+        descOffers: 'عروض بطاقات بنك البحرين الوطني',
+        labelStatements: 'كشوفات الحساب',
+        descStatements: 'التقرير الشهري لحسابك المصرفي',
+        version: 'الإصدار 4.2.0 (بنوك البحرين)'
+      },
+      en: {
+        dir: 'ltr',
+        lang: 'en',
+        headerTitle: 'Settings',
+        langToggleBtn: 'العربية',
+        secAccount: 'Account',
+        labelName: 'Full Name',
+        valName: 'Ahmed Ali Al Khalifa',
+        labelPhone: 'Mobile Phone',
+        labelLang: 'App Language',
+        valLang: 'English',
+        secSecurity: 'Security',
+        labelFaceId: 'Face ID',
+        descFaceId: 'Fast and secure login',
+        label2fa: 'Two-Step Login',
+        desc2fa: 'Extra security for sensitive actions',
+        secNotifications: 'Notifications',
+        labelTransfers: 'Transfers',
+        descTransfers: 'Instant deposit and withdrawal alerts',
+        labelOffers: 'Offers & Discounts',
+        descOffers: 'NBB card promotions and rewards',
+        labelStatements: 'Statements',
+        descStatements: 'Monthly bank account reports',
+        version: 'Version 4.2.0 (Bahrain Banking)'
+      }
+    };
+
+    let currentLocale = 'ar';
+
+    const langToggleBtn = document.getElementById('lang-toggle');
+    const htmlRoot = document.documentElement;
+
+    function updateLanguage(locale) {
+      currentLocale = locale;
+      const t = translations[locale];
+
+      htmlRoot.setAttribute('lang', t.lang);
+      htmlRoot.setAttribute('dir', t.dir);
+
+      document.getElementById('header-title').textContent = t.headerTitle;
+      langToggleBtn.textContent = t.langToggleBtn;
+
+      document.getElementById('section-account').textContent = t.secAccount;
+      document.getElementById('label-name').textContent = t.labelName;
+      document.getElementById('label-phone').textContent = t.labelPhone;
+      document.getElementById('label-lang').textContent = t.labelLang;
+      document.getElementById('current-lang-val').textContent = t.valLang;
+
+      document.getElementById('section-security').textContent = t.secSecurity;
+      document.getElementById('label-faceid').textContent = t.labelFaceId;
+      document.getElementById('desc-faceid').textContent = t.descFaceId;
+      document.getElementById('label-2fa').textContent = t.label2fa;
+      document.getElementById('desc-2fa').textContent = t.desc2fa;
+
+      document.getElementById('section-notifications').textContent = t.secNotifications;
+      document.getElementById('label-transfers').textContent = t.labelTransfers;
+      document.getElementById('desc-transfers').textContent = t.descTransfers;
+      document.getElementById('label-offers').textContent = t.labelOffers;
+      document.getElementById('desc-offers').textContent = t.descOffers;
+      document.getElementById('label-statements').textContent = t.labelStatements;
+      document.getElementById('desc-statements').textContent = t.descStatements;
+    }
+
+    langToggleBtn.addEventListener('click', () => {
+      const nextLocale = currentLocale === 'ar' ? 'en' : 'ar';
+      updateLanguage(nextLocale);
+    });
+
+    // Allow clicking the language row to toggle as well
+    document.getElementById('language-row').addEventListener('click', () => {
+      const nextLocale = currentLocale === 'ar' ? 'en' : 'ar';
+      updateLanguage(nextLocale);
+    });
+  </script>
+</body>
+</html>

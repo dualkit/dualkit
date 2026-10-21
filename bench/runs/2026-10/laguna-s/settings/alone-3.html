@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الإعدادات - تطبيق بنك البحرين</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f7;
+            color: #333;
+            direction: rtl;
+            text-align: right;
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+
+        .status-bar {
+            height: 20px;
+            background-color: #007AFF;
+            color: white;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 8px;
+        }
+
+        .header {
+            background-color: #007AFF;
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .settings-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .settings-group {
+            background-color: white;
+            border-radius: 12px;
+            margin: 16px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .group-title {
+            background-color: #f8f9fa;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .settings-row:last-child {
+            border-bottom: none;
+        }
+
+        .row-label {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .row-title {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 2px;
+        }
+
+        .row-value {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .chevron {
+            margin-left: 12px;
+            font-size: 18px;
+            color: #ccc;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 28px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #007AFF;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        .toggle-container {
+            margin-left: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="status-bar">
+        <span>9:41</span>
+        <span>●●● ●●● — 100%</span>
+    </div>
+
+    <div class="header">
+        <button class="back-button">←</button>
+        <h1>الإعدادات</h1>
+        <div style="width: 24px;"></div>
+    </div>
+
+    <div class="settings-container">
+        <!-- Account Group -->
+        <div class="settings-group">
+            <div class="group-title">الحساب</div>
+            
+            <div class="settings-row">
+                <div class="row-label">
+                    <div class="row-title">الاسم</div>
+                    <div class="row-value">محمد علي أحمد</div>
+                </div>
+                <div class="chevron">›</div>
+            </div>
+
+            <div class="settings-row">
+                <div class="row-label">
+                    <div class="row-title">رقم الهاتف</div>
+                    <div class="row-value">+973 3600 1234</div>
+                </div>
+                <div class="chevron">›</div>
+            </div>
+
+            <div class="settings-row">
+                <div class="row-label">
+                    <div class="row-title">اللغة</div>
+                    <div class="row-value">العربية</div>
+                </div>
+                <div class="chevron">›</div>
+            </div>
+        </div>
+
+        <!-- Security Group -->
+        <div class="settings-group">
+            <div class="group-title">الأمان</div>
+            
+            <div class="settings-row">
+                <div class="row-label">
+                    <div class="row-title">مصادقة الوجه (Face ID)</div>
+                    <div class="row-value">تفعيل تسجيل الدخول باستخدام الوجه</div>
+                </div>
+                <div class="toggle-container">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-row">
+                <div class="row-label">
+                    <div class="row-title">تسجيل الدخول ثنائي الخطوات</div>
+                    <div class="row-value">طلب رمز تحقق عند تسجيل الدخول</div>
+                </div>
+                <div class="toggle-container">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Group -->
+        <div class="settings-group">
+            <div class="group-title">الإشعارات</div>
+            
+            <div class="settings-row">
+                <div class="row-label">
+                    <div class="row-title">التحويلات البنكية</div>
+                    <div class="row-value">إشعار عند إتمام أي تحويل</div>
+                </div>
+                <div class="toggle-container">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-row">
+                <div class="row-label">
+                    <div class="row-title">العروض والعروض الخاصة</div>
+                    <div class="row-value">إشعار بأحدث العروض المميزة</div>
+                </div>
+                <div class="toggle-container">
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-row">
+                <div class="row-label">
+                    <div class="row-title">كشوفات الحساب</div>
+                    <div class="row-value">إشعار باستلام الكشف الشهري</div>
+                </div>
+                <div class="toggle-container">
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

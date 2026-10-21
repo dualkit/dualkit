@@ -1,0 +1,291 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "support-chat",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-10-21T17:30:31.039Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>دردشة الدعم - كويتيل</title>\n  <style>\n    :root {\n      --bg: #f5f7fa;\n      --header-bg: #0078d4;\n      --header-text: #ffffff;\n      --bubble-agent: #ffffff;\n      --bubble-customer: #e4f0fd;\n      --text-primary: #1a1a1a;\n      --text-secondary: #5a5a5a;\n      --input-bg: #ffffff;\n      --input-border: #d0d7de;\n      --send-btn: #0078d4;\n      --send-btn-text: #ffffff;\n      --time-color: #8a8a8a;\n    }\n\n    * {\n      margin: 0;\n      padding: 0;\n      box-sizing: border-box;\n    }\n\n    body {\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n      background-color: var(--bg);\n      color: var(--text-primary);\n      max-width: 480px;\n      margin: 0 auto;\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n    }\n\n    .header {\n      background-color: var(--header-bg);\n      color: var(--header-text);\n      padding: 16px 20px;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n    }\n\n    .header .title {\n      font-size: 18px;\n      font-weight: 600;\n    }\n\n    .header .back-btn {\n      background: none;\n      border: none;\n      color: var(--header-text);\n      font-size: 16px;\n      cursor: pointer;\n    }\n\n    .chat-container {\n      flex: 1;\n      overflow-y: auto;\n      padding: 16px;\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    .message {\n      max-width: 80%;\n      line-height: 1.6;\n    }\n\n    .message.agent {\n      align-self: flex-start;\n      background-color: var(--bubble-agent);\n      border-top-left-radius: 4px;\n      border-top-right-radius: 16px;\n      border-bottom-right-radius: 16px;\n      border-bottom-left-radius: 16px;\n      padding: 12px 16px;\n      box-shadow: 0 1px 2px rgba(0,0,0,0.05);\n    }\n\n    .message.customer {\n      align-self: flex-end;\n      background-color: var(--bubble-customer);\n      border-top-left-radius: 16px;\n      border-top-right-radius: 16px;\n      border-bottom-right-radius: 4px;\n      border-bottom-left-radius: 16px;\n      padding: 12px 16px;\n      box-shadow: 0 1px 2px rgba(0,0,0,0.05);\n    }\n\n    .message .sender-name {\n      font-weight: 600;\n      font-size: 13px;\n      margin-bottom: 4px;\n      color: var(--header-bg);\n    }\n\n    .message .text {\n      font-size: 15px;\n      word-wrap: break-word;\n    }\n\n    .message .time {\n      font-size: 11px;\n      color: var(--time-color);\n      margin-top: 6px;\n      text-align: left;\n    }\n\n    .message.customer .time {\n      text-align: right;\n    }\n\n    .input-area {\n      display: flex;\n      align-items: center;\n      padding: 12px 16px;\n      background-color: var(--input-bg);\n      border-top: 1px solid var(--input-border);\n      gap: 12px;\n    }\n\n    .input-area textarea {\n      flex: 1;\n      border: 1px solid var(--input-border);\n      border-radius: 20px;\n      padding: 10px 16px;\n      font-size: 15px;\n      resize: none;\n      outline: none;\n      background-color: #fafbfc;\n      min-height: 40px;\n      max-height: 120px;\n    }\n\n    .input-area .send-btn {\n      background-color: var(--send-btn);\n      color: var(--send-btn-text);\n      border: none;\n      border-radius: 50%;\n      width: 44px;\n      height: 44px;\n      font-size: 18px;\n      cursor: pointer;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      flex-shrink: 0;\n    }\n\n    .input-area .send-btn:disabled {\n      background-color: #b3c7df;\n      cursor: not-allowed;\n    }\n\n    /* Bidi isolation for mixed-script content */\n    .ltr-run {\n      direction: ltr;\n      display: inline-block;\n      unicode-bidi: embed;\n    }\n\n    /* Scrollbar styling */\n    .chat-container::-webkit-scrollbar {\n      width: 6px;\n    }\n\n    .chat-container::-webkit-scrollbar-track {\n      background: transparent;\n    }\n\n    .chat-container::-webkit-scrollbar-thumb {\n      background: rgba(0,0,0,0.1);\n      border-radius: 3px;\n    }\n\n    .chat-container::-webkit-scrollbar-thumb:hover {\n      background: rgba(0,0,0,0.2);\n    }\n  </style>\n</head>\n<body>\n  <div class=\"header\">\n    <button class=\"back-btn\" aria-label=\"رجوع\">←</button>\n    <div class=\"title\">دردشة الدعم</div>\n    <div style=\"width: 24px;\"></div>\n  </div>\n\n  <div class=\"chat-container\">\n    <!-- Message 1: Agent greeting -->\n    <div class=\"message agent\">\n      <div class=\"sender-name\">سارة</div>\n      <div class=\"text\">مرحباً بك! أنا سارا من فريق الدعم الخاص بشركة كويتيل. كيف يمكنني مساعدتك اليوم؟</div>\n      <div class=\"time\">10:15 ص</div>\n    </div>\n\n    <!-- Message 2: Customer inquiry -->\n    <div class=\"message customer\">\n      <div class=\"text\">مرحباً سارة، عندي مشكلة في تفعيل <span class=\"ltr-run\">eSIM</span> على هاتفي. جربت كل الخطوات لكن ما نجحت.</div>\n      <div class=\"time\">10:17 ص</div>\n    </div>\n\n    <!-- Message 3: Agent response -->\n    <div class=\"message agent\">\n      <div class=\"sender-name\">سارة</div>\n      <div class=\"text\">أهلاً وسهلاً، شكراً لتواصلك معنا. من فضلك أرسل لي رقم الطلب <span class=\"ltr-run\">(TX-48213)</span> الخاص بك حتى أتمكن من مراجعته.</div>\n      <div class=\"time\">10:18 ص</div>\n    </div>\n\n    <!-- Message 4: Customer provides order number -->\n    <div class=\"message customer\">\n      <div class=\"text\">بالطبع، رقم الطلب هو <span class=\"ltr-run\">TX-48213</span>. وهل يمكنك مساعدتي في حل المشكلة؟</div>\n      <div class=\"time\">10:19 ص</div>\n    </div>\n\n    <!-- Message 5: Agent troubleshooting -->\n    <div class=\"message agent\">\n      <div class=\"sender-name\">سارة</div>\n      <div class=\"text\">جاري مراجعة طلبكم الآن. يبدو أن هناك مشكلة في تفعيل <span class=\"ltr-run\">eSIM</span> على شبكة <span class=\"ltr-run\">5G</span>. سأعيد إرسال الرابط لكم خلال دقيقة، يرجى المحاولة مرة أخرى.</div>\n      <div class=\"time\">10:21 ص</div>\n    </div>\n\n    <!-- Message 6: Customer confirmation -->\n    <div class=\"message customer\">\n      <div class=\"text\">شكراً لكِ سارة! نجح تفعيل <span class=\"ltr-run\">eSIM</span> الآن على شبكة <span class=\"ltr-run\">5G</span>. كل شيء يعمل بشكل جيد الآن.</div>\n      <div class=\"time\">10:23 ص</div>\n    </div>\n  </div>\n\n  <div class=\"input-area\">\n    <textarea id=\"message-input\" placeholder=\"اكتب رسالتك هنا...\" rows=\"1\"></textarea>\n    <button id=\"send-button\" class=\"send-btn\" disabled>➤</button>\n  </div>\n\n  <script>\n    const messageInput = document.getElementById('message-input');\n    const sendButton = document.getElementById('send-button');\n\n    messageInput.addEventListener('input', function() {\n      sendButton.disabled = this.value.trim().length === 0;\n    });\n\n    sendButton.addEventListener('click', function() {\n      if (messageInput.value.trim()) {\n        // In a real app, this would send the message\n        messageInput.value = '';\n        sendButton.disabled = true;\n      }\n    });\n\n    // Auto-resize textarea\n    messageInput.addEventListener('input', function() {\n      this.style.height = 'auto';\n      this.style.height = (this.scrollHeight) + 'px';\n    });\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6488,
+    "output": 2546
+  },
+  "ms": 52820,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 51,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 103.609375,
+        "y": 184.796875,
+        "width": 254.390625,
+        "height": 17.59375
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"time\">10:15 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 103.609375,
+        "y": 480.78125,
+        "width": 254.390625,
+        "height": 17.59375
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"time\">10:18 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 103.609375,
+        "y": 776.765625,
+        "width": 254.390625,
+        "height": 17.59375
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"time\">10:21 ص</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 150.5,
+        "y": 17,
+        "width": 97.015625,
+        "height": 20
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"title\">دردشة الدعم</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 330,
+        "y": 84,
+        "width": 28,
+        "height": 15
+      },
+      "message": "\"سارة\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"sender-name\">سارة</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 103.609375,
+        "y": 186.796875,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:15 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">10:15 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 242.796875,
+        "y": 322.390625,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:17 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">10:17 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 330,
+        "y": 379.984375,
+        "width": 28,
+        "height": 15
+      },
+      "message": "\"سارة\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"sender-name\">سارة</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 103.609375,
+        "y": 482.78125,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:18 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">10:18 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 242.796875,
+        "y": 594.375,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:19 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">10:19 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 330,
+        "y": 651.96875,
+        "width": 28,
+        "height": 15
+      },
+      "message": "\"سارة\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"sender-name\">سارة</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 103.609375,
+        "y": 778.765625,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:21 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">10:21 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 242.796875,
+        "y": 914.359375,
+        "width": 43.59375,
+        "height": 12
+      },
+      "message": "\"10:23 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"time\">10:23 ص</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 70,
+        "width": 286.390625,
+        "height": 144.390625
+      },
+      "message": "border-top-left-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">\n      <div class=\"sender-name\">سارة</div>\n      <div class=\"text\">مرحباً بك! أنا سارا من فريق الدعم الخاص بشركة كويتيل. كيف يمكنني م"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 230.390625,
+        "width": 286.390625,
+        "height": 119.59375
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">\n      <div class=\"text\">مرحباً سارة، عندي مشكلة في تفعيل <span class=\"ltr-run\">eSIM</span> على هاتفي. جربت كل الخطوات لكن ما نجحت"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 365.984375,
+        "width": 286.390625,
+        "height": 144.390625
+      },
+      "message": "border-top-left-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">\n      <div class=\"sender-name\">سارة</div>\n      <div class=\"text\">أهلاً وسهلاً، شكراً لتواصلك معنا. من فضلك أرسل لي رقم الطلب <span "
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 526.375,
+        "width": 286.390625,
+        "height": 95.59375
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">\n      <div class=\"text\">بالطبع، رقم الطلب هو <span class=\"ltr-run\">TX-48213</span>. وهل يمكنك مساعدتي في حل المشكلة؟</div>\n      "
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 637.96875,
+        "width": 286.390625,
+        "height": 168.390625
+      },
+      "message": "border-top-left-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">\n      <div class=\"sender-name\">سارة</div>\n      <div class=\"text\">جاري مراجعة طلبكم الآن. يبدو أن هناك مشكلة في تفعيل <span class=\"l"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 822.359375,
+        "width": 286.390625,
+        "height": 119.59375
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">\n      <div class=\"text\">شكراً لكِ سارة! نجح تفعيل <span class=\"ltr-run\">eSIM</span> الآن على شبكة <span class=\"ltr-run\">5G</span>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 1027
+}

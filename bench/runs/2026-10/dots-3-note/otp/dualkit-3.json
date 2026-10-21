@@ -1,0 +1,67 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "otp",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-10-21T17:02:30.457Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>البنك السعودي — إدخال الرمز</title>\n<style>\n  /* ---- Arabic type tokens (dualkit-type-pairing) ---- */\n  :lang(ar) {\n    --type-label-size: 14px;\n    --type-caption-size: 14px;\n    --type-body-size: 16px;\n    letter-spacing: 0;\n    text-transform: none;\n    font-style: normal;\n    line-height: 1.7;\n  }\n\n  /* ---- Reset & base ---- */\n  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }\n\n  body {\n    font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;\n    min-height: 100vh;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    background: #f5f5f5;\n    color: #1a1a1a;\n    padding: 24px 16px;\n    direction: rtl;\n    -webkit-text-size-adjust: 100%;\n  }\n\n  /* ---- Card ---- */\n  .card {\n    width: 100%;\n    max-width: 420px;\n    background: #ffffff;\n    border-radius: 16px;\n    padding: 40px 28px 32px;\n    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);\n    text-align: center;\n  }\n\n  /* ---- Logo / brand mark ---- */\n  .brand-mark {\n    width: 56px;\n    height: 56px;\n    margin: 0 auto 24px;\n    background: #0052a4;\n    border-radius: 12px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    color: #fff;\n    font-size: 28px;\n    font-weight: 700;\n  }\n\n  /* ---- Title ---- */\n  h1 {\n    font-size: 22px;\n    font-weight: 700;\n    color: #1a1a1a;\n    margin-bottom: 10px;\n    line-height: 1.4;\n  }\n\n  /* ---- Subtitle ---- */\n  .subtitle {\n    font-size: 15px;\n    color: #555555;\n    line-height: 1.6;\n    margin-bottom: 36px;\n  }\n\n  .subtitle bdi {\n    font-weight: 600;\n    color: #1a1a1a;\n  }\n\n  /* ---- OTP boxes ---- */\n  .code-form {\n    display: flex;\n    gap: 8px;\n    justify-content: center;\n    margin-bottom: 28px;\n    /* force LTR run for digit entry */\n    direction: ltr;\n  }\n\n  .code-form input {\n    width: 46px;\n    height: 54px;\n    text-align: center;\n    font-size: 22px;\n    font-weight: 600;\n    font-variant-numeric: tabular-nums;\n    color: #1a1a1a;\n    background: #ffffff;\n    border: 1.5px solid #d0d0d0;\n    border-radius: 10px;\n    outline: none;\n    transition: border-color 0.18s, box-shadow 0.18s;\n    -moz-appearance: textfield;\n  }\n\n  .code-form input::-webkit-outer-spin-button,\n  .code-form input::-webkit-inner-spin-button {\n    -webkit-appearance: none;\n    margin: 0;\n  }\n\n  .code-form input:focus {\n    border-color: #0052a4;\n    box-shadow: 0 0 0 3px rgba(0, 82, 164, 0.15);\n  }\n\n  /* ---- Countdown ---- */\n  .countdown {\n    font-size: 14px;\n    color: #666666;\n    margin-bottom: 28px;\n    font-variant-numeric: tabular-nums;\n  }\n\n  .countdown .timer {\n    font-weight: 600;\n    color: #0052a4;\n  }\n\n  /* ---- Verify button ---- */\n  #verify-btn {\n    width: 100%;\n    padding: 14px;\n    font-size: 16px;\n    font-weight: 600;\n    color: #ffffff;\n    background: #0052a4;\n    border: none;\n    border-radius: 10px;\n    cursor: pointer;\n    transition: background 0.18s;\n  }\n\n  #verify-btn:hover:not(:disabled) { background: #004080; }\n  #verify-btn:active:not(:disabled) { background: #003566; }\n  #verify-btn:disabled { background: #cccccc; cursor: not-allowed; }\n\n  /* ---- Footer link ---- */\n  .footer-link {\n    margin-top: 24px;\n    font-size: 13px;\n    color: #888888;\n  }\n</style>\n</head>\n<body>\n\n  <div class=\"card\">\n    <!-- Brand mark -->\n    <div class=\"brand-mark\">ال</div>\n\n    <!-- Title -->\n    <h1>أدخل الرمز</h1>\n\n    <!-- Subtitle -->\n    <p class=\"subtitle\">\n      أرسلنا رمزًا مكوّنًا من 6 أرقام إلى<br>\n      <bdi dir=\"ltr\">+966 55 123 4567</bdi>\n    </p>\n\n    <!-- OTP input boxes -->\n    <form class=\"code-form\" id=\"otp-form\" autocomplete=\"one-time-code\" autocomplete=\"off\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" data-index=\"0\" aria-label=\"الرقم الأول\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" data-index=\"1\" aria-label=\"الرقم الثاني\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" data-index=\"2\" aria-label=\"الرقم الثالث\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" data-index=\"3\" aria-label=\"الرقم الرابع\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" data-index=\"4\" aria-label=\"الرقم الخامس\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" data-index=\"5\" aria-label=\"الرقم Sixth\">\n    </form>\n\n    <!-- Countdown -->\n    <p class=\"countdown\">\n      أعد الإرسال خلال <span class=\"timer\" id=\"timer\">٠:٤٥</span>\n    </p>\n\n    <!-- Verify button -->\n    <button type=\"submit\" id=\"verify-btn\">acco</button>\n\n    <!-- Footer -->\n    <p class=\"footer-link\">لا تlemn الرمز؟ تواصل مع الدعم</p>\n  </div>\n\n<script>\n(function () {\n  const form      = document.getElementById('otp-form');\n  const inputs    = Array.from(form.querySelectorAll('input'));\n  const verifyBtn = document.getElementById('verify-btn');\n  const timerEl   = document.getElementById('timer');\n\n  /* ---- Move focus between boxes ---- */\n  inputs.forEach((input, index) => {\n    input.addEventListener('input', function () {\n      this.value = this.value.replace(/\\D/g, '').slice(0, 1);\n      if (this.value && index < inputs.length - 1) {\n        inputs[index + 1].focus();\n      }\n    });\n\n    input.addEventListener('keydown', function (e) {\n      if (e.key === 'Backspace' && !this.value && index > 0) {\n        inputs[index - 1].focus();\n      }\n      if (e.key === 'ArrowRight' && index < inputs.length - 1) {\n        inputs[index + 1].focus();\n      }\n      if (e.key === 'ArrowLeft' && index > 0) {\n        inputs[index - 1].focus();\n      }\n    });\n\n    input.addEventListener('paste', function (e) {\n      e.preventDefault();\n      const data = e.clipboardData.getData('text')\n                    .replace(/\\D/g, '')\n                    .slice(0, 6);\n      data.split('').forEach((ch, i) => {\n        if (inputs[i]) inputs[i].value = ch;\n      });\n      const last = Math.min(data.length, 5);\n      inputs[last]?.focus();\n    });\n  });\n\n  /* ---- Submit ---- */\n  form.addEventListener('submit', function (e) {\n    e.preventDefault();\n    const code = inputs.map(i => i.value).join('');\n    if (code.length !== 6) return;\n\n    verifyBtn.textContent = 'acco...';\n    verifyBtn.disabled = true;\n\n    // Simulate API call\n    setTimeout(function () {\n      verifyBtn.textContent = 'acco';\n      verifyBtn.disabled = false;\n    }, 2000);\n  });\n\n  /* ---- Countdown (Arabic-Indic digits) ---- */\n  const arabicDigits = '٠١٢٣٤٥٦٧٨٩';\n  const toArabic = function (n) {\n    return n.toString().split('').map(function (d) { return arabicDigits[d]; }).join('');\n  };\n\n  let seconds = 45;\n  const tick = function () {\n    if (seconds < 0) {\n      timerEl.textContent = 'أعد الإرسال';\n      return;\n    }\n    const m = Math.floor(seconds / 60);\n    const s = seconds % 60;\n    timerEl.textContent = toArabic(m) + ':' + toArabic(s);\n    seconds--;\n  };\n\n  tick();\n  setInterval(tick, 1000);\n})();\n</script>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6304,
+    "output": 4663
+  },
+  "ms": 45919,
+  "finish": "stop",
+  "reasoningTokens": 2307,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 88,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 129.328125,
+        "y": 499.90625,
+        "width": 28.671875,
+        "height": 16
+      },
+      "message": "\"٠:٤٥\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"timer\" id=\"timer\">٠:٤٥</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 181,
+        "y": 214.21875,
+        "width": 28,
+        "height": 31
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"brand-mark\">ال</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 103.359375,
+        "y": 630.890625,
+        "width": 183.265625,
+        "height": 15
+      },
+      "message": "\"لا تlemn الرمز؟ تواصل مع الدعم\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"footer-link\">لا تlemn الرمز؟ تواصل مع الدعم</p>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

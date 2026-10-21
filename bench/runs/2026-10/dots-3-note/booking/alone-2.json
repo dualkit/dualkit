@@ -1,0 +1,53 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "booking",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T17:45:49.712Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>مواعيد العيادة</title>\n<style>\n  body {\n    font-family: 'Arial', sans-serif;\n    background-color: #f5f5f5;\n    margin: 0;\n    padding: 0;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    min-height: 100vh;\n  }\n  .container {\n    width: 100%;\n    max-width: 480px;\n    background: #fff;\n    padding: 16px;\n    box-sizing: border-box;\n    direction: rtl;\n  }\n  .header {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 16px;\n  }\n  .header button {\n    background: none;\n    border: none;\n    font-size: 24px;\n    color: #333;\n    cursor: pointer;\n  }\n  #monthName {\n    font-size: 20px;\n    margin: 0 8px;\n  }\n  .calendar {\n    display: grid;\n    grid-template-columns: repeat(7, 1fr);\n    gap: 4px;\n    margin-bottom: 16px;\n  }\n  .day-header {\n    text-align: center;\n    font-weight: bold;\n    padding: 8px 0;\n    background: #eee;\n    border-radius: 4px;\n  }\n  .day-cell {\n    text-align: center;\n    padding: 8px 0;\n    border: 1px solid #ddd;\n    border-radius: 4px;\n    cursor: pointer;\n  }\n  .day-cell:hover {\n    background: #f0f0f0;\n  }\n  .today {\n    background: #007bff;\n    color: #fff;\n  }\n  .selected {\n    background: #28a745;\n    color: #fff;\n  }\n  .time-slots {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 8px;\n    margin-bottom: 16px;\n  }\n  .time-slot {\n    padding: 8px 12px;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    background: #f9f9f9;\n    cursor: pointer;\n  }\n  .time-slot:hover {\n    background: #e9e9e9;\n  }\n  .time-slot.selected {\n    background: #007bff;\n    color: #fff;\n  }\n  .doctor {\n    margin-bottom: 16px;\n    font-size: 16px;\n    text-align: center;\n  }\n  .confirm-btn {\n    width: 100%;\n    padding: 12px;\n    background: #28a745;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    font-size: 16px;\n    cursor: pointer;\n  }\n  .confirm-btn:hover {\n    background: #218838;\n  }\n</style>\n</head>\n<body>\n<div class=\"container\">\n  <div class=\"header\">\n    <button id=\"prevMonth\">‹</button>\n    <h2 id=\"monthName\"></h2>\n    <button id=\"nextMonth\">›</button>\n  </div>\n  <div class=\"calendar\" id=\"calendar\">\n    <!-- Day headers will be added by JS -->\n  </div>\n  <div class=\"time-slots\" id=\"timeSlots\">\n    <!-- Time slots will be added by JS -->\n  </div>\n  <div class=\"doctor\">\n    <p>الدكتور: د. أحمد محمد</p>\n  </div>\n  <button class=\"confirm-btn\" id=\"confirmBtn\">تأكيد الحجز</button>\n</div>\n\n<script>\n  // Arabic month names\n  const monthNames = [\"يناير\", \"فبراير\", \"مارس\", \"أبريل\", \"مايو\", \"يونيو\", \"يوليو\", \"أغسطس\", \"سبتمبر\", \"أكتوبر\", \"نوفمبر\", \"ديسمبر\"];\n  // Day names starting Saturday\n  const dayNames = [\"سبت\", \"أحد\", \"إثنين\", \"ثلاثاء\", \"أربعاء\", \"خميس\", \"جمعة\"];\n\n  let currentDate = new Date();\n  let currentMonth = currentDate.getMonth();\n  let currentYear = currentDate.getFullYear();\n\n  const calendarEl = document.getElementById('calendar');\n  const monthNameEl = document.getElementById('monthName');\n  const prevBtn = document.getElementById('prevMonth');\n  const nextBtn = document.getElementById('nextMonth');\n  const timeSlotsEl = document.getElementById('timeSlots');\n  const confirmBtn = document.getElementById('confirmBtn');\n\n  // Generate time slots\n  function generateTimeSlots() {\n    timeSlotsEl.innerHTML = '';\n    for (let h = 9; h <= 12; h++) {\n      for (let m = 0; m < 60; m += 30) {\n        if (h === 12 && m > 0) break; // only 12:00\n        const time = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;\n        const slot = document.createElement('div');\n        slot.className = 'time-slot';\n        slot.textContent = time;\n        slot.addEventListener('click', () => {\n          document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));\n          slot.classList.add('selected');\n        });\n        timeSlotsEl.appendChild(slot);\n      }\n    }\n  }\n\n  // Generate calendar\n  function generateCalendar() {\n    calendarEl.innerHTML = '';\n    // Add day headers\n    const headerRow = document.createElement('div');\n    headerRow.style.display = 'contents';\n    dayNames.forEach(day => {\n      const header = document.createElement('div');\n      header.className = 'day-header';\n      header.textContent = day;\n      headerRow.appendChild(header);\n    });\n    calendarEl.appendChild(headerRow);\n\n    // Get first day of month and number of days\n    const firstDay = new Date(currentYear, currentMonth, 1);\n    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();\n    const startDayIndex = (firstDay.getDay() + 1) % 7; // Saturday=0\n\n    // Create grid\n    const grid = document.createElement('div');\n    grid.style.display = 'contents';\n\n    // Empty cells\n    for (let i = 0; i < startDayIndex; i++) {\n      const empty = document.createElement('div');\n      empty.className = 'day-cell';\n      empty.style.visibility = 'hidden';\n      grid.appendChild(empty);\n    }\n\n    // Day cells\n    const today = new Date();\n    for (let day = 1; day <= daysInMonth; day++) {\n      const cell = document.createElement('div');\n      cell.className = 'day-cell';\n      cell.textContent = day;\n      // Check if today\n      if (today.getDate() === day && today.getMonth() === currentMonth && today.getFullYear() === currentYear) {\n        cell.classList.add('today');\n      }\n      cell.addEventListener('click', () => {\n        document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('selected'));\n        cell.classList.add('selected');\n      });\n      grid.appendChild(cell);\n    }\n\n    calendarEl.appendChild(grid);\n\n    // Update month name\n    monthNameEl.textContent = `${monthNames[currentMonth]} ${currentYear}`;\n  }\n\n  // Event listeners for navigation\n  prevBtn.addEventListener('click', () => {\n    currentMonth--;\n    if (currentMonth < 0) {\n      currentMonth = 11;\n      currentYear--;\n    }\n    generateCalendar();\n  });\n\n  nextBtn.addEventListener('click', () => {\n    currentMonth++;\n    if (currentMonth > 11) {\n      currentMonth = 0;\n      currentYear++;\n    }\n    generateCalendar();\n  });\n\n  // Confirm button\n  confirmBtn.addEventListener('click', () => {\n    const selectedDate = document.querySelector('.day-cell.selected');\n    const selectedTime = document.querySelector('.time-slot.selected');\n    if (selectedDate && selectedTime) {\n      alert(`تم تأكيد الحجز في ${selectedDate.textContent} ${monthNameEl.textContent} ${currentYer} الساعة ${selectedTime.textContent}`);\n    } else {\n      alert('يرجى اختيار اليوم والوقت');\n    }\n  });\n\n  // Initialize\n  generateTimeSlots();\n  generateCalendar();\n</script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 146,
+    "output": 10225
+  },
+  "ms": 103657,
+  "finish": "stop",
+  "reasoningTokens": 8801,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 145.46875,
+        "y": 170.5,
+        "width": 99.0625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h2 id=\"monthName\">أكتوبر 2026</h2>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 158.765625,
+        "y": 647.5,
+        "width": 72.453125,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"confirm-btn\" id=\"confirmBtn\">تأكيد الحجز</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

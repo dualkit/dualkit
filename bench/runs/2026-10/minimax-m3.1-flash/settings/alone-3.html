@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f7f6">
+  <title>الإعدادات</title>
+  <style>
+    :root {
+      --primary: #006d5b;
+      --primary-dark: #005347;
+      --primary-soft: #e6f4f0;
+      --background: #f4f7f6;
+      --surface: #ffffff;
+      --text: #172522;
+      --muted: #6d7b77;
+      --border: #e5ebe9;
+      --switch-off: #d8dfdd;
+      --shadow: 0 10px 30px rgba(18, 55, 47, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Tahoma, Arial, sans-serif;
+      background: var(--background);
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      padding-bottom: 32px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 90% 0%, rgba(0, 109, 91, 0.08), transparent 30%),
+        var(--background);
+    }
+
+    .status-bar {
+      height: 30px;
+      padding: 8px 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #17352f;
+      font-size: 12px;
+      font-weight: 700;
+      direction: ltr;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-icons svg {
+      display: block;
+    }
+
+    .header {
+      padding: 19px 20px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 25px;
+      line-height: 1.3;
+      font-weight: 800;
+    }
+
+    .back-button {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 5px 16px rgba(20, 50, 44, 0.05);
+    }
+
+    .back-button svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    main {
+      padding: 0 16px;
+    }
+
+    .section {
+      margin-bottom: 19px;
+    }
+
+    .section-title {
+      margin: 0 5px 9px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .card {
+      overflow: hidden;
+      border: 1px solid rgba(222, 232, 229, 0.9);
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .row {
+      min-height: 66px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+    }
+
+    .row + .row {
+      border-top: 1px solid var(--border);
+    }
+
+    button.row,
+    a.row {
+      width: 100%;
+      border: 0;
+      color: inherit;
+      font: inherit;
+      text-align: right;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    button.row:focus-visible,
+    a.row:focus-visible,
+    .switch input:focus-visible + .slider {
+      outline: 3px solid rgba(0, 109, 91, 0.2);
+      outline-offset: 2px;
+    }
+
+    .icon {
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .icon svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .row-content {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .row-title {
+      margin: 0 0 4px;
+      font-size: 15px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .row-value {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+      direction: rtl;
+    }
+
+    .chevron {
+      flex: 0 0 auto;
+      width: 19px;
+      height: 19px;
+      color: #98a5a1;
+    }
+
+    .chevron svg {
+      width: 100%;
+      height: 100%;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .switch {
+      position: relative;
+      flex: 0 0 auto;
+      width: 48px;
+      height: 29px;
+      display: inline-block;
+    }
+
+    .switch input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: var(--switch-off);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 23px;
+      height: 23px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+      transition: transform 0.2s ease;
+    }
+
+    .switch input:checked + .slider {
+      background: var(--primary);
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translateX(-19px);
+    }
+
+    .security-note {
+      margin: 8px 6px 0;
+      color: #82908c;
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    @media (min-width: 431px) {
+      body {
+        padding: 24px 0;
+      }
+
+      .phone {
+        min-height: calc(100vh - 48px);
+        max-height: calc(100vh - 48px);
+        border-radius: 30px;
+        box-shadow: 0 20px 60px rgba(20, 55, 47, 0.14);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="status-bar" aria-hidden="true">
+      <span>9:41</span>
+      <div class="status-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
+          <rect x="0" y="8" width="3" height="4" rx="1"></rect>
+          <rect x="4" y="5" width="3" height="7" rx="1"></rect>
+          <rect x="8" y="2" width="3" height="10" rx="1"></rect>
+          <rect x="12" y="0" width="3" height="12" rx="1"></rect>
+        </svg>
+        <svg width="15" height="12" viewBox="0 0 15 12" fill="currentColor">
+          <path d="M7.5 9.7a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 0 0 0-2.8Zm0-4.3c1.3 0 2.5.5 3.4 1.4l1.2-1.3A6.1 6.1 0 0 0 7.5 3.7a6.1 6.1 0 0 0-4.6 1.8l1.2 1.3A4.4 4.4 0 0 1 7.5 5.4Zm0-3.7c2.3 0 4.4.9 6 2.4l1.2-1.3A9.6 9.6 0 0 0 7.5 0 9.6 9.6 0 0 0 .3 2.8l1.2 1.3a8 8 0 0 1 6-2.4Z"></path>
+        </svg>
+        <svg width="22" height="12" viewBox="0 0 22 12" fill="none">
+          <rect x="0.5" y="0.5" width="19" height="11" rx="3" stroke="currentColor" opacity=".5"></rect>
+          <rect x="2" y="2" width="15" height="8" rx="1.5" fill="currentColor"></rect>
+          <path d="M21 4v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".5"></path>
+        </svg>
+      </div>
+    </div>
+
+    <header class="header">
+      <h1>الإعدادات</h1>
+      <button class="back-button" type="button" aria-label="رجوع">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m9 18 6-6-6-6"></path>
+        </svg>
+      </button>
+    </header>
+
+    <main>
+      <section class="section" aria-labelledby="account-heading">
+        <h2 class="section-title" id="account-heading">الحساب</h2>
+        <div class="card">
+          <a class="row" href="#name" aria-label="الاسم، فتح صفحة تعديل الاسم">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
+              </svg>
+            </span>
+            <span class="row-content">
+              <span class="row-title">الاسم</span>
+              <span class="row-value">محمد أحمد</span>
+            </span>
+            <span class="chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>
+            </span>
+          </a>
+
+          <a class="row" href="#phone" aria-label="رقم الهاتف، فتح صفحة تعديل الرقم">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M8.2 3H5.4C4.1 3 3 4.1 3 5.4 3 13.4 10.6 21 18.6 21c1.3 0 2.4-1.1 2.4-2.4v-2.8l-5-1-1.2 2.5a14.8 14.8 0 0 1-8.1-8.1l2.5-1.2-1-5Z"></path>
+              </svg>
+            </span>
+            <span class="row-content">
+              <span class="row-title">رقم الهاتف</span>
+              <span class="row-value" dir="ltr">+973 3600 1234</span>
+            </span>
+            <span class="chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>
+            </span>
+          </a>
+
+          <a class="row" href="#language" aria-label="اللغة، العربية، فتح صفحة اللغة">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"></path>
+              </svg>
+            </span>
+            <span class="row-content">
+              <span class="row-title">اللغة</span>
+              <span class="row-value">العربية</span>
+            </span>
+            <span class="chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"></path></svg>
+            </span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="security-heading">
+        <h2 class="section-title" id="security-heading">الأمان</h2>
+        <div class="card">
+          <div class="row">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"></path>
+                <path d="M9 9a3 3 0 0 1 6 0c0 2-3 2-3 4M12 17h.01"></path>
+              </svg>
+            </span>
+            <span class="row-content">
+              <span class="row-title">معرّف الوجه</span>
+              <span class="row-value">تسجيل الدخول باستخدام ملامح الوجه</span>
+            </span>
+            <label class="switch">
+              <input type="checkbox" checked aria-label="تفعيل معرف الوجه">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="row">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2 4 5v6c0 5 3.4 9.1 8 11 4.6-1.9 8-6 8-11V5l-8-3Z"></path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+            </span>
+            <span class="row-content">
+              <span class="row-title">تسجيل الدخول بخطوتين</span>
+              <span class="row-value">رمز إضافي عند تسجيل الدخول</span>
+            </span>
+            <label class="switch">
+              <input type="checkbox" checked aria-label="تفعيل تسجيل الدخول بخطوتين">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        <p class="security-note">ستصلك رموز التحقق على هاتفك عند تفعيل هذه الخيارات.</p>
+      </section>
+
+      <section class="section" aria-labelledby="notifications-heading">
+        <h2 class="section-title" id="notifications-heading">الإشعارات</h2>
+        <div class="card">
+          <div class="row">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M4 7h16M7 4v6M17 4v6M5 11h14v9H5zM9 15h2M14 15h2"></path>
+              </svg>
+            </span>
+            <span class="row-content">
+              <span class="row-title">التحويلات</span>
+              <span class="row-value">إشعار عند تنفيذ أي تحويل</span>
+            </span>
+            <label class="switch">
+              <input type="checkbox" checked aria-label="تفعيل إشعارات التحويلات">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="row">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 13 11 22l-9-9V4h9l9 9Z"></path>
+                <circle cx="7.5" cy="8.5" r="1.5"></circle>
+              </svg>
+            </span>
+            <span class="row-content">
+              <span class="row-title">العروض</span>
+              <span class="row-value">العروض والخصومات الجديدة</span>
+            </span>
+            <label class="switch">
+              <input type="checkbox" checked aria-label="تفعيل إشعارات العروض">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="row">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 2h9l4 4v16H6z"></path>
+                <path d="M14 2v5h5M9 12h6M9 16h6"></path>
+              </svg>
+            </span>
+            <span class="row-content">
+              <span class="row-title">كشوف الحساب</span>
+              <span class="row-value">إشعارات عند صدور كشف حساب</span>
+            </span>
+            <label class="switch">
+              <input type="checkbox" checked aria-label="تفعيل إشعارات كشوف الحساب">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

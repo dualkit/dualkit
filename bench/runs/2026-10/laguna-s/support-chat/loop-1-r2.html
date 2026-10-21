@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دعم العملاء - تيكوم كويت</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
+      color: #333;
+      direction: rtl;
+      text-align: right;
+      padding: 16px;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-height: 100vh;
+      padding-top: 12px;
+    }
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 16px;
+    }
+    .message {
+      margin-bottom: 16px;
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .customer {
+      background-color: #dcf8c6;
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+    }
+    .agent {
+      background-color: #ffffff;
+      margin-right: auto;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    }
+    .time {
+      font-size: 12px;
+      color: #777;
+      margin-top: 6px;
+      text-align: start;
+    }
+    .agent-name {
+      font-weight: 600;
+      color: #0078d4;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .input-area {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background-color: #ffffff;
+      border-top: 1px solid #e0e0e0;
+    }
+    .input-area input[type="text"] {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      font-size: 15px;
+      outline: none;
+      margin-left: 8px;
+    }
+    .send-button {
+      background-color: #0078d4;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .send-button:hover {
+      background-color: #005a9e;
+    }
+    .highlight {
+      background-color: #fff3cd;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="messages">
+      <!-- Message 1 - Customer -->
+      <div class="message customer">
+        <bdi>مرحباً، أريد الاستفادة من عرض eSIM الخاص بـ 5G. هل يدعمونه؟</bdi>
+        <div class="time">10:12 ص</div>
+      </div>
+
+      <!-- Message 2 - Agent -->
+      <div class="message agent">
+        <span class="agent-name">سارة من دعم تيكوم</span>
+        <bdi>مرحباً بك! نعم، نحن ندعم eSIM مع شبكة 5G بشكل كامل. يمكنك تفعيلها مباشرة من تطبيقنا.</bdi>
+        <div class="time">10:13 ص</div>
+      </div>
+
+      <!-- Message 3 - Customer -->
+      <div class="message customer">
+        <bdi>جميل، لدي أيضاً طلب جديد برقم <span class="highlight">TX-48213</span>. هل يمكن ربطه بحسابي؟</bdi>
+        <div class="time">10:15 ص</div>
+      </div>
+
+      <!-- Message 4 - Agent -->
+      <div class="message agent">
+        <span class="agent-name">سارة من دعم تيكوم</span>
+        <bdi>بالطبع! لقد قمت بربط طلبك <span class="highlight">TX-48213</span> بحسابكم بنجاح. سيصلكم إشعار عبر الرسائل القصيرة.</bdi>
+        <div class="time">10:16 ص</div>
+      </div>
+
+      <!-- Message 5 - Customer -->
+      <div class="message customer">
+        <bdi>شكراً جزيلاً! هل يمكن أن أستخدم 5G في جميع أنحاء المدينة؟</bdi>
+        <div class="time">10:18 ص</div>
+      </div>
+
+      <!-- Message 6 - Agent -->
+      <div class="message agent">
+        <span class="agent-name">سارة من دعم تيكوم</span>
+        <bdi>أهلاً وسهلاً! نعم، خدمة 5G متاحة في معظم المناطق الرئيسية في الكويت. إذا واجهتك أي مشاكل، لا تتردد في التواصل معاً مرة أخرى.</bdi>
+        <div class="time">10:19 ص</div>
+      </div>
+    </div>
+
+    <div class="input-area">
+      <input type="text" placeholder="اكتب رسالتك هنا..." aria-label="نص الرسالة">
+      <button class="send-button">إرسال</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أدخل الرمز</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-primary: #0052c2;
+      --color-bg: #f5f5f5;
+      --color-text: #333;
+      --color-border: #ccc;
+      --color-disabled: #e0e0e0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Noto Sans', sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      text-align: start;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    .container {
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-block-end: 0.5rem;
+      line-height: 1.4;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      margin-block-end: 2rem;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .subtitle bdi {
+      white-space: nowrap;
+    }
+
+    .otp-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-block-end: 2rem;
+      dir: ltr;
+    }
+
+    .otp-box {
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid var(--color-border);
+      border-radius: 0.5rem;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 500;
+      background: #fff;
+      color: var(--color-text);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .otp-box:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(0, 82, 194, 0.2);
+    }
+
+    .countdown {
+      text-align: center;
+      margin-block-end: 1.5rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .countdown button {
+      background: none;
+      border: none;
+      color: var(--color-primary);
+      font-family: inherit;
+      font-size: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      transition: background-color 0.2s;
+    }
+
+    .countdown button:disabled {
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    .countdown button:not(:disabled):hover {
+      background-color: rgba(0, 82, 194, 0.1);
+    }
+
+    .verify-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: var(--color-primary);
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-family: inherit;
+    }
+
+    .verify-btn:hover:not(:disabled) {
+      background-color: #003e8c;
+    }
+
+    .verify-btn:disabled {
+      background-color: var(--color-disabled);
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 360px) {
+      .otp-box {
+        width: 2rem;
+        height: 2rem;
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>أدخل الرمز</h1>
+    <p class="subtitle">
+      أرسلنا رمزًا مكونًا من 6 أرقام إلى <bdi dir="ltr">+966 55 123 4567</bdi>
+    </p>
+
+    <form class="otp-form" autocomplete="off" novalidate>
+      <div class="otp-container">
+        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+        <input type="text" class="otp-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+      </div>
+    </form>
+
+    <div class="countdown">
+      <button id="resend-btn" disabled>إعادة الإرسال بعد <span id="timer">0:45</span></button>
+    </div>
+
+    <button class="verify-btn" id="verify-btn" disabled>acco</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const otpInputs = document.querySelectorAll('.otp-box');
+      const resendBtn = document.getElementById('resend-btn');
+      const verifyBtn = document.getElementById('verify-btn');
+      const otpForm = document.querySelector('.otp-form');
+
+      let timeLeft = 45;
+      let countdownInterval = null;
+      let currentTimerSpan = document.getElementById('timer');
+
+      // Focus first input on load
+      otpInputs[0].focus();
+
+      // OTP navigation
+      otpInputs.forEach((input, index) => {
+        input.addEventListener('input', () => {
+          // Allow only digits
+          input.value = input.value.replace(/[^0-9]/g, '');
+          if (input.value.length === 1) {
+            if (index < otpInputs.length - 1) {
+              otpInputs[index + 1].focus();
+            }
+          }
+          toggleVerifyButton();
+        });
+
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && input.value === '' && index > 0) {
+            otpInputs[index - 1].focus();
+          }
+        });
+
+        // Prevent non-numeric characters
+        input.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const paste = (e.clipboardData || window.clipboardData).getData('text');
+          const digits = paste.replace(/[^0-9]/g, '').slice(0, 1);
+          input.value = digits;
+          if (digits.length === 1 && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+          }
+          toggleVerifyButton();
+        });
+      });
+
+      function toggleVerifyButton() {
+        const allFilled = Array.from(otpInputs).every(input => input.value.length === 1);
+        verifyBtn.disabled = !allFilled;
+      }
+
+      function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+      }
+
+      function updateCountdown() {
+        if (timeLeft <= 0) {
+          resendBtn.disabled = false;
+          resendBtn.innerHTML = 'إعادة الإرسال';
+          resendBtn.onclick = handleResend;
+          if (countdownInterval) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+          }
+          return;
+        }
+        currentTimerSpan.textContent = formatTime(timeLeft);
+        timeLeft--;
+      }
+
+      function startCountdown() {
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+        }
+        timeLeft = 45;
+        currentTimerSpan.textContent = formatTime(timeLeft);
+        resendBtn.disabled = true;
+        resendBtn.innerHTML = 'إعادة الإرسال بعد <span id="timer">0:45</span>';
+        currentTimerSpan = document.getElementById('timer');
+        countdownInterval = setInterval(() => {
+          updateCountdown();
+          if (timeLeft < 0) {
+            clearInterval(countdownInterval);
+            countdownInterval = null;
+          }
+        }, 1000);
+      }
+
+      function handleResend() {
+        // Reset OTP fields
+        otpInputs.forEach(input => input.value = '');
+        otpInputs[0].focus();
+        toggleVerifyButton();
+        startCountdown();
+      }
+
+      // Verify button click
+      verifyBtn.addEventListener('click', () => {
+        const code = Array.from(otpInputs).map(input => input.value).join('');
+        // In a real app, send code to server
+        console.log('Code submitted:', code);
+        alert('acco: ' + code);
+      });
+
+      // Start the countdown on page load
+      startCountdown();
+    });
+  </script>
+</body>
+</html>

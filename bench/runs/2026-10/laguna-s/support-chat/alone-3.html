@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>دعم العملاء - كويتيل</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e8eef2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+            color: #1a1a1a;
+        }
+
+        .phone-container {
+            width: 100%;
+            max-width: 430px;
+            background: #ffffff;
+            border-radius: 40px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.15),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 95vh;
+            position: relative;
+        }
+
+        /* Status bar */
+        .status-bar {
+            height: 20px;
+            background: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 8px;
+            font-size: 10px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        /* Header */
+        .chat-header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1a2a6c 100%);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 22px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .agent-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+            color: #1e3a8a;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .agent-info {
+            flex: 1;
+        }
+
+        .agent-name {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .agent-status {
+            color: #93c5fd;
+            font-size: 13px;
+            margin-top: 2px;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .header-icons button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* Messages container */
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background: #f9fafb;
+        }
+
+        .message-wrapper {
+            display: flex;
+            flex-direction: column;
+            max-width: 80%;
+        }
+
+        .customer-message {
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        .agent-message {
+            align-self: flex-start;
+            text-align: left;
+        }
+
+        .message-bubble {
+            padding: 12px 16px;
+            border-radius: 20px;
+            font-size: 15px;
+            line-height: 1.6;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        .customer-bubble {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border-bottom-right-radius: 6px;
+            color: #166534;
+        }
+
+        .agent-bubble {
+            background: #ffffff;
+            border-bottom-left-radius: 6px;
+            color: #1f2937;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+        }
+
+        .message-time {
+            font-size: 11px;
+            margin-top: 4px;
+            opacity: 0.7;
+            font-weight: 500;
+        }
+
+        .customer-time {
+            text-align: left;
+        }
+
+        .agent-time {
+            text-align: right;
+        }
+
+        /* Input area */
+        .input-area {
+            background: #ffffff;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #e5e7eb;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+
+        .input-area .attachment-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .input-area .emoji-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 1px solid #d1d5db;
+            border-radius: 24px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+            background: #f9fafb;
+            color: #1f2937;
+        }
+
+        .message-input:focus {
+            border-color: #3b82f6;
+            background: #ffffff;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1a2a6c 100%);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+            transition: transform 0.1s, box-shadow 0.2s;
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .send-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Scrollbar */
+        .messages-container::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        /* Bottom indicator */
+        .bottom-indicator {
+            height: 20px;
+            background: #000;
+            border-radius: 0 0 0 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <!-- Status bar -->
+        <div class="status-bar">
+            <span>الاتصال</span>
+            <span>100%</span>
+        </div>
+
+        <!-- Header -->
+        <div class="chat-header">
+            <button class="back-btn">‹</button>
+            <div class="agent-avatar">س</div>
+            <div class="agent-info">
+                <div class="agent-name">سارة - مركز الدعم</div>
+                <div class="agent-status">متصلة الآن</div>
+            </div>
+            <div class="header-icons">
+                <button>⋮</button>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="messages-container">
+            <!-- Message 1 - Customer -->
+            <div class="message-wrapper customer-message">
+                <div class="message-bubble customer-bubble">
+                    <div>مرحباً، أواجه مشكلة في تفعيل خدمة 5G على هاتفي. لم تتعرف الشبكة على الخدمة رغم تفعيلها من خلال التطبيق.</div>
+                    <div class="message-time customer-time">10:25 ص</div>
+                </div>
+            </div>
+
+            <!-- Message 2 - Agent -->
+            <div class="message-wrapper agent-message">
+                <div class="message-bubble agent-bubble">
+                    <div>مرحباً بك! أولاً، تأكد من أن هاتفك يدعم شبكة 5G وأن الإعدادات الصحيحة مفعلة. هل يمكنك التحقق من إعدادات الشبكة في إعدادات الهاتف؟</div>
+                    <div class="message-time agent-time">10:27 ص</div>
+                </div>
+            </div>
+
+            <!-- Message 3 - Customer -->
+            <div class="message-wrapper customer-message">
+                <div class="message-bubble customer-bubble">
+                    <div>لقد تحققت من الإعدادات وهاتفي يدعم 5G، لكن لا يزال لا يعمل. طلبت eSIM جديدة قبل أسبوع، ربما هناك مشكلة في التفعيل؟</div>
+                    <div class="message-time customer-time">10:29 ص</div>
+                </div>
+            </div>
+
+            <!-- Message 4 - Agent -->
+            <div class="message-wrapper agent-message">
+                <div class="message-bubble agent-bubble">
+                    <div>شكراً لتواصلك. تم العثور على طلب eSIM الخاص بك برقم التفعيل TX-48213. يبدو أن هناك مشكلة في ربط الخدمة بحسابك. سأعيد تفعيلها الآن من النظام.</div>
+                    <div class="message-time agent-time">10:31 ص</div>
+                </div>
+            </div>
+
+            <!-- Message 5 - Customer -->
+            <div class="message-wrapper customer-message">
+                <div class="message-bubble customer-bubble">
+                    <div>شكراً لك سارة! هل سأحتاج إلى إعادة تشغيل الهاتف بعد إعادة التفعيل؟ وهل سيستغرق ذلك وقتاً طويلاً؟</div>
+                    <div class="message-time customer-time">10:33 ص</div>
+                </div>
+            </div>
+
+            <!-- Message 6 - Agent -->
+            <div class="message-wrapper agent-message">
+                <div class="message-bubble agent-bubble">
+                    <div>نعم، بعد إعادة التفعيل ننصح بإعادة تشغيل الهاتف مرة واحدة. قد يستغرق ظهور إشارة 5G بضع دقائق. إذا لم تظهر الخدمة بعد 10 دقائق، أخبرني وسأتحقق مباشرة.</div>
+                    <div class="message-time agent-time">10:35 ص</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input area -->
+        <div class="input-area">
+            <button class="attachment-btn">📎</button>
+            <input type="text" class="message-input" placeholder="اكتب رسالتك هنا...">
+            <button class="emoji-btn">😊</button>
+            <button class="send-btn" disabled>➤</button>
+        </div>
+    </div>
+
+    <script>
+        const input = document.querySelector('.message-input');
+        const sendBtn = document.querySelector('.send-btn');
+
+        input.addEventListener('input', () => {
+            sendBtn.disabled = input.value.trim() === '';
+        });
+
+        sendBtn.addEventListener('click', () => {
+            if (!sendBtn.disabled) {
+                input.value = '';
+                sendBtn.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>

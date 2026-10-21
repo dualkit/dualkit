@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز موعد - عيادة القطبية</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding: 20px;
+            direction: rtl;
+            text-align: right;
+        }
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #0a7b3f, #1a9d55);
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 style="font-size: 20px; margin-bottom: 4px;">حجز موعد</h1>
+        .doctor-name {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .nav-arrow {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #0a7b3f;
+            padding: 5px 10px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .nav-arrow:hover {
+            background: #e8f5e9;
+        }
+        .month-year {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .weekday {
+            text-align: center;
+            padding: 12px 5px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #666;
+        }
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        .day {
+            height: 48px;
+            border-bottom: 1px solid #eee;
+            border-left: 1px solid #eee;
+            padding: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .day:hover {
+            background: #e8f5e9;
+        }
+        .day.other-month {
+            background: #fafafa;
+            color: #ccc;
+            cursor: default;
+        }
+        .day.other-month:hover {
+            background: #fafafa;
+        }
+        .day.today {
+            background: #e8f5e9;
+            color: #0a7b3f;
+            font-weight: bold;
+        }
+        .day.selected {
+            background: #0a7b3f;
+            color: #fff;
+        }
+        .day-number {
+            font-size: 14px;
+        }
+        .time-slots {
+            padding: 20px;
+        }
+        .time-slots h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #333;
+        }
+        .slots-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .slot {
+            flex: 1 1 calc(50% - 10px);
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .slot:hover {
+            border-color: #0a7b3f;
+            background: #e8f5e9;
+        }
+        .slot.selected {
+            background: #0a7b3f;
+            color: #fff;
+            border-color: #0a7b3f;
+        }
+        .confirm-btn {
+            display: block;
+            width: calc(100% - 40px);
+            margin: 20px auto;
+            padding: 14px;
+            background: linear-gradient(135deg, #0a7b3f, #1a9d55);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .confirm-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(10, 123, 63, 0.3);
+        }
+        .confirm-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="font-size: 20px; margin-bottom: 4px;">حجز موعد</h1>
+            <div class="doctor-name">د. فاطمة المنصوري</div>
+        </div>
+
+        <div class="calendar-header">
+            <button class="nav-arrow" id="prevMonth">&#8249;</button>
+            <div class="month-year" id="monthYear">أكتوبر 2023</div>
+            <button class="nav-arrow" id="nextMonth">&#8250;</button>
+        </div>
+
+        <div class="weekdays">
+            <div class="weekday">س</div>
+            <div class="weekday">أ</div>
+            <div class="weekday">أ</div>
+            <div class="weekday">أ</div>
+            <div class="weekday">أ</div>
+            <div class="weekday">أ</div>
+            <div class="weekday">أ</div>
+        </div>
+
+        <div class="days-grid" id="daysGrid"></div>
+
+        <div class="time-slots">
+            <h3>اختر وقتًا</h3>
+            <div class="slots-container" id="slotsContainer"></div>
+        </div>
+
+        <button class="confirm-btn" id="confirmBtn" disabled>تأكيد الحجز</button>
+    </div>
+
+    <script>
+        const arabicMonths = [
+            "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+            "يوليو", "أغسطس", "سبتممبر", "أكتوبر", "نوفمبر", "ديسمبر"
+        ];
+
+        const arabicWeekdays = ["س", "أ", "أ", "أ", "أ", "أ", "أ"];
+
+        let currentDate = new Date();
+        let selectedDate = null;
+        let selectedSlot = null;
+
+        const monthYearEl = document.getElementById("monthYear");
+        const daysGridEl = document.getElementById("daysGrid");
+        const slotsContainerEl = document.getElementById("slotsContainer");
+        const confirmBtn = document.getElementById("confirmBtn");
+        const prevMonthBtn = document.getElementById("prevMonth");
+        const nextMonthBtn = document.getElementById("nextMonth");
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            monthYearEl.textContent = `${arabicMonths[month]} ${year}`;
+
+            daysGridEl.innerHTML = "";
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+
+            // Get the day of week (0=Sunday, 1=Monday, ..., 6=Saturday)
+            let startDay = firstDay.getDay();
+            // Convert to Saturday-based week (Saturday=0, Sunday=1, ..., Friday=6)
+            startDay = (startDay + 1) % 7;
+
+            // Add empty cells for days from previous month
+            for (let i = 0; i < startDay; i++) {
+                const emptyDay = document.createElement("div");
+                emptyDay.className = "day other-month";
+                emptyDay.innerHTML = '<div class="day-number"></div>';
+                daysGridEl.appendChild(emptyDay);
+            }
+
+            // Add days of current month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayEl = document.createElement("div");
+                dayEl.className = "day";
+                dayEl.innerHTML = `<div class="day-number">${day}</div>`;
+
+                const today = new Date();
+                if (day === today.getDate() &&
+                    month === today.getMonth() &&
+                    year === today.getFullYear()) {
+                    dayEl.classList.add("today");
+                }
+
+                dayEl.addEventListener("click", () => {
+                    document.querySelectorAll(".day").forEach(d => d.classList.remove("selected"));
+                    dayEl.classList.add("selected");
+                    selectedDate = new Date(year, month, day);
+                    renderTimeSlots();
+                });
+
+                daysGridEl.appendChild(dayEl);
+            }
+
+            // Fill remaining cells with next month's days
+            const totalCells = startDay + daysInMonth;
+            const remainingCells = Math.ceil(totalCells / 7) * 7 - totalCells;
+            for (let i = 1; i <= remainingCells; i++) {
+                const nextDay = document.createElement("div");
+                nextDay.className = "day other-month";
+                nextDay.innerHTML = `<div class="day-number">${i}</div>`;
+                daysGridEl.appendChild(nextDay);
+            }
+        }
+
+        function renderTimeSlots() {
+            slotsContainerEl.innerHTML = "";
+            selectedSlot = null;
+            confirmBtn.disabled = true;
+
+            const times = [];
+            for (let h = 9; h <= 12; h++) {
+                for (let m = 0; m < 60; m += 30) {
+                    if (h === 12 && m > 0) break;
+                    const hourStr = h.toString().padStart(2, "0");
+                    const minStr = m.toString().padStart(2, "0");
+                    times.push(`${hourStr}:${minStr}`);
+                }
+            }
+
+            times.forEach(time => {
+                const slotEl = document.createElement("div");
+                slotEl.className = "slot";
+                slotEl.textContent = time;
+                slotEl.addEventListener("click", () => {
+                    document.querySelectorAll(".slot").forEach(s => s.classList.remove("selected"));
+                    slotEl.classList.add("selected");
+                    selectedSlot = time;
+                    confirmBtn.disabled = false;
+                });
+                slotsContainerEl.appendChild(slotEl);
+            });
+        }
+
+        prevMonthBtn.addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        });
+
+        nextMonthBtn.addEventListener("click", () => {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        });
+
+        confirmBtn.addEventListener("click", () => {
+            if (selectedDate && selectedSlot) {
+                alert(`تم حجز موعد في ${selectedDate.toLocaleDateString('ar-EG')} الساعة ${selectedSlot}`);
+            }
+        });
+
+        // Initialize
+        renderCalendar();
+    </script>
+</body>
+</html>

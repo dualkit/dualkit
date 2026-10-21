@@ -1,0 +1,179 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "support-chat",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T17:01:06.337Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"theme-color\" content=\"#f7f8fa\">\n  <title>مركز الدعم</title>\n  <style>\n    :root {\n      --brand: #6d3df5;\n      --brand-dark: #5427d7;\n      --brand-soft: #eee9ff;\n      --ink: #17151d;\n      --muted: #6f6b78;\n      --line: #e8e5ec;\n      --surface: #ffffff;\n      --page: #f4f3f7;\n      --success: #25a86b;\n    }\n\n    * {\n      box-sizing: border-box;\n    }\n\n    html,\n    body {\n      margin: 0;\n      min-height: 100%;\n      background: var(--page);\n      color: var(--ink);\n      font-family: \"Noto Sans Arabic\", \"Noto Sans\", sans-serif;\n      -webkit-font-smoothing: antialiased;\n    }\n\n    body {\n      min-height: 100vh;\n      min-height: 100dvh;\n      display: grid;\n      place-items: center;\n      padding: 24px;\n    }\n\n    button,\n    textarea {\n      font: inherit;\n    }\n\n    button {\n      -webkit-tap-highlight-color: transparent;\n    }\n\n    .phone {\n      width: min(100%, 430px);\n      height: min(900px, calc(100dvh - 48px));\n      min-height: 640px;\n      overflow: hidden;\n      display: grid;\n      grid-template-rows: auto auto 1fr auto;\n      background: var(--surface);\n      border: 1px solid rgba(23, 21, 29, 0.08);\n      border-radius: 34px;\n      box-shadow:\n        0 28px 70px rgba(34, 25, 58, 0.16),\n        0 4px 16px rgba(34, 25, 58, 0.08);\n    }\n\n    .status-bar {\n      height: 34px;\n      padding: 9px 20px 0;\n      display: flex;\n      align-items: flex-start;\n      justify-content: space-between;\n      direction: ltr;\n      font-size: 12px;\n      font-weight: 700;\n    }\n\n    .status-icons {\n      display: flex;\n      align-items: center;\n      gap: 5px;\n    }\n\n    .signal {\n      display: flex;\n      align-items: flex-end;\n      gap: 2px;\n      height: 11px;\n    }\n\n    .signal i {\n      display: block;\n      width: 3px;\n      border-radius: 2px;\n      background: currentColor;\n    }\n\n    .signal i:nth-child(1) { height: 4px; }\n    .signal i:nth-child(2) { height: 6px; }\n    .signal i:nth-child(3) { height: 8px; }\n    .signal i:nth-child(4) { height: 11px; }\n\n    .battery {\n      width: 20px;\n      height: 10px;\n      padding: 1.5px;\n      border: 1px solid currentColor;\n      border-radius: 3px;\n      position: relative;\n    }\n\n    .battery::before {\n      content: \"\";\n      position: absolute;\n      inset: 2px;\n      border-radius: 1px;\n      background: currentColor;\n    }\n\n    .battery::after {\n      content: \"\";\n      position: absolute;\n      inset-inline-end: -3px;\n      top: 2px;\n      width: 2px;\n      height: 4px;\n      border-radius: 0 2px 2px 0;\n      background: currentColor;\n    }\n\n    .app-header {\n      min-height: 76px;\n      padding: 12px 18px;\n      display: flex;\n      align-items: center;\n      gap: 12px;\n      background: rgba(255, 255, 255, 0.96);\n      border-bottom: 1px solid var(--line);\n      position: relative;\n      z-index: 2;\n    }\n\n    .back-button {\n      width: 38px;\n      height: 38px;\n      flex: 0 0 auto;\n      border: 0;\n      border-radius: 50%;\n      display: grid;\n      place-items: center;\n      background: transparent;\n      color: var(--ink);\n      cursor: pointer;\n    }\n\n    .back-button:hover {\n      background: var(--page);\n    }\n\n    .back-button svg {\n      width: 23px;\n      height: 23px;\n    }\n\n    .agent-avatar {\n      width: 46px;\n      height: 46px;\n      flex: 0 0 auto;\n      border-radius: 50%;\n      display: grid;\n      place-items: center;\n      position: relative;\n      background: linear-gradient(145deg, #8060ff, #5124d1);\n      color: white;\n      font-size: 18px;\n      font-weight: 700;\n      box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.18);\n    }\n\n    .online-dot {\n      position: absolute;\n      inset-inline-end: 0;\n      bottom: 1px;\n      width: 12px;\n      height: 12px;\n      border: 2px solid white;\n      border-radius: 50%;\n      background: var(--success);\n    }\n\n    .agent-info {\n      min-width: 0;\n      flex: 1;\n    }\n\n    .agent-info h1 {\n      margin: 0 0 3px;\n      font-size: 17px;\n      line-height: 1.4;\n      font-weight: 700;\n    }\n\n    .agent-info p {\n      margin: 0;\n      color: var(--success);\n      font-size: 14px;\n      line-height: 1.5;\n    }\n\n    .call-button {\n      width: 40px;\n      height: 40px;\n      flex: 0 0 auto;\n      border: 0;\n      border-radius: 50%;\n      display: grid;\n      place-items: center;\n      background: var(--brand-soft);\n      color: var(--brand);\n      cursor: pointer;\n    }\n\n    .call-button svg {\n      width: 20px;\n      height: 20px;\n    }\n\n    .support-banner {\n      margin: 12px 16px 4px;\n      padding: 9px 12px;\n      display: flex;\n      align-items: center;\n      gap: 8px;\n      border-radius: 12px;\n      background: #f5f2ff;\n      color: #4e35a9;\n      font-size: 14px;\n      line-height: 1.6;\n    }\n\n    .support-banner svg {\n      width: 18px;\n      height: 18px;\n      flex: 0 0 auto;\n    }\n\n    .messages {\n      min-height: 0;\n      overflow-y: auto;\n      padding: 14px 16px 18px;\n      display: flex;\n      flex-direction: column;\n      gap: 13px;\n      background:\n        radial-gradient(circle at 85% 8%, rgba(109, 61, 245, 0.04), transparent 26%),\n        #fbfafc;\n      scrollbar-width: thin;\n      scrollbar-color: #d8d2e2 transparent;\n    }\n\n    .date {\n      align-self: center;\n      padding: 5px 12px;\n      border-radius: 999px;\n      background: #eeeaf1;\n      color: var(--muted);\n      font-size: 14px;\n      line-height: 1.5;\n    }\n\n    .message {\n      max-width: 82%;\n      display: flex;\n      flex-direction: column;\n      align-items: flex-start;\n    }\n\n    .message.customer {\n      align-self: flex-start;\n      align-items: flex-start;\n    }\n\n    .message.agent {\n      align-self: flex-end;\n      align-items: flex-end;\n    }\n\n    .bubble {\n      padding: 11px 14px;\n      border-radius: 18px;\n      font-size: 16px;\n      line-height: 1.75;\n      box-shadow: 0 2px 7px rgba(30, 22, 45, 0.05);\n    }\n\n    .customer .bubble {\n      background: var(--surface);\n      border: 1px solid var(--line);\n      border-start-start-radius: 6px;\n    }\n\n    .agent .bubble {\n      background: var(--brand);\n      color: white;\n      border-start-end-radius: 6px;\n    }\n\n    .bubble p {\n      margin: 0;\n    }\n\n    .bubble p + p {\n      margin-top: 6px;\n    }\n\n    .message-time {\n      margin-top: 4px;\n      padding-inline: 4px;\n      color: #8b8792;\n      font-size: 14px;\n      line-height: 1.5;\n      direction: rtl;\n    }\n\n    .typing {\n      align-self: flex-end;\n      padding: 10px 14px;\n      border-radius: 18px 18px 6px 18px;\n      background: var(--brand-soft);\n      display: flex;\n      gap: 4px;\n    }\n\n    .typing i {\n      width: 6px;\n      height: 6px;\n      border-radius: 50%;\n      background: var(--brand);\n      animation: pulse 1.2s infinite ease-in-out;\n    }\n\n    .typing i:nth-child(2) { animation-delay: 0.15s; }\n    .typing i:nth-child(3) { animation-delay: 0.3s; }\n\n    @keyframes pulse {\n      0%, 60%, 100% { opacity: 0.35; transform: translateY(0); }\n      30% { opacity: 1; transform: translateY(-3px); }\n    }\n\n    .composer {\n      padding: 11px 14px 16px;\n      background: var(--surface);\n      border-top: 1px solid var(--line);\n    }\n\n    .composer-form {\n      display: flex;\n      align-items: flex-end;\n      gap: 9px;\n    }\n\n    .composer textarea {\n      min-height: 46px;\n      max-height: 110px;\n      flex: 1;\n      resize: none;\n      padding: 11px 15px;\n      border: 1px solid #ddd8e3;\n      border-radius: 23px;\n      outline: none;\n      background: #f8f7fa;\n      color: var(--ink);\n      font-size: 16px;\n      line-height: 1.55;\n      transition: border-color 0.2s, box-shadow 0.2s;\n    }\n\n    .composer textarea:focus {\n      border-color: var(--brand);\n      box-shadow: 0 0 0 3px rgba(109, 61, 245, 0.11);\n    }\n\n    .composer textarea::placeholder {\n      color: #96919e;\n    }\n\n    .send-button {\n      width: 46px;\n      height: 46px;\n      flex: 0 0 auto;\n      border: 0;\n      border-radius: 50%;\n      display: grid;\n      place-items: center;\n      background: var(--brand);\n      color: white;\n      cursor: pointer;\n      box-shadow: 0 7px 16px rgba(109, 61, 245, 0.28);\n      transition: transform 0.15s, background 0.15s;\n    }\n\n    .send-button:hover {\n      background: var(--brand-dark);\n    }\n\n    .send-button:active {\n      transform: scale(0.94);\n    }\n\n    .send-button svg {\n      width: 21px;\n      height: 21px;\n    }\n\n    .privacy-note {\n      margin: 5px 4px 0;\n      color: #96919e;\n      text-align: center;\n      font-size: 14px;\n      line-height: 1.5;\n    }\n\n    @media (max-width: 560px) {\n      body {\n        padding: 0;\n        background: var(--surface);\n      }\n\n      .phone {\n        width: 100%;\n        height: 100vh;\n        height: 100dvh;\n        min-height: 0;\n        border: 0;\n        border-radius: 0;\n        box-shadow: none;\n      }\n    }\n  </style>\n</head>\n<body>\n  <main class=\"phone\" aria-label=\"محادثة الدعم\">\n    <div class=\"status-bar\" aria-hidden=\"true\">\n      <span>9:41</span>\n      <span class=\"status-icons\">\n        <span class=\"signal\"><i></i><i></i><i></i><i></i></span>\n        <span>5G</span>\n        <span class=\"battery\"></span>\n      </span>\n    </div>\n\n    <header class=\"app-header\">\n      <button class=\"back-button\" type=\"button\" aria-label=\"العودة\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n          <path d=\"m9 18 6-6-6-6\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n        </svg>\n      </button>\n\n      <div class=\"agent-avatar\" aria-hidden=\"true\">\n        س\n        <span class=\"online-dot\"></span>\n      </div>\n\n      <div class=\"agent-info\">\n        <h1>سارة</h1>\n        <p>متصل الآن · خدمة العملاء</p>\n      </div>\n\n      <button class=\"call-button\" type=\"button\" aria-label=\"الاتصال بسارة\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n          <path d=\"M8.7 3.7 10.2 7c.2.5.1 1-.2 1.4L8.4 10a14.1 14.1 0 0 0 5.6 5.6l1.6-1.6c.4-.3.9-.4 1.4-.2l3.3 1.5c.5.2.8.7.8 1.2v2.8c0 .9-.7 1.7-1.6 1.7C10.8 21 3 13.2 3 3.7c0-.9.8-1.6 1.7-1.6h2.8c.5 0 1 .3 1.2.8Z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n        </svg>\n      </button>\n    </header>\n\n    <div class=\"support-banner\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n        <path d=\"M12 8v4m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n      </svg>\n      <span>الردود في المحادثة مشفرة ومحمية.</span>\n    </div>\n\n    <section class=\"messages\" aria-label=\"الرسائل\" aria-live=\"polite\">\n      <div class=\"date\">اليوم</div>\n\n      <article class=\"message customer\">\n        <div class=\"bubble\">\n          <p>مرحبًا، طلبت شريحة eSIM جديدة أمس ولم تصلني رسالة التفعيل.</p>\n        </div>\n        <time class=\"message-time\" datetime=\"2025-03-18T09:12\">٩:١٢ ص</time>\n      </article>\n\n      <article class=\"message agent\">\n        <div class=\"bubble\">\n          <p>أهلًا بك 👋 أنا سارة. هل يمكنك مشاركة رقم الطلب الذي يظهر في رسالة التأكيد؟</p>\n        </div>\n        <time class=\"message-time\" datetime=\"2025-03-18T09:15\">٩:١٥ ص</time>\n      </article>\n\n      <article class=\"message customer\">\n        <div class=\"bubble\">\n          <p>بالتأكيد، رقم الطلب هو <bdi dir=\"ltr\">TX-48213</bdi>.</p>\n        </div>\n        <time class=\"message-time\" datetime=\"2025-03-18T09:17\">٩:١٧ ص</time>\n      </article>\n\n      <article class=\"message agent\">\n        <div class=\"bubble\">\n          <p>شكرًا لك. وجدت الطلب، وهو الآن قيد التجهيز. ستصلك رسالة التفعيل خلال 10 دقائق.</p>\n        </div>\n        <time class=\"message-time\" datetime=\"2025-03-18T09:19\">٩:١٩ ص</time>\n      </article>\n\n      <article class=\"message customer\">\n        <div class=\"bubble\">\n          <p>هل ستعمل الشريحة على هاتفي تلقائيًا؟ ولا أحتاج إلى زيارة فرع؟</p>\n        </div>\n        <time class=\"message-time\" datetime=\"2025-03-18T09:23\">٩:٢٣ ص</time>\n      </article>\n\n      <article class=\"message agent\">\n        <div class=\"bubble\">\n          <p>نعم، ستعمل تلقائيًا على هاتفك المتوافق مع <bdi dir=\"ltr\">5G</bdi>. فعّل <bdi dir=\"ltr\">eSIM</bdi> من الإعدادات ثمFollow the instructions in the activation message.</p>\n        </div>\n        <time class=\"message-time\" datetime=\"2025-03-18T09:25\">٩:٢٥ ص</time>\n      </article>\n    </section>\n\n    <footer class=\"composer\">\n      <form class=\"composer-form\" id=\"chatForm\">\n        <label for=\"messageInput\" hidden>اكتب رسالتك</label>\n        <textarea\n          id=\"messageInput\"\n          name=\"message\"\n          rows=\"1\"\n          placeholder=\"اكتب رسالتك...\"\n          dir=\"auto\"\n          autocomplete=\"off\"\n        ></textarea>\n        <button class=\"send-button\" type=\"submit\" aria-label=\"إرسال الرسالة\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n            <path d=\"m21 3-7.2 18-3.7-7.1L3 10.2 21 3Z\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n            <path d=\"M10.1 13.9 15 9\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"/>\n          </svg>\n        </button>\n      </form>\n      <p class=\"privacy-note\">لا نشارك معلوماتك مع أي جهة خارجية.</p>\n    </footer>\n  </main>\n\n  <script>\n    const form = document.getElementById(\"chatForm\");\n    const input = document.getElementById(\"messageInput\");\n\n    form.addEventListener(\"submit\", (event) => {\n      event.preventDefault();\n      const text = input.value.trim();\n      if (!text) return;\n\n      const messages = document.querySelector(\".messages\");\n      const message = document.createElement(\"article\");\n      message.className = \"message customer\";\n\n      const bubble = document.createElement(\"div\");\n      bubble.className = \"bubble\";\n      const paragraph = document.createElement(\"p\");\n      paragraph.textContent = text;\n      bubble.appendChild(paragraph);\n\n      const time = document.createElement(\"time\");\n      time.className = \"message-time\";\n      time.textContent = new Intl.DateTimeFormat(\"ar-KW-u-nu-latn\", {\n        hour: \"numeric\",\n        minute: \"2-digit\",\n        hour12: true\n      }).format(new Date());\n\n      message.append(bubble, time);\n      messages.appendChild(message);\n      messages.scrollTop = messages.scrollHeight;\n      input.value = \"\";\n    });\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6171,
+    "output": 4714
+  },
+  "ms": 40636,
+  "finish": "stop",
+  "reasoningTokens": 199,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 77,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-placeholder",
+      "title": "An Arabic hint on the wrong side of the field",
+      "severity": "warning",
+      "box": {
+        "x": 69,
+        "y": 753.203125,
+        "width": 307,
+        "height": 48.796875
+      },
+      "message": "The placeholder \"اكتب رسالتك...\" is Arabic in a left-to-right field.",
+      "fix": "Keep dir=\"ltr\" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.",
+      "snippet": "<textarea id=\"messageInput\" name=\"message\" rows=\"1\" placeholder=\"اكتب رسالتك...\" dir=\"auto\" autocomplete=\"off\"></textarea>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 134.953125,
+        "y": 503.390625,
+        "width": 70.265625,
+        "height": 17
+      },
+      "message": "\"TX-48213\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">TX-48213</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 37.078125,
+        "y": 592.390625,
+        "width": 258.46875,
+        "height": 73
+      },
+      "message": "\"شكرًا لك. وجدت الطلب، وهو الآن قيد التجه…\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<p>شكرًا لك. وجدت الطلب، وهو الآن قيد التجهيز. ستصلك رسالة التفعيل خلال 10 دقائق.</p>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 251.75,
+        "y": 882.390625,
+        "width": 21.34375,
+        "height": 17
+      },
+      "message": "\"5G\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi dir=\"ltr\">5G</bdi>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 288,
+        "y": 61.5,
+        "width": 22,
+        "height": 20
+      },
+      "message": "\"Noto Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"agent-avatar\" aria-hidden=\"true\">\n        س\n        <span class=\"online-dot\"></span>\n      </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 80.453125,
+        "y": 224.390625,
+        "width": 293.546875,
+        "height": 80
+      },
+      "message": "border-top-left-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          <p>مرحبًا، طلبت شريحة eSIM جديدة أمس ولم تصلني رسالة التفعيل.</p>\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 342.390625,
+        "width": 293.546875,
+        "height": 106
+      },
+      "message": "border-top-left-radius: 6px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          <p>أهلًا بك 👋 أنا سارة. هل يمكنك مشاركة رقم الطلب الذي يظهر في رسالة التأكيد؟</p>\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 115.5,
+        "y": 486.390625,
+        "width": 258.5,
+        "height": 52
+      },
+      "message": "border-top-left-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          <p>بالتأكيد، رقم الطلب هو <bdi dir=\"ltr\">TX-48213</bdi>.</p>\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 576.390625,
+        "width": 293.546875,
+        "height": 106
+      },
+      "message": "border-top-left-radius: 6px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          <p>شكرًا لك. وجدت الطلب، وهو الآن قيد التجهيز. ستصلك رسالة التفعيل خلال 10 دقائق.</p>\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 80.453125,
+        "y": 720.390625,
+        "width": 293.546875,
+        "height": 80
+      },
+      "message": "border-top-left-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          <p>هل ستعمل الشريحة على هاتفي تلقائيًا؟ ولا أحتاج إلى زيارة فرع؟</p>\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 838.390625,
+        "width": 293.546875,
+        "height": 134
+      },
+      "message": "border-top-left-radius: 6px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          <p>نعم، ستعمل تلقائيًا على هاتفك المتوافق مع <bdi dir=\"ltr\">5G</bdi>. فعّل <bdi dir=\"ltr\">eSIM</bdi> من الإعدادات ثمFollow the in"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f8fc" />
+  <title>الإعدادات</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
+
+    :root {
+      --bg: #f7f8fc;
+      --surface: #ffffff;
+      --ink: #172033;
+      --muted: #7a8192;
+      --line: #edf0f5;
+      --primary: #3559e0;
+      --primary-soft: #edf1ff;
+      --green: #22a06b;
+      --shadow: 0 12px 36px rgba(29, 44, 85, .07);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: #e9edf5;
+      color: var(--ink);
+      font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      padding: 28px 16px;
+    }
+
+    button, input { font: inherit; }
+    button { border: 0; cursor: pointer; }
+
+    .phone {
+      width: min(100%, 430px);
+      min-height: 820px;
+      background: var(--bg);
+      border: 1px solid rgba(255,255,255,.8);
+      border-radius: 34px;
+      overflow: hidden;
+      box-shadow: 0 22px 60px rgba(28, 40, 75, .18);
+    }
+
+    .status-bar {
+      height: 32px;
+      padding: 8px 22px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #30384a;
+      font-family: Arial, sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      direction: ltr;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .header {
+      padding: 22px 22px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 25px;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .back-button {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--surface);
+      color: var(--ink);
+      box-shadow: 0 4px 15px rgba(35, 49, 88, .06);
+    }
+
+    .back-button svg { transform: scaleX(-1); }
+
+    .profile-card {
+      margin: 4px 18px 22px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: linear-gradient(135deg, #385de5 0%, #647bf0 100%);
+      border-radius: 22px;
+      color: white;
+      box-shadow: 0 12px 24px rgba(53, 89, 224, .22);
+    }
+
+    .avatar {
+      width: 52px;
+      height: 52px;
+      flex: 0 0 52px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: rgba(255,255,255,.18);
+      font-size: 23px;
+      font-weight: 700;
+    }
+
+    .profile-copy { min-width: 0; }
+    .profile-copy strong { display: block; font-size: 16px; }
+    .profile-copy span {
+      display: block;
+      margin-top: 3px;
+      color: rgba(255,255,255,.75);
+      font-size: 14px;
+    }
+
+    .content { padding: 0 18px 100px; }
+
+    .group {
+      margin-bottom: 20px;
+      background: var(--surface);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .group-title {
+      margin: 0;
+      padding: 17px 18px 9px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .row {
+      min-height: 67px;
+      width: 100%;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: transparent;
+      color: var(--ink);
+      text-align: start;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .row:last-child { border-bottom: 0; }
+    .row.tappable { cursor: pointer; }
+    .row.tappable:hover { background: #fafbff; }
+    .row.tappable:active { background: #f1f4fc; }
+
+    .row-icon {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .row-icon.green { background: #e9f8f1; color: var(--green); }
+    .row-icon.orange { background: #fff2e5; color: #e58b24; }
+    .row-icon.purple { background: #f0ecff; color: #7558d8; }
+
+    .row-copy { flex: 1; min-width: 0; }
+    .row-copy strong { display: block; font-size: 15px; font-weight: 600; }
+    .row-copy span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .chevron {
+      flex: 0 0 auto;
+      color: #a3a9b7;
+      transform: scaleX(-1);
+    }
+
+    .switch {
+      position: relative;
+      width: 50px;
+      height: 30px;
+      flex: 0 0 50px;
+      padding: 0;
+      border-radius: 20px;
+      background: #d9dce5;
+      transition: background .2s ease;
+    }
+
+    .switch::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,.15);
+      transition: transform .2s ease;
+    }
+
+    .switch[aria-checked="true"] { background: var(--primary); }
+    .switch[aria-checked="true"]::after { transform: translateX(-20px); }
+
+    .support {
+      padding: 5px 8px 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .support button {
+      padding: 0;
+      background: transparent;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .toast {
+      position: fixed;
+      right: 50%;
+      bottom: 28px;
+      transform: translate(50%, 20px);
+      padding: 12px 18px;
+      border-radius: 14px;
+      background: #20283b;
+      color: white;
+      font-size: 14px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease, transform .25s ease;
+      box-shadow: 0 8px 25px rgba(0,0,0,.2);
+    }
+
+    .toast.show { opacity: 1; transform: translate(50%, 0); }
+
+    @media (max-width: 460px) {
+      body { padding: 0; background: var(--bg); }
+      .phone { min-height: 100vh; border: 0; border-radius: 0; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <div class="status-bar" aria-label="حالة الهاتف">
+      <span>9:41</span>
+      <span class="status-icons">
+        <span>▮▮▮</span><span>⌁</span><span>▰</span>
+      </span>
+    </div>
+
+    <header class="header">
+      <h1>الإعدادات</h1>
+      <button class="back-button" aria-label="العودة إلى الصفحة السابقة">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </header>
+
+    <section class="profile-card" aria-label="بيانات الحساب">
+      <div class="avatar" aria-hidden="true">م</div>
+      <div class="profile-copy">
+        <strong>محمد عبدالله</strong>
+        <span dir="ltr" style="display:block; unicode-bidi:isolate;">BH67 1200 3456 7890</span>
+      </div>
+    </section>
+
+    <div class="content">
+      <section class="group" aria-labelledby="account-heading">
+        <h2 class="group-title" id="account-heading">الحساب</h2>
+
+        <button class="row tappable" type="button" data-action="الاسم">
+          <span class="row-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M5.5 20c.7-4 3-6 6.5-6s5.8 2 6.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="row-copy">
+            <strong>الاسم</strong>
+            <span>محمد عبدالله</span>
+          </span>
+          <span class="chevron">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+
+        <button class="row tappable" type="button" data-action="رقم الهاتف">
+          <span class="row-icon green">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M7 3.5 4.8 4.7c-.8.5-1.1 1.5-.8 2.4 1.8 5.6 5.9 9.7 11.5 11.5.9.3 1.9 0 2.4-.8l1.2-2.2-4-2-1.3 1.4a13.3 13.3 0 0 1-4.2-4.2l1.4-1.3-2-4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="row-copy">
+            <strong>رقم الهاتف</strong>
+            <span dir="ltr" style="display:block; unicode-bidi:isolate;">+973 3600 1234</span>
+          </span>
+          <span class="chevron">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+
+        <button class="row tappable" type="button" data-action="اللغة">
+          <span class="row-icon orange">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M3.8 12h16.4M12 3.5c2.2 2.3 3.3 5.1 3.3 8.5S14.2 18.2 12 20.5C9.8 18.2 8.7 15.4 8.7 12S9.8 5.8 12 3.5Z" stroke="currentColor" stroke-width="1.6"/>
+            </svg>
+          </span>
+          <span class="row-copy">
+            <strong>اللغة</strong>
+            <span>العربية</span>
+          </span>
+          <span class="chevron">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </section>
+
+      <section class="group" aria-labelledby="security-heading">
+        <h2 class="group-title" id="security-heading">الأمان</h2>
+
+        <div class="row">
+          <span class="row-icon purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3.5c1.7 1.4 3.7 2 5.5 2v5.2c0 4-2.1 7.5-5.5 9.8-3.4-2.3-5.5-5.8-5.5-9.8V5.5c1.8 0 3.8-.6 5.5-2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M9.5 12.3 11 14l3.7-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="row-copy"><strong>Face ID</strong></span>
+          <button class="switch" role="switch" aria-checked="true" aria-label="تفعيل Face ID"></button>
+        </div>
+
+        <div class="row">
+          <span class="row-icon green">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="5" y="8" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M8 8V6.5a4 4 0 0 1 8 0V8M9 13h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="row-copy"><strong>تسجيل الدخول بخطوتين</strong></span>
+          <button class="switch" role="switch" aria-checked="true" aria-label="تفعيل تسجيل الدخول بخطوتين"></button>
+        </div>
+      </section>
+
+      <section class="group" aria-labelledby="notifications-heading">
+        <h2 class="group-title" id="notifications-heading">الإشعارات</h2>
+
+        <div class="row">
+          <span class="row-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 8h12M4 12h16M4 16h9" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+              <path d="m17 5 3 3-3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="row-copy"><strong>التحويلات</strong></span>
+          <button class="switch" role="switch" aria-checked="true" aria-label="تفعيل إشعارات التحويلات"></button>
+        </div>
+
+        <div class="row">
+          <span class="row-icon orange">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 13 13 20l-9-9V4h7l9 9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/>
+            </svg>
+          </span>
+          <span class="row-copy"><strong>العروض</strong></span>
+          <button class="switch" role="switch" aria-checked="true" aria-label="تفعيل إشعارات العروض"></button>
+        </div>
+
+        <div class="row">
+          <span class="row-icon green">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 3.5h9l3 3v14H6v-17Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+              <path d="M14 3.5v4h4M9 12h6M9 15.5h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="row-copy"><strong>كشوف الحساب</strong></span>
+          <button class="switch" role="switch" aria-checked="false" aria-label="تفعيل إشعارات كشوف الحساب"></button>
+        </div>
+      </section>
+
+      <p class="support">
+        هل تحتاج إلى مساعدة؟<br>
+        <button type="button" id="supportButton">تواصل مع خدمة العملاء</button>
+      </p>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
+
+  <script>
+    const toast = document.getElementById('toast');
+    let toastTimer;
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    document.querySelectorAll('.switch').forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const enabled = toggle.getAttribute('aria-checked') === 'true';
+        toggle.setAttribute('aria-checked', String(!enabled));
+        showToast(enabled ? 'تم إيقاف الإعداد' : 'تم تفعيل الإعداد');
+      });
+    });
+
+    document.querySelectorAll('.tappable').forEach(row => {
+      row.addEventListener('click', () => {
+        showToast(`سيتم فتح شاشة ${row.dataset.action}`);
+      });
+    });
+
+    document.getElementById('supportButton').addEventListener('click', () => {
+      showToast('سيتم الاتصال بخدمة العملاء');
+    });
+
+    document.querySelector('.back-button').addEventListener('click', () => {
+      showToast('العودة إلى الصفحة الرئيسية');
+    });
+  </script>
+</body>
+</html>

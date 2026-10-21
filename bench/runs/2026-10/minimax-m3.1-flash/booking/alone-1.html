@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>حجز موعد – عيادة قطرية</title>
+  <style>
+    :root {
+      --navy: #123b4a;
+      --teal: #0e8f83;
+      --teal-dark: #087367;
+      --mint: #e8f6f3;
+      --sand: #f5efe3;
+      --cream: #fbfaf6;
+      --ink: #17313a;
+      --muted: #71828a;
+      --line: #e7ecec;
+      --white: #ffffff;
+      --shadow: 0 12px 36px rgba(18, 59, 74, 0.10);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: Tahoma, Arial, sans-serif;
+      color: var(--ink);
+      background: #dfe8e7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .phone {
+      width: 390px;
+      max-width: 100vw;
+      min-height: 844px;
+      background: var(--cream);
+      box-shadow: 0 24px 70px rgba(9, 43, 55, 0.24);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .top-area {
+      background:
+        radial-gradient(circle at 12% 25%, rgba(255,255,255,.16) 0 4px, transparent 5px),
+        radial-gradient(circle at 85% 72%, rgba(255,255,255,.12) 0 18px, transparent 19px),
+        linear-gradient(145deg, #123b4a, #0b6f70);
+      color: white;
+      padding: 22px 20px 28px;
+      border-radius: 0 0 30px 30px;
+      position: relative;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 23px;
+    }
+
+    .back {
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 50%;
+      color: white;
+      background: rgba(255,255,255,.1);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+    }
+
+    .back svg {
+      width: 20px;
+      transform: rotate(90deg);
+    }
+
+    .header-copy {
+      flex: 1;
+    }
+
+    .eyebrow {
+      margin: 0 0 4px;
+      color: #bfe4df;
+      font-size: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 23px;
+      font-weight: 700;
+    }
+
+    .clinic-mark {
+      width: 43px;
+      height: 43px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.2);
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+    }
+
+    .content {
+      padding: 0 18px 24px;
+    }
+
+    .doctor-card {
+      margin-top: -14px;
+      position: relative;
+      z-index: 2;
+      background: white;
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 52px;
+      height: 52px;
+      flex: 0 0 auto;
+      border-radius: 16px;
+      background: linear-gradient(145deg, var(--sand), #ead8b9);
+      color: var(--navy);
+      display: grid;
+      place-items: center;
+      font-size: 25px;
+    }
+
+    .doctor-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .doctor-info small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .doctor-info h2 {
+      margin: 3px 0 4px;
+      font-size: 16px;
+    }
+
+    .specialty {
+      color: var(--teal-dark);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .specialty::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    .section {
+      margin-top: 24px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .section-title h3 {
+      font-size: 16px;
+      margin: 0;
+    }
+
+    .section-title span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .calendar {
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px 14px 14px;
+      box-shadow: 0 8px 25px rgba(18, 59, 74, .06);
+    }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      direction: rtl;
+    }
+
+    .month-label {
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 7px;
+    }
+
+    .month-btn {
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #f8faf9;
+      color: var(--navy);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .month-btn:active {
+      background: var(--mint);
+    }
+
+    .month-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .next svg {
+      transform: rotate(180deg);
+    }
+
+    .weekdays,
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      direction: ltr;
+      gap: 3px;
+    }
+
+    .weekdays {
+      margin-bottom: 7px;
+    }
+
+    .weekday {
+      text-align: center;
+      color: #8a989d;
+      font-size: 10px;
+      font-weight: 700;
+      direction: rtl;
+      padding: 5px 0;
+    }
+
+    .day {
+      aspect-ratio: 1;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      border-radius: 12px;
+      position: relative;
+      font-size: 12px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .day:hover:not(:disabled) {
+      background: var(--mint);
+    }
+
+    .day:disabled {
+      color: #cbd2d3;
+      cursor: default;
+    }
+
+    .day.today {
+      color: var(--teal-dark);
+      font-weight: 700;
+    }
+
+    .day.today::after {
+      content: "";
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--teal);
+      position: absolute;
+      bottom: 4px;
+    }
+
+    .day.selected {
+      background: var(--teal);
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 5px 12px rgba(14, 143, 131, .25);
+    }
+
+    .day.selected::after {
+      background: white;
+    }
+
+    .calendar-note {
+      margin: 12px 2px 0;
+      color: var(--muted);
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .calendar-note::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+
+    .time-row {
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      padding: 2px 2px 8px;
+      scrollbar-width: none;
+    }
+
+    .time-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .time {
+      min-width: 72px;
+      border: 1px solid #d9e4e2;
+      background: white;
+      color: var(--navy);
+      border-radius: 12px;
+      padding: 11px 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .time.selected {
+      color: white;
+      background: var(--teal);
+      border-color: var(--teal);
+      box-shadow: 0 5px 12px rgba(14, 143, 131, .22);
+    }
+
+    .summary {
+      margin-top: 20px;
+      border-radius: 16px;
+      background: var(--mint);
+      padding: 13px 14px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: #31545d;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .summary-icon {
+      flex: 0 0 auto;
+      width: 27px;
+      height: 27px;
+      background: white;
+      color: var(--teal-dark);
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+    }
+
+    .confirm {
+      width: 100%;
+      border: 0;
+      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+      color: white;
+      border-radius: 15px;
+      padding: 15px;
+      margin-top: 19px;
+      font-size: 16px;
+      font-weight: 700;
+      box-shadow: 0 10px 22px rgba(14, 143, 131, .25);
+      cursor: pointer;
+    }
+
+    .confirm:active {
+      transform: translateY(1px);
+    }
+
+    .confirm:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .privacy {
+      text-align: center;
+      color: #94a0a4;
+      font-size: 10px;
+      margin: 10px 0 0;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translate(-50%, 20px);
+      background: var(--navy);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s ease;
+      z-index: 5;
+      width: max-content;
+      max-width: 85vw;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 430px) {
+      body {
+        display: block;
+        background: var(--cream);
+      }
+
+      .phone {
+        width: 100%;
+        min-height: 100vh;
+        box-shadow: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone">
+    <header class="top-area">
+      <div class="header">
+        <button class="back" aria-label="رجوع">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6"/>
+          </svg>
+        </button>
+        <div class="header-copy">
+          <p class="eyebrow">عيادة الدوحة التخصصية</p>
+          <h1>حجز موعد</h1>
+        </div>
+        <div class="clinic-mark" aria-hidden="true">✚</div>
+      </div>
+    </header>
+
+    <div class="content">
+      <section class="doctor-card" aria-label="بيانات الطبيب">
+        <div class="avatar" aria-hidden="true">♙</div>
+        <div class="doctor-info">
+          <small>الطبيب المعالج</small>
+          <h2>د. سارة المريخي</h2>
+          <div class="specialty">استشارية طب الأسرة</div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">
+          <h3>اختر التاريخ</h3>
+          <span id="selectedDateLabel">اختر يومًا من التقويم</span>
+        </div>
+
+        <div class="calendar">
+          <div class="month-nav">
+            <div class="month-label" id="monthLabel"></div>
+            <div class="nav-buttons">
+              <button class="month-btn prev" id="prevMonth" aria-label="الشهر السابق">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m15 18-6-6 6-6"/>
+                </svg>
+              </button>
+              <button class="month-btn next" id="nextMonth" aria-label="الشهر التالي">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m15 18-6-6 6-6"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="weekdays" aria-hidden="true">
+            <div class="weekday">سبت</div>
+            <div class="weekday">أحد</div>
+            <div class="weekday">إثنين</div>
+            <div class="weekday">ثلاثاء</div>
+            <div class="weekday">أربعاء</div>
+            <div class="weekday">خميس</div>
+            <div class="weekday">جمعة</div>
+          </div>
+
+          <div class="days" id="days"></div>
+
+          <p class="calendar-note">النقطة الخضراء indicate اليوم الحالي</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">
+          <h3>اختر الوقت</h3>
+          <span>المواعيد المتاحة</span>
+        </div>
+        <div class="time-row" id="timeRow">
+          <button class="time" data-time="09:00">9:00 ص</button>
+          <button class="time" data-time="09:30">9:30 ص</button>
+          <button class="time" data-time="10:00">10:00 ص</button>
+          <button class="time" data-time="10:30">10:30 ص</button>
+          <button class="time" data-time="11:00">11:00 ص</button>
+          <button class="time" data-time="11:30">11:30 ص</button>
+          <button class="time" data-time="12:00">12:00 م</button>
+        </div>
+      </section>
+
+      <div class="summary">
+        <div class="summary-icon" aria-hidden="true">✓</div>
+        <div>سيتم تأكيد الموعد لدى الاستقبال، ويُرسل رقم الحجز إلى هاتفك بعد إتمام العملية.</div>
+      </div>
+
+      <button class="confirm" id="confirmBtn" disabled>تأكيد الحجز</button>
+      <p class="privacy">بالضغط على تأكيد الحجز، أنت توافق على سياسة حجز المواعيد.</p>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const monthNames = [
+      "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+      "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+    ];
+
+    const today = new Date();
+    let viewYear = today.getFullYear();
+    let viewMonth = today.getMonth();
+    let selectedDate = null;
+    let selectedTime = null;
+
+    const daysElement = document.getElementById("days");
+    const monthLabel = document.getElementById("monthLabel");
+    const selectedDateLabel = document.getElementById("selectedDateLabel");
+    const confirmButton = document.getElementById("confirmBtn");
+    const toast = document.getElementById("toast");
+
+    function sameDay(a, b) {
+      return a.getFullYear() === b.getFullYear() &&
+             a.getMonth() === b.getMonth() &&
+             a.getDate() === b.getDate();
+    }
+
+    function renderCalendar() {
+      monthLabel.textContent = `${monthNames[viewMonth]} ${viewYear}`;
+      daysElement.innerHTML = "";
+
+      const firstDay = new Date(viewYear, viewMonth, 1);
+      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+      const offset = (firstDay.getDay() + 1) % 7;
+
+      for (let i = 0; i < offset; i++) {
+        const empty = document.createElement("div");
+        daysElement.appendChild(empty);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const date = new Date(viewYear, viewMonth, day);
+        const button = document.createElement("button");
+        button.className = "day";
+        button.textContent = day;
+        button.setAttribute("aria-label", `${day} ${monthNames[viewMonth]}`);
+
+        if (sameDay(date, today)) button.classList.add("today");
+        if (selectedDate && sameDay(date, selectedDate)) button.classList.add("selected");
+
+        const past = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        button.disabled = past;
+
+        button.addEventListener("click", () => {
+          selectedDate = date;
+          selectedDateLabel.textContent = `${day} ${monthNames[viewMonth]}`;
+          renderCalendar();
+          updateButton();
+        });
+
+        daysElement.appendChild(button);
+      }
+    }
+
+    document.getElementById("prevMonth").addEventListener("click", () => {
+      viewMonth--;
+      if (viewMonth < 0) {
+        viewMonth = 11;
+        viewYear--;
+      }
+      renderCalendar();
+    });
+
+    document.getElementById("nextMonth").addEventListener("click", () => {
+      viewMonth++;
+      if (viewMonth > 11) {
+        viewMonth = 0;
+        viewYear++;
+      }
+      renderCalendar();
+    });
+
+    document.querySelectorAll(".time").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".time").forEach(item => item.classList.remove("selected"));
+        button.classList.add("selected");
+        selectedTime = button.dataset.time;
+        updateButton();
+      });
+    });
+
+    function updateButton() {
+      confirmButton.disabled = !(selectedDate && selectedTime);
+    }
+
+    confirmButton.addEventListener("click", () => {
+      if (!selectedDate || !selectedTime) return;
+      const formattedDate = selectedDate.toLocaleDateString("ar-QA", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+      toast.textContent = `تم تأكيد موعدك يوم ${formattedDate} الساعة ${selectedTime}`;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3200);
+    });
+
+    renderCalendar();
+  </script>
+</body>
+</html>

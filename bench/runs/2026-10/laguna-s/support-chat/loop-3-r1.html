@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دردشة الدعم - كويتيل</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --header-bg: #0078d4;
+      --header-text: #ffffff;
+      --bubble-agent: #ffffff;
+      --bubble-customer: #e4f0fd;
+      --text-primary: #1a1a1a;
+      --text-secondary: #5a5a5a;
+      --input-bg: #ffffff;
+      --input-border: #d0d7de;
+      --send-btn: #0078d4;
+      --send-btn-text: #ffffff;
+      --time-color: #8a8a8a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background-color: var(--header-bg);
+      color: var(--header-text);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header .title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .header .back-btn {
+      background: none;
+      border: none;
+      color: var(--header-text);
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      max-width: 80%;
+      line-height: 1.6;
+    }
+
+    .message.agent {
+      align-self: flex-start;
+      background-color: var(--bubble-agent);
+      border-top-left-radius: 4px;
+      border-top-right-radius: 16px;
+      border-bottom-right-radius: 16px;
+      border-bottom-left-radius: 16px;
+      padding: 12px 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .message.customer {
+      align-self: flex-end;
+      background-color: var(--bubble-customer);
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      border-bottom-right-radius: 4px;
+      border-bottom-left-radius: 16px;
+      padding: 12px 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .message .sender-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+      color: var(--header-bg);
+    }
+
+    .message .text {
+      font-size: 15px;
+      word-wrap: break-word;
+    }
+
+    .message .time {
+      font-size: 12px;
+      color: var(--time-color);
+      margin-top: 6px;
+      text-align: start;
+    }
+
+    .message.customer .time {
+      text-align: end;
+    }
+
+    .input-area {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background-color: var(--input-bg);
+      border-top: 1px solid var(--input-border);
+      gap: 12px;
+    }
+
+    .input-area textarea {
+      flex: 1;
+      border: 1px solid var(--input-border);
+      border-radius: 20px;
+      padding: 10px 16px;
+      font-size: 15px;
+      resize: none;
+      outline: none;
+      background-color: #fafbfc;
+      min-height: 40px;
+      max-height: 120px;
+    }
+
+    .input-area .send-btn {
+      background-color: var(--send-btn);
+      color: var(--send-btn-text);
+      border: none;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .input-area .send-btn:disabled {
+      background-color: #b3c7df;
+      cursor: not-allowed;
+    }
+
+    /* Bidi isolation for mixed-script content */
+    .ltr-run {
+      direction: ltr;
+      display: inline-block;
+      unicode-bidi: embed;
+    }
+
+    /* Scrollbar styling */
+    .chat-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .chat-container::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,0.1);
+      border-radius: 3px;
+    }
+
+    .chat-container::-webkit-scrollbar-thumb:hover {
+      background: rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <button class="back-btn" aria-label="رجوع">←</button>
+    <div class="title">دردشة الدعم</div>
+    <div style="width: 24px;"></div>
+  </div>
+
+  <div class="chat-container">
+    <!-- Message 1: Agent greeting -->
+    <div class="message agent">
+      <div class="sender-name">سارة</div>
+      <div class="text">مرحباً بك! أنا سارا من فريق الدعم الخاص بشركة كويتيل. كيف يمكنني مساعدتك اليوم؟</div>
+      <div class="time">10:15 ص</div>
+    </div>
+
+    <!-- Message 2: Customer inquiry -->
+    <div class="message customer">
+      <div class="text">مرحباً سارة، عندي مشكلة في تفعيل <span class="ltr-run">eSIM</span> على هاتفي. جربت كل الخطوات لكن ما نجحت.</div>
+      <div class="time">10:17 ص</div>
+    </div>
+
+    <!-- Message 3: Agent response -->
+    <div class="message agent">
+      <div class="sender-name">سارة</div>
+      <div class="text">أهلاً وسهلاً، شكراً لتواصلك معنا. من فضلك أرسل لي رقم الطلب <span class="ltr-run">(TX-48213)</span> الخاص بك حتى أتمكن من مراجعته.</div>
+      <div class="time">10:18 ص</div>
+    </div>
+
+    <!-- Message 4: Customer provides order number -->
+    <div class="message customer">
+      <div class="text">بالطبع، رقم الطلب هو <span class="ltr-run">TX-48213</span>. وهل يمكنك مساعدتي في حل المشكلة؟</div>
+      <div class="time">10:19 ص</div>
+    </div>
+
+    <!-- Message 5: Agent troubleshooting -->
+    <div class="message agent">
+      <div class="sender-name">سارة</div>
+      <div class="text">جاري مراجعة طلبكم الآن. يبدو أن هناك مشكلة في تفعيل <span class="ltr-run">eSIM</span> على شبكة <span class="ltr-run">5G</span>. سأعيد إرسال الرابط لكم خلال دقيقة، يرجى المحاولة مرة أخرى.</div>
+      <div class="time">10:21 ص</div>
+    </div>
+
+    <!-- Message 6: Customer confirmation -->
+    <div class="message customer">
+      <div class="text">شكراً لكِ سارة! نجح تفعيل <span class="ltr-run">eSIM</span> الآن على شبكة <span class="ltr-run">5G</span>. كل شيء يعمل بشكل جيد الآن.</div>
+      <div class="time">10:23 ص</div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <textarea id="message-input" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+    <button id="send-button" class="send-btn" disabled>➤</button>
+  </div>
+
+  <script>
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+
+    messageInput.addEventListener('input', function() {
+      sendButton.disabled = this.value.trim().length === 0;
+    });
+
+    sendButton.addEventListener('click', function() {
+      if (messageInput.value.trim()) {
+        // In a real app, this would send the message
+        messageInput.value = '';
+        sendButton.disabled = true;
+      }
+    });
+
+    // Auto-resize textarea
+    messageInput.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+    });
+  </script>
+</body>
+</html>

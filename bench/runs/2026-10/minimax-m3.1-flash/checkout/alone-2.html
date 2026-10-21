@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#f7f8f4">
+  <title>إتمام الطلب — فواكه</title>
+  <style>
+    :root {
+      --green: #176b45;
+      --green-dark: #0e5133;
+      --green-soft: #e8f3ec;
+      --orange: #f4a340;
+      --ink: #17221d;
+      --muted: #748078;
+      --line: #e5e9e5;
+      --surface: #ffffff;
+      --page: #f6f7f3;
+      --danger: #b9453c;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--page);
+      color: var(--ink);
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--page);
+      overflow: hidden;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 68px;
+      padding: 14px 20px;
+      background: rgba(246, 247, 243, 0.96);
+      border-bottom: 1px solid rgba(23, 34, 29, 0.05);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+    }
+
+    .back-btn {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      border-radius: 50%;
+      background: #fff;
+      color: var(--ink);
+      box-shadow: 0 3px 14px rgba(20, 44, 32, 0.08);
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .back-btn:active {
+      transform: scale(.94);
+      background: #f0f2ee;
+    }
+
+    .back-btn svg {
+      width: 21px;
+      height: 21px;
+    }
+
+    main {
+      padding: 16px 16px 112px;
+    }
+
+    .delivery-card {
+      position: relative;
+      margin-bottom: 18px;
+      padding: 16px 17px;
+      overflow: hidden;
+      border-radius: 20px;
+      color: #fff;
+      background: linear-gradient(135deg, #176b45 0%, #0e5435 100%);
+      box-shadow: 0 10px 24px rgba(23, 107, 69, .18);
+    }
+
+    .delivery-card::after {
+      content: "";
+      position: absolute;
+      left: -28px;
+      top: -36px;
+      width: 125px;
+      height: 125px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .07);
+    }
+
+    .delivery-label {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 8px;
+      color: #d9eee2;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .delivery-label svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .delivery-card h2 {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .delivery-card p {
+      margin: 0;
+      color: #e6f2eb;
+      font-size: 12px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 3px 10px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .item-count {
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .cart-list {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: 0 6px 18px rgba(24, 41, 31, .045);
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 76px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+    }
+
+    .cart-item + .cart-item {
+      border-top: 1px solid var(--line);
+    }
+
+    .photo {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 76px;
+      height: 76px;
+      overflow: hidden;
+      border-radius: 16px;
+      background: #f2eee4;
+    }
+
+    .photo::before {
+      content: "";
+      position: absolute;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.42);
+    }
+
+    .photo svg {
+      position: relative;
+      z-index: 1;
+      width: 51px;
+      height: 51px;
+      filter: drop-shadow(0 5px 4px rgba(48, 39, 21, .11));
+    }
+
+    .item-info {
+      min-width: 0;
+    }
+
+    .item-name {
+      display: block;
+      margin: 0 0 5px;
+      overflow: hidden;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .item-meta {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .stepper {
+      display: inline-grid;
+      grid-template-columns: 30px 28px 30px;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid #dce4de;
+      border-radius: 10px;
+      background: #f9faf8;
+      direction: ltr;
+    }
+
+    .stepper button {
+      height: 29px;
+      padding: 0;
+      color: var(--green);
+      background: transparent;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .stepper button:active {
+      background: var(--green-soft);
+    }
+
+    .quantity {
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .item-price {
+      align-self: start;
+      margin-top: 3px;
+      color: var(--green-dark);
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+      direction: rtl;
+    }
+
+    .summary-card {
+      margin-top: 16px;
+      padding: 17px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: 0 6px 18px rgba(24, 41, 31, .045);
+    }
+
+    .promo-label {
+      display: block;
+      margin: 0 1px 8px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .promo-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .promo-input {
+      flex: 1;
+      min-width: 0;
+      height: 46px;
+      padding: 0 13px;
+      border: 1px solid #dce2dd;
+      outline: none;
+      border-radius: 12px;
+      color: var(--ink);
+      background: #fafbf9;
+      font-size: 13px;
+      text-align: right;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .promo-input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(23, 107, 69, .1);
+    }
+
+    .apply-btn {
+      min-width: 74px;
+      padding: 0 13px;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--green);
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .promo-message {
+      min-height: 18px;
+      margin: 6px 2px 0;
+      color: var(--green);
+      font-size: 11px;
+    }
+
+    .promo-message.error {
+      color: var(--danger);
+    }
+
+    .totals {
+      margin-top: 10px;
+      padding-top: 14px;
+      border-top: 1px dashed #dce2dd;
+    }
+
+    .total-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      color: #566159;
+      font-size: 13px;
+    }
+
+    .total-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .total-row strong {
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .total-row.grand {
+      margin-top: 13px;
+      padding-top: 13px;
+      border-top: 1px solid var(--line);
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .total-row.grand strong {
+      color: var(--green-dark);
+      font-size: 18px;
+    }
+
+    .free {
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .checkout-bar {
+      position: fixed;
+      z-index: 30;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 -8px 28px rgba(21, 42, 29, .09);
+      backdrop-filter: blur(14px);
+    }
+
+    .order-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 52px;
+      border-radius: 14px;
+      color: #fff;
+      background: linear-gradient(135deg, #1b7950, #0d5637);
+      box-shadow: 0 8px 18px rgba(23, 107, 69, .24);
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .18s ease, opacity .18s ease;
+    }
+
+    .order-btn:active {
+      transform: translateY(1px) scale(.995);
+      opacity: .92;
+    }
+
+    .checkout-bar p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: 10px;
+      text-align: center;
+    }
+
+    @media (max-width: 350px) {
+      .cart-item {
+        grid-template-columns: 66px 1fr auto;
+        gap: 9px;
+        padding: 12px;
+      }
+
+      .photo {
+        width: 66px;
+        height: 66px;
+      }
+
+      .item-meta {
+        font-size: 10px;
+      }
+
+      .item-price {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <h1>إتمام الطلب</h1>
+      <button class="back-btn" type="button" aria-label="العودة إلى السلة" onclick="history.back()">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </header>
+
+    <main>
+      <section class="delivery-card" aria-label="معلومات التوصيل">
+        <div class="delivery-label">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M3 6.5h11v10H3zM14 10h3.5l3.5 3.5v3H14z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            <circle cx="7" cy="18" r="2" fill="currentColor"/>
+            <circle cx="18" cy="18" r="2" fill="currentColor"/>
+          </svg>
+          التوصيل إلى
+        </div>
+        <h2>منزل، شارع النخيل</h2>
+        <p>دبي، الإمارات · اليوم بين 4:00 و6:00 مساءً</p>
+      </section>
+
+      <div class="section-title">
+        <h2>منتجاتك</h2>
+        <span class="item-count" id="itemCount">3 منتجات</span>
+      </div>
+
+      <section class="cart-list" aria-label="العربة">
+        <article class="cart-item" data-price="8.50">
+          <div class="photo" aria-label="صورة تفاح أحمر">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <path d="M33 18c-3-8-12-8-17-2-7 8-4 24 5 31 6 5 13 3 16-1 4 3 11 5 16 0 8-8 8-24 1-31-6-5-14-3-17 3-1-2-2-4-4 0z" fill="#e7513f"/>
+              <path d="M32 19c0-7 4-11 10-12 1 7-3 11-10 12z" fill="#3d8a4b"/>
+              <path d="M32 19c-2-5-6-7-11-6" fill="none" stroke="#6d5134" stroke-width="3" stroke-linecap="round"/>
+              <path d="M24 29c2-4 6-6 8-6" fill="none" stroke="#ff8d70" stroke-width="3" stroke-linecap="round" opacity=".75"/>
+            </svg>
+          </div>
+          <div class="item-info">
+            <h3 class="item-name">تفاح أحمر طازج</h3>
+            <p class="item-meta">للحبة · 1 كجم</p>
+            <div class="stepper" aria-label="كمية تفاح أحمر">
+              <button type="button" data-action="increase" aria-label="زيادة الكمية">+</button>
+              <span class="quantity">1</span>
+              <button type="button" data-action="decrease" aria-label="تقليل الكمية">−</button>
+            </div>
+          </div>
+          <div class="item-price" data-line-price>8.50 د.إ</div>
+        </article>
+
+        <article class="cart-item" data-price="12.00">
+          <div class="photo" aria-label="صورة موز">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <path d="M16 20c8-10 25-10 31 0 7 12-1 29-13 32-12-2-20-19-18-32z" fill="#efc12f"/>
+              <path d="M18 22c6-6 19-7 27-1M19 31c6-5 17-6 25-2" fill="none" stroke="#d9a51c" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+              <path d="M45 21c3-7 8-7 10-3 1 4-4 7-9 7" fill="#88672d"/>
+            </svg>
+          </div>
+          <div class="item-info">
+            <h3 class="item-name">موز Gundaria</h3>
+            <p class="item-meta">لكل كيلو · 1 كجم</p>
+            <div class="stepper" aria-label="كمية موز Gundaria">
+              <button type="button" data-action="increase" aria-label="زيادة الكمية">+</button>
+              <span class="quantity">1</span>
+              <button type="button" data-action="decrease" aria-label="تقليل الكمية">−</button>
+            </div>
+          </div>
+          <div class="item-price" data-line-price>12.00 د.إ</div>
+        </article>
+
+        <article class="cart-item" data-price="23.75">
+          <div class="photo" aria-label="صورة بطيخ">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <path d="M9 30C11 15 24 9 38 12c10 2 17 10 18 19-6 15-18 23-33 20-8-2-13-9-14-21z" fill="#4f9d4b"/>
+              <path d="M15 28c8-7 25-8 37 2-6 10-16 15-28 14-5-1-8-7-9-16z" fill="#e95a57"/>
+              <path d="M20 30c6-2 12 2 14 8M32 28c6 0 11 3 14 8" fill="none" stroke="#f9d66b" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M42 13c4-6 9-6 12-2-3 5-7 7-12 6" fill="#39783c"/>
+            </svg>
+          </div>
+          <div class="item-info">
+            <h3 class="item-name">بطيخ أحمر بدون بذور</h3>
+            <p class="item-meta">للقطعة · 1 كجم</p>
+            <div class="stepper" aria-label="كمية البطيخ">
+              <button type="button" data-action="increase" aria-label="زيادة الكمية">+</button>
+              <span class="quantity">1</span>
+              <button type="button" data-action="decrease" aria-label="تقليل الكمية">−</button>
+            </div>
+          </div>
+          <div class="item-price" data-line-price>23.75 د.إ</div>
+        </article>
+      </section>
+
+      <section class="summary-card" aria-label="ملخص الطلب">
+        <label class="promo-label" for="promoCode">هل لديك رمز خصم؟</label>
+        <div class="promo-row">
+          <input class="promo-input" id="promoCode" type="text" inputmode="text" placeholder="أدخل رمز الخصم" autocomplete="off">
+          <button class="apply-btn" id="applyPromo" type="button">تطبيق</button>
+        </div>
+        <p class="promo-message" id="promoMessage" role="status"></p>
+
+        <div class="totals">
+          <div class="total-row">
+            <span>المجموع الفرعي</span>
+            <strong id="subtotal">44.25 د.إ</strong>
+          </div>
+          <div class="total-row">
+            <span>التوصيل</span>
+            <strong class="free" id="delivery">مجاني</strong>
+          </div>
+          <div class="total-row">
+            <span>ضريبة القيمة المضافة (5%)</span>
+            <strong id="vat">2.21 د.إ</strong>
+          </div>
+          <div class="total-row grand">
+            <span>الإجمالي</span>
+            <strong id="grandTotal">46.46 د.إ</strong>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="checkout-bar">
+      <button class="order-btn" id="placeOrder" type="button">إتمام الطلب</button>
+      <p>الدفع عند الاستلام متاح</p>
+    </div>
+  </div>
+
+  <script>
+    const formatAED = value => value.toFixed(2) + " د.إ";
+    const itemCount = document.getElementById("itemCount");
+    const subtotalEl = document.getElementById("subtotal");
+    const vatEl = document.getElementById("vat");
+    const grandTotalEl = document.getElementById("grandTotal");
+    const promoMessage = document.getElementById("promoMessage");
+    let discountRate = 0;
+
+    function updateTotals() {
+      let subtotal = 0;
+      let totalQuantity = 0;
+
+      document.querySelectorAll(".cart-item").forEach(item => {
+        const quantity = Number(item.querySelector(".quantity").textContent);
+        const unitPrice = Number(item.dataset.price);
+        const lineTotal = unitPrice * quantity;
+        subtotal += lineTotal;
+        totalQuantity += quantity;
+        item.querySelector("[data-line-price]").textContent = formatAED(lineTotal);
+      });
+
+      const discountedSubtotal = subtotal * (1 - discountRate);
+      const vat = discountedSubtotal * 0.05;
+      const total = discountedSubtotal + vat;
+
+      subtotalEl.textContent = formatAED(subtotal);
+      vatEl.textContent = formatAED(vat);
+      grandTotalEl.textContent = formatAED(total);
+      itemCount.textContent = totalQuantity + (totalQuantity === 1 ? " منتج" : totalQuantity === 2 ? " منتجان" : " منتجات");
+    }
+
+    document.querySelectorAll(".cart-item").forEach(item => {
+      item.querySelectorAll("[data-action]").forEach(button => {
+        button.addEventListener("click", () => {
+          const quantityEl = item.querySelector(".quantity");
+          let quantity = Number(quantityEl.textContent);
+
+          if (button.dataset.action === "increase") {
+            quantity++;
+          } else {
+            quantity = Math.max(1, quantity - 1);
+          }
+
+          quantityEl.textContent = quantity;
+          updateTotals();
+        });
+      });
+    });
+
+    document.getElementById("applyPromo").addEventListener("click", () => {
+      const code = document.getElementById("promoCode").value.trim().toUpperCase();
+
+      if (code === "FOOD10") {
+        discountRate = 0.10;
+        promoMessage.textContent = "تم تطبيق خصم 10% بنجاح";
+        promoMessage.classList.remove("error");
+      } else if (code === "GULF5") {
+        discountRate = 0.05;
+        promoMessage.textContent = "تم تطبيق خصم 5% بنجاح";
+        promoMessage.classList.remove("error");
+      } else {
+        discountRate = 0;
+        promoMessage.textContent = code ? "رمز الخصم غير صالح، حاول مرة أخرى" : "أدخل رمز الخصم أولًا";
+        promoMessage.classList.toggle("error", Boolean(code));
+      }
+
+      updateTotals();
+    });
+
+    document.getElementById("placeOrder").addEventListener("click", event => {
+      const button = event.currentTarget;
+      const originalText = button.textContent;
+      button.textContent = "جارٍ إرسال الطلب...";
+      button.disabled = true;
+
+      setTimeout(() => {
+        button.textContent = "تم إرسال الطلب ✓";
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.disabled = false;
+        }, 1700);
+      }, 900);
+    });
+
+    updateTotals();
+  </script>
+</body>
+</html>

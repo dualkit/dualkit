@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدعم الفني - مراسلة سارة</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #0f172a;
+            --phone-bg: #f8fafc;
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --bubble-agent: #ffffff;
+            --bubble-customer: #e0f2fe;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            
+            /* Type tokens for Arabic */
+            --type-body-size: 16px;
+            --type-label-size: 14px;
+            --type-caption-size: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :lang(ar) {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            letter-spacing: 0;
+            text-transform: none;
+            font-style: normal;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            font-size: var(--type-body-size);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        /* Phone Container Mockup */
+        .phone-frame {
+            width: 100%;
+            max-width: 390px;
+            height: 844px;
+            background-color: var(--phone-bg);
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 10px #1e293b;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* App Header */
+        .chat-header {
+            background: #ffffff;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            z-index: 10;
+        }
+
+        .agent-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+            position: relative;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background-color: #22c55e;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            inset-inline-start: 0;
+        }
+
+        .agent-info h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .agent-info p {
+            font-size: var(--type-label-size);
+            color: var(--text-muted);
+        }
+
+        /* Chat Messages Body */
+        .chat-body {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background-color: #f1f5f9;
+        }
+
+        .message-group {
+            display: flex;
+            flex-direction: column;
+            max-width: 82%;
+        }
+
+        .message-group.incoming {
+            align-self: flex-start;
+        }
+
+        .message-group.outgoing {
+            align-self: flex-end;
+        }
+
+        .message-bubble {
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            font-size: var(--type-label-size);
+            line-height: 1.6;
+            position: relative;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .incoming .message-bubble {
+            background-color: var(--bubble-agent);
+            color: var(--text-main);
+            border-start-start-radius: 4px;
+        }
+
+        .outgoing .message-bubble {
+            background-color: var(--bubble-customer);
+            color: var(--text-main);
+            border-start-end-radius: 4px;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            padding-inline: 0.25rem;
+        }
+
+        .incoming .message-time {
+            text-align: start;
+        }
+
+        .outgoing .message-time {
+            text-align: end;
+        }
+
+        /* Chat Footer / Input Area */
+        .chat-footer {
+            background: #ffffff;
+            padding: 0.875rem 1rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rsem;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            background-color: #f1f5f9;
+            border-radius: 9999px;
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            border: 1px solid transparent;
+            transition: border-color 0.2s;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--primary);
+            background-color: #ffffff;
+        }
+
+        .chat-input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: inherit;
+            font-size: var(--type-label-size);
+            color: var(--text-main);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .send-btn {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Directional arrow mirror for RTL */
+        .send-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .send-btn:dir(rtl) svg {
+            transform: scaleX(-1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame">
+        <!-- Header -->
+        <header class="chat-header">
+            <div class="agent-avatar">
+                س
+                <div class="status-dot"></div>
+            </div>
+            <div class="agent-info">
+                <h1>سارة</h1>
+                <p>خدمة العملاء - الكويت</p>
+            </div>
+        </header>
+
+        <!-- Messages Area -->
+        <main class="chat-body">
+            <!-- Message 1 (Customer) -->
+            <div class="message-group outgoing">
+                <div class="message-bubble">
+                    السلام عليكم، عندي استفسار بخصوص اشتراك الـ <bdi dir="ltr">5G</bdi> الجديد.
+                </div>
+                <div class="message-time"><bdi dir="ltr">10:40 ص</bdi></div>
+            </div>
+
+            <!-- Message 2 (Agent Sara) -->
+            <div class="message-group incoming">
+                <div class="message-bubble">
+                    وعليكم السلام ورحمة الله وبركاته! أهلاً بك. أنا سارة، كيف يمكنني مساعدتك اليوم بخصوص خدمات الـ <bdi dir="ltr">5G</bdi>؟
+                </div>
+                <div class="message-time"><bdi dir="ltr">10:41 ص</bdi></div>
+            </div>
+
+            <!-- Message 3 (Customer) -->
+            <div class="message-group outgoing">
+                <div class="message-bubble">
+                    طلبت تفعيل شريحة <bdi dir="ltr">eSIM</bdi> برقم الطلب <bdi dir="ltr">TX-48213</bdi> ولاحظت أن التفعيل تأخر.
+                </div>
+                <div class="message-time"><bdi dir="ltr">10:42 ص</bdi></div>
+            </div>
+
+            <!-- Message 4 (Agent Sara) -->
+            <div class="message-group incoming">
+                <div class="message-bubble">
+                    أبشر ولا تشيل هم. تحققت من النظام وأرى أن طلبك رقم <bdi dir="ltr">TX-48213</bdi> قيد المعالجة النهائية وسيصلك رمز التفعيل خلال دقائق.
+                </div>
+                <div class="message-time"><bdi dir="ltr">10:43 ص</bdi></div>
+            </div>
+
+            <!-- Message 5 (Customer) -->
+            <div class="message-group outgoing">
+                <div class="message-bubble">
+                    ممتاز، شكراً جزيلاً لتعاونك السريع يا سارة.
+                </div>
+                <div class="message-time"><bdi dir="ltr">10:44 ص</bdi></div>
+            </div>
+
+            <!-- Message 6 (Agent Sara) -->
+            <div class="message-group incoming">
+                <div class="message-bubble">
+                    العفو، هذا واجبنا! إذا احتجت لأي مساعدة أخرى بخصوص باقاتك أو خدماتنا، أنا حاضرة دائماً. يومك سعيد!
+                </div>
+                <div class="message-time"><bdi dir="ltr">10:45 ص</bdi></div>
+            </div>
+        </main>
+
+        <!-- Footer / Input -->
+        <footer class="chat-footer">
+            <div class="input-wrapper">
+                <input type="text" class="chat-input" dir="auto" placeholder="اكتب رسالتك هنا..." />
+            </div>
+            <button class="send-btn" aria-label="إرسال الرسالة">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+                </svg>
+            </button>
+        </footer>
+    </div>
+
+</body>
+</html>

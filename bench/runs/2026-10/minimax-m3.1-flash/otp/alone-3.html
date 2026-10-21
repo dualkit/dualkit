@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d6d46">
+  <title>التحقق من رمز الدخول</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Tahoma, Arial, sans-serif;
+      color: #17221d;
+      background: #f4f8f6;
+      display: flex;
+      justify-content: center;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      padding: 28px 22px 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 44px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #0d6d46;
+      font-weight: 700;
+      font-size: 19px;
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: #0d6d46;
+      font-size: 17px;
+    }
+
+    .back-button {
+      width: 42px;
+      height: 42px;
+      border: 1px solid #dce5e0;
+      border-radius: 50%;
+      background: #fff;
+      color: #25332c;
+      display: grid;
+      place-items: center;
+      font-size: 23px;
+      cursor: pointer;
+    }
+
+    .content {
+      flex: 1;
+    }
+
+    .step {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: #e2f1e9;
+      color: #0d6d46;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 28px;
+      line-height: 1.4;
+    }
+
+    .description {
+      margin: 0 0 30px;
+      color: #617069;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .description strong {
+      color: #24352d;
+      font-weight: 700;
+      direction: ltr;
+      display: inline-block;
+    }
+
+    .code-group {
+      direction: ltr;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 9px;
+      margin-bottom: 22px;
+    }
+
+    .code-input {
+      width: 100%;
+      aspect-ratio: 1 / 1.18;
+      min-width: 0;
+      border: 1.5px solid #cad6d0;
+      border-radius: 13px;
+      background: #fff;
+      color: #17221d;
+      text-align: center;
+      font-size: 25px;
+      font-weight: 700;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      appearance: textfield;
+    }
+
+    .code-input::-webkit-outer-spin-button,
+    .code-input::-webkit-inner-spin-button {
+      margin: 0;
+      appearance: none;
+    }
+
+    .code-input:focus {
+      border-color: #0d6d46;
+      box-shadow: 0 0 0 3px rgba(13, 109, 70, 0.12);
+    }
+
+    .code-input.filled {
+      border-color: #0d6d46;
+      background: #fbfefc;
+    }
+
+    .error {
+      min-height: 24px;
+      margin: -7px 0 8px;
+      color: #c53e3e;
+      font-size: 13px;
+    }
+
+    .resend {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 2px;
+      color: #627068;
+      font-size: 14px;
+      border-bottom: 1px solid #e0e8e4;
+    }
+
+    .resend button {
+      border: 0;
+      background: transparent;
+      color: #0d6d46;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .resend button:disabled {
+      color: #7b8982;
+      cursor: default;
+    }
+
+    .support {
+      margin-top: 24px;
+      text-align: center;
+      color: #728078;
+      font-size: 13px;
+    }
+
+    .support a {
+      color: #0d6d46;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .verify-button {
+      width: 100%;
+      min-height: 54px;
+      margin-top: 32px;
+      border: 0;
+      border-radius: 14px;
+      color: #fff;
+      background: #0d6d46;
+      font: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(13, 109, 70, 0.2);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .verify-button:active {
+      transform: translateY(1px);
+    }
+
+    .verify-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    @media (max-width: 350px) {
+      .page {
+        padding-inline: 16px;
+      }
+
+      .code-group {
+        gap: 6px;
+      }
+
+      .code-input {
+        border-radius: 10px;
+        font-size: 21px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div class="logo" aria-label="البنك">
+        <span class="logo-mark">✓</span>
+        <span>البنك</span>
+      </div>
+      <button class="back-button" type="button" aria-label="رجوع">‹</button>
+    </header>
+
+    <section class="content">
+      <span class="step">التحقق من الهوية</span>
+      <h1>أدخل رمز التحقق</h1>
+      <p class="description">
+        أرسلنا رمزًا مكونًا من 6 أرقام إلى الرقم
+        <strong dir="ltr">+966 55 123 4567</strong>
+      </p>
+
+      <form id="verificationForm" novalidate>
+        <div class="code-group" aria-label="حقول رمز التحقق">
+          <input class="code-input" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="الرقم الأول">
+          <input class="code-input" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="الرقم الثاني">
+          <input class="code-input" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="الرقم الثالث">
+          <input class="code-input" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="الرقم الرابع">
+          <input class="code-input" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="الرقم الخامس">
+          <input class="code-input" type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="الرقم السادس">
+        </div>
+
+        <p class="error" id="error" role="alert" aria-live="polite"></p>
+
+        <div class="resend">
+          <span>لم تصلك الرسالة؟</span>
+          <button id="resendButton" type="button" disabled>إعادة الإرسال خلال 0:45</button>
+        </div>
+
+        <p class="support">
+          هل تواجه مشكلة؟ <a href="tel:8000000000">تواصل مع خدمة العملاء</a>
+        </p>
+
+        <button class="verify-button" id="verifyButton" type="submit" disabled>تحقق</button>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const inputs = Array.from(document.querySelectorAll(".code-input"));
+    const form = document.getElementById("verificationForm");
+    const error = document.getElementById("error");
+    const verifyButton = document.getElementById("verifyButton");
+    const resendButton = document.getElementById("resendButton");
+
+    function updateCodeState() {
+      inputs.forEach((input) => {
+        input.value = input.value.replace(/\D/g, "").slice(0, 1);
+        input.classList.toggle("filled", input.value !== "");
+      });
+
+      const complete = inputs.every((input) => input.value !== "");
+      verifyButton.disabled = !complete;
+      if (complete) error.textContent = "";
+    }
+
+    inputs.forEach((input, index) => {
+      input.addEventListener("input", () => {
+        input.value = input.value.replace(/\D/g, "").slice(0, 1);
+        updateCodeState();
+        if (input.value && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener("keydown", (event) => {
+        if (event.key === "Backspace" && !input.value && index > 0) {
+          inputs[index - 1].focus();
+        }
+        if (event.key === "ArrowLeft" && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+        if (event.key === "ArrowRight" && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+
+      input.addEventListener("paste", (event) => {
+        const digits = (event.clipboardData.getData("text") || "").replace(/\D/g, "");
+        if (digits) {
+          event.preventDefault();
+          digits.slice(0, 6).split("").forEach((digit, i) => {
+            if (inputs[i]) inputs[i].value = digit;
+          });
+          updateCodeState();
+          inputs[Math.min(digits.length, 6) - 1].focus();
+        }
+      });
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const code = inputs.map((input) => input.value).join("");
+
+      if (code.length !== 6) {
+        error.textContent = "يرجى إدخال الأرقام الستة كاملة.";
+        return;
+      }
+
+      error.textContent = "تم التحقق من الرمز بنجاح.";
+      verifyButton.textContent = "تم التحقق ✓";
+      verifyButton.disabled = true;
+    });
+
+    let remaining = 45;
+    const timer = setInterval(() => {
+      remaining -= 1;
+      const minutes = Math.floor(remaining / 60);
+      const seconds = String(remaining % 60).padStart(2, "0");
+      resendButton.textContent = `إعادة الإرسال خلال ${minutes}:${seconds}`;
+
+      if (remaining <= 0) {
+        clearInterval(timer);
+        resendButton.disabled = false;
+        resendButton.textContent = "إعادة إرسال الرمز";
+      }
+    }, 1000);
+
+    resendButton.addEventListener("click", () => {
+      remaining = 45;
+      resendButton.disabled = true;
+      resendButton.textContent = "إعادة الإرسال خلال 0:45";
+      error.textContent = "تم إرسال رمز جديد.";
+      inputs.forEach((input) => input.value = "");
+      updateCodeState();
+      inputs[0].focus();
+    });
+
+    inputs[0].focus();
+  </script>
+</body>
+</html>

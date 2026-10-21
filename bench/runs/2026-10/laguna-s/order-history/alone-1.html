@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل الطلبات - تطبيق التسوق السعودي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            direction: rtl;
+            text-align: right;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .header h1 {
+            font-size: 24px;
+            color: #c0392b;
+            font-weight: bold;
+        }
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .order-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border-right: 5px solid #ccc;
+        }
+        .order-card.delivered {
+            border-right-color: #27ae60;
+        }
+        .order-card.onway {
+            border-right-color: #2980b9;
+        }
+        .order-card.cancelled {
+            border-right-color: #c0392b;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .order-number {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .status-badge.delivered {
+            background-color: #27ae60;
+        }
+        .status-badge.onway {
+            background-color: #2980b9;
+        }
+        .status-badge.cancelled {
+            background-color: #c0392b;
+        }
+        .order-details {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.8;
+        }
+        .order-details span {
+            display: inline-block;
+            min-width: 110px;
+        }
+        .order-total {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>سجل الطلبات</h1>
+    </div>
+    <div class="order-list">
+        <!-- طلب تم التوصيل -->
+        <div class="order-card delivered">
+            <div class="order-header">
+                <div class="order-number">رقم الطلب: #A-10293</div>
+                <div class="status-badge delivered">تم التوصيل</div>
+            </div>
+            <div class="order-details">
+                <div><span>التاريخ (ميلادي):</span> 15 مارس 2024</div>
+                <div><span>التاريخ (هجري):</span> 2 شعبان 1445</div>
+            </div>
+            <div class="order-total">المجموع: ٢٩٩.٩٩ ر.س</div>
+        </div>
+
+        <!-- طلب في الطريق -->
+        <div class="order-card onway">
+            <div class="order-header">
+                <div class="order-number">رقم الطلب: #A-10294</div>
+                <div class="status-badge onway">في الطريق</div>
+            </div>
+            <div class="order-details">
+                <div><span>التاريخ (ميلادي):</span> 18 مارس 2024</div>
+                <div><span>التاريخ (هجري):</span> 5 شعبان 1445</div>
+            </div>
+            <div class="order-total">المجموع: ١٤٩.٥٠ ر.س</div>
+        </div>
+
+        <!-- طلب آخر في الطريق -->
+        <div class="order-card onway">
+            <div class="order-header">
+                <div class="order-number">رقم الطلب: #A-10295</div>
+                <div class="status-badge onway">في الطريق</div>
+            </div>
+            <div class="order-details">
+                <div><span>التاريخ (ميلادي):</span> 20 مارس 2024</div>
+                <div><span>التاريخ (هجري):</span> 7 شعبان 1445</div>
+            </div>
+            <div class="order-total">المجموع: ٤٩٩.٠٠ ر.س</div>
+        </div>
+
+        <!-- طلب ملغى -->
+        <div class="order-card cancelled">
+            <div class="order-header">
+                <div class="order-number">رقم الطلب: #A-10292</div>
+                <div class="status-badge cancelled">ملغى</div>
+            </div>
+            <div class="order-details">
+                <div><span>التاريخ (ميلادي):</span> 10 مارس 2024</div>
+                <div><span>التاريخ (هجري):</span> 25 رجب 1445</div>
+            </div>
+            <div class="order-total">المجموع: ١٩٩.٩٩ ر.س</div>
+        </div>
+    </div>
+</body>
+</html>

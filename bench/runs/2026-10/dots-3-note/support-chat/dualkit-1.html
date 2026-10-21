@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدعم - تطبيق الكويت للاتصالات</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :lang(ar) {
+    --type-label-size: 14px;
+    --type-caption-size: 14px;
+    --type-body-size: 16px;
+    letter-spacing: 0;
+    text-transform: none;
+    font-style: normal;
+    line-height: 1.7;
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: 'Cairo', sans-serif;
+    font-size: var(--type-body-size);
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .phone {
+    width: 375px;
+    height: 667px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  /* Header */
+  .header {
+    background: #0a7d40;
+    color: #fff;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .back-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+  }
+  .back-btn:active {
+    background: rgba(255,255,255,0.2);
+  }
+  .back-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+  .header-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .header-name {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .header-status {
+    font-size: 12px;
+    opacity: 0.8;
+  }
+  /* Messages */
+  .messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .msg {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 18px;
+    position: relative;
+    font-size: 15px;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+  .msg.agent {
+    align-self: flex-start;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+  }
+  .msg.customer {
+    align-self: flex-end;
+    background: #0a7d40;
+    color: #fff;
+  }
+  .msg-time {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+    text-align: start;
+  }
+  .msg.customer .msg-time {
+    color: rgba(255,255,255,0.7);
+  }
+  /* Input */
+  .input-area {
+    display: flex;
+    padding: 10px 16px;
+    border-top: 1px solid #e0e0e0;
+    background: #fff;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .input-field {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 10px 16px;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    direction: auto;
+    background: #f9f9f9;
+  }
+  .input-field:focus {
+    background: #fff;
+    border-color: #0a7d40;
+  }
+  .send-btn {
+    background: #0a7d40;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .send-btn:active {
+    background: #085d30;
+  }
+  .send-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  /* Mirroring directional icons */
+  .icon-directional:dir(rtl) {
+    transform: scaleX(-1);
+  }
+  /* Isolate LTR runs */
+  bdi {
+    unicode-bidi: isolate;
+  }
+  /* Scrollbar */
+  .messages::-webkit-scrollbar {
+    width: 6px;
+  }
+  .messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  .messages::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="header">
+      <button class="back-btn" aria-label="رجوع">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" class="icon-directional"/>
+        </svg>
+      </button>
+      <div class="header-info">
+        <span class="header-name">سارة</span>
+        <span class="header-status">متصل الآن</span>
+      </div>
+    </div>
+    <div class="messages">
+      <!-- Customer message 1 -->
+      <div class="msg customer">
+        أود تفعيل بطاقة <bdi dir="ltr">eSIM</bdi> على خطة <bdi dir="ltr">5G</bdi> لي. ما هي الخطوات المطلوبة؟
+        <div class="msg-time">09:15</div>
+      </div>
+      <!-- Agent message 1 -->
+      <div class="msg agent">
+        مرحباً بك! نحن نساعدك في تفعيل الخدمة. يرجى تزويدي برقم الطلب.
+        <div class="msg-time">09:16</div>
+      </div>
+      <!-- Customer message 2 -->
+      <div class="msg customer">
+        رقم طلبي هو <bdi dir="ltr">TX-48213</bdi>. أريد معرفة طريقة التفعيل خطوة بخطوة.
+        <div class="msg-time">09:17</div>
+      </div>
+      <!-- Agent message 2 -->
+      <div class="msg agent">
+        يسرنا مساعدتك. لتفعيل <bdi dir="ltr">eSIM</bdi>، افتح تطبيق الإعدادات، اختر «<bdi dir="ltr">cellular</bdi>»، ثم اضغط على «إضافة خطة». تأكد أن جهازك يدعم تقنية <bdi dir="ltr">5G</bdi>.
+        <div class="msg-time">09:18</div>
+      </div>
+      <!-- Customer message 3 -->
+      <div class="msg customer">
+        هل هناك أي تكلفة مرتبطة بتفعيل <bdi dir="ltr">eSIM</bdi>؟
+        <div class="msg-time">09:19</div>
+      </div>
+      <!-- Agent message 3 -->
+      <div class="msg agent">
+        لا تكلفة على تفعيل <bdi dir="ltr">eSIM</bdi>. تمت تفعيل خدمتك بنجاح. للأسئلة الإضافية، يرجى الاتصال بفريق الدعم على <bdi dir="ltr">+965 12345678</bdi>.
+        <div class="msg-time">09:20</div>
+      </div>
+    </div>
+    <div class="input-area">
+      <input type="text" class="input-field" placeholder="اكتب رسالتك..." dir="auto" autocomplete="off">
+      <button class="send-btn" aria-label="أرسل">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7" class="icon-directional"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</body>
+</html>

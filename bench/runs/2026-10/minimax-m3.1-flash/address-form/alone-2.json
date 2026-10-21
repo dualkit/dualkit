@@ -1,0 +1,53 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "address-form",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T16:48:07.605Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"theme-color\" content=\"#0d8f55\">\n  <title>عنوان التوصيل</title>\n  <style>\n    * {\n      box-sizing: border-box;\n    }\n\n    body {\n      margin: 0;\n      min-height: 100vh;\n      background: #f4f6f5;\n      color: #17221d;\n      font-family: Tahoma, Arial, sans-serif;\n      -webkit-font-smoothing: antialiased;\n    }\n\n    .page {\n      width: 100%;\n      max-width: 480px;\n      min-height: 100vh;\n      margin: 0 auto;\n      padding: 24px 20px 32px;\n      background: #fff;\n    }\n\n    .header {\n      margin-bottom: 26px;\n    }\n\n    .header h1 {\n      margin: 0 0 7px;\n      font-size: 24px;\n      line-height: 1.4;\n      color: #10251c;\n    }\n\n    .header p {\n      margin: 0;\n      color: #6d7c75;\n      font-size: 14px;\n      line-height: 1.7;\n    }\n\n    form {\n      display: grid;\n      gap: 18px;\n    }\n\n    .field {\n      display: grid;\n      gap: 8px;\n    }\n\n    label {\n      font-size: 14px;\n      font-weight: 700;\n      color: #263a31;\n    }\n\n    input,\n    select {\n      width: 100%;\n      height: 52px;\n      border: 1px solid #d8dfdc;\n      border-radius: 12px;\n      background: #fff;\n      color: #17221d;\n      padding: 0 15px;\n      font: inherit;\n      font-size: 16px;\n      outline: none;\n      transition: border-color 0.2s, box-shadow 0.2s;\n    }\n\n    input::placeholder {\n      color: #a0aaa5;\n    }\n\n    input:focus,\n    select:focus {\n      border-color: #0d8f55;\n      box-shadow: 0 0 0 3px rgba(13, 143, 85, 0.12);\n    }\n\n    select {\n      appearance: none;\n      background-image:\n        linear-gradient(45deg, transparent 50%, #64756d 50%),\n        linear-gradient(135deg, #64756d 50%, transparent 50%);\n      background-position:\n        18px calc(50% - 2px),\n        13px calc(50% - 2px);\n      background-size: 5px 5px, 5px 5px;\n      background-repeat: no-repeat;\n      padding-left: 42px;\n    }\n\n    .phone-wrap {\n      position: relative;\n    }\n\n    .phone-wrap input {\n      padding-left: 54px;\n      direction: ltr;\n      text-align: left;\n      font-weight: 700;\n      letter-spacing: 0.4px;\n    }\n\n    .phone-prefix {\n      position: absolute;\n      top: 50%;\n      left: 15px;\n      transform: translateY(-50%);\n      color: #68776f;\n      font-size: 14px;\n      direction: ltr;\n      pointer-events: none;\n    }\n\n    .button {\n      width: 100%;\n      min-height: 54px;\n      margin-top: 8px;\n      border: 0;\n      border-radius: 13px;\n      background: #0d8f55;\n      color: #fff;\n      font: inherit;\n      font-size: 16px;\n      font-weight: 700;\n      cursor: pointer;\n      box-shadow: 0 8px 18px rgba(13, 143, 85, 0.2);\n      transition: background 0.2s, transform 0.1s;\n    }\n\n    .button:hover {\n      background: #0a7847;\n    }\n\n    .button:active {\n      transform: translateY(1px);\n    }\n\n    .button:focus-visible {\n      outline: 3px solid rgba(13, 143, 85, 0.3);\n      outline-offset: 3px;\n    }\n\n    @media (max-width: 360px) {\n      .page {\n        padding: 20px 16px 28px;\n      }\n\n      .header h1 {\n        font-size: 22px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <main class=\"page\">\n    <header class=\"header\">\n      <h1>عنوان التوصيل</h1>\n      <p>أدخل تفاصيل العنوان لتسهيل عملية التوصيل.</p>\n    </header>\n\n    <form>\n      <div class=\"field\">\n        <label for=\"building\">المبنى أو الفيلا</label>\n        <input id=\"building\" name=\"building\" type=\"text\" placeholder=\"مثال: مبنى 12، شقة 304\" autocomplete=\"street-address\">\n      </div>\n\n      <div class=\"field\">\n        <label for=\"street\">الشارع</label>\n        <input id=\"street\" name=\"street\" type=\"text\" placeholder=\"اسم الشارع\" autocomplete=\"address-line2\">\n      </div>\n\n      <div class=\"field\">\n        <label for=\"area\">المنطقة</label>\n        <input id=\"area\" name=\"area\" type=\"text\" placeholder=\"اسم المنطقة\" autocomplete=\"address-level3\">\n      </div>\n\n      <div class=\"field\">\n        <label for=\"emirate\">الإمارة</label>\n        <select id=\"emirate\" name=\"emirate\" autocomplete=\"address-level1\">\n          <option value=\"dubai\" selected>دبي</option>\n          <option value=\"abu-dhabi\">أبوظبي</option>\n          <option value=\"sharjah\">الشارقة</option>\n          <option value=\"ajman\">عجمان</option>\n          <option value=\"umm-al-quwain\">أم القيوين</option>\n          <option value=\"ras-al-khaimah\">رأس الخيمة</option>\n          <option value=\"fujairah\">الفجيرة</option>\n        </select>\n      </div>\n\n      <div class=\"field\">\n        <label for=\"makani\">رقم المكناني</label>\n        <input id=\"makani\" name=\"makani\" type=\"text\" inputmode=\"numeric\" placeholder=\"أدخل رقم المكناني\">\n      </div>\n\n      <div class=\"field\">\n        <label for=\"phone\">رقم الهاتف</label>\n        <div class=\"phone-wrap\">\n          <span class=\"phone-prefix\">+971</span>\n          <input id=\"phone\" name=\"phone\" type=\"tel\" placeholder=\"050 123 4567\" autocomplete=\"tel\">\n        </div>\n      </div>\n\n      <button class=\"button\" type=\"submit\">حفظ العنوان</button>\n    </form>\n  </main>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 327,
+    "output": 1637
+  },
+  "ms": 9929,
+  "finish": "stop",
+  "reasoningTokens": 72,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 95,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 227.328125,
+        "y": 27,
+        "width": 142.671875,
+        "height": 27
+      },
+      "message": "Arabic falls back from Tahoma, Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>عنوان التوصيل</h1>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 420.390625,
+        "width": 350,
+        "height": 52
+      },
+      "message": "padding-right: 15px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<select id=\"emirate\" name=\"emirate\" autocomplete=\"address-level1\">\n          <option value=\"dubai\" selected=\"\">دبي</option>\n          <option value=\"abu-dhabi\">"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

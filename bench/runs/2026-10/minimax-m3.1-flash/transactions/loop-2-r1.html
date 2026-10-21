@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f7f9">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <title>سجل المعاملات</title>
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --text: #17212b;
+      --muted: #6c7783;
+      --line: #e8ecef;
+      --green: #087f5b;
+      --green-soft: #e8f7f1;
+      --red: #c2413b;
+      --red-soft: #fff0ef;
+      --brand: #0c7357;
+      --brand-dark: #075b45;
+      --shadow: 0 8px 28px rgba(18, 42, 35, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Noto Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(12, 115, 87, 0.08), transparent 32%),
+        var(--bg);
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: env(safe-area-inset-top) 18px calc(30px + env(safe-area-inset-bottom));
+      background: rgba(244, 246, 248, 0.94);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 62px;
+    }
+
+    .icon-button {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      box-shadow: 0 3px 12px rgba(18, 42, 35, 0.04);
+    }
+
+    .icon-button:active {
+      transform: scale(0.96);
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.6;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .profile {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #e1eee9;
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    .balance-card {
+      position: relative;
+      overflow: hidden;
+      margin-top: 18px;
+      padding: 23px 22px 22px;
+      border-radius: 24px;
+      color: #fff;
+      background: linear-gradient(135deg, #087457 0%, #0b8a66 100%);
+      box-shadow: 0 14px 32px rgba(8, 116, 87, 0.2);
+    }
+
+    .balance-card::before,
+    .balance-card::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .balance-card::before {
+      width: 170px;
+      height: 170px;
+      inset-block-start: -90px;
+      inset-inline-end: -35px;
+    }
+
+    .balance-card::after {
+      width: 110px;
+      height: 110px;
+      inset-block-end: -70px;
+      inset-inline-start: 25px;
+    }
+
+    .balance-label {
+      position: relative;
+      margin: 0 0 7px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .balance-value {
+      position: relative;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin: 0;
+      font-size: 31px;
+      line-height: 1.5;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .balance-value small {
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .balance-meta {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin: 13px 0 0;
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .balance-meta svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 25px 2px 12px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.6;
+      font-weight: 700;
+    }
+
+    .filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 38px;
+      padding: 6px 11px;
+      border: 1px solid #dfe5e6;
+      border-radius: 12px;
+      background: var(--surface);
+      color: #34413c;
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .filter svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .transactions {
+      overflow: hidden;
+      border: 1px solid rgba(226, 231, 233, 0.9);
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .transaction {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      min-height: 79px;
+      padding: 13px 14px;
+    }
+
+    .transaction + .transaction {
+      border-top: 1px solid var(--line);
+    }
+
+    .merchant-icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #f0f3f5;
+      color: #52616c;
+    }
+
+    .merchant-icon.incoming {
+      background: var(--green-soft);
+      color: var(--green);
+    }
+
+    .merchant-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .merchant-info {
+      min-width: 0;
+    }
+
+    .merchant-name {
+      overflow: hidden;
+      margin: 0 0 3px;
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.55;
+      font-weight: 650;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .merchant-name bdi {
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-weight: 650;
+    }
+
+    .transaction-date {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .amount {
+      min-width: 91px;
+      text-align: end;
+      font-size: 15px;
+      line-height: 1.55;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .amount.incoming {
+      color: var(--green);
+    }
+
+    .amount.outgoing {
+      color: var(--text);
+    }
+
+    .amount span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .load-more {
+      width: 100%;
+      min-height: 48px;
+      border: 0;
+      border-top: 1px solid var(--line);
+      background: #fbfcfc;
+      color: var(--brand);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .load-more:active {
+      background: #f2f7f5;
+    }
+
+    @media (max-width: 370px) {
+      .app {
+        padding-inline: 12px;
+      }
+
+      .transaction {
+        grid-template-columns: 40px minmax(0, 1fr) auto;
+        gap: 9px;
+        padding-inline: 11px;
+      }
+
+      .merchant-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .amount {
+        min-width: 82px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <button class="icon-button" type="button" aria-label="رجوع">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1 class="page-title">سجل المعاملات</h1>
+      <div class="profile" aria-label="الملف الشخصي">م</div>
+    </header>
+
+    <section class="balance-card" aria-labelledby="balance-title">
+      <p class="balance-label" id="balance-title">الرصيد المتاح</p>
+      <p class="balance-value">
+        <bdi>1,284.750</bdi>
+        <small>ر.ع.</small>
+      </p>
+      <p class="balance-meta">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3l7 3v5c0 4.6-2.9 8-7 10-4.1-2-7-5.4-7-10V6l7-3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M9.5 12l1.7 1.7 3.6-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        محفوظ بأمان في محفظة عُمان
+      </p>
+    </section>
+
+    <div class="section-heading">
+      <h2>المعاملات</h2>
+      <button class="filter" type="button" aria-label="تصفية المعاملات حسب هذا الشهر">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M7 3v3M17 3v3M4 9h16M6 5h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        هذا الشهر
+      </button>
+    </div>
+
+    <section class="transactions" aria-label="ثماني معاملات">
+      <article class="transaction">
+        <div class="merchant-icon incoming">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v13m0 0l-5-5m5 5l5-5M5 20h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="merchant-info">
+          <p class="merchant-name">تحويل وارد</p>
+          <p class="transaction-date">18 أغسطس 2025</p>
+        </div>
+        <div class="amount incoming">
+          <bdi>+250.000</bdi>
+          <span>ر.ع. وارد</span>
+        </div>
+      </article>
+
+      <article class="transaction">
+        <div class="merchant-icon">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 8h16l-1 12H5L4 8zm4 0V6a4 4 0 118 0v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="merchant-info">
+          <p class="merchant-name"><bdi dir="ltr">Lulu Hypermarket</bdi></p>
+          <p class="transaction-date">16 أغسطس 2025</p>
+        </div>
+        <div class="amount outgoing">
+          <bdi>−37.850</bdi>
+          <span>ر.ع. صادر</span>
+        </div>
+      </article>
+
+      <article class="transaction">
+        <div class="merchant-icon">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M7 9h6M7 13h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="merchant-info">
+          <p class="merchant-name"><bdi dir="ltr">Netflix</bdi></p>
+          <p class="transaction-date">14 أغسطس 2025</p>
+        </div>
+        <div class="amount outgoing">
+          <bdi>−11.900</bdi>
+          <span>ر.ع. صادر</span>
+        </div>
+      </article>
+
+      <article class="transaction">
+        <div class="merchant-icon incoming">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v13m0 0l-5-5m5 5l5-5M5 20h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="merchant-info">
+          <p class="merchant-name">استرداد مبلغ</p>
+          <p class="transaction-date">12 أغسطس 2025</p>
+        </div>
+        <div class="amount incoming">
+          <bdi>+64.300</bdi>
+          <span>ر.ع. وارد</span>
+        </div>
+      </article>
+
+      <article class="transaction">
+        <div class="merchant-icon">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 9h16M6 9l1 11h10l1-11M9 9V6a3 3 0 016 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="merchant-info">
+          <p class="merchant-name">متجر العيد</p>
+          <p class="transaction-date">10 أغسطس 2025</p>
+        </div>
+        <div class="amount outgoing">
+          <bdi>−128.450</bdi>
+          <span>ر.ع. صادر</span>
+        </div>
+      </article>
+
+      <article class="transaction">
+        <div class="merchant-icon">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 21V4h9a3 3 0 013 3v1a3 3 0 01-3 3H8m0 0l3-3m-3 3l3 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="merchant-info">
+          <p class="merchant-name">مقهى ركن البن</p>
+          <p class="transaction-date">8 أغسطس 2025</p>
+        </div>
+        <div class="amount outgoing">
+          <bdi>−4.200</bdi>
+          <span>ر.ع. صادر</span>
+        </div>
+      </article>
+
+      <article class="transaction">
+        <div class="merchant-icon incoming">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v13m0 0l-5-5m5 5l5-5M5 20h14" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="merchant-info">
+          <p class="merchant-name">إيداع نقدي</p>
+          <p class="transaction-date">5 أغسطس 2025</p>
+        </div>
+        <div class="amount incoming">
+          <bdi>+400.000</bdi>
+          <span>ر.ع. وارد</span>
+        </div>
+      </article>
+
+      <article class="transaction">
+        <div class="merchant-icon">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6 7h12l-1 13H7L6 7zm3 0V5a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="merchant-info">
+          <p class="merchant-name">مركز للفنون</p>
+          <p class="transaction-date">2 أغسطس 2025</p>
+        </div>
+        <div class="amount outgoing">
+          <bdi>−22.750</bdi>
+          <span>ر.ع. صادر</span>
+        </div>
+      </article>
+
+      <button class="load-more" type="button">عرض المعاملات السابقة</button>
+    </section>
+  </main>
+</body>
+</html>

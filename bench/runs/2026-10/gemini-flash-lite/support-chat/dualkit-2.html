@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الدعم الفني - اتصالات الكويت</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-canvas: #f0f4f8;
+      --bg-phone: #ffffff;
+      --primary: #0052cc;
+      --primary-light: #e6f0ff;
+      --text-main: #172b4d;
+      --text-muted: #6b778c;
+      --bubble-agent: #f4f5f7;
+      --bubble-user: #0052cc;
+      --bubble-user-text: #ffffff;
+      --border-color: #dfe1e6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    /* Arabic typography rules */
+    :lang(ar) {
+      font-size: 16px;
+      line-height: 1.7;
+      letter-spacing: 0;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Phone Shell */
+    .phone-frame {
+      width: 100%;
+      max-width: 390px;
+      height: 844px;
+      background-color: var(--bg-phone);
+      border-radius: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 0 0 10px #1e293b;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Status Bar Mock */
+    .status-bar {
+      height: 44px;
+      background-color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      flex-shrink: 0;
+    }
+
+    /* Chat Header */
+    .chat-header {
+      background-color: #ffffff;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      flex-shrink: 0;
+      gap: 12px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+    }
+
+    .agent-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      position: relative;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background-color: #36b37e;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 0;
+      inset-inline-start: 0;
+    }
+
+    .agent-info h1 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .agent-info p {
+      font-size: 13px;
+      color: #36b37e;
+      font-weight: 500;
+    }
+
+    /* Chat Messages Body */
+    .chat-messages {
+      flex: 1;
+      background-color: #f8fafc;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message-group {
+      display: flex;
+      flex-direction: column;
+      max-width: 80%;
+    }
+
+    .message-group.agent {
+      align-self: flex-start;
+    }
+
+    .message-group.user {
+      align-self: flex-end;
+    }
+
+    .bubble {
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 14px;
+      line-height: 1.6;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      word-break: break-word;
+    }
+
+    .agent .bubble {
+      background-color: var(--bubble-agent);
+      color: var(--text-main);
+      border-start-start-radius: 4px;
+    }
+
+    .user .bubble {
+      background-color: var(--bubble-user);
+      color: var(--bubble-user-text);
+      border-start-end-radius: 4px;
+    }
+
+    .timestamp {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      padding-inline: 4px;
+    }
+
+    .agent .timestamp {
+      align-self: flex-start;
+    }
+
+    .user .timestamp {
+      align-self: flex-end;
+    }
+
+    /* Input Footer */
+    .chat-footer {
+      background-color: #ffffff;
+      padding: 12px 16px 28px 16px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .input-wrapper {
+      flex: 1;
+      background-color: #f1f3f5;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      border: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--primary);
+      background-color: #ffffff;
+    }
+
+    .chat-input {
+      flex: 1;
+      border: none;
+      background: none;
+      padding: 10px 0;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text-main);
+      outline: none;
+    }
+
+    .chat-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .send-btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: opacity 0.2s;
+    }
+
+    .send-btn:hover {
+      opacity: 0.9;
+    }
+
+    .send-btn svg {
+      width: 18px;
+      height: 18px;
+      transform: scaleX(-1); /* Point towards start in RTL if needed, or normal */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-frame">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span>9:41</span>
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <span style="font-size: 12px;">5G</span>
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><path d="M1 9h2v2H1V9zm3-3h2v5H4V6zm3-3h2v8H7V3zm3-3h2v11h-2V0zm3 4h2v7h-2V4z"/></svg>
+      </div>
+    </div>
+
+    <!-- Chat Header -->
+    <header class="chat-header">
+      <button class="back-btn" aria-label="رجوع">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+      <div class="agent-avatar">
+        س
+        <div class="status-dot"></div>
+      </div>
+      <div class="agent-info">
+        <h1>سارة</h1>
+        <p>خدمة العملاء</p>
+      </div>
+    </header>
+
+    <!-- Chat Messages -->
+    <main class="chat-messages">
+      
+      <!-- Message 1: Customer -->
+      <div class="message-group user">
+        <div class="bubble">
+          مرحباً، أريد الاستفسار عن طريقة تفعيل باقة الـ <bdi dir="ltr">5G</bdi> الجديدة.
+        </div>
+        <span class="timestamp">10:40 ص</span>
+      </div>
+
+      <!-- Message 2: Agent -->
+      <div class="message-group agent">
+        <div class="bubble">
+          أهلاً بك! يسعدني مساعدتك. هل تقصد باقة الإنترنت المنزلي أم باقة الموبايل؟
+        </div>
+        <span class="timestamp">10:41 ص</span>
+      </div>
+
+      <!-- Message 3: Customer -->
+      <div class="message-group user">
+        <div class="bubble">
+          باقة الموبايل، ولقد طلبت شرائح <bdi dir="ltr">eSIM</bdi> برقم الطلب <bdi dir="ltr">TX-48213</bdi>.
+        </div>
+        <span class="timestamp">10:42 ص</span>
+      </div>
+
+      <!-- Message 4: Agent -->
+      <div class="message-group agent">
+        <div class="bubble">
+          شكراً لتزويدي بالمعلومات. لقد تحققت من الطلب رقم <bdi dir="ltr">TX-48213</bdi> وهو قيد المعالجة للتفعيل الآن.
+        </div>
+        <span class="timestamp">10:43 ص</span>
+      </div>
+
+      <!-- Message 5: Customer -->
+      <div class="message-group user">
+        <div class="bubble">
+          ممتاز، كم يستغرق وقت التفعيل عادة؟
+        </div>
+        <span class="timestamp">10:44 ص</span>
+      </div>
+
+      <!-- Message 6: Agent -->
+      <div class="message-group agent">
+        <div class="bubble">
+          عادة ما يستغرق التفعيل أقل من 15 دقيقة. هل يمكنني مساعدتك بشيء آخر اليوم؟
+        </div>
+        <span class="timestamp">10:45 ص</span>
+      </div>
+
+    </main>
+
+    <!-- Input Footer -->
+    <footer class="chat-footer">
+      <div class="input-wrapper">
+        <input type="text" class="chat-input" placeholder="اكتب رسالتك هنا..." dir="auto">
+      </div>
+      <button class="send-btn" aria-label="إرسال الرسالة">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </footer>
+  </div>
+
+</body>
+</html>

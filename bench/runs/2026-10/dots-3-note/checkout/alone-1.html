@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: #fff;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .back-arrow {
+      background: none;
+      border: none;
+      font-size: 24px;
+      margin-left: 8px;
+      cursor: pointer;
+    }
+    .title {
+      font-size: 20px;
+      font-weight: bold;
+    }
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .photo-placeholder {
+      width: 60px;
+      height: 60px;
+      background-color: #ddd;
+      border-radius: 8px;
+      margin-left: 12px;
+    }
+    .item-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .item-name {
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    .stepper {
+      display: flex;
+      align-items: center;
+    }
+    .stepper button {
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: #f0f0f0;
+      border-radius: 4px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .stepper input {
+      width: 40px;
+      height: 30px;
+      text-align: center;
+      margin: 0 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .item-price {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .promo {
+      margin: 16px 0;
+    }
+    .promo input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .summary {
+      margin-top: 16px;
+    }
+    .summary .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px dashed #ccc;
+    }
+    .summary .total {
+      font-weight: bold;
+      font-size: 18px;
+      margin-top: 8px;
+    }
+    .place-order {
+      width: 100%;
+      padding: 12px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      margin-top: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <button class="back-arrow">←</button>
+      <h1 class="title">إتمام الطلب</h1>
+    </header>
+
+    <!-- Item 1 -->
+    <div class="item">
+      <div class="photo-placeholder"></div>
+      <div class="item-info">
+        <div class="item-name">تفاح</div>
+        <div class="stepper">
+          <button class="decrease">-</button>
+          <input type="number" value="1" min="0">
+          <button class="increase">+</button>
+        </div>
+      </div>
+      <div class="item-price">10.00 د.إ</div>
+    </div>
+
+    <!-- Item 2 -->
+    <div class="item">
+      <div class="photo-placeholder"></div>
+      <div class="item-info">
+        <div class="item-name">حليب</div>
+        <div class="stepper">
+          <button class="decrease">-</button>
+          <input type="number" value="2" min="0">
+          <button class="increase">+</button>
+        </div>
+      </div>
+      <div class="item-price">5.00 د.إ</div>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="item">
+      <div class="photo-placeholder"></div>
+      <div class="item-info">
+        <div class="item-name">بروتين</div>
+        <div class="stepper">
+          <button class="decrease">-</button>
+          <input type="number" value="1" min="0">
+          <button class="increase">+</button>
+        </div>
+      </div>
+      <div class="item-price">20.00 د.إ</div>
+    </div>
+
+    <!-- Promo code -->
+    <div class="promo">
+      <input type="text" placeholder="رمز الخصم">
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+      <div class="row subtotal">
+        <span>الإجمالي الفرعي</span>
+        <span>0.00 د.إ</span>
+      </div>
+      <div class="row delivery">
+        <span>الdelivery</span>
+        <span>10.00 د.إ</span>
+      </div>
+      <div class="row vat">
+        <span>ضريبة القيمة المضافة (5%)</span>
+        <span>0.00 د.إ</span>
+      </div>
+      <div class="row total">
+        <span>الإجمالي</span>
+        <span>0.00 د.إ</span>
+      </div>
+    </div>
+
+    <!-- Place order -->
+    <button class="place-order">Place order</button>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const items = document.querySelectorAll('.item');
+      const subtotalEl = document.querySelector('.subtotal span:last-child');
+      const vatEl = document.querySelector('.vat span:last-child');
+      const totalEl = document.querySelector('.total span:last-child');
+
+      function updateTotals() {
+        let subtotal = 0;
+        items.forEach(item => {
+          const price = parseFloat(item.querySelector('.item-price').textContent);
+          const quantity = parseInt(item.querySelector('input').value);
+          subtotal += price * quantity;
+        });
+        const delivery = 10;
+        const vat = subtotal * 0.05;
+        const total = subtotal + delivery + vat;
+        subtotalEl.textContent = subtotal.toFixed(2) + ' د.إ';
+        vatEl.textContent = vat.toFixed(2) + ' د.إ';
+        totalEl.textContent = total.toFixed(2) + ' د.إ';
+      }
+
+      items.forEach(item => {
+        const decBtn = item.querySelector('.decrease');
+        const incBtn = item.querySelector('.increase');
+        const input = item.querySelector('input');
+
+        decBtn.addEventListener('click', () => {
+          if (input.value > 0) {
+            input.value--;
+            updateTotals();
+          }
+        });
+        incBtn.addEventListener('click', () => {
+          input.value++;
+          updateTotals();
+        });
+        input.addEventListener('change', updateTotals);
+      });
+
+      updateTotals();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملخص الدفع</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #1a1a1a;
+            direction: rtl;
+            text-align: right;
+            padding: 20px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .back-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            margin-left: 12px;
+            color: #4a4a4a;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .amount-due {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+        .due-date {
+            font-size: 15px;
+            color: #6a6a6a;
+            margin-bottom: 12px;
+        }
+        .order-info {
+            font-size: 15px;
+            color: #4a4a4a;
+        }
+        .phone-field {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d0d0d0;
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: right;
+            margin-bottom: 20px;
+            background-color: #fafafa;
+        }
+        .phone-field::placeholder {
+            color: #9a9a9a;
+        }
+        .pay-button {
+            width: 100%;
+            background-color: #0073e6;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .pay-button:hover {
+            background-color: #005bb5;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="back-button" aria-label="رجوع">←</button>
+        <h1 class="header-title">ملخص الدفع</h1>
+    </div>
+
+    <div class="card">
+        <div class="amount-due">1,234.50 درهم إماراتي</div>
+        <div class="due-date">تاريخ الاستحقاق: 3 نوفمبر 2026 | 14 ربيع أول 1448 هـ</div>
+        <div class="order-info">لديك 3 عناصر في هذا الطلب</div>
+    </div>
+
+    <div class="card">
+        <input type="tel" class="phone-field" placeholder="أدخل رقم الهاتف (مثال: 050 123 4567)" />
+    </div>
+
+    <button class="pay-button">دفع الآن</button>
+</body>
+</html>

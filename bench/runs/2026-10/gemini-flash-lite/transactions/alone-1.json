@@ -1,0 +1,419 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "transactions",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-10-21T16:56:52.439Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>تطبيق المحفظة - المعاملات</title>\n    <!-- Tailwind CSS CDN -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Fonts: Tajawal -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap\" rel=\"stylesheet\">\n    <script>\n        tailwind.config = {\n            theme: {\n                extend: {\n                    fontFamily: {\n                        tajawal: ['Tajawal', 'sans-serif'],\n                    },\n                    colors: {\n                        brand: {\n                            50: '#e6f4f1',\n                            500: '#008767',\n                            600: '#006c52',\n                            700: '#00523e',\n                        }\n                    }\n                }\n            }\n        }\n    </script>\n</head>\n<body class=\"bg-gray-900 font-tajawal flex items-center justify-center min-h-screen p-0 m-0 sm:p-4\">\n\n    <!-- Phone Frame -->\n    <div class=\"w-full max-w-[390px] h-screen sm:h-[844px] bg-gray-50 sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative sm:border-[10px] sm:border-gray-800\">\n        \n        <!-- Dynamic Island / Notch Mockup -->\n        <div class=\"absolute top-0 left-1/2 transform -translate-x-1/2 h-6 w-36 bg-gray-800 rounded-b-2xl z-50 hidden sm:block\"></div>\n\n        <!-- Top App Bar -->\n        <div class=\"bg-white px-6 pt-12 pb-4 flex items-center justify-between border-b border-gray-100 shadow-xs\">\n            <div class=\"flex items-center gap-3\">\n                <button class=\"w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-200 transition\">\n                    <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"></path>\n                    </svg>\n                </button>\n                <h1 class=\"text-xl font-bold text-gray-800\">سجل المعاملات</h1>\n            </div>\n            <button class=\"w-9 h-9 rounded-full bg-brand-50 flex items-center justify-center text-brand-600 hover:bg-brand-100 transition\">\n                <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z\"></path>\n                </svg>\n            </button>\n        </div>\n\n        <!-- Scrollable Content Area -->\n        <div class=\"flex-1 overflow-y-auto px-5 py-5 space-y-6\">\n\n            <!-- Balance Card -->\n            <div class=\"bg-gradient-to-br from-brand-600 to-brand-700 rounded-2xl p-5 text-white shadow-lg relative overflow-hidden\">\n                <div class=\"absolute -left-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full pointer-events-none\"></div>\n                <div class=\"flex justify-between items-start mb-3\">\n                    <span class=\"text-xs font-medium text-brand-50 bg-white/20 px-3 py-1 rounded-full\">الرصيد الإجمالي</span>\n                    <svg class=\"w-6 h-6 text-brand-50 opacity-80\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z\"></path>\n                    </svg>\n                </div>\n                <div class=\"flex items-baseline gap-1\">\n                    <h2 class=\"text-3xl font-black tracking-tight\">١,٤٥٠.٢٠٠</h2>\n                    <span class=\"text-sm font-bold text-brand-50\">ر.ع.</span>\n                </div>\n                <div class=\"mt-4 pt-3 border-t border-white/15 flex justify-between text-xs text-brand-50\">\n                    <span>الدخل: +٨٥٠.٠٠٠ ر.ع.</span>\n                    <span>المصروفات: -٣٥٤.٨٠٠ ر.ع.</span>\n                </div>\n            </div>\n\n            <!-- Filter Section -->\n            <div class=\"flex items-center justify-between\">\n                <span class=\"text-sm font-bold text-gray-700\">المعاملات الأخيرة</span>\n                \n                <!-- Filter Dropdown Button -->\n                <button class=\"flex items-center gap-2 bg-white border border-gray-200 px-3 py-1.5 rounded-xl text-xs font-medium text-gray-600 shadow-2xs hover:bg-gray-50 transition\">\n                    <svg class=\"w-3.5 h-3.5 text-brand-600\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"></path>\n                    </svg>\n                    <span>هذا الشهر</span>\n                    <svg class=\"w-3 h-3 text-gray-400\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 9l-7 7-7-7\"></path>\n                    </svg>\n                </button>\n            </div>\n\n            <!-- Transactions List (Table Style) -->\n            <div class=\"bg-white rounded-2xl border border-gray-100 shadow-xs overflow-hidden divide-y divide-gray-100\">\n                \n                <!-- Transaction 1 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50/80 transition\">\n                    <div class=\"flex items-center gap-3\">\n                        <div class=\"w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-bold text-sm shrink-0\">\n                            <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z\"></path>\n                            </svg>\n                        </div>\n                        <div>\n                            <h4 class=\"text-sm font-bold text-gray-800\">Lulu Hypermarket</h4>\n                            <span class=\"text-[11px] text-gray-400\">٢٤ مايو ٢٠٢٤ • ٠٧:٣٠ م</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"block text-sm font-bold text-red-600\">- ٣٤.٢٥٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">مشتريات</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 2 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50/80 transition\">\n                    <div class=\"flex items-center gap-3\">\n                        <div class=\"w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-bold text-sm shrink-0\">\n                            <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z\"></path>\n                            </svg>\n                        </div>\n                        <div>\n                            <h4 class=\"text-sm font-bold text-gray-800\">Netflix</h4>\n                            <span class=\"text-[11px] text-gray-400\">٢٢ مايو ٢٠٢٤ • 02:15 ص</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"block text-sm font-bold text-red-600\">- ٤.٥٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">ترفيه</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 3 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50/80 transition\">\n                    <div class=\"flex items-center gap-3\">\n                        <div class=\"w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm shrink-0\">\n                            <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 14l-7 7m0 0l-7-7m7 7V3\"></path>\n                            </svg>\n                        </div>\n                        <div>\n                            <h4 class=\"text-sm font-bold text-gray-800\">تحويل من أحمد البلوشي</h4>\n                            <span class=\"text-[11px] text-gray-400\">٢٠ مايو ٢٠٢٤ • ١١:٠٠ ص</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"block text-sm font-bold text-emerald-600\">+ ١٢٠.٠٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">تحويل وارد</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 4 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50/80 transition\">\n                    <div class=\"flex items-center gap-3\">\n                        <div class=\"w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-bold text-sm shrink-0\">\n                            <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z\"></path>\n                            </svg>\n                        </div>\n                        <div>\n                            <h4 class=\"text-sm font-bold text-gray-800\">Omantel</h4>\n                            <span class=\"text-[11px] text-gray-400\">١٨ مايو ٢٠٢٤ • ٠٤:٢٠ م</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"block text-sm font-bold text-red-600\">- ١٥.٠٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">فواتير</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 5 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50/80 transition\">\n                    <div class=\"flex items-center gap-3\">\n                        <div class=\"w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-bold text-sm shrink-0\">\n                            <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z\"></path>\n                            </svg>\n                        </div>\n                        <div>\n                            <h4 class=\"text-sm font-bold text-gray-800\">Starbucks Coffee</h4>\n                            <span class=\"text-[11px] text-gray-400\">١٥ مايو ٢٠٢٤ • ٠٩:١٠ ص</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"block text-sm font-bold text-red-600\">- ٢.٣٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">مأكولات ومشروبات</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 6 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50/80 transition\">\n                    <div class=\"flex items-center gap-3\">\n                        <div class=\"w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-bold text-sm shrink-0\">\n                            <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z\"></path>\n                            </svg>\n                        </div>\n                        <div>\n                            <h4 class=\"text-sm font-bold text-gray-800\">Apple.com/Bill</h4>\n                            <span class=\"text-[11px] text-gray-400\">١٢ مايو ٢٠٢٤ • ٠١:٤٥ م</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"block text-sm font-bold text-red-600\">- ٣.٩٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">خدمات رقمية</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 7 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50/80 transition\">\n                    <div class=\"flex items-center gap-3\">\n                        <div class=\"w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center font-bold text-sm shrink-0\">\n                            <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M13 10V3L4 14h7v7l9-11h-7z\"></path>\n                            </svg>\n                        </div>\n                        <div>\n                            <h4 class=\"text-sm font-bold text-gray-800\">محطة المها للبترول</h4>\n                            <span class=\"text-[11px] text-gray-400\">١٠ مايو ٢٠٢٤ • ٠٨:٠٠ ص</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"block text-sm font-bold text-red-600\">- ١٨.٥٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">وقود</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 8 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50/80 transition\">\n                    <div class=\"flex items-center gap-3\">\n                        <div class=\"w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm shrink-0\">\n                            <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M19 14l-7 7m0 0l-7-7m7 7V3\"></path>\n                            </svg>\n                        </div>\n                        <div>\n                            <h4 class=\"text-sm font-bold text-gray-800\">راتب شهر مايو</h4>\n                            <span class=\"text-[11px] text-gray-400\">٠١ مايو ٢٠٢٤ • ٠٩:٠٠ ص</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"block text-sm font-bold text-emerald-600\">+ ٨٥٠.٠٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">راتب</span>\n                    </div>\n                </div>\n\n            </div>\n            \n            <!-- Bottom spacing for mobile aesthetic -->\n            <div class=\"h-4\"></div>\n        </div>\n\n        <!-- Bottom Navigation Bar Mockup -->\n        <div class=\"bg-white border-t border-gray-100 py-3 px-6 flex justify-around items-center text-gray-400 text-xs\">\n            <button class=\"flex flex-col items-center gap-1 hover:text-brand-600 transition\">\n                <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6\"></path></svg>\n                <span>الرئيسية</span>\n            </button>\n            <button class=\"flex flex-col items-center gap-1 text-brand-600 font-bold\">\n                <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01\"></path></svg>\n                <span>المعاملات</span>\n            </button>\n            <button class=\"flex flex-col items-center gap-1 hover:text-brand-600 transition\">\n                <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z\"></path></svg>\n                <span>الخدمات</span>\n            </button>\n            <button class=\"flex flex-col items-center gap-1 hover:text-brand-600 transition\">\n                <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z\"></path></svg>\n                <span>حسابي</span>\n            </button>\n        </div>\n\n        <!-- Home Indicator Bar -->\n        <div class=\"absolute bottom-1 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gray-300 rounded-full sm:hidden\"></div>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 143,
+    "output": 5842
+  },
+  "ms": 16554,
+  "finish": "STOP",
+  "reasoningTokens": 1228,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 25,
+  "score": 63,
+  "missing": [
+    "eight rows"
+  ],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 264,
+        "y": 244,
+        "width": 86,
+        "height": 12
+      },
+      "message": "\"الدخل: +٨٥٠.٠٠٠ ر.ع.\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span>الدخل: +٨٥٠.٠٠٠ ر.ع.</span>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 35,
+        "y": 663,
+        "width": 82,
+        "height": 20
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<span class=\"block text-sm font-bold text-red-600\">- ٢.٣٠٠ ر.ع.</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 206,
+        "y": 471,
+        "width": 97,
+        "height": 11
+      },
+      "message": "\"٢٢ مايو ٢٠٢٤ • 02:15 ص\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">٢٢ مايو ٢٠٢٤ • 02:15 ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 260,
+        "y": 147,
+        "width": 78,
+        "height": 12
+      },
+      "message": "\"الرصيد الإجمالي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs font-medium text-brand-50 bg-white/20 px-3 py-1 rounded-full\">الرصيد الإجمالي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 264,
+        "y": 244,
+        "width": 86,
+        "height": 12
+      },
+      "message": "\"الدخل: +٨٥٠.٠٠٠ ر.ع.\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>الدخل: +٨٥٠.٠٠٠ ر.ع.</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 40,
+        "y": 244,
+        "width": 118,
+        "height": 12
+      },
+      "message": "\"المصروفات: -٣٥٤.٨٠٠ ر.ع.\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المصروفات: -٣٥٤.٨٠٠ ر.ع.</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 53,
+        "y": 311,
+        "width": 51,
+        "height": 12
+      },
+      "message": "\"هذا الشهر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>هذا الشهر</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 219,
+        "y": 398,
+        "width": 84,
+        "height": 11
+      },
+      "message": "\"٢٤ مايو ٢٠٢٤ • ٠٧:٣٠ م\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">٢٤ مايو ٢٠٢٤ • ٠٧:٣٠ م</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 399,
+        "width": 39,
+        "height": 10
+      },
+      "message": "\"مشتريات\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">مشتريات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 206,
+        "y": 471,
+        "width": 97,
+        "height": 11
+      },
+      "message": "\"٢٢ مايو ٢٠٢٤ • 02:15 ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">٢٢ مايو ٢٠٢٤ • 02:15 ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 472,
+        "width": 20,
+        "height": 10
+      },
+      "message": "\"ترفيه\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">ترفيه</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 218,
+        "y": 544,
+        "width": 85,
+        "height": 11
+      },
+      "message": "\"٢٠ مايو ٢٠٢٤ • ١١:٠٠ ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">٢٠ مايو ٢٠٢٤ • ١١:٠٠ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 545,
+        "width": 40,
+        "height": 10
+      },
+      "message": "\"تحويل وارد\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">تحويل وارد</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 223,
+        "y": 617,
+        "width": 80,
+        "height": 11
+      },
+      "message": "\"١٨ مايو ٢٠٢٤ • ٠٤:٢٠ م\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">١٨ مايو ٢٠٢٤ • ٠٤:٢٠ م</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 618,
+        "width": 22,
+        "height": 10
+      },
+      "message": "\"فواتير\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">فواتير</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 216,
+        "y": 690,
+        "width": 87,
+        "height": 11
+      },
+      "message": "\"١٥ مايو ٢٠٢٤ • ٠٩:١٠ ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">١٥ مايو ٢٠٢٤ • ٠٩:١٠ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 691,
+        "width": 82,
+        "height": 10
+      },
+      "message": "\"مأكولات ومشروبات\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">مأكولات ومشروبات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 224,
+        "y": 763,
+        "width": 79,
+        "height": 11
+      },
+      "message": "\"١٢ مايو ٢٠٢٤ • ٠١:٤٥ م\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">١٢ مايو ٢٠٢٤ • ٠١:٤٥ م</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 764,
+        "width": 53,
+        "height": 10
+      },
+      "message": "\"خدمات رقمية\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">خدمات رقمية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 216,
+        "y": 836,
+        "width": 87,
+        "height": 11
+      },
+      "message": "\"١٠ مايو ٢٠٢٤ • ٠٨:٠٠ ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">١٠ مايو ٢٠٢٤ • ٠٨:٠٠ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 837,
+        "width": 19,
+        "height": 10
+      },
+      "message": "\"وقود\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">وقود</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 217,
+        "y": 909,
+        "width": 86,
+        "height": 11
+      },
+      "message": "\"٠١ مايو ٢٠٢٤ • ٠٩:٠٠ ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">٠١ مايو ٢٠٢٤ • ٠٩:٠٠ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 910,
+        "width": 18,
+        "height": 10
+      },
+      "message": "\"راتب\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">راتب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 305.625,
+        "y": 818,
+        "width": 39,
+        "height": 12
+      },
+      "message": "\"الرئيسية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>الرئيسية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 206.875,
+        "y": 818,
+        "width": 56,
+        "height": 12
+      },
+      "message": "\"المعاملات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المعاملات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 123.125,
+        "y": 818,
+        "width": 41,
+        "height": 12
+      },
+      "message": "\"الخدمات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>الخدمات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 45.375,
+        "y": 818,
+        "width": 35,
+        "height": 12
+      },
+      "message": "\"حسابي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>حسابي</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": -4,
+        "y": 174,
+        "width": 128,
+        "height": 128
+      },
+      "message": "left: -24px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"absolute -left-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full pointer-events-none\"></div>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

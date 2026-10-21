@@ -1,0 +1,711 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "order-history",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T16:53:27.893Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"theme-color\" content=\"#f5f7f8\">\n  <title>سوقنا — سجل الطلبات</title>\n  <style>\n    :root {\n      --primary: #0d7d5b;\n      --primary-dark: #086347;\n      --primary-soft: #e8f5ef;\n      --ink: #17211d;\n      --muted: #68736e;\n      --line: #e5eae7;\n      --surface: #ffffff;\n      --background: #f5f7f6;\n      --amber: #a76600;\n      --amber-soft: #fff3dc;\n      --red: #b42318;\n      --red-soft: #feeceb;\n      --blue: #1769aa;\n      --blue-soft: #e9f3fc;\n      --shadow: 0 2px 12px rgba(18, 45, 35, 0.055);\n    }\n\n    * {\n      box-sizing: border-box;\n      -webkit-tap-highlight-color: transparent;\n    }\n\n    html, body {\n      margin: 0;\n      min-height: 100%;\n      background: var(--background);\n      color: var(--ink);\n      font-family: Tahoma, Arial, sans-serif;\n    }\n\n    body {\n      display: flex;\n      justify-content: center;\n    }\n\n    button {\n      font: inherit;\n    }\n\n    .app {\n      width: 100%;\n      max-width: 430px;\n      min-height: 100vh;\n      background: var(--background);\n      overflow: hidden;\n    }\n\n    .topbar {\n      height: 60px;\n      padding: max(12px, env(safe-area-inset-top)) 20px 0;\n      background: var(--surface);\n      border-bottom: 1px solid var(--line);\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      position: relative;\n    }\n\n    .icon-button {\n      width: 40px;\n      height: 40px;\n      border: 0;\n      border-radius: 12px;\n      background: transparent;\n      color: var(--ink);\n      display: grid;\n      place-items: center;\n      cursor: pointer;\n    }\n\n    .icon-button:active {\n      background: #f0f3f1;\n    }\n\n    .icon-button svg {\n      width: 23px;\n      height: 23px;\n      stroke: currentColor;\n      fill: none;\n      stroke-width: 1.9;\n      stroke-linecap: round;\n      stroke-linejoin: round;\n    }\n\n    .page-title {\n      margin: 0;\n      font-size: 19px;\n      font-weight: 700;\n      letter-spacing: -0.2px;\n    }\n\n    .content {\n      padding: 20px 16px 32px;\n    }\n\n    .intro {\n      margin: 0 4px 17px;\n      color: var(--muted);\n      font-size: 13px;\n      line-height: 1.7;\n    }\n\n    .filter-row {\n      display: flex;\n      gap: 9px;\n      margin-bottom: 18px;\n      overflow-x: auto;\n      scrollbar-width: none;\n      padding: 1px;\n    }\n\n    .filter-row::-webkit-scrollbar {\n      display: none;\n    }\n\n    .filter {\n      flex: 0 0 auto;\n      border: 1px solid var(--line);\n      border-radius: 22px;\n      background: var(--surface);\n      color: #53605a;\n      padding: 9px 16px;\n      font-size: 13px;\n      font-weight: 600;\n      cursor: pointer;\n      transition: 0.2s ease;\n    }\n\n    .filter.active {\n      background: var(--primary);\n      border-color: var(--primary);\n      color: #fff;\n      box-shadow: 0 4px 10px rgba(13, 125, 91, 0.18);\n    }\n\n    .orders {\n      display: flex;\n      flex-direction: column;\n      gap: 14px;\n    }\n\n    .order-card {\n      background: var(--surface);\n      border: 1px solid #edf0ee;\n      border-radius: 18px;\n      padding: 16px;\n      box-shadow: var(--shadow);\n      overflow: hidden;\n    }\n\n    .order-card:active {\n      transform: scale(0.995);\n    }\n\n    .order-head {\n      display: flex;\n      align-items: flex-start;\n      justify-content: space-between;\n      gap: 12px;\n      padding-bottom: 14px;\n      border-bottom: 1px solid var(--line);\n    }\n\n    .order-id {\n      margin: 0 0 7px;\n      color: var(--muted);\n      font-size: 12px;\n      font-weight: 600;\n    }\n\n    .order-number {\n      display: inline-block;\n      direction: ltr;\n      unicode-bidi: isolate;\n      color: var(--ink);\n      font-size: 15px;\n      font-weight: 700;\n      letter-spacing: 0.2px;\n    }\n\n    .status {\n      display: inline-flex;\n      align-items: center;\n      gap: 6px;\n      white-space: nowrap;\n      border-radius: 20px;\n      padding: 7px 10px;\n      font-size: 11px;\n      font-weight: 700;\n    }\n\n    .status svg {\n      width: 14px;\n      height: 14px;\n      fill: none;\n      stroke: currentColor;\n      stroke-width: 2;\n      stroke-linecap: round;\n      stroke-linejoin: round;\n    }\n\n    .delivered {\n      color: var(--primary);\n      background: var(--primary-soft);\n    }\n\n    .on-way {\n      color: var(--blue);\n      background: var(--blue-soft);\n    }\n\n    .cancelled {\n      color: var(--red);\n      background: var(--red-soft);\n    }\n\n    .order-body {\n      padding-top: 14px;\n    }\n\n    .date-grid {\n      display: grid;\n      grid-template-columns: 1fr 1fr;\n      gap: 12px;\n      margin-bottom: 15px;\n    }\n\n    .date-box {\n      background: #f8faf9;\n      border-radius: 12px;\n      padding: 10px 11px;\n    }\n\n    .date-label {\n      display: block;\n      margin-bottom: 5px;\n      color: var(--muted);\n      font-size: 10px;\n    }\n\n    .date-value {\n      display: block;\n      font-size: 12px;\n      font-weight: 700;\n      line-height: 1.45;\n      white-space: nowrap;\n    }\n\n    .order-summary {\n      display: flex;\n      align-items: flex-end;\n      justify-content: space-between;\n      gap: 12px;\n    }\n\n    .items {\n      margin: 0;\n      color: var(--muted);\n      font-size: 12px;\n      line-height: 1.5;\n    }\n\n    .price-label {\n      display: block;\n      margin-bottom: 4px;\n      color: var(--muted);\n      font-size: 10px;\n    }\n\n    .price {\n      font-size: 15px;\n      font-weight: 700;\n      white-space: nowrap;\n    }\n\n    .price span {\n      color: var(--muted);\n      font-size: 11px;\n      font-weight: 600;\n    }\n\n    .details-button {\n      width: 100%;\n      height: 42px;\n      margin-top: 15px;\n      border: 0;\n      border-radius: 11px;\n      background: #f1f5f3;\n      color: var(--primary);\n      font-size: 12px;\n      font-weight: 700;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      gap: 7px;\n      cursor: pointer;\n    }\n\n    .details-button svg {\n      width: 16px;\n      height: 16px;\n      fill: none;\n      stroke: currentColor;\n      stroke-width: 2;\n      stroke-linecap: round;\n      stroke-linejoin: round;\n    }\n\n    .empty-space {\n      height: 25px;\n    }\n\n    @media (max-width: 360px) {\n      .content {\n        padding-inline: 12px;\n      }\n\n      .date-value {\n        font-size: 11px;\n      }\n\n      .status {\n        padding-inline: 8px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <main class=\"app\">\n    <header class=\"topbar\">\n      <button class=\"icon-button\" type=\"button\" aria-label=\"رجوع\">\n        <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n          <path d=\"M9 18l6-6-6-6\"></path>\n        </svg>\n      </button>\n      <h1 class=\"page-title\">سجل الطلبات</h1>\n      <button class=\"icon-button\" type=\"button\" aria-label=\"المزيد من الخيارات\">\n        <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n          <circle cx=\"12\" cy=\"5\" r=\"1\"></circle>\n          <circle cx=\"12\" cy=\"12\" r=\"1\"></circle>\n          <circle cx=\"12\" cy=\"19\" r=\"1\"></circle>\n        </svg>\n      </button>\n    </header>\n\n    <section class=\"content\">\n      <p class=\"intro\">تابع مشترياتك السابقة واطلع على حالة كل طلب بسهولة.</p>\n\n      <nav class=\"filter-row\" aria-label=\"تصفية الطلبات\">\n        <button class=\"filter active\" type=\"button\">الكل <span>4</span></button>\n        <button class=\"filter\" type=\"button\">تم التوصيل</button>\n        <button class=\"filter\" type=\"button\">قيد التوصيل</button>\n        <button class=\"filter\" type=\"button\">ملغي</button>\n      </nav>\n\n      <section class=\"orders\" aria-label=\"قائمة الطلبات\">\n        <article class=\"order-card\">\n          <div class=\"order-head\">\n            <div>\n              <p class=\"order-id\">رقم الطلب</p>\n              <span class=\"order-number\">#A-10293</span>\n            </div>\n            <span class=\"status delivered\">\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n                <path d=\"M8 12.5l2.5 2.5L16.5 9\"></path>\n              </svg>\n              تم التوصيل\n            </span>\n          </div>\n          <div class=\"order-body\">\n            <div class=\"date-grid\">\n              <div class=\"date-box\">\n                <span class=\"date-label\">التاريخ الميلادي</span>\n                <span class=\"date-value\">8 يناير 2025</span>\n              </div>\n              <div class=\"date-box\">\n                <span class=\"date-label\">التاريخ الهجري</span>\n                <span class=\"date-value\">18 ربيع الآخر 1446</span>\n              </div>\n            </div>\n            <div class=\"order-summary\">\n              <p class=\"items\">3 منتجات<br>تم التسليم إلى الرياض</p>\n              <div>\n                <span class=\"price-label\">إجمالي الطلب</span>\n                <div class=\"price\">248.50 <span>ر.س</span></div>\n              </div>\n            </div>\n            <button class=\"details-button\" type=\"button\">\n              عرض تفاصيل الطلب\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <path d=\"M15 18l-6-6 6-6\"></path>\n              </svg>\n            </button>\n          </div>\n        </article>\n\n        <article class=\"order-card\">\n          <div class=\"order-head\">\n            <div>\n              <p class=\"order-id\">رقم الطلب</p>\n              <span class=\"order-number\">#A-10176</span>\n            </div>\n            <span class=\"status on-way\">\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <path d=\"M3 6h11v10H3zM14 10h4l3 3v3h-7z\"></path>\n                <circle cx=\"7\" cy=\"18\" r=\"2\"></circle>\n                <circle cx=\"18\" cy=\"18\" r=\"2\"></circle>\n              </svg>\n              في الطريق إليك\n            </span>\n          </div>\n          <div class=\"order-body\">\n            <div class=\"date-grid\">\n              <div class=\"date-box\">\n                <span class=\"date-label\">التاريخ الميلادي</span>\n                <span class=\"date-value\">16 ديسمبر 2024</span>\n              </div>\n              <div class=\"date-box\">\n                <span class=\"date-label\">التاريخ الهجري</span>\n                <span class=\"date-value\">25 جمادى الأولى 1446</span>\n              </div>\n            </div>\n            <div class=\"order-summary\">\n              <p class=\"items\">5 منتجات<br>متوقع التوصيل غداً</p>\n              <div>\n                <span class=\"price-label\">إجمالي الطلب</span>\n                <div class=\"price\">419.00 <span>ر.س</span></div>\n              </div>\n            </div>\n            <button class=\"details-button\" type=\"button\">\n              عرض تفاصيل الطلب\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <path d=\"M15 18l-6-6 6-6\"></path>\n              </svg>\n            </button>\n          </div>\n        </article>\n\n        <article class=\"order-card\">\n          <div class=\"order-head\">\n            <div>\n              <p class=\"order-id\">رقم الطلب</p>\n              <span class=\"order-number\">#A-09842</span>\n            </div>\n            <span class=\"status cancelled\">\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n                <path d=\"M9 9l6 6M15 9l-6 6\"></path>\n              </svg>\n              طلب ملغي\n            </span>\n          </div>\n          <div class=\"order-body\">\n            <div class=\"date-grid\">\n              <div class=\"date-box\">\n                <span class=\"date-label\">التاريخ الميلادي</span>\n                <span class=\"date-value\">29 نوفمبر 2024</span>\n              </div>\n              <div class=\"date-box\">\n                <span class=\"date-label\">التاريخ الهجري</span>\n                <span class=\"date-value\">7 جمادى الأولى 1446</span>\n              </div>\n            </div>\n            <div class=\"order-summary\">\n              <p class=\"items\">منتج واحد<br>أُلغي بناءً على طلبك</p>\n              <div>\n                <span class=\"price-label\">إجمالي الطلب</span>\n                <div class=\"price\">89.00 <span>ر.س</span></div>\n              </div>\n            </div>\n            <button class=\"details-button\" type=\"button\">\n              عرض تفاصيل الطلب\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <path d=\"M15 18l-6-6 6-6\"></path>\n              </svg>\n            </button>\n          </div>\n        </article>\n\n        <article class=\"order-card\">\n          <div class=\"order-head\">\n            <div>\n              <p class=\"order-id\">رقم الطلب</p>\n              <span class=\"order-number\">#A-09511</span>\n            </div>\n            <span class=\"status delivered\">\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n                <path d=\"M8 12.5l2.5 2.5L16.5 9\"></path>\n              </svg>\n              تم التوصيل\n            </span>\n          </div>\n          <div class=\"order-body\">\n            <div class=\"date-grid\">\n              <div class=\"date-box\">\n                <span class=\"date-label\">التاريخ الميلادي</span>\n                <span class=\"date-value\">12 نوفمبر 2024</span>\n              </div>\n              <div class=\"date-box\">\n                <span class=\"date-label\">التاريخ الهجري</span>\n                <span class=\"date-value\">20 Rabi al-Awwal 1446</span>\n              </div>\n            </div>\n            <div class=\"order-summary\">\n              <p class=\"items\">7 منتجات<br>تم التسليم إلى جدة</p>\n              <div>\n                <span class=\"price-label\">إجمالي الطلب</span>\n                <div class=\"price\">635.75 <span>ر.س</span></div>\n              </div>\n            </div>\n            <button class=\"details-button\" type=\"button\">\n              عرض تفاصيل الطلب\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <path d=\"M15 18l-6-6 6-6\"></path>\n              </svg>\n            </button>\n          </div>\n        </article>\n      </section>\n      <div class=\"empty-space\"></div>\n    </section>\n  </main>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 314,
+    "output": 4084
+  },
+  "ms": 78274,
+  "finish": "stop",
+  "reasoningTokens": 169,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 84,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 139.859375,
+        "y": 25,
+        "width": 110.28125,
+        "height": 21
+      },
+      "message": "Arabic falls back from Tahoma, Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1 class=\"page-title\">سجل الطلبات</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 63.484375,
+        "y": 83,
+        "width": 306.515625,
+        "height": 15
+      },
+      "message": "\"تابع مشترياتك السابقة واطلع على حالة كل …\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"intro\">تابع مشترياتك السابقة واطلع على حالة كل طلب بسهولة.</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 327.375,
+        "y": 130.09375,
+        "width": 28.625,
+        "height": 15
+      },
+      "message": "\"الكل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"filter active\" type=\"button\">الكل <span>4</span></button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 216.515625,
+        "y": 130.09375,
+        "width": 60.625,
+        "height": 15
+      },
+      "message": "\"تم التوصيل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"filter\" type=\"button\">تم التوصيل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 108.890625,
+        "y": 130.09375,
+        "width": 64.625,
+        "height": 15
+      },
+      "message": "\"قيد التوصيل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"filter\" type=\"button\">قيد التوصيل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 37.890625,
+        "y": 130.09375,
+        "width": 28,
+        "height": 15
+      },
+      "message": "\"ملغي\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"filter\" type=\"button\">ملغي</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 300.65625,
+        "y": 191.09375,
+        "width": 56.34375,
+        "height": 14
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"order-id\">رقم الطلب</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 198.59375,
+        "width": 48.0625,
+        "height": 12
+      },
+      "message": "\"تم التوصيل\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status delivered\">\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n             "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 284.21875,
+        "y": 269.09375,
+        "width": 61.78125,
+        "height": 11
+      },
+      "message": "\"التاريخ الميلادي\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-label\">التاريخ الميلادي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 284.9375,
+        "y": 286.09375,
+        "width": 61.0625,
+        "height": 14
+      },
+      "message": "\"8 يناير 2025\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-value\">8 يناير 2025</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 118.21875,
+        "y": 269.09375,
+        "width": 59.78125,
+        "height": 11
+      },
+      "message": "\"التاريخ الهجري\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-label\">التاريخ الهجري</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 84.921875,
+        "y": 286.09375,
+        "width": 93.078125,
+        "height": 14
+      },
+      "message": "\"18 ربيع الآخر 1446\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-value\">18 ربيع الآخر 1446</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 309.96875,
+        "y": 329.484375,
+        "width": 47.03125,
+        "height": 14
+      },
+      "message": "\"3 منتجات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"items\">3 منتجات<br>تم التسليم إلى الرياض</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 244.984375,
+        "y": 347.484375,
+        "width": 112.015625,
+        "height": 14
+      },
+      "message": "\"تم التسليم إلى الرياض\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"items\">3 منتجات<br>تم التسليم إلى الرياض</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 45.34375,
+        "y": 331.484375,
+        "width": 58.78125,
+        "height": 11
+      },
+      "message": "\"إجمالي الطلب\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"price-label\">إجمالي الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 33,
+        "y": 350.484375,
+        "width": 21.0625,
+        "height": 12
+      },
+      "message": "\"ر.س\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>ر.س</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 154.171875,
+        "y": 392.484375,
+        "width": 104.671875,
+        "height": 14
+      },
+      "message": "\"عرض تفاصيل الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"details-button\" type=\"button\">\n              عرض تفاصيل الطلب\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <path d="
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 300.65625,
+        "y": 468.484375,
+        "width": 56.34375,
+        "height": 14
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"order-id\">رقم الطلب</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 475.984375,
+        "width": 71.125,
+        "height": 12
+      },
+      "message": "\"في الطريق إليك\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status on-way\">\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <path d=\"M3 6h11v10H3zM14 10h4l3 3v3h-7z\"></path>\n      "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 284.21875,
+        "y": 546.484375,
+        "width": 61.78125,
+        "height": 11
+      },
+      "message": "\"التاريخ الميلادي\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-label\">التاريخ الميلادي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 262.265625,
+        "y": 563.484375,
+        "width": 83.734375,
+        "height": 14
+      },
+      "message": "\"16 ديسمبر 2024\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-value\">16 ديسمبر 2024</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 118.21875,
+        "y": 546.484375,
+        "width": 59.78125,
+        "height": 11
+      },
+      "message": "\"التاريخ الهجري\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-label\">التاريخ الهجري</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 65.921875,
+        "y": 563.484375,
+        "width": 112.078125,
+        "height": 14
+      },
+      "message": "\"25 جمادى الأولى 1446\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-value\">25 جمادى الأولى 1446</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 309.96875,
+        "y": 606.875,
+        "width": 47.03125,
+        "height": 14
+      },
+      "message": "\"5 منتجات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"items\">5 منتجات<br>متوقع التوصيل غداً</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 267.328125,
+        "y": 624.875,
+        "width": 89.671875,
+        "height": 14
+      },
+      "message": "\"متوقع التوصيل غداً\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"items\">5 منتجات<br>متوقع التوصيل غداً</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 45.34375,
+        "y": 608.875,
+        "width": 58.78125,
+        "height": 11
+      },
+      "message": "\"إجمالي الطلب\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"price-label\">إجمالي الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 33,
+        "y": 627.875,
+        "width": 21.0625,
+        "height": 12
+      },
+      "message": "\"ر.س\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>ر.س</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 154.171875,
+        "y": 669.875,
+        "width": 104.671875,
+        "height": 14
+      },
+      "message": "\"عرض تفاصيل الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"details-button\" type=\"button\">\n              عرض تفاصيل الطلب\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <path d="
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 300.65625,
+        "y": 745.875,
+        "width": 56.34375,
+        "height": 14
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"order-id\">رقم الطلب</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 753.375,
+        "width": 51.0625,
+        "height": 12
+      },
+      "message": "\"طلب ملغي\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status cancelled\">\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n             "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 284.21875,
+        "y": 823.875,
+        "width": 61.78125,
+        "height": 11
+      },
+      "message": "\"التاريخ الميلادي\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-label\">التاريخ الميلادي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 266.265625,
+        "y": 840.875,
+        "width": 79.734375,
+        "height": 14
+      },
+      "message": "\"29 نوفمبر 2024\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-value\">29 نوفمبر 2024</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 118.21875,
+        "y": 823.875,
+        "width": 59.78125,
+        "height": 11
+      },
+      "message": "\"التاريخ الهجري\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-label\">التاريخ الهجري</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 72.59375,
+        "y": 840.875,
+        "width": 105.40625,
+        "height": 14
+      },
+      "message": "\"7 جمادى الأولى 1446\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-value\">7 جمادى الأولى 1446</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 309.65625,
+        "y": 884.265625,
+        "width": 47.34375,
+        "height": 14
+      },
+      "message": "\"منتج واحد\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"items\">منتج واحد<br>أُلغي بناءً على طلبك</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 257.984375,
+        "y": 902.265625,
+        "width": 99.015625,
+        "height": 14
+      },
+      "message": "\"أُلغي بناءً على طلبك\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"items\">منتج واحد<br>أُلغي بناءً على طلبك</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 37,
+        "y": 886.265625,
+        "width": 58.78125,
+        "height": 11
+      },
+      "message": "\"إجمالي الطلب\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"price-label\">إجمالي الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 33,
+        "y": 905.265625,
+        "width": 21.0625,
+        "height": 12
+      },
+      "message": "\"ر.س\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>ر.س</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 154.171875,
+        "y": 947.265625,
+        "width": 104.671875,
+        "height": 14
+      },
+      "message": "\"عرض تفاصيل الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"details-button\" type=\"button\">\n              عرض تفاصيل الطلب\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <path d="
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 300.65625,
+        "y": 1023.265625,
+        "width": 56.34375,
+        "height": 14
+      },
+      "message": "\"رقم الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"order-id\">رقم الطلب</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 1030.765625,
+        "width": 48.0625,
+        "height": 12
+      },
+      "message": "\"تم التوصيل\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"status delivered\">\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n             "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 284.21875,
+        "y": 1101.265625,
+        "width": 61.78125,
+        "height": 11
+      },
+      "message": "\"التاريخ الميلادي\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-label\">التاريخ الميلادي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 266.265625,
+        "y": 1118.265625,
+        "width": 79.734375,
+        "height": 14
+      },
+      "message": "\"12 نوفمبر 2024\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-value\">12 نوفمبر 2024</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 118.21875,
+        "y": 1101.265625,
+        "width": 59.78125,
+        "height": 11
+      },
+      "message": "\"التاريخ الهجري\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-label\">التاريخ الهجري</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 309.96875,
+        "y": 1161.65625,
+        "width": 47.03125,
+        "height": 14
+      },
+      "message": "\"7 منتجات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"items\">7 منتجات<br>تم التسليم إلى جدة</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 261.984375,
+        "y": 1179.65625,
+        "width": 95.015625,
+        "height": 14
+      },
+      "message": "\"تم التسليم إلى جدة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"items\">7 منتجات<br>تم التسليم إلى جدة</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 45.34375,
+        "y": 1163.65625,
+        "width": 58.78125,
+        "height": 11
+      },
+      "message": "\"إجمالي الطلب\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"price-label\">إجمالي الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 33,
+        "y": 1182.65625,
+        "width": 21.0625,
+        "height": 12
+      },
+      "message": "\"ر.س\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>ر.س</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 154.171875,
+        "y": 1224.65625,
+        "width": 104.671875,
+        "height": 14
+      },
+      "message": "\"عرض تفاصيل الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"details-button\" type=\"button\">\n              عرض تفاصيل الطلب\n              <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\">\n                <path d="
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 1327
+}

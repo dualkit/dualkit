@@ -1,0 +1,361 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "checkout",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T16:57:16.112Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"theme-color\" content=\"#0d6b45\">\n  <title>إتمام الطلب — فواكه بلس</title>\n  <style>\n    :root {\n      --green: #0d6b45;\n      --green-dark: #075237;\n      --green-soft: #eaf5ef;\n      --text: #17231e;\n      --muted: #718078;\n      --line: #e7ece9;\n      --surface: #ffffff;\n      --background: #f6f8f7;\n      --orange: #f5a623;\n    }\n\n    * {\n      box-sizing: border-box;\n    }\n\n    body {\n      margin: 0;\n      background: #e9eeeb;\n      color: var(--text);\n      font-family: Tahoma, Arial, sans-serif;\n      -webkit-font-smoothing: antialiased;\n    }\n\n    .app {\n      width: 100%;\n      max-width: 430px;\n      min-height: 100vh;\n      margin: 0 auto;\n      background: var(--background);\n      box-shadow: 0 0 30px rgba(18, 45, 34, 0.1);\n      padding-bottom: 116px;\n    }\n\n    .header {\n      position: sticky;\n      top: 0;\n      z-index: 10;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      padding: 18px 18px 16px;\n      background: rgba(255, 255, 255, 0.96);\n      border-bottom: 1px solid var(--line);\n      backdrop-filter: blur(12px);\n    }\n\n    .back-button {\n      width: 42px;\n      height: 42px;\n      border: 1px solid var(--line);\n      border-radius: 14px;\n      background: #fff;\n      color: var(--text);\n      display: grid;\n      place-items: center;\n      cursor: pointer;\n      box-shadow: 0 3px 10px rgba(20, 55, 40, 0.05);\n    }\n\n    .back-button svg {\n      width: 22px;\n      height: 22px;\n    }\n\n    .header h1 {\n      margin: 0;\n      font-size: 18px;\n      font-weight: 800;\n    }\n\n    .secure-label {\n      display: flex;\n      align-items: center;\n      gap: 5px;\n      color: var(--muted);\n      font-size: 11px;\n    }\n\n    .secure-label svg {\n      width: 14px;\n      height: 14px;\n      color: var(--green);\n    }\n\n    main {\n      padding: 18px;\n    }\n\n    .delivery-card {\n      display: flex;\n      align-items: center;\n      gap: 12px;\n      padding: 14px;\n      margin-bottom: 16px;\n      border: 1px solid #dceae2;\n      border-radius: 18px;\n      background: linear-gradient(135deg, #f1faf5, #fff);\n    }\n\n    .delivery-icon {\n      width: 44px;\n      height: 44px;\n      flex: 0 0 44px;\n      border-radius: 14px;\n      background: var(--green);\n      color: white;\n      display: grid;\n      place-items: center;\n    }\n\n    .delivery-icon svg {\n      width: 23px;\n      height: 23px;\n    }\n\n    .delivery-copy {\n      flex: 1;\n    }\n\n    .delivery-copy strong {\n      display: block;\n      margin-bottom: 3px;\n      font-size: 13px;\n    }\n\n    .delivery-copy span {\n      color: var(--muted);\n      font-size: 11px;\n    }\n\n    .edit-button {\n      border: 0;\n      background: transparent;\n      color: var(--green);\n      font: inherit;\n      font-size: 12px;\n      font-weight: 700;\n      cursor: pointer;\n    }\n\n    .section-title {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin: 0 2px 11px;\n    }\n\n    .section-title h2 {\n      margin: 0;\n      font-size: 16px;\n    }\n\n    .item-count {\n      color: var(--muted);\n      font-size: 12px;\n    }\n\n    .cart-card {\n      overflow: hidden;\n      margin-bottom: 16px;\n      border: 1px solid var(--line);\n      border-radius: 20px;\n      background: var(--surface);\n      box-shadow: 0 6px 18px rgba(27, 62, 47, 0.045);\n    }\n\n    .cart-item {\n      display: grid;\n      grid-template-columns: 72px 1fr auto;\n      gap: 12px;\n      align-items: center;\n      padding: 14px;\n    }\n\n    .cart-item + .cart-item {\n      border-top: 1px solid var(--line);\n    }\n\n    .photo-placeholder {\n      width: 72px;\n      height: 72px;\n      border-radius: 17px;\n      display: grid;\n      place-items: center;\n      font-size: 34px;\n      background: linear-gradient(145deg, #f7f3e9, #e8f1e9);\n      border: 1px solid rgba(40, 80, 62, 0.06);\n    }\n\n    .item-details {\n      min-width: 0;\n    }\n\n    .item-name {\n      margin: 0 0 5px;\n      font-size: 14px;\n      line-height: 1.4;\n      font-weight: 800;\n    }\n\n    .item-unit {\n      margin: 0 0 9px;\n      color: var(--muted);\n      font-size: 10px;\n    }\n\n    .stepper {\n      width: 98px;\n      height: 30px;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      border: 1px solid var(--line);\n      border-radius: 10px;\n      background: #f8faf9;\n      overflow: hidden;\n    }\n\n    .stepper button {\n      width: 31px;\n      height: 100%;\n      border: 0;\n      background: transparent;\n      color: var(--green);\n      font-size: 18px;\n      font-weight: 700;\n      cursor: pointer;\n    }\n\n    .stepper span {\n      font-size: 12px;\n      font-weight: 700;\n    }\n\n    .price-block {\n      align-self: stretch;\n      display: flex;\n      flex-direction: column;\n      align-items: flex-end;\n      justify-content: center;\n      gap: 3px;\n    }\n\n    .price {\n      white-space: nowrap;\n      font-size: 13px;\n      font-weight: 800;\n    }\n\n    .price small {\n      color: var(--muted);\n      font-size: 9px;\n      font-weight: 500;\n    }\n\n    .summary-card {\n      padding: 16px;\n      border: 1px solid var(--line);\n      border-radius: 20px;\n      background: var(--surface);\n      box-shadow: 0 6px 18px rgba(27, 62, 47, 0.045);\n    }\n\n    .summary-card h2 {\n      margin: 0 0 14px;\n      font-size: 16px;\n    }\n\n    .promo-form {\n      display: flex;\n      gap: 8px;\n      margin-bottom: 15px;\n    }\n\n    .promo-input {\n      flex: 1;\n      min-width: 0;\n      height: 44px;\n      padding: 0 13px;\n      border: 1px solid #dfe6e2;\n      border-radius: 12px;\n      outline: none;\n      background: #fafcfb;\n      color: var(--text);\n      font: inherit;\n      font-size: 12px;\n    }\n\n    .promo-input::placeholder {\n      color: #98a39d;\n    }\n\n    .promo-input:focus {\n      border-color: var(--green);\n      box-shadow: 0 0 0 3px rgba(13, 107, 69, 0.08);\n    }\n\n    .apply-button {\n      height: 44px;\n      padding: 0 16px;\n      border: 0;\n      border-radius: 12px;\n      background: var(--green-soft);\n      color: var(--green);\n      font: inherit;\n      font-size: 12px;\n      font-weight: 800;\n      cursor: pointer;\n    }\n\n    .summary-row {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 8px 0;\n      color: #536159;\n      font-size: 12px;\n    }\n\n    .summary-row span:last-child {\n      color: var(--text);\n      font-weight: 700;\n    }\n\n    .summary-row.discount span {\n      color: var(--green);\n    }\n\n    .divider {\n      height: 1px;\n      margin: 8px 0;\n      background: var(--line);\n    }\n\n    .total-row {\n      display: flex;\n      justify-content: space-between;\n      align-items: flex-end;\n      padding-top: 6px;\n    }\n\n    .total-row strong {\n      font-size: 17px;\n    }\n\n    .total-price {\n      color: var(--green);\n      font-size: 20px;\n      font-weight: 900;\n    }\n\n    .total-price small {\n      font-size: 11px;\n      font-weight: 700;\n    }\n\n    .vat-note {\n      margin-top: 3px;\n      color: var(--muted);\n      font-size: 9px;\n    }\n\n    .bottom-bar {\n      position: fixed;\n      bottom: 0;\n      left: 50%;\n      z-index: 20;\n      width: 100%;\n      max-width: 430px;\n      padding: 12px 18px calc(14px + env(safe-area-inset-bottom));\n      transform: translateX(-50%);\n      border-top: 1px solid var(--line);\n      background: rgba(255, 255, 255, 0.97);\n      box-shadow: 0 -8px 24px rgba(25, 55, 42, 0.08);\n      backdrop-filter: blur(12px);\n    }\n\n    .order-button {\n      width: 100%;\n      height: 54px;\n      border: 0;\n      border-radius: 16px;\n      background: linear-gradient(135deg, var(--green), #0a7b4e);\n      color: #fff;\n      font: inherit;\n      font-size: 15px;\n      font-weight: 800;\n      cursor: pointer;\n      box-shadow: 0 8px 18px rgba(13, 107, 69, 0.22);\n    }\n\n    .order-button:active {\n      transform: translateY(1px);\n      background: var(--green-dark);\n    }\n\n    .payment-note {\n      margin: 7px 0 0;\n      text-align: center;\n      color: var(--muted);\n      font-size: 9px;\n    }\n\n    @media (min-width: 431px) {\n      body {\n        padding: 18px 0;\n      }\n\n      .app {\n        min-height: calc(100vh - 36px);\n        border-radius: 24px;\n        overflow: hidden;\n      }\n\n      .bottom-bar {\n        bottom: 18px;\n        border-radius: 0 0 24px 24px;\n      }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"app\">\n    <header class=\"header\">\n      <button class=\"back-button\" type=\"button\" aria-label=\"الرجوع\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n          <path d=\"M9 18l6-6-6-6\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n        </svg>\n      </button>\n      <h1>إتمام الطلب</h1>\n      <div class=\"secure-label\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n          <path d=\"M7 10V8a5 5 0 0110 0v2M6 10h12v10H6V10z\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n        </svg>\n        <span>دفع آمن</span>\n      </div>\n    </header>\n\n    <main>\n      <section class=\"delivery-card\" aria-label=\"عنوان التوصيل\">\n        <div class=\"delivery-icon\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\">\n            <path d=\"M12 21s7-5.2 7-12A7 7 0 105 9c0 6.8 7 12 7 12z\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n            <circle cx=\"12\" cy=\"9\" r=\"2.3\" stroke=\"currentColor\" stroke-width=\"1.8\"/>\n          </svg>\n        </div>\n        <div class=\"delivery-copy\">\n          <strong>التوصيل إلى</strong>\n          <span>شارع الكورنيش، برج孵ار، دبي</span>\n        </div>\n        <button class=\"edit-button\" type=\"button\">تغيير</button>\n      </section>\n\n      <div class=\"section-title\">\n        <h2>سلة التسوق</h2>\n        <span class=\"item-count\">3 منتجات</span>\n      </div>\n\n      <section class=\"cart-card\" aria-label=\"المنتجات في السلة\">\n        <article class=\"cart-item\">\n          <div class=\"photo-placeholder\" role=\"img\" aria-label=\"صورةplaceholder\">[ ]</div>\n          <div class=\"item-details\">\n            <h3 class=\"item-name\">تفاح أحمر طازج</h3>\n            <p class=\"item-unit\">1 كجم • عبوة 4 حبات</p>\n            <div class=\"stepper\" aria-label=\"كمية تفاح أحمر طازج\">\n              <button type=\"button\" aria-label=\"زيادة الكمية\">+</button>\n              <span>1</span>\n              <button type=\"button\" aria-label=\"إنقاص الكمية\">−</button>\n            </div>\n          </div>\n          <div class=\"price-block\">\n            <div class=\"price\">18.50 <small>درهم</small></div>\n          </div>\n        </article>\n\n        <article class=\"cart-item\">\n          <div class=\"photo-placeholder\" role=\"img\" aria-label=\"صورةplaceholder\">[ ]</div>\n          <div class=\"item-details\">\n            <h3 class=\"item-name\">حليب طازج كامل الدسم</h3>\n            <p class=\"item-unit\">2 لتر • عبوة واحدة</p>\n            <div class=\"stepper\" aria-label=\"كمية حليب طازج كامل الدسم\">\n              <button type=\"button\" aria-label=\"زيادة الكمية\">+</button>\n              <span>2</span>\n              <button type=\"button\" aria-label=\"إنقاص الكمية\">−</button>\n            </div>\n          </div>\n          <div class=\"price-block\">\n            <div class=\"price\">14.00 <small>درهم</small></div>\n          </div>\n        </article>\n\n        <article class=\"cart-item\">\n          <div class=\"photo-placeholder\" role=\"img\" aria-label=\"صورةplaceholder\">[ ]</div>\n          <div class=\"item-details\">\n            <h3 class=\"item-name\">خبز عربي طازج</h3>\n            <p class=\"item-unit\">5 أرغفة • عبوة واحدة</p>\n            <div class=\"stepper\" aria-label=\"كمية خبز عربي طازج\">\n              <button type=\"button\" aria-label=\"زيادة الكمية\">+</button>\n              <span>1</span>\n              <button type=\"button\" aria-label=\"إنقاص الكمية\">−</button>\n            </div>\n          </div>\n          <div class=\"price-block\">\n            <div class=\"price\">7.50 <small>درهم</small></div>\n          </div>\n        </article>\n      </section>\n\n      <section class=\"summary-card\" aria-label=\"ملخص الطلب\">\n        <h2>ملخص الفاتورة</h2>\n\n        <form class=\"promo-form\" onsubmit=\"event.preventDefault()\">\n          <input class=\"promo-input\" type=\"text\" placeholder=\"أدخل رمز الخصم\" aria-label=\"رمز الخصم\">\n          <button class=\"apply-button\" type=\"submit\">تطبيق</button>\n        </form>\n\n        <div class=\"summary-row\">\n          <span>المجموع الفرعي</span>\n          <span>40.00 درهم</span>\n        </div>\n        <div class=\"summary-row\">\n          <span>رسوم التوصيل</span>\n          <span>8.00 درهم</span>\n        </div>\n        <div class=\"summary-row\">\n          <span>ضريبة القيمة المضافة (5%)</span>\n          <span>2.40 درهم</span>\n        </div>\n        <div class=\"summary-row discount\">\n          <span>خصم</span>\n          <span>0.00 درهم</span>\n        </div>\n\n        <div class=\"divider\"></div>\n\n        <div class=\"total-row\">\n          <div>\n            <strong>الإجمالي</strong>\n            <div class=\"vat-note\">شامل ضريبة القيمة المضافة</div>\n          </div>\n          <div class=\"total-price\">50.40 <small>درهم</small></div>\n        </div>\n      </section>\n    </main>\n\n    <div class=\"bottom-bar\">\n      <button class=\"order-button\" type=\"button\">تأكيد الطلب</button>\n      <p class=\"payment-note\">سيتم الدفع عبر Visa المنتهية في 4821</p>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 337,
+    "output": 4119
+  },
+  "ms": 17278,
+  "finish": "stop",
+  "reasoningTokens": 51,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 84,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 156.53125,
+        "y": 29,
+        "width": 90.015625,
+        "height": 20
+      },
+      "message": "Arabic falls back from Tahoma, Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>إتمام الطلب</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 18.015625,
+        "y": 32.5,
+        "width": 36.0625,
+        "height": 12
+      },
+      "message": "\"دفع آمن\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>دفع آمن</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 234.375,
+        "y": 114,
+        "width": 66.625,
+        "height": 15
+      },
+      "message": "\"التوصيل إلى\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<strong>التوصيل إلى</strong>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 164.8125,
+        "y": 136,
+        "width": 136.1875,
+        "height": 12
+      },
+      "message": "\"شارع الكورنيش، برج孵ار، دبي\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>شارع الكورنيش، برج孵ار، دبي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 39,
+        "y": 125,
+        "width": 24,
+        "height": 14
+      },
+      "message": "\"تغيير\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"edit-button\" type=\"button\">تغيير</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 20,
+        "y": 187.5,
+        "width": 47.03125,
+        "height": 14
+      },
+      "message": "\"3 منتجات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"item-count\">3 منتجات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 186.46875,
+        "y": 254.59375,
+        "width": 86.53125,
+        "height": 11
+      },
+      "message": "\"1 كجم • عبوة 4 حبات\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"item-unit\">1 كجم • عبوة 4 حبات</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 33,
+        "y": 263.796875,
+        "width": 19,
+        "height": 10
+      },
+      "message": "\"درهم\" is 9px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small>درهم</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 197.8125,
+        "y": 358.1875,
+        "width": 75.1875,
+        "height": 11
+      },
+      "message": "\"2 لتر • عبوة واحدة\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"item-unit\">2 لتر • عبوة واحدة</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 33,
+        "y": 367.390625,
+        "width": 19,
+        "height": 10
+      },
+      "message": "\"درهم\" is 9px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small>درهم</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 186.8125,
+        "y": 461.78125,
+        "width": 86.1875,
+        "height": 11
+      },
+      "message": "\"5 أرغفة • عبوة واحدة\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"item-unit\">5 أرغفة • عبوة واحدة</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 33,
+        "y": 470.984375,
+        "width": 19,
+        "height": 10
+      },
+      "message": "\"درهم\" is 9px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small>درهم</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 51,
+        "y": 607.78125,
+        "width": 31,
+        "height": 14
+      },
+      "message": "\"تطبيق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"apply-button\" type=\"submit\">تطبيق</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 272.65625,
+        "y": 659.78125,
+        "width": 82.34375,
+        "height": 14
+      },
+      "message": "\"المجموع الفرعي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المجموع الفرعي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 659.78125,
+        "width": 58.375,
+        "height": 14
+      },
+      "message": "\"40.00 درهم\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>40.00 درهم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 282.65625,
+        "y": 689.78125,
+        "width": 72.34375,
+        "height": 14
+      },
+      "message": "\"رسوم التوصيل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>رسوم التوصيل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 689.78125,
+        "width": 51.703125,
+        "height": 14
+      },
+      "message": "\"8.00 درهم\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>8.00 درهم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 219.640625,
+        "y": 719.78125,
+        "width": 135.359375,
+        "height": 14
+      },
+      "message": "\"ضريبة القيمة المضافة (5%)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>ضريبة القيمة المضافة (5%)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 719.78125,
+        "width": 51.703125,
+        "height": 14
+      },
+      "message": "\"2.40 درهم\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>2.40 درهم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 330,
+        "y": 749.78125,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"خصم\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>خصم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 749.78125,
+        "width": 51.703125,
+        "height": 14
+      },
+      "message": "\"0.00 درهم\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>0.00 درهم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 245.484375,
+        "y": 818.78125,
+        "width": 109.515625,
+        "height": 10
+      },
+      "message": "\"شامل ضريبة القيمة المضافة\" is 9px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"vat-note\">شامل ضريبة القيمة المضافة</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 35,
+        "y": 813.78125,
+        "width": 23,
+        "height": 12
+      },
+      "message": "\"درهم\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small>درهم</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 121.78125,
+        "y": 820,
+        "width": 146.421875,
+        "height": 10
+      },
+      "message": "\"سيتم الدفع عبر Visa المنتهية في 4821\" is 9px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"payment-note\">سيتم الدفع عبر Visa المنتهية في 4821</p>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 980
+}

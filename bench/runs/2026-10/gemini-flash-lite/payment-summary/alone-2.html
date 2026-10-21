@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملخص الدفع - تطبيق Fintech</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 flex items-center justify-center min-h-screen p-0 sm:p-4">
+
+    <!-- Phone Screen Container -->
+    <div class="w-full max-w-md bg-slate-50 min-h-screen sm:min-h-[750px] sm:rounded-[40px] shadow-2xl flex flex-col justify-between overflow-hidden relative border-0 sm:border-8 sm:border-slate-800">
+
+        <!-- Top Section -->
+        <div>
+            <!-- Header -->
+            <div class="flex items-center justify-between px-6 pt-8 pb-4 bg-white border-b border-slate-100">
+                <button class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+                <h1 class="text-lg font-bold text-slate-800">ملخص الدفع</h1>
+                <div class="w-10"></div> <!-- Spacer for alignment -->
+            </div>
+
+            <!-- Main Content -->
+            <div class="px-6 py-6 space-y-6">
+
+                <!-- Amount Card -->
+                <div class="bg-gradient-to-br from-emerald-600 to-teal-700 rounded-3xl p-6 text-white shadow-lg shadow-teal-900/10 relative overflow-hidden">
+                    <div class="absolute -left-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+                    <div class="text-emerald-100 text-sm font-medium mb-1">المبلغ المستحق</div>
+                    <div class="flex items-baseline gap-2 mb-4">
+                        <span class="text-4xl font-bold tracking-tight">1,234.50</span>
+                        <span class="text-lg font-semibold text-emerald-200">د.إ</span>
+                    </div>
+
+                    <div class="pt-4 border-t border-white/15 flex flex-col gap-1 text-xs text-emerald-100">
+                        <div class="flex items-center justify-between">
+                            <span>تاريخ الاستحقاق:</span>
+                            <span class="font-semibold text-white">3 نوفمبر 2026</span>
+                        </div>
+                        <div class="flex items-center justify-between text-emerald-200/80">
+                            <span>التاريخ الهجري:</span>
+                            <span>22 جمادى الأولى 1448 هـ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Info -->
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                        </div>
+                        <span class="text-sm font-semibold text-slate-700">لديك 3 عناصر في هذا الطلب</span>
+                    </div>
+                    <span class="text-xs text-teal-600 font-semibold bg-teal-50 px-2.5 py-1 rounded-full">التفاصيل</span>
+                </div>
+
+                <!-- Receipt SMS Section -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 space-y-3">
+                    <label for="phone" class="block text-sm font-semibold text-slate-700">
+                        رقم الهاتف لإرسال الإيصال
+                    </label>
+                    <div class="relative flex items-center">
+                        <div class="absolute right-3.5 flex items-center gap-1.5 pointer-events-none text-slate-400 border-l border-slate-200 pl-2.5">
+                            <span class="text-xs font-semibold">+971</span>
+                            <span class="text-base">🇦🇪</span>
+                        </div>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            placeholder="050 123 4567" 
+                            class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 pr-24 text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all"
+                        >
+                    </div>
+                    <p class="text-[11px] text-slate-400">سنرسل لك رسالة نصية تحتوي على تفاصيل المعاملة والإيصال الرقمي.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Bottom Action Section -->
+        <div class="p-6 bg-white border-t border-slate-100">
+            <button class="w-full bg-teal-600 hover:bg-teal-700 active:scale-[0.98] transition-all text-white font-bold py-4 rounded-2xl shadow-lg shadow-teal-600/25 flex items-center justify-center gap-2 cursor-pointer text-base">
+                <span>ادفع الآن</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </button>
+            <div class="mt-4 flex items-center justify-center gap-2 text-slate-400 text-xs">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <span>دفع آمن ومشفر بالكامل</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

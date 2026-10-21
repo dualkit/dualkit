@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الملف الشخصي</title>
+  <style>
+    :root {
+      --type-body-size: 16px;
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --color-text: #1a1a1a;
+      --color-muted: #6b7280;
+      --color-border: #e5e7eb;
+      --color-primary: #2563eb;
+      --line-height-body: 1.7;
+      --line-height-label: 1.6;
+    }
+
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'IBM Plex Sans Arabic', sans-serif;
+      font-size: var(--type-body-size);
+      line-height: var(--line-height-body);
+      color: var(--color-text);
+      background-color: #f9fafb;
+      padding: 16px;
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .profile-header h1 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .profile-header p {
+      font-size: var(--type-caption-size);
+      color: var(--color-muted);
+    }
+
+    .profile-section {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .profile-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .profile-item:last-child {
+      border-bottom: none;
+    }
+
+    .profile-label {
+      font-size: var(--type-label-size);
+      color: var(--color-muted);
+      line-height: var(--line-height-label);
+    }
+
+    .profile-value {
+      font-size: var(--type-body-size);
+      font-weight: 500;
+      color: var(--color-text);
+      line-height: var(--line-height-body);
+    }
+
+    .profile-value bdi {
+      display: inline-block;
+      direction: ltr;
+      text-align: right;
+    }
+
+    .edit-action {
+      background: none;
+      border: none;
+      color: var(--color-primary);
+      font-size: var(--type-label-size);
+      font-weight: 600;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: background-color 0.2s ease;
+    }
+
+    .edit-action:hover {
+      background-color: rgba(37, 99, 235, 0.05);
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
+
+      .profile-item {
+        padding: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-header">
+    <h1>الملف الشخصي</h1>
+    <p>إدارة حسابك وإعداداتك</p>
+  </div>
+
+  <div class="profile-section">
+    <div class="profile-item">
+      <div>
+        <div class="profile-label">الاسم</div>
+        <div class="profile-value">ليلى المنصوري</div>
+      </div>
+      <button class="edit-action">تعديل</button>
+    </div>
+
+    <div class="profile-item">
+      <div>
+        <div class="profile-label">البريد الإلكتروني</div>
+        <div class="profile-value"><bdi dir="ltr">layla@example.com</bdi></div>
+      </div>
+      <button class="edit-action">تعديل</button>
+    </div>
+
+    <div class="profile-item">
+      <div>
+        <div class="profile-label">رقم الهاتف</div>
+        <div class="profile-value"><bdi dir="ltr">+971 50 123 4567</bdi></div>
+      </div>
+      <button class="edit-action">تعديل</button>
+    </div>
+
+    <div class="profile-item">
+      <div>
+        <div class="profile-label">رقم الحساب البنكي (IBAN)</div>
+        <div class="profile-value"><bdi dir="ltr">AE07 0331 2345 6789 0123 456</bdi></div>
+      </div>
+      <button class="edit-action">تعديل</button>
+    </div>
+  </div>
+</body>
+</html>
+```

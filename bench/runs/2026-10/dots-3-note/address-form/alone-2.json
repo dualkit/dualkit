@@ -1,0 +1,53 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "address-form",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T17:04:06.054Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>عنوان التوصيل</title>\n  <style>\n    body {\n      font-family: 'Arial', sans-serif;\n      background-color: #f5f5f5;\n      padding: 16px;\n      margin: 0;\n    }\n    .form-group {\n      margin-bottom: 16px;\n    }\n    label {\n      display: block;\n      margin-bottom: 4px;\n      font-weight: bold;\n      color: #333;\n    }\n    input, select {\n      width: 100%;\n      padding: 8px;\n      border: 1px solid #ccc;\n      border-radius: 4px;\n      box-sizing: border-box;\n      font-size: 16px;\n    }\n    button {\n      width: 100%;\n      padding: 12px;\n      background-color: #007AFF;\n      color: white;\n      border: none;\n      border-radius: 4px;\n      font-size: 16px;\n      cursor: pointer;\n    }\n    button:hover {\n      background-color: #0056b3;\n    }\n  </style>\n</head>\n<body>\n  <form>\n    <div class=\"form-group\">\n      <label for=\"building\">مبنى أو فيلا</label>\n      <input type=\"text\" id=\"building\" name=\"building\" placeholder=\"رقم المبنى أو فيلا\">\n    </div>\n    <div class=\"form-group\">\n      <label for=\"street\">شارع</label>\n      <input type=\"text\" id=\"street\" name=\"street\" placeholder=\"اسم الشارع\">\n    </div>\n    <div class=\"form-group\">\n      <label for=\"area\">منطقة</label>\n      <input type=\"text\" id=\"area\" name=\"area\" placeholder=\"المنطقة\">\n    </div>\n    <div class=\"form-group\">\n      <label for=\"makani\">رقم مكاني</label>\n      <input type=\"text\" id=\"makani\" name=\"makani\" placeholder=\"رقم المكان\">\n    </div>\n    <div class=\"form-group\">\n      <label for=\"emirate\">إمارة</label>\n      <select id=\"emirate\" name=\"emirate\">\n        <option value=\"dubai\" selected>دبي</option>\n        <option value=\"abudhabi\">أبوظبي</option>\n        <option value=\"sharjah\">الشارقة</option>\n        <option value=\"ajman\">عجمان</option>\n        <option value=\"rasalkhaimah\">الخليل</option>\n        <option value=\"fujairah\">الفجيرة</option>\n        <option value=\"ummalkhwaima\">أم القيوين</option>\n      </select>\n    </div>\n    <div class=\"form-group\">\n      <label for=\"phone\">رقم الهاتف</label>\n      <input type=\"tel\" id=\"phone\" name=\"phone\" placeholder=\"050 123 4567\">\n    </div>\n    <button type=\"submit\">حفظ عنوان</button>\n  </form>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 144,
+    "output": 2322
+  },
+  "ms": 23685,
+  "finish": "stop",
+  "reasoningTokens": 1691,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 298.109375,
+        "y": 17,
+        "width": 75.890625,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<label for=\"building\">مبنى أو فيلا</label>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 156.765625,
+        "y": 480,
+        "width": 76.453125,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button type=\"submit\">حفظ عنوان</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

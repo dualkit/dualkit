@@ -1,0 +1,391 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "transactions",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T17:10:31.452Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>المعاملات</title>\n  <style>\n    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;600;700&display=swap');\n\n    * { box-sizing: border-box; }\n\n    body {\n      margin: 0;\n      min-height: 100vh;\n      background: #f4f6f8;\n      color: #17221c;\n      font-family: \"Tajawal\", Arial, sans-serif;\n    }\n\n    .app {\n      width: 100%;\n      max-width: 430px;\n      min-height: 100vh;\n      margin: 0 auto;\n      background: #f7f8f7;\n      box-shadow: 0 0 30px rgba(25, 45, 32, 0.08);\n    }\n\n    .status-bar {\n      height: 28px;\n      padding: 7px 18px 0;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      font-size: 11px;\n      font-weight: 700;\n    }\n\n    .status-icons {\n      display: flex;\n      align-items: center;\n      gap: 5px;\n      font-size: 10px;\n    }\n\n    .header {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      padding: 12px 20px 18px;\n      background: linear-gradient(145deg, #0c4d35, #146746);\n      color: white;\n      border-radius: 0 0 28px 28px;\n      box-shadow: 0 8px 20px rgba(13, 75, 51, 0.16);\n    }\n\n    .back {\n      width: 38px;\n      height: 38px;\n      border: 1px solid rgba(255,255,255,.2);\n      border-radius: 12px;\n      display: grid;\n      place-items: center;\n      background: rgba(255,255,255,.1);\n      font-size: 23px;\n    }\n\n    .header h1 {\n      margin: 0;\n      font-size: 21px;\n      font-weight: 700;\n    }\n\n    .profile {\n      width: 37px;\n      height: 37px;\n      border-radius: 50%;\n      display: grid;\n      place-items: center;\n      background: #f0d29b;\n      color: #704f20;\n      font-size: 19px;\n    }\n\n    main {\n      padding: 18px 16px 28px;\n    }\n\n    .balance-card {\n      padding: 20px;\n      border-radius: 20px;\n      background: white;\n      box-shadow: 0 5px 18px rgba(29, 52, 38, .07);\n      margin-bottom: 16px;\n    }\n\n    .balance-label {\n      color: #758078;\n      font-size: 13px;\n      margin-bottom: 5px;\n    }\n\n    .balance {\n      display: flex;\n      align-items: baseline;\n      gap: 7px;\n      direction: ltr;\n      justify-content: flex-end;\n    }\n\n    .balance strong {\n      font-size: 30px;\n      letter-spacing: -.5px;\n    }\n\n    .balance span {\n      color: #647068;\n      font-weight: 700;\n      font-size: 14px;\n    }\n\n    .balance-note {\n      margin-top: 8px;\n      color: #168052;\n      font-size: 12px;\n      display: flex;\n      align-items: center;\n      gap: 5px;\n    }\n\n    .section-head {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin: 20px 2px 12px;\n    }\n\n    .section-head h2 {\n      margin: 0;\n      font-size: 17px;\n    }\n\n    .month-filter {\n      border: 1px solid #dce3dd;\n      background: white;\n      color: #415047;\n      border-radius: 11px;\n      padding: 8px 11px;\n      font-family: inherit;\n      font-size: 13px;\n      font-weight: 600;\n      outline: none;\n    }\n\n    .transactions {\n      overflow: hidden;\n      border-radius: 18px;\n      background: white;\n      box-shadow: 0 5px 18px rgba(29, 52, 38, .07);\n    }\n\n    .transaction {\n      display: grid;\n      grid-template-columns: 44px 1fr auto;\n      gap: 11px;\n      align-items: center;\n      padding: 14px 15px;\n      border-bottom: 1px solid #edf0ed;\n    }\n\n    .transaction:last-child {\n      border-bottom: 0;\n    }\n\n    .merchant-icon {\n      width: 44px;\n      height: 44px;\n      border-radius: 14px;\n      display: grid;\n      place-items: center;\n      font-size: 19px;\n      font-weight: 700;\n    }\n\n    .icon-green { background: #e1f3e9; color: #167249; }\n    .icon-red { background: #fee7e4; color: #d1483e; }\n    .icon-blue { background: #e7effd; color: #3567ba; }\n    .icon-gold { background: #fff0d5; color: #a56c13; }\n    .icon-purple { background: #eee7fb; color: #7650af; }\n\n    .merchant {\n      min-width: 0;\n    }\n\n    .merchant h3 {\n      margin: 0 0 4px;\n      font-size: 14px;\n      font-weight: 700;\n      white-space: nowrap;\n      overflow: hidden;\n      text-overflow: ellipsis;\n    }\n\n    .merchant p {\n      margin: 0;\n      color: #879089;\n      font-size: 11px;\n    }\n\n    .amount {\n      text-align: left;\n      direction: ltr;\n      white-space: nowrap;\n    }\n\n    .amount strong {\n      display: block;\n      font-size: 13px;\n      font-weight: 700;\n    }\n\n    .amount small {\n      display: block;\n      margin-top: 4px;\n      font-size: 10px;\n      font-weight: 600;\n    }\n\n    .in { color: #168052; }\n    .out { color: #d1483e; }\n\n    .summary {\n      display: flex;\n      gap: 10px;\n      margin-top: 14px;\n    }\n\n    .summary-item {\n      flex: 1;\n      padding: 13px;\n      border-radius: 15px;\n      background: white;\n      border: 1px solid #edf0ed;\n    }\n\n    .summary-item span {\n      display: block;\n      color: #7a847d;\n      font-size: 11px;\n      margin-bottom: 3px;\n    }\n\n    .summary-item strong {\n      direction: ltr;\n      display: inline-block;\n      font-size: 14px;\n    }\n\n    @media (max-width: 360px) {\n      .transaction {\n        grid-template-columns: 40px 1fr auto;\n        gap: 8px;\n        padding: 12px 10px;\n      }\n      .merchant-icon { width: 40px; height: 40px; }\n      .amount strong { font-size: 12px; }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"app\">\n    <div class=\"status-bar\">\n      <span>٩:٤١ ص</span>\n      <span class=\"status-icons\">● ◒ ▮</span>\n    </div>\n\n    <header class=\"header\">\n      <div class=\"back\" aria-label=\"رجوع\">‹</div>\n      <h1>المعاملات</h1>\n      <div class=\"profile\" aria-label=\"الملف الشخصي\">م</div>\n    </header>\n\n    <main>\n      <section class=\"balance-card\">\n        <div class=\"balance-label\">الرصيد المتاح</div>\n        <div class=\"balance\">\n          <strong>1,248.750</strong>\n          <span>ر.ع.</span>\n        </div>\n        <div class=\"balance-note\">↗ تم تحديث الرصيد منذ قليل</div>\n      </section>\n\n      <div class=\"section-head\">\n        <h2>سجل المعاملات</h2>\n        <select class=\"month-filter\" aria-label=\"تصفية حسب الشهر\">\n          <option>هذا الشهر</option>\n          <option>الشهر الماضي</option>\n          <option>آخر ٣ أشهر</option>\n        </select>\n      </div>\n\n      <section class=\"transactions\" aria-label=\"جدول المعاملات\">\n        <article class=\"transaction\">\n          <div class=\"merchant-icon icon-green\">ص</div>\n          <div class=\"merchant\">\n            <h3>تمويناتoru</h3>\n            <p>١٨ أغسطس ٢٠٢٥</p>\n          </div>\n          <div class=\"amount\">\n            <strong>25.000</strong>\n            <small class=\"in\">↙ للداخل</small>\n          </div>\n        </article>\n\n        <article class=\"transaction\">\n          <div class=\"merchant-icon icon-red\">L</div>\n          <div class=\"merchant\">\n            <h3>Lulu Hypermarket</h3>\n            <p>١٧ أغسطس ٢٠٢٥</p>\n          </div>\n          <div class=\"amount\">\n            <strong>43.750</strong>\n            <small class=\"out\">↗ للخارج</small>\n          </div>\n        </article>\n\n        <article class=\"transaction\">\n          <div class=\"merchant-icon icon-blue\">N</div>\n          <div class=\"merchant\">\n            <h3>Netflix</h3>\n            <p>١٥ أغسطس ٢٠٢٥</p>\n          </div>\n          <div class=\"amount\">\n            <strong>5.280</strong>\n            <small class=\"out\">↗ للخارج</small>\n          </div>\n        </article>\n\n        <article class=\"transaction\">\n          <div class=\"merchant-icon icon-gold\">أ</div>\n          <div class=\"merchant\">\n            <h3>أroraki</h3>\n            <p>١٣ أغسطس ٢٠٢٥</p>\n          </div>\n          <div class=\"amount\">\n            <strong>18.500</strong>\n            <small class=\"out\">↗ للخارج</small>\n          </div>\n        </article>\n\n        <article class=\"transaction\">\n          <div class=\"merchant-icon icon-purple\">O</div>\n          <div class=\"merchant\">\n            <h3>Omani Credit Bank</h3>\n            <p>١٢ أغسطس ٢٠٢٥</p>\n          </div>\n          <div class=\"amount\">\n            <strong>300.000</strong>\n            <small class=\"in\">↙ للداخل</small>\n          </div>\n        </article>\n\n        <article class=\"transaction\">\n          <div class=\"merchant-icon icon-red\">م</div>\n          <div class=\"merchant\">\n            <h3>مطعم اليtof</h3>\n            <p>١٠ أغسطس ٢٠٢٥</p>\n          </div>\n          <div class=\"amount\">\n            <strong>12.350</strong>\n            <small class=\"out\">↗ للخارج</small>\n          </div>\n        </article>\n\n        <article class=\"transaction\">\n          <div class=\"merchant-icon icon-blue\">S</div>\n          <div class=\"merchant\">\n            <h3>Spotify</h3>\n            <p>٨ أغسطس ٢٠٢٥</p>\n          </div>\n          <div class=\"amount\">\n            <strong>3.990</strong>\n            <small class=\"out\">↗ للخارج</small>\n          </div>\n        </article>\n\n        <article class=\"transaction\">\n          <div class=\"merchant-icon icon-green\">ن</div>\n          <div class=\"merchant\">\n            <h3>نقل عماني</h3>\n            <p>٦ أغسطس ٢٠٢٥</p>\n          </div>\n          <div class=\"amount\">\n            <strong>1.200</strong>\n            <small class=\"out\">↗ للخارج</small>\n          </div>\n        </article>\n      </section>\n\n      <div class=\"summary\">\n        <div class=\"summary-item\">\n          <span>إجمالي الوارد</span>\n          <strong class=\"in\">325.000 ر.ع.</strong>\n        </div>\n        <div class=\"summary-item\">\n          <span>إجمالي الصادر</span>\n          <strong class=\"out\">110.070 ر.ع.</strong>\n        </div>\n      </div>\n    </main>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 333,
+    "output": 2893
+  },
+  "ms": 49289,
+  "finish": "stop",
+  "reasoningTokens": 34,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 68,
+  "missing": [
+    "eight rows"
+  ],
+  "findings": [
+    {
+      "rule": "bidi/punctuation-flip",
+      "title": "Punctuation at the wrong end",
+      "severity": "warning",
+      "box": {
+        "x": 331,
+        "y": 168,
+        "width": 23,
+        "height": 14
+      },
+      "message": "\"ر.ع.\" runs left to right, so its last mark moves to the start.",
+      "fix": "Give the block the direction of its own text, with dir=\"ltr\", dir=\"rtl\" or dir=\"auto\".",
+      "snippet": "<span>ر.ع.</span>"
+    },
+    {
+      "rule": "bidi/punctuation-flip",
+      "title": "Punctuation at the wrong end",
+      "severity": "warning",
+      "box": {
+        "x": 284,
+        "y": 929,
+        "width": 76,
+        "height": 14
+      },
+      "message": "\"325.000 ر.ع.\" runs left to right, so its last mark moves to the start.",
+      "fix": "Give the block the direction of its own text, with dir=\"ltr\", dir=\"rtl\" or dir=\"auto\".",
+      "snippet": "<strong class=\"in\">325.000 ر.ع.</strong>"
+    },
+    {
+      "rule": "bidi/punctuation-flip",
+      "title": "Punctuation at the wrong end",
+      "severity": "warning",
+      "box": {
+        "x": 105,
+        "y": 929,
+        "width": 71,
+        "height": 14
+      },
+      "message": "\"110.070 ر.ع.\" runs left to right, so its last mark moves to the start.",
+      "fix": "Give the block the direction of its own text, with dir=\"ltr\", dir=\"rtl\" or dir=\"auto\".",
+      "snippet": "<strong class=\"out\">110.070 ر.ع.</strong>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 284,
+        "y": 929,
+        "width": 76,
+        "height": 14
+      },
+      "message": "\"325.000 ر.ع.\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<strong class=\"in\">325.000 ر.ع.</strong>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 105,
+        "y": 929,
+        "width": 71,
+        "height": 14
+      },
+      "message": "\"110.070 ر.ع.\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<strong class=\"out\">110.070 ر.ع.</strong>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 338,
+        "y": 12,
+        "width": 34,
+        "height": 11
+      },
+      "message": "\"٩:٤١ ص\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>٩:٤١ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 285,
+        "y": 135,
+        "width": 69,
+        "height": 13
+      },
+      "message": "\"الرصيد المتاح\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"balance-label\">الرصيد المتاح</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 213,
+        "y": 202,
+        "width": 141,
+        "height": 12
+      },
+      "message": "\"↗ تم تحديث الرصيد منذ قليل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"balance-note\">↗ تم تحديث الرصيد منذ قليل</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 230,
+        "y": 341,
+        "width": 74,
+        "height": 11
+      },
+      "message": "\"١٨ أغسطس ٢٠٢٥\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p>١٨ أغسطس ٢٠٢٥</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 342,
+        "width": 39,
+        "height": 10
+      },
+      "message": "\"↙ للداخل\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small class=\"in\">↙ للداخل</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 230,
+        "y": 414,
+        "width": 74,
+        "height": 11
+      },
+      "message": "\"١٧ أغسطس ٢٠٢٥\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p>١٧ أغسطس ٢٠٢٥</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 415,
+        "width": 37,
+        "height": 10
+      },
+      "message": "\"↗ للخارج\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small class=\"out\">↗ للخارج</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 230,
+        "y": 487,
+        "width": 74,
+        "height": 11
+      },
+      "message": "\"١٥ أغسطس ٢٠٢٥\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p>١٥ أغسطس ٢٠٢٥</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 488,
+        "width": 37,
+        "height": 10
+      },
+      "message": "\"↗ للخارج\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small class=\"out\">↗ للخارج</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 229,
+        "y": 560,
+        "width": 75,
+        "height": 11
+      },
+      "message": "\"١٣ أغسطس ٢٠٢٥\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p>١٣ أغسطس ٢٠٢٥</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 561,
+        "width": 37,
+        "height": 10
+      },
+      "message": "\"↗ للخارج\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small class=\"out\">↗ للخارج</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 231,
+        "y": 633,
+        "width": 73,
+        "height": 11
+      },
+      "message": "\"١٢ أغسطس ٢٠٢٥\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p>١٢ أغسطس ٢٠٢٥</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 634,
+        "width": 39,
+        "height": 10
+      },
+      "message": "\"↙ للداخل\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small class=\"in\">↙ للداخل</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 232,
+        "y": 706,
+        "width": 72,
+        "height": 11
+      },
+      "message": "\"١٠ أغسطس ٢٠٢٥\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p>١٠ أغسطس ٢٠٢٥</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 707,
+        "width": 37,
+        "height": 10
+      },
+      "message": "\"↗ للخارج\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small class=\"out\">↗ للخارج</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 232,
+        "y": 779,
+        "width": 72,
+        "height": 11
+      },
+      "message": "\"٨ أغسطس ٢٠٢٥\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p>٨ أغسطس ٢٠٢٥</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 780,
+        "width": 37,
+        "height": 10
+      },
+      "message": "\"↗ للخارج\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small class=\"out\">↗ للخارج</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 233,
+        "y": 852,
+        "width": 71,
+        "height": 11
+      },
+      "message": "\"٦ أغسطس ٢٠٢٥\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p>٦ أغسطس ٢٠٢٥</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 31,
+        "y": 853,
+        "width": 37,
+        "height": 10
+      },
+      "message": "\"↗ للخارج\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<small class=\"out\">↗ للخارج</small>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 305,
+        "y": 912,
+        "width": 55,
+        "height": 11
+      },
+      "message": "\"إجمالي الوارد\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>إجمالي الوارد</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 116,
+        "y": 912,
+        "width": 60,
+        "height": 11
+      },
+      "message": "\"إجمالي الصادر\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>إجمالي الصادر</span>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 988
+}

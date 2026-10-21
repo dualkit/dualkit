@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملف الملف الشخصي</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background-color: #000;
+            border-radius: 40px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .screen {
+            flex: 1;
+            background-color: #f5f5f5;
+            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        header {
+            background-color: #0a4d2a;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .profile-container {
+            padding: 20px;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #0a4d2a;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            margin: 0 auto 15px;
+        }
+        .profile-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .profile-email {
+            font-size: 14px;
+            color: #666;
+        }
+        .info-section {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        .info-section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #0a4d2a;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-size: 14px;
+            color: #555;
+        }
+        .info-value {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+        .edit-btn {
+            background-color: #0a4d2a;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .edit-btn:hover {
+            background-color: #083d22;
+        }
+        footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+            color: #888;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen">
+            <header>
+                الملف الشخصي
+            </header>
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="avatar">ل</div>
+                    <div class="profile-name">ليلى المنصوري</div>
+                    <div class="profile-email">layla@example.com</div>
+                </div>
+                <div class="info-section">
+                    <div class="info-section-title">بيانات الاتصال</div>
+                    <div class="info-item">
+                        <span class="info-label">رقم الهاتف</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="info-value">+971 50 123 4567</span>
+                            <button class="edit-btn">تعديل</button>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">البريد الإلكتروني</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="info-value">layla@example.com</span>
+                            <button class="edit-btn">تعديل</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-section">
+                    <div class="info-section-title">معلومات الدفع</div>
+                    <div class="info-item">
+                        <span class="info-label">رقم الحساب البنكي (IBAN)</span>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span class="info-value">AE07 0331 2345 6789 0123 456</span>
+                            <button class="edit-btn">تعديل</button>
+                        </div>
+                    </div>
+                </div>
+                <footer>
+                    تطبيق مدفوعات الإمارات
+                </footer>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

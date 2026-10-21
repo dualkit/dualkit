@@ -1,0 +1,291 @@
+{
+  "month": "2026-10",
+  "model": "gemini-flash-lite",
+  "screen": "booking",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T16:53:45.604Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>حجز موعد - عيادات الدوحة</title>\n    <!-- Tailwind CSS -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Fonts - Cairo -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap\" rel=\"stylesheet\">\n    <!-- Font Awesome -->\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">\n    <script>\n        tailwind.config = {\n            theme: {\n                extend: {\n                    fontFamily: {\n                        sans: ['Cairo', 'sans-serif'],\n                    },\n                    colors: {\n                        primary: '#0e7490',\n                        primaryDark: '#155e75',\n                        accent: '#06b6d4',\n                    }\n                }\n            }\n        }\n    </script>\n</head>\n<body class=\"bg-slate-200 flex items-center justify-center min-h-screen p-0 m-0\">\n\n    <!-- Phone Screen Container -->\n    <div class=\"w-[390px] h-[844px] bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col relative border-[8px] border-slate-800\">\n        \n        <!-- Phone Notch / Status Bar -->\n        <div class=\"bg-primary text-white px-6 pt-4 pb-2 flex justify-between items-center text-sm\">\n            <span>9:41</span>\n            <div class=\"w-24 h-4 bg-slate-800 rounded-full absolute top-2 left-1/2 transform -translate-x-1/2\"></div>\n            <div class=\"flex gap-2\">\n                <i class=\"fa-solid fa-signal\"></i>\n                <i class=\"fa-solid fa-wifi\"></i>\n                <i class=\"fa-solid fa-battery-full\"></i>\n            </div>\n        </div>\n\n        <!-- App Header -->\n        <div class=\"bg-primary text-white px-6 py-4 flex items-center justify-between shadow-md\">\n            <button class=\"w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition\">\n                <i class=\"fa-solid fa-arrow-right\"></i>\n            </button>\n            <h1 class=\"text-lg font-bold\">حجز موعد</h1>\n            <div class=\"w-9\"></div> <!-- Spacer -->\n        </div>\n\n        <!-- Main Content (Scrollable) -->\n        <div class=\"flex-1 overflow-y-auto p-5 space-y-6 pb-24\">\n\n            <!-- Doctor Profile Card -->\n            <div class=\"flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-sm\">\n                <img src=\"https://images.unsplash.com/photo-1594824813587-28d842b429d2?w=150&auto=format&fit=crop&q=80\" \n                     alt=\"د. فاطمة الكعبي\" \n                     class=\"w-16 h-16 rounded-full object-cover border-2 border-primary\">\n                <div>\n                    <span class=\"text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold\">استشاري</span>\n                    <h2 class=\"font-bold text-slate-800 text-base mt-1\">د. فاطمة الكعبي</h2>\n                    <p class=\"text-xs text-slate-500\">طب الأسرة والمجتمع • مركز الرديفة الطبي</p>\n                </div>\n            </div>\n\n            <!-- Calendar Section -->\n            <div class=\"bg-white rounded-2xl border border-slate-100 shadow-sm p-4\">\n                <!-- Month Navigation -->\n                <div class=\"flex items-center justify-between mb-4\">\n                    <button id=\"prevMonth\" class=\"w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600 transition\">\n                        <i class=\"fa-solid fa-chevron-right\"></i>\n                    </button>\n                    <h2 id=\"monthYearDisplay\" class=\"font-bold text-slate-800 text-base\">أكتوبر ٢٠٢٣</h2>\n                    <button id=\"nextMonth\" class=\"w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600 transition\">\n                        <i class=\"fa-solid fa-chevron-left\"></i>\n                    </button>\n                </div>\n\n                <!-- Weekdays Header (Saturday Start) -->\n                <div class=\"grid grid-cols-7 text-center text-xs font-semibold text-slate-400 mb-2\">\n                    <div>سبت</div>\n                    <div>أحد</div>\n                    <div>إثنين</div>\n                    <div>ثلاثاء</div>\n                    <div>أربعاء</div>\n                    <div>خميس</div>\n                    <div>جمعة</div>\n                </div>\n\n                <!-- Days Grid -->\n                <div id=\"daysGrid\" class=\"grid grid-cols-7 gap-y-2 text-center text-sm\">\n                    <!-- Days will be populated via JS or static markup -->\n                    <!-- Padding days for previous month -->\n                    <div class=\"text-slate-300 py-2\">30</div>\n                    <!-- October Days -->\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">1</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">2</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">3</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">4</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">5</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">6</div>\n                    \n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">7</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">8</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">9</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">10</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">11</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">12</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">13</div>\n\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">14</div>\n                    <!-- Today Marked -->\n                    <div class=\"py-2 bg-primary text-white font-bold rounded-full cursor-pointer shadow-md shadow-primary/30\">15</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">16</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">17</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">18</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">19</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">20</div>\n\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">21</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">22</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">23</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">24</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">25</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">26</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">27</div>\n\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">28</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">29</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">30</div>\n                    <div class=\"py-2 text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer\">31</div>\n                </div>\n            </div>\n\n            <!-- Time Slots Section -->\n            <div>\n                <h3 class=\"font-bold text-slate-800 text-sm mb-3 flex items-center gap-2\">\n                    <i class=\"fa-regular fa-clock text-primary\"></i>\n                    الأوقات المتاحة (صباحاً)\n                </h3>\n                <div class=\"grid grid-cols-3 gap-2.5\">\n                    <button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:border-primary hover:text-primary transition text-center\">\n                        ٠٩:٠٠ ص\n                    </button>\n                    <button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:border-primary hover:text-primary transition text-center\">\n                        ٠٩:٣٠ ص\n                    </button>\n                    <button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:border-primary hover:text-primary transition text-center\">\n                        ١٠:٠٠ ص\n                    </button>\n                    <button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl bg-primary text-white border border-primary font-bold shadow-sm text-center\">\n                        ١٠:٣٠ ص\n                    </button>\n                    <button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:border-primary hover:text-primary transition text-center\">\n                        ١١:٠٠ ص\n                    </button>\n                    <button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:border-primary hover:text-primary transition text-center\">\n                        ١١:٣٠ ص\n                    </button>\n                    <button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:border-primary hover:text-primary transition text-center\">\n                        ١٢:٠٠ م\n                    </button>\n                </div>\n            </div>\n\n        </div>\n\n        <!-- Bottom Action Bar -->\n        <div class=\"absolute bottom-0 left-0 right-0 bg-white border-t border-slate-100 p-4 shadow-lg\">\n            <button class=\"w-full bg-primary hover:bg-primaryDark text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-primary/30 transition flex items-center justify-center gap-2\">\n                <span>تأكيد الحجز</span>\n                <i class=\"fa-solid fa-check\"></i>\n            </button>\n        </div>\n\n    </div>\n\n    <script>\n        // Simple interactivity for time slots selection\n        const slots = document.querySelectorAll('.time-slot');\n        slots.forEach(slot => {\n            slot.addEventListener('click', () => {\n                slots.forEach(s => {\n                    s.classList.remove('bg-primary', 'text-white', 'border-primary', 'font-bold', 'shadow-sm');\n                    s.classList.add('border-slate-200', 'text-slate-700');\n                });\n                slot.classList.remove('border-slate-200', 'text-slate-700');\n                slot.classList.add('bg-primary', 'text-white', 'border-primary', 'font-bold', 'shadow-sm');\n            });\n        });\n    </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 145,
+    "output": 3355
+  },
+  "ms": 10432,
+  "finish": "STOP",
+  "reasoningTokens": 987,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 76,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 333,
+        "y": 78,
+        "width": 14,
+        "height": 16
+      },
+      "message": "\"arrow-right\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-arrow-right\"></i>"
+    },
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 324,
+        "y": 291,
+        "width": 10,
+        "height": 16
+      },
+      "message": "\"chevron-right\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-chevron-right\"></i>"
+    },
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 56,
+        "y": 291,
+        "width": 10,
+        "height": 16
+      },
+      "message": "\"chevron-left\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-chevron-left\"></i>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 211,
+        "y": 159,
+        "width": 46,
+        "height": 23
+      },
+      "message": "\"استشاري\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold\">استشاري</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 57,
+        "y": 205,
+        "width": 208,
+        "height": 23
+      },
+      "message": "\"طب الأسرة والمجتمع • مركز الرديفة الطبي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-slate-500\">طب الأسرة والمجتمع • مركز الرديفة الطبي</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 311.578125,
+        "y": 327,
+        "width": 24,
+        "height": 23
+      },
+      "message": "\"سبت\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>سبت</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 272.71875,
+        "y": 327,
+        "width": 16,
+        "height": 23
+      },
+      "message": "\"أحد\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>أحد</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 226.359375,
+        "y": 327,
+        "width": 23,
+        "height": 23
+      },
+      "message": "\"إثنين\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>إثنين</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 181.5,
+        "y": 327,
+        "width": 27,
+        "height": 23
+      },
+      "message": "\"ثلاثاء\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>ثلاثاء</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 138.140625,
+        "y": 327,
+        "width": 28,
+        "height": 23
+      },
+      "message": "\"أربعاء\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>أربعاء</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 92.28125,
+        "y": 327,
+        "width": 34,
+        "height": 23
+      },
+      "message": "\"خميس\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>خميس</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 51.421875,
+        "y": 327,
+        "width": 30,
+        "height": 23
+      },
+      "message": "\"جمعة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>جمعة</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 292.171875,
+        "y": 647,
+        "width": 35,
+        "height": 23
+      },
+      "message": "\"٠٩:٠٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:border-primary hover:text-primary transition "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 175,
+        "y": 647,
+        "width": 40,
+        "height": 23
+      },
+      "message": "\"٠٩:٣٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:border-primary hover:text-primary transition "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 63.84375,
+        "y": 647,
+        "width": 33,
+        "height": 23
+      },
+      "message": "\"١٠:٠٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:border-primary hover:text-primary transition "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 290.671875,
+        "y": 695,
+        "width": 38,
+        "height": 23
+      },
+      "message": "\"١٠:٣٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl bg-primary text-white border border-primary font-bold shadow-sm text-center\">\n            "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 178,
+        "y": 695,
+        "width": 34,
+        "height": 23
+      },
+      "message": "\"١١:٠٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:border-primary hover:text-primary transition "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 60.84375,
+        "y": 695,
+        "width": 39,
+        "height": 23
+      },
+      "message": "\"١١:٣٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:border-primary hover:text-primary transition "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 294.671875,
+        "y": 743,
+        "width": 30,
+        "height": 23
+      },
+      "message": "\"١٢:٠٠ م\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"time-slot py-2.5 px-2 text-xs font-semibold rounded-xl border border-slate-200 text-slate-700 hover:border-primary hover:text-primary transition "
+    }
+  ],
+  "unreadableStylesheets": 2,
+  "pageHeight": 844
+}

@@ -1,0 +1,207 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "settings",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T17:39:37.962Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n    <title>الإعدادات - تطبيق بنك البحرين</title>\n    <style>\n        * {\n            margin: 0;\n            padding: 0;\n            box-sizing: border-box;\n        }\n\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #f5f5f7;\n            color: #333;\n            direction: rtl;\n            text-align: right;\n            min-height: 100vh;\n            padding-bottom: 20px;\n        }\n\n        .status-bar {\n            height: 20px;\n            background-color: #007AFF;\n            color: white;\n            font-size: 12px;\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            padding: 0 8px;\n        }\n\n        .header {\n            background-color: #007AFF;\n            color: white;\n            padding: 16px 20px;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .header h1 {\n            font-size: 20px;\n            font-weight: 600;\n        }\n\n        .back-button {\n            background: none;\n            border: none;\n            color: white;\n            font-size: 18px;\n            cursor: pointer;\n        }\n\n        .settings-container {\n            max-width: 600px;\n            margin: 0 auto;\n            padding: 0 16px;\n        }\n\n        .settings-group {\n            background-color: white;\n            border-radius: 12px;\n            margin: 16px 0;\n            box-shadow: 0 2px 4px rgba(0,0,0,0.05);\n            overflow: hidden;\n        }\n\n        .group-title {\n            background-color: #f8f9fa;\n            padding: 12px 16px;\n            font-size: 14px;\n            font-weight: 600;\n            color: #666;\n            text-transform: uppercase;\n            letter-spacing: 0.5px;\n        }\n\n        .settings-row {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            padding: 16px;\n            border-bottom: 1px solid #eee;\n        }\n\n        .settings-row:last-child {\n            border-bottom: none;\n        }\n\n        .row-label {\n            display: flex;\n            flex-direction: column;\n            flex: 1;\n        }\n\n        .row-title {\n            font-size: 16px;\n            color: #333;\n            margin-bottom: 2px;\n        }\n\n        .row-value {\n            font-size: 14px;\n            color: #888;\n        }\n\n        .chevron {\n            margin-left: 12px;\n            font-size: 18px;\n            color: #ccc;\n        }\n\n        .toggle-switch {\n            position: relative;\n            display: inline-block;\n            width: 50px;\n            height: 28px;\n        }\n\n        .toggle-switch input {\n            opacity: 0;\n            width: 0;\n            height: 0;\n        }\n\n        .slider {\n            position: absolute;\n            cursor: pointer;\n            top: 0;\n            left: 0;\n            right: 0;\n            bottom: 0;\n            background-color: #ccc;\n            transition: .4s;\n            border-radius: 28px;\n        }\n\n        .slider:before {\n            position: absolute;\n            content: \"\";\n            height: 22px;\n            width: 22px;\n            left: 3px;\n            bottom: 3px;\n            background-color: white;\n            transition: .4s;\n            border-radius: 50%;\n        }\n\n        input:checked + .slider {\n            background-color: #007AFF;\n        }\n\n        input:checked + .slider:before {\n            transform: translateX(22px);\n        }\n\n        .toggle-container {\n            margin-left: 12px;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"status-bar\">\n        <span>9:41</span>\n        <span>●●● ●●● — 100%</span>\n    </div>\n\n    <div class=\"header\">\n        <button class=\"back-button\">←</button>\n        <h1>الإعدادات</h1>\n        <div style=\"width: 24px;\"></div>\n    </div>\n\n    <div class=\"settings-container\">\n        <!-- Account Group -->\n        <div class=\"settings-group\">\n            <div class=\"group-title\">الحساب</div>\n            \n            <div class=\"settings-row\">\n                <div class=\"row-label\">\n                    <div class=\"row-title\">الاسم</div>\n                    <div class=\"row-value\">محمد علي أحمد</div>\n                </div>\n                <div class=\"chevron\">›</div>\n            </div>\n\n            <div class=\"settings-row\">\n                <div class=\"row-label\">\n                    <div class=\"row-title\">رقم الهاتف</div>\n                    <div class=\"row-value\">+973 3600 1234</div>\n                </div>\n                <div class=\"chevron\">›</div>\n            </div>\n\n            <div class=\"settings-row\">\n                <div class=\"row-label\">\n                    <div class=\"row-title\">اللغة</div>\n                    <div class=\"row-value\">العربية</div>\n                </div>\n                <div class=\"chevron\">›</div>\n            </div>\n        </div>\n\n        <!-- Security Group -->\n        <div class=\"settings-group\">\n            <div class=\"group-title\">الأمان</div>\n            \n            <div class=\"settings-row\">\n                <div class=\"row-label\">\n                    <div class=\"row-title\">مصادقة الوجه (Face ID)</div>\n                    <div class=\"row-value\">تفعيل تسجيل الدخول باستخدام الوجه</div>\n                </div>\n                <div class=\"toggle-container\">\n                    <label class=\"toggle-switch\">\n                        <input type=\"checkbox\" checked>\n                        <span class=\"slider\"></span>\n                    </label>\n                </div>\n            </div>\n\n            <div class=\"settings-row\">\n                <div class=\"row-label\">\n                    <div class=\"row-title\">تسجيل الدخول ثنائي الخطوات</div>\n                    <div class=\"row-value\">طلب رمز تحقق عند تسجيل الدخول</div>\n                </div>\n                <div class=\"toggle-container\">\n                    <label class=\"toggle-switch\">\n                        <input type=\"checkbox\" checked>\n                        <span class=\"slider\"></span>\n                    </label>\n                </div>\n            </div>\n        </div>\n\n        <!-- Notifications Group -->\n        <div class=\"settings-group\">\n            <div class=\"group-title\">الإشعارات</div>\n            \n            <div class=\"settings-row\">\n                <div class=\"row-label\">\n                    <div class=\"row-title\">التحويلات البنكية</div>\n                    <div class=\"row-value\">إشعار عند إتمام أي تحويل</div>\n                </div>\n                <div class=\"toggle-container\">\n                    <label class=\"toggle-switch\">\n                        <input type=\"checkbox\" checked>\n                        <span class=\"slider\"></span>\n                    </label>\n                </div>\n            </div>\n\n            <div class=\"settings-row\">\n                <div class=\"row-label\">\n                    <div class=\"row-title\">العروض والعروض الخاصة</div>\n                    <div class=\"row-value\">إشعار بأحدث العروض المميزة</div>\n                </div>\n                <div class=\"toggle-container\">\n                    <label class=\"toggle-switch\">\n                        <input type=\"checkbox\">\n                        <span class=\"slider\"></span>\n                    </label>\n                </div>\n            </div>\n\n            <div class=\"settings-row\">\n                <div class=\"row-label\">\n                    <div class=\"row-title\">كشوفات الحساب</div>\n                    <div class=\"row-value\">إشعار باستلام الكشف الشهري</div>\n                </div>\n                <div class=\"toggle-container\">\n                    <label class=\"toggle-switch\">\n                        <input type=\"checkbox\">\n                        <span class=\"slider\"></span>\n                    </label>\n                </div>\n            </div>\n        </div>\n    </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 159,
+    "output": 2238
+  },
+  "ms": 45184,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 53,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 256.359375,
+        "y": 239,
+        "width": 101.640625,
+        "height": 16
+      },
+      "message": "\"+973 3600 1234\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"row-value\">+973 3600 1234</div>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 312,
+        "y": 104,
+        "width": 46,
+        "height": 16
+      },
+      "message": "0.5px letter-spacing on \"الحساب\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"group-title\">الحساب</div>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 324,
+        "y": 369,
+        "width": 34,
+        "height": 16
+      },
+      "message": "0.5px letter-spacing on \"الأمان\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"group-title\">الأمان</div>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 299,
+        "y": 564,
+        "width": 59,
+        "height": 16
+      },
+      "message": "0.5px letter-spacing on \"الإشعارات\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"group-title\">الإشعارات</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 158,
+        "y": 37,
+        "width": 80,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الإعدادات</h1>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 44,
+        "y": 156,
+        "width": 6,
+        "height": 21
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"chevron\">›</div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 44,
+        "y": 226,
+        "width": 6,
+        "height": 21
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"chevron\">›</div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 44,
+        "y": 296,
+        "width": 6,
+        "height": 21
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"chevron\">›</div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 44,
+        "y": 417.5,
+        "width": 50,
+        "height": 28
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"toggle-container\">\n                    <label class=\"toggle-switch\">\n                        <input type=\"checkbox\" checked=\"\">\n                    "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 44,
+        "y": 487.5,
+        "width": 50,
+        "height": 28
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"toggle-container\">\n                    <label class=\"toggle-switch\">\n                        <input type=\"checkbox\" checked=\"\">\n                    "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 44,
+        "y": 612.5,
+        "width": 50,
+        "height": 28
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"toggle-container\">\n                    <label class=\"toggle-switch\">\n                        <input type=\"checkbox\" checked=\"\">\n                    "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 44,
+        "y": 682.5,
+        "width": 50,
+        "height": 28
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"toggle-container\">\n                    <label class=\"toggle-switch\">\n                        <input type=\"checkbox\">\n                        <span c"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 44,
+        "y": 752.5,
+        "width": 50,
+        "height": 28
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"toggle-container\">\n                    <label class=\"toggle-switch\">\n                        <input type=\"checkbox\">\n                        <span c"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

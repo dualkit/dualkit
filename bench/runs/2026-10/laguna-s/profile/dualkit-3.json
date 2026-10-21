@@ -1,0 +1,53 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "profile",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-10-21T17:16:13.419Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الملف الشخصي</title>\n  <style>\n    :lang(ar) {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n    body {\n      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;\n      font-size: var(--type-body-size);\n      margin: 0;\n      padding: 16px;\n      background-color: #f5f5f5;\n      color: #333;\n    }\n    .profile-header {\n      text-align: center;\n      margin-bottom: 24px;\n    }\n    .profile-header h1 {\n      font-size: 20px;\n      font-weight: 600;\n      margin: 0;\n    }\n    .profile-item {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 16px 0;\n      border-bottom: 1px solid #e0e0e0;\n    }\n    .profile-item:last-child {\n      border-bottom: none;\n    }\n    .profile-label {\n      font-size: var(--type-label-size);\n      font-weight: 500;\n    }\n    .profile-value {\n      font-size: var(--type-body-size);\n      text-align: right;\n    }\n    .edit-button {\n      background: none;\n      border: none;\n      color: #007AFF;\n      font-size: var(--type-label-size);\n      font-weight: 500;\n      cursor: pointer;\n      padding: 4px 8px;\n    }\n    .edit-button:hover {\n      text-decoration: underline;\n    }\n    bdi {\n      unicode-bidi: isolate;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"profile-header\">\n    <h1>الملف الشخصي</h1>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">الاسم</div>\n    <div class=\"profile-value\">ليلى المنصوري</div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">البريد الإلكتروني</div>\n    <div class=\"profile-value\"><bdi dir=\"ltr\">layla@example.com</bdi></div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">رقم الهاتف</div>\n    <div class=\"profile-value\"><bdi dir=\"ltr\">+971 50 123 4567</bdi></div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n\n  <div class=\"profile-item\">\n    <div class=\"profile-label\">رقم الحساب البنكي (IBAN)</div>\n    <div class=\"profile-value\"><bdi dir=\"ltr\">AE07 0331 2345 6789 0123 456</bdi></div>\n    <button class=\"edit-button\">تعديل</button>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6507,
+    "output": 905
+  },
+  "ms": 15718,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 127.71875,
+        "y": 22,
+        "width": 134.5625,
+        "height": 22
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الملف الشخصي</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 24.015625,
+        "y": 97,
+        "width": 33,
+        "height": 16
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"edit-button\">تعديل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

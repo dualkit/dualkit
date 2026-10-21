@@ -1,0 +1,39 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "address-form",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-10-21T17:09:07.585Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>عنوان التوصيل</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Noto+Arabic:wght@400;500;600&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --color-bg: #f5f5f5;\n      --color-card: #ffffff;\n      --color-text: #333333;\n      --color-border: #cccccc;\n      --color-primary: #007AFF;\n      --color-primary-text: #ffffff;\n      --radius: 8px;\n      --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);\n      --spacing-sm: 0.5rem;\n      --spacing-md: 1rem;\n      --spacing-lg: 1.5rem;\n    }\n\n    * {\n      box-sizing: border-box;\n    }\n\n    body {\n      margin: 0;\n      padding: var(--spacing-md);\n      background-color: var(--color-bg);\n      font-family: 'Noto Arabic', sans-serif;\n      font-size: 16px;\n      line-height: 1.6;\n      color: var(--color-text);\n      direction: rtl;\n      text-align: start;\n    }\n\n    .container {\n      max-width: 480px;\n      margin: 0 auto;\n    }\n\n    h1 {\n      font-size: 1.5rem;\n      font-weight: 600;\n      margin: 0 0 var(--spacing-lg) 0;\n      text-align: start;\n    }\n\n    form {\n      background-color: var(--color-card);\n      border-radius: var(--radius);\n      box-shadow: var(--shadow);\n      padding: var(--spacing-lg);\n      display: flex;\n      flex-direction: column;\n      gap: var(--spacing-md);\n    }\n\n    .field {\n      display: flex;\n      flex-direction: column;\n      gap: var(--spacing-sm);\n    }\n\n    label {\n      font-size: 1rem;\n      font-weight: 500;\n      text-align: start;\n    }\n\n    input,\n    select {\n      width: 100%;\n      padding: 0.75rem;\n      border: 1px solid var(--color-border);\n      border-radius: 4px;\n      font-size: 1rem;\n      font-family: inherit;\n      background-color: #fff;\n      transition: border-color 0.2s;\n    }\n\n    input:focus,\n    select:focus {\n      outline: none;\n      border-color: var(--color-primary);\n    }\n\n    input[dir=\"ltr\"],\n    select[dir=\"ltr\"] {\n      direction: ltr;\n      text-align: start;\n    }\n\n    button {\n      padding: 0.75rem;\n      background-color: var(--color-primary);\n      color: var(--color-primary-text);\n      border: none;\n      border-radius: 4px;\n      font-size: 1rem;\n      font-weight: 500;\n      font-family: inherit;\n      cursor: pointer;\n      margin-top: var(--spacing-sm);\n      transition: background-color 0.2s;\n    }\n\n    button:hover {\n      background-color: #0056b3;\n    }\n\n    /* Ensure placeholder text in LTR inputs is not reordered */\n    input::placeholder {\n      color: #999;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>عنوان التوصيل</h1>\n    <form>\n      <div class=\"field\">\n        <label for=\"building\">مبنى أو فيلا</label>\n        <input type=\"text\" id=\"building\" name=\"building\" placeholder=\"مثلا: مبنى 12\">\n      </div>\n\n      <div class=\"field\">\n        <label for=\"street\">شارع</label>\n        <input type=\"text\" id=\"street\" name=\"street\" placeholder=\"اسم الشارع\">\n      </div>\n\n      <div class=\"field\">\n        <label for=\"area\">منطقة</label>\n        <input type=\"text\" id=\"area\" name=\"area\" placeholder=\"المنطقة\">\n      </div>\n\n      <div class=\"field\">\n        <label for=\"makani\">رقم مكاني</label>\n        <input type=\"text\" id=\"makani\" name=\"makani\" placeholder=\"1234567890\" dir=\"ltr\" inputmode=\"numeric\">\n      </div>\n\n      <div class=\"field\">\n        <label for=\"emirate\">الإمارة</label>\n        <select id=\"emirate\" name=\"emirate\">\n          <option value=\"dubai\" selected>دبي</option>\n          <option value=\"abudhabi\">أبوظبي</option>\n          <option value=\"sharjah\">الشارقة</option>\n          <option value=\"ajman\">عجمان</option>\n          <option value=\"rak\">الخيمة</option>\n          <option value=\"fujairah\">الفجيرة</option>\n          <option value=\"umq\">أم القيوين</option>\n        </select>\n      </div>\n\n      <div class=\"field\">\n        <label for=\"phone\">رقم الهاتف</label>\n        <input type=\"tel\" id=\"phone\" name=\"phone\" placeholder=\"050 123 4567\" dir=\"ltr\" inputmode=\"tel\" autocomplete=\"tel\">\n      </div>\n\n      <button type=\"submit\">حفظ عنوان</button>\n    </form>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6297,
+    "output": 4104
+  },
+  "ms": 44272,
+  "finish": "stop",
+  "reasoningTokens": 2884,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 96,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 231.328125,
+        "y": 21,
+        "width": 142.671875,
+        "height": 27
+      },
+      "message": "\"Noto Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>عنوان التوصيل</h1>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

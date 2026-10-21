@@ -1,0 +1,235 @@
+{
+  "month": "2026-10",
+  "model": "minimax-m3.1-flash",
+  "screen": "settings",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-10-21T17:07:07.215Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"theme-color\" content=\"#f4f7f6\">\n  <title>الإعدادات</title>\n  <style>\n    :root {\n      --primary: #006d5b;\n      --primary-dark: #005347;\n      --primary-soft: #e6f4f0;\n      --background: #f4f7f6;\n      --surface: #ffffff;\n      --text: #172522;\n      --muted: #6d7b77;\n      --border: #e5ebe9;\n      --switch-off: #d8dfdd;\n      --shadow: 0 10px 30px rgba(18, 55, 47, 0.07);\n    }\n\n    * {\n      box-sizing: border-box;\n      -webkit-tap-highlight-color: transparent;\n    }\n\n    html,\n    body {\n      margin: 0;\n      min-height: 100%;\n      font-family: Tahoma, Arial, sans-serif;\n      background: var(--background);\n      color: var(--text);\n    }\n\n    body {\n      display: flex;\n      justify-content: center;\n    }\n\n    .phone {\n      width: 100%;\n      max-width: 430px;\n      min-height: 100vh;\n      padding-bottom: 32px;\n      overflow: hidden;\n      background:\n        radial-gradient(circle at 90% 0%, rgba(0, 109, 91, 0.08), transparent 30%),\n        var(--background);\n    }\n\n    .status-bar {\n      height: 30px;\n      padding: 8px 20px 0;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      color: #17352f;\n      font-size: 12px;\n      font-weight: 700;\n      direction: ltr;\n    }\n\n    .status-icons {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n    }\n\n    .status-icons svg {\n      display: block;\n    }\n\n    .header {\n      padding: 19px 20px 22px;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n    }\n\n    .header h1 {\n      margin: 0;\n      font-size: 25px;\n      line-height: 1.3;\n      font-weight: 800;\n    }\n\n    .back-button {\n      width: 42px;\n      height: 42px;\n      border: 1px solid var(--border);\n      border-radius: 14px;\n      display: grid;\n      place-items: center;\n      color: var(--text);\n      background: rgba(255, 255, 255, 0.88);\n      box-shadow: 0 5px 16px rgba(20, 50, 44, 0.05);\n    }\n\n    .back-button svg {\n      width: 20px;\n      height: 20px;\n    }\n\n    main {\n      padding: 0 16px;\n    }\n\n    .section {\n      margin-bottom: 19px;\n    }\n\n    .section-title {\n      margin: 0 5px 9px;\n      color: var(--muted);\n      font-size: 13px;\n      font-weight: 700;\n    }\n\n    .card {\n      overflow: hidden;\n      border: 1px solid rgba(222, 232, 229, 0.9);\n      border-radius: 20px;\n      background: var(--surface);\n      box-shadow: var(--shadow);\n    }\n\n    .row {\n      min-height: 66px;\n      padding: 12px 14px;\n      display: flex;\n      align-items: center;\n      gap: 12px;\n      background: var(--surface);\n    }\n\n    .row + .row {\n      border-top: 1px solid var(--border);\n    }\n\n    button.row,\n    a.row {\n      width: 100%;\n      border: 0;\n      color: inherit;\n      font: inherit;\n      text-align: right;\n      text-decoration: none;\n      cursor: pointer;\n    }\n\n    button.row:focus-visible,\n    a.row:focus-visible,\n    .switch input:focus-visible + .slider {\n      outline: 3px solid rgba(0, 109, 91, 0.2);\n      outline-offset: 2px;\n    }\n\n    .icon {\n      flex: 0 0 42px;\n      width: 42px;\n      height: 42px;\n      display: grid;\n      place-items: center;\n      border-radius: 13px;\n      color: var(--primary);\n      background: var(--primary-soft);\n    }\n\n    .icon svg {\n      width: 21px;\n      height: 21px;\n      fill: none;\n      stroke: currentColor;\n      stroke-width: 1.8;\n      stroke-linecap: round;\n      stroke-linejoin: round;\n    }\n\n    .row-content {\n      min-width: 0;\n      flex: 1;\n    }\n\n    .row-title {\n      margin: 0 0 4px;\n      font-size: 15px;\n      line-height: 1.35;\n      font-weight: 700;\n    }\n\n    .row-value {\n      margin: 0;\n      color: var(--muted);\n      font-size: 12px;\n      line-height: 1.45;\n      direction: rtl;\n    }\n\n    .chevron {\n      flex: 0 0 auto;\n      width: 19px;\n      height: 19px;\n      color: #98a5a1;\n    }\n\n    .chevron svg {\n      width: 100%;\n      height: 100%;\n      fill: none;\n      stroke: currentColor;\n      stroke-width: 2;\n      stroke-linecap: round;\n      stroke-linejoin: round;\n    }\n\n    .switch {\n      position: relative;\n      flex: 0 0 auto;\n      width: 48px;\n      height: 29px;\n      display: inline-block;\n    }\n\n    .switch input {\n      position: absolute;\n      width: 1px;\n      height: 1px;\n      opacity: 0;\n    }\n\n    .slider {\n      position: absolute;\n      inset: 0;\n      border-radius: 999px;\n      background: var(--switch-off);\n      cursor: pointer;\n      transition: background 0.2s ease;\n    }\n\n    .slider::before {\n      content: \"\";\n      position: absolute;\n      top: 3px;\n      right: 3px;\n      width: 23px;\n      height: 23px;\n      border-radius: 50%;\n      background: #fff;\n      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);\n      transition: transform 0.2s ease;\n    }\n\n    .switch input:checked + .slider {\n      background: var(--primary);\n    }\n\n    .switch input:checked + .slider::before {\n      transform: translateX(-19px);\n    }\n\n    .security-note {\n      margin: 8px 6px 0;\n      color: #82908c;\n      font-size: 11px;\n      line-height: 1.65;\n    }\n\n    @media (min-width: 431px) {\n      body {\n        padding: 24px 0;\n      }\n\n      .phone {\n        min-height: calc(100vh - 48px);\n        max-height: calc(100vh - 48px);\n        border-radius: 30px;\n        box-shadow: 0 20px 60px rgba(20, 55, 47, 0.14);\n      }\n    }\n  </style>\n</head>\n<body>\n  <div class=\"phone\">\n    <div class=\"status-bar\" aria-hidden=\"true\">\n      <span>9:41</span>\n      <div class=\"status-icons\">\n        <svg width=\"16\" height=\"12\" viewBox=\"0 0 16 12\" fill=\"currentColor\">\n          <rect x=\"0\" y=\"8\" width=\"3\" height=\"4\" rx=\"1\"></rect>\n          <rect x=\"4\" y=\"5\" width=\"3\" height=\"7\" rx=\"1\"></rect>\n          <rect x=\"8\" y=\"2\" width=\"3\" height=\"10\" rx=\"1\"></rect>\n          <rect x=\"12\" y=\"0\" width=\"3\" height=\"12\" rx=\"1\"></rect>\n        </svg>\n        <svg width=\"15\" height=\"12\" viewBox=\"0 0 15 12\" fill=\"currentColor\">\n          <path d=\"M7.5 9.7a1.4 1.4 0 1 0 0 2.8 1.4 1.4 0 0 0 0-2.8Zm0-4.3c1.3 0 2.5.5 3.4 1.4l1.2-1.3A6.1 6.1 0 0 0 7.5 3.7a6.1 6.1 0 0 0-4.6 1.8l1.2 1.3A4.4 4.4 0 0 1 7.5 5.4Zm0-3.7c2.3 0 4.4.9 6 2.4l1.2-1.3A9.6 9.6 0 0 0 7.5 0 9.6 9.6 0 0 0 .3 2.8l1.2 1.3a8 8 0 0 1 6-2.4Z\"></path>\n        </svg>\n        <svg width=\"22\" height=\"12\" viewBox=\"0 0 22 12\" fill=\"none\">\n          <rect x=\"0.5\" y=\"0.5\" width=\"19\" height=\"11\" rx=\"3\" stroke=\"currentColor\" opacity=\".5\"></rect>\n          <rect x=\"2\" y=\"2\" width=\"15\" height=\"8\" rx=\"1.5\" fill=\"currentColor\"></rect>\n          <path d=\"M21 4v4\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" opacity=\".5\"></path>\n        </svg>\n      </div>\n    </div>\n\n    <header class=\"header\">\n      <h1>الإعدادات</h1>\n      <button class=\"back-button\" type=\"button\" aria-label=\"رجوع\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\">\n          <path d=\"m9 18 6-6-6-6\"></path>\n        </svg>\n      </button>\n    </header>\n\n    <main>\n      <section class=\"section\" aria-labelledby=\"account-heading\">\n        <h2 class=\"section-title\" id=\"account-heading\">الحساب</h2>\n        <div class=\"card\">\n          <a class=\"row\" href=\"#name\" aria-label=\"الاسم، فتح صفحة تعديل الاسم\">\n            <span class=\"icon\" aria-hidden=\"true\">\n              <svg viewBox=\"0 0 24 24\">\n                <circle cx=\"12\" cy=\"8\" r=\"4\"></circle>\n                <path d=\"M4.5 21a7.5 7.5 0 0 1 15 0\"></path>\n              </svg>\n            </span>\n            <span class=\"row-content\">\n              <span class=\"row-title\">الاسم</span>\n              <span class=\"row-value\">محمد أحمد</span>\n            </span>\n            <span class=\"chevron\" aria-hidden=\"true\">\n              <svg viewBox=\"0 0 24 24\"><path d=\"m15 18-6-6 6-6\"></path></svg>\n            </span>\n          </a>\n\n          <a class=\"row\" href=\"#phone\" aria-label=\"رقم الهاتف، فتح صفحة تعديل الرقم\">\n            <span class=\"icon\" aria-hidden=\"true\">\n              <svg viewBox=\"0 0 24 24\">\n                <path d=\"M8.2 3H5.4C4.1 3 3 4.1 3 5.4 3 13.4 10.6 21 18.6 21c1.3 0 2.4-1.1 2.4-2.4v-2.8l-5-1-1.2 2.5a14.8 14.8 0 0 1-8.1-8.1l2.5-1.2-1-5Z\"></path>\n              </svg>\n            </span>\n            <span class=\"row-content\">\n              <span class=\"row-title\">رقم الهاتف</span>\n              <span class=\"row-value\" dir=\"ltr\">+973 3600 1234</span>\n            </span>\n            <span class=\"chevron\" aria-hidden=\"true\">\n              <svg viewBox=\"0 0 24 24\"><path d=\"m15 18-6-6 6-6\"></path></svg>\n            </span>\n          </a>\n\n          <a class=\"row\" href=\"#language\" aria-label=\"اللغة، العربية، فتح صفحة اللغة\">\n            <span class=\"icon\" aria-hidden=\"true\">\n              <svg viewBox=\"0 0 24 24\">\n                <circle cx=\"12\" cy=\"12\" r=\"9\"></circle>\n                <path d=\"M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18\"></path>\n              </svg>\n            </span>\n            <span class=\"row-content\">\n              <span class=\"row-title\">اللغة</span>\n              <span class=\"row-value\">العربية</span>\n            </span>\n            <span class=\"chevron\" aria-hidden=\"true\">\n              <svg viewBox=\"0 0 24 24\"><path d=\"m15 18-6-6 6-6\"></path></svg>\n            </span>\n          </a>\n        </div>\n      </section>\n\n      <section class=\"section\" aria-labelledby=\"security-heading\">\n        <h2 class=\"section-title\" id=\"security-heading\">الأمان</h2>\n        <div class=\"card\">\n          <div class=\"row\">\n            <span class=\"icon\" aria-hidden=\"true\">\n              <svg viewBox=\"0 0 24 24\">\n                <path d=\"M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3\"></path>\n                <path d=\"M9 9a3 3 0 0 1 6 0c0 2-3 2-3 4M12 17h.01\"></path>\n              </svg>\n            </span>\n            <span class=\"row-content\">\n              <span class=\"row-title\">معرّف الوجه</span>\n              <span class=\"row-value\">تسجيل الدخول باستخدام ملامح الوجه</span>\n            </span>\n            <label class=\"switch\">\n              <input type=\"checkbox\" checked aria-label=\"تفعيل معرف الوجه\">\n              <span class=\"slider\"></span>\n            </label>\n          </div>\n\n          <div class=\"row\">\n            <span class=\"icon\" aria-hidden=\"true\">\n              <svg viewBox=\"0 0 24 24\">\n                <path d=\"M12 2 4 5v6c0 5 3.4 9.1 8 11 4.6-1.9 8-6 8-11V5l-8-3Z\"></path>\n                <path d=\"m9 12 2 2 4-4\"></path>\n              </svg>\n            </span>\n            <span class=\"row-content\">\n              <span class=\"row-title\">تسجيل الدخول بخطوتين</span>\n              <span class=\"row-value\">رمز إضافي عند تسجيل الدخول</span>\n            </span>\n            <label class=\"switch\">\n              <input type=\"checkbox\" checked aria-label=\"تفعيل تسجيل الدخول بخطوتين\">\n              <span class=\"slider\"></span>\n            </label>\n          </div>\n        </div>\n        <p class=\"security-note\">ستصلك رموز التحقق على هاتفك عند تفعيل هذه الخيارات.</p>\n      </section>\n\n      <section class=\"section\" aria-labelledby=\"notifications-heading\">\n        <h2 class=\"section-title\" id=\"notifications-heading\">الإشعارات</h2>\n        <div class=\"card\">\n          <div class=\"row\">\n            <span class=\"icon\" aria-hidden=\"true\">\n              <svg viewBox=\"0 0 24 24\">\n                <path d=\"M4 7h16M7 4v6M17 4v6M5 11h14v9H5zM9 15h2M14 15h2\"></path>\n              </svg>\n            </span>\n            <span class=\"row-content\">\n              <span class=\"row-title\">التحويلات</span>\n              <span class=\"row-value\">إشعار عند تنفيذ أي تحويل</span>\n            </span>\n            <label class=\"switch\">\n              <input type=\"checkbox\" checked aria-label=\"تفعيل إشعارات التحويلات\">\n              <span class=\"slider\"></span>\n            </label>\n          </div>\n\n          <div class=\"row\">\n            <span class=\"icon\" aria-hidden=\"true\">\n              <svg viewBox=\"0 0 24 24\">\n                <path d=\"M20 13 11 22l-9-9V4h9l9 9Z\"></path>\n                <circle cx=\"7.5\" cy=\"8.5\" r=\"1.5\"></circle>\n              </svg>\n            </span>\n            <span class=\"row-content\">\n              <span class=\"row-title\">العروض</span>\n              <span class=\"row-value\">العروض والخصومات الجديدة</span>\n            </span>\n            <label class=\"switch\">\n              <input type=\"checkbox\" checked aria-label=\"تفعيل إشعارات العروض\">\n              <span class=\"slider\"></span>\n            </label>\n          </div>\n\n          <div class=\"row\">\n            <span class=\"icon\" aria-hidden=\"true\">\n              <svg viewBox=\"0 0 24 24\">\n                <path d=\"M6 2h9l4 4v16H6z\"></path>\n                <path d=\"M14 2v5h5M9 12h6M9 16h6\"></path>\n              </svg>\n            </span>\n            <span class=\"row-content\">\n              <span class=\"row-title\">كشوف الحساب</span>\n              <span class=\"row-value\">إشعارات عند صدور كشف حساب</span>\n            </span>\n            <label class=\"switch\">\n              <input type=\"checkbox\" checked aria-label=\"تفعيل إشعارات كشوف الحساب\">\n              <span class=\"slider\"></span>\n            </label>\n          </div>\n        </div>\n      </section>\n    </main>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 331,
+    "output": 4419
+  },
+  "ms": 25517,
+  "finish": "stop",
+  "reasoningTokens": 77,
+  "servedModel": "minimax/minimax-m3.1-flash:free",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 72,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 272,
+        "y": 55.75,
+        "width": 98,
+        "height": 28
+      },
+      "message": "Arabic falls back from Tahoma, Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الإعدادات</h1>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 101.703125,
+        "y": 400.109375,
+        "width": 203.296875,
+        "height": 33.390625
+      },
+      "message": "Line height is 1.45 on \"تسجيل الدخول باستخدام ملامح الوجه\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<span class=\"row-value\">تسجيل الدخول باستخدام ملامح الوجه</span>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 94.859375,
+        "y": 467.109375,
+        "width": 210.140625,
+        "height": 33.390625
+      },
+      "message": "Line height is 1.45 on \"رمز إضافي عند تسجيل الدخول\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<span class=\"row-value\">رمز إضافي عند تسجيل الدخول</span>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 106.703125,
+        "y": 738.25,
+        "width": 198.296875,
+        "height": 33.390625
+      },
+      "message": "Line height is 1.45 on \"إشعارات عند صدور كشف حساب\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<span class=\"row-value\">إشعارات عند صدور كشف حساب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 325,
+        "y": 113,
+        "width": 44,
+        "height": 15
+      },
+      "message": "\"الحساب\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<h2 class=\"section-title\" id=\"account-heading\">الحساب</h2>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 211.203125,
+        "y": 164.796875,
+        "width": 53.34375,
+        "height": 14
+      },
+      "message": "\"محمد أحمد\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"row-value\">محمد أحمد</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 238.546875,
+        "y": 298.796875,
+        "width": 33,
+        "height": 14
+      },
+      "message": "\"العربية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"row-value\">العربية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 337,
+        "y": 358,
+        "width": 32,
+        "height": 15
+      },
+      "message": "\"الأمان\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<h2 class=\"section-title\" id=\"security-heading\">الأمان</h2>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 101.703125,
+        "y": 400.109375,
+        "width": 203.296875,
+        "height": 33.390625
+      },
+      "message": "\"تسجيل الدخول باستخدام ملامح الوجه\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"row-value\">تسجيل الدخول باستخدام ملامح الوجه</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 94.859375,
+        "y": 467.109375,
+        "width": 210.140625,
+        "height": 33.390625
+      },
+      "message": "\"رمز إضافي عند تسجيل الدخول\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"row-value\">رمز إضافي عند تسجيل الدخول</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 109.484375,
+        "y": 528,
+        "width": 258.515625,
+        "height": 12
+      },
+      "message": "\"ستصلك رموز التحقق على هاتفك عند تفعيل هذ…\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"security-note\">ستصلك رموز التحقق على هاتفك عند تفعيل هذه الخيارات.</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 315,
+        "y": 562.140625,
+        "width": 54,
+        "height": 15
+      },
+      "message": "\"الإشعارات\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<h2 class=\"section-title\" id=\"notifications-heading\">الإشعارات</h2>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 118.203125,
+        "y": 613.9375,
+        "width": 123.34375,
+        "height": 14
+      },
+      "message": "\"إشعار عند تنفيذ أي تحويل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"row-value\">إشعار عند تنفيذ أي تحويل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 109.875,
+        "y": 680.9375,
+        "width": 141.671875,
+        "height": 14
+      },
+      "message": "\"العروض والخصومات الجديدة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"row-value\">العروض والخصومات الجديدة</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 106.703125,
+        "y": 738.25,
+        "width": 198.296875,
+        "height": 33.390625
+      },
+      "message": "\"إشعارات عند صدور كشف حساب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"row-value\">إشعارات عند صدور كشف حساب</span>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

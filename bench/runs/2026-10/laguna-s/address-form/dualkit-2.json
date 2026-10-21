@@ -1,0 +1,53 @@
+{
+  "month": "2026-10",
+  "model": "laguna-s",
+  "screen": "address-form",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-10-21T17:07:29.329Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>نموذج عنوان التسليم</title>\n  <style>\n    :root {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      --color-text: #1a1a1a;\n      --color-muted: #6b7280;\n      --color-border: #d1d5db;\n      --color-primary: #059669;\n      --color-primary-hover: #047857;\n      --radius: 8px;\n      --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', sans-serif;\n      font-size: var(--type-body-size);\n      color: var(--color-text);\n      background-color: #f9fafb;\n      line-height: 1.6;\n      padding: 16px;\n    }\n\n    .form-container {\n      max-width: 480px;\n      margin: 0 auto;\n      background-color: #ffffff;\n      border-radius: var(--radius);\n      box-shadow: var(--shadow);\n      padding: 24px;\n    }\n\n    .form-title {\n      font-size: 20px;\n      font-weight: 600;\n      margin-bottom: 24px;\n      color: var(--color-text);\n    }\n\n    .field-group {\n      margin-bottom: 20px);\n    }\n\n    .field-group:last-child {\n      margin-bottom: 0;\n    }\n\n    label {\n      display: block;\n      font-size: var(--type-label-size);\n      font-weight: 500;\n      margin-bottom: 6px;\n      color: var(--color-text);\n    }\n\n    .input-wrapper {\n      position: relative;\n    }\n\n    input, select {\n      width: 100%;\n      padding: 12px 14px;\n      font-size: var(--type-body-size);\n      border: 1px solid var(--color-border);\n      border-radius: var(--radius);\n      background-color: #ffffff;\n      color: var(--color-text);\n      outline: none;\n      transition: border-color 0.2s ease;\n    }\n\n    input:focus, select:focus {\n      border-color: var(--color-primary);\n      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.2);\n    }\n\n    .hint {\n      font-size: var(--type-caption-size);\n      color: var(--color-muted);\n      margin-top: 6px;\n    }\n\n    .submit-button {\n      width: 100%;\n      padding: 14px;\n      font-size: var(--type-label-size);\n      font-weight: 600;\n      color: #ffffff;\n      background-color: var(--color-primary);\n      border: none;\n      border-radius: var(--radius);\n      cursor: pointer;\n      transition: background-color 0.2s ease;\n      margin-top: 12px;\n    }\n\n    .submit-button:hover {\n      background-color: var(--color-primary_hover);\n    }\n\n    :lang(ar) {\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      --type-body-size: 16px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"form-container\">\n    <h1 class=\"form-title\">عنوان التسليم</h1>\n    <form id=\"addressForm\">\n      <div class=\"field-group\">\n        <label for=\"building-villa\">المبنى أو الفيلا</label>\n        <input type=\"text\" id=\"building-villa\" name=\"building_villa\" placeholder=\"مثال: المبنى ١٢ أو الفيلا ٥\">\n      </div>\n\n      <div class=\"field-group\">\n        <label for=\"street\">الشارع</label>\n        <input type=\"text\" id=\"street\" name=\"street\" placeholder=\"مثال: شارع التوحيد\">\n      </div>\n\n      <div class=\"field-group\">\n        <label for=\"area\">المنطقة</label>\n        <input type=\"text\" id=\"area\" name=\"area\" placeholder=\"مثال: دبي الهامرة\">\n      </div>\n\n      <div class=\"field-group\">\n        <label for=\"makani\">رقم المكاني</label>\n        <input type=\"text\" id=\"makani\" name=\"makani\" inputmode=\"numeric\" placeholder=\"مثال: ٣٣٣٣٣٣٣٣٣٣٣٣٣٣٣٣\">\n      </div>\n\n      <div class=\"field-group\">\n        <label for=\"emirate\">الإمارة</label>\n        <select id=\"emirate\" name=\"emirate\">\n          <option value=\"dubai\">دبي</option>\n          <option value=\"abu-dhabi\">أبوظبي</option>\n          <option value=\"sharjah\">الشارقة</option>\n          <option value=\"ajman\">عجمان</option>\n          <option value=\"umm-al-quwain\">أم القيوين</option>\n          <option value=\"ras-al-khaimah\">رأس الخيمة</option>\n          <option value=\"fujairah\">الفجيرة</option>\n        </select>\n      </div>\n\n      <div class=\"field-group\">\n        <label for=\"phone\">رقم الهاتف</label>\n        <div class=\"input-wrapper\">\n          <input type=\"tel\" id=\"phone\" name=\"phone\" inputmode=\"tel\" dir=\"ltr\" placeholder=\"050 123 4567\">\n        </div>\n        <p class=\"hint\">مثال: <bdi dir=\"ltr\">050 123 4567</bdi></p>\n      </div>\n\n      <button type=\"submit\" class=\"submit-button\">حفظ العنوان</button>\n    </form>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6484,
+    "output": 1643
+  },
+  "ms": 35389,
+  "finish": "stop",
+  "reasoningTokens": 0,
+  "servedModel": "poolside/laguna-s-2.1:free",
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 233.4375,
+        "y": 46,
+        "width": 116.5625,
+        "height": 22
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1 class=\"form-title\">عنوان التسليم</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 158.546875,
+        "y": 646.515625,
+        "width": 72.890625,
+        "height": 16
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button type=\"submit\" class=\"submit-button\">حفظ العنوان</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

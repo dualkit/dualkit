@@ -1,0 +1,97 @@
+{
+  "month": "2026-10",
+  "model": "dots-3-note",
+  "screen": "order-history",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-10-21T17:16:42.344Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>تاريخ الطلب</title>\n<style>\n  body {\n    font-family: Arial, sans-serif;\n    background: #f5f5f5;\n    padding: 16px;\n  }\n  .order {\n    background: #fff;\n    border-radius: 8px;\n    padding: 16px;\n    margin-bottom: 16px;\n    box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n  }\n  .order-number {\n    font-weight: bold;\n    font-size: 1.1em;\n    margin-bottom: 4px;\n  }\n  .date, .total {\n    margin: 2px 0;\n  }\n  .status {\n    display: inline-block;\n    padding: 4px 8px;\n    border-radius: 4px;\n    margin-top: 8px;\n  }\n  .delivered { background: #e6f7ee; color: #2e7d32; }\n  .onway { background: #fff3cd; color: #856404; }\n  .cancelled { background: #f8d7da; color: #721c24; }\n</style>\n</head>\n<body>\n  <h2>تاريخ الطلب</h2>\n\n  <div class=\"order\">\n    <div class=\"order-number\">رقم الطلب: #A-10293</div>\n    <div class=\"date\">التاريخ: 2023-12-01 (ميلادي) / 1445-06-18 (هجري)</div>\n    <div class=\"total\">الإجمالي: 250 ريال</div>\n    <div class=\"status delivered\">تم التسليم</div>\n  </div>\n\n  <div class=\"order\">\n    <div class=\"order-number\">رقم الطلب: #B-45678</div>\n    <div class=\"date\">التاريخ: 2023-12-05 (ميلادي) / 1445-06-22 (هجري)</div>\n    <div class=\"total\">الإجمالي: 120 ريال</div>\n    <div class=\"status onway\">في العبوة</div>\n  </div>\n\n  <div class=\"order\">\n    <div class=\"order-number\">رقم الطلب: #C-12345</div>\n    <div class=\"date\">التاريخ: 2023-12-10 (ميلادي) / 1445-06-27 (هجري)</div>\n    <div class=\"total\">الإجمالي: 300 ريال</div>\n    <div class=\"status cancelled\">ملغي</div>\n  </div>\n\n  <div class=\"order\">\n    <div class=\"order-number\">رقم الطلب: #D-67890</div>\n    <div class=\"date\">التاريخ: 2023-12-12 (ميلادي) / 1445-06-29 (هجري)</div>\n    <div class=\"total\">الإجمالي: 80 ريال</div>\n    <div class=\"status delivered\">تم التسليم</div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 129,
+    "output": 4082
+  },
+  "ms": 40175,
+  "finish": "stop",
+  "reasoningTokens": 3206,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 66,
+  "missing": [
+    "four orders"
+  ],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 178.078125,
+        "y": 107.8125,
+        "width": 171.921875,
+        "height": 20
+      },
+      "message": "\"#A-10293\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #A-10293</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 178.078125,
+        "y": 276.8125,
+        "width": 171.921875,
+        "height": 20
+      },
+      "message": "\"#B-45678\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #B-45678</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 178.078125,
+        "y": 445.8125,
+        "width": 171.921875,
+        "height": 20
+      },
+      "message": "\"#C-12345\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #C-12345</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 178.078125,
+        "y": 614.8125,
+        "width": 171.921875,
+        "height": 20
+      },
+      "message": "\"#D-67890\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">رقم الطلب: #D-67890</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 244.328125,
+        "y": 43.90625,
+        "width": 121.671875,
+        "height": 27
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h2>تاريخ الطلب</h2>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}
