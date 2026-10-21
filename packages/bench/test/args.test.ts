@@ -25,7 +25,7 @@ describe('parseCli', () => {
     expect(parseCli([], 0)).toMatchObject({ screen: undefined, runs: undefined })
   })
   it('rejects an unknown screen, runs outside 1 to 3, and unknown flags, as BenchErrors', () => {
-    expect(() => parseCli(['--screen', 'checkout'], 0)).toThrow(/otp/)
+    expect(() => parseCli(['--screen', 'nonexistent'], 0)).toThrow(/otp/)
     for (const n of ['0', '4', '1.5', 'two']) expect(() => parseCli(['--runs', n], 0), n).toThrow(BenchError)
     expect(() => parseCli(['--modle', 'x'], 0)).toThrow(BenchError)
   })
