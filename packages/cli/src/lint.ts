@@ -28,7 +28,7 @@ export function formatLint(result: LintResult, color: boolean): string {
       ? `No issues found in ${plural(files, 'file')}.`
       : `${plural(count(findings, 'error'), 'error')}, ${plural(count(findings, 'warning'), 'warning')}, ${plural(count(findings, 'note'), 'note')} in ${plural(files, 'file')}`,
   )
-  for (const q of result.quiet ?? []) lines.push(quietLine(q))
+  for (const q of result.quiet) lines.push(quietLine(q))
   return `${lines.join('\n')}\n`
 }
 

@@ -100,7 +100,14 @@ describe('dualkit lint', () => {
 })
 
 describe('formatLint', () => {
-  const base: LintResult = { root: '/x', files: 2, skipped: [], findings: [] }
+  const base: LintResult = { root: '/x', files: 2, skipped: [], findings: [], quiet: [] }
+  it('lists quiet files, one line per reason', () => {
+    const text = formatLint({ ...base, quiet: [{ reason: 'flipped', files: 2249, flipper: 'rtlcss' }, { reason: 'example', files: 12 }, { reason: 'generated', files: 3 }, { reason: 'email', files: 5 }] }, false)
+    expect(text).toContain('Skipped physical rules in 2,249 files flipped by rtlcss.')
+    expect(text).toContain('Skipped physical rules in 12 example files.')
+    expect(text).toContain('Skipped physical rules in 3 generated files.')
+    expect(text).toContain('Skipped physical rules in 5 email templates.')
+  })
   it('says no issues, and leaves skipped files to formatSkipped', () => {
     const result = { ...base, skipped: [{ file: 'big.js', reason: 'minified' }] }
     const text = formatLint(result, false)
