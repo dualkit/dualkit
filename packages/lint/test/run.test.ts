@@ -114,7 +114,7 @@ describe('lint quiet files', () => {
     expect(result.quiet).toContainEqual({ reason: 'flipped', files: 1, flipper: 'rtlcss' })
   })
 
-  it('reads classes, styles and inline styles in a .vue file with correct lines', async () => {
+  it('reads classes in nested templates and styles in a .vue file with correct lines', async () => {
     const root = tree({
       'package.json': tw, 'node_modules/tailwindcss/package.json': installed, 'index.html': '<html dir="rtl"></html>',
       'a.vue': '<template>\n  <div class="pl-4">\n    <template v-if="ok">\n      <p class="mr-2">x</p>\n    </template>\n  </div>\n</template>\n<style scoped>\n.a {\n  margin-left: 1px;\n}\n</style>\n',

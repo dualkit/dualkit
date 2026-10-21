@@ -117,4 +117,26 @@ describe('parseSource Vue and Svelte', () => {
     const result = await lint(['.'], { cwd: root })
     expect(result.skipped[0]?.reason).toMatch(/^parse error:/)
   })
+
+  it('ignores non-JS script types in a component and reads the markup', async () => {
+    const root = tree({
+      'package.json': '{"devDependencies":{"tailwindcss":"^3.4.0"}}', 'node_modules/tailwindcss/package.json': '{"name":"tailwindcss","version":"3.4.17"}',
+      'index.html': '<html dir="rtl"></html>',
+      'ld.svelte': '<svelte:head><script type="application/ld+json">{"@context":"https://schema.org"}</script></svelte:head><p class="ml-2">x</p>',
+    })
+    const result = await lint(['.'], { cwd: root })
+    expect(result.skipped).toEqual([])
+    expect(result.findings.map((f) => f.rule)).toContain('source/physical-tailwind')
+  })
+
+  it('does not read a non-HTML template as markup but keeps its style and script', () => {
+    const text = '<template lang="pug">\np.x text <b class="mr-3">\n</template>\n<style>.a { margin-left: 1px }</style>\n<script>const a = 1</script>\n'
+    const file = parseSource('a.vue', text)
+    expect(file?.css).toHaveLength(1)
+    expect(file?.js).toHaveLength(1)
+    const classes: string[] = []
+    const walk = (n: any): void => { if (n.attrs) for (const a of n.attrs) if (a.name === 'class') classes.push(a.value); for (const c of n.childNodes ?? []) walk(c); if (n.content) walk(n.content) }
+    walk(file?.html)
+    expect(classes).toEqual([])
+  })
 })

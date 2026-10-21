@@ -73,6 +73,14 @@ const attr = (el: Element, name: string): string =>
 /** Style languages that are not CSS or SCSS: a component's block in one of these is skipped, not an error. */
 const SKIPPED_STYLE_LANGS = new Set(['less', 'stylus', 'styl', 'sass'])
 
+/** A <template lang="pug"> or similar is not HTML, so its content is not read as markup. */
+function dropForeignTemplates(html: Node): void {
+  for (const el of elements(html)) {
+    const lang = attr(el, 'lang')
+    if (el.tagName === 'template' && lang !== '' && lang !== 'html' && 'content' in el) (el.content as { childNodes: Node[] }).childNodes = []
+  }
+}
+
 function parseHtmlFile(text: string, component = false): Pick<SourceFile, 'css' | 'js' | 'html'> {
   const html = parseHtml(text, { sourceCodeLocationInfo: true })
   const css: CssBlock[] = []
@@ -87,14 +95,16 @@ function parseHtmlFile(text: string, component = false): Pick<SourceFile, 'css' 
       css.push(parseStyle(body.text, styleLang === 'scss' ? 'scss' : 'css', body.offset))
       continue
     }
+    const type = attr(el, 'type')
+    if (!JS_TYPES.has(type)) continue
     if (component) {
       const scriptLang = attr(el, 'lang')
       js.push(parseJs(body.text, scriptLang === 'tsx' ? 'tsx' : scriptLang === 'ts' ? 'ts' : 'js', body.offset))
-      continue
+    } else {
+      js.push(parseJs(body.text, type === 'text/jsx' || type === 'text/babel' ? 'jsx' : 'js', body.offset))
     }
-    const type = (el.attrs.find((a) => a.name === 'type')?.value ?? '').trim().toLowerCase()
-    if (JS_TYPES.has(type)) js.push(parseJs(body.text, type === 'text/jsx' || type === 'text/babel' ? 'jsx' : 'js', body.offset))
   }
+  if (component) dropForeignTemplates(html)
   return { css, js, html }
 }
 
