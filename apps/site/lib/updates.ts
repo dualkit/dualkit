@@ -9,7 +9,7 @@ export const RELEASES: readonly Release[] = [
     slug: 'precision-pass',
     date: '2026-10-21',
     version: 'dualkit 0.4.0-beta.0',
-    tags: ['Check', 'Rules'],
+    tags: ['Lint', 'Check', 'Rules'],
     title: 'Fewer false findings in lint and check',
     body: [
       'We ran dualkit lint and dualkit check on 20 real products on 20 October and labelled a sample of the findings by hand. Most of what they reported was not a bug. This release is the fixes, and we reran the same sweep to measure them. Both tools are better. Lint is still not good enough.',
