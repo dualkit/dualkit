@@ -158,3 +158,11 @@ Prompt text, verbatim, each followed by the same closing paragraph as today's pr
 - [ ] **Step 3:** Implement.
 - [ ] **Step 4:** `npx vitest run packages/bench`, root `npm run typecheck`, `npm run lint` if present: PASS. `npm run bench -- --fake --month 2026-09 --no-summary` then `--study --fake --month 2026-09` prints a table; delete `bench/runs/2026-09`.
 - [ ] **Step 5:** Commit `feat: bench study report and longer monthly run`.
+
+#### Task 5 addition (ruling, 21 Oct): daily request budget
+
+The old test "keeps a whole month of OpenRouter calls, every retry spent, under the 1,000 a day cap" cannot hold with ten screens and the loop (worst case 2,400). Replace it with a runtime budget:
+
+- `makeGenerate` takes `budget?: number` (default `OPENROUTER_DAILY_BUDGET = 950`), counting every OpenRouter attempt, retries included, in this process. Once spent, a call returns `{ ok: false, error: 'Daily request budget spent', ms: 0 }` without a request.
+- `runBench` treats that error like the deadline: no new build starts for any OpenRouter model, nothing is written for the build that hit it, and the counts say `stoppedEarly`. The cron on the 2nd and 3rd finishes the rest.
+- Tests: the old cap test is replaced by `it('stops at the daily budget without a request')` and a run test `it('leaves builds for the next day once the budget is spent')`.
