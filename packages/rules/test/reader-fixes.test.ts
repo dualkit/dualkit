@@ -275,3 +275,40 @@ describe('stable node ids', () => {
   it('falls back to the chain when classes repeat', async () =>
     expect(await idOf('<div><p class="a">واحد</p><p class="a">اثنان</p></div>', 'اثنان')).toBe('body > div > p.a:nth-of-type(2)'))
 })
+
+describe('fix round 1', () => {
+  it.each(['.rtl\\:ml-2 .a', '.rtl\\/50 .a', '.rtl\\.x .a', ':not(:is([dir=rtl])) .x', '.h:not(:is([dir="rtl"]))'])
+  ('treats %s as unscoped', (selector) => expect(rtlScoped(selector)).toBe(false))
+
+  it('splits a selector list without breaking an escaped comma', async () => {
+    const found = (await layoutsOf('<p class="d,e">نص</p><p class="f">نص</p>', '.d\\,e, .f{margin-right:8px}')).filter((l) => l.physical.length > 0)
+    expect(found).toHaveLength(2)
+  })
+
+  const small = '<p style="font-size:11px">نص صغير جدا هنا</p>'
+  const sizeIds = async (body: string) =>
+    runRules(await modelOf(doc(body)), { rules: RULES.filter((r) => r.id === 'type/arabic-size') }).map((f) => f.rule)
+
+  it('keeps painted content inside a scaled clipping box', async () => {
+    const body = `<div style="width:300px;margin:0 auto 0 0;overflow:hidden;transform:scale(2);transform-origin:0 0"><div style="padding-left:200px">${small}</div></div>`
+    expect(await sizeIds(body)).toEqual(['type/arabic-size'])
+  })
+
+  it('keeps a scaled element that is partly on screen', async () => {
+    const body = `<div style="width:300px;margin:0 auto 0 0;transform:scale(2);transform-origin:0 0">${small}</div>`
+    expect(await sizeIds(body)).toEqual(['type/arabic-size'])
+  })
+
+  it('keeps text in a display: contents element for joins', async () => {
+    const m = await modelOf(doc('<p>م<span style="display:contents;font-family:serif">د</span></p>'))
+    expect(m.joins).toHaveLength(1)
+  })
+
+  const idOf = async (body: string, text: string) => (await modelOf(doc(body))).texts.find((t) => t.text === text)?.id
+  it('uses a unique, stable-looking id', async () => expect(await idOf('<p id="intro">واحد</p>', 'واحد')).toBe('p#intro'))
+  it('skips duplicate ids', async () => expect(await idOf('<p id="a">واحد</p><p id="a">اثنان</p>', 'واحد')).not.toBe('p#a'))
+  it('skips generated ids', async () => {
+    expect(await idOf('<p id="swiper-wrapper-3c110a7105124b">واحد</p>', 'واحد')).not.toContain('3c110a')
+    expect(await idOf('<p id=":r1:">واحد</p>', 'واحد')).not.toContain(':r1:')
+  })
+})

@@ -19,7 +19,7 @@ const firstPhysical = (layouts: LayoutNode[], match: (property: string) => boole
     })
 
 export const physicalSpacing = defineRule({
-  id: 'layout/physical-spacing', group: 'layout', severity: 'warning',
+  id: 'layout/physical-spacing', group: 'layout', severity: 'note',
   title: 'Spacing that does not mirror',
   why: 'margin-left and padding-right stay put when the layout flips, so gaps end up on the wrong side.',
   fix: 'Use margin-inline-start, padding-inline-end and the other logical properties.',
@@ -27,7 +27,7 @@ export const physicalSpacing = defineRule({
 })
 
 export const physicalInset = defineRule({
-  id: 'layout/physical-inset', group: 'layout', severity: 'warning',
+  id: 'layout/physical-inset', group: 'layout', severity: 'note',
   title: 'Position, float or border that does not mirror',
   why: 'left, right, float and one-sided borders or corners stay on the same side when the layout flips.',
   fix: 'Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.',

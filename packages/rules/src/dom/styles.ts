@@ -12,15 +12,32 @@ const hasPhysical = (decl: CSSStyleDeclaration): boolean => {
 const RTL_SIGNALS: RegExp[] = [
   /:dir\(\s*["']?rtl["']?\s*\)/i,
   /\[\s*dir\s*=\s*["']?\s*rtl\s*["']?(\s+[is])?\s*\]/i,
-  /\.rtl(?![\w-])/,
+  /\.rtl(?![\w\\-])/,
   /\[\s*lang\s*[\^|]?=\s*["']?\s*ar(?![a-z])/i,
   /:lang\(\s*["']?\s*ar(?![a-z])/i,
 ]
-const NEGATION = /:not\([^()]*\)/g
+
+/** Removes every :not(...) with its balanced contents, at any depth, since a scope inside a negation excludes it. */
+function stripNegations(selector: string): string {
+  let out = ''
+  for (let i = 0; i < selector.length; i++) {
+    if (selector[i] === '\\') { out += selector.slice(i, i + 2); i++; continue }
+    if (!selector.startsWith(':not(', i)) { out += selector[i]; continue }
+    let depth = 0
+    let j = i + 4
+    for (; j < selector.length; j++) {
+      if (selector[j] === '\\') j++
+      else if (selector[j] === '(') depth++
+      else if (selector[j] === ')' && --depth === 0) break
+    }
+    i = j
+  }
+  return out
+}
 
 /** True when any part of the selector only applies to right-to-left or Arabic content, so a physical side in it is deliberate. */
 export function rtlScoped(selector: string): boolean {
-  const positive = selector.replace(NEGATION, '')
+  const positive = stripNegations(selector)
   return RTL_SIGNALS.some((signal) => signal.test(positive))
 }
 
@@ -32,7 +49,8 @@ function splitList(list: string): string[] {
   let from = 0
   for (let i = 0; i < list.length; i++) {
     const c = list[i]
-    if (quote) { if (c === '\\') i++; else if (c === quote) quote = '' }
+    if (c === '\\') i++
+    else if (quote) { if (c === quote) quote = '' }
     else if (c === '"' || c === "'") quote = c
     else if (c === '(' || c === '[') depth++
     else if (c === ')' || c === ']') depth--

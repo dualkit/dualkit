@@ -2,6 +2,10 @@ const MAX_DEPTH = 4
 
 type SiblingIndex = { nth: Map<Element, number>; total: Map<string, number> }
 
+const GENERATED_ID = /[0-9a-f]{6,}|^:r[^:]*:$/i
+const looksGenerated = (id: string): boolean => GENERATED_ID.test(id)
+const escape = (doc: Document, value: string): string => doc.defaultView?.CSS?.escape?.(value) ?? value
+
 /** A selector-like id for an element, memoised so a big page costs one pass over each sibling list. */
 export function makePathOf(): (el: Element) => string {
   const memo = new Map<Element, string>()
@@ -32,11 +36,19 @@ export function makePathOf(): (el: Element) => string {
     return result
   }
 
+  /** The element's id as a selector, only when it is unique on the page and does not look generated. */
+  const idPart = (node: Element): string | null => {
+    if (!node.id || looksGenerated(node.id)) return null
+    const selector = `${node.tagName.toLowerCase()}#${escape(node.ownerDocument, node.id)}`
+    return isUnique(node.ownerDocument, selector) ? selector : null
+  }
+
   /** An id, a data-testid or a class combination unique on the page names the element on its own. */
   const stable = (node: Element): string | null => {
     const tag = node.tagName.toLowerCase()
-    if (node.id) return `${tag}#${node.id}`
     const doc = node.ownerDocument
+    const byId = idPart(node)
+    if (byId) return byId
     const testId = node.getAttribute('data-testid')
     if (testId) {
       const selector = `${tag}[data-testid="${testId.replace(/["\\]/g, '\\$&')}"]`
@@ -44,7 +56,7 @@ export function makePathOf(): (el: Element) => string {
     }
     const classes = typeof node.className === 'string' ? node.className.trim().split(/\s+/).filter(Boolean) : []
     if (classes.length > 0) {
-      const selector = `${tag}${classes.map((c) => `.${doc.defaultView?.CSS?.escape ? doc.defaultView.CSS.escape(c) : c}`).join('')}`
+      const selector = `${tag}${classes.map((c) => `.${escape(doc, c)}`).join('')}`
       if (isUnique(doc, selector)) return selector
     }
     return null
@@ -52,7 +64,8 @@ export function makePathOf(): (el: Element) => string {
 
   const part = (node: Element): string => {
     const tag = node.tagName.toLowerCase()
-    if (node.id) return `${tag}#${node.id}`
+    const byId = idPart(node)
+    if (byId) return byId
     const cls = typeof node.className === 'string' ? node.className.trim().split(/\s+/)[0] : ''
     const parent = node.parentElement
     const index = parent ? indexOf(parent) : null
@@ -69,7 +82,7 @@ export function makePathOf(): (el: Element) => string {
     let node: Element | null = el
     while (node && parts.length < MAX_DEPTH && node.tagName !== 'HTML') {
       parts.unshift(part(node))
-      if (node.id) break
+      if (idPart(node)) break
       node = node.parentElement
     }
     const path = parts.join(' > ')

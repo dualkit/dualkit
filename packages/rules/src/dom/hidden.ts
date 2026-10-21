@@ -3,6 +3,7 @@ const CLIPPED = /^rect\(\s*(0|1)(px)?[\s,)]/
 
 /** The standard visually-hidden pattern: a 1px box, or a clip that leaves nothing showing. */
 export function screenReaderOnly(el: Element, s: CSSStyleDeclaration): boolean {
+  if (s.display === 'contents') return false
   const r = el.getBoundingClientRect()
   if (r.width <= 1 && r.height <= 1) return true
   return CLIPPED.test(s.clip) || HIDDEN_CLIP_PATH.test(s.clipPath)
@@ -62,8 +63,11 @@ export function makeClippedAway(): (el: Element) => boolean {
     let range = incoming(el, s.position)
     if (el.parentElement && clipsX(s)) {
       const r = el.getBoundingClientRect()
-      const left = r.left + el.clientLeft
-      range = intersect(range, { left, right: left + (el.clientWidth || r.width) })
+      // A transform scales the painted box but not clientWidth, so convert the client box to rendered pixels.
+      const layout = (el as HTMLElement).offsetWidth
+      const k = layout > 0 ? r.width / layout : 1
+      const left = r.left + el.clientLeft * k
+      range = intersect(range, { left, right: left + (el.clientWidth > 0 ? el.clientWidth * k : r.width) })
     }
     childRanges.set(el, range)
     return range
@@ -73,8 +77,10 @@ export function makeClippedAway(): (el: Element) => boolean {
     const known = visibleThrough.get(el)
     if (known !== undefined) return known
     const s = el.ownerDocument.defaultView!.getComputedStyle(el)
-    const r = el.getBoundingClientRect()
     const allowed = incoming(el, s.position)
+    // display: contents has no box of its own; its text paints where its parent's range allows.
+    if (s.display === 'contents') { const hidden = empty(allowed); visibleThrough.set(el, hidden); return hidden }
+    const r = el.getBoundingClientRect()
     const result = empty(intersect({ left: r.left, right: r.right }, allowed))
     visibleThrough.set(el, result)
     return result
