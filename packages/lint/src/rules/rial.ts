@@ -119,7 +119,7 @@ export const RIAL_RULES: readonly LintRule[] = [
     title: 'Old rial sign',
     why: 'U+FDFC is the rial sign, a ligature of the Persian word ریال, and it is not the Saudi riyal sign: Unicode 17 added that as U+20C1. It is also a right-to-left letter (bidi class AL), not a currency sign (ET), so it behaves differently next to numbers.',
     fix: 'Write the code SAR or ر.س. Use the Saudi riyal sign U+20C1 only where the font has it.',
-    langs: ['css', 'scss', 'html', 'js', 'jsx', 'ts', 'tsx'],
+    langs: ['css', 'scss', 'html', 'js', 'jsx', 'ts', 'tsx', 'vue', 'svelte'],
     check: (file) => [...jsHits(file), ...(file.html ? htmlHits(file.html, file.text) : []), ...cssHits(file)],
   },
 ]

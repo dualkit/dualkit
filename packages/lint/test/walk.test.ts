@@ -37,7 +37,7 @@ describe('walk', () => {
       'a.css': '', 'b.scss': '', 'c.html': '', 'd.htm': '', 'e.js': '', 'f.mjs': '', 'g.cjs': '', 'h.jsx': '',
       'i.ts': '', 'j.mts': '', 'k.cts': '', 'l.tsx': '', 'm.d.ts': '', 'n.vue': '', 'o.md': '', 'p.svelte': '',
     })
-    expect(walk(['.'], root).files).toEqual(['a.css', 'b.scss', 'c.html', 'd.htm', 'e.js', 'f.mjs', 'g.cjs', 'h.jsx', 'i.ts', 'j.mts', 'k.cts', 'l.tsx'])
+    expect(walk(['.'], root).files).toEqual(['a.css', 'b.scss', 'c.html', 'd.htm', 'e.js', 'f.mjs', 'g.cjs', 'h.jsx', 'i.ts', 'j.mts', 'k.cts', 'l.tsx', 'n.vue', 'p.svelte'])
   })
 
   it('skips a symlink to a parent directory without hanging', () => {
@@ -70,8 +70,8 @@ describe('walk', () => {
   })
 
   it('records an explicit file with an unsupported extension as skipped', () => {
-    const root = tree({ 'a.vue': '', 'b.d.ts': '' })
-    expect(walk(['a.vue', 'b.d.ts'], root)).toMatchObject({ files: [], skipped: [{ file: 'a.vue', reason: 'unsupported file type' }, { file: 'b.d.ts', reason: 'unsupported file type' }] })
+    const root = tree({ 'a.md': '', 'b.d.ts': '' })
+    expect(walk(['a.md', 'b.d.ts'], root)).toMatchObject({ files: [], skipped: [{ file: 'a.md', reason: 'unsupported file type' }, { file: 'b.d.ts', reason: 'unsupported file type' }] })
   })
 
   it('lists a long-line file without reading it, and returns only files and skipped', () => {

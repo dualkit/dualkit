@@ -3,7 +3,7 @@ import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
 import ignore, { type Ignore } from 'ignore'
 import type { Skipped } from './types'
 
-export const EXTENSIONS: readonly string[] = ['.css', '.scss', '.html', '.htm', '.js', '.mjs', '.cjs', '.jsx', '.ts', '.mts', '.cts', '.tsx']
+export const EXTENSIONS: readonly string[] = ['.css', '.scss', '.html', '.htm', '.js', '.mjs', '.cjs', '.jsx', '.ts', '.mts', '.cts', '.tsx', '.vue', '.svelte']
 export const ALWAYS_SKIP: readonly string[] = ['node_modules', 'dist', '.next', 'build', 'coverage', '.git']
 export const MINIFIED_BYTES = 1024 * 1024
 export const MINIFIED_LINE = 500

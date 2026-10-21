@@ -114,6 +114,27 @@ describe('lint quiet files', () => {
     expect(result.quiet).toContainEqual({ reason: 'flipped', files: 1, flipper: 'rtlcss' })
   })
 
+  it('reads classes, styles and inline styles in a .vue file with correct lines', async () => {
+    const root = tree({
+      'package.json': tw, 'node_modules/tailwindcss/package.json': installed, 'index.html': '<html dir="rtl"></html>',
+      'a.vue': '<template>\n  <div class="pl-4">\n    <template v-if="ok">\n      <p class="mr-2">x</p>\n    </template>\n  </div>\n</template>\n<style scoped>\n.a {\n  margin-left: 1px;\n}\n</style>\n',
+    })
+    const result = await lint(['.'], { cwd: root })
+    expect(result.findings.map((f) => [f.rule, f.line])).toEqual(expect.arrayContaining([
+      ['source/physical-tailwind', 2], ['source/physical-tailwind', 4], ['source/physical-css', 10],
+    ]))
+  })
+
+  it('treats a dir attribute in a Vue template as deliberate', async () => {
+    const root = tree({
+      'package.json': tw, 'node_modules/tailwindcss/package.json': installed,
+      'index.html': '<html dir="rtl"></html>',
+      'a.vue': '<template>\n  <div dir="ltr" class="pl-4">x</div>\n</template>\n',
+    })
+    const result = await lint(['.'], { cwd: root })
+    expect(result.findings.filter((f) => f.rule === 'source/physical-tailwind')).toEqual([])
+  })
+
   it('silences example files', async () => {
     const root = tree({ 'examples/a.css': '.a { margin-left: 4px }' })
     const result = await lint(['.'], { cwd: root })

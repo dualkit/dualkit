@@ -3,7 +3,7 @@ import type { Severity } from '@dualkit/rules'
 import type { DefaultTreeAdapterMap } from 'parse5'
 import type { Root } from 'postcss'
 
-export type Lang = 'css' | 'scss' | 'html' | 'js' | 'jsx' | 'ts' | 'tsx'
+export type Lang = 'css' | 'scss' | 'html' | 'vue' | 'svelte' | 'js' | 'jsx' | 'ts' | 'tsx'
 export type JsLang = 'js' | 'jsx' | 'ts' | 'tsx'
 
 export type CssBlock = { root: Root; offset: number }

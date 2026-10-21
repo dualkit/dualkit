@@ -5,8 +5,8 @@ import { tree } from './helpers'
 
 describe('parseSource', () => {
   it('maps extensions to languages', () => {
-    expect(['a.css', 'a.scss', 'a.htm', 'a.html', 'a.mjs', 'a.cjs', 'a.jsx', 'a.mts', 'a.cts', 'a.tsx', 'a.vue'].map(langOf))
-      .toEqual(['css', 'scss', 'html', 'html', 'js', 'js', 'jsx', 'ts', 'ts', 'tsx', null])
+    expect(['a.css', 'a.scss', 'a.htm', 'a.html', 'a.mjs', 'a.cjs', 'a.jsx', 'a.mts', 'a.cts', 'a.tsx', 'a.vue', 'a.svelte', 'a.md'].map(langOf))
+      .toEqual(['css', 'scss', 'html', 'html', 'js', 'js', 'jsx', 'ts', 'ts', 'tsx', 'vue', 'svelte', null])
   })
 
   it('parses a .ts type assertion with the TypeScript plugin and no JSX', () => {
@@ -81,5 +81,40 @@ describe('parseSource decorators and Flow', () => {
 
   it('does not parse Flow types without a pragma', () => {
     expect(parseSource('a.js', 'function f(x: number): string { return String(x) }\n')).toBeNull()
+  })
+})
+
+describe('parseSource Vue and Svelte', () => {
+  const vue = '<template>\n  <div class="ml-2">x</div>\n</template>\n<style lang="scss" scoped>\n.a { margin-left: 1px; .b { padding-right: 2px } }\n</style>\n<script setup lang="ts">\nconst a: number = 1\n</script>\n'
+
+  it('splits a .vue file into scss, ts and html with offsets into the text', () => {
+    const file = parseSource('a.vue', vue)
+    expect(file?.html).not.toBeNull()
+    expect(file?.css).toHaveLength(1)
+    expect(file?.js).toHaveLength(1)
+    expect(file?.js[0]?.lang).toBe('ts')
+    expect(vue.slice(file?.css[0]?.offset).startsWith('\n.a { margin-left')).toBe(true)
+    expect(vue.slice(file?.js[0]?.offset).startsWith('\nconst a')).toBe(true)
+  })
+
+  it('splits a .svelte file with top-level markup', () => {
+    const text = '<script lang="ts">let n: number = 1</script>\n<p class="pl-4">{n}</p>\n<style>p { margin-left: 1px }</style>\n'
+    const file = parseSource('a.svelte', text)
+    expect(file?.js[0]?.lang).toBe('ts')
+    expect(file?.css).toHaveLength(1)
+    expect(file?.html).not.toBeNull()
+  })
+
+  it('reads lang="tsx" as tsx and skips less, stylus and sass blocks', () => {
+    const text = '<script lang="tsx">export const A = () => <b/></script>\n<style lang="less">.a { margin-left: 1px }</style><style lang="stylus">a\n  margin-left 1px</style><style lang="sass">.a\n  margin-left: 1px</style>'
+    const file = parseSource('a.vue', text)
+    expect(file?.js[0]?.lang).toBe('tsx')
+    expect(file?.css).toEqual([])
+  })
+
+  it('skips a .vue file whose script does not parse', async () => {
+    const root = tree({ 'a.vue': '<template><i/></template><script>const = </script>' })
+    const result = await lint(['.'], { cwd: root })
+    expect(result.skipped[0]?.reason).toMatch(/^parse error:/)
   })
 })

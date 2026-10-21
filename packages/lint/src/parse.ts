@@ -10,7 +10,7 @@ type Element = DefaultTreeAdapterMap['element']
 const BOM = '﻿'
 
 const LANG_BY_EXT: Readonly<Record<string, Lang>> = {
-  '.css': 'css', '.scss': 'scss', '.html': 'html', '.htm': 'html',
+  '.css': 'css', '.scss': 'scss', '.html': 'html', '.htm': 'html', '.vue': 'vue', '.svelte': 'svelte',
   '.js': 'js', '.mjs': 'js', '.cjs': 'js', '.jsx': 'jsx',
   '.ts': 'ts', '.mts': 'ts', '.cts': 'ts', '.tsx': 'tsx',
 }
@@ -67,7 +67,13 @@ function inner(el: Element, text: string): { text: string; offset: number } | nu
   return { text: text.slice(start, loc.endTag.startOffset), offset: start }
 }
 
-function parseHtmlFile(text: string): Pick<SourceFile, 'css' | 'js' | 'html'> {
+const attr = (el: Element, name: string): string =>
+  (el.attrs.find((a) => a.name === name)?.value ?? '').trim().toLowerCase()
+
+/** Style languages that are not CSS or SCSS: a component's block in one of these is skipped, not an error. */
+const SKIPPED_STYLE_LANGS = new Set(['less', 'stylus', 'styl', 'sass'])
+
+function parseHtmlFile(text: string, component = false): Pick<SourceFile, 'css' | 'js' | 'html'> {
   const html = parseHtml(text, { sourceCodeLocationInfo: true })
   const css: CssBlock[] = []
   const js: JsBlock[] = []
@@ -76,7 +82,14 @@ function parseHtmlFile(text: string): Pick<SourceFile, 'css' | 'js' | 'html'> {
     const body = inner(el, text)
     if (!body || body.text.trim() === '') continue
     if (el.tagName === 'style') {
-      css.push(parseStyle(body.text, 'css', body.offset))
+      const styleLang = component ? attr(el, 'lang') : ''
+      if (SKIPPED_STYLE_LANGS.has(styleLang)) continue
+      css.push(parseStyle(body.text, styleLang === 'scss' ? 'scss' : 'css', body.offset))
+      continue
+    }
+    if (component) {
+      const scriptLang = attr(el, 'lang')
+      js.push(parseJs(body.text, scriptLang === 'tsx' ? 'tsx' : scriptLang === 'ts' ? 'ts' : 'js', body.offset))
       continue
     }
     const type = (el.attrs.find((a) => a.name === 'type')?.value ?? '').trim().toLowerCase()
@@ -102,6 +115,7 @@ export function parseSourceOutcome(path: string, rawText: string, abs: string = 
   try {
     if (lang === 'css' || lang === 'scss') return { file: { ...base, css: [parseStyle(text, lang, 0)], js: [], html: null } }
     if (lang === 'html') return { file: { ...base, ...parseHtmlFile(text) } }
+    if (lang === 'vue' || lang === 'svelte') return { file: { ...base, ...parseHtmlFile(text, true) } }
     return { file: { ...base, css: [], js: [parseJs(text, lang, 0)], html: null } }
   } catch (err) {
     return { error: oneLine(err) }
