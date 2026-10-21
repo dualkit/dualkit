@@ -300,7 +300,8 @@ describe('fix round 1', () => {
   })
 
   it('keeps text in a display: contents element for joins', async () => {
-    const m = await modelOf(doc('<p>م<span style="display:contents;font-family:serif">د</span></p>'))
+    // The split comes from the inline-block, so it does not depend on which fonts the machine has.
+    const m = await modelOf(doc('<p>مح<span style="display:contents">م<b style="display:inline-block">د</b></span></p>'))
     expect(m.joins).toHaveLength(1)
   })
 

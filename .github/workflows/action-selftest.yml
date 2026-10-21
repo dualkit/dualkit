@@ -33,7 +33,8 @@ jobs:
         uses: ./action
         with:
           mode: lint
-          paths: packages/cli/test/fixtures/lint
+          paths: action/selftest/lint
           command: node packages/cli/dist/cli.js
-      # The fixture holds one warning, so the step above passing proves fail-on error does not trip on it.
+      # The sample holds one physical-css note, so the step above passing proves fail-on error does not trip on it.
+      # It lives outside any fixtures folder because lint skips the physical rules in fixtures, examples and demos.
       - run: test "${{ steps.dk.outputs.findings }}" -gt 0
