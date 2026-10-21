@@ -15,6 +15,11 @@ describe('bench workflow', () => {
     expect(yml).toContain('OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}')
     expect(yml).toContain('GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}')
   })
+  it('builds every workspace package the bench imports before it runs', () => {
+    const deps = Object.keys(JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf8')).dependencies).filter((d) => d.startsWith('@dualkit/'))
+    const run = yml.indexOf('name: Run the bench')
+    for (const dep of deps) expect(yml.slice(0, run)).toContain(`npm run build -w ${dep}`)
+  })
   it('never runs two benches at once and stops within six hours', () => {
     expect(yml).toMatch(/concurrency:\s*\n\s*group: bench/)
     expect(yml).toContain('timeout-minutes: 360')
