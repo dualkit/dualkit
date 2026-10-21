@@ -5,7 +5,9 @@ export type Usage = { input: number; output: number }
 export type ReplyMeta = { finish: string | null; reasoningTokens: number; servedModel: string | null }
 export type Reply = { text: string; usage: Usage } & ReplyMeta
 export type Generated = ({ ok: true; ms: number } & Reply) | { ok: false; error: string; ms: number; reply?: Reply }
-export type Generate = (model: ModelEntry, req: { system: string; prompt: string }) => Promise<Generated>
+/** A later turn in the conversation, sent after the first user prompt. */
+export type Turn = { role: 'user' | 'assistant'; content: string }
+export type Generate = (model: ModelEntry, req: { system: string; prompt: string; turns?: Turn[] }) => Promise<Generated>
 type Options = { env: Record<string, string | undefined>; fetch?: typeof fetch; sleep?: (ms: number) => Promise<void>; now?: () => number; timeoutMs?: number
   /** Epoch ms. Once it passes no retry starts; the call returns its last error. */
   deadline?: number }
@@ -27,11 +29,11 @@ const textOrNull = (v: unknown): string | null => (typeof v === 'string' && v.le
 
 type Call = { url: string; init: RequestInit; read: (body: any) => Reply }
 
-function request(model: ModelEntry, key: string, { system, prompt }: { system: string; prompt: string }): Call {
+function request(model: ModelEntry, key: string, { system, prompt, turns = [] }: { system: string; prompt: string; turns?: Turn[] }): Call {
   if (model.provider === 'openrouter') return {
     url: 'https://openrouter.ai/api/v1/chat/completions',
     init: { method: 'POST', headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json', 'x-title': 'Dualkit Bench', 'http-referer': 'https://dualkit.dev/bench' },
-      body: JSON.stringify({ model: model.model, temperature: RUN.temperature, max_tokens: RUN.maxTokens, reasoning: { max_tokens: RUN.reasoningTokens }, messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }] }) },
+      body: JSON.stringify({ model: model.model, temperature: RUN.temperature, max_tokens: RUN.maxTokens, reasoning: { max_tokens: RUN.reasoningTokens }, messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }, ...turns] }) },
     read: (b) => ({
       text: String(b?.choices?.[0]?.message?.content ?? ''),
       usage: { input: Number(b?.usage?.prompt_tokens ?? 0), output: Number(b?.usage?.completion_tokens ?? 0) },
@@ -41,7 +43,7 @@ function request(model: ModelEntry, key: string, { system, prompt }: { system: s
   return {
     url: `https://generativelanguage.googleapis.com/v1beta/models/${model.model}:generateContent`,
     init: { method: 'POST', headers: { 'x-goog-api-key': key, 'content-type': 'application/json' },
-      body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { temperature: RUN.temperature, maxOutputTokens: RUN.maxTokens, thinkingConfig: { thinkingBudget: RUN.reasoningTokens } } }) },
+      body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text: prompt }] }, ...turns.map((t) => ({ role: t.role === 'assistant' ? 'model' : 'user', parts: [{ text: t.content }] }))], generationConfig: { temperature: RUN.temperature, maxOutputTokens: RUN.maxTokens, thinkingConfig: { thinkingBudget: RUN.reasoningTokens } } }) },
     read: (b) => ({
       text: (b?.candidates?.[0]?.content?.parts ?? []).map((p: { text?: string }) => p.text ?? '').join(''),
       usage: { input: Number(b?.usageMetadata?.promptTokenCount ?? 0), output: Number(b?.usageMetadata?.candidatesTokenCount ?? 0) },

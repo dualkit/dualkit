@@ -15,6 +15,7 @@ export const fakeGenerate: Generate = async (model, req) => {
     'fake-incomplete': fenced(fixture('incomplete')),
     'fake-garbage': 'Sorry, I cannot build that.',
   }
-  const text = page[model.id]
+  // A follow-up turn means the page was sent back for a fix, and every fake but the garbage one fixes it.
+  const text = req.turns?.length && model.id !== 'fake-garbage' ? page['fake-good'] : page[model.id]
   return text ? { ok: true, text, usage: { input: 0, output: 0 }, finish: 'stop', reasoningTokens: 0, servedModel: model.model, ms: 0 } : { ok: false, error: `No fake page for ${model.id}`, ms: 0 }
 }

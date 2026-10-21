@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { loadModels, RUN, SCREENS, type ModelEntry } from '../src/config'
 import { BACKOFF_MS, makeGenerate, MAX_RETRIES, MIN_GAP_MS, REQUEST_TIMEOUT_MS } from '../src/providers'
+import { fakeGenerate } from '../src/fake'
 
 const or: ModelEntry = { id: 'g', provider: 'openrouter', model: 'google/gemma-4-31b-it:free', label: 'G', since: '2026-11', by: 'Fake', mark: 'google' }
 const gm: ModelEntry = { id: 'f', provider: 'gemini', model: 'gemini-flash-latest', label: 'F', since: '2026-11', by: 'Fake', mark: 'google' }
@@ -238,5 +239,33 @@ describe('error inside a 200', () => {
     expect(error).toMatch(/^Provider error: Upstream rejected \*\*\* y+$/)
     expect(error).not.toContain('or-secret')
     expect(error.length).toBeLessThanOrEqual('Provider error: '.length + 200)
+  })
+})
+
+describe('follow-up turns', () => {
+  const turns = [{ role: 'assistant' as const, content: 'A' }, { role: 'user' as const, content: 'B' }]
+  const ok = () => fakeFetch([json(200, { choices: [{ message: { content: 'hi' } }], candidates: [{ content: { parts: [{ text: 'hi' }] } }] })])
+  it('sends follow-up turns to OpenRouter in order', async () => {
+    const { f, calls } = ok()
+    await makeGenerate({ env, fetch: f, ...noSleep })(or, { ...req, turns })
+    expect(JSON.parse(String(calls[0]!.init.body)).messages).toEqual([{ role: 'system', content: 'sys' }, { role: 'user', content: 'build it' }, { role: 'assistant', content: 'A' }, { role: 'user', content: 'B' }])
+  })
+  it('sends follow-up turns to Gemini with the model role', async () => {
+    const { f, calls } = ok()
+    await makeGenerate({ env, fetch: f, ...noSleep })(gm, { ...req, turns })
+    expect(JSON.parse(String(calls[0]!.init.body)).contents).toEqual([{ role: 'user', parts: [{ text: 'build it' }] }, { role: 'model', parts: [{ text: 'A' }] }, { role: 'user', parts: [{ text: 'B' }] }])
+  })
+  it('sends no extra turns when none are given', async () => {
+    const a = ok(), b = ok()
+    await makeGenerate({ env, fetch: a.f, ...noSleep })(or, req)
+    await makeGenerate({ env, fetch: b.f, ...noSleep })(gm, req)
+    expect(JSON.parse(String(a.calls[0]!.init.body)).messages).toHaveLength(2)
+    expect(JSON.parse(String(b.calls[0]!.init.body)).contents).toHaveLength(1)
+  })
+  it('fake provider answers a follow-up with the good page, except fake-garbage', async () => {
+    const m = (id: string) => ({ ...or, id })
+    expect(await fakeGenerate(m('fake-buggy'), { system: 'sys', prompt: 'p', turns })).toMatchObject({ ok: true, text: expect.stringContaining('```html') })
+    const bad = await fakeGenerate(m('fake-garbage'), { system: 'sys', prompt: 'p', turns })
+    expect(bad).toMatchObject({ ok: true, text: 'Sorry, I cannot build that.' })
   })
 })
