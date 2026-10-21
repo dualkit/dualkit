@@ -44,7 +44,7 @@ describe('plannedBench', () => {
   it('reads the real bench package by default', () => {
     const p = plannedBench()
     expect(p?.models).toBeGreaterThan(0)
-    expect(p?.screens).toBe(5)
+    expect(p?.screens).toBe(10)
   })
   it('returns null when the bench package is missing', () => {
     expect(plannedBench('/nope')).toBeNull()

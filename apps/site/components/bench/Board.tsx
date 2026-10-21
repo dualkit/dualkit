@@ -70,7 +70,7 @@ function Row({ model, open, onToggle, panelId, ruleCount, fixes }: { model: Benc
 
 /**
  * The leaderboard. On first view each track draws from 0 to its two scores, a row at a time.
- * Rows open their five screens beneath them, one model at a time.
+ * Rows open their ten screens beneath them, one model at a time.
  */
 export function Board({ models, ruleCount, fixes, outOf }: { models: readonly BenchModel[]; ruleCount: number; fixes: Record<string, string>; outOf: number }) {
   const [openId, setOpenId] = useState<string | null>(null)

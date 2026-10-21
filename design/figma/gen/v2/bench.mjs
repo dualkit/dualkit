@@ -14,7 +14,7 @@ const mark = (m, size = 16) => ({ shape: `${m.by} mark`, kind: 'svg', size: [siz
 
 export const BENCH = {
   headline: 'How well does AI\nbuild Arabic?',
-  lede: 'Every month, free AI models build five Arabic screens on their own, then again with Dualkit. dualkit check scores every build against 20 rules.',
+  lede: 'Every month, free AI models build ten Arabic screens on their own, then again with Dualkit. dualkit check scores every build against 20 rules.',
   month: 'November 2026',
   facts: '6 models · 5 screens · 180 builds',
   raw: 'Raw files on GitHub',
@@ -31,7 +31,7 @@ export const BENCH = {
   how: {
     heading: 'How the Bench works',
     items: [
-      ['Five screens', 'A payment summary, a one-time code, an address form, a profile and an order history. Every prompt is public.'],
+      ['Ten screens', 'A payment summary, a one-time code, an address form, a profile, an order history, a checkout, a support chat, a booking, settings and transactions. Every prompt is public.'],
       ['Three runs, two ways', 'Each model builds each screen three times on its own, then three times with the Dualkit skills loaded. The middle run counts.'],
       ['Scored by dualkit check', 'The same 20 rules you can run with npx dualkit check. A build that leaves out a part the prompt asked for scores 0.'],
       ['A small sample', 'Free models only, run once a month. A model that fails shows as didn’t run, never as a guess.'],
@@ -46,7 +46,7 @@ export const BENCH = {
   ],
   empty: {
     heading: 'The first run lands on 1 November.',
-    lede: 'Six free models, five screens, three runs each. The results and every raw file go up here the same day.',
+    lede: 'Six free models, ten screens, three runs each. The results and every raw file go up here the same day.',
   },
 }
 
@@ -153,7 +153,7 @@ function legendB() {
   return row('Legend', [
     row('Legend alone', [ring('Legend ring'), text('Alone', 'V2Small', { color: 'color.text.soft' })], { gap: 'space.tight', align: 'center' }),
     row('Legend dualkit', [{ shape: 'Legend dot', kind: 'ellipse', size: [12, 12], fill: 'color.surface.inverse' }, text('With Dualkit', 'V2Small', { color: 'color.text.soft' })], { gap: 'space.tight', align: 'center' }),
-    text('Rules passed across five screens, out of 100', 'V2Small', { color: 'color.text.faint' }),
+    text('Rules passed across ten screens, out of 100', 'V2Small', { color: 'color.text.faint' }),
   ], { gap: 'space.group', align: 'center', wrap: true, w: 'fill' })
 }
 
@@ -210,7 +210,7 @@ function how(mobile = false) {
   return band('How', [row('How row', [side, col('How items wrap', [grid], { w: 'size.v2.half' })], { w: 'fill', justify: 'between' })], { pad: { top: 'space.v2.section', bottom: 'space.v2.section' } })
 }
 
-// ---- the open row: one model's five screens, the first one open ----
+// ---- the open row: one model's ten screens, the first one open ----
 
 // Both builds are shown at the same zoom, over the top 300 css px of a 390 px phone, so the comparison stays fair.
 const CROP = { w: 390, h: 300 }
