@@ -1,5 +1,5 @@
 import { readFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
+import { resolve, sep } from 'node:path'
 import { parseSource, parseSourceOutcome } from './parse'
 import { lineStarts, positionAt } from './position'
 import { DEFAULT_RULES } from './rules'
@@ -133,7 +133,12 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
   const summary = rules.find((rule) => rule.id === NO_RTL_SUPPORT)
   const hasPhysical = findings.some((f) => PHYSICAL_RULES.has(f.rule))
   const top = repoTop(cwd) ?? cwd
-  const collapse = summary !== undefined && hasPhysical && !rtlSupport && !hasRtlLocaleFiles(top, gitignores(top))
+  // A subset run only sees part of the repo, so it cannot tell that the repo has no right-to-left support.
+  const coversRepo = paths.some((p) => {
+    const abs = resolve(options.cwd, p)
+    return top === abs || top.startsWith(abs.endsWith(sep) ? abs : abs + sep)
+  })
+  const collapse = summary !== undefined && hasPhysical && coversRepo && !rtlSupport && !hasRtlLocaleFiles(top, gitignores(top))
   const final = collapse ? collapsePhysical(findings, summary) : findings
   return { root: options.cwd, files: linted, skipped, findings: final.sort(byPosition), quiet: [...tally.values()] }
 }

@@ -156,6 +156,17 @@ describe('lint with no right-to-left support', () => {
     expect(result.findings.map((f) => f.rule)).toEqual(['source/physical-css', 'source/physical-css', 'source/physical-css'])
   })
 
+  it('keeps the findings when only a subset of the repo is linted', async () => {
+    const cwd = tree({ 'src/app.tsx': '<html dir="rtl" />', 'a/x.css': '.a { margin-left: 4px }' })
+    const result = await lint(['a/x.css'], { cwd })
+    expect(result.findings.map((f) => f.rule)).toEqual(['source/physical-css'])
+  })
+
+  it('still collapses when linting the repo top as a dot', async () => {
+    const result = await lint(['.'], { cwd: tree({ 'a/x.css': '.a { margin-left: 4px }' }) })
+    expect(result.findings.map((f) => f.rule)).toEqual(['source/no-rtl-support'])
+  })
+
   it('keeps the individual findings when the summary is ignored', async () => {
     const result = await lint(['.'], { cwd: tree(three()), ignore: ['source/no-rtl-support'] })
     expect(result.findings).toHaveLength(3)

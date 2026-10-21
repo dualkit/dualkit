@@ -14,9 +14,11 @@ describe('hasRtlSignal', () => {
 })
 
 describe('isRtlLocalePath', () => {
-  it.each(['locales/ar.json', 'i18n/ar-SA.po', 'lang/he/common.json', 'translations/fa_IR.yml', 'ur.json', 'messages.ar.json'])('is true for %s', (p) =>
+  it.each(['locales/ar.json', 'i18n/ar-SA.po', 'lang/he/common.json', 'translations/fa_IR.yml', 'ur.json', 'messages.ar.json',
+    'locales/ar/tools/x.ts', 'i18n/he-IL/common.ts', 'messages.he.json', 'config/locales/ar.yml', 'src/lang/fa.ts', 'locales/ar_EG.json', 'locales/ar-Arab-EG.json', 'locales/ar-001.json'])('is true for %s', (p) =>
     expect(isRtlLocalePath(p)).toBe(true))
-  it.each(['src/area.ts', 'car.json', 'locales/en.json', 'src/components/Button.tsx'])('is false for %s', (p) => expect(isRtlLocalePath(p)).toBe(false))
+  it.each(['src/area.ts', 'car.json', 'locales/en.json', 'src/components/Button.tsx',
+    'fa-solid/icon.svg', 'ps-utils/index.ts', 'he-man/a.ts', 'ps.ts', 'sd.ts', 'src/he.ts', 'assets/fa/icons.svg', 'locales/fa-solid/a.ts', 'locales/ps-utils.json'])('is false for %s', (p) => expect(isRtlLocalePath(p)).toBe(false))
 })
 
 describe('hasRtlLocaleFiles', () => {
@@ -38,5 +40,14 @@ describe('hasRtlLocaleFiles', () => {
   it('stops at depth 6', () => {
     expect(hasRtlLocaleFiles(make(['a/b/c/d/e/ar.json']), none)).toBe(true)
     expect(hasRtlLocaleFiles(make(['a/b/c/d/e/f/g/ar.json']), none)).toBe(false)
+  })
+  it('skips build output folders', () => {
+    for (const d of ['dist', 'build', 'out', 'coverage', 'vendor', '.next']) expect(hasRtlLocaleFiles(make([`${d}/ar.json`]), none)).toBe(false)
+  })
+  it('does not count a bare name outside a locale folder', () => expect(hasRtlLocaleFiles(make(['assets/fa/icons.svg', 'src/he.ts']), none)).toBe(false))
+  it('returns true when it stops at the entry cap', () => {
+    const root = make(['a/1.txt', 'a/2.txt', 'a/3.txt'])
+    expect(hasRtlLocaleFiles(root, none, 2)).toBe(true)
+    expect(hasRtlLocaleFiles(root, none)).toBe(false)
   })
 })
