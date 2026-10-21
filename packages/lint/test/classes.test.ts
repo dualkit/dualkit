@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { classStrings } from '../src/classes'
 import { parseSource } from '../src/parse'
+import { TAILWIND_RULES } from '../src/rules/tailwind'
+import { lintText } from '../src/run'
+import type { SourceFile } from '../src/types'
 
 /** Every whole class token the file yields, in order. */
 const tokens = (path: string, text: string): string[] => {
@@ -122,5 +125,38 @@ describe('classStrings conditional', () => {
   it('marks fragments under a condition, object key or variant leaf', () => {
     const file = parseSource('a.tsx', "cn('a', x && 'b', y || 'c', z ? 'd' : 'e', { f: g }); cva('h', { variants: { v: { w: 'i' } } })\nexport const A = () => <p className=\"j\" />")!
     expect(classStrings(file).map((f) => `${f.text}:${f.conditional}`)).toEqual(['a:false', 'b:true', 'c:true', 'd:true', 'e:true', 'f:true', 'h:false', 'i:true', 'j:false'])
+  })
+})
+
+describe('deliberate geometry', () => {
+  const jsx = (el: string): SourceFile | null => parseSource('a.tsx', `export const A = () => (${el})`)
+  const html = (el: string): SourceFile | null => parseSource('a.html', `<body>${el}</body>`)
+  const CASES: [string, string][] = [
+    ['<span dir="ltr" className="ml-2" />', '<span dir="ltr" class="ml-2"></span>'],
+    ['<i aria-hidden="true" className="right-2" />', '<i aria-hidden="true" class="right-2"></i>'],
+    ['<div className="absolute pointer-events-none -left-10" />', '<div class="absolute pointer-events-none -left-10"></div>'],
+    ['<div className="fixed pointer-events-none right-0" />', '<div class="fixed pointer-events-none right-0"></div>'],
+  ]
+
+  it.each(CASES)('marks %s as deliberate in JSX and HTML', (j, h) => {
+    expect(classStrings(jsx(j)!).map((f) => f.deliberate)).toEqual([true])
+    expect(classStrings(html(h)!).map((f) => f.deliberate)).toEqual([true])
+  })
+
+  it('does not mark a plain absolute box or a child of a deliberate one', () => {
+    expect(classStrings(jsx('<div className="absolute left-2" />')!)[0]?.deliberate).toBeUndefined()
+    expect(classStrings(html('<div class="absolute left-2"></div>')!)[0]?.deliberate).toBeUndefined()
+    expect(classStrings(jsx('<div dir="ltr"><b className="ml-2" /></div>')!)[0]?.deliberate).toBeUndefined()
+    expect(classStrings(jsx('<span dir="rtl" className="ml-2" />')!)[0]?.deliberate).toBeUndefined()
+  })
+
+  it('marks classes read from a call inside a deliberate element', () => {
+    expect(classStrings(jsx('<i aria-hidden className={cn("ml-2", on && "mr-1")} />')!).map((f) => f.deliberate)).toEqual([true, true])
+  })
+
+  it('gives physical-tailwind no hit for a deliberate fragment', () => {
+    const ctx = { tailwindVersion: () => '3.4.0' }
+    expect(lintText('a.tsx', 'export const A = () => <i aria-hidden="true" className="ml-2 right-2" />', { rules: TAILWIND_RULES, ctx })).toEqual([])
+    expect(lintText('a.tsx', 'export const A = () => <i className="ml-2" />', { rules: TAILWIND_RULES, ctx })).toHaveLength(1)
   })
 })

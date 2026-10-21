@@ -3,11 +3,13 @@ import { resolve } from 'node:path'
 import { parseSource, parseSourceOutcome } from './parse'
 import { lineStarts, positionAt } from './position'
 import { DEFAULT_RULES } from './rules'
+import { NO_RTL_SUPPORT } from './rules/summary'
+import { hasRtlLocaleFiles, hasRtlSignal, isRtlLocalePath } from './rtl-signal'
 import { createFlipperLookup, quietReason } from './scope'
 import { suppressed } from './suppress'
 import { createTailwindInfo } from './tailwind-version'
 import type { LintContext, LintFinding, LintResult, LintRule, QuietEntry, QuietReason, Skipped, SourceFile } from './types'
-import { compare, isMinified, repoTop, walk } from './walk'
+import { compare, gitignores, isMinified, repoTop, walk } from './walk'
 
 /** Built the same way as docsUrl in @dualkit/rules, pointing at LINT.md. */
 export const lintDocsUrl = (id: string): string =>
@@ -40,6 +42,22 @@ function lintFile(file: SourceFile, rules: readonly LintRule[], ctx: LintContext
     }
   }
   return findings.sort(byPosition)
+}
+
+const PHYSICAL_RULES = new Set(['source/physical-css', 'source/physical-tailwind'])
+
+/** Replaces every physical finding with one summary at the first of them. */
+function collapsePhysical(findings: readonly LintFinding[], rule: LintRule): LintFinding[] {
+  const physical = findings.filter((f) => PHYSICAL_RULES.has(f.rule))
+  const first = [...physical].sort(byPosition)[0]
+  if (!first) return [...findings]
+  const count = physical.length.toLocaleString('en-US')
+  const summary: LintFinding = {
+    rule: rule.id, group: 'source', severity: rule.severity, title: rule.title, fix: rule.fix, docs: lintDocsUrl(rule.id),
+    message: `${count} ${physical.length === 1 ? 'side is' : 'sides are'} set left or right. This repo has no right-to-left support yet; start here.`,
+    file: first.file, line: first.line, column: first.column,
+  }
+  return [...findings.filter((f) => !PHYSICAL_RULES.has(f.rule)), summary]
 }
 
 /** Lints one file's text without touching the disk. A file that does not parse gives no findings. */
@@ -79,6 +97,7 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
   const skipped: Skipped[] = [...walkSkipped]
   const findings: LintFinding[] = []
   let linted = 0
+  let rtlSupport = false
   for (const path of files) {
     const abs = resolve(options.cwd, path)
     let text: string
@@ -92,6 +111,8 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
       skipped.push({ file: path, reason: 'minified' })
       continue
     }
+    // The text is dropped after this file, so only the yes or no is kept.
+    if (!rtlSupport && (hasRtlSignal(text) || isRtlLocalePath(path))) rtlSupport = true
     const outcome = parseSourceOutcome(path, text, abs)
     if ('error' in outcome) {
       skipped.push({ file: path, reason: `parse error: ${outcome.error}` })
@@ -100,6 +121,8 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
     linted++
     const reason = reasonOf(outcome.file)
     if (reason) {
+      // A flipper in the build means the repo already mirrors its left and right for right-to-left.
+      if (reason === 'flipped') rtlSupport = true
       const flipper = reason === 'flipped' ? flippers.get(path) ?? undefined : undefined
       const key = `${reason}:${flipper ?? ''}`
       const entry = tally.get(key)
@@ -107,5 +130,10 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
     }
     findings.push(...lintFile(outcome.file, rules, ctx))
   }
-  return { root: options.cwd, files: linted, skipped, findings: findings.sort(byPosition), quiet: [...tally.values()] }
+  const summary = rules.find((rule) => rule.id === NO_RTL_SUPPORT)
+  const hasPhysical = findings.some((f) => PHYSICAL_RULES.has(f.rule))
+  const top = repoTop(cwd) ?? cwd
+  const collapse = summary !== undefined && hasPhysical && !rtlSupport && !hasRtlLocaleFiles(top, gitignores(top))
+  const final = collapse ? collapsePhysical(findings, summary) : findings
+  return { root: options.cwd, files: linted, skipped, findings: final.sort(byPosition), quiet: [...tally.values()] }
 }

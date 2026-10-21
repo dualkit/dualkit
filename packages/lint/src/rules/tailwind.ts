@@ -170,15 +170,15 @@ const index = (entries: readonly [string, Placed][]): Map<string, Placed[]> => {
 /** Checks one class source. Pairs and centring are judged across its fragments; hits stay per token. */
 function checkSource(fragments: readonly ClassFragment[], version: SemVer, bothNames: boolean): LintHit[] {
   const tokens = fragments.flatMap((f, fragment) =>
-    [...f.text.matchAll(/\S+/g)].map((m) => ({ token: m[0], at: f.offset + m.index, parsed: parseClass(m[0]), placed: { fragment, conditional: f.conditional }, sided: f.sided === true })))
+    [...f.text.matchAll(/\S+/g)].map((m) => ({ token: m[0], at: f.offset + m.index, parsed: parseClass(m[0]), placed: { fragment, conditional: f.conditional }, sided: f.sided === true, deliberate: f.deliberate === true })))
   const keys = index(tokens.map(({ parsed: p, placed }) => [key(p.variants, p.negative, p.core), placed]))
   const cores = index(tokens.map(({ parsed: p, placed }) => [p.core, placed]))
   // A base is overridden only when an rtl: or ltr: class resets the same physical property, such as rtl:ml-0 for ml-4.
   const overridden = new Set(tokens.filter(({ parsed: p }) => p.variants.some((v) => DIRECTION_VARIANT.test(v))).map(({ parsed: p }) => propertyOf(p.core)))
   const hits: LintHit[] = []
-  for (const { token, at, parsed, placed, sided } of tokens) {
+  for (const { token, at, parsed, placed, sided, deliberate } of tokens) {
     const matches = TAILWIND_MAP.filter((e) => e.pattern.test(parsed.core))
-    if (matches.length === 0 || sided || sideScoped(parsed.variants) || isOffscreen(parsed.negative, parsed.core)) continue
+    if (matches.length === 0 || sided || deliberate || sideScoped(parsed.variants) || isOffscreen(parsed.negative, parsed.core)) continue
     const property = propertyOf(parsed.core)
     if (property !== null && overridden.has(property)) continue
     const near = (map: Map<string, Placed[]>, k: string): boolean => (map.get(k) ?? []).some((p) => together(placed, p))

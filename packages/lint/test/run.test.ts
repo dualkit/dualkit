@@ -131,3 +131,43 @@ describe('lint quiet files', () => {
     expect(lintText('examples/a.css', '.a { margin-left: 4px }').map((f) => f.rule)).toEqual(['source/physical-css'])
   })
 })
+
+describe('lint with no right-to-left support', () => {
+  const three = (extra: Record<string, string> = {}): Record<string, string> => ({
+    'a.css': '.a { margin-left: 4px }', 'b.css': '.b { padding-right: 4px }', 'c.css': '.c { left: 2px }', ...extra,
+  })
+
+  it('collapses the physical findings into one note at the first of them', async () => {
+    const result = await lint(['.'], { cwd: tree(three()) })
+    expect(result.findings).toHaveLength(1)
+    expect(result.findings[0]).toMatchObject({
+      rule: 'source/no-rtl-support', severity: 'note', file: 'a.css', line: 1,
+      message: '3 sides are set left or right. This repo has no right-to-left support yet; start here.',
+    })
+  })
+
+  it('reports the findings as usual with one rtl: class anywhere', async () => {
+    const result = await lint(['.'], { cwd: tree(three({ 'd.tsx': 'export const D = () => <i className="rtl:mr-2" />' })) })
+    expect(result.findings.map((f) => f.rule)).toEqual(['source/physical-css', 'source/physical-css', 'source/physical-css'])
+  })
+
+  it('reports the findings as usual when a locale file exists', async () => {
+    const result = await lint(['.'], { cwd: tree(three({ 'public/locales/ar.json': '{}' })) })
+    expect(result.findings.map((f) => f.rule)).toEqual(['source/physical-css', 'source/physical-css', 'source/physical-css'])
+  })
+
+  it('keeps the individual findings when the summary is ignored', async () => {
+    const result = await lint(['.'], { cwd: tree(three()), ignore: ['source/no-rtl-support'] })
+    expect(result.findings).toHaveLength(3)
+  })
+
+  it('adds nothing when there are no physical findings', async () => {
+    expect((await lint(['.'], { cwd: tree({ 'a.css': '.a { margin-inline-start: 4px }' }) })).findings).toEqual([])
+  })
+
+  it('writes a thousands separator in the count', async () => {
+    const css = Array.from({ length: 1200 }, (_, i) => `.a${i} { margin-left: ${i + 1}px }`).join('\n')
+    const result = await lint(['.'], { cwd: tree({ 'a.css': css }) })
+    expect(result.findings[0]?.message).toMatch(/^1,200 sides are set/)
+  })
+})

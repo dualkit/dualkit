@@ -24,7 +24,7 @@ export function isMinified(text: string): boolean {
   return text.length / lines > MINIFIED_LINE
 }
 
-type Ignored = (abs: string, isDir: boolean) => boolean
+export type Ignored = (abs: string, isDir: boolean) => boolean
 
 const inside = (parent: string, child: string): boolean => {
   const rel = relative(parent, child)
@@ -48,7 +48,7 @@ function ignoreRoot(dir: string, cwd: string): string {
 }
 
 /** Reads .gitignore files from the root down, caching one matcher per directory. */
-function gitignores(root: string): Ignored {
+export function gitignores(root: string): Ignored {
   const cache = new Map<string, Ignore | null>()
   const matcher = (dir: string): Ignore | null => {
     if (cache.has(dir)) return cache.get(dir) ?? null
