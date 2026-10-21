@@ -8,12 +8,14 @@ import { chromium, type Browser, type BrowserContext, type Page } from 'playwrig
 import { audit } from '../../cli/src/audit'
 import { RUN, type RequiredPart } from './config'
 
-export type SlimFinding = { rule: string; title: string; severity: 'error' | 'warning' | 'note'; box: { x: number; y: number; width: number; height: number } | null }
+export type SlimFinding = { rule: string; title: string; severity: 'error' | 'warning' | 'note'; box: { x: number; y: number; width: number; height: number } | null; message: string; fix: string; snippet: string | null }
 export type Scored =
-  | { ok: true; rulesPassed: number; score: number; missing: string[]; findings: SlimFinding[]; screenshot: string; pageHeight: number; unreadableStylesheets: number }
+  | { ok: true; rulesPassed: number; score: number; missing: string[]; text: string; findings: SlimFinding[]; screenshot: string; pageHeight: number; unreadableStylesheets: number }
   | { ok: false; error: string }
 
 export const RULE_COUNT = RULES.length
+/** Distinct rules with a warning or error; notes never count as failed. */
+export const failedRules = (findings: readonly { rule: string; severity: string }[]) => [...new Set(findings.filter((f) => f.severity !== 'note').map((f) => f.rule))]
 export const SCORE_DEADLINE_MS = 90_000
 const GOTO_MS = 30_000
 const LOAD_MS = 10_000
@@ -57,6 +59,10 @@ async function pageText(page: Page): Promise<string> {
 }
 
 export async function missingParts(page: Page, required: readonly RequiredPart[]): Promise<string[]> {
+  return (await readParts(page, required)).missing
+}
+
+async function readParts(page: Page, required: readonly RequiredPart[]): Promise<{ missing: string[]; text: string }> {
   // Locators, innerText and inputValue run in Playwright's isolated world and the regex runs in Node, so a page cannot patch its way past the check.
   const text = await pageText(page)
   const missing: string[] = []
@@ -65,10 +71,10 @@ export async function missingParts(page: Page, required: readonly RequiredPart[]
     const byText = p.text ? new RegExp(p.text).test(text) : true
     if (!(bySelector && byText)) missing.push(p.label)
   }
-  return missing
+  return { missing, text }
 }
 
-async function checkRequired(browser: Browser, url: string, required: readonly RequiredPart[], contexts: BrowserContext[]): Promise<string[]> {
+async function checkRequired(browser: Browser, url: string, required: readonly RequiredPart[], contexts: BrowserContext[]): Promise<{ missing: string[]; text: string }> {
   const context = await browser.newContext({ viewport: { width: RUN.width, height: RUN.height } })
   contexts.push(context)
   try {
@@ -77,7 +83,7 @@ async function checkRequired(browser: Browser, url: string, required: readonly R
     await page.waitForLoadState('load', { timeout: LOAD_MS }).catch(() => {})
     await waitForFonts(page)
     await page.waitForTimeout(SETTLE_MS)
-    return await missingParts(page, required)
+    return await readParts(page, required)
   } finally {
     await context.close().catch(() => {})
   }
@@ -105,14 +111,15 @@ export async function scoreHtml(html: string, required: readonly RequiredPart[],
         { url, width: RUN.width, height: RUN.height, config: { ignore: [], exclude: [] } },
         async () => (auditBrowser = await launch()),
       )
-      const missing = await checkRequired(shared, url, required, contexts)
+      const { missing, text } = await checkRequired(shared, url, required, contexts)
       const findings: SlimFinding[] = result.findings.map((f) => ({
         rule: f.rule, title: f.title, severity: f.severity,
         box: f.node ? { x: f.node.box.x, y: f.node.box.y, width: f.node.box.width, height: f.node.box.height } : null,
+        message: f.message, fix: f.fix, snippet: f.node?.snippet ?? null,
       }))
       return {
-        ok: true, rulesPassed: RULE_COUNT - new Set(findings.map((f) => f.rule)).size, score: result.score,
-        missing, findings, screenshot: result.screenshot, pageHeight: result.pageHeight, unreadableStylesheets: result.unreadableStylesheets,
+        ok: true, rulesPassed: RULE_COUNT - failedRules(findings).length, score: result.score,
+        missing, text, findings, screenshot: result.screenshot, pageHeight: result.pageHeight, unreadableStylesheets: result.unreadableStylesheets,
       }
     })()
     const deadline = new Promise<typeof TIMED_OUT>((resolve) => { timer = setTimeout(() => resolve(TIMED_OUT), opts.deadlineMs ?? SCORE_DEADLINE_MS) })

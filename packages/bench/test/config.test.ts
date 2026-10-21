@@ -51,14 +51,34 @@ describe('loadModels', () => {
   })
 })
 
+const SAMPLES: Record<string, Record<string, string>> = {
+  checkout: { 'AED prices': 'المجموع 45.00 AED' },
+  'support-chat': { 'order number': 'رقم الطلب TX-48213 جاهز', 'English terms': 'فعّلت eSIM على هاتفي' },
+  booking: { 'calendar days': 'السبت 20 الأحد 21 ... 30 31', 'time slots': 'المواعيد 9:00 9:30 10:00 10:30 11:00 11:30' },
+  settings: { 'phone number': 'رقم الجوال +973 3600 1234' },
+  transactions: { 'OMR amounts': 'المبلغ 12.500 OMR', 'three decimals': '12.500', 'English merchant': 'Netflix اشتراك' },
+}
+
 describe('loadScreens', () => {
-  it('loads all five screens in order, each with a prompt and required parts', () => {
+  it('loads all ten screens in order, each with a prompt and required parts', () => {
     const screens = loadScreens()
     expect(screens.map((s) => s.id)).toEqual([...SCREENS])
     for (const s of screens) {
       expect(s.prompt.length).toBeGreaterThan(100)
       expect(s.required.length).toBeGreaterThan(0)
       for (const r of s.required) expect(r.selector ?? r.text).toBeTruthy()
+    }
+  })
+  it('loads ten screens in order', () => {
+    expect(loadScreens().map((s) => s.id)).toEqual(['payment-summary', 'otp', 'address-form', 'profile', 'order-history', 'checkout', 'support-chat', 'booking', 'settings', 'transactions'])
+  })
+  it.each(Object.entries(SAMPLES))('%s: every required text pattern is valid and matches a good Arabic sample', (id, lines) => {
+    const screen = loadScreens().find((s) => s.id === id)!
+    const texts = screen.required.filter((r) => r.text)
+    expect(texts.length).toBe(Object.keys(lines).length)
+    for (const r of texts) {
+      expect(() => new RegExp(r.text!)).not.toThrow()
+      expect(new RegExp(r.text!).test(lines[r.label]!), r.label).toBe(true)
     }
   })
   it('compiles every text pattern', () => {

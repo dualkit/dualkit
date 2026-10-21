@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { loadModels, RUN, SCREENS, type ModelEntry } from '../src/config'
-import { BACKOFF_MS, makeGenerate, MAX_RETRIES, MIN_GAP_MS, REQUEST_TIMEOUT_MS } from '../src/providers'
+import { RUN, type ModelEntry } from '../src/config'
+import { BACKOFF_MS, BUDGET_SPENT, makeGenerate, mayClear, MAX_RETRIES, MIN_GAP_MS, OPENROUTER_DAILY_BUDGET, REQUEST_TIMEOUT_MS } from '../src/providers'
+import { fakeGenerate } from '../src/fake'
 
 const or: ModelEntry = { id: 'g', provider: 'openrouter', model: 'google/gemma-4-31b-it:free', label: 'G', since: '2026-11', by: 'Fake', mark: 'google' }
 const gm: ModelEntry = { id: 'f', provider: 'gemini', model: 'gemini-flash-latest', label: 'F', since: '2026-11', by: 'Fake', mark: 'google' }
@@ -158,10 +159,28 @@ describe('upstream rate limits', () => {
     expect(calls).toHaveLength(5)
     expect(waits).toEqual([15_000, 30_000, 60_000, 120_000])
   })
-  it('keeps a whole month of OpenRouter calls, every retry spent, under the 1,000 a day cap', () => {
-    const openrouter = loadModels().filter((m) => m.provider === 'openrouter').length
-    const worst = openrouter * SCREENS.length * 2 * RUN.runs * (1 + MAX_RETRIES)
-    expect(worst).toBeLessThanOrEqual(1000)
+  it('stops at the daily budget without a request', async () => {
+    expect(OPENROUTER_DAILY_BUDGET).toBe(950)
+    const { f, calls } = fakeFetch([json(429, {}), json(429, {}), json(200, { choices: [{ message: { content: 'hi' } }] })])
+    const generate = makeGenerate({ env, fetch: f, ...noSleep, budget: 2 })
+    // Both attempts count, the retry included, and the third would be over the budget.
+    expect(await generate(or, req)).toEqual({ ok: false, error: BUDGET_SPENT, ms: 0 })
+    expect(calls).toHaveLength(2)
+    expect(await generate(or, req)).toEqual({ ok: false, error: 'Daily request budget spent', ms: 0 })
+    expect(calls).toHaveLength(2)
+  })
+  it('does not count Gemini calls against the OpenRouter budget', async () => {
+    const ok = () => json(200, { candidates: [{ content: { parts: [{ text: 'hi' }] } }] })
+    const { f, calls } = fakeFetch([ok(), ok(), json(200, { choices: [{ message: { content: 'hi' } }] })])
+    const generate = makeGenerate({ env, fetch: f, ...noSleep, budget: 1 })
+    expect((await generate(gm, req)).ok).toBe(true)
+    expect((await generate(gm, req)).ok).toBe(true)
+    expect((await generate(or, req)).ok).toBe(true)
+    expect(calls).toHaveLength(3)
+  })
+  it('lets a spent budget clear, so a loop build stopped by it is left for the next day', () => {
+    expect(mayClear(BUDGET_SPENT)).toBe(true)
+    expect(mayClear('No HTML in the reply')).toBe(false)
   })
 })
 
@@ -238,5 +257,33 @@ describe('error inside a 200', () => {
     expect(error).toMatch(/^Provider error: Upstream rejected \*\*\* y+$/)
     expect(error).not.toContain('or-secret')
     expect(error.length).toBeLessThanOrEqual('Provider error: '.length + 200)
+  })
+})
+
+describe('follow-up turns', () => {
+  const turns = [{ role: 'assistant' as const, content: 'A' }, { role: 'user' as const, content: 'B' }]
+  const ok = () => fakeFetch([json(200, { choices: [{ message: { content: 'hi' } }], candidates: [{ content: { parts: [{ text: 'hi' }] } }] })])
+  it('sends follow-up turns to OpenRouter in order', async () => {
+    const { f, calls } = ok()
+    await makeGenerate({ env, fetch: f, ...noSleep })(or, { ...req, turns })
+    expect(JSON.parse(String(calls[0]!.init.body)).messages).toEqual([{ role: 'system', content: 'sys' }, { role: 'user', content: 'build it' }, { role: 'assistant', content: 'A' }, { role: 'user', content: 'B' }])
+  })
+  it('sends follow-up turns to Gemini with the model role', async () => {
+    const { f, calls } = ok()
+    await makeGenerate({ env, fetch: f, ...noSleep })(gm, { ...req, turns })
+    expect(JSON.parse(String(calls[0]!.init.body)).contents).toEqual([{ role: 'user', parts: [{ text: 'build it' }] }, { role: 'model', parts: [{ text: 'A' }] }, { role: 'user', parts: [{ text: 'B' }] }])
+  })
+  it('sends no extra turns when none are given', async () => {
+    const a = ok(), b = ok()
+    await makeGenerate({ env, fetch: a.f, ...noSleep })(or, req)
+    await makeGenerate({ env, fetch: b.f, ...noSleep })(gm, req)
+    expect(JSON.parse(String(a.calls[0]!.init.body)).messages).toHaveLength(2)
+    expect(JSON.parse(String(b.calls[0]!.init.body)).contents).toHaveLength(1)
+  })
+  it('fake provider answers a follow-up with the good page, except fake-garbage', async () => {
+    const m = (id: string) => ({ ...or, id })
+    expect(await fakeGenerate(m('fake-buggy'), { system: 'sys', prompt: 'p', turns })).toMatchObject({ ok: true, text: expect.stringContaining('```html') })
+    const bad = await fakeGenerate(m('fake-garbage'), { system: 'sys', prompt: 'p', turns })
+    expect(bad).toMatchObject({ ok: true, text: 'Sorry, I cannot build that.' })
   })
 })

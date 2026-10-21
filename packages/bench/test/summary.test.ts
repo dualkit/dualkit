@@ -11,7 +11,7 @@ import { buildSummary, publishSummary, writeSummary } from '../src/summary'
 const screens = loadScreens()
 const model = (id: string, since = '2026-10'): ModelEntry => ({ id, provider: 'openrouter', model: id, label: id.toUpperCase(), since, by: 'Fake', mark: 'google' })
 
-function seed(store: ReturnType<typeof makeStore>, id: string, passed: Record<Condition, number>, skip: string[] = []) {
+function seed(store: ReturnType<typeof makeStore>, id: string, passed: Record<Exclude<Condition, 'loop'>, number>, skip: string[] = []) {
   for (const s of screens) for (const condition of ['alone', 'dualkit'] as const) for (const run of [1, 2, 3]) {
     if (skip.includes(`${s.id}/${condition}`)) continue
     const k: BuildKey = { month: '2026-11', model: id, screen: s.id, condition, run }
@@ -81,6 +81,24 @@ describe('generatedAt', () => {
     const out = await buildSummary({ month: '2099-01', models: [model('a')], screens, store, shots: async () => null })
     expect(out.generatedAt).toBe('2026-10-19T08:00:00.000Z')
   })
+  it('ignores loop builds, which the page does not show', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    seed(store, 'a', { alone: 8, dualkit: 18 })
+    const k: BuildKey = { month: '2026-11', model: 'a', screen: 'otp', condition: 'loop', run: 1 }
+    store.write({ ...k, at: '2026-11-03T09:15:00.000Z', reply: 'r', usage: null, ms: 1, finish: 'stop', reasoningTokens: 0, servedModel: 'a', ok: true, rulesPassed: 25, score: 90, missing: [], findings: [], unreadableStylesheets: 0, pageHeight: 900, from: { rulesPassed: 18, score: 72 }, rounds: [] }, '<html></html>', Buffer.from('x'))
+    const out = await buildSummary({ month: '2026-11', models: [model('a')], screens, store, shots: async () => null })
+    expect(out.generatedAt).toBe('2026-11-01T04:30:00.000Z')
+  })
+  it('does not publish a month whose only successful builds are loop builds', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    seed(store, 'a', { alone: 8, dualkit: 18 })
+    const loop = store.list('2026-11').filter((r) => r.condition === 'dualkit').map((r) => ({ ...r, condition: 'loop' as const }))
+    const s2 = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    for (const r of loop) s2.write(r, null)
+    const out = await publishSummary({ month: '2026-11', models: [model('a')], screens, store: s2, siteRoot: site, shots: async () => null })
+    expect(out.ok).toBe(false)
+  })
   it('is the first day of the month when nothing ran', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
     const out = await buildSummary({ month: '2026-11', models: [model('gone')], screens, store, shots: async () => null })
@@ -95,11 +113,26 @@ describe('buildSummary', () => {
     seed(store, 'b', { alone: 12, dualkit: 15 })
     const out = await buildSummary({ month: '2026-11', models: [model('a'), model('b', '2026-11')], screens, store, shots: async () => null })
     expect(out.models.map((m) => m.id)).toEqual(['a', 'b'])
-    expect(out.models[0]).toMatchObject({ alone: { rulesPassed: 40, outOf: RULE_COUNT * screens.length }, dualkit: { rulesPassed: 90 }, lift: 50, isNew: false })
+    expect(out.models[0]).toMatchObject({ alone: { rulesPassed: 8 * screens.length, outOf: RULE_COUNT * screens.length }, dualkit: { rulesPassed: 18 * screens.length }, lift: 10 * screens.length, isNew: false })
     expect(out.models[1]!.isNew).toBe(true)
     // Three identical builds tie, and cell() picks the lower middle of runs [3, 2, 1]: run 2.
     expect(out.models[0]!.screens[0]!.alone).toMatchObject({ ran: true, raw: 'bench/runs/2026-11/a/payment-summary/alone-2.json' })
     expect(parseBenchMonth(JSON.parse(JSON.stringify(out)))).toEqual(out)
+  })
+  it('keeps only rule, title, severity and box of each finding, so no model HTML reaches the site', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    seed(store, 'a', { alone: 8, dualkit: 18 })
+    const full = { rule: 'r', title: 'R', severity: 'error' as const, box: { x: 1, y: 2, width: 3, height: 4 }, message: 'm', fix: 'f', snippet: '<div onclick="x">' }
+    for (const run of [1, 2, 3]) {
+      const k: BuildKey = { month: '2026-11', model: 'a', screen: screens[0]!.id, condition: 'alone', run }
+      const r = store.read(k)!
+      if (r.ok) store.write({ ...r, findings: [full] }, '<html></html>', Buffer.from('x'))
+    }
+    const out = await buildSummary({ month: '2026-11', models: [model('a')], screens, store, shots: async () => null })
+    const cell = out.models[0]!.screens[0]!.alone
+    const findings = cell.ran ? cell.findings : []
+    expect(findings).toHaveLength(1)
+    expect(Object.keys(findings[0]!).sort()).toEqual(['box', 'rule', 'severity', 'title'])
   })
   it('keeps the cell and logs when the screenshot step throws', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))

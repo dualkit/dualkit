@@ -3,7 +3,7 @@
 export const BENCH_COPY = {
   title: 'The Bench',
   headline: ['How well does AI', 'build Arabic?'],
-  lede: (rules: number) => `Every month, free AI models build five Arabic screens on their own, then again with Dualkit. dualkit check scores every build against ${rules} rules.`,
+  lede: (rules: number) => `Every month, free AI models build ten Arabic screens on their own, then again with Dualkit. dualkit check scores every build against ${rules} rules.`,
   raw: 'Raw files on GitHub',
   prompts: 'Read the prompts',
   promptsUrl: 'https://github.com/dualkit/dualkit/tree/main/packages/bench/prompts',
@@ -11,7 +11,7 @@ export const BENCH_COPY = {
   how: {
     heading: 'How the Bench works',
     items: (rules: number): readonly (readonly [string, string])[] => [
-      ['Five screens', 'A payment summary, a one-time code, an address form, a profile and an order history. Every prompt is public.'],
+      ['Ten screens', 'A payment summary, a one-time code, an address form, a profile, an order history, a checkout, a support chat, a booking, settings and transactions. Every prompt is public.'],
       ['Three runs, two ways', 'Each model builds each screen three times on its own, then three times with the Dualkit skills loaded. The middle run counts.'],
       ['Scored by dualkit check', `The same ${rules} rules you can run with npx dualkit check. A build that leaves out a part the prompt asked for scores 0.`],
       ['A small sample', 'Free models only, run once a month. A model that fails shows as didn’t run, never as a guess.'],
@@ -20,9 +20,9 @@ export const BENCH_COPY = {
   empty: {
     heading: (day: string) => `The first run lands on ${day}.`,
     running: 'The first run is under way.',
-    lede: 'Six free models, five screens, three runs each. The results and every raw file go up here the same day.',
+    lede: 'Six free models, ten screens, three runs each. The results and every raw file go up here the same day.',
   },
-  legend: { alone: 'Alone', dualkit: 'With Dualkit', caption: (outOf: number) => `Rules passed across five screens, out of ${outOf}` },
+  legend: { alone: 'Alone', dualkit: 'With Dualkit', caption: (outOf: number) => `Rules passed across ten screens, out of ${outOf}` },
   columns: { rank: 'Rank', model: 'Model', pair: 'Alone → with Dualkit', lift: 'Lift' },
   didntRun: 'Didn’t run this month',
   newModel: 'New',

@@ -5,6 +5,7 @@ import { makeGenerate } from './providers'
 import { resolveMonth } from './month'
 import { runBench } from './run'
 import { makeStore } from './store'
+import { renderStudy, study } from './study'
 import { publishSummary } from './summary'
 
 const FAKE_MODELS: ModelEntry[] = ['fake-good', 'fake-buggy', 'fake-incomplete', 'fake-garbage']
@@ -19,6 +20,11 @@ async function main(): Promise<number> {
     return 0
   }
   const all = args.fake ? FAKE_MODELS : loadModels()
+  // The study report reads what the month already has, over every model and screen; it builds nothing and writes nothing.
+  if (args.study) {
+    console.log(renderStudy(study(makeStore().list(month), all, loadScreens())))
+    return 0
+  }
   const models = args.model ? all.filter((m) => m.id === args.model) : all
   if (models.length === 0) throw new BenchError(`No model with id "${args.model}". Ids: ${all.map((m) => m.id).join(', ')}`)
   const store = makeStore()
@@ -30,7 +36,7 @@ async function main(): Promise<number> {
       ...(args.deadline !== undefined ? { deadline: args.deadline } : {}),
       ...(args.runs !== undefined ? { runs: args.runs } : {}),
     })
-    console.log(`Built ${out.built}, skipped ${out.skipped}, failed ${out.failed}.${out.stoppedEarly ? ' Stopped at the deadline; a rerun finishes the rest.' : ''}`)
+    console.log(`Built ${out.built}, skipped ${out.skipped}, failed ${out.failed}.${out.stoppedEarly ? ' Stopped at the deadline or the daily request budget; a rerun finishes the rest.' : ''}`)
     if (out.built === 0 && out.skipped === 0) return 1
   }
   if (args.noSummary) return 0

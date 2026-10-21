@@ -11,6 +11,10 @@ on:
       model:
         description: 'Only this model id from packages/bench/models.json'
         required: false
+      summary:
+        description: 'Build the site summary and commit it (off: commit only bench/; scheduled runs always build it)'
+        type: boolean
+        default: false
 permissions:
   contents: write
 concurrency:
@@ -19,7 +23,7 @@ concurrency:
 jobs:
   bench:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 360
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -34,7 +38,7 @@ jobs:
           git config user.name 'dualkit-bench[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
       - name: Run the bench
-        timeout-minutes: 165
+        timeout-minutes: 345
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -86,16 +90,23 @@ jobs:
       - name: Build the summary
         if: ${{ !cancelled() }}
         timeout-minutes: 20
+        env:
+          SUMMARY: ${{ inputs.summary }}
         run: |
           # Without a month the run step failed before it started; never fall back to this month.
           [ -n "$BENCH_MONTH" ] || { echo "No month was resolved, so there is no summary to build."; exit 1; }
+          # A scheduled run has no inputs, so only an explicit false turns the summary off.
+          [ "$SUMMARY" = false ] && { echo "Summary turned off for this run."; exit 0; }
           npm run bench -w @dualkit/bench -- --summary-only --month "$BENCH_MONTH"
       - name: Commit the results
         if: ${{ !cancelled() }}
+        env:
+          SUMMARY: ${{ inputs.summary }}
         run: |
           [ -n "$BENCH_MONTH" ] || { echo "No month was resolved, so there is nothing to commit."; exit 1; }
+          if [ "$SUMMARY" = false ]; then sources=(bench); else sources=(bench apps/site/content/bench apps/site/public/bench); fi
           paths=()
-          for p in bench apps/site/content/bench apps/site/public/bench; do
+          for p in "${sources[@]}"; do
             if [ -e "$p" ]; then paths+=("$p"); fi
           done
           if [ ${#paths[@]} -gt 0 ]; then git add -A -- "${paths[@]}"; fi

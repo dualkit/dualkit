@@ -2,14 +2,16 @@ import { chromium, type Browser } from 'playwright'
 import sharp from 'sharp'
 import { RUN, type ModelEntry, type Screen } from './config'
 import { extractHtml } from './extract'
-import type { Generate } from './providers'
+import { loopBuild, type Built } from './loop'
+import { ACCESS, BUDGET_SPENT, type Generate } from './providers'
 import { makeProgressWriter, progressOf, type RecentBuild } from './progress'
 import { scoreHtml } from './score'
 import type { BuildKey, BuildRecord, Condition, Store } from './store'
 import { checkSkills, SKILLS_DIR, systemPrompt } from './system'
 
+/** The two builds from the prompt; the loop runs after all of them, from each dualkit build. */
 const CONDITIONS: readonly Condition[] = ['alone', 'dualkit']
-const ACCESS = /^No [A-Z_]+_API_KEY$|^HTTP (401|403|404)\b/
+const ALL: readonly Condition[] = [...CONDITIONS, 'loop']
 /** A 4xx other than 429 will not get better by asking again. */
 const CLIENT = /^HTTP 4(?!29)\d\d\b/
 const LOCK_AFTER = 3
@@ -87,9 +89,9 @@ export async function runBench({ month, models, screens, generate, store, score 
   const browser = doLaunch ? sharedBrowser(doLaunch) : undefined
   const limit = semaphore(SCORE_CONCURRENCY)
   const finished: RecentBuild[] = []
-  const total = models.length * screens.length * CONDITIONS.length * runs
+  const total = models.length * screens.length * ALL.length * runs
   const writeFile = makeProgressWriter(store.progressFile(month), log)
-  const keys: BuildKey[] = models.flatMap((m) => screens.flatMap((sc) => CONDITIONS.flatMap((condition) => Array.from({ length: runs }, (_, i) => ({ month, model: m.id, screen: sc.id, condition, run: i + 1 })))))
+  const keys: BuildKey[] = models.flatMap((m) => screens.flatMap((sc) => ALL.flatMap((condition) => Array.from({ length: runs }, (_, i) => ({ month, model: m.id, screen: sc.id, condition, run: i + 1 })))))
   const countDone = () => keys.filter((k) => store.read(k) !== null).length
   // A catch-up run with nothing left to build writes no progress at all, so the file (and the commit) stays as it was.
   const quiet = keys.every((k) => store.isDone(k))
@@ -97,9 +99,14 @@ export async function runBench({ month, models, screens, generate, store, score 
   const onFinish = (entry: RecentBuild) => { finished.push(entry); return publish(true) }
   await publish(true)
   const scorer: Scorer = (html, screen) => limit(async () => score(html, screen.required, browser ? { browser: await browser.get() } : {}))
+  // Once one OpenRouter call finds the daily budget spent, no OpenRouter model starts another build; Gemini is not counted.
+  let budgetSpent = false
+  const spend = () => { budgetSpent = true }
+  const lateFor = (model: ModelEntry) => (): string | null =>
+    now() >= deadline ? 'past the deadline' : model.provider === 'openrouter' && budgetSpent ? 'daily request budget spent' : null
   try {
     // Every model at once, sharing the one paced Generate; each model's own builds stay in order.
-    const all = await Promise.all(models.map((model) => runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, onFinish, late: () => now() >= deadline })))
+    const all = await Promise.all(models.map((model) => runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, onFinish, late: lateFor(model), spend })))
     return all.reduce((a, c) => ({ built: a.built + c.built, skipped: a.skipped + c.skipped, failed: a.failed + c.failed, stoppedEarly: a.stoppedEarly || c.stoppedEarly }), NONE)
   } finally {
     await browser?.close()
@@ -107,26 +114,47 @@ export async function runBench({ month, models, screens, generate, store, score 
   }
 }
 
-type ModelRun = { month: string; model: ModelEntry; screens: Screen[]; generate: Generate; store: Store; scorer: Scorer; log: (line: string) => void; skillsDir: string; runs: number; onFinish: (entry: RecentBuild) => Promise<void>; late: () => boolean }
+type ModelRun = { month: string; model: ModelEntry; screens: Screen[]; generate: Generate; store: Store; scorer: Scorer; log: (line: string) => void; skillsDir: string; runs: number; onFinish: (entry: RecentBuild) => Promise<void>
+  /** Why no new build may start, or null when one may. */
+  late: () => string | null
+  /** Marks the daily budget spent for every OpenRouter model. */
+  spend: () => void }
 const NONE: Counts = { built: 0, skipped: 0, failed: 0, stoppedEarly: false }
 
-async function runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, onFinish, late }: ModelRun): Promise<Counts> {
+async function runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, onFinish, late, spend }: ModelRun): Promise<Counts> {
   let counts = NONE
   let streak: Streak = { key: null, n: 0 }
-  for (const screen of screens) for (const condition of CONDITIONS) for (let run = 1; run <= runs; run++) {
-    const key: BuildKey = { month, model: model.id, screen: screen.id, condition, run }
-    if (store.isDone(key)) { counts = { ...counts, skipped: counts.skipped + 1 }; continue }
-    if (streak.n >= LOCK_AFTER) continue
-    if (late()) {
-      log(`${model.id}: past the deadline, leaving the rest for the next run`)
-      return { ...counts, stoppedEarly: true }
-    }
-    const rec = await build(key, model, screen, generate, scorer, skillsDir, log)
+  const shoot = (key: BuildKey) => (png: string) => toWebp(png).catch((e: unknown) => {
+    log(`${key.model} ${key.screen} ${key.condition} ${key.run}: screenshot not saved: ${e instanceof Error ? e.message : String(e)}`)
+    return null
+  })
+  const stop = (why: string) => { log(`${model.id}: ${why}, leaving the rest for the next run`); return false }
+  /** Builds one key, or returns false once the deadline has passed or the daily budget is spent. */
+  const step = async (key: BuildKey, screen: Screen, make: () => Promise<Built | null>): Promise<boolean> => {
+    if (store.isDone(key)) { counts = { ...counts, skipped: counts.skipped + 1 }; return true }
+    if (streak.n >= LOCK_AFTER) return true
+    const why = late()
+    if (why !== null) return stop(why)
+    const rec = await make()
+    if (rec === null) return true
+    // The build that found the budget spent is not written, so the next day's run builds it.
+    if (!rec.record.ok && rec.record.error === BUDGET_SPENT) { spend(); return stop('daily request budget spent') }
     streak = nextStreak(streak, rec.record.ok ? null : rec.record.error)
-    store.write(rec.record, rec.html, rec.shot)
+    store.write(rec.record, rec.html, rec.shot, rec.pages)
     counts = rec.record.ok ? { ...counts, built: counts.built + 1 } : { ...counts, failed: counts.failed + 1 }
     log(`${key.model} ${key.screen} ${key.condition} ${key.run}: ${rec.record.ok ? `${rec.record.rulesPassed} rules` : rec.record.error}`)
     await onFinish(recentOf(rec.record, model, screen))
+    return true
+  }
+  // Two passes: every alone and dualkit build first, then the loops, so a deadline or budget stop never costs the published cells a build.
+  for (const screen of screens) for (const condition of CONDITIONS) for (let run = 1; run <= runs; run++) {
+    const key: BuildKey = { month, model: model.id, screen: screen.id, condition, run }
+    if (!(await step(key, screen, () => build(key, model, screen, generate, scorer, skillsDir, shoot(key))))) return { ...counts, stoppedEarly: true }
+  }
+  for (const screen of screens) for (let run = 1; run <= runs; run++) {
+    const key: BuildKey = { month, model: model.id, screen: screen.id, condition: 'loop', run }
+    const make = () => loopBuild({ key, model, screen, generate, store, scorer, skillsDir, shoot: shoot(key), late: () => late() !== null })
+    if (!(await step(key, screen, make))) return { ...counts, stoppedEarly: true }
   }
   if (streak.n >= LOCK_AFTER) log(`${model.id}: skipped for this run after ${LOCK_AFTER} errors in a row that will not clear: ${streak.key}`)
   return counts
@@ -137,12 +165,10 @@ const recentOf = (r: BuildRecord, model: ModelEntry, screen: Screen): RecentBuil
   ok: r.ok, rulesPassed: r.ok ? r.rulesPassed : null, error: r.ok ? null : r.error,
 })
 
-type Built = { record: BuildRecord; html: string | null; shot: Buffer | null }
-
 /** The page's screenshot from the scoring render, at 1x: the summary copies this file, so the image is the build that was scored. */
 const toWebp = (png: string) => sharp(Buffer.from(png, 'base64')).resize({ width: RUN.width }).webp({ quality: 90 }).toBuffer()
 
-async function build(key: BuildKey, model: ModelEntry, screen: Screen, generate: Generate, scorer: Scorer, skillsDir: string, log: (line: string) => void): Promise<Built> {
+async function build(key: BuildKey, model: ModelEntry, screen: Screen, generate: Generate, scorer: Scorer, skillsDir: string, shoot: (png: string) => Promise<Buffer | null>): Promise<Built> {
   const base = { ...key, at: new Date().toISOString() }
   const gen = await generate(model, { system: systemPrompt(key.condition, skillsDir), prompt: screen.prompt })
   if (!gen.ok) {
@@ -156,10 +182,7 @@ async function build(key: BuildKey, model: ModelEntry, screen: Screen, generate:
   try {
     const s = await scorer(html, screen)
     if (!s.ok) return { record: { ...meta, ok: false, error: `Render failed: ${s.error}` }, html, shot: null }
-    const shot = await toWebp(s.screenshot).catch((e: unknown) => {
-      log(`${key.model} ${key.screen} ${key.condition} ${key.run}: screenshot not saved: ${e instanceof Error ? e.message : String(e)}`)
-      return null
-    })
+    const shot = await shoot(s.screenshot)
     const record: BuildRecord = {
       ...meta, ok: true, rulesPassed: s.rulesPassed, score: s.score, missing: s.missing, findings: s.findings,
       unreadableStylesheets: s.unreadableStylesheets, pageHeight: s.pageHeight,

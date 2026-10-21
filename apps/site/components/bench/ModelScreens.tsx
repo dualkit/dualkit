@@ -8,7 +8,7 @@ import { ScreenSide } from './ScreenSide'
 const C = BENCH_COPY
 const result = (c: BenchCell, ruleCount: number, cond: string) => (c.ran ? `${c.rulesPassed} of ${ruleCount} ${cond}` : `Didn’t run ${cond}`)
 
-/** One model's five screens. The first starts open; each toggles on its own. */
+/** One model's ten screens. The first starts open; each toggles on its own. */
 export function ModelScreens({ model, ruleCount, fixes }: { model: BenchModel; ruleCount: number; fixes: Record<string, string> }) {
   const [open, setOpen] = useState<ReadonlySet<string>>(() => new Set(model.screens[0] ? [model.screens[0].id] : []))
   const base = useId()

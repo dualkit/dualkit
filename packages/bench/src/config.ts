@@ -11,7 +11,7 @@ export type Screen = { id: string; title: string; prompt: string; required: Requ
 export class BenchError extends Error {}
 
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
-export const SCREENS = ['payment-summary', 'otp', 'address-form', 'profile', 'order-history'] as const
+export const SCREENS = ['payment-summary', 'otp', 'address-form', 'profile', 'order-history', 'checkout', 'support-chat', 'booking', 'settings', 'transactions'] as const
 /** maxTokens is the whole reply; reasoning models may spend at most reasoningTokens of it thinking, so the page keeps about 12000. */
 export const RUN = { temperature: 0.4, maxTokens: 16000, reasoningTokens: 4000, runs: 3, minRuns: 2, width: 390, height: 844 } as const
 export const MARKS_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', 'design', 'assets', 'marks')
