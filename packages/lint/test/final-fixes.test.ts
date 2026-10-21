@@ -21,6 +21,16 @@ describe('template placeholders are unknown values', () => {
     expect(rules('a.ts', text, 'source/physical-css').map((f) => f.line)).toEqual([2, 3])
   })
 
+  it('two placeholders with the same source text are a symmetric pair', () => {
+    const text = 'export const A = styled.p`\n  margin-left: ${() => t.spacing[4]};\n  margin-right: ${() => t.spacing[4]};\n`\n'
+    expect(rules('a.ts', text, 'source/physical-css')).toEqual([])
+  })
+
+  it('a placeholder and a literal are not a symmetric pair', () => {
+    const text = 'export const A = styled.p`\n  margin-left: ${a};\n  margin-right: xxx;\n`\n'
+    expect(rules('a.ts', text, 'source/physical-css').map((f) => f.line)).toEqual([2, 3])
+  })
+
   it('equal literal values are still a symmetric pair', () => {
     const text = 'export const A = styled.p`\n  margin-left: 4px;\n  margin-right: 4px;\n`\n'
     expect(rules('a.ts', text, 'source/physical-css')).toEqual([])

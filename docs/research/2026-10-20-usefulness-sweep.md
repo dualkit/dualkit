@@ -135,13 +135,13 @@ We reran the sweep after the fixes above. Lint used the same 10 repos at pinned 
 
 | | Before (0.1.0-beta.0) | After |
 |---|---|---|
-| Findings on the 10 repos | 3,577 | 938 after the noise fixes, 1,887 after adding Vue, Svelte and CSS-in-JS |
+| Findings on the 10 repos | 3,577 | 938 after the noise fixes, 1,905 after adding Vue, Svelte and CSS-in-JS |
 | Precision on the labelled sample, all rules | 16% | 34% |
 | Real bugs kept | 40 found | 39 of the 40 |
 
 - The one real bug lost came from the dir-attribute rule, which is now off by default.
 - A fresh sample of 79 new findings held 33 more real bugs.
-- Reading Vue, Svelte and CSS-in-JS added findings in Chatwoot (200), Twenty (688), Rocket.Chat (53) and Nextcloud (8).
+- Reading Vue, Svelte and CSS-in-JS added findings in Chatwoot (200), Twenty (706), Rocket.Chat (53) and Nextcloud (8).
 - By rule after the fixes: physical-tailwind 62% (20 real, 12 false), physical-css 30% (52 real, 123 false).
 - Discourse produced 2,249 false findings before because rtlcss runs in its build. It is now skipped with one summary line.
 - Lint did not reach the 80% goal. At 34% most of what it reports is still not a bug.
