@@ -3,7 +3,7 @@ import { dirname, isAbsolute, join, relative } from 'node:path'
 import type { QuietReason } from './types'
 
 const HEADER_LINES = 5
-const GENERATED = [/@generated\b/, /DO NOT EDIT/i, /^\s*(?:\/\*!?|\/\/)\s*tailwindcss v\d/i]
+const GENERATED = [/@generated\b/, /DO NOT EDIT/, /^\s*(?:\/\*!?|\/\/)\s*tailwindcss v\d/i]
 
 const EXAMPLE_SEGMENTS = new Set(['examples', 'example', 'demo', 'demos', 'fixtures', '__fixtures__', 'stories', 'storybook-static'])
 const EMAIL_SEGMENTS = new Set(['mailer', 'mailers', 'email', 'emails', 'mail'])
@@ -50,7 +50,7 @@ function fromGems(dir: string): string | null {
   }
   for (const name of names) {
     try {
-      const text = readFileSync(join(dir, name), 'utf8')
+      const text = readFileSync(join(dir, name), 'utf8').split(/\r\n|\r|\n/).filter((l) => !l.trimStart().startsWith('#')).join('\n')
       const found = FLIPPERS.find((f) => new RegExp(`['"]${f}['"]`).test(text))
       if (found) return found
     } catch {

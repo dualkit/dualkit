@@ -14,6 +14,10 @@ describe('quietReason', () => {
     expect(quietReason('a.css', '\n\n\n\n\n/* DO NOT EDIT */\n')).toBeNull()
   })
 
+  it('does not treat lowercase prose as generated', () => {
+    expect(quietReason('a.css', '/* do not edit below this line by hand */\n.a{}')).toBeNull()
+  })
+
   it('matches example directories by whole segment', () => {
     for (const p of ['examples/x.css', 'packages/demo/a.tsx', 'src/__fixtures__/a.css', 'stories/a.tsx', 'storybook-static/a.css']) {
       expect(quietReason(p, '')).toBe('example')
@@ -40,6 +44,11 @@ describe('createFlipperLookup', () => {
   it('reads a Gemfile at top', () => {
     const top = tree({ Gemfile: 'source "x"\ngem "rtlcss"\n', 'app/a.scss': '' })
     expect(createFlipperLookup(top)(join(top, 'app/a.scss'))).toBe('rtlcss')
+  })
+
+  it('ignores a commented-out gem line', () => {
+    const top = tree({ Gemfile: '# gem "rtlcss"\n  # gem "rtlcss"\n' })
+    expect(createFlipperLookup(top)(join(top, 'a.scss'))).toBeNull()
   })
 
   it.each(['postcss-rtlcss', 'postcss-rtl', 'cssjanus', 'stylis-plugin-rtl', '@mui/stylis-plugin-rtl'])('finds %s', (name) => {

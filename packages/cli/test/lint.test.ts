@@ -108,6 +108,13 @@ describe('formatLint', () => {
     expect(text).toContain('Skipped physical rules in 3 generated files.')
     expect(text).toContain('Skipped physical rules in 5 email templates.')
   })
+  it('uses singular nouns for one file', () => {
+    const text = formatLint({ ...base, quiet: [{ reason: 'email', files: 1 }, { reason: 'example', files: 1 }, { reason: 'generated', files: 1 }, { reason: 'flipped', files: 1, flipper: 'rtlcss' }] }, false)
+    expect(text).toContain('in 1 email template.')
+    expect(text).toContain('in 1 example file.')
+    expect(text).toContain('in 1 generated file.')
+    expect(text).toContain('in 1 file flipped by rtlcss.')
+  })
   it('says no issues, and leaves skipped files to formatSkipped', () => {
     const result = { ...base, skipped: [{ file: 'big.js', reason: 'minified' }] }
     const text = formatLint(result, false)
