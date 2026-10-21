@@ -34,7 +34,7 @@ Dualkit fixes them at the source, in the agent and in the code, and checks any p
 | **[Format](packages/format/)** | Six Gulf currencies, Umm al-Qura dates, Arabic numerals, GCC phones and IBANs for all six countries, Emirates ID, Saudi VAT number, Gulf weekends. No dependencies | `npm i @dualkit/format` |
 | **[Starter](packages/starter/)** | A bilingual design system to fork: one token file feeds CSS, Tailwind and Figma, plus eight React components | [From the release](#starter) |
 | **[Check](packages/cli/)** | Audit any page for Arabic and RTL bugs, with a shareable Gulf-ready report | `npx dualkit check <url>` |
-| **[Lint](packages/lint/)** | 8 source rules that catch Arabic and RTL bugs in your CSS, HTML, JavaScript and TypeScript, with no browser | `npx dualkit@beta lint .` |
+| **[Lint](packages/lint/)** | 8 source rules on by default that catch Arabic and RTL bugs in your CSS, HTML, JavaScript and TypeScript, with no browser | `npx dualkit@beta lint .` |
 
 ## Proof
 
@@ -123,16 +123,16 @@ In CI, `uses: dualkit/dualkit/action@main` scores every pull request and uploads
 
 ## Lint
 
-Lint reads your source instead of a rendered page, so it needs no browser and runs in seconds. It checks CSS, SCSS, HTML, JavaScript and TypeScript, including JSX, against 8 source rules: left and right in CSS and Tailwind classes, letter-spacing on Arabic, `[dir]` selectors, Arabic formats that leave the digits to the runtime, the bare `islamic` calendar instead of `islamic-umalqura` (the Hijri calendar CLDR ranks first for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar), Hijri dates with no time zone, and the old rial sign.
+Lint reads your source instead of a rendered page, so it needs no browser and runs in seconds. It checks CSS, SCSS, HTML, JavaScript and TypeScript, including JSX, plus Vue and Svelte files and CSS in styled and css templates, against 8 source rules: left and right in CSS and Tailwind classes, letter-spacing on Arabic, Arabic formats that leave the digits to the runtime, the bare `islamic` calendar instead of `islamic-umalqura` (the Hijri calendar CLDR ranks first for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar), Hijri dates with no time zone, and the old rial sign. Left and right in CSS is a note, so it is listed but does not fail the run unless you set `--fail-on note`. A ninth rule, which prefers `:dir()` to a `[dir]` selector, is off by default and can be turned back on through the API: pass `RULES` from `@dualkit/lint` to `lint()`.
 
 ```
 npx dualkit@beta lint .
 ```
 
 ```
-physical.css:2:3  ▲ source/physical-css  `margin-left: 8px` is tied to one side. Use `margin-inline-start`.
+physical.css:2:3  · source/physical-css  `margin-left: 8px` is tied to one side. Use `margin-inline-start`.
 
-0 errors, 1 warning, 0 notes in 2 files
+0 errors, 0 warnings, 1 note in 2 files
 ```
 
 It exits 1 when a finding reaches `--fail-on` (default `error`). Turn a rule off for one line with a `dualkit-disable-next-line <rule-id> -- reason` comment. In CI, set `mode: lint` on the same Action. Every rule and its known limits are in [LINT.md](packages/lint/LINT.md).
@@ -151,7 +151,7 @@ The most useful help right now:
 | --- | --- |
 | `packages/format` | The format library, with its tests |
 | `packages/rules` | The 29 check rules and the page reader, with their tests |
-| `packages/lint` | The 8 source rules behind `dualkit lint`, with their tests |
+| `packages/lint` | The source rules behind `dualkit lint`, with their tests |
 | `packages/cli` | The `dualkit` CLI and its report |
 | `action` | The GitHub Action that runs check or lint on pull requests |
 | `skills` | The four skills (`SKILL.md` each) |

@@ -1,12 +1,15 @@
 import { readFile } from 'node:fs/promises'
-import { resolve } from 'node:path'
+import { resolve, sep } from 'node:path'
 import { parseSource, parseSourceOutcome } from './parse'
 import { lineStarts, positionAt } from './position'
-import { RULES } from './rules'
+import { DEFAULT_RULES } from './rules'
+import { NO_RTL_SUPPORT } from './rules/summary'
+import { hasRtlLocaleFiles, hasRtlSignal, isRtlLocalePath } from './rtl-signal'
+import { createFlipperLookup, POSTCSS_FLIPPERS, quietReason, STYLIS_FLIPPERS } from './scope'
 import { suppressed } from './suppress'
 import { createTailwindInfo } from './tailwind-version'
-import type { LintContext, LintFinding, LintResult, LintRule, Skipped, SourceFile } from './types'
-import { compare, isMinified, walk } from './walk'
+import type { LintContext, LintFinding, LintResult, LintRule, QuietEntry, QuietReason, Skipped, SourceFile } from './types'
+import { compare, gitignores, isMinified, repoTop, walk } from './walk'
 
 /** Built the same way as docsUrl in @dualkit/rules, pointing at LINT.md. */
 export const lintDocsUrl = (id: string): string =>
@@ -18,7 +21,7 @@ type RuleOptions = { rules?: readonly LintRule[]; ignore?: readonly string[] }
 
 const activeRules = (options: RuleOptions): readonly LintRule[] => {
   const ignore = new Set(options.ignore ?? [])
-  return (options.rules ?? RULES).filter((rule) => !ignore.has(rule.id))
+  return (options.rules ?? DEFAULT_RULES).filter((rule) => !ignore.has(rule.id))
 }
 
 export const byPosition = (a: LintFinding, b: LintFinding): number =>
@@ -41,6 +44,24 @@ function lintFile(file: SourceFile, rules: readonly LintRule[], ctx: LintContext
   return findings.sort(byPosition)
 }
 
+const POSTCSS_LANGS = new Set(['css', 'scss', 'vue', 'svelte'])
+
+const PHYSICAL_RULES = new Set(['source/physical-css', 'source/physical-tailwind'])
+
+/** Replaces every physical finding with one summary at the first of them. */
+function collapsePhysical(findings: readonly LintFinding[], rule: LintRule): LintFinding[] {
+  const physical = findings.filter((f) => PHYSICAL_RULES.has(f.rule))
+  const first = [...physical].sort(byPosition)[0]
+  if (!first) return [...findings]
+  const count = physical.length.toLocaleString('en-US')
+  const summary: LintFinding = {
+    rule: rule.id, group: 'source', severity: rule.severity, title: rule.title, fix: rule.fix, docs: lintDocsUrl(rule.id),
+    message: `${count} ${physical.length === 1 ? 'side is' : 'sides are'} set left or right. This repo has no right-to-left support yet; start here.`,
+    file: first.file, line: first.line, column: first.column,
+  }
+  return [...findings.filter((f) => !PHYSICAL_RULES.has(f.rule)), summary]
+}
+
 /** Lints one file's text without touching the disk. A file that does not parse gives no findings. */
 export function lintText(
   path: string,
@@ -60,9 +81,29 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
     tailwindVersion: (file) => infoOf(file.abs, resolve(options.cwd)).version,
     tailwindRange: (file) => infoOf(file.abs, resolve(options.cwd)).range,
   }
+  const cwd = resolve(options.cwd)
+  const top = repoTop(cwd) ?? cwd
+  const postcssOf = createFlipperLookup(top, POSTCSS_FLIPPERS)
+  const stylisOf = createFlipperLookup(top, STYLIS_FLIPPERS)
+  // Each flipper mirrors only what it processes: PostCSS tools see stylesheets and <style> blocks, Stylis plugins see template CSS.
+  ctx.blockFlipper = (file, block) => (block.fromTemplate ? stylisOf(file.abs) : POSTCSS_LANGS.has(file.lang) ? postcssOf(file.abs) : null)
+  const flippers = new Map<string, string | null>()
+  const reasons = new Map<string, QuietReason | null>()
+  const reasonOf = (file: SourceFile): QuietReason | null => {
+    const known = reasons.get(file.path)
+    if (known !== undefined) return known
+    const flipper = file.css.map((block) => ctx.blockFlipper?.(file, block) ?? null).find((name) => name !== null) ?? null
+    flippers.set(file.path, flipper)
+    const reason = quietReason(file.path, file.text) ?? (flipper ? 'flipped' : null)
+    reasons.set(file.path, reason)
+    return reason
+  }
+  ctx.physicalQuiet = reasonOf
+  const tally = new Map<string, QuietEntry>()
   const skipped: Skipped[] = [...walkSkipped]
   const findings: LintFinding[] = []
   let linted = 0
+  let rtlSupport = false
   for (const path of files) {
     const abs = resolve(options.cwd, path)
     let text: string
@@ -76,13 +117,33 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
       skipped.push({ file: path, reason: 'minified' })
       continue
     }
+    // The text is dropped after this file, so only the yes or no is kept.
+    if (!rtlSupport && (hasRtlSignal(text) || isRtlLocalePath(path))) rtlSupport = true
     const outcome = parseSourceOutcome(path, text, abs)
     if ('error' in outcome) {
       skipped.push({ file: path, reason: `parse error: ${outcome.error}` })
       continue
     }
     linted++
+    const reason = reasonOf(outcome.file)
+    if (reason) {
+      // A flipper in the build means the repo already mirrors its left and right for right-to-left.
+      if (reason === 'flipped') rtlSupport = true
+      const flipper = reason === 'flipped' ? flippers.get(path) ?? undefined : undefined
+      const key = `${reason}:${flipper ?? ''}`
+      const entry = tally.get(key)
+      tally.set(key, entry ? { ...entry, files: entry.files + 1 } : { reason, files: 1, ...(flipper ? { flipper } : {}) })
+    }
     findings.push(...lintFile(outcome.file, rules, ctx))
   }
-  return { root: options.cwd, files: linted, skipped, findings: findings.sort(byPosition) }
+  const summary = rules.find((rule) => rule.id === NO_RTL_SUPPORT)
+  const hasPhysical = findings.some((f) => PHYSICAL_RULES.has(f.rule))
+  // A subset run only sees part of the repo, so it cannot tell that the repo has no right-to-left support.
+  const coversRepo = paths.some((p) => {
+    const abs = resolve(options.cwd, p)
+    return top === abs || top.startsWith(abs.endsWith(sep) ? abs : abs + sep)
+  })
+  const collapse = summary !== undefined && hasPhysical && coversRepo && !rtlSupport && !hasRtlLocaleFiles(top, gitignores(top))
+  const final = collapse ? collapsePhysical(findings, summary) : findings
+  return { root: options.cwd, files: linted, skipped, findings: final.sort(byPosition), quiet: [...tally.values()] }
 }

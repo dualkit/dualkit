@@ -2,7 +2,7 @@ import type { Node } from '@babel/types'
 import { staticLocales, staticObject, staticString, unwrap, visit } from '../ast'
 import type { LintHit, LintRule, SourceFile } from '../types'
 
-const JS_LANGS = ['js', 'jsx', 'ts', 'tsx', 'html'] as const
+const JS_LANGS = ['js', 'jsx', 'ts', 'tsx', 'html', 'vue', 'svelte'] as const
 
 type Kind = 'number' | 'date' | 'either'
 type IntlCall = {

@@ -3,7 +3,7 @@ import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
 import ignore, { type Ignore } from 'ignore'
 import type { Skipped } from './types'
 
-export const EXTENSIONS: readonly string[] = ['.css', '.scss', '.html', '.htm', '.js', '.mjs', '.cjs', '.jsx', '.ts', '.mts', '.cts', '.tsx']
+export const EXTENSIONS: readonly string[] = ['.css', '.scss', '.html', '.htm', '.js', '.mjs', '.cjs', '.jsx', '.ts', '.mts', '.cts', '.tsx', '.vue', '.svelte']
 export const ALWAYS_SKIP: readonly string[] = ['node_modules', 'dist', '.next', 'build', 'coverage', '.git']
 export const MINIFIED_BYTES = 1024 * 1024
 export const MINIFIED_LINE = 500
@@ -24,7 +24,7 @@ export function isMinified(text: string): boolean {
   return text.length / lines > MINIFIED_LINE
 }
 
-type Ignored = (abs: string, isDir: boolean) => boolean
+export type Ignored = (abs: string, isDir: boolean) => boolean
 
 const inside = (parent: string, child: string): boolean => {
   const rel = relative(parent, child)
@@ -32,7 +32,7 @@ const inside = (parent: string, child: string): boolean => {
 }
 
 /** The nearest directory at or above dir that holds a .git entry, or null. */
-function repoTop(dir: string): string | null {
+export function repoTop(dir: string): string | null {
   for (let d = dir; ; d = dirname(d)) {
     if (existsSync(join(d, '.git'))) return d
     if (dirname(d) === d) return null
@@ -48,7 +48,7 @@ function ignoreRoot(dir: string, cwd: string): string {
 }
 
 /** Reads .gitignore files from the root down, caching one matcher per directory. */
-function gitignores(root: string): Ignored {
+export function gitignores(root: string): Ignored {
   const cache = new Map<string, Ignore | null>()
   const matcher = (dir: string): Ignore | null => {
     if (cache.has(dir)) return cache.get(dir) ?? null

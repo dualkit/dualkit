@@ -55,8 +55,8 @@ describe('layouts', () => {
     expect(m.layouts.some((l) => l.id === 'div#two')).toBe(false)
   })
 
-  it('reads inline styles and logical properties correctly', async () => {
-    const m = await modelOf(doc('<div style="padding-right:4px">نص</div><div style="margin-inline-start:16px">نص</div>'))
+  it('reads stylesheet rules and logical properties correctly, and leaves inline styles alone', async () => {
+    const m = await modelOf(doc('<div class="p">نص</div><div class="l">نص</div><div style="padding-right:4px">نص</div>').replace('</head>', '<style>.p{padding-right:4px}.l{margin-inline-start:16px}</style></head>'))
     expect(m.layouts).toHaveLength(1)
     expect(m.layouts[0]!.physical[0]!.property).toBe('padding-right')
   })
@@ -138,11 +138,11 @@ describe('real page fixes', () => {
 
   it('reads 5,000 inline spans in one block quickly', async () => {
     const spans = Array.from({ length: 5000 }, (_, i) => `<span>كلمة${i} </span>`).join('')
-    const { ms, texts } = await timeRead(doc(`<pre>${spans}</pre>`))
+    const { ms, texts } = await timeRead(doc(`<pre style="white-space:pre-wrap">${spans}</pre>`))
     expect(texts).toBe(5000)
     expect(ms).toBeLessThan(1500)
     const t = Date.now()
-    const m = await modelOf(doc(`<pre>${spans}</pre>`))
+    const m = await modelOf(doc(`<pre style="white-space:pre-wrap">${spans}</pre>`))
     expect(m.texts).toHaveLength(5000)
     expect(Date.now() - t).toBeLessThan(5000)
   })

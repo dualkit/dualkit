@@ -22,7 +22,7 @@ const HELP = `Usage: dualkit check <url or file> [options]
   --min-score <n>     Exit 1 when the score is below n
   --config <file>     Config file (default dualkit.config.json)
 
-dualkit lint scans source files (CSS, SCSS, HTML, JS, TS, JSX, TSX) and needs no browser:
+dualkit lint scans source files (CSS, SCSS, HTML, Vue, Svelte, JS, TS, JSX, TSX) and needs no browser:
 
   --json              Print the result as JSON instead of the list
   --fail-on <level>   Exit 1 on findings at or above error, warning or note (default error)

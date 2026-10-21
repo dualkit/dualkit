@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { classStrings } from '../src/classes'
 import { parseSource } from '../src/parse'
+import { TAILWIND_RULES } from '../src/rules/tailwind'
+import { lintText } from '../src/run'
+import type { SourceFile } from '../src/types'
 
 /** Every whole class token the file yields, in order. */
 const tokens = (path: string, text: string): string[] => {
@@ -122,5 +125,57 @@ describe('classStrings conditional', () => {
   it('marks fragments under a condition, object key or variant leaf', () => {
     const file = parseSource('a.tsx', "cn('a', x && 'b', y || 'c', z ? 'd' : 'e', { f: g }); cva('h', { variants: { v: { w: 'i' } } })\nexport const A = () => <p className=\"j\" />")!
     expect(classStrings(file).map((f) => `${f.text}:${f.conditional}`)).toEqual(['a:false', 'b:true', 'c:true', 'd:true', 'e:true', 'f:true', 'h:false', 'i:true', 'j:false'])
+  })
+})
+
+describe('deliberate geometry', () => {
+  const jsx = (el: string): SourceFile | null => parseSource('a.tsx', `export const A = () => (${el})`)
+  const html = (el: string): SourceFile | null => parseSource('a.html', `<body>${el}</body>`)
+  const CASES: [string, string][] = [
+    ['<span dir="ltr" className="ml-2" />', '<span dir="ltr" class="ml-2"></span>'],
+    ['<i aria-hidden="true" className="right-2" />', '<i aria-hidden="true" class="right-2"></i>'],
+  ]
+
+  it.each(CASES)('marks %s as deliberate in JSX and HTML', (j, h) => {
+    expect(classStrings(jsx(j)!).map((f) => f.deliberate)).toEqual([true])
+    expect(classStrings(html(h)!).map((f) => f.deliberate)).toEqual([true])
+  })
+
+  it.each(['absolute', 'fixed'])('marks a %s pointer-events-none element as an overlay', (pos) => {
+    expect(classStrings(jsx(`<div className="${pos} pointer-events-none -left-10" />`)!).map((f) => f.overlay)).toEqual([true])
+    expect(classStrings(html(`<div class="${pos} pointer-events-none -left-10"></div>`)!).map((f) => f.overlay)).toEqual([true])
+    expect(classStrings(jsx(`<div className="${pos} left-2" />`)!)[0]?.overlay).toBeUndefined()
+  })
+
+  it('does not mark a plain absolute box or a child of a deliberate one', () => {
+    expect(classStrings(jsx('<div className="absolute left-2" />')!)[0]?.deliberate).toBeUndefined()
+    expect(classStrings(html('<div class="absolute left-2"></div>')!)[0]?.deliberate).toBeUndefined()
+    expect(classStrings(jsx('<div dir="ltr"><b className="ml-2" /></div>')!)[0]?.deliberate).toBeUndefined()
+    expect(classStrings(jsx('<span dir="rtl" className="ml-2" />')!)[0]?.deliberate).toBeUndefined()
+  })
+
+  it('marks classes read from a call inside a deliberate element', () => {
+    expect(classStrings(jsx('<i aria-hidden className={cn("ml-2", on && "mr-1")} />')!).map((f) => f.deliberate)).toEqual([true, true])
+  })
+
+  it('gives physical-tailwind no hit for a deliberate fragment', () => {
+    const ctx = { tailwindVersion: () => '3.4.0' }
+    expect(lintText('a.tsx', 'export const A = () => <i aria-hidden="true" className="ml-2 right-2" />', { rules: TAILWIND_RULES, ctx })).toEqual([])
+    expect(lintText('a.tsx', 'export const A = () => <i className="ml-2" />', { rules: TAILWIND_RULES, ctx })).toHaveLength(1)
+  })
+
+  describe('decorative overlays skip only a negative left or right offset', () => {
+    const ctx = { tailwindVersion: () => '3.4.0' }
+    const hits = (path: string, markup: string): number => lintText(path, path.endsWith('.html') ? `<body>${markup}</body>` : `export const A = () => ${markup}`, { rules: TAILWIND_RULES, ctx }).length
+    const both = (jsxClass: string): number[] => [
+      hits('a.tsx', `<div className="${jsxClass}" />`),
+      hits('a.html', `<div class="${jsxClass}"></div>`),
+    ]
+
+    it('reports a positive offset', () => expect(both('pointer-events-none absolute inset-y-0 right-3')).toEqual([1, 1]))
+    it('skips a negative offset', () => expect(both('pointer-events-none absolute -right-8')).toEqual([0, 0]))
+    it('skips a negative offset under a variant and important', () => expect(both('pointer-events-none absolute md:-left-8 !-right-4')).toEqual([0, 0]))
+    it('still reports a margin beside a negative offset', () => expect(both('pointer-events-none absolute -right-8 mr-2')).toEqual([1, 1]))
+    it('reports a negative offset without pointer-events-none', () => expect(both('absolute -right-8')).toEqual([1, 1]))
   })
 })

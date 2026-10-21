@@ -12,8 +12,11 @@ type Element = DefaultTreeAdapterMap['element']
  * fragment applies only sometimes: under &&, ||, ??, a ternary arm, a clsx object key, or a cva or tv
  * variant, slot or compound value. sided is true when the side is chosen on purpose: a ternary arm whose
  * test compares with 'left' or 'right', or a cva or tv variant value under a left or right key.
+ * deliberate is true when the owning element keeps its geometry on purpose: dir="ltr" or aria-hidden.
+ * overlay is true when the owning element is absolute or fixed and pointer-events-none; only its negative
+ * left and right offsets are decoration, which the rule decides per class.
  */
-export type ClassFragment = { offset: number; text: string; group: number; conditional: boolean; sided?: true }
+export type ClassFragment = { offset: number; text: string; group: number; conditional: boolean; sided?: true; deliberate?: true; overlay?: true }
 
 /** Calls whose string arguments are class lists. cva and tv also take a config object, read by configClasses. */
 const CLASS_CALLS = new Set(['clsx', 'cn', 'cx', 'twMerge', 'twJoin', 'classnames', 'classNames'])
@@ -25,7 +28,7 @@ const COMPOUND_CLASS_KEYS = new Set(['class', 'className'])
 const SPACE = /\s/
 
 type Out = { map: Map<number, ClassFragment>; groups: number }
-type Sink = { file: SourceFile; base: number; out: Out; group: number; conditional: boolean; sided?: true }
+type Sink = { file: SourceFile; base: number; out: Out; group: number; conditional: boolean; sided?: true; deliberate?: true; overlay?: true }
 
 const sometimes = (sink: Sink): Sink => (sink.conditional ? sink : { ...sink, conditional: true })
 
@@ -53,7 +56,7 @@ function emit(sink: Sink, start: number, end: number, cutStart: boolean, cutEnd:
   if (cutEnd) while (to > from && !SPACE.test(text[to - 1]!)) to--
   if (to > from && !sink.out.map.has(from)) {
     const fragment: ClassFragment = { offset: from, text: text.slice(from, to), group: sink.group, conditional: sink.conditional }
-    sink.out.map.set(from, sink.sided ? { ...fragment, sided: true } : fragment)
+    sink.out.map.set(from, { ...fragment, ...(sink.sided ? { sided: true as const } : {}), ...(sink.deliberate ? { deliberate: true as const } : {}), ...(sink.overlay ? { overlay: true as const } : {}) })
   }
 }
 
@@ -185,9 +188,54 @@ function classCall(sink: Sink, node: Node): void {
   if (second) configClasses(sink, second)
 }
 
+/** A bare token in class text, not a variant part or a longer name. */
+const bareToken = (name: string): RegExp => new RegExp(`(?<![\\w:\\[/-])${name}(?![\\w-])`)
+const POINTER_NONE = bareToken('pointer-events-none')
+const OVERLAY = bareToken('(?:absolute|fixed)')
+
+/** An overlay that cannot be hit: it takes no pointer events, so its side is decoration. */
+const isInertOverlay = (classText: string): boolean => POINTER_NONE.test(classText) && OVERLAY.test(classText)
+
+/** dir="ltr" or aria-hidden="true" on an element: its geometry is not part of the reading flow. */
+const isDeliberateAttr = (name: string, value: string | null): boolean =>
+  (name === 'dir' && value?.trim().toLowerCase() === 'ltr') || (name === 'aria-hidden' && (value === null || value.trim().toLowerCase() === 'true'))
+
+function jsxAttrValue(attr: Node): string | null | undefined {
+  if (attr.type !== 'JSXAttribute') return undefined
+  const value = attr.value
+  if (!value) return null
+  if (value.type === 'StringLiteral') return value.value
+  if (value.type !== 'JSXExpressionContainer') return undefined
+  const e = value.expression
+  if (e.type === 'StringLiteral') return e.value
+  if (e.type === 'BooleanLiteral') return String(e.value)
+  return undefined
+}
+
+/** What a JSX opening element keeps on purpose: a deliberate attribute, or a class list that makes it an inert overlay. */
+function jsxMarks(sink: Sink, node: Node): { deliberate: boolean; overlay: boolean } {
+  const marks = { deliberate: false, overlay: false }
+  if (node.type !== 'JSXOpeningElement') return marks
+  for (const attr of node.attributes) {
+    if (attr.type !== 'JSXAttribute' || attr.name.type !== 'JSXIdentifier') continue
+    const name = attr.name.name
+    if (CLASS_ATTRS.has(name)) {
+      if (attr.start != null && attr.end != null && isInertOverlay(sink.file.text.slice(sink.base + attr.start, sink.base + attr.end))) marks.overlay = true
+      continue
+    }
+    const value = jsxAttrValue(attr)
+    if (value !== undefined && isDeliberateAttr(name, value)) marks.deliberate = true
+  }
+  return marks
+}
+
 const SKIP_KEYS = new Set(['loc', 'leadingComments', 'trailingComments', 'innerComments', 'extra'])
 
-function visit(sink: Sink, node: Node): void {
+function visit(parent: Sink, node: Node): void {
+  const marks = jsxMarks(parent, node)
+  const sink = marks.deliberate || marks.overlay
+    ? { ...parent, ...(marks.deliberate ? { deliberate: true as const } : {}), ...(marks.overlay ? { overlay: true as const } : {}) }
+    : parent
   if (node.type === 'JSXAttribute' && node.name.type === 'JSXIdentifier' && CLASS_ATTRS.has(node.name.name)) {
     const value = node.value
     const attr = { ...sink, group: nextGroup(sink.out) }
@@ -226,7 +274,12 @@ function htmlClasses(file: SourceFile, out: Out): void {
     if (!head) continue
     const start = loc.startOffset + head[0].length
     const end = loc.endOffset - (head[1] ? 1 : 0)
-    if (end > start) out.map.set(start, { offset: start, text: file.text.slice(start, end), group: nextGroup(out), conditional: false })
+    if (end <= start) continue
+    const text = file.text.slice(start, end)
+    const attr = (name: string): string | null => el.attrs.find((a) => a.name === name)?.value ?? null
+    const deliberate = isDeliberateAttr('dir', attr('dir')) || (el.attrs.some((a) => a.name === 'aria-hidden') && isDeliberateAttr('aria-hidden', attr('aria-hidden')))
+    const overlay = isInertOverlay(text)
+    out.map.set(start, { offset: start, text, group: nextGroup(out), conditional: false, ...(deliberate ? { deliberate: true as const } : {}), ...(overlay ? { overlay: true as const } : {}) })
   }
 }
 

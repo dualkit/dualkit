@@ -20,13 +20,17 @@ export const arabicLeading = defineRule({
     .map((t) => ({ node: pick(t), message: `Line height is ${((t.font.lineHeight ?? 0) / t.font.size).toFixed(2)} on "${excerpt(t.text)}".` })),
 })
 
+/** Letter-spacing shows from this fraction of the font size (0.4px at 16px). */
+const MIN_TRACKING_EM = 0.025
+const TRACKING_EPSILON = 1e-9
+
 export const arabicTracking = defineRule({
   id: 'type/arabic-tracking', group: 'type', severity: 'error',
   title: 'Letter-spacing on Arabic',
   why: 'Arabic letters join, and letter-spacing pulls the joins apart.',
   fix: 'Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.',
   check: (m) => arabicRuns(m)
-    .filter((t) => Math.abs(t.font.letterSpacing) > 0.01)
+    .filter((t) => Math.abs(t.font.letterSpacing) >= t.font.size * MIN_TRACKING_EM - TRACKING_EPSILON)
     .map((t) => ({ node: pick(t), message: `${t.font.letterSpacing}px letter-spacing on "${excerpt(t.text)}".` })),
 })
 

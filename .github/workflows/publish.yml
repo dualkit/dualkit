@@ -5,7 +5,7 @@ on:
       package:
         description: Which package to publish
         type: choice
-        options: [format, starter, rules, lint, cli] # publish lint before cli, which depends on it
+        options: [format, starter, rules, lint, cli] # publish rules, then lint, then cli: each pins the one before it
         default: format
         required: true
       tag:

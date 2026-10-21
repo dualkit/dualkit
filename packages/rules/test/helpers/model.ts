@@ -15,7 +15,7 @@ const run = (p: Partial<TextRun>): TextRun => ({
   font: { families: ['IBM Plex Sans Arabic', 'sans-serif'], size: 16, lineHeight: 27, letterSpacing: 0, style: 'normal', weight: 400 },
   lines: 1, signs: [], mirrored: false, mirroredBy: null, ...p,
 })
-export const layout = (p: Partial<LayoutNode> = {}): LayoutNode => ({ ...base, dir: 'rtl', textAlign: 'start', hasOwnText: true, hasArabicText: true, physical: [], ...p })
+export const layout = (p: Partial<LayoutNode> = {}): LayoutNode => ({ ...base, dir: 'rtl', textAlign: 'start', hasOwnText: true, hasArabicText: true, textSlack: 100, physical: [], ...p })
 export const icon = (p: Partial<IconNode> = {}): IconNode => ({ ...base, name: 'arrow-right', dir: 'rtl', mirrored: false, turned: false, ...p })
 export const clip = (p: Partial<ClipNode> = {}): ClipNode => ({ ...base, axis: 'x', hidden: 40, ellipsis: false, hasArabic: true, ...p })
 export const field = (p: Partial<FieldNode> = {}): FieldNode => ({ ...base, kind: 'email', dir: 'rtl', dirAttr: null, placeholder: '', placeholderShown: true, placeholderSide: 'left', ...p })

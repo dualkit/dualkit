@@ -2,6 +2,8 @@ import { parse as parseBabel, type ParserPlugin } from '@babel/parser'
 import { parse as parseHtml, type DefaultTreeAdapterMap } from 'parse5'
 import { parse as parseCss } from 'postcss'
 import scss from 'postcss-scss'
+import { templateCss } from './css-in-js'
+import { maskSvelteExpressions } from './svelte-mask'
 import type { CssBlock, JsBlock, JsLang, Lang, SourceFile } from './types'
 
 type Node = DefaultTreeAdapterMap['node']
@@ -10,7 +12,7 @@ type Element = DefaultTreeAdapterMap['element']
 const BOM = '﻿'
 
 const LANG_BY_EXT: Readonly<Record<string, Lang>> = {
-  '.css': 'css', '.scss': 'scss', '.html': 'html', '.htm': 'html',
+  '.css': 'css', '.scss': 'scss', '.html': 'html', '.htm': 'html', '.vue': 'vue', '.svelte': 'svelte',
   '.js': 'js', '.mjs': 'js', '.cjs': 'js', '.jsx': 'jsx',
   '.ts': 'ts', '.mts': 'ts', '.cts': 'ts', '.tsx': 'tsx',
 }
@@ -67,8 +69,22 @@ function inner(el: Element, text: string): { text: string; offset: number } | nu
   return { text: text.slice(start, loc.endTag.startOffset), offset: start }
 }
 
-function parseHtmlFile(text: string): Pick<SourceFile, 'css' | 'js' | 'html'> {
-  const html = parseHtml(text, { sourceCodeLocationInfo: true })
+const attr = (el: Element, name: string): string =>
+  (el.attrs.find((a) => a.name === name)?.value ?? '').trim().toLowerCase()
+
+/** Style languages that are not CSS or SCSS: a component's block in one of these is skipped, not an error. */
+const SKIPPED_STYLE_LANGS = new Set(['less', 'stylus', 'styl', 'sass'])
+
+/** A <template lang="pug"> or similar is not HTML, so its content is not read as markup. */
+function dropForeignTemplates(html: Node): void {
+  for (const el of elements(html)) {
+    const lang = attr(el, 'lang')
+    if (el.tagName === 'template' && lang !== '' && lang !== 'html' && 'content' in el) (el.content as { childNodes: Node[] }).childNodes = []
+  }
+}
+
+function parseHtmlFile(text: string, component = false, markup: string = text): Pick<SourceFile, 'css' | 'js' | 'html'> {
+  const html = parseHtml(markup, { sourceCodeLocationInfo: true })
   const css: CssBlock[] = []
   const js: JsBlock[] = []
   for (const el of elements(html)) {
@@ -76,12 +92,21 @@ function parseHtmlFile(text: string): Pick<SourceFile, 'css' | 'js' | 'html'> {
     const body = inner(el, text)
     if (!body || body.text.trim() === '') continue
     if (el.tagName === 'style') {
-      css.push(parseStyle(body.text, 'css', body.offset))
+      const styleLang = component ? attr(el, 'lang') : ''
+      if (SKIPPED_STYLE_LANGS.has(styleLang)) continue
+      css.push(parseStyle(body.text, styleLang === 'scss' ? 'scss' : 'css', body.offset))
       continue
     }
-    const type = (el.attrs.find((a) => a.name === 'type')?.value ?? '').trim().toLowerCase()
-    if (JS_TYPES.has(type)) js.push(parseJs(body.text, type === 'text/jsx' || type === 'text/babel' ? 'jsx' : 'js', body.offset))
+    const type = attr(el, 'type')
+    if (!JS_TYPES.has(type)) continue
+    if (component) {
+      const scriptLang = attr(el, 'lang')
+      js.push(parseJs(body.text, scriptLang === 'tsx' ? 'tsx' : scriptLang === 'ts' ? 'ts' : 'js', body.offset))
+    } else {
+      js.push(parseJs(body.text, type === 'text/jsx' || type === 'text/babel' ? 'jsx' : 'js', body.offset))
+    }
   }
+  if (component) dropForeignTemplates(html)
   return { css, js, html }
 }
 
@@ -102,7 +127,12 @@ export function parseSourceOutcome(path: string, rawText: string, abs: string = 
   try {
     if (lang === 'css' || lang === 'scss') return { file: { ...base, css: [parseStyle(text, lang, 0)], js: [], html: null } }
     if (lang === 'html') return { file: { ...base, ...parseHtmlFile(text) } }
-    return { file: { ...base, css: [], js: [parseJs(text, lang, 0)], html: null } }
+    if (lang === 'vue' || lang === 'svelte') {
+      const parsed = parseHtmlFile(text, true, lang === 'svelte' ? maskSvelteExpressions(text) : text)
+      return { file: { ...base, ...parsed, css: [...parsed.css, ...parsed.js.flatMap((b) => templateCss(b, text))] } }
+    }
+    const block = parseJs(text, lang, 0)
+    return { file: { ...base, css: templateCss(block, text), js: [block], html: null } }
   } catch (err) {
     return { error: oneLine(err) }
   }

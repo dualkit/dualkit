@@ -27,7 +27,13 @@ const harness = (cwd: string) => {
   }
 }
 
+/** physical-css, a note. */
 const WARN = '.a { margin-left: 8px; }\n'
+/** physical-tailwind, a warning. It needs a Tailwind version from package.json. */
+const WARN_TW = '<div class="ml-4"></div>\n'
+const TAILWIND = JSON.stringify({ devDependencies: { tailwindcss: '^3.4.0' } })
+/** A locale file is a right-to-left signal, so the physical finding is reported on its own instead of collapsing into the repo note. */
+const RTL = { 'locales/ar.json': '{}' }
 const CLEAN = '.a { margin-inline-start: 8px; }\n'
 
 describe('dualkit lint', () => {
@@ -38,9 +44,16 @@ describe('dualkit lint', () => {
   })
 
   it('exits 0 on warnings at the default fail-on, 1 at --fail-on warning', async () => {
-    const cwd = project({ 'a.css': WARN })
+    const cwd = project({ 'a.html': WARN_TW, 'package.json': TAILWIND, ...RTL })
     expect(await run(['lint', '.'], harness(cwd).io)).toBe(0)
     expect(await run(['lint', '.', '--fail-on', 'warning'], harness(cwd).io)).toBe(1)
+    expect(await run(['lint', '.', '--fail-on', 'note'], harness(cwd).io)).toBe(1)
+  })
+
+  it('a note does not fail at --fail-on warning, only at --fail-on note', async () => {
+    const cwd = project({ 'a.css': WARN, ...RTL })
+    expect(await run(['lint', '.'], harness(cwd).io)).toBe(0)
+    expect(await run(['lint', '.', '--fail-on', 'warning'], harness(cwd).io)).toBe(0)
     expect(await run(['lint', '.', '--fail-on', 'note'], harness(cwd).io)).toBe(1)
   })
 
@@ -69,15 +82,15 @@ describe('dualkit lint', () => {
   })
 
   it('prints path:line:col lines and totals', async () => {
-    const t = harness(project({ 'a.css': WARN }))
+    const t = harness(project({ 'a.css': WARN, ...RTL }))
     await run(['lint', '--fail-on', 'error'], t.io)
     const text = t.out.join('')
-    expect(text).toMatch(/a\.css:1:\d+ {2}▲ /)
-    expect(text).toMatch(/0 errors, 1 warning, 0 notes in 1 file/)
+    expect(text).toMatch(/a\.css:1:\d+ {2}· /)
+    expect(text).toMatch(/0 errors, 0 warnings, 1 note in 1 file/)
   })
 
   it('config ignore drops a lint id, rejects unknown ids, accepts check ids', async () => {
-    const cwd = project({ 'a.css': WARN })
+    const cwd = project({ 'a.css': WARN, ...RTL })
     const first = harness(cwd)
     await run(['lint', '--json'], first.io)
     const id = (JSON.parse(first.out.join('')) as LintResult).findings[0]!.rule
@@ -100,7 +113,21 @@ describe('dualkit lint', () => {
 })
 
 describe('formatLint', () => {
-  const base: LintResult = { root: '/x', files: 2, skipped: [], findings: [] }
+  const base: LintResult = { root: '/x', files: 2, skipped: [], findings: [], quiet: [] }
+  it('lists quiet files, one line per reason', () => {
+    const text = formatLint({ ...base, quiet: [{ reason: 'flipped', files: 2249, flipper: 'rtlcss' }, { reason: 'example', files: 12 }, { reason: 'generated', files: 3 }, { reason: 'email', files: 5 }] }, false)
+    expect(text).toContain('Skipped physical rules in 2,249 files flipped by rtlcss.')
+    expect(text).toContain('Skipped physical rules in 12 example files.')
+    expect(text).toContain('Skipped physical rules in 3 generated files.')
+    expect(text).toContain('Skipped physical rules in 5 email templates.')
+  })
+  it('uses singular nouns for one file', () => {
+    const text = formatLint({ ...base, quiet: [{ reason: 'email', files: 1 }, { reason: 'example', files: 1 }, { reason: 'generated', files: 1 }, { reason: 'flipped', files: 1, flipper: 'rtlcss' }] }, false)
+    expect(text).toContain('in 1 email template.')
+    expect(text).toContain('in 1 example file.')
+    expect(text).toContain('in 1 generated file.')
+    expect(text).toContain('in 1 file flipped by rtlcss.')
+  })
   it('says no issues, and leaves skipped files to formatSkipped', () => {
     const result = { ...base, skipped: [{ file: 'big.js', reason: 'minified' }] }
     const text = formatLint(result, false)

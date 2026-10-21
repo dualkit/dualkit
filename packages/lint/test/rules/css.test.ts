@@ -15,7 +15,7 @@ describe('registration', () => {
   it('registers the three rules with the right severities and no em dashes', () => {
     const mine = RULES.filter((r) => IDS.includes(r.id))
     expect(mine.map((r) => [r.id, r.severity])).toEqual([
-      ['source/physical-css', 'warning'], ['source/arabic-letter-spacing', 'error'], ['source/dir-attribute-selector', 'note'],
+      ['source/physical-css', 'note'], ['source/arabic-letter-spacing', 'error'], ['source/dir-attribute-selector', 'note'],
     ])
     for (const r of mine) expect(`${r.title}${r.why}${r.fix}`).not.toContain('—')
   })
@@ -57,7 +57,7 @@ describe('source/physical-css', () => {
         const f = physical(`.a { ${decl} }`, path)
         expect(f).toHaveLength(1)
         expect(f[0]!.message).toContain(logical)
-        expect(f[0]).toMatchObject({ severity: 'warning', line: 1, column: 6 })
+        expect(f[0]).toMatchObject({ severity: 'note', line: 1, column: 6 })
       })
     }
   }

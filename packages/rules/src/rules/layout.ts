@@ -5,6 +5,9 @@ import { excerpt, hasArabic } from '../text'
 /** Under this many Arabic words a block is a label, such as a language switcher, not a paragraph. */
 const MIN_ARABIC_WORDS = 3
 
+/** Text must sit at least this many px short of its box for text-align to show. */
+const MIN_TEXT_SLACK = 4
+
 const SPACING = /^(margin|padding)-(left|right)$/
 
 const firstPhysical = (layouts: LayoutNode[], match: (property: string) => boolean): Hit[] =>
@@ -16,7 +19,7 @@ const firstPhysical = (layouts: LayoutNode[], match: (property: string) => boole
     })
 
 export const physicalSpacing = defineRule({
-  id: 'layout/physical-spacing', group: 'layout', severity: 'warning',
+  id: 'layout/physical-spacing', group: 'layout', severity: 'note',
   title: 'Spacing that does not mirror',
   why: 'margin-left and padding-right stay put when the layout flips, so gaps end up on the wrong side.',
   fix: 'Use margin-inline-start, padding-inline-end and the other logical properties.',
@@ -24,7 +27,7 @@ export const physicalSpacing = defineRule({
 })
 
 export const physicalInset = defineRule({
-  id: 'layout/physical-inset', group: 'layout', severity: 'warning',
+  id: 'layout/physical-inset', group: 'layout', severity: 'note',
   title: 'Position, float or border that does not mirror',
   why: 'left, right, float and one-sided borders or corners stay on the same side when the layout flips.',
   fix: 'Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.',
@@ -37,7 +40,7 @@ export const textAlignLeft = defineRule({
   why: 'text-align: left pins right-to-left text to the wrong edge.',
   fix: 'Use text-align: start.',
   check: (m) => m.layouts
-    .filter((l) => l.dir === 'rtl' && l.hasOwnText && l.hasArabicText && l.textAlign === 'left')
+    .filter((l) => l.dir === 'rtl' && l.hasOwnText && l.hasArabicText && l.textAlign === 'left' && l.textSlack >= MIN_TEXT_SLACK)
     .map((l) => ({ node: pick(l), message: 'This right-to-left text is aligned left.' })),
 })
 

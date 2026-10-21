@@ -44,14 +44,14 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 <a id="layout-physical-spacing"></a>
 ### `layout/physical-spacing` Spacing that does not mirror
 
-**warning.** margin-left and padding-right stay put when the layout flips, so gaps end up on the wrong side.
+**note.** margin-left and padding-right stay put when the layout flips, so gaps end up on the wrong side.
 
 **Fix:** Use margin-inline-start, padding-inline-end and the other logical properties.
 
 <a id="layout-physical-inset"></a>
 ### `layout/physical-inset` Position, float or border that does not mirror
 
-**warning.** left, right, float and one-sided borders or corners stay on the same side when the layout flips.
+**note.** left, right, float and one-sided borders or corners stay on the same side when the layout flips.
 
 **Fix:** Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.
 
@@ -235,3 +235,9 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 - A word counts as split only when both halves sit in one line of inline content, with no list item, table cell, block, or flex or grid item between them, and the two letters at the boundary touch on the same line, less than 1px apart. Separate boxes with no space between them in the markup, such as nav links, tabs, table cells or a badge with a margin, are not one word.
 - A webfont with the default unicode-range counts as Arabic when its name says so, or when it draws alef (U+0627) at a width different from its own missing-glyph box and from the sans-serif or serif fallback, by more than 0.5px at 48px. A font whose alef matched every fallback that closely would be missed.
 - The Arabic placeholder check reads where the hint lands from text-align on the field and on ::placeholder, with start and end resolved against the field's direction. It runs only on right-to-left pages.
+- Every rule reads only what a reader can see. An element is skipped when its box, cut to the viewport's width and to each ancestor that clips overflow, has no width left, as with off-canvas menus and inactive carousel slides. Absolute elements are cut only by their containing block and the ancestors above it, and fixed ones by none.
+- layout/physical-spacing and layout/physical-inset are notes now, not warnings. On real pages they mostly flagged sides that were already right to left, such as a margin that a script or a framework flips for Arabic, so they are kept as a hint to check rather than a defect.
+- layout/physical-spacing and layout/physical-inset skip a declaration when the selector that matched the element is scoped to right to left (:dir(rtl), [dir=rtl], .rtl, [lang^=ar], [lang|=ar], [lang=ar] or :lang(ar)), judged per selector in a comma list. Inline styles are skipped too, because script sets them already computed for the direction. A scope inside :not(), at any depth, does not count as scoped.
+- layout/text-align-left flags a block only when its text sits at least 4px short of its content box, so text that fills its box or a shrink-wrapped inline-block is not flagged, and only when Arabic is at least half of the block's own letters.
+- type/arabic-tracking flags letter-spacing of 0.025em or more of the font size (0.4px at 16px), so 0.15px at 16px passes and 0.5px at 9px does not.
+- Findings are named by the element's id (only when it is unique and does not look generated), then its data-testid, then a class combination that is unique on the page, and only then by a path of tags and nth-of-type positions.

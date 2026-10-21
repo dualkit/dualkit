@@ -1,20 +1,52 @@
 import type { Container, Declaration, Rule } from 'postcss'
 import { directionScoped, fullSelectors, targetsArabic, withoutDirection } from '../selectors'
-import type { LintHit, LintRule, SourceFile } from '../types'
+import type { CssBlock, LintHit, LintRule, SourceFile } from '../types'
 
-const CSS_LANGS = ['css', 'scss', 'html'] as const
+const CSS_LANGS = ['css', 'scss', 'html', 'vue', 'svelte', 'js', 'jsx', 'ts', 'tsx'] as const
 
 /** Calls visit for every declaration with its offset in the file text and its enclosing rule, if any. */
-function eachDeclaration(file: SourceFile, visit: (decl: Declaration, offset: number, rule: Rule | null) => void): void {
+function eachDeclaration(
+  file: SourceFile,
+  visit: (decl: Declaration, offset: number, rule: Rule | null, shown: string, block: CssBlock) => void,
+  skip?: (block: CssBlock) => boolean,
+): void {
   for (const block of file.css) {
+    if (skip?.(block)) continue
     block.root.walkDecls((decl) => {
       const start = decl.source?.start?.offset
       if (start === undefined) return
       let parent = decl.parent as Container | undefined
       while (parent && parent.type !== 'rule') parent = parent.parent as Container | undefined
-      visit(decl, block.offset + start, (parent as Rule | undefined) ?? null)
+      const end = decl.source?.end?.offset ?? start
+      visit(decl, block.offset + start, (parent as Rule | undefined) ?? null, shownValue(file, block, decl, block.offset + start, block.offset + end + 1), block)
     })
   }
+}
+
+const SHOWN_MAX = 60
+
+/**
+ * The value to print in a message. In CSS from a template literal the parsed value may hold filler that stands in
+ * for a `${...}`, so the source text is shown instead, on one line and cut when long.
+ */
+function shownValue(file: SourceFile, block: CssBlock, decl: Declaration, from: number, to: number): string {
+  if (!block.fromTemplate) return normalise(decl.value)
+  const value = sourceValue(file.text.slice(from, to))
+  return value.length > SHOWN_MAX ? `${value.slice(0, SHOWN_MAX - 1)}…` : value
+}
+
+/** The value of a declaration as written in the source, on one line. */
+function sourceValue(raw: string): string {
+  const colon = raw.indexOf(':')
+  return (colon === -1 ? raw : raw.slice(colon + 1)).replace(/;\s*$/, '').replace(/\s+/g, ' ').trim()
+}
+
+/** A template declaration's value as written, so two `${...}` can be compared by their source text. */
+function templateValue(file: SourceFile, block: CssBlock, decl: Declaration): string | null {
+  const start = decl.source?.start?.offset
+  const end = decl.source?.end?.offset
+  if (start === undefined || end === undefined) return null
+  return sourceValue(file.text.slice(block.offset + start, block.offset + end + 1))
 }
 
 const ZERO_WITH_UNIT = /(^|[\s(,])[+-]?0*\.?0+[a-z%]*(?=$|[\s),])/g
@@ -72,11 +104,17 @@ function isCentring(decl: Declaration, prop: string, value: string): boolean {
   })
 }
 
-function hasSymmetricSibling(decl: Declaration, prop: string, value: string): boolean {
+/** The filler for a `${...}` in template CSS: two interpolations are equal only when their source text is. */
+const PLACEHOLDER = /\$x+/
+
+function hasSymmetricSibling(decl: Declaration, prop: string, value: string, sourceOf: (d: Declaration) => string | null): boolean {
   const opposite = OPPOSITE[prop]
   const parent = decl.parent
   if (!opposite || !parent) return false
-  return (parent.nodes ?? []).some((n) => n.type === 'decl' && n.prop.toLowerCase() === opposite && normalise(n.value) === value)
+  const siblings = (parent.nodes ?? []).filter((n): n is Declaration => n.type === 'decl' && n.prop.toLowerCase() === opposite)
+  if (!PLACEHOLDER.test(value)) return siblings.some((n) => normalise(n.value) === value)
+  const own = sourceOf(decl)
+  return own !== null && siblings.some((n) => sourceOf(n) === own)
 }
 
 /** Shorthands that also set a physical property, so an override written with them resets it. */
@@ -124,25 +162,30 @@ function physicalFix(prop: string, value: string): string | null {
 
 const physicalCss: LintRule = {
   id: 'source/physical-css',
-  severity: 'warning',
+  severity: 'note',
   title: 'Use logical CSS properties instead of left and right',
   why: 'A physical left or right property stays on the same side in Arabic, so the margin, padding, border, offset or alignment is on the wrong edge and the layout looks unbalanced.',
   fix: 'Use the logical property, such as margin-inline-start, padding-inline-end, inset-inline-start or text-align: start, so the side follows the reading direction.',
   langs: CSS_LANGS,
-  check: (file) => {
+  check: (file, ctx) => {
+    const quiet = ctx.physicalQuiet?.(file)
+    if (quiet && quiet !== 'flipped') return []
     const hits: LintHit[] = []
     const overrides = directionOverrides(file)
-    eachDeclaration(file, (decl, offset, rule) => {
+    // A flipper only mirrors the CSS it processes, which differs by block: see blockFlipper in run.ts.
+    const flipped = (block: CssBlock): boolean => ctx.blockFlipper?.(file, block) != null
+    eachDeclaration(file, (decl, offset, rule, shown, block) => {
       const prop = decl.prop.toLowerCase()
       if (prop.startsWith('-') || prop.includes('#{') || prop.includes('$') || prop.includes('@')) return
       const value = normalise(decl.value)
       const logical = physicalFix(prop, value)
       if (!logical) return
-      if (PHYSICAL_PROPS[prop] ? hasSymmetricSibling(decl, prop, value) || isOffscreen(prop, value) || isCentring(decl, prop, value) : false) return
+      const sourceOf = (d: Declaration): string | null => templateValue(file, block, d)
+      if (PHYSICAL_PROPS[prop] ? hasSymmetricSibling(decl, prop, value, sourceOf) || isOffscreen(prop, value) || isCentring(decl, prop, value) : false) return
       if (rule && fullSelectors(rule).every(directionScoped)) return
       if (overridden(rule, prop, overrides)) return
-      hits.push({ offset, message: `\`${prop}: ${normalise(decl.value)}\` is tied to one side. Use \`${logical}\`.` })
-    })
+      hits.push({ offset, message: `\`${prop}: ${shown}\` is tied to one side. Use \`${logical}\`.` })
+    }, flipped)
     return hits
   },
 }
@@ -177,13 +220,13 @@ const arabicLetterSpacing: LintRule = {
   langs: CSS_LANGS,
   check: (file) => {
     const hits: LintHit[] = []
-    eachDeclaration(file, (decl, offset, rule) => {
+    eachDeclaration(file, (decl, offset, rule, shown) => {
       if (decl.prop.toLowerCase() !== 'letter-spacing' || !rule) return
       const value = normalise(decl.value)
       if (NEUTRAL_SPACING.test(value) || UNKNOWN_VALUE.test(value)) return
       const arabic = fullSelectors(rule).find((s) => targetsArabic(s) && !codeSubject(s))
       if (arabic === undefined) return
-      hits.push({ offset, message: `\`letter-spacing: ${value}\` on \`${arabic.trim()}\` breaks the joins between Arabic letters.` })
+      hits.push({ offset, message: `\`letter-spacing: ${shown}\` on \`${arabic.trim()}\` breaks the joins between Arabic letters.` })
     })
     return hits
   },

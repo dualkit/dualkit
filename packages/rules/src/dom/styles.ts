@@ -9,7 +9,61 @@ const hasPhysical = (decl: CSSStyleDeclaration): boolean => {
   return false
 }
 
-/** Finds which elements author a physical (left/right) property, in any readable stylesheet or inline style. */
+const RTL_SIGNALS: RegExp[] = [
+  /:dir\(\s*["']?rtl["']?\s*\)/i,
+  /\[\s*dir\s*=\s*["']?\s*rtl\s*["']?(\s+[is])?\s*\]/i,
+  /\.rtl(?![\w\\-])/,
+  /\[\s*lang\s*[\^|]?=\s*["']?\s*ar(?![a-z])/i,
+  /:lang\(\s*["']?\s*ar(?![a-z])/i,
+]
+
+/** Removes every :not(...) with its balanced contents, at any depth, since a scope inside a negation excludes it. */
+function stripNegations(selector: string): string {
+  let out = ''
+  for (let i = 0; i < selector.length; i++) {
+    if (selector[i] === '\\') { out += selector.slice(i, i + 2); i++; continue }
+    if (!selector.startsWith(':not(', i)) { out += selector[i]; continue }
+    let depth = 0
+    let j = i + 4
+    for (; j < selector.length; j++) {
+      if (selector[j] === '\\') j++
+      else if (selector[j] === '(') depth++
+      else if (selector[j] === ')' && --depth === 0) break
+    }
+    i = j
+  }
+  return out
+}
+
+/** True when any part of the selector only applies to right-to-left or Arabic content, so a physical side in it is deliberate. */
+export function rtlScoped(selector: string): boolean {
+  const positive = stripNegations(selector)
+  return RTL_SIGNALS.some((signal) => signal.test(positive))
+}
+
+/** Splits a selector list at its top-level commas, leaving commas inside brackets, parentheses and quotes alone. */
+function splitList(list: string): string[] {
+  const parts: string[] = []
+  let depth = 0
+  let quote = ''
+  let from = 0
+  for (let i = 0; i < list.length; i++) {
+    const c = list[i]
+    if (c === '\\') i++
+    else if (quote) { if (c === quote) quote = '' }
+    else if (c === '"' || c === "'") quote = c
+    else if (c === '(' || c === '[') depth++
+    else if (c === ')' || c === ']') depth--
+    else if (c === ',' && depth === 0) { parts.push(list.slice(from, i)); from = i + 1 }
+  }
+  parts.push(list.slice(from))
+  return parts.map((p) => p.trim()).filter(Boolean)
+}
+
+/**
+ * Finds which elements author a physical (left/right) property in a readable stylesheet. Declarations whose matching
+ * selector is right-to-left scoped are skipped, and so are inline styles (set by script, already computed for the direction).
+ */
 export function authoredPhysical(doc: Document, win: Window): { authored: Authored; unreadable: number } {
   const authored: Authored = new Map()
   let unreadable = 0
@@ -27,15 +81,17 @@ export function authoredPhysical(doc: Document, win: Window): { authored: Author
       if ('media' in rule && !win.matchMedia((rule.media as MediaList).mediaText || 'all').matches) continue
       if ('styleSheet' in rule && rule.styleSheet) walkSheet(rule.styleSheet as CSSStyleSheet)
       if ('selectorText' in rule && 'style' in rule && hasPhysical(rule.style as CSSStyleDeclaration)) {
-        let els: Element[] = []
-        try { els = Array.from(doc.querySelectorAll(String(rule.selectorText))) } catch { els = [] }
-        for (const el of els) add(el, rule.style as CSSStyleDeclaration)
+        for (const selector of splitList(String(rule.selectorText))) {
+          if (rtlScoped(selector)) continue
+          let els: Element[] = []
+          try { els = Array.from(doc.querySelectorAll(selector)) } catch { els = [] }
+          for (const el of els) add(el, rule.style as CSSStyleDeclaration)
+        }
       }
       if ('cssRules' in rule && rule.cssRules) walk(rule.cssRules as CSSRuleList)
     }
   }
   for (const sheet of Array.from(doc.styleSheets)) walkSheet(sheet)
-  for (const el of Array.from(doc.querySelectorAll('[style]'))) add(el, (el as HTMLElement).style)
   return { authored, unreadable }
 }
 
