@@ -43,6 +43,8 @@ function stub(replies: Generated[]) {
 const run = (store: ReturnType<typeof makeStore>, generate: Generate) =>
   loopBuild({ key, model, screen, generate, store, scorer: (h) => scorer(h), shoot: async (png) => Buffer.from(`webp of ${png}`) })
 
+const down = (error: string): Generated => ({ ok: false, error, ms: 3 })
+
 describe('harm', () => {
   it('lists rules failed after and not before, and parts lost', () => {
     const out = harm({ failed: ['a', 'b'], missing: ['x'], text: '' }, { failed: ['b', 'c'], missing: ['x', 'y'], text: '' })
@@ -51,6 +53,14 @@ describe('harm', () => {
   it('keeps 0.5 of the Arabic when half the letters go', () => {
     expect(harm({ failed: [], missing: [], text: 'ابتث 12' }, { failed: [], missing: [], text: 'اب hi' }).arabicKept).toBe(0.5)
     expect(harm({ failed: [], missing: [], text: 'اا' }, { failed: [], missing: [], text: 'ا' }).arabicKept).toBe(0.5)
+  })
+  it('counts lint rules failed after and not before', async () => {
+    const store = setup(page(['a']))
+    const spaced = page([]).replace('<p>', '<style>:lang(ar) p { letter-spacing: 2px }</style><p>')
+    const { generate } = stub([reply(fenced(spaced))])
+    const out = (await run(store, generate))!
+    const rounds = out.record.ok ? out.record.rounds! : []
+    expect(rounds[0]).toMatchObject({ ok: true, regressed: ['source/arabic-letter-spacing'] })
   })
   it('is 1 when there was no Arabic before', () => {
     expect(harm({ failed: [], missing: [], text: 'hello' }, { failed: [], missing: [], text: '' }).arabicKept).toBe(1)
@@ -79,6 +89,32 @@ describe('loopBuild', () => {
     expect(rounds[0]).toMatchObject({ ok: false, error: 'Render failed: boom', rulesPassed: null, score: null, arabicKept: null })
     expect(rounds[1]).toMatchObject({ ok: true, rulesPassed: 20 })
     expect(out.record).toMatchObject({ rulesPassed: 20, score: 100 })
+  })
+  it('fails the build, keeping the usage spent, on a provider error that may clear', async () => {
+    for (const error of ['HTTP 503: down', 'HTTP 429: slow', 'Network error: reset', 'Timed out after 600 s', 'HTTP 401: no']) {
+      const store = setup(page(['a', 'b']))
+      const { generate } = stub([reply(fenced(page(['b']))), down(error)])
+      const out = (await run(store, generate))!
+      expect(out.record).toMatchObject({ ok: false, error, usage: { input: 10, output: 20 }, ms: 5 })
+      expect(out.html).toBeNull()
+    }
+  })
+  it('records a provider error that will not clear as a failed round and keeps the last good page', async () => {
+    const store = setup(page(['a', 'b']))
+    const better = page(['b'])
+    const { generate } = stub([reply(fenced(better)), down('HTTP 400: context too long')])
+    const out = (await run(store, generate))!
+    expect(out.html).toBe(better)
+    expect(out.record).toMatchObject({ ok: true, rulesPassed: 19 })
+    const rounds = out.record.ok ? out.record.rounds! : []
+    expect(rounds[1]).toMatchObject({ ok: false, error: 'HTTP 400: context too long', reply: null, usage: null, rulesPassed: null })
+  })
+  it('fails the build without a call when the dualkit page will not render again', async () => {
+    const store = setup(page(['a'], 'BROKEN'))
+    const { generate, calls } = stub([])
+    const out = (await run(store, generate))!
+    expect(calls).toHaveLength(0)
+    expect(out.record).toMatchObject({ ok: false, error: 'Render failed: boom', usage: null })
   })
   it('does not try and writes nothing when the dualkit build failed or its page is missing', async () => {
     const failed = setup(null, false)

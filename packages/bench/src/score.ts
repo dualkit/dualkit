@@ -14,6 +14,8 @@ export type Scored =
   | { ok: false; error: string }
 
 export const RULE_COUNT = RULES.length
+/** Distinct rules with a warning or error; notes never count as failed. */
+export const failedRules = (findings: readonly { rule: string; severity: string }[]) => [...new Set(findings.filter((f) => f.severity !== 'note').map((f) => f.rule))]
 export const SCORE_DEADLINE_MS = 90_000
 const GOTO_MS = 30_000
 const LOAD_MS = 10_000
@@ -116,7 +118,7 @@ export async function scoreHtml(html: string, required: readonly RequiredPart[],
         message: f.message, fix: f.fix, snippet: f.node?.snippet ?? null,
       }))
       return {
-        ok: true, rulesPassed: RULE_COUNT - new Set(findings.filter((f) => f.severity !== 'note').map((f) => f.rule)).size, score: result.score,
+        ok: true, rulesPassed: RULE_COUNT - failedRules(findings).length, score: result.score,
         missing, text, findings, screenshot: result.screenshot, pageHeight: result.pageHeight, unreadableStylesheets: result.unreadableStylesheets,
       }
     })()

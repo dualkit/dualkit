@@ -2,8 +2,8 @@ import { existsSync, readFileSync } from 'node:fs'
 import type { ModelEntry, Screen } from './config'
 import { extractHtml } from './extract'
 import { feedbackPrompt, lintPage, MAX_ITEMS } from './feedback'
-import type { Generate, Turn, Usage } from './providers'
-import type { Scored, SlimFinding } from './score'
+import { mayClear, type Generate, type Turn, type Usage } from './providers'
+import { failedRules, type Scored, type SlimFinding } from './score'
 import type { BuildKey, BuildRecord, Round, Store } from './store'
 import { SKILLS_DIR, systemPrompt } from './system'
 
@@ -17,8 +17,19 @@ type OkScored = Extract<Scored, { ok: true }>
 type Scorer = (html: string, screen: Screen) => Promise<Scored>
 type Meta = { finish: string | null; reasoningTokens: number | null; servedModel: string | null }
 /** The last page that rendered, and the turns that led to it (none for the dualkit page). */
-type Page = { html: string; reply: string; turns: Turn[]; findings: SlimFinding[]; missing: string[]; text: string | null; meta: Meta
-  result: Pick<OkScored, 'rulesPassed' | 'score' | 'unreadableStylesheets' | 'pageHeight'>; png: string | null }
+type Page = {
+  html: string
+  reply: string
+  turns: Turn[]
+  findings: SlimFinding[]
+  /** Lint rules at warning or error, so harm sees lint regressions too. */
+  lintFailed: string[]
+  missing: string[]
+  text: string | null
+  meta: Meta
+  result: Pick<OkScored, 'rulesPassed' | 'score' | 'unreadableStylesheets' | 'pageHeight'>
+  png: string | null
+}
 
 const ARABIC = /[ء-ي]/g
 const letters = (text: string) => {
@@ -26,7 +37,6 @@ const letters = (text: string) => {
   for (const c of text.match(ARABIC) ?? []) counts.set(c, (counts.get(c) ?? 0) + 1)
   return counts
 }
-const failedRules = (findings: SlimFinding[]) => [...new Set(findings.filter((f) => f.severity !== 'note').map((f) => f.rule))]
 const errorText = (e: unknown) => (e instanceof Error ? e.message : String(e))
 
 /** What a fix broke: rules that newly fail, parts that went missing, and the share of Arabic letters still there. */
@@ -55,13 +65,14 @@ export async function loopBuild({ key, model, screen, generate, store, scorer, s
   const htmlFile = store.paths(dualkitKey).html
   if (!from?.ok || from.reply === null || !existsSync(htmlFile)) return null
   const at = new Date().toISOString()
+  const html = readFileSync(htmlFile, 'utf8')
   let good: Page = {
-    html: readFileSync(htmlFile, 'utf8'), reply: from.reply, turns: [], findings: from.findings, missing: from.missing, text: null,
+    html, reply: from.reply, turns: [], findings: from.findings, lintFailed: failedRules(lintPage(html)), missing: from.missing, text: null,
     meta: { finish: from.finish, reasoningTokens: from.reasoningTokens, servedModel: from.servedModel },
     result: { rulesPassed: from.rulesPassed, score: from.score, unreadableStylesheets: from.unreadableStylesheets, pageHeight: from.pageHeight }, png: null,
   }
   const rounds: Round[] = []
-  const failed = (error: string): Built => ({ record: { ...key, at, reply: null, usage: null, ms: sumMs(rounds), finish: null, reasoningTokens: null, servedModel: null, ok: false, error }, html: null, shot: null })
+  const failed = (error: string): Built => ({ record: { ...key, at, reply: null, usage: sumUsage(rounds), ms: sumMs(rounds), finish: null, reasoningTokens: null, servedModel: null, ok: false, error }, html: null, shot: null })
   for (let n = 1; n <= MAX_ROUNDS; n++) {
     const lint = lintPage(good.html)
     const feedback = feedbackPrompt(good.findings, lint)
@@ -97,23 +108,26 @@ const readShot = (file: string) => (existsSync(file) ? readFileSync(file) : null
 
 type RoundInput = { model: ModelEntry; screen: Screen; generate: Generate; scorer: Scorer; system: string; turns: Turn[]; sent: number; before: Page }
 
-/** One fix. A reply with no HTML, or a page that will not render, is a failed round; an API error with no reply is not a round at all. */
+/** One fix. A reply with no HTML, a page that will not render, or an API error that asking again will not clear is a failed round; an error that may clear is not a round at all, so the build is redone. */
 async function round({ model, screen, generate, scorer, system, turns, sent, before }: RoundInput): Promise<{ error: string } | { round: Round; page: Page | null }> {
   const at = new Date().toISOString()
   const gen = await generate(model, { system, prompt: screen.prompt, turns })
-  if (!gen.ok && !gen.reply) return { error: gen.error }
-  const reply = gen.ok ? gen : gen.reply!
-  const base = { at, ms: gen.ms, usage: reply.usage, reply: reply.text, sent }
+  if (!gen.ok && !gen.reply && mayClear(gen.error)) return { error: gen.error }
+  const reply = gen.ok ? gen : gen.reply ?? null
+  const base = { at, ms: gen.ms, usage: reply?.usage ?? null, reply: reply?.text ?? null, sent }
   const lost = (error: string) => ({ round: { ...base, ok: false, error, rulesPassed: null, score: null, missing: [], regressed: [], lostParts: [], arabicKept: null }, page: null })
   if (!gen.ok) return lost(gen.error)
   const html = extractHtml(gen.text)
   if (html === null) return lost('No HTML in the reply')
   const s = await scorer(html, screen).catch((e: unknown): Scored => ({ ok: false, error: errorText(e) }))
   if (!s.ok) return lost(`Render failed: ${s.error}`)
-  const failed = failedRules(s.findings)
-  const h = harm({ failed: failedRules(before.findings), missing: before.missing, text: before.text ?? '' }, { failed, missing: s.missing, text: s.text })
+  const lintFailed = failedRules(lintPage(html))
+  const h = harm(
+    { failed: [...failedRules(before.findings), ...before.lintFailed], missing: before.missing, text: before.text ?? '' },
+    { failed: [...failedRules(s.findings), ...lintFailed], missing: s.missing, text: s.text },
+  )
   const page: Page = {
-    html, reply: gen.text, turns, findings: s.findings, missing: s.missing, text: s.text,
+    html, reply: gen.text, turns, findings: s.findings, lintFailed, missing: s.missing, text: s.text,
     meta: { finish: gen.finish, reasoningTokens: gen.reasoningTokens, servedModel: gen.servedModel },
     result: { rulesPassed: s.rulesPassed, score: s.score, unreadableStylesheets: s.unreadableStylesheets, pageHeight: s.pageHeight }, png: s.screenshot,
   }

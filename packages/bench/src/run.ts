@@ -3,7 +3,7 @@ import sharp from 'sharp'
 import { RUN, type ModelEntry, type Screen } from './config'
 import { extractHtml } from './extract'
 import { loopBuild, type Built } from './loop'
-import type { Generate } from './providers'
+import { ACCESS, type Generate } from './providers'
 import { makeProgressWriter, progressOf, type RecentBuild } from './progress'
 import { scoreHtml } from './score'
 import type { BuildKey, BuildRecord, Condition, Store } from './store'
@@ -12,7 +12,6 @@ import { checkSkills, SKILLS_DIR, systemPrompt } from './system'
 /** The two builds from the prompt; each dualkit run is followed by its loop run. */
 const CONDITIONS: readonly Condition[] = ['alone', 'dualkit']
 const ALL: readonly Condition[] = [...CONDITIONS, 'loop']
-const ACCESS = /^No [A-Z_]+_API_KEY$|^HTTP (401|403|404)\b/
 /** A 4xx other than 429 will not get better by asking again. */
 const CLIENT = /^HTTP 4(?!29)\d\d\b/
 const LOCK_AFTER = 3

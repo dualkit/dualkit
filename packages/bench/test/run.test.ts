@@ -100,6 +100,17 @@ describe('loop', () => {
     expect(again.calls).toEqual(['loop'])
     expect(out).toEqual({ built: 1, skipped: 8, failed: 0, stoppedEarly: false })
   })
+  it('counts loop failures toward the error streak', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    const { calls, generate } = tracked()
+    // From the first loop call on, every call is denied: loop 1, dualkit 2 and dualkit 3 make three in a row.
+    const deny: Generate = async (m, r) => (calls.includes('denied') || r.turns?.length ? (calls.push('denied'), { ok: false, error: 'HTTP 401: no', ms: 1 }) : generate(m, r))
+    const lines: string[] = []
+    await runBench({ month: '2026-11', models: [model('a')], screens: loadScreens().slice(0, 2), generate: deny, store, score: fixScore, log: (l) => lines.push(l) })
+    expect(calls).toEqual(['alone', 'alone', 'alone', 'dualkit', 'denied', 'denied', 'denied'])
+    expect(store.list('2026-11').find((r) => r.condition === 'loop')).toMatchObject({ ok: false, error: 'HTTP 401: no' })
+    expect(lines.some((l) => l.includes('skipped for this run after 3 errors'))).toBe(true)
+  })
   it('tries the loop on a rerun once its dualkit build exists', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
     let down = true

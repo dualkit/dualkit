@@ -8,6 +8,11 @@ export type Generated = ({ ok: true; ms: number } & Reply) | { ok: false; error:
 /** A later turn in the conversation, sent after the first user prompt. */
 export type Turn = { role: 'user' | 'assistant'; content: string }
 export type Generate = (model: ModelEntry, req: { system: string; prompt: string; turns?: Turn[] }) => Promise<Generated>
+/** Errors that mean the key or model is not available to us. */
+export const ACCESS = /^No [A-Z_]+_API_KEY$|^HTTP (401|403|404)\b/
+const TRANSIENT = /^HTTP (5\d\d|429)\b|^Network error|^Timed out/
+/** An error that may clear by asking again later: a busy or down server, the network, a timeout, or access. */
+export const mayClear = (error: string) => TRANSIENT.test(error) || ACCESS.test(error)
 type Options = { env: Record<string, string | undefined>; fetch?: typeof fetch; sleep?: (ms: number) => Promise<void>; now?: () => number; timeoutMs?: number
   /** Epoch ms. Once it passes no retry starts; the call returns its last error. */
   deadline?: number }
