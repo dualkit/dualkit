@@ -14,7 +14,7 @@ const model = (id: string): ModelEntry => ({ id, provider: 'openrouter', model: 
 const screens = loadScreens().slice(0, 1)
 // A real phone-sized PNG at 2x, as the audit returns it, so the runner's WebP step runs for real.
 const PNG = (await sharp({ create: { width: 780, height: 1600, channels: 3, background: '#ffffff' } }).png().toBuffer()).toString('base64')
-const fastScore = async () => ({ ok: true as const, rulesPassed: 15, score: 40, missing: [], findings: [], screenshot: PNG, pageHeight: 800, unreadableStylesheets: 1 })
+const fastScore = async () => ({ ok: true as const, rulesPassed: 15, score: 40, missing: [], text: '', findings: [], screenshot: PNG, pageHeight: 800, unreadableStylesheets: 1 })
 
 describe('runBench', () => {
   it('builds every model, screen, condition and run, then skips them on a rerun', async () => {

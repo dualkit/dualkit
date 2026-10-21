@@ -113,4 +113,20 @@ describe('required parts accept faithful Arabic builds', () => {
     expect(hijri.test('12 أكتوبر 2026')).toBe(false)
     expect(hijri.test('هذا')).toBe(false)
   })
+  it('counts only rules with a warning or error as failed', async () => {
+    const out = await scoreHtml('<!doctype html><html lang="ar" dir="rtl"><head><style>body{font-family:"Noto Naskh Arabic",sans-serif}.a{margin-left:12px}</style></head><body><div style="display:flex"><p>مرحبا</p><p class="a">أهلا</p></div></body></html>', [], { browser })
+    if (!out.ok) throw new Error('should score')
+    expect(out.findings.every((f) => f.severity === 'note')).toBe(true)
+    expect(out.findings.length).toBeGreaterThan(0)
+    expect(out.rulesPassed).toBe(RULE_COUNT)
+  })
+  it('keeps message, fix, snippet and page text', async () => {
+    const out = await scoreHtml(fixture('buggy'), payment.required, { browser })
+    if (!out.ok) throw new Error('should score')
+    const withNode = out.findings.find((f) => f.box !== null)!
+    expect(withNode.message.length).toBeGreaterThan(0)
+    expect(withNode.fix.length).toBeGreaterThan(0)
+    expect(typeof withNode.snippet).toBe('string')
+    expect(out.text.length).toBeGreaterThan(0)
+  })
 })
