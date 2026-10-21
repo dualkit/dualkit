@@ -44,6 +44,9 @@ function lintFile(file: SourceFile, rules: readonly LintRule[], ctx: LintContext
   return findings.sort(byPosition)
 }
 
+/** A script file with CSS in template literals: a build-time flipper mirrors that CSS like a stylesheet's. */
+const holdsTemplateCss = (file: SourceFile): boolean => file.js.length > 0 && file.html === null && file.css.length > 0
+
 const PHYSICAL_RULES = new Set(['source/physical-css', 'source/physical-tailwind'])
 
 /** Replaces every physical finding with one summary at the first of them. */
@@ -86,8 +89,7 @@ export async function lint(paths: string[], options: { cwd: string } & RuleOptio
   const reasonOf = (file: SourceFile): QuietReason | null => {
     const known = reasons.get(file.path)
     if (known !== undefined) return known
-    // Stylesheets, and script files that hold CSS in template literals, are the files a build-time flipper mirrors.
-    const flipper = file.lang === 'css' || file.lang === 'scss' || (file.css.length > 0 && file.html === null && file.lang !== 'vue' && file.lang !== 'svelte') ? flipperOf(file.abs) : null
+    const flipper = file.lang === 'css' || file.lang === 'scss' || holdsTemplateCss(file) ? flipperOf(file.abs) : null
     flippers.set(file.path, flipper)
     const reason = quietReason(file.path, file.text) ?? (flipper ? 'flipped' : null)
     reasons.set(file.path, reason)

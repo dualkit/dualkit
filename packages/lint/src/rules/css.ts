@@ -5,16 +5,32 @@ import type { LintHit, LintRule, SourceFile } from '../types'
 const CSS_LANGS = ['css', 'scss', 'html', 'vue', 'svelte', 'js', 'jsx', 'ts', 'tsx'] as const
 
 /** Calls visit for every declaration with its offset in the file text and its enclosing rule, if any. */
-function eachDeclaration(file: SourceFile, visit: (decl: Declaration, offset: number, rule: Rule | null) => void): void {
+function eachDeclaration(file: SourceFile, visit: (decl: Declaration, offset: number, rule: Rule | null, shown: string) => void): void {
   for (const block of file.css) {
     block.root.walkDecls((decl) => {
       const start = decl.source?.start?.offset
       if (start === undefined) return
       let parent = decl.parent as Container | undefined
       while (parent && parent.type !== 'rule') parent = parent.parent as Container | undefined
-      visit(decl, block.offset + start, (parent as Rule | undefined) ?? null)
+      const end = decl.source?.end?.offset ?? start
+      visit(decl, block.offset + start, (parent as Rule | undefined) ?? null, shownValue(file, decl, block.offset + start, block.offset + end + 1))
     })
   }
+}
+
+const SHOWN_MAX = 60
+const SCRIPT_LANGS = new Set(['js', 'jsx', 'ts', 'tsx'])
+
+/**
+ * The value to print in a message. In a script file the parsed value may hold filler that stands in for a
+ * `${...}`, so the source text is shown instead, on one line and cut when long.
+ */
+function shownValue(file: SourceFile, decl: Declaration, from: number, to: number): string {
+  if (!SCRIPT_LANGS.has(file.lang)) return normalise(decl.value)
+  const raw = file.text.slice(from, to)
+  const colon = raw.indexOf(':')
+  const value = (colon === -1 ? raw : raw.slice(colon + 1)).replace(/;\s*$/, '').replace(/\s+/g, ' ').trim()
+  return value.length > SHOWN_MAX ? `${value.slice(0, SHOWN_MAX - 1)}…` : value
 }
 
 const ZERO_WITH_UNIT = /(^|[\s(,])[+-]?0*\.?0+[a-z%]*(?=$|[\s),])/g
@@ -133,7 +149,7 @@ const physicalCss: LintRule = {
     if (ctx.physicalQuiet?.(file)) return []
     const hits: LintHit[] = []
     const overrides = directionOverrides(file)
-    eachDeclaration(file, (decl, offset, rule) => {
+    eachDeclaration(file, (decl, offset, rule, shown) => {
       const prop = decl.prop.toLowerCase()
       if (prop.startsWith('-') || prop.includes('#{') || prop.includes('$') || prop.includes('@')) return
       const value = normalise(decl.value)
@@ -142,7 +158,7 @@ const physicalCss: LintRule = {
       if (PHYSICAL_PROPS[prop] ? hasSymmetricSibling(decl, prop, value) || isOffscreen(prop, value) || isCentring(decl, prop, value) : false) return
       if (rule && fullSelectors(rule).every(directionScoped)) return
       if (overridden(rule, prop, overrides)) return
-      hits.push({ offset, message: `\`${prop}: ${normalise(decl.value)}\` is tied to one side. Use \`${logical}\`.` })
+      hits.push({ offset, message: `\`${prop}: ${shown}\` is tied to one side. Use \`${logical}\`.` })
     })
     return hits
   },
@@ -178,13 +194,13 @@ const arabicLetterSpacing: LintRule = {
   langs: CSS_LANGS,
   check: (file) => {
     const hits: LintHit[] = []
-    eachDeclaration(file, (decl, offset, rule) => {
+    eachDeclaration(file, (decl, offset, rule, shown) => {
       if (decl.prop.toLowerCase() !== 'letter-spacing' || !rule) return
       const value = normalise(decl.value)
       if (NEUTRAL_SPACING.test(value) || UNKNOWN_VALUE.test(value)) return
       const arabic = fullSelectors(rule).find((s) => targetsArabic(s) && !codeSubject(s))
       if (arabic === undefined) return
-      hits.push({ offset, message: `\`letter-spacing: ${value}\` on \`${arabic.trim()}\` breaks the joins between Arabic letters.` })
+      hits.push({ offset, message: `\`letter-spacing: ${shown}\` on \`${arabic.trim()}\` breaks the joins between Arabic letters.` })
     })
     return hits
   },

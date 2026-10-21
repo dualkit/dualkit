@@ -70,6 +70,21 @@ describe('templateCss', () => {
   })
 })
 
+describe('template CSS messages', () => {
+  it('show the source text of the value, never filler', () => {
+    const messages = lintText('a.ts', 'const A = css`\n  margin-left: ${(p) => p.gap}px;\n  padding-left: 1px;\n`\n').map((f) => f.message)
+    expect(messages).toContain('`margin-left: ${(p) => p.gap}px` is tied to one side. Use `margin-inline-start`.')
+    expect(messages.join('\n')).not.toMatch(/x{3,}/)
+  })
+
+  it('collapses lines and cuts long values', () => {
+    const long = 'a'.repeat(100)
+    const [f] = lintText('a.ts', `const A = css\`\n  margin-left: \${\n  p.gap}px ${long};\n\``).filter((x) => x.rule === 'source/physical-css')
+    expect(f?.message).not.toContain('\n')
+    expect(f?.message).toContain('…')
+  })
+})
+
 describe('template CSS scope and suppression', () => {
   const sheet = 'export const A = styled.div`\n  margin-left: 1px;\n`\n'
 
