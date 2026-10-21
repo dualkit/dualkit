@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { loadModels, RUN, SCREENS, type ModelEntry } from '../src/config'
-import { BACKOFF_MS, makeGenerate, MAX_RETRIES, MIN_GAP_MS, REQUEST_TIMEOUT_MS } from '../src/providers'
+import { RUN, type ModelEntry } from '../src/config'
+import { BACKOFF_MS, BUDGET_SPENT, makeGenerate, mayClear, MAX_RETRIES, MIN_GAP_MS, OPENROUTER_DAILY_BUDGET, REQUEST_TIMEOUT_MS } from '../src/providers'
 import { fakeGenerate } from '../src/fake'
 
 const or: ModelEntry = { id: 'g', provider: 'openrouter', model: 'google/gemma-4-31b-it:free', label: 'G', since: '2026-11', by: 'Fake', mark: 'google' }
@@ -159,10 +159,28 @@ describe('upstream rate limits', () => {
     expect(calls).toHaveLength(5)
     expect(waits).toEqual([15_000, 30_000, 60_000, 120_000])
   })
-  it('keeps a whole month of OpenRouter calls, every retry spent, under the 1,000 a day cap', () => {
-    const openrouter = loadModels().filter((m) => m.provider === 'openrouter').length
-    const worst = openrouter * SCREENS.length * 2 * RUN.runs * (1 + MAX_RETRIES)
-    expect(worst).toBeLessThanOrEqual(1000)
+  it('stops at the daily budget without a request', async () => {
+    expect(OPENROUTER_DAILY_BUDGET).toBe(950)
+    const { f, calls } = fakeFetch([json(429, {}), json(429, {}), json(200, { choices: [{ message: { content: 'hi' } }] })])
+    const generate = makeGenerate({ env, fetch: f, ...noSleep, budget: 2 })
+    // Both attempts count, the retry included, and the third would be over the budget.
+    expect(await generate(or, req)).toEqual({ ok: false, error: BUDGET_SPENT, ms: 0 })
+    expect(calls).toHaveLength(2)
+    expect(await generate(or, req)).toEqual({ ok: false, error: 'Daily request budget spent', ms: 0 })
+    expect(calls).toHaveLength(2)
+  })
+  it('does not count Gemini calls against the OpenRouter budget', async () => {
+    const ok = () => json(200, { candidates: [{ content: { parts: [{ text: 'hi' }] } }] })
+    const { f, calls } = fakeFetch([ok(), ok(), json(200, { choices: [{ message: { content: 'hi' } }] })])
+    const generate = makeGenerate({ env, fetch: f, ...noSleep, budget: 1 })
+    expect((await generate(gm, req)).ok).toBe(true)
+    expect((await generate(gm, req)).ok).toBe(true)
+    expect((await generate(or, req)).ok).toBe(true)
+    expect(calls).toHaveLength(3)
+  })
+  it('lets a spent budget clear, so a loop build stopped by it is left for the next day', () => {
+    expect(mayClear(BUDGET_SPENT)).toBe(true)
+    expect(mayClear('No HTML in the reply')).toBe(false)
   })
 })
 

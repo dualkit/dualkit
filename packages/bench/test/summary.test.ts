@@ -81,6 +81,24 @@ describe('generatedAt', () => {
     const out = await buildSummary({ month: '2099-01', models: [model('a')], screens, store, shots: async () => null })
     expect(out.generatedAt).toBe('2026-10-19T08:00:00.000Z')
   })
+  it('ignores loop builds, which the page does not show', async () => {
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    seed(store, 'a', { alone: 8, dualkit: 18 })
+    const k: BuildKey = { month: '2026-11', model: 'a', screen: 'otp', condition: 'loop', run: 1 }
+    store.write({ ...k, at: '2026-11-03T09:15:00.000Z', reply: 'r', usage: null, ms: 1, finish: 'stop', reasoningTokens: 0, servedModel: 'a', ok: true, rulesPassed: 25, score: 90, missing: [], findings: [], unreadableStylesheets: 0, pageHeight: 900, from: { rulesPassed: 18, score: 72 }, rounds: [] }, '<html></html>', Buffer.from('x'))
+    const out = await buildSummary({ month: '2026-11', models: [model('a')], screens, store, shots: async () => null })
+    expect(out.generatedAt).toBe('2026-11-01T04:30:00.000Z')
+  })
+  it('does not publish a month whose only successful builds are loop builds', async () => {
+    const site = mkdtempSync(join(tmpdir(), 'site-'))
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    seed(store, 'a', { alone: 8, dualkit: 18 })
+    const loop = store.list('2026-11').filter((r) => r.condition === 'dualkit').map((r) => ({ ...r, condition: 'loop' as const }))
+    const s2 = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
+    for (const r of loop) s2.write(r, null)
+    const out = await publishSummary({ month: '2026-11', models: [model('a')], screens, store: s2, siteRoot: site, shots: async () => null })
+    expect(out.ok).toBe(false)
+  })
   it('is the first day of the month when nothing ran', async () => {
     const store = makeStore(mkdtempSync(join(tmpdir(), 'sum-')))
     const out = await buildSummary({ month: '2026-11', models: [model('gone')], screens, store, shots: async () => null })

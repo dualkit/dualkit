@@ -196,6 +196,37 @@ describe('soft deadline', () => {
   })
 })
 
+describe('daily budget', () => {
+  it('leaves builds for the next day once the budget is spent', async () => {
+    const gemini: ModelEntry = { ...model('fake-good'), id: 'gem', provider: 'gemini' }
+    let orCalls = 0
+    const lines: string[] = []
+    // The OpenRouter model gets one build, then the budget is spent; the Gemini model is not counted and finishes.
+    const budgeted: Generate = async (m, r) => {
+      if (m.provider === 'gemini') return fakeGenerate({ ...m, id: 'fake-good' }, r)
+      return ++orCalls > 1 ? { ok: false, error: 'Daily request budget spent', ms: 0 } : fakeGenerate(m, r)
+    }
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    const out = await runBench({ month: '2026-11', models: [model('fake-good'), gemini], screens, generate: budgeted, store, score: fastScore, log: (l) => lines.push(l) })
+    expect(out).toEqual({ built: 10, skipped: 0, failed: 0, stoppedEarly: true })
+    expect(orCalls).toBe(2)
+    expect(store.list('2026-11').filter((r) => r.model === 'fake-good').map((r) => `${r.condition}-${r.run}`)).toEqual(['alone-1'])
+    expect(store.list('2026-11').filter((r) => r.model === 'gem')).toHaveLength(9)
+    expect(lines.some((l) => l.includes('daily request budget spent, leaving the rest for the next run'))).toBe(true)
+  })
+  it('writes nothing for a loop build stopped by the budget', async () => {
+    let n = 0
+    // alone 1 and dualkit 1 build; the loop's first fix hits the budget.
+    const budgeted: Generate = async (m, r) => (++n > 2 ? { ok: false, error: 'Daily request budget spent', ms: 0 } : fakeGenerate({ ...m, id: 'fake-buggy' }, r))
+    const store = makeStore(mkdtempSync(join(tmpdir(), 'run-')))
+    const findings = [{ rule: 'x', title: 'X', severity: 'error' as const, box: null, message: 'm', fix: 'f', snippet: null }]
+    const score = async () => ({ ...(await fastScore()), findings })
+    const out = await runBench({ month: '2026-11', models: [model('fake-buggy')], screens, generate: budgeted, store, score, runs: 1 })
+    expect(out.stoppedEarly).toBe(true)
+    expect(store.list('2026-11').map((r) => r.condition)).toEqual(['alone', 'dualkit'])
+  })
+})
+
 describe('skills check', () => {
   it('throws a BenchError before any API call when a skill has no SKILL.md', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'skills-'))

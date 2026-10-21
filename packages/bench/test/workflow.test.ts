@@ -15,9 +15,9 @@ describe('bench workflow', () => {
     expect(yml).toContain('OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}')
     expect(yml).toContain('GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}')
   })
-  it('never runs two benches at once and stops within three hours', () => {
+  it('never runs two benches at once and stops within six hours', () => {
     expect(yml).toMatch(/concurrency:\s*\n\s*group: bench/)
-    expect(yml).toContain('timeout-minutes: 180')
+    expect(yml).toContain('timeout-minutes: 360')
   })
   it('uploads bench/runs as an artifact on every run that was not cancelled, so a 2099 rehearsal can be read', () => {
     const at = yml.indexOf('name: Keep the raw runs')
@@ -36,8 +36,8 @@ describe('bench workflow', () => {
     expect(yml).toContain('git pull --rebase --autostash')
   })
   it('gives the bench step its own timeout under the job timeout', () => {
-    expect(yml).toMatch(/name: Run the bench\n\s+timeout-minutes: 165\n/)
-    expect(yml).toContain('timeout-minutes: 180')
+    expect(yml).toMatch(/name: Run the bench\n\s+timeout-minutes: 345\n/)
+    expect(yml).toContain('timeout-minutes: 360')
   })
   it('retries the pull and push three times and fails when all attempts fail', () => {
     expect(yml).toContain('for i in 1 2 3; do')
@@ -48,8 +48,19 @@ describe('bench workflow', () => {
     const lines = yml.split('\n').filter((line) => line.includes('${{ inputs.'))
     expect(lines.length).toBeGreaterThan(0)
     for (const line of lines) {
-      expect(line).toMatch(/^\s*(MONTH|MODEL): \$\{\{ inputs\.(month|model) \}\}$/)
+      expect(line).toMatch(/^\s*(MONTH|MODEL|SUMMARY): \$\{\{ inputs\.(month|model|summary) \}\}$/)
     }
+  })
+  it('has a summary input, on by default, that skips the summary and commits only bench/ when off', () => {
+    expect(yml).toMatch(/summary:\n\s+description: .+\n\s+type: boolean\n\s+default: true\n/)
+    const summary = yml.slice(yml.indexOf('name: Build the summary'), yml.indexOf('name: Commit the results'))
+    expect(summary).toContain('SUMMARY: ${{ inputs.summary }}')
+    expect(summary).toContain('[ "$SUMMARY" = false ]')
+    expect(summary.indexOf('[ "$SUMMARY" = false ]')).toBeLessThan(summary.indexOf('--summary-only'))
+    const commit = yml.slice(yml.indexOf('name: Commit the results'))
+    expect(commit).toContain('SUMMARY: ${{ inputs.summary }}')
+    expect(commit).toMatch(/if \[ "\$SUMMARY" = false \]; then sources=\(bench\); else sources=\(bench apps\/site\/content\/bench apps\/site\/public\/bench\); fi/)
+    expect(commit).toContain('for p in "${sources[@]}"; do')
   })
   it('builds no summary in the run step', () => {
     const run = yml.slice(yml.indexOf('name: Run the bench'), yml.indexOf('name: Build the summary'))

@@ -3,7 +3,7 @@ import sharp from 'sharp'
 import { RUN, type ModelEntry, type Screen } from './config'
 import { extractHtml } from './extract'
 import { loopBuild, type Built } from './loop'
-import { ACCESS, type Generate } from './providers'
+import { ACCESS, BUDGET_SPENT, type Generate } from './providers'
 import { makeProgressWriter, progressOf, type RecentBuild } from './progress'
 import { scoreHtml } from './score'
 import type { BuildKey, BuildRecord, Condition, Store } from './store'
@@ -99,9 +99,14 @@ export async function runBench({ month, models, screens, generate, store, score 
   const onFinish = (entry: RecentBuild) => { finished.push(entry); return publish(true) }
   await publish(true)
   const scorer: Scorer = (html, screen) => limit(async () => score(html, screen.required, browser ? { browser: await browser.get() } : {}))
+  // Once one OpenRouter call finds the daily budget spent, no OpenRouter model starts another build; Gemini is not counted.
+  let budgetSpent = false
+  const spend = () => { budgetSpent = true }
+  const lateFor = (model: ModelEntry) => (): string | null =>
+    now() >= deadline ? 'past the deadline' : model.provider === 'openrouter' && budgetSpent ? 'daily request budget spent' : null
   try {
     // Every model at once, sharing the one paced Generate; each model's own builds stay in order.
-    const all = await Promise.all(models.map((model) => runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, onFinish, late: () => now() >= deadline })))
+    const all = await Promise.all(models.map((model) => runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, onFinish, late: lateFor(model), spend })))
     return all.reduce((a, c) => ({ built: a.built + c.built, skipped: a.skipped + c.skipped, failed: a.failed + c.failed, stoppedEarly: a.stoppedEarly || c.stoppedEarly }), NONE)
   } finally {
     await browser?.close()
@@ -109,26 +114,31 @@ export async function runBench({ month, models, screens, generate, store, score 
   }
 }
 
-type ModelRun = { month: string; model: ModelEntry; screens: Screen[]; generate: Generate; store: Store; scorer: Scorer; log: (line: string) => void; skillsDir: string; runs: number; onFinish: (entry: RecentBuild) => Promise<void>; late: () => boolean }
+type ModelRun = { month: string; model: ModelEntry; screens: Screen[]; generate: Generate; store: Store; scorer: Scorer; log: (line: string) => void; skillsDir: string; runs: number; onFinish: (entry: RecentBuild) => Promise<void>
+  /** Why no new build may start, or null when one may. */
+  late: () => string | null
+  /** Marks the daily budget spent for every OpenRouter model. */
+  spend: () => void }
 const NONE: Counts = { built: 0, skipped: 0, failed: 0, stoppedEarly: false }
 
-async function runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, onFinish, late }: ModelRun): Promise<Counts> {
+async function runModel({ month, model, screens, generate, store, scorer, log, skillsDir, runs, onFinish, late, spend }: ModelRun): Promise<Counts> {
   let counts = NONE
   let streak: Streak = { key: null, n: 0 }
   const shoot = (key: BuildKey) => (png: string) => toWebp(png).catch((e: unknown) => {
     log(`${key.model} ${key.screen} ${key.condition} ${key.run}: screenshot not saved: ${e instanceof Error ? e.message : String(e)}`)
     return null
   })
-  /** Builds one key, or returns false once the deadline has passed. */
+  const stop = (why: string) => { log(`${model.id}: ${why}, leaving the rest for the next run`); return false }
+  /** Builds one key, or returns false once the deadline has passed or the daily budget is spent. */
   const step = async (key: BuildKey, screen: Screen, make: () => Promise<Built | null>): Promise<boolean> => {
     if (store.isDone(key)) { counts = { ...counts, skipped: counts.skipped + 1 }; return true }
     if (streak.n >= LOCK_AFTER) return true
-    if (late()) {
-      log(`${model.id}: past the deadline, leaving the rest for the next run`)
-      return false
-    }
+    const why = late()
+    if (why !== null) return stop(why)
     const rec = await make()
     if (rec === null) return true
+    // The build that found the budget spent is not written, so the next day's run builds it.
+    if (!rec.record.ok && rec.record.error === BUDGET_SPENT) { spend(); return stop('daily request budget spent') }
     streak = nextStreak(streak, rec.record.ok ? null : rec.record.error)
     store.write(rec.record, rec.html, rec.shot)
     counts = rec.record.ok ? { ...counts, built: counts.built + 1 } : { ...counts, failed: counts.failed + 1 }

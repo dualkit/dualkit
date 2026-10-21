@@ -91,7 +91,7 @@ describe('loopBuild', () => {
     expect(out.record).toMatchObject({ rulesPassed: 20, score: 100 })
   })
   it('fails the build, keeping the usage spent, on a provider error that may clear', async () => {
-    for (const error of ['HTTP 503: down', 'HTTP 429: slow', 'Network error: reset', 'Timed out after 600 s', 'HTTP 401: no']) {
+    for (const error of ['HTTP 503: down', 'HTTP 429: slow', 'Network error: reset', 'Timed out after 600 s', 'HTTP 401: no', 'Daily request budget spent']) {
       const store = setup(page(['a', 'b']))
       const { generate } = stub([reply(fenced(page(['b']))), down(error)])
       const out = (await run(store, generate))!

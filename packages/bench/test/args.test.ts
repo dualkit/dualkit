@@ -3,9 +3,9 @@ import { DEADLINE_MS, parseCli } from '../src/args'
 import { BenchError } from '../src/config'
 
 describe('parseCli', () => {
-  it('sets a soft deadline 140 minutes out by default', () => {
-    expect(DEADLINE_MS).toBe(140 * 60_000)
-    expect(parseCli([], 1_000).deadline).toBe(1_000 + 140 * 60_000)
+  it('sets a soft deadline 320 minutes out by default', () => {
+    expect(DEADLINE_MS).toBe(320 * 60_000)
+    expect(parseCli([], 1_000).deadline).toBe(1_000 + 320 * 60_000)
   })
   it('drops the deadline with --no-deadline', () => {
     expect(parseCli(['--no-deadline'], 1_000).deadline).toBeUndefined()
@@ -15,6 +15,10 @@ describe('parseCli', () => {
     expect(parseCli(['--no-summary'], 0).noSummary).toBe(true)
     expect(parseCli(['--summary-only', '--month', '2026-11'], 0)).toMatchObject({ summaryOnly: true, month: '2026-11' })
     expect(() => parseCli(['--summary-only', '--no-summary'], 0)).toThrow(BenchError)
+  })
+  it('reads --study', () => {
+    expect(parseCli([], 0).study).toBe(false)
+    expect(parseCli(['--study', '--month', '2026-11'], 0)).toMatchObject({ study: true, month: '2026-11' })
   })
   it('reads --print-month', () => {
     expect(parseCli([], 0).printMonth).toBe(false)

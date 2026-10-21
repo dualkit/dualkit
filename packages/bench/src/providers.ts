@@ -11,11 +11,16 @@ export type Generate = (model: ModelEntry, req: { system: string; prompt: string
 /** Errors that mean the key or model is not available to us. */
 export const ACCESS = /^No [A-Z_]+_API_KEY$|^HTTP (401|403|404)\b/
 const TRANSIENT = /^HTTP (5\d\d|429)\b|^Network error|^Timed out/
-/** An error that may clear by asking again later: a busy or down server, the network, a timeout, or access. */
-export const mayClear = (error: string) => TRANSIENT.test(error) || ACCESS.test(error)
+/** OpenRouter allows 1,000 free-model requests a day; this process stops a little short, retries included. */
+export const OPENROUTER_DAILY_BUDGET = 950
+export const BUDGET_SPENT = 'Daily request budget spent'
+/** An error that may clear by asking again later: a busy or down server, the network, a timeout, access, or a spent daily budget. */
+export const mayClear = (error: string) => TRANSIENT.test(error) || ACCESS.test(error) || error === BUDGET_SPENT
 type Options = { env: Record<string, string | undefined>; fetch?: typeof fetch; sleep?: (ms: number) => Promise<void>; now?: () => number; timeoutMs?: number
   /** Epoch ms. Once it passes no retry starts; the call returns its last error. */
-  deadline?: number }
+  deadline?: number
+  /** OpenRouter attempts this instance may make, retries included. Gemini is not counted. */
+  budget?: number }
 
 /** Free models are often "temporarily rate-limited upstream"; four retries give a busy upstream about four minutes to clear. */
 export const MAX_RETRIES = 4
@@ -71,7 +76,8 @@ function settle(body: any, call: Call, key: string, ms: number): Generated {
   return { ok: false, error: 'Empty reply', ms }
 }
 
-export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), now = Date.now, timeoutMs = REQUEST_TIMEOUT_MS, deadline = Infinity }: Options): Generate {
+export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promise((r) => setTimeout(r, ms)), now = Date.now, timeoutMs = REQUEST_TIMEOUT_MS, deadline = Infinity, budget = OPENROUTER_DAILY_BUDGET }: Options): Generate {
+  let spent = 0
   // Models run concurrently through this one instance, so slots are handed out one at a time on a chain:
   // each caller waits for the slot before it, then starts at least MIN_GAP_MS after that one started.
   let last = -Infinity
@@ -93,6 +99,11 @@ export function makeGenerate({ env, fetch: f = fetch, sleep = (ms) => new Promis
     let error = 'No attempt made'
     for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
       if (attempt > 0 && now() >= deadline) break
+      // Checked and counted before any await, so calls running at once cannot overspend.
+      if (model.provider === 'openrouter') {
+        if (spent >= budget) return { ok: false, error: BUDGET_SPENT, ms: 0 }
+        spent++
+      }
       await pace()
       const signal = AbortSignal.timeout(timeoutMs)
       const timedOut = (): Generated => ({ ok: false, error: `Timed out after ${timeoutMs / 1000} s`, ms: now() - started })

@@ -87,10 +87,13 @@ function withMoves(models: BenchModel[]): BenchModel[] {
   })
 }
 
+/** The page shows the two setups from the prompt; loop builds are for the study report. */
+const shown = (records: BuildRecord[]) => records.filter((r) => r.condition === 'alone' || r.condition === 'dualkit')
+
 type SummaryOptions = { month: string; models: ModelEntry[]; screens: Screen[]; store: Store; siteRoot?: string; shots?: Shots }
 
 export async function buildSummary({ month, models, screens, store, siteRoot = SITE_ROOT, shots = copyShots(store, siteRoot) }: SummaryOptions): Promise<BenchMonth> {
-  const records = store.list(month)
+  const records = shown(store.list(month))
   const out: BenchModel[] = []
   for (const m of models) {
     const rows: BenchModel['screens'] = []
@@ -120,7 +123,7 @@ export type Published = { ok: true; file: string } | { ok: false; message: strin
 /** Builds and writes the month, but never a month that did not run: with no successful build there is nothing to publish. */
 export async function publishSummary(opts: SummaryOptions): Promise<Published> {
   const siteRoot = opts.siteRoot ?? SITE_ROOT
-  if (!opts.store.list(opts.month).some((r) => r.ok))
+  if (!shown(opts.store.list(opts.month)).some((r) => r.ok))
     return { ok: false, message: `No successful build for ${opts.month}, so no summary was written. Run the bench for that month first.` }
   const summary = await buildSummary({ ...opts, siteRoot })
   parseBenchMonth(JSON.parse(JSON.stringify(summary)))
