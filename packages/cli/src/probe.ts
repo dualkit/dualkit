@@ -40,22 +40,54 @@ async function probeOne(field: Locator): Promise<boolean | null> {
   }
 }
 
+/** A field's maxlength (-1 when unset) and its form's index in document.forms (-1 when it has none). Null when not found. */
+async function shapeOf(field: Locator): Promise<{ maxLength: number; form: number } | null> {
+  try {
+    if ((await field.count()) === 0) return null
+    return await field.evaluate((el) => {
+      const input = el as unknown as { maxLength: number; form: unknown }
+      const forms = (globalThis as unknown as { document: { forms: ArrayLike<unknown> } }).document.forms
+      return { maxLength: input.maxLength, form: input.form ? Array.from(forms).indexOf(input.form) : -1 }
+    }, undefined, { timeout: STEP_TIMEOUT_MS })
+  } catch {
+    return null
+  }
+}
+
+/** A one-character box, one of a row that together hold a code. */
+const isDigitBox = (maxLength: number): boolean => maxLength >= 0 && maxLength <= 1
+
 /**
  * Types ١٢ into up to PROBE_MAX_FIELDS code, tel and number fields and reports, by field id, whether the digits were
  * deleted. It never presses Enter or submits, and puts each field's value back afterwards. A field it cannot type into
  * is left out. If typing navigates the page, it stops there and leaves the remaining fields out. Never throws.
+ *
+ * The value is put back with no input event, so a page that keeps each digit in its own state still holds the typed one.
+ * To never fill a whole code that such a page then sends, it types into only the first box of a run of one-character
+ * code boxes, and into at most one field per form.
  */
 export async function probeArabicDigits(page: Page, fields: readonly ProbeField[]): Promise<Map<string, boolean>> {
   const found = new Map<string, boolean>()
+  const usedForms = new Set<number>()
+  let inDigitRun = false
   let navigated = false
   const onNavigate = (frame: Frame) => { if (frame === page.mainFrame()) navigated = true }
   page.on('framenavigated', onNavigate)
   try {
     for (const field of fields.filter((f) => PROBED_KINDS.has(f.kind)).slice(0, PROBE_MAX_FIELDS)) {
-      const dropped = await probeOne(page.locator(`css=${field.id}`))
+      const locator = page.locator(`css=${field.id}`)
+      const shape = await shapeOf(locator)
+      if (shape === null) continue
+      const digitBox = field.kind === 'code' && isDigitBox(shape.maxLength)
+      const skip = (digitBox && inDigitRun) || usedForms.has(shape.form)
+      inDigitRun = digitBox
+      if (skip) continue
+      const dropped = await probeOne(locator)
       // A result read after a navigation may come from another page, so it is not kept.
       if (navigated) break
-      if (dropped !== null) found.set(field.id, dropped)
+      if (dropped === null) continue
+      found.set(field.id, dropped)
+      if (shape.form >= 0) usedForms.add(shape.form)
     }
   } finally {
     page.off('framenavigated', onNavigate)

@@ -17,6 +17,11 @@ const OTP = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8
 <input id="bad" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
 <input id="good" autocomplete="one-time-code" inputmode="numeric"></body></html>`
 
+/** Six one-digit boxes kept in framework-style state, not in .value, that send the code once all six are full. */
+const OTP_STATE = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"></head><body><p>رمز التحقق</p>
+${Array.from({ length: 6 }, (_, i) => `<input id="d${i}" autocomplete="one-time-code" inputmode="numeric" maxlength="1" oninput="digits[${i}]=this.value;if(digits.every(Boolean)){window.sent=true;fetch('/sent')}">`).join('')}
+<script>const digits=['','','','','','']</script></body></html>`
+
 /** A code field that reports each keystroke to the test through an exposed binding, so a test can see whether audit typed. */
 const SPY = (lang: string, text: string) => `<!doctype html><html lang="${lang}" dir="rtl"><head><meta charset="utf-8"></head><body><p>${text}</p>
 <input id="code" autocomplete="one-time-code" inputmode="numeric" oninput="window.dkTyped()"></body></html>`
@@ -29,9 +34,19 @@ const TAGS = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-
 
 let server: Server
 let base = ''
+let sent = 0
 
 beforeAll(async () => {
   server = createServer((req, res) => {
+    if (req.url === '/sent') {
+      sent += 1
+      res.writeHead(204).end()
+      return
+    }
+    if (req.url === '/otp-state') {
+      res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' }).end(OTP_STATE)
+      return
+    }
     if (req.url === '/missing') {
       res.writeHead(404, { 'content-type': 'text/html; charset=utf-8' }).end('<!doctype html><html><body><p>Not found</p></body></html>')
       return
@@ -109,6 +124,12 @@ describe('audit on real page shapes', () => {
     const r = await audit(options(`${base}/otp`))
     const found = r.findings.filter((f) => f.rule === 'content/drops-arabic-digits')
     expect(found.map((f) => [f.severity, f.node?.id])).toEqual([['error', 'input#bad']])
+  })
+
+  it('never fills every box of a one-digit code kept in framework state, so the code is never sent', async () => {
+    sent = 0
+    await audit(options(`${base}/otp-state`))
+    expect(sent).toBe(0)
   })
 
   describe('only types into fields when the rule can fire', () => {

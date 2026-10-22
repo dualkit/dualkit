@@ -62,12 +62,33 @@ describe('probeArabicDigits', () => {
   })
   it(`probes at most ${PROBE_MAX_FIELDS} fields`, async () => {
     const ids = Array.from({ length: PROBE_MAX_FIELDS + 2 }, (_, i) => `f${i}`)
-    const found = await onPage(ids.map((id) => `<input id="${id}" maxlength="1" ${STRIP}>`).join(''), (p) => probeArabicDigits(p, ids.map((id) => field(`#${id}`))))
+    const found = await onPage(ids.map((id) => `<input id="${id}" ${STRIP}>`).join(''), (p) => probeArabicDigits(p, ids.map((id) => field(`#${id}`))))
     expect([...found.keys()]).toEqual(ids.slice(0, PROBE_MAX_FIELDS).map((id) => `#${id}`))
+  })
+  it('probes only the first box of a run of one-digit code boxes', async () => {
+    const ids = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6']
+    const found = await onPage(ids.map((id) => `<input id="${id}" maxlength="1" ${STRIP}>`).join('') + `<input id="tel" type="tel" ${STRIP}>`,
+      (p) => probeArabicDigits(p, [...ids.map((id) => field(`#${id}`)), field('#tel', 'tel')]))
+    expect([...found.keys()]).toEqual(['#d1', '#tel'])
+  })
+  it('probes at most one field per form', async () => {
+    const found = await onPage(
+      `<form><input id="a" ${STRIP}><input id="b" type="tel" ${STRIP}></form><form><input id="c" type="tel" ${STRIP}></form>`,
+      (p) => probeArabicDigits(p, [field('#a'), field('#b', 'tel'), field('#c', 'tel')]))
+    expect([...found.keys()]).toEqual(['#a', '#c'])
+  })
+  it('never fills every box of a one-digit code kept in a JS array', async () => {
+    const ids = ['d0', 'd1', 'd2', 'd3', 'd4', 'd5']
+    const boxes = ids.map((id, i) => `<input id="${id}" maxlength="1" oninput="digits[${i}]=this.value;if(digits.every(Boolean))window.sent=true">`).join('')
+    const sent = await onPage(`<script>window.digits=['','','','','','']</script>${boxes}`, async (p) => {
+      await probeArabicDigits(p, ids.map((id) => field(`#${id}`)))
+      return p.evaluate(() => (globalThis as unknown as { sent?: boolean }).sent)
+    })
+    expect(sent).toBeUndefined()
   })
   it('restores each field\'s value and never submits its form', async () => {
     const after = await onPage(
-      `<form onsubmit="document.body.dataset.sent='yes';return false"><input id="a" value="٣٤" ${STRIP}><input id="b" type="tel" value="0501234567"></form>`,
+      `<form onsubmit="document.body.dataset.sent='yes';return false"><input id="a" value="٣٤" ${STRIP}></form><form><input id="b" type="tel" value="0501234567"></form>`,
       async (p) => {
         await probeArabicDigits(p, [field('#a'), field('#b', 'tel')])
         return [await p.locator('#a').inputValue(), await p.locator('#b').inputValue(), await p.locator('body').getAttribute('data-sent')]
