@@ -21,7 +21,7 @@ It opens the page in Chromium, runs 34 rules (bidi, layout, icons, type, content
 | `--width`, `--height` | `1280`, `800` | Viewport, for example `--width 390 --height 844` for a phone |
 | `--min-score <n>` | `0` | Exit 1 below this score, for CI |
 | `--config <file>` | `dualkit.config.json` | Ignore rules or regions |
-| `--review` | | Also ask a vision model for problems the rules cannot see, see [Review](#review) |
+| `--review` | | Experimental. Also ask a vision model for problems the rules cannot see, see [Review](#review) |
 | `--review-model <provider:model>` | `gemini:gemini-flash-lite-latest` | The model for `--review` |
 
 ```json
@@ -36,7 +36,7 @@ Every rule, why it matters and how to fix it: [RULES.md](https://github.com/dual
 GEMINI_API_KEY=your-key npx dualkit check https://example.com/ar --review
 ```
 
-`--review` adds a second pass after the rules. It sends screenshots of the page to a vision model and asks about problems a rule cannot measure, such as a date that reads in the wrong order or an icon that points the wrong way. Each problem it reports is then checked a second time on a close-up crop, and only the ones the model confirms firmly are kept.
+`--review` is experimental. It has not been measured against hand labels yet, so treat its findings as suggestions. It adds a second pass after the rules. It sends screenshots of the page to a vision model and asks about problems a rule cannot measure, such as a date that reads in the wrong order or an icon that points the wrong way. Each problem it reports is then checked a second time on a close-up crop, and only the ones the model confirms firmly are kept.
 
 By default it uses `gemini-flash-lite-latest` from Google, which has a free tier. Pick another model with `--review-model provider:model`, where the provider is `gemini` or `openrouter`, for example `--review-model openrouter:google/gemma-3-27b-it:free`.
 

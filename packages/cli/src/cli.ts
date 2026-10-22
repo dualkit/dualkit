@@ -23,7 +23,7 @@ const HELP = `Usage: dualkit check <url or file> [options]
   --height <px>       Viewport height (default 800)
   --min-score <n>     Exit 1 when the score is below n
   --config <file>     Config file (default dualkit.config.json)
-  --review            Also ask a vision model for problems the rules cannot see (needs GEMINI_API_KEY)
+  --review            Experimental. Ask a vision model for problems the rules cannot see (needs GEMINI_API_KEY)
   --review-model <provider:model>
                       Model for --review, gemini or openrouter (default gemini:gemini-flash-lite-latest)
 
