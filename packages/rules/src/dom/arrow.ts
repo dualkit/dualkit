@@ -93,22 +93,52 @@ export function glyphHead(text: string, dir: Direction): ArrowHead | null {
   return dir === 'rtl' && BIDI_MIRRORED.has(glyph) ? flip(GLYPHS[glyph]!) : GLYPHS[glyph]!
 }
 
-const BACK = /(^|[^a-z])(back|prev|previous)([^a-z]|$)|رجوع|السابق|عودة/
-const FORWARD = /(^|[^a-z])(next|forward)([^a-z]|$)|التالي|متابعة/
-const words = (value: string): string => value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
+const BACK_WORDS = new Set(['back', 'prev', 'previous', 'رجوع', 'الرجوع', 'ارجع', 'السابق', 'عودة', 'العودة'])
+const FORWARD_WORDS = new Set(['next', 'forward', 'التالي', 'متابعة'])
+/** Words that may follow a role word in a name: "back to orders", "الرجوع إلى الخطوة السابقة". */
+const TO = new Set(['to', 'إلى', 'الى'])
+/** What a role word may step through: "previous month", "الشهر السابق", "nextMonth". */
+const UNITS = new Set(['month', 'year', 'week', 'day', 'page', 'step', 'slide', 'الشهر', 'العام', 'الأسبوع', 'اليوم'])
+/** What a class or id may call the control after its role word: "back-btn", "back-link". */
+const CONTROLS = new Set(['btn', 'button', 'link', 'icon', 'arrow', 'nav'])
 
-/** Back or forward from label, class, id or title words. Null when they say neither, or both. */
-export function roleOf(values: readonly string[]): ArrowRole | null {
-  const text = values.map(words).join(' ')
-  const back = BACK.test(text)
-  const forward = FORWARD.test(text)
-  return back === forward ? null : back ? 'back' : 'forward'
+type Roles = { back: boolean; forward: boolean }
+const roleWord = (w: string | undefined): Roles => ({ back: w !== undefined && BACK_WORDS.has(w), forward: w !== undefined && FORWARD_WORDS.has(w) })
+const either = (a: Roles, b: Roles): Roles => ({ back: a.back || b.back, forward: a.forward || b.forward })
+const NONE: Roles = { back: false, forward: false }
+
+/**
+ * A label or title names a role only as a whole phrase: the role word alone, followed by "to" and a place,
+ * or paired with a unit such as a month. A role word inside other words ("الطلبات السابقة", "previous orders") names none.
+ */
+function nameRoles(name: string): Roles {
+  const w = name.trim().toLowerCase().split(/\s+/).filter(Boolean)
+  if (w.length === 1 || (w.length > 2 && TO.has(w[1]!))) return roleWord(w[0])
+  if (w.length !== 2) return NONE
+  return UNITS.has(w[1]!) ? roleWord(w[0]) : UNITS.has(w[0]!) ? roleWord(w[1]) : NONE
+}
+
+/**
+ * A class or id token names a role when it is a role word, ends in one after a separator (swiper-button-prev, nav-back),
+ * or is a role word and a control or unit (back-btn, prevMonth). previous-orders, cash-back-offer and back-office name none.
+ */
+function tokenRoles(token: string): Roles {
+  const w = token.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase().split(/[-_]+/).filter(Boolean)
+  // A token with both kinds of role word (prev-next) says both.
+  if (w.some((x) => BACK_WORDS.has(x)) && w.some((x) => FORWARD_WORDS.has(x))) return { back: true, forward: true }
+  const paired = w.length === 2 && (CONTROLS.has(w[1]!) || UNITS.has(w[1]!)) ? roleWord(w[0]) : NONE
+  return either(roleWord(w[w.length - 1]), paired)
+}
+
+/** Back or forward from label and title names, and class and id tokens. Null when they say neither, or both. */
+export function roleOf({ names = [], tokens = [] }: { names?: readonly string[]; tokens?: readonly string[] }): ArrowRole | null {
+  const r = [...names.map(nameRoles), ...tokens.map(tokenRoles)].reduce(either, NONE)
+  return r.back === r.forward ? null : r.back ? 'back' : 'forward'
 }
 
 export const CONTROL = 'button, a, [role="button"], [role="link"]'
 /** How far up from the icon the button or link may sit. */
 const CONTROL_DEPTH = 3
-const ROLE_ATTRS = ['aria-label', 'class', 'id', 'title'] as const
 
 /** The role of an arrow, from the icon's own words and those of every element up to the button or link around it. */
 export function iconRole(el: Element): ArrowRole | null {
@@ -120,7 +150,11 @@ export function iconRole(el: Element): ArrowRole | null {
   }
   // Without a control, words further up (a section named "previous orders") say nothing about this icon.
   const named = control ? chain : [el]
-  return roleOf(named.flatMap((n) => ROLE_ATTRS.map((a) => n.getAttribute(a) ?? '')))
+  const attr = (n: Element, a: string): string => n.getAttribute(a) ?? ''
+  return roleOf({
+    names: named.flatMap((n) => [attr(n, 'aria-label'), attr(n, 'title')]),
+    tokens: named.flatMap((n) => [...attr(n, 'class').split(/\s+/), attr(n, 'id')]),
+  })
 }
 
 const times = ([a, b, c, d]: Linear, [e, f, g, h]: Linear): Linear => [a * e + c * f, b * e + d * f, a * g + c * h, b * g + d * h]

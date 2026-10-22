@@ -46,17 +46,26 @@ describe('glyphHead', () => {
 })
 
 describe('roleOf', () => {
-  it.each(['back', 'Back to orders', 'back-btn', 'prev', 'prevMonth', 'previous', 'رجوع', 'الرجوع إلى الخطوة السابقة', 'السابق', 'العودة إلى صفحة الدفع'])('reads %s as back', (word) => {
-    expect(roleOf([word])).toBe('back')
+  it.each(['back', 'Back', 'prev', 'previous', 'رجوع', 'الرجوع', 'ارجع', 'السابق', 'عودة', 'Back to orders', 'الرجوع إلى الخطوة السابقة', 'العودة إلى صفحة الدفع', 'Previous month', 'الشهر السابق'])('reads the name %s as back', (name) => {
+    expect(roleOf({ names: [name] })).toBe('back')
   })
-  it.each(['next', 'nextMonth', 'swiper-button-next', 'forward', 'التالي', 'الشهر التالي', 'متابعة'])('reads %s as forward', (word) => {
-    expect(roleOf([word])).toBe('forward')
+  it.each(['next', 'forward', 'التالي', 'متابعة', 'Next page', 'الشهر التالي'])('reads the name %s as forward', (name) => {
+    expect(roleOf({ names: [name] })).toBe('forward')
   })
-  it.each(['feedback', 'background', 'backdrop', 'playback', 'preview', 'search', 'nextjs-root', ''])('reads %s as neither', (word) => {
-    expect(roleOf([word])).toBeNull()
+  it.each(['الطلبات السابقة', 'Previous orders', 'Cash back offer', 'feedback', 'العودة للمدرسة عروض', ''])('reads the name %s as neither', (name) => {
+    expect(roleOf({ names: [name] })).toBeNull()
+  })
+  it.each(['back', 'btn-back', 'prev', 'swiper-button-prev', 'slick-prev', 'nav-back', 'icon-back', 'back-btn', 'back-link', 'prevMonth', 'previous'])('reads the token %s as back', (token) => {
+    expect(roleOf({ tokens: [token] })).toBe('back')
+  })
+  it.each(['next', 'nextMonth', 'swiper-button-next', 'slick-next', 'forward'])('reads the token %s as forward', (token) => {
+    expect(roleOf({ tokens: [token] })).toBe('forward')
+  })
+  it.each(['previous-orders', 'previousOrders', 'cash-back-offer', 'back-office', 'feedback', 'background', 'backdrop', 'playback', 'preview', 'search', 'nextjs-root', ''])('reads the token %s as neither', (token) => {
+    expect(roleOf({ tokens: [token] })).toBeNull()
   })
   it('reads nothing when the words say both', () => {
-    expect(roleOf(['prev-next'])).toBeNull()
-    expect(roleOf(['nav-btn prev', 'التالي'])).toBeNull()
+    expect(roleOf({ tokens: ['prev-next'] })).toBeNull()
+    expect(roleOf({ names: ['التالي'], tokens: ['nav-btn', 'prev'] })).toBeNull()
   })
 })

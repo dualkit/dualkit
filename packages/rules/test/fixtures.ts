@@ -93,6 +93,13 @@ export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: st
       page(`<button aria-label="التالي">${backLeft}</button><button aria-label="رجوع">‹</button>`, { css: ARROW_CSS }),
       // An all-English page, where back points left.
       page(`<button aria-label="Back">${backLeft}</button><a aria-label="Back" href="#">←</a>`, { lang: 'en', dir: 'ltr', css: ARROW_CSS }),
+      // Correct drill-in chevrons whose label, class or id only contains a role word.
+      page(`<a href="#" aria-label="الطلبات السابقة">${backLeft}</a>`, { css: ARROW_CSS }),
+      page(`<a href="#" class="previous-orders">${backLeft}</a>`, { css: ARROW_CSS }),
+      page(`<a href="#" class="previousOrders">${backLeft}</a>`, { css: ARROW_CSS }),
+      page(`<a href="#" class="cash-back-offer">${backLeft}</a>`, { css: ARROW_CSS }),
+      page(`<a href="#" id="back-office">${backLeft}</a>`, { css: ARROW_CSS }),
+      page('<a href="#" class="previous-orders">←</a>'),
     ],
   },
   'icons/mirrored-by-mistake': { bad: page(icon('play', 'transform:scaleX(-1)')), good: page(icon('play')) },

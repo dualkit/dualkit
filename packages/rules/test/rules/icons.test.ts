@@ -38,8 +38,9 @@ describe('icons/arrow-points-forward', () => {
   it('stays quiet without a role, without a head, or in LTR', () => {
     expect(ids(screen({ icons: [arrow({ role: null, head: 'left' }), arrow({ role: 'back', head: null }), arrow({ role: 'back', head: 'left', dir: 'ltr' })] }))).toEqual([])
   })
-  it('is an error', () => {
-    expect(runRules(screen({ icons: [arrow({ role: 'back', head: 'left' })] }), { rules: iconRules })[0]!.severity).toBe('error')
+  // R23: no real-world precision data yet, so it must not fail CI hard.
+  it('is a warning', () => {
+    expect(runRules(screen({ icons: [arrow({ role: 'back', head: 'left' })] }), { rules: iconRules })[0]!.severity).toBe('warning')
   })
   it('reports only arrow-points-forward when not-mirrored would fire on the same icon', () => {
     expect(ids(screen({ icons: [icon({ name: 'arrow-left', role: 'back', head: 'left' })] }))).toEqual(['icons/arrow-points-forward'])

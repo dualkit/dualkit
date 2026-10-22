@@ -15,7 +15,7 @@ const pointsForward = (i: IconNode): boolean =>
   i.dir === 'rtl' && i.head !== null && ((i.role === 'back' && i.head === 'left') || (i.role === 'forward' && i.head === 'right'))
 
 export const arrowPointsForward = defineRule({
-  id: 'icons/arrow-points-forward', group: 'icons', severity: 'error',
+  id: 'icons/arrow-points-forward', group: 'icons', severity: 'warning',
   title: 'A back or next arrow drawn pointing the wrong way',
   why: 'Arabic reads right to left, so a back arrow points right and a next arrow points left. An arrow drawn the other way sends the reader the wrong way.',
   fix: 'In right to left, draw the arrow the other way, mirror it with a :dir(rtl) { transform: scaleX(-1) } rule, or swap the glyph, such as ← for →.',
@@ -31,7 +31,7 @@ export const notMirrored = defineRule({
   fix: 'Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.',
   // A turn such as Tailwind's rtl:rotate-180 points a symmetric arrow the other way too, so it counts.
   check: (m) => m.icons
-    // An icon that arrow-points-forward reports is left to it: that finding is more exact and more severe.
+    // An icon that arrow-points-forward reports is left to it: that finding is more exact.
     .filter((i) => i.dir === 'rtl' && !i.mirrored && !i.turned && i.name !== null && directional(i.name) && !pointsForward(i))
     .map((i) => ({ node: pick(i), message: `"${i.name}" is not mirrored in right-to-left. Check it points the way the reader moves.` })),
 })
