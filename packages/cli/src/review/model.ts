@@ -28,7 +28,11 @@ const MAX_TOKENS = 4096
 const ERROR_BODY_CHARS = 200
 const KEY: Record<VisionModel['provider'], string> = { openrouter: 'OPENROUTER_API_KEY', gemini: 'GEMINI_API_KEY' }
 
-type Call = { url: string; init: RequestInit; read: (body: any) => { text: string; costUsd: number } }
+type Call = { url: string; init: RequestInit; read: (body: any) => { text: string; costUsd: number; finish: string | null } }
+
+/** OpenRouter says length and Gemini says MAX_TOKENS when the reply ran into the output cap. */
+const CAPPED = ['length', 'MAX_TOKENS']
+const finishOf = (v: unknown): string | null => (typeof v === 'string' && v.length > 0 ? v : null)
 
 function request(model: VisionModel, key: string, { system, text, images }: Ask): Call {
   if (model.provider === 'openrouter') return {
@@ -38,13 +42,13 @@ function request(model: VisionModel, key: string, { system, text, images }: Ask)
         { role: 'system', content: system },
         { role: 'user', content: [{ type: 'text', text }, ...images.map((i) => ({ type: 'image_url', image_url: { url: `data:${i.mime};base64,${i.base64}` } }))] },
       ] }) },
-    read: (b) => ({ text: String(b?.choices?.[0]?.message?.content ?? ''), costUsd: Number(b?.usage?.cost) || 0 }),
+    read: (b) => ({ text: String(b?.choices?.[0]?.message?.content ?? ''), costUsd: Number(b?.usage?.cost) || 0, finish: finishOf(b?.choices?.[0]?.finish_reason) }),
   }
   return {
     url: `https://generativelanguage.googleapis.com/v1beta/models/${model.model}:generateContent`,
     init: { method: 'POST', headers: { 'x-goog-api-key': key, 'content-type': 'application/json' },
       body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text }, ...images.map((i) => ({ inline_data: { mime_type: i.mime, data: i.base64 } }))] }], generationConfig: { temperature: 0, maxOutputTokens: MAX_TOKENS } }) },
-    read: (b) => ({ text: (b?.candidates?.[0]?.content?.parts ?? []).map((p: { text?: string }) => p.text ?? '').join(''), costUsd: 0 }),
+    read: (b) => ({ text: (b?.candidates?.[0]?.content?.parts ?? []).map((p: { text?: string }) => p.text ?? '').join(''), costUsd: 0, finish: finishOf(b?.candidates?.[0]?.finishReason) }),
   }
 }
 
@@ -65,15 +69,21 @@ export function makeVision({ env, fetch: f = fetch, sleep = (ms) => new Promise(
     queue = slot.catch(() => {})
     return slot
   }
-  return async (model: VisionModel, ask: Ask): Promise<Answer> => {
-    const key = env[KEY[model.provider]]
-    if (!key) return { ok: false, error: `No ${KEY[model.provider]}` }
+  // Paid calls run one at a time, from the cap check through the ledger write, so the next one sees the new spend.
+  let paidQueue: Promise<unknown> = Promise.resolve()
+  const exclusive = <T>(job: () => Promise<T>): Promise<T> => {
+    const run = paidQueue.then(job, job)
+    paidQueue = run.catch(() => {})
+    return run
+  }
+
+  async function send(model: VisionModel, key: string, ask: Ask): Promise<Answer> {
     const call = request(model, key, ask)
+    const paid = model.provider === 'openrouter'
     let error = 'No attempt made'
     for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
-      if (overCap(ledger)) return { ok: false, error: BUDGET_SPENT }
+      if (paid && overCap(ledger)) return { ok: false, error: BUDGET_SPENT }
       await pace()
-      if (overCap(ledger)) return { ok: false, error: BUDGET_SPENT }
       const signal = AbortSignal.timeout(REQUEST_TIMEOUT_MS)
       let res: Response
       try {
@@ -85,10 +95,12 @@ export function makeVision({ env, fetch: f = fetch, sleep = (ms) => new Promise(
         continue
       }
       if (res.ok) {
+        // The cost is lost when the reply fails to parse or the request times out: the body is the only place it is reported.
         const body = await res.json().catch(() => null)
-        const { text, costUsd } = call.read(body)
-        // A reply that cost money is recorded even if it turns out empty.
+        const { text, costUsd, finish } = call.read(body)
+        // A reply that cost money is recorded even if it is empty or cut off.
         ledger?.add(costUsd)
+        if (finish !== null && CAPPED.includes(finish)) return { ok: false, error: 'Hit the token cap' }
         if (text.trim()) return { ok: true, text, costUsd }
         const message = body?.error?.message
         return { ok: false, error: typeof message === 'string' && message ? `Provider error: ${clipBody(message, key)}` : 'Empty reply' }
@@ -100,5 +112,12 @@ export function makeVision({ env, fetch: f = fetch, sleep = (ms) => new Promise(
       if (attempt < MAX_RETRIES) await sleep(after > 0 ? after * 1000 : BACKOFF_MS[attempt] ?? 120_000)
     }
     return { ok: false, error }
+  }
+
+  return async (model: VisionModel, ask: Ask): Promise<Answer> => {
+    const key = env[KEY[model.provider]]
+    if (!key) return { ok: false, error: `No ${KEY[model.provider]}` }
+    // The cap stops paid calls only; Gemini costs nothing and is never blocked.
+    return model.provider === 'openrouter' ? exclusive(() => send(model, key, ask)) : send(model, key, ask)
   }
 }

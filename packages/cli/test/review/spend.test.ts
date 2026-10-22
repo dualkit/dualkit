@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
@@ -45,5 +45,13 @@ describe('fileLedger', () => {
   it('exposes the cap, null meaning none', () => {
     expect(fileLedger(join(dir(), 'l.json'), null).capUsd).toBeNull()
     expect(fileLedger(join(dir(), 'l.json'), 3).capUsd).toBe(3)
+  })
+})
+
+describe('fileLedger writes', () => {
+  it('leaves no temp file behind', () => {
+    const d = dir()
+    fileLedger(join(d, 'ledger.json'), 3).add(0.1)
+    expect(readdirSync(d)).toEqual(['ledger.json'])
   })
 })

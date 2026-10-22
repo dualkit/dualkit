@@ -110,4 +110,60 @@ describe('makeVision', () => {
   it('defaults to Gemini flash lite', () => {
     expect(DEFAULT_REVIEW_MODEL).toEqual({ provider: 'gemini', model: 'gemini-flash-lite-latest' })
   })
+
+  it('sends exactly one request when two concurrent paid calls would pass the cap', async () => {
+    let calls = 0
+    const ledger = memoryLedger(2.9, 3)
+    const vision = makeVision({ env: { OPENROUTER_API_KEY: 'k' }, sleep, ledger, fetch: (async () => { calls++; return json({ choices: [{ message: { content: 'hi' } }], usage: { cost: 0.2 } }) }) as any })
+    const answers = await Promise.all([vision(openrouter, ask), vision(openrouter, ask)])
+    expect(calls).toBe(1)
+    expect(answers.filter((a) => a.ok)).toHaveLength(1)
+    expect(answers.filter((a) => !a.ok)).toEqual([{ ok: false, error: 'Monthly review budget spent' }])
+  })
+
+  it('never blocks Gemini on the cap', async () => {
+    let calls = 0
+    const vision = makeVision({ env: { GEMINI_API_KEY: 'k' }, sleep, ledger: memoryLedger(5, 3), fetch: (async () => { calls++; return json({ candidates: [{ content: { parts: [{ text: 'ok' }] } }] }) }) as any })
+    expect((await vision(gemini, ask)).ok).toBe(true)
+    expect(calls).toBe(1)
+  })
+
+  it('returns an error for a reply cut off at the token cap but records its cost', async () => {
+    const ledger = memoryLedger(0, 3)
+    const vision = makeVision({ env: { OPENROUTER_API_KEY: 'k' }, sleep, ledger, fetch: (async () => json({ choices: [{ message: { content: 'par' }, finish_reason: 'length' }], usage: { cost: 0.01 } })) as any })
+    expect(await vision(openrouter, ask)).toEqual({ ok: false, error: 'Hit the token cap' })
+    expect(ledger.spent()).toBeCloseTo(0.01)
+    const g = makeVision({ env: { GEMINI_API_KEY: 'k' }, sleep, fetch: (async () => json({ candidates: [{ finishReason: 'MAX_TOKENS', content: { parts: [{ text: 'par' }] } }] })) as any })
+    expect(await g(gemini, ask)).toEqual({ ok: false, error: 'Hit the token cap' })
+  })
+
+  it('sends the Gemini key in the header, not the URL', async () => {
+    let url = ''
+    let headers: any
+    const vision = makeVision({ env: { GEMINI_API_KEY: 'secret-g' }, sleep, fetch: (async (u: string, init: RequestInit) => {
+      url = u
+      headers = init.headers
+      return json({ candidates: [{ content: { parts: [{ text: 'ok' }] } }] })
+    }) as any })
+    await vision(gemini, ask)
+    expect(headers['x-goog-api-key']).toBe('secret-g')
+    expect(url).not.toContain('secret-g')
+  })
+
+  it('redacts the key from error text', async () => {
+    const vision = makeVision({ env: { OPENROUTER_API_KEY: 'secret-o' }, sleep, fetch: (async () => new Response('bad key secret-o here', { status: 400 })) as any })
+    const answer = await vision(openrouter, ask)
+    expect(answer.ok).toBe(false)
+    if (!answer.ok) {
+      expect(answer.error).not.toContain('secret-o')
+      expect(answer.error).toContain('***')
+    }
+  })
+
+  it('records the cost of an empty paid reply', async () => {
+    const ledger = memoryLedger(0, 3)
+    const vision = makeVision({ env: { OPENROUTER_API_KEY: 'k' }, sleep, ledger, fetch: (async () => json({ choices: [{ message: { content: '' } }], usage: { cost: 0.03 } })) as any })
+    expect(await vision(openrouter, ask)).toEqual({ ok: false, error: 'Empty reply' })
+    expect(ledger.spent()).toBeCloseTo(0.03)
+  })
 })

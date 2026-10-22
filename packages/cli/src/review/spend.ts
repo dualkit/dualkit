@@ -1,14 +1,14 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
 
 /** Tracks what paid model calls have cost this month. `capUsd: null` means no cap. */
 export type Ledger = { spent(): number; add(usd: number): void; capUsd: number | null }
 
-type Record = { month: string; usd: number; calls: number }
+type Entry = { month: string; usd: number; calls: number }
 
 const monthKey = (d: Date) => d.toISOString().slice(0, 7)
 
-function read(path: string, month: string): Record {
+function read(path: string, month: string): Entry {
   try {
     const r = JSON.parse(readFileSync(path, 'utf8'))
     if (r && r.month === month && Number.isFinite(r.usd) && Number.isFinite(r.calls)) return { month, usd: r.usd, calls: r.calls }
@@ -26,7 +26,10 @@ export function fileLedger(path: string, capUsd: number | null, now: () => Date 
     add(usd) {
       const current = read(path, monthKey(now()))
       mkdirSync(dirname(path), { recursive: true })
-      writeFileSync(path, JSON.stringify({ month: current.month, usd: current.usd + usd, calls: current.calls + 1 }))
+      // Write beside the file, then rename over it, so a crash never leaves half a ledger.
+      const temp = `${path}.${process.pid}.tmp`
+      writeFileSync(temp, JSON.stringify({ month: current.month, usd: current.usd + usd, calls: current.calls + 1 }))
+      renameSync(temp, path)
     },
   }
 }
