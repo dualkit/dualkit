@@ -16,6 +16,10 @@ describe('parseCli', () => {
     expect(parseCli(['--summary-only', '--month', '2026-11'], 0)).toMatchObject({ summaryOnly: true, month: '2026-11' })
     expect(() => parseCli(['--summary-only', '--no-summary'], 0)).toThrow(BenchError)
   })
+  it('reads --rescore-parts', () => {
+    expect(parseCli([], 0).rescoreParts).toBe(false)
+    expect(parseCli(['--rescore-parts', '--month', '2026-10'], 0)).toMatchObject({ rescoreParts: true, month: '2026-10' })
+  })
   it('reads --study', () => {
     expect(parseCli([], 0).study).toBe(false)
     expect(parseCli(['--study', '--month', '2026-11'], 0)).toMatchObject({ study: true, month: '2026-11' })

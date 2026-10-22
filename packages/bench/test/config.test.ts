@@ -56,7 +56,7 @@ const SAMPLES: Record<string, Record<string, string>> = {
   'support-chat': { 'order number': 'رقم الطلب TX-48213 جاهز', 'English terms': 'فعّلت eSIM على هاتفي' },
   booking: { 'calendar days': 'السبت 20 الأحد 21 ... 30 31', 'time slots': 'المواعيد 9:00 9:30 10:00 10:30 11:00 11:30' },
   settings: { 'phone number': 'رقم الجوال +973 3600 1234' },
-  transactions: { 'OMR amounts': 'المبلغ 12.500 OMR', 'three decimals': '12.500', 'English merchant': 'Netflix اشتراك' },
+  transactions: { 'eight transactions': Array.from({ length: 8 }, (_, i) => `تاجر ${i} ${i + 1}.250 ر.ع`).join('\n'), 'OMR amounts': 'المبلغ 12.500 OMR', 'three decimals': '12.500', 'English merchant': 'Netflix اشتراك' },
 }
 
 describe('loadScreens', () => {
@@ -80,6 +80,16 @@ describe('loadScreens', () => {
       expect(() => new RegExp(r.text!)).not.toThrow()
       expect(new RegExp(r.text!).test(lines[r.label]!), r.label).toBe(true)
     }
+  })
+  it('loosened checks: seven transactions and three orders are still incomplete, any letter prefix counts', () => {
+    const [tx, orders] = ['transactions', 'order-history'].map((id) => loadScreens().find((s) => s.id === id)!)
+    const eight = new RegExp(tx!.required.find((r) => r.label === 'eight transactions')!.text!)
+    expect(eight.test(Array.from({ length: 7 }, (_, i) => `${i}.250`).join(' '))).toBe(false)
+    const four = new RegExp(orders!.required.find((r) => r.label === 'four orders')!.text!)
+    expect(four.test('#A-10293 #B-88492 #C-33921 #D-55120')).toBe(true)
+    expect(four.test('#A-10293 #B-88492 #C-33921')).toBe(false)
+    expect(four.test('#SA-8501 #SA-8492 #SA-8310 #SA-8194')).toBe(true)
+    expect(four.test('#أ-10293 #أ-10292 #أ-10291 #أ-10290')).toBe(true)
   })
   it('compiles every text pattern', () => {
     for (const s of loadScreens()) for (const r of s.required) if (r.text) expect(() => new RegExp(r.text!)).not.toThrow()
