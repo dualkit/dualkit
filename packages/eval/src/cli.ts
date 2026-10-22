@@ -35,7 +35,7 @@ async function precisionSet(data: string): Promise<PrecisionResult[]> {
   const { products, skipped } = listProducts(data)
   const out: PrecisionResult[] = (['check', 'lint'] as const).map((tool) => ({
     tool, byRule: {}, noteTally: EMPTY, notes: 0, products: 0,
-    skipped: skipped.filter((s) => s.why.includes('at csamples/') === (tool === 'check')).length,
+    skipped: skipped.filter((s) => s.tool === tool).length,
   }))
   for (const p of products) {
     const slot = out.findIndex((x) => x.tool === p.tool)

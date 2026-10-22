@@ -39,9 +39,27 @@ describe('renderReport', () => {
 
   it('puts no product names or snippets in the markdown', () => {
     const r = fixture()
-    const withNames = { ...r, precision: [{ ...r.precision[0]!, name: 'secretco', snippet: '<p class="x">' }, r.precision[1]!] } as EvalResult
-    const md = renderReport(withNames)
+    const leaky: EvalResult = {
+      ...r,
+      misses: {
+        ...r.misses,
+        results: r.misses.results.map((x) => ({ ...x, id: `secretco:<p class="x">:${x.id}` })),
+      },
+    }
+    const md = renderReport(leaky)
     expect(md).not.toContain('secretco')
     expect(md).not.toContain('<p class="x">')
+  })
+
+  it('reports notes on their own line, unclear counts and the real-world miss row', () => {
+    const r = fixture()
+    const md = renderReport({
+      ...r,
+      misses: { ...r.misses, results: [...r.misses.results, { id: 'r', kind: 'real', tool: 'check', caught: false }] },
+    })
+    expect(md).toContain('| check | 2 | 0% |')
+    expect(md).toContain('| lint | 0 | no data |')
+    expect(md).toContain('| real-world miss | 0% (0/1) | no data |')
+    expect(md).toMatch(/\| check \| 80% \| 67% \| \d+% \| \d+% \| 12 \| 2 \|/)
   })
 })

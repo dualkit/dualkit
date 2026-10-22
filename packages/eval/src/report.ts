@@ -57,7 +57,15 @@ function toolRows(r: EvalResult): (string | number)[][] {
       pct(rLoud),
       pct(f1(pLoud, rLoud)),
       hasData ? total(loud) : NO_DATA,
+      p ? loud.unclear + p.noteTally.unclear : NO_DATA,
     ]
+  })
+}
+
+function noteRows(r: EvalResult): (string | number)[][] {
+  return TOOLS.map((tool) => {
+    const p = r.precision.find((x) => x.tool === tool)
+    return [tool, p ? p.notes : NO_DATA, p ? pct(precision(p.noteTally)) : NO_DATA]
   })
 }
 
@@ -72,11 +80,12 @@ function ruleRows(r: EvalResult): (string | number)[][] {
 function kindRows(r: EvalResult): (string | number)[][] {
   const kinds = [...new Set(r.misses.results.map((x) => x.kind))].sort()
   return kinds.map((kind) => {
+    const name = kind === 'real' ? 'real-world miss' : kind
     const cell = (tool: string): string => {
       const { caught, n } = recallOf(r.misses.results, tool, kind)
       return n === 0 ? NO_DATA : `${pct(recall(caught, n))} (${caught}/${n})`
     }
-    return [kind, cell('check'), cell('lint')]
+    return [name, cell('check'), cell('lint')]
   })
 }
 
@@ -89,7 +98,9 @@ export function renderReport(r: EvalResult): string {
   return [
     header,
     '## Per tool',
-    table(['tool', 'precision (warning and error)', 'precision (all severities)', 'recall', 'F1', 'findings'], toolRows(r)),
+    table(['tool', 'precision (warning and error)', 'precision (all severities)', 'recall', 'F1', 'findings', 'unclear'], toolRows(r)),
+    '## Notes',
+    table(['tool', 'notes', 'precision on notes'], noteRows(r)),
     '## Precision per rule',
     rules.length
       ? table(['tool', 'rule', 'precision', 'real', 'handled', 'intended', 'unclear'], rules)

@@ -37,15 +37,15 @@ const sampleFile = (data: string, p: SweepProduct): string =>
   join(data, p.tool === 'lint' ? 'samples' : 'csamples', `${p.name}.md`)
 
 /** Every product that has a label file, split into scorable ones and ones missing a sample file. */
-export function listProducts(data: string): { products: SweepProduct[]; skipped: { name: string; why: string }[] } {
+export function listProducts(data: string): { products: SweepProduct[]; skipped: { tool: 'check' | 'lint'; name: string; why: string }[] } {
   const files = readdirSync(join(data, 'labels')).filter((f) => f.endsWith('.json')).sort()
   const products: SweepProduct[] = []
-  const skipped: { name: string; why: string }[] = []
+  const skipped: { tool: 'check' | 'lint'; name: string; why: string }[] = []
   for (const f of files) {
     const base = f.slice(0, -'.json'.length)
     const product: SweepProduct = base.startsWith('check-') ? { tool: 'check', name: base.slice('check-'.length) } : { tool: 'lint', name: base }
     if (existsSync(sampleFile(data, product))) products.push(product)
-    else skipped.push({ name: product.name, why: `no sample file at ${product.tool === 'lint' ? 'samples' : 'csamples'}/${product.name}.md` })
+    else skipped.push({ tool: product.tool, name: product.name, why: `no sample file at ${product.tool === 'lint' ? 'samples' : 'csamples'}/${product.name}.md` })
   }
   return { products, skipped }
 }
