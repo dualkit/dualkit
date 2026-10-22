@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { afterAll, describe, expect, it } from 'vitest'
 import { REVIEW_PROMPT_VERSION } from '../../cli/src/review/prompt'
 import type { ReviewResult } from '../../cli/src/review'
+import { fileLedger } from '../../cli/src/review/model'
 import { cachedReview, reviewKey } from '../src/review-cache.js'
 
 const dir = mkdtempSync(join(tmpdir(), 'eval-review-cache-'))
@@ -28,7 +29,7 @@ describe('review cache', () => {
     const second = await cachedReview({ dir, content: 'page one', model: gemini, run })
     expect(calls).toBe(1)
     expect(first.cached).toBe(false)
-    expect(second).toEqual({ result: done, cached: true })
+    expect(second).toEqual({ result: { ...done, spentUsd: 0 }, cached: true })
   })
 
   it('does not store a skipped result, so a run without a key never poisons the cache', async () => {
@@ -39,5 +40,16 @@ describe('review cache', () => {
     let calls = 0
     await cachedReview({ dir, content: 'page two', model: gemini, run: async () => { calls += 1; return done } })
     expect(calls).toBe(1)
+  })
+
+  it('reports no spend for a cache hit, and the ledger keeps only the first run', async () => {
+    const ledger = fileLedger(join(dir, 'spend.json'), 3)
+    const paid = async (): Promise<ReviewResult> => { ledger.add(0.25); return { findings: [], spentUsd: 0.25, skipped: null, unchecked: 0 } }
+    const first = await cachedReview({ dir, content: 'page three', model: gemini, run: paid })
+    const second = await cachedReview({ dir, content: 'page three', model: gemini, run: paid })
+    expect(first.result.spentUsd).toBe(0.25)
+    expect(second.cached).toBe(true)
+    expect(second.result.spentUsd).toBe(0)
+    expect(ledger.spent()).toBe(0.25)
   })
 })

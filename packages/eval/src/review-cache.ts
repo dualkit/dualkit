@@ -31,7 +31,8 @@ export type CachedReview = { result: ReviewResult; cached: boolean }
 export async function cachedReview(opts: { dir: string; content: string; model: VisionModel; run: () => Promise<ReviewResult> }): Promise<CachedReview> {
   const file = join(opts.dir, `${reviewKey(opts.content, opts.model)}.json`)
   const known = read(file)
-  if (known) return { result: known, cached: true }
+  // A hit costs nothing now, whatever the first run spent.
+  if (known) return { result: { ...known, spentUsd: 0 }, cached: true }
   const result = await opts.run()
   // A result with unchecked findings came from a flaky double-check, so it is run again next time.
   if (result.skipped === null && result.unchecked === 0) {

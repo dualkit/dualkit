@@ -2,7 +2,7 @@ import type { Finding, NodeRef } from '@dualkit/rules'
 import type { Ask } from './model'
 import type { ReviewRule } from './rules'
 
-/** Bump when the review prompt changes, so the eval's cached results stop matching. */
+/** Bump this whenever the prompt or the reflection text (reflect.ts) changes, because the eval's review cache keys on it. */
 export const REVIEW_PROMPT_VERSION = '1'
 
 const SYSTEM = [

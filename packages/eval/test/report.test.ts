@@ -97,7 +97,13 @@ describe('review and dualkit columns', () => {
   it('says review was skipped, with the reason, and shows no review recall', () => {
     const md = renderReport({ ...withReview(), review: { skipped: 'No GEMINI_API_KEY', spentUsd: 0 }, misses: { cases: 1, dropped: 0, results: [at('a', 'check', true), at('a', 'lint', false), at('a', 'dualkit', true)] } })
     expect(md).toContain('Review was skipped: No GEMINI_API_KEY.')
-    expect(md).toContain('| date-order | 100% (1/1) | 0% (0/1) | no data | 100% (1/1) |')
+    expect(md).toContain('| date-order | 100% (1/1) | 0% (0/1) |')
+    expect(md).not.toContain('dualkit')
+  })
+
+  it('keeps the old shape when review did not run: no review or dualkit text', () => {
+    const md = renderReport({ ...fixture(), misses: { cases: 1, dropped: 0, results: [at('a', 'check', true), at('a', 'lint', false), at('a', 'dualkit', true)] } })
+    expect(md).not.toMatch(/review|dualkit/i)
   })
 
   it('reports review precision as unlabelled with a count, never 0%', () => {

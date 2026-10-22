@@ -54,7 +54,13 @@ function recallOf(results: readonly CaseResult[], tool: string, kind?: string): 
   return { caught: rows.filter((r) => r.caught).length, n: rows.length }
 }
 
-const RECALL_TOOLS = ['check', 'lint', 'review', 'dualkit'] as const
+const BASE_TOOLS = ['check', 'lint'] as const
+const WITH_REVIEW = ['check', 'lint', 'review', 'dualkit'] as const
+
+/** Review columns appear only when review ran for at least one case or page. */
+const reviewRan = (r: EvalResult): boolean =>
+  r.misses.results.some((x) => x.tool === 'review') || r.precision.some((p) => p.tool === 'review' && p.products > 0)
+const recallTools = (r: EvalResult): readonly string[] => (reviewRan(r) ? WITH_REVIEW : BASE_TOOLS)
 
 /** Review precision needs hand labels. Without them, say so and give the number of findings waiting for a label. */
 function reviewPrecision(p: PrecisionResult | undefined, labelled: number): string | null {
@@ -64,7 +70,7 @@ function reviewPrecision(p: PrecisionResult | undefined, labelled: number): stri
 
 function toolRows(r: EvalResult): (string | number)[][] {
   const base = checkLintRows(r)
-  const extra = (['review', 'dualkit'] as const).flatMap((tool) => {
+  const extra = (reviewRan(r) ? (['review', 'dualkit'] as const) : []).flatMap((tool) => {
     const p = r.precision.find((x) => x.tool === tool)
     const rec = recallOf(r.misses.results, tool)
     if (rec.n === 0 && !p) return []
@@ -130,7 +136,7 @@ function kindRows(r: EvalResult): (string | number)[][] {
       const { caught, n } = recallOf(r.misses.results, tool, kind)
       return n === 0 ? NO_DATA : `${pct(recall(caught, n))} (${caught}/${n})`
     }
-    return [name, ...RECALL_TOOLS.map(cell)]
+    return [name, ...recallTools(r).map(cell)]
   })
 }
 
@@ -157,7 +163,7 @@ export function renderReport(r: EvalResult): string {
       ? table(['tool', 'rule', 'precision', 'real', 'handled', 'intended', 'unclear'], rules)
       : NO_DATA,
     '## Recall per bug kind',
-    r.misses.results.length ? table(['kind', ...RECALL_TOOLS], kindRows(r)) : NO_DATA,
+    r.misses.results.length ? table(['kind', ...recallTools(r)], kindRows(r)) : NO_DATA,
     '',
   ].join('\n\n')
 }
