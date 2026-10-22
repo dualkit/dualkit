@@ -31,7 +31,7 @@ function readingOrder(nodes: NodeRef[]): NodeRef[] {
 }
 
 /** The first fenced block anywhere in the reply, else the slice from the first `{` to the last `}`. */
-const parseJson = (reply: string): unknown => {
+export const parseJson = (reply: string): unknown => {
   const fenced = /```(?:json)?[ \t]*\r?\n?([^]*?)```/i.exec(reply)?.[1]
   const open = reply.indexOf('{')
   const braces = open >= 0 && reply.lastIndexOf('}') > open ? reply.slice(open, reply.lastIndexOf('}') + 1) : null
@@ -56,7 +56,7 @@ export function findingsFrom(reply: string, cands: NodeRef[], rules: ReviewRule[
     const confidence = typeof entry.confidence === 'number' && Number.isFinite(entry.confidence) ? Math.min(1, Math.max(0, entry.confidence)) : 0
     return [{
       rule: rule.id, group: rule.group, severity: 'warning', title: rule.title, message, fix: rule.fix, docs: REVIEW_DOCS,
-      node: cands[el], source: 'review', confidence, line: null,
+      node: cands[el] ?? null, source: 'review', confidence, line: null,
     }]
   })
 }
@@ -71,11 +71,11 @@ function parseTag(text: string): Tag | null {
   if (!m) return null
   const attrs = new Map<string, string>()
   const closed = m[3] === '>'
-  let rest = m[2].replace(/\/\s*$/, '')
+  let rest = (m[2] ?? '').replace(/\/\s*$/, '')
   // A cut-off tag may end in a half-written attribute; leave it out.
   if (!closed) rest = rest.replace(/\s+[^\s"'=]*(?:\s*=\s*(?:"[^"]*|'[^']*|[^\s"']*))?$/, '')
-  for (const a of rest.matchAll(ATTR)) attrs.set(a[1].toLowerCase(), (a[2] ?? a[3] ?? a[4] ?? '').replace(/\s+/g, ' ').trim())
-  return { name: m[1].toLowerCase(), attrs, closed }
+  for (const a of rest.matchAll(ATTR)) attrs.set((a[1] ?? '').toLowerCase(), (a[2] ?? a[3] ?? a[4] ?? '').replace(/\s+/g, ' ').trim())
+  return { name: (m[1] ?? '').toLowerCase(), attrs, closed }
 }
 
 function matches(want: Tag, have: Tag): boolean {
@@ -93,5 +93,5 @@ export function lineOf(source: string, node: NodeRef): number | null {
     const have = parseTag(m[0])
     if (have && matches(want, have)) hits.push(source.slice(0, m.index).split('\n').length)
   }
-  return hits.length === 1 ? hits[0] : null
+  return hits.length === 1 ? hits[0] ?? null : null
 }

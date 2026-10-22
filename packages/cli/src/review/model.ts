@@ -96,7 +96,7 @@ export function makeVision({ env, fetch: f = fetch, sleep = (ms) => new Promise(
       }
       if (res.ok) {
         // The cost is lost when the reply fails to parse or the request times out: the body is the only place it is reported.
-        const body = await res.json().catch(() => null)
+        const body: any = await res.json().catch(() => null)
         const { text, costUsd, finish } = call.read(body)
         // A reply that cost money is recorded even if it is empty or cut off.
         ledger?.add(costUsd)

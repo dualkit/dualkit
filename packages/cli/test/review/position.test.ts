@@ -10,6 +10,7 @@ const date = 'review/date-reads-wrong'
 describe('findingsFrom', () => {
   it('maps element 2 to the third candidate as a review warning', () => {
     const [f] = findingsFrom(JSON.stringify({ findings: [{ rule: date, element: 2, message: 'Day and month are swapped.', confidence: 0.8 }] }), cands, rules)
+    if (!f) throw new Error('no finding')
     expect(f).toMatchObject({ rule: date, severity: 'warning', source: 'review', confidence: 0.8, message: 'Day and month are swapped.', line: null })
     expect(f.node?.id).toBe('c')
     expect(f.docs).toContain('#review')
@@ -54,7 +55,7 @@ describe('findingsFrom', () => {
     const reply = JSON.stringify({ findings: [{ rule: date, element: '2', message: 'm', confidence: 1 }, { rule: date, element: 'two', message: 'm', confidence: 1 }, { rule: date, element: '3', message: 'm', confidence: 1 }] })
     const out = findingsFrom(reply, cands, rules)
     expect(out).toHaveLength(1)
-    expect(out[0].node?.id).toBe('c')
+    expect(out[0]?.node?.id).toBe('c')
   })
   it('reads JSON inside a code fence', () => {
     const reply = '```json\n' + JSON.stringify({ findings: [{ rule: date, element: 1, message: 'm', confidence: 0.5 }] }) + '\n```'

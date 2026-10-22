@@ -25,6 +25,9 @@ const safeHref = (url: string) => (/^https:\/\//.test(url) ? escapeHtml(url) : n
 const message = (f: Finding) => `<bdi dir="ltr">${renderMessage(f.message)}</bdi>`
 const snippet = (f: Finding) => (f.node ? `<code dir="ltr">${escapeHtml(f.node.snippet)}</code>` : '')
 
+/** Marks a finding that came from the vision model, with how sure it was. */
+const reviewBadge = (f: Finding) => (f.source === 'review' ? `<span class="badge">Review${f.confidence === undefined ? '' : ` · ${Math.round(f.confidence * 100)}% sure`}</span>` : '')
+
 function crop({ n, f }: Numbered, box: Box, ctx: ViewContext, minPx: number, cls: string): string {
   const rough = cropWindow(box, ctx.imageWidth, ctx.imageHeight)
   const content = ctx.paint?.contentSpan(rough.y, rough.y + rough.height) ?? null
@@ -68,6 +71,6 @@ export function renderCard(group: RuleGroup, ctx: ViewContext): string {
   const href = safeHref(f.docs)
   const why = href ? ` <a class="why" href="${href}">Why</a>` : ''
   return `<article class="card ev ${f.severity}">${evidence}<div class="body">
-<p class="head"><span class="pin-static ${f.severity}">${first.n}</span><span>${SEVERITY_LABEL[f.severity]}</span><span class="rid">${escapeHtml(f.rule)}</span></p>
+<p class="head"><span class="pin-static ${f.severity}">${first.n}</span><span>${SEVERITY_LABEL[f.severity]}</span><span class="rid">${escapeHtml(f.rule)}</span>${reviewBadge(f)}</p>
 <h3>${escapeHtml(f.title)}</h3><p class="fix">${escapeHtml(f.fix)}${why}</p>${seen}${more(group, ctx)}</div></article>`
 }

@@ -1,11 +1,12 @@
 import { readFileSync } from 'node:fs'
+import { PNG } from 'pngjs'
 import { describe, expect, it } from 'vitest'
 import type { AuditResult } from '../src/audit'
-import { run } from '../src/cli'
+import { parseReviewModel, run } from '../src/cli'
 
 const fake = (score = 80): AuditResult => ({
   url: 'https://example.com/', date: '2026-10-16T00:00:00.000Z', width: 1280, height: 800, score, findings: [],
-  screenshot: '', pageHeight: 800, unreadableStylesheets: 0,
+  screenshot: '', pageHeight: 800, unreadableStylesheets: 0, tags: {},
 })
 
 const io = (score = 80) => {
@@ -75,5 +76,95 @@ describe('dualkit check', () => {
     const t = io()
     expect(await run(['--help'], t.io)).toBe(0)
     expect(t.out.join('')).toContain('dualkit check <url or file>')
+  })
+})
+
+const shot = PNG.sync.write(new PNG({ width: 2560, height: 1600 })).toString('base64')
+const screen = {
+  root: { lang: 'ar', dir: 'rtl', computedDir: 'rtl' }, texts: [{ id: 'p', snippet: '<p>مرحبا</p>', box: { x: 20, y: 30, width: 80, height: 20 }, text: '٢٠٢٦/١٠/٢٢', blockHasArabic: true }],
+  layouts: [], icons: [], fields: [], fonts: [], labels: [], clips: [], joins: [], unreadableStylesheets: 0, viewportWidth: 1280,
+}
+const reviewable = (url = 'https://example.com/') => ({ ...fake(80), url, screenshot: shot, screen }) as unknown as AuditResult
+const found = '{"findings":[{"rule":"review/date-reads-wrong","element":0,"message":"The year comes first.","confidence":0.9}]}'
+const sure = async (_m: unknown, ask: { text: string }) => ({ ok: true as const, costUsd: 0.01, text: ask.text.includes('claimed problem') ? '{"confirmed": true, "confidence": 0.8}' : found })
+
+describe('dualkit check --review', () => {
+  const withReview = (vision: unknown, result: AuditResult = reviewable()) => {
+    const t = io()
+    return { ...t, io: { ...t.io, audit: async () => result, vision: vision as never } }
+  }
+
+  it('prints check findings, then review findings marked review', async () => {
+    const t = withReview(sure)
+    expect(await run(['check', 'https://example.com', '--review'], t.io)).toBe(0)
+    const text = t.out.join('')
+    expect(text).toContain('Score 80/100')
+    expect(text.indexOf('Score 80/100')).toBeLessThan(text.indexOf('review review/date-reads-wrong'))
+    expect(text).toContain('80% sure')
+    expect(t.files['dualkit-report.html']).toContain('class="badge"')
+  })
+
+  it('with no key prints the check result, one stderr line, and the same exit code', async () => {
+    const { makeVision } = await import('../src/review/model')
+    const vision = makeVision({ env: {} })
+    for (const score of [80, 40]) {
+      const t = withReview(vision, { ...reviewable(), score })
+      const plain = io(score)
+      const withFlag = await run(['check', 'https://example.com', '--review', '--min-score', '50'], t.io)
+      expect(withFlag).toBe(await run(['check', 'https://example.com', '--min-score', '50'], plain.io))
+      expect(t.err.join('')).toBe('Review skipped: No GEMINI_API_KEY\n')
+      expect(t.out.join('')).toContain(`Score ${score}/100`)
+    }
+  })
+
+  it('adds review spend and skipped state to --json, without the model data', async () => {
+    const t = withReview(sure)
+    await run(['check', 'https://example.com', '--review', '--json'], t.io)
+    const json = JSON.parse(t.out.join(''))
+    expect(json.review).toMatchObject({ spentUsd: expect.closeTo(0.02), skipped: null })
+    expect(json.review.findings[0]).toMatchObject({ source: 'review', line: null })
+    expect(json.screen).toBeUndefined()
+  })
+
+  it('does not change the score or the exit code', async () => {
+    const t = withReview(sure)
+    expect(await run(['check', 'https://example.com', '--review', '--min-score', '80'], t.io)).toBe(0)
+    expect(t.out.join('')).toContain('Score 80/100')
+  })
+
+  it('does not call the model without --review', async () => {
+    let calls = 0
+    const t = withReview(async () => { calls++; return { ok: false, error: 'x' } })
+    await run(['check', 'https://example.com'], t.io)
+    expect(calls).toBe(0)
+    expect(t.out.join('')).not.toContain('review')
+  })
+
+  it('points a local file finding at its line', async () => {
+    const url = new URL('./fixtures/page.html', import.meta.url).href
+    const t = withReview(sure, { ...reviewable(url), screen: { ...screen, texts: [{ ...screen.texts[0]!, snippet: '<h1>' }] } as never })
+    await run(['check', url, '--review', '--json'], t.io)
+    expect(JSON.parse(t.out.join('')).review.findings[0].line).toBe(5)
+  })
+
+  it.each(['gemini', 'nope:model', ':model', 'gemini:'])('rejects --review-model "%s" as a usage error before the audit', async (value) => {
+    const t = withReview(sure)
+    let audited = false
+    t.io.audit = async () => { audited = true; return reviewable() }
+    expect(await run(['check', 'https://example.com', '--review', '--review-model', value], t.io)).toBe(2)
+    expect(t.err.join('')).toContain('--review-model')
+    expect(audited).toBe(false)
+  })
+
+  it('needs --review for --review-model, and lint takes neither', async () => {
+    expect(await run(['check', 'https://example.com', '--review-model', 'gemini:x'], io().io)).toBe(2)
+    expect(await run(['lint', '.', '--review'], io().io)).toBe(2)
+  })
+})
+
+describe('parseReviewModel', () => {
+  it('defaults to Gemini and splits at the first colon', () => {
+    expect(parseReviewModel(undefined)).toEqual({ provider: 'gemini', model: 'gemini-flash-lite-latest' })
+    expect(parseReviewModel('openrouter:google/gemma-3-27b-it:free')).toEqual({ provider: 'openrouter', model: 'google/gemma-3-27b-it:free' })
   })
 })

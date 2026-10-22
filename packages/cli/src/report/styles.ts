@@ -41,6 +41,7 @@ const CARDS = `
 .ev{padding:10px;display:flex;flex-direction:column}
 .body{padding:22px 14px 14px;display:flex;flex-direction:column;flex:1}
 .head{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:13px;color:var(--soft)}
+.badge{padding:1px 8px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--faint);color:var(--faint);font-size:12px;line-height:1.5}
 .rid{font:12px/1.4 ${MONO};color:var(--faint);overflow-wrap:anywhere}
 .pin-static{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:var(--c);color:#fff;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
 h3{margin:12px 0 0;font-size:19px;line-height:1.3;font-weight:500;letter-spacing:-.015em}

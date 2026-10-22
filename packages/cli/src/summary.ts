@@ -29,3 +29,15 @@ export function formatSummary(result: AuditResult, color = Boolean(process.stdou
   if (result.unreadableStylesheets > 0) lines.push('', `${plural(result.unreadableStylesheets, 'stylesheet')} could not be read, so layout checks may miss rules in them.`)
   return `${lines.join('\n')}\n`
 }
+
+/** Review findings under the check summary, each marked `review` with its confidence. They never change the score. */
+export function formatReview({ findings, spentUsd }: { findings: readonly Finding[]; spentUsd: number }, color = Boolean(process.stdout.isTTY)): string {
+  if (findings.length === 0) return ''
+  const lines = ['', paint(color, 1, `Review found ${plural(findings.length, 'thing')} worth a look (the model can be wrong)`)]
+  for (const f of findings) {
+    const where = f.line ? ` line ${f.line}` : ''
+    lines.push(`${paint(color, 33, MARK.warning)} ${paint(color, 2, 'review')} ${f.rule}${where}  ${f.message} (${Math.round((f.confidence ?? 0) * 100)}% sure)`)
+  }
+  if (spentUsd > 0) lines.push(`Review spent $${spentUsd.toFixed(4)}`)
+  return `${lines.join('\n')}\n`
+}

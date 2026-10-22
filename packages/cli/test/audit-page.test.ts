@@ -24,6 +24,9 @@ const SPY_PAGES: Record<string, string> = { '/spy-ar': SPY('ar', 'رمز الت�
 
 const VERY_TALL = '<!doctype html><html lang="ar" dir="rtl"><body style="margin:0"><div style="height:6000px"></div></body></html>'
 
+const TAGS = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"></head><body><p>مرحبا</p>
+<table><tr><td>1</td></tr></table><form><input type="text"><input type="hidden"><textarea></textarea></form><div class="chat-window"></div></body></html>`
+
 let server: Server
 let base = ''
 
@@ -37,7 +40,7 @@ beforeAll(async () => {
       res.writeHead(500, { 'content-type': 'text/html; charset=utf-8' }).end('<!doctype html><html><body><p>Oops</p></body></html>')
       return
     }
-    const page = SPY_PAGES[req.url ?? ''] ?? (req.url === '/otp' ? OTP : req.url === '/tall-rtl' ? TALL_RTL : req.url === '/very-tall' ? VERY_TALL : HERO)
+    const page = SPY_PAGES[req.url ?? ''] ?? (req.url === '/otp' ? OTP : req.url === '/tags' ? TAGS : req.url === '/tall-rtl' ? TALL_RTL : req.url === '/very-tall' ? VERY_TALL : HERO)
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' }).end(page)
   })
   await new Promise<void>((r) => server.listen(0, r))
@@ -87,6 +90,11 @@ describe('audit on real page shapes', () => {
     expect(shot.width).toBe(2048)
     expect(shot.height).toBe(6000)
     expect(shot.colours).toEqual([[255, 0, 0, 255], [0, 0, 255, 255]])
+  })
+
+  it('counts the tags the reviewer picks its rules from', async () => {
+    const r = await audit(options(`${base}/tags`))
+    expect(r.tags).toEqual({ table: 1, form: 1, input: 2, chat: 1 })
   })
 
   it('captures at 1x when 2x would make the screenshot too tall', async () => {
