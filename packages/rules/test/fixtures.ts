@@ -20,6 +20,22 @@ const long = 'نص عربي طويل يمتد على عدة أسطر في هذه
 export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: string[]; moreBad?: string[] }> = {
   'bidi/unisolated-number': { bad: page('<p>رقم الهاتف 050 123 4567</p>'), good: page('<p>رقم الهاتف <bdi>050 123 4567</bdi></p>') },
   'bidi/unisolated-latin': { bad: page('<p>رقم الطلب #A-10293 تم</p>'), good: page('<p>رقم الطلب <bdi>#A-10293</bdi> تم</p>') },
+  'bidi/date-order': {
+    bad: page('<div dir="rtl"><span>٣-١١-٢٠٢٦</span></div>'),
+    good: page('<div dir="rtl"><span>٣/١١/٢٠٢٦</span></div>'),
+    moreBad: [
+      page('<p>تاريخ الطلب 15-03-2025</p>'),
+      page('<p>آخر تحديث <bdi dir="ltr">15 مارس 2025، 10:00 ص</bdi></p>'),
+      page('<p>آخر تحديث <span style="direction:ltr;unicode-bidi:isolate">14 ربيع الأول 1447</span></p>'),
+    ],
+    moreGood: [
+      page('<p>تاريخ الطلب 15/03/2025</p>'),
+      page('<p>تاريخ الطلب <bdi dir="ltr">15-03-2025</bdi></p>'),
+      page('<p>Date 15-03-2025</p>'),
+      page('<p>آخر تحديث 15 مارس 2025، 10:00 ص</p>'),
+      page('<p>Order placed on 15-03-2025 at 10:00 am.</p>', { lang: 'en', dir: 'ltr' }),
+    ],
+  },
   'bidi/punctuation-flip': { bad: page('<p>Hello world!</p>'), good: page('<p dir="ltr">Hello world!</p>') },
   'bidi/field-direction': { bad: page('<label>البريد <input type="email"></label>'), good: page('<label>البريد <input type="email" dir="ltr"></label>') },
   'bidi/field-placeholder': {

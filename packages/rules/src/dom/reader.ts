@@ -83,6 +83,24 @@ function isolatedBelow(el: Element, block: Element, style: Style): boolean {
   return false
 }
 
+/**
+ * Whether an element at or above this one turns text order left to right inside right-to-left content. Inline CSS direction only
+ * reorders text with unicode-bidi set; a dir attribute sets it, and a block's direction sets its paragraph's.
+ */
+function forcesLtr(el: Element, style: Style, memo: Map<Element, boolean>): boolean {
+  const known = memo.get(el)
+  if (known !== undefined) return known
+  const s = style(el)
+  const parent = el.parentElement
+  let result = false
+  if (s.direction === 'ltr' && parent) {
+    const flips = style(parent).direction === 'rtl' && (s.unicodeBidi !== 'normal' || (s.display !== 'inline' && s.display !== 'contents'))
+    result = flips || forcesLtr(parent, style, memo)
+  }
+  memo.set(el, result)
+  return result
+}
+
 /** What touches this text on one side, climbing out of inline tags up to the block: a <br>, the block's edge, or other content. */
 function edgeOf(node: Node, block: Element, side: 'previousSibling' | 'nextSibling'): 'br' | 'edge' | 'content' {
   let at: Node | null = node
@@ -121,6 +139,7 @@ function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, re
   type BlockInfo = { block: Element; id: string; full: string; text: string; dir: ReturnType<typeof dirOf>; facts: Pick<TextRun, 'blockArabicShare' | 'blockHasArabic' | 'blockArabicWords'> }
   const blockCache = new Map<Element, BlockInfo>()
   const hidden = new Map<Element, boolean>()
+  const forced = new Map<Element, boolean>()
   const newBlockInfo = (block: Element): BlockInfo => {
     const full = clean(block.textContent ?? '')
     const facts = { blockArabicShare: arabicShare(full), blockHasArabic: hasArabic(full), blockArabicWords: arabicWordCount(full) }
@@ -159,7 +178,7 @@ function readTexts(doc: Document, style: Style, skipped: Pred, visible: Pred, re
       ...ref(parent, rect(range.getBoundingClientRect())),
       text, blockId: id, blockText, ...facts, blockDir, dir: dirOf(s),
       lang: parent.closest('[lang]')?.getAttribute('lang') || null,
-      isolated: isolatedBelow(parent, block, style), isLastInBlock: full.endsWith(text), endsLine: endsLine(node, block),
+      isolated: isolatedBelow(parent, block, style), forcedLtr: forcesLtr(parent, style, forced), isLastInBlock: full.endsWith(text), endsLine: endsLine(node, block),
       font, signs: readSigns(doc, text, font, fonts), lines: Math.max(1, lines), mirrored: mirroredBy !== null, mirroredBy: mirroredBy && pathOf(mirroredBy),
     })
   }

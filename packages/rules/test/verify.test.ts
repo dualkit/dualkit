@@ -801,3 +801,25 @@ describe('type/arabic-broken-join matches what Chromium paints', () => {
     expect(await found(html, 'type/arabic-broken-join')).toEqual(['type/arabic-broken-join'])
   })
 })
+
+// Task 4: the date-order rule flags what Chromium paints out of order, read from character x positions.
+describe('bidi/date-order', () => {
+  const painted = (body: string) => withPage(page(body), async (p) => visualText(await charBoxes(p, '#d')))
+  it('Chromium reverses dash-joined Arabic numbers and keeps slashed or Western-only dates whole', async () => {
+    expect(await painted('<div dir="rtl"><span id="d">٣-١١-٢٠٢٦</span></div>')).toBe('٢٠٢٦-١١-٣')
+    expect(await painted('<p id="d">تاريخ 15-03-2025</p>')).toMatch(/^2025-03-15/)
+    expect(await painted('<div dir="rtl"><span id="d">٣/١١/٢٠٢٦</span></div>')).toBe('٣/١١/٢٠٢٦')
+    expect(await painted('<p id="d">تاريخ 15/03/2025</p>')).toMatch(/^15\/03\/2025/)
+    expect(await painted('<p id="d">Date 15-03-2025</p>')).toBe('Date15-03-2025')
+    expect(await painted('<p>تاريخ <bdi dir="ltr" id="d">15-03-2025</bdi></p>')).toBe('15-03-2025')
+  })
+  it('Chromium paints a worded date forced left to right with its pieces backwards, and keeps it whole right to left', async () => {
+    expect(await painted('<p>تحديث <bdi dir="ltr" id="d">15 مارس 2025، 10:00 ص</bdi></p>')).toBe('15ص10:00،2025سرام')
+    expect(await painted('<p id="d">15 مارس 2025، 10:00 ص</p>')).toBe('ص10:00،2025سرام15')
+    expect(await painted('<p>تحديث <bdi dir="ltr" id="d">الأحد 15 مارس 2025</bdi></p>')).toBe('2025سرام15دحألا')
+  })
+  it('reports the date element itself, not its block', async () => {
+    const findings = runRules(await modelOf(page('<div dir="rtl"><span>٣-١١-٢٠٢٦</span></div>')), { rules: RULES.filter((r) => r.id === 'bidi/date-order') })
+    expect(findings.map((f) => f.node?.snippet.startsWith('<span'))).toEqual([true])
+  })
+})

@@ -18,6 +18,13 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 
 **Fix:** Wrap it in `<bdi>`, or give its element dir="ltr".
 
+<a id="bidi-date-order"></a>
+### `bidi/date-order` A date that will show in the wrong order
+
+**error.** Inside right-to-left text, digits joined by - become Arabic numbers when they are Arabic-Indic or follow an Arabic word, and a - does not hold those together, so 15-03-2025 shows as 2025-03-15. A worded Arabic date such as 15 مارس 2025، 10:00 ص, forced left to right with dir="ltr", shows its words and numbers backwards.
+
+**Fix:** Join the parts with / instead of -, or wrap a Western-digit date in `<bdi dir="ltr">`. Leave a worded Arabic date right to left.
+
 <a id="bidi-punctuation-flip"></a>
 ### `bidi/punctuation-flip` Punctuation at the wrong end
 

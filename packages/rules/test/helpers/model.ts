@@ -11,7 +11,7 @@ export const text = (p: Partial<TextRun> = {}): TextRun => {
 }
 const run = (p: Partial<TextRun>): TextRun => ({
   ...base, text: 'مرحبا', blockId: 'p', blockText: 'مرحبا', blockArabicShare: 1, blockHasArabic: true, blockArabicWords: 1, blockDir: 'rtl', dir: 'rtl', lang: 'ar',
-  isolated: false, isLastInBlock: true, endsLine: false,
+  isolated: false, forcedLtr: false, isLastInBlock: true, endsLine: false,
   font: { families: ['IBM Plex Sans Arabic', 'sans-serif'], size: 16, lineHeight: 27, letterSpacing: 0, style: 'normal', weight: 400 },
   lines: 1, signs: [], mirrored: false, mirroredBy: null, ...p,
 })

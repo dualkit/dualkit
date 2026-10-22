@@ -64,7 +64,7 @@ PINS[EXAMPLES.find((e) => e.quote.startsWith('const count = '))!.quote] = (e) =>
 afterAll(closeBrowser)
 
 describe('skill examples through the rules', () => {
-  it('runs all 29 rules', () => expect(RULES).toHaveLength(29))
+  it('runs all 30 rules', () => expect(RULES).toHaveLength(30))
 
   it('renders the bare shell with findings', async () => {
     const ids = runRules(await modelOf(shell('', '<p>مرحبا بكم</p>'))).map((f) => f.rule)
@@ -121,7 +121,7 @@ describe('skill examples through the rules', () => {
     }
   })
 
-  it.each(skillsWithExamples)('%s: its good examples pass all 29 rules on their own page', async (skill) => {
+  it.each(skillsWithExamples)('%s: its good examples pass all 30 rules on their own page', async (skill) => {
     const own = EXAMPLES.filter((e) => e.skill === skill)
     const page = shell(own.map(cssOf).join('\n'), own.map((e) => e.html).join('\n'))
     const findings = runRules(await modelOf(page), { ignore: ignoredFor(skill) }).map((f) => `${skill} ${f.rule}: ${f.message}`)

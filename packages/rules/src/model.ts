@@ -33,6 +33,11 @@ export type TextRun = NodeRef & {
   lang: string | null
   /** Inside <bdi>, an element with a dir attribute, or unicode-bidi isolate or plaintext, below its block. */
   isolated: boolean
+  /**
+   * The run's text order is forced left to right inside right-to-left content: an element at or above it runs ltr while its parent
+   * runs rtl, through <bdi dir="ltr">, a dir attribute, or CSS direction on a block or with unicode-bidi set. Separate from `isolated`.
+   */
+  forcedLtr: boolean
   isLastInBlock: boolean
   /** The run is a whole line closed by a <br>, with nothing else on that line. */
   endsLine: boolean
