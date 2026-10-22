@@ -1,9 +1,11 @@
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
 import { join, relative, resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { fileURLToPath, pathToFileURL } from 'node:url'
 import { lintText } from '@dualkit/lint'
 import { chromium, type Browser } from 'playwright'
 import { parse } from 'node-html-parser'
+import { RUN } from '@dualkit/bench/src/config'
 import { scoreHtml, type Scored } from '@dualkit/bench/src/score'
 import { applyEdits, retag } from './inject-html.js'
 import { INJECTORS, type BugKind } from './inject.js'
@@ -34,6 +36,7 @@ export async function closeBrowser(): Promise<void> {
   const b = browser
   browser = null
   scored.clear()
+  boxes.clear()
   await b?.close().catch(() => {})
 }
 
@@ -158,16 +161,83 @@ const newKeys = (bugged: readonly string[], clean: readonly string[]): string[] 
 }
 
 type Scorer = (html: string) => Promise<Scored>
+export type Box = { x: number; y: number; width: number; height: number }
+type BoxOf = (html: string) => Promise<Box | null>
+export type Deps = { score?: Scorer; box?: BoxOf }
 
-/** Check found it: a new warning or error whose element carries the marker. */
-export async function checkCaught(bugged: string, clean: string, score: Scorer = scorePage): Promise<boolean> {
+const boxes = new Map<string, Promise<Box | null>>()
+const SETTLE_MS = 800
+
+/** Where the marked element renders, read from a render set up like the audit's (same viewport, load and settle). */
+export function markedBox(html: string): Promise<Box | null> {
+  const known = boxes.get(html)
+  if (known) return known
+  const run = (async () => {
+    browser ??= await chromium.launch()
+    const dir = mkdtempSync(join(tmpdir(), 'eval-box-'))
+    const context = await browser.newContext({ viewport: { width: RUN.width, height: RUN.height } })
+    try {
+      const file = join(dir, 'index.html')
+      writeFileSync(file, html)
+      const page = await context.newPage()
+      await page.goto(pathToFileURL(file).href, { waitUntil: 'domcontentloaded', timeout: 30_000 })
+      await page.waitForLoadState('load', { timeout: 10_000 }).catch(() => {})
+      await page.waitForTimeout(SETTLE_MS)
+      return await page.evaluate((marker) => {
+        const el = document.querySelector(`[${marker}]`)
+        if (!el) return null
+        const r = el.getBoundingClientRect()
+        return { x: r.x + scrollX, y: r.y + scrollY, width: r.width, height: r.height }
+      }, MARKER)
+    } finally {
+      await context.close().catch(() => {})
+      rmSync(dir, { recursive: true, force: true })
+    }
+  })()
+  if (boxes.size >= CACHE_PAGES) boxes.delete(boxes.keys().next().value as string)
+  boxes.set(html, run)
+  return run
+}
+
+type Hit = { rule: string; snippet: string | null; box: Box | null }
+const MARKED_FIRST_TAG = /^<[^>]*data-eval-bug/
+const BOX_SLACK = 1
+
+/** The same rule on the same element: snippets compared with the marker removed, both cut to the shorter, since a snippet is cut at a fixed length and the marker pushes the cut earlier. */
+function sameFinding(a: Hit, b: Hit): boolean {
+  if (a.rule !== b.rule) return false
+  const x = stripMarker(a.snippet ?? '')
+  const y = stripMarker(b.snippet ?? '')
+  const n = Math.min(x.length, y.length)
+  return x.slice(0, n) === y.slice(0, n)
+}
+
+/** Findings of the bugged page that the clean page does not already have, each clean finding used once. */
+function newFindings(bugged: readonly Hit[], clean: readonly Hit[]): Hit[] {
+  const free = [...clean]
+  return bugged.filter((f) => {
+    const i = free.findIndex((c) => sameFinding(f, c))
+    if (i === -1) return true
+    free.splice(i, 1)
+    return false
+  })
+}
+
+const inside = (inner: Box, outer: Box): boolean =>
+  inner.x >= outer.x - BOX_SLACK && inner.y >= outer.y - BOX_SLACK &&
+  inner.x + inner.width <= outer.x + outer.width + BOX_SLACK && inner.y + inner.height <= outer.y + outer.height + BOX_SLACK &&
+  inner.width * inner.height < outer.width * outer.height - BOX_SLACK
+
+/** Check found it: a new warning or error on the marked element (marker in the snippet's first tag) or on a descendant (box strictly inside the marked element's box). */
+export async function checkCaught(bugged: string, clean: string, deps: Deps = {}): Promise<boolean> {
+  const score = deps.score ?? scorePage
   const [b, c] = await Promise.all([score(bugged), score(clean)])
   if (!b.ok) return false
-  const key = (f: { rule: string; snippet: string | null }) => JSON.stringify([f.rule, stripMarker(f.snippet ?? '')])
-  const loud = (r: Scored) => (r.ok ? r.findings.filter((f) => f.severity !== 'note') : [])
-  const onMarked = loud(b).filter((f) => f.snippet?.includes(MARKER))
-  const fresh = new Set(newKeys(loud(b).map(key), loud(c).map(key)))
-  return onMarked.some((f) => fresh.has(key(f)))
+  const loud = (r: Scored): Hit[] => (r.ok ? r.findings.filter((f) => f.severity !== 'note') : [])
+  const fresh = newFindings(loud(b), loud(c))
+  if (fresh.some((f) => MARKED_FIRST_TAG.test(f.snippet ?? ''))) return true
+  const marked = await (deps.box ?? markedBox)(bugged)
+  return marked !== null && fresh.some((f) => f.box !== null && inside(f.box, marked))
 }
 
 /** Lint found it: a new warning or error on a line that holds the marker. */
@@ -189,7 +259,7 @@ export function sharedLine(html: string): boolean {
   return (line.match(/<[a-zA-Z]/g) ?? []).length > 1
 }
 
-export async function runCase(c: MissCase, clean: string, score: Scorer = scorePage): Promise<CaseResult[]> {
+export async function runCase(c: MissCase, clean: string, deps: Deps = {}): Promise<CaseResult[]> {
   const result = (tool: CaseResult['tool'], caught: boolean): CaseResult => ({ id: c.id, kind: c.kind, tool, caught })
-  return [result('check', await checkCaught(c.html, clean, score)), result('lint', lintCaught(c.html, clean))]
+  return [result('check', await checkCaught(c.html, clean, deps)), result('lint', lintCaught(c.html, clean))]
 }

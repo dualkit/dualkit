@@ -97,28 +97,44 @@ describe('markSelector', () => {
 })
 
 describe('checkCaught', () => {
-  const finding = (snippet: string, severity: 'warning' | 'note' = 'warning') => ({ rule: 'type/letter-spacing', title: '', severity, box: null, message: '', fix: '', snippet })
+  type Box = { x: number; y: number; width: number; height: number }
+  const finding = (snippet: string, severity: 'warning' | 'note' = 'warning', box: Box | null = null) => ({ rule: 'type/letter-spacing', title: '', severity, box, message: '', fix: '', snippet })
   const scored = (...findings: ReturnType<typeof finding>[]) => ({ ok: true as const, rulesPassed: 0, score: 0, missing: [], text: '', findings, screenshot: '', pageHeight: 0, unreadableStylesheets: 0 })
-  const score = (pages: Record<string, ReturnType<typeof scored>>) => async (html: string) => pages[html]!
+  const run = (clean: ReturnType<typeof scored>, bugged: ReturnType<typeof scored>, marked: Box | null = null) =>
+    checkCaught('bugged', 'clean', { score: async (html) => (html === 'bugged' ? bugged : clean), box: async () => marked })
+  const MARKED: Box = { x: 10, y: 100, width: 300, height: 80 }
 
   it('counts a finding on the marked element as caught', async () => {
-    const pages = { clean: scored(), bugged: scored(finding('<h1 data-eval-bug="arabic-tracking" style="letter-spacing: 0.08em;">')) }
-    expect(await checkCaught('bugged', 'clean', score(pages))).toBe(true)
+    expect(await run(scored(), scored(finding('<h1 data-eval-bug="arabic-tracking" style="letter-spacing: 0.08em;">')))).toBe(true)
   })
 
   it('does not count a new finding on an unmarked sibling', async () => {
-    const pages = { clean: scored(), bugged: scored(finding('<p style="letter-spacing: 0.08em;">')) }
-    expect(await checkCaught('bugged', 'clean', score(pages))).toBe(false)
+    expect(await run(scored(), scored(finding('<p style="letter-spacing: 0.08em;">', 'warning', { x: 10, y: 400, width: 300, height: 20 })), MARKED)).toBe(false)
   })
 
   it('does not count a rule the clean page already reports on that element', async () => {
-    const pages = { clean: scored(finding('<h1 style="x">')), bugged: scored(finding('<h1 data-eval-bug="k" style="x">')) }
-    expect(await checkCaught('bugged', 'clean', score(pages))).toBe(false)
+    expect(await run(scored(finding('<h1 style="x">')), scored(finding('<h1 data-eval-bug="k" style="x">')))).toBe(false)
+  })
+
+  it('does not count a long element whose finding the clean page already has', async () => {
+    const tail = `class="${'a '.repeat(80)}">`
+    const clean = finding(`<div ${tail}`.slice(0, 160))
+    const bugged = finding(`<div data-eval-bug="k" ${tail}`.slice(0, 160))
+    expect(await run(scored(clean), scored(bugged))).toBe(false)
+  })
+
+  it('does not count an ancestor whose snippet contains the marked child', async () => {
+    const ancestor = finding('<div class="card"><h1 data-eval-bug="k" style="letter-spacing: 0.08em;">', 'warning', { x: 0, y: 0, width: 390, height: 844 })
+    expect(await run(scored(), scored(ancestor), MARKED)).toBe(false)
+  })
+
+  it('counts a new finding on a descendant inside the marked box', async () => {
+    const inner = finding('<span style="letter-spacing: 0.08em;">', 'warning', { x: 20, y: 110, width: 100, height: 20 })
+    expect(await run(scored(), scored(inner), MARKED)).toBe(true)
   })
 
   it('ignores notes', async () => {
-    const pages = { clean: scored(), bugged: scored(finding('<h1 data-eval-bug="k">', 'note')) }
-    expect(await checkCaught('bugged', 'clean', score(pages))).toBe(false)
+    expect(await run(scored(), scored(finding('<h1 data-eval-bug="k">', 'note')))).toBe(false)
   })
 
   it('sees letter-spacing on a marked Arabic heading in a real render', async () => {
@@ -140,6 +156,15 @@ ${line}
 
   it('counts a lint finding on the marked line as caught', () => {
     expect(lintCaught(page(digits.replace('<script>', '<script data-eval-bug="k">')), page('<script>1</script>'))).toBe(true)
+  })
+
+  it('reads lint lines as 1-based', () => {
+    const digits = "<script>new Intl.NumberFormat('ar').format(5)</script>"
+    const second = `<p>x</p>\n${digits.replace('<script>', '<script data-eval-bug="k">')}`
+    const first = `${digits.replace('<script>', '<script data-eval-bug="k">')}\n<p>x</p>`
+    expect(lintCaught(second, '<p>x</p>\n<script>1</script>')).toBe(true)
+    expect(lintCaught(first, '<script>1</script>\n<p>x</p>')).toBe(true)
+    expect(lintCaught(`<p data-eval-bug="k">x</p>\n${digits}`, '<p>x</p>\n<script>1</script>')).toBe(false)
   })
 
   it('does not count a finding on another line', () => {
