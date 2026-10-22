@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ملخص الدفع</title>
+    <!-- Google Fonts: IBM Plex Sans Arabic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #F8FAFC;
+            --surface-color: #FFFFFF;
+            --primary: #0F766E;
+            --primary-hover: #115E59;
+            --primary-light: #F0FDFA;
+            --text-main: #0F172A;
+            --text-secondary: #64748B;
+            --text-muted: #94A3B8;
+            --border: #E2E8F0;
+            --accent-gold: #D97706;
+            --accent-gold-bg: #FEF3C7;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --shadow-subtle: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+            --shadow-float: 0 10px 25px -5px rgba(15, 118, 110, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #0F172A;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-main);
+        }
+
+        /* Mobile device mockup frame */
+        .device-container {
+            width: 100%;
+            max-width: 414px;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        @media (min-width: 440px) {
+            .device-container {
+                min-height: 870px;
+                height: 870px;
+                border-radius: 44px;
+                box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 0 8px #1E293B;
+                overflow: hidden;
+            }
+        }
+
+        /* Mobile Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 24px 6px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .status-icons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Navigation Header */
+        .header {
+            display: grid;
+            grid-template-columns: 44px 1fr 44px;
+            align-items: center;
+            padding: 10px 16px 14px;
+            background-color: var(--bg-color);
+        }
+
+        .back-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--surface-color);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-main);
+        }
+
+        .back-button:active {
+            transform: scale(0.94);
+            background-color: #F1F5F9;
+        }
+
+        .header-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Scrollable Content */
+        .content {
+            flex: 1;
+            padding: 8px 20px 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Main Amount Card */
+        .card-amount {
+            background: linear-gradient(145deg, #064E3B, #0F766E);
+            color: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 24px 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 12px 24px -6px rgba(15, 118, 110, 0.35);
+        }
+
+        .card-amount::after {
+            content: "";
+            position: absolute;
+            left: -30px;
+            bottom: -30px;
+            width: 130px;
+            height: 130px;
+            background: rgba(255, 255, 255, 0.07);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .amount-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #A7F3D0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .amount-val-wrap {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            direction: ltr;
+            justify-content: flex-end;
+            margin-bottom: 18px;
+        }
+
+        .amount-currency {
+            font-size: 18px;
+            font-weight: 600;
+            color: #E2E8F0;
+        }
+
+        .amount-number {
+            font-size: 38px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1;
+        }
+
+        /* Due Date Pill */
+        .due-date-box {
+            background-color: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .due-date-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #D1FAE5;
+        }
+
+        .dates-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .date-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .date-divider {
+            opacity: 0.5;
+            font-size: 11px;
+        }
+
+        /* Order Items Notice Card */
+        .card-items {
+            background-color: var(--surface-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .items-info-side {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .items-icon-wrap {
+            width: 42px;
+            height: 42px;
+            background-color: #FEF3C7;
+            color: #B45309;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .items-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .items-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .view-link {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* SMS Notification Section */
+        .section-card {
+            background-color: var(--surface-color);
+            border-radius: var(--radius-md);
+            padding: 18px 16px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .field-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .field-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            background-color: #F8FAFC;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 4px 8px;
+            transition: all 0.2s ease;
+        }
+
+        .input-group:focus-within {
+            border-color: var(--primary);
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+        }
+
+        .country-prefix {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 10px;
+            border-left: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            user-select: none;
+        }
+
+        .country-flag {
+            width: 22px;
+            height: 15px;
+            border-radius: 2px;
+            object-fit: cover;
+            display: inline-block;
+        }
+
+        .phone-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px 12px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-main);
+            outline: none;
+            direction: ltr;
+            text-align: right;
+            letter-spacing: 0.5px;
+        }
+
+        .phone-input::placeholder {
+            color: var(--text-muted);
+            letter-spacing: normal;
+        }
+
+        /* Security Assurance */
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        /* Footer & Pay Action Button */
+        .footer-action {
+            background-color: var(--surface-color);
+            padding: 16px 20px 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .pay-btn {
+            width: 100%;
+            height: 54px;
+            background-color: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow-float);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .pay-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .pay-btn:active {
+            transform: scale(0.98);
+        }
+
+        .pay-btn-amount {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 14px;
+            direction: ltr;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: absolute;
+            top: 60px;
+            left: 20px;
+            right: 20px;
+            background-color: #064E3B;
+            color: white;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform: translateY(-80px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="device-container">
+    <!-- Feedback Toast -->
+    <div id="toast" class="toast">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>جاري معالجة عملية الدفع بأمان...</span>
+    </div>
+
+    <!-- Phone Status Bar -->
+    <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-icons">
+            <!-- Cellular -->
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
+                <rect x="0" y="8" width="3" height="4" rx="0.5"/>
+                <rect x="4.3" y="5" width="3" height="7" rx="0.5"/>
+                <rect x="8.6" y="2.5" width="3" height="9.5" rx="0.5"/>
+                <rect x="13" y="0" width="3" height="12" rx="0.5"/>
+            </svg>
+            <!-- Wi-Fi -->
+            <svg width="15" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+                <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                <line x1="12" y1="20" x2="12.01" y2="20"/>
+            </svg>
+            <!-- Battery -->
+            <svg width="22" height="11" viewBox="0 0 24 12" fill="currentColor">
+                <rect x="1" y="1" width="19" height="10" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+                <rect x="3" y="3" width="13" height="6" rx="1.5"/>
+                <path d="M22 4.5v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Screen Header -->
+    <header class="header">
+        <button class="back-button" aria-label="رجوع" onclick="history.back ? history.back() : null">
+            <!-- Right-pointing Chevron for RTL Back -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+        <h1 class="header-title">ملخص الدفع</h1>
+        <div style="width: 40px;"></div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="content">
+        <!-- Amount Card -->
+        <div class="card-amount">
+            <div class="amount-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <line x1="2" y1="10" x2="22" y2="10"/>
+                </svg>
+                <span>المبلغ الإجمالي المستحق</span>
+            </div>
+
+            <div class="amount-val-wrap">
+                <span class="amount-currency">AED</span>
+                <span class="amount-number">1,234.50</span>
+            </div>
+
+            <!-- Due Date (Gregorian and Hijri) -->
+            <div class="due-date-box">
+                <div class="due-date-header">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span>تاريخ الاستحقاق</span>
+                </div>
+                <div class="dates-container">
+                    <span class="date-badge">3 نوفمبر 2026 م</span>
+                    <span class="date-divider">•</span>
+                    <span class="date-badge">23 جمادى الأولى 1448 هـ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3 Items Notice Card -->
+        <div class="card-items">
+            <div class="items-info-side">
+                <div class="items-icon-wrap">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div class="items-title">لديك 3 عناصر في هذا الطلب</div>
+                    <div class="items-subtitle">مشتريات إلكترونية وخدمات تقنية</div>
+                </div>
+            </div>
+            <a href="javascript:void(0)" class="view-link">التفاصيل</a>
+        </div>
+
+        <!-- SMS Receipt Phone Number Field -->
+        <div class="section-card">
+            <label class="field-label" for="phoneInput">رقم الهاتف المتحرك</label>
+            <p class="field-desc">سنرسل نسخة إلكترونية من إيصال الدفع عبر رسالة نصية قصيرة (SMS)</p>
+
+            <div class="input-group">
+                <!-- UAE Dial Code & Flag -->
+                <div class="country-prefix">
+                    <!-- UAE Flag SVG -->
+                    <svg class="country-flag" viewBox="0 0 600 300" aria-label="علم الإمارات">
+                        <rect width="600" height="100" fill="#00732f"/>
+                        <rect y="100" width="600" height="100" fill="#ffffff"/>
+                        <rect y="200" width="600" height="100" fill="#000000"/>
+                        <rect width="150" height="300" fill="#ff0000"/>
+                    </svg>
+                    <span dir="ltr">+971</span>
+                </div>
+
+                <input 
+                    type="tel" 
+                    id="phoneInput" 
+                    class="phone-input" 
+                    placeholder="050 123 4567"
+                    maxlength="12"
+                    autocomplete="tel"
+                >
+            </div>
+        </div>
+
+        <!-- Security and Guarantee -->
+        <div class="security-note">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            <span>دفع آمن ومعتمد من مصرف الإمارات المركزي</span>
+        </div>
+    </main>
+
+    <!-- Footer Action -->
+    <footer class="footer-action">
+        <button class="pay-btn" id="payButton" onclick="handlePayment()">
+            <span>ادفع الآن</span>
+            <span class="pay-btn-amount">1,234.50 AED</span>
+        </button>
+    </footer>
+</div>
+
+<script>
+    // Format UAE Phone Input nicely: 050 123 4567
+    const phoneInput = document.getElementById('phoneInput');
+    
+    phoneInput.addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 10) value = value.slice(0, 10);
+        
+        // Auto format standard UAE format
+        let formatted = '';
+        if (value.length > 0) {
+            formatted = value.substring(0, 3);
+            if (value.length > 3) {
+                formatted += ' ' + value.substring(3, 6);
+            }
+            if (value.length > 6) {
+                formatted += ' ' + value.substring(6, 10);
+            }
+        }
+        e.target.value = formatted;
+    });
+
+    function handlePayment() {
+        const btn = document.getElementById('payButton');
+        const toast = document.getElementById('toast');
+        
+        btn.disabled = true;
+        btn.style.opacity = '0.8';
+        btn.innerHTML = `
+            <span>جاري المعالجة...</span>
+        `;
+        
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            btn.innerHTML = `
+                <span>تم الدفع بنجاح ✓</span>
+            `;
+            btn.style.backgroundColor = '#059669';
+        }, 2200);
+    }
+</script>
+
+</body>
+</html>

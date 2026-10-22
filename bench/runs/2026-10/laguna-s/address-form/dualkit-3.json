@@ -4,16 +4,78 @@
   "screen": "address-form",
   "condition": "dualkit",
   "run": 3,
-  "at": "2026-10-21T17:08:06.715Z",
-  "reply": "",
+  "at": "2026-10-22T07:21:53.572Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>نموذج عنوان التسليم</title>\n  <style>\n    :lang(ar) {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n    body {\n      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;\n      font-size: var(--type-body-size);\n      margin: 0;\n      padding: 16px;\n      background-color: #f9f9f9;\n      color: #333;\n    }\n    h1 {\n      font-size: 20px;\n      margin-bottom: 20px;\n      text-align: center;\n    }\n    form {\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n    label {\n      font-size: var(--type-label-size);\n      margin-bottom: 4px;\n      display: block;\n    }\n    input, select {\n      width: 100%;\n      padding: 10px;\n      font-size: var(--type-body-size);\n      border: 1px solid #ccc;\n      border-radius: 6px;\n      box-sizing: border-box;\n    }\n    input[dir=\"ltr\"] {\n      text-align: left;\n    }\n    .phone-wrapper {\n      display: flex;\n      align-items: center;\n      gap: 8px;\n    }\n    .phone-wrapper bdi {\n      font-weight: bold;\n    }\n    button {\n      background-color: #00796B;\n      color: white;\n      border: none;\n      padding: 14px;\n      font-size: var(--type-body-size);\n      border-radius: 6px;\n      cursor: pointer;\n    }\n    button:hover {\n      background-color: #00695C;\n    }\n  </style>\n</head>\n<body>\n  <h1>عنوان التسليم</h1>\n  <form>\n    <div>\n      <label for=\"building-villa\">المبنى أو الفيلا</label>\n      <input type=\"text\" id=\"building-villa\" name=\"building_villa\" placeholder=\"مثال: المبنى ١٢ أو الفيلا ٣\" />\n    </div>\n\n    <div>\n      <label for=\"street\">الشارع</label>\n      <input type=\"text\" id=\"street\" name=\"street\" placeholder=\"مثال: شارع الملك فهد\" />\n    </div>\n\n    <div>\n      <label for=\"area\">المنطقة</label>\n      <input type=\"text\" id=\"area\" name=\"area\" placeholder=\"مثال: دبي الكبرى\" />\n    </div>\n\n    <div>\n      <label for=\"makani\">رقم المكاني</label>\n      <input type=\"text\" id=\"makani\" name=\"makani\" inputmode=\"numeric\" dir=\"ltr\" placeholder=\"مثال: ٣٣٣٣٣٣٣٣٣٣٣٣٣٣٣٣\" />\n    </div>\n\n    <div>\n      <label for=\"emirate\">الإمارة</label>\n      <select id=\"emirate\" name=\"emirate\">\n        <option value=\"Dubai\">دبي</option>\n        <option value=\"Abu Dhabi\">أبوظبي</option>\n        <option value=\"Sharjah\">الشارقة</option>\n        <option value=\"Ajman\">عجمان</option>\n        <option value=\"Umm Al-Quwain\">أم القيوين</option>\n        <option value=\"Ras Al-Khaimah\">رأس الخيمة</option>\n        <option value=\"Fujairah\">الفجيرة</option>\n      </select>\n    </div>\n\n    <div>\n      <label for=\"phone\">رقم الهاتف</label>\n      <div class=\"phone-wrapper\">\n        <bdi dir=\"ltr\">+971</bdi>\n        <input type=\"tel\" id=\"phone\" name=\"phone\" inputmode=\"tel\" dir=\"ltr\" placeholder=\"مثال: 050 123 4567\" />\n      </div>\n    </div>\n\n    <button type=\"submit\">حفظ العنوان</button>\n  </form>\n</body>\n</html>\n```",
   "usage": {
     "input": 6484,
-    "output": 16000
+    "output": 1176
   },
-  "finish": "length",
-  "reasoningTokens": 16021,
+  "ms": 22855,
+  "finish": "stop",
+  "reasoningTokens": 0,
   "servedModel": "poolside/laguna-s-2.1:free",
-  "ms": 320839,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 84,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-placeholder",
+      "title": "An Arabic hint on the wrong side of the field",
+      "severity": "warning",
+      "box": {
+        "x": 16,
+        "y": 390.140625,
+        "width": 358,
+        "height": 49.1875
+      },
+      "message": "The placeholder \"مثال: ٣٣٣٣٣٣٣٣٣٣٣٣٣٣٣٣\" is Arabic in a left-to-right field.",
+      "fix": "Keep dir=\"ltr\" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.",
+      "snippet": "<input type=\"text\" id=\"makani\" name=\"makani\" inputmode=\"numeric\" dir=\"ltr\" placeholder=\"مثال: ٣٣٣٣٣٣٣٣٣٣٣٣٣٣٣٣\">"
+    },
+    {
+      "rule": "bidi/field-placeholder",
+      "title": "An Arabic hint on the wrong side of the field",
+      "severity": "warning",
+      "box": {
+        "x": 16,
+        "y": 567.921875,
+        "width": 313.953125,
+        "height": 49.1875
+      },
+      "message": "The placeholder \"مثال: 050 123 4567\" is Arabic in a left-to-right field.",
+      "fix": "Keep dir=\"ltr\" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.",
+      "snippet": "<input type=\"tel\" id=\"phone\" name=\"phone\" inputmode=\"tel\" dir=\"ltr\" placeholder=\"مثال: 050 123 4567\">"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 136.71875,
+        "y": 35.390625,
+        "width": 116.5625,
+        "height": 22
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>عنوان التسليم</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 153.265625,
+        "y": 652.109375,
+        "width": 83.453125,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button type=\"submit\">حفظ العنوان</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
 }

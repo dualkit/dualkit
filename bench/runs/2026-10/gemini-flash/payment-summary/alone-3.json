@@ -4,13 +4,330 @@
   "screen": "payment-summary",
   "condition": "alone",
   "run": 3,
-  "at": "2026-10-21T16:50:58.676Z",
-  "reply": null,
-  "usage": null,
-  "finish": null,
-  "reasoningTokens": null,
-  "servedModel": null,
-  "ms": 233071,
-  "ok": false,
-  "error": "HTTP 503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n"
+  "at": "2026-10-22T07:12:12.973Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n    <title>ملخص الدفع</title>\n    <!-- Google Fonts: Cairo & Readex Pro for premium UAE fintech typography -->\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Readex+Pro:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n    \n    <style>\n        :root {\n            --primary: #0A8754;\n            --primary-dark: #065F3A;\n            --primary-light: #E8F8F0;\n            --surface: #FFFFFF;\n            --background: #F4F6F8;\n            --text-main: #0F172A;\n            --text-secondary: #64748B;\n            --text-muted: #94A3B8;\n            --border: #E2E8F0;\n            --gold: #D97706;\n            --gold-light: #FEF3C7;\n            --radius-lg: 20px;\n            --radius-md: 14px;\n            --radius-sm: 10px;\n            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);\n            --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 4px 10px -3px rgba(15, 23, 42, 0.03);\n        }\n\n        * {\n            box-sizing: border-box;\n            margin: 0;\n            padding: 0;\n            -webkit-tap-highlight-color: transparent;\n        }\n\n        body {\n            font-family: 'Cairo', 'Readex Pro', -apple-system, BlinkMacSystemFont, sans-serif;\n            background-color: #0b1329;\n            color: var(--text-main);\n            min-height: 100vh;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            padding: 0;\n        }\n\n        /* Mobile Shell Frame */\n        .mobile-container {\n            width: 100%;\n            max-width: 420px;\n            min-height: 100vh;\n            background-color: var(--background);\n            position: relative;\n            display: flex;\n            flex-direction: column;\n            overflow-x: hidden;\n        }\n\n        @media (min-width: 440px) {\n            .mobile-container {\n                min-height: 860px;\n                height: 860px;\n                border-radius: 40px;\n                box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);\n                border: 8px solid #1E293B;\n                margin: 20px 0;\n            }\n        }\n\n        /* Status Bar (Simulated iPhone) */\n        .status-bar {\n            padding: 14px 24px 8px;\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            font-size: 13px;\n            font-weight: 600;\n            color: var(--text-main);\n            letter-spacing: -0.2px;\n        }\n\n        .status-icons {\n            display: flex;\n            gap: 6px;\n            align-items: center;\n        }\n\n        /* Top Header */\n        .app-header {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            padding: 12px 20px 16px;\n            background: transparent;\n        }\n\n        .back-btn {\n            width: 42px;\n            height: 42px;\n            border-radius: 50%;\n            background: var(--surface);\n            border: 1px solid var(--border);\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            cursor: pointer;\n            color: var(--text-main);\n            transition: all 0.2s ease;\n            box-shadow: var(--shadow-sm);\n        }\n\n        .back-btn:active {\n            transform: scale(0.94);\n            background: #F1F5F9;\n        }\n\n        .header-title {\n            font-size: 18px;\n            font-weight: 700;\n            color: var(--text-main);\n        }\n\n        .header-placeholder {\n            width: 42px;\n        }\n\n        /* Content Scroll Area */\n        .content-scroll {\n            flex: 1;\n            padding: 4px 20px 120px;\n            overflow-y: auto;\n            scrollbar-width: none;\n        }\n\n        .content-scroll::-webkit-scrollbar {\n            display: none;\n        }\n\n        /* Main Amount Card */\n        .amount-card {\n            background: linear-gradient(145deg, #064E3B, #047857);\n            border-radius: var(--radius-lg);\n            padding: 24px 20px;\n            color: #ffffff;\n            box-shadow: 0 14px 28px rgba(4, 120, 87, 0.25);\n            position: relative;\n            overflow: hidden;\n            margin-bottom: 18px;\n        }\n\n        .amount-card::before {\n            content: '';\n            position: absolute;\n            top: -40px;\n            left: -40px;\n            width: 140px;\n            height: 140px;\n            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);\n            border-radius: 50%;\n        }\n\n        .amount-label {\n            font-size: 13px;\n            font-weight: 500;\n            color: rgba(255, 255, 255, 0.85);\n            margin-bottom: 6px;\n        }\n\n        .amount-wrapper {\n            display: flex;\n            align-items: baseline;\n            gap: 8px;\n            margin-bottom: 18px;\n        }\n\n        .amount-value {\n            font-family: 'Readex Pro', sans-serif;\n            font-size: 38px;\n            font-weight: 800;\n            letter-spacing: -1px;\n            line-height: 1;\n        }\n\n        .amount-currency {\n            font-size: 16px;\n            font-weight: 600;\n            color: #A7F3D0;\n        }\n\n        /* Due Date Pill Box */\n        .due-date-box {\n            background: rgba(0, 0, 0, 0.22);\n            backdrop-filter: blur(8px);\n            border: 1px solid rgba(255, 255, 255, 0.15);\n            border-radius: var(--radius-md);\n            padding: 12px 14px;\n            display: flex;\n            align-items: center;\n            gap: 12px;\n        }\n\n        .calendar-icon-wrap {\n            width: 36px;\n            height: 36px;\n            background: rgba(255, 255, 255, 0.18);\n            border-radius: 10px;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            flex-shrink: 0;\n        }\n\n        .date-content {\n            display: flex;\n            flex-direction: column;\n            gap: 2px;\n        }\n\n        .date-title {\n            font-size: 11px;\n            color: #D1FAE5;\n            font-weight: 500;\n        }\n\n        .date-primary {\n            font-size: 13.5px;\n            font-weight: 700;\n            color: #FFFFFF;\n        }\n\n        .date-hijri {\n            font-size: 11.5px;\n            color: #A7F3D0;\n            font-weight: 500;\n        }\n\n        /* Order Items Notice Card */\n        .order-card {\n            background: var(--surface);\n            border-radius: var(--radius-lg);\n            padding: 16px 18px;\n            border: 1px solid var(--border);\n            box-shadow: var(--shadow-sm);\n            margin-bottom: 18px;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n        }\n\n        .order-info {\n            display: flex;\n            align-items: center;\n            gap: 12px;\n        }\n\n        .order-icon-badge {\n            width: 44px;\n            height: 44px;\n            border-radius: 12px;\n            background: #EFF6FF;\n            color: #2563EB;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            flex-shrink: 0;\n        }\n\n        .order-text-main {\n            font-size: 14.5px;\n            font-weight: 700;\n            color: var(--text-main);\n        }\n\n        .order-text-sub {\n            font-size: 12px;\n            color: var(--text-secondary);\n            margin-top: 2px;\n        }\n\n        .items-pill {\n            background: #F1F5F9;\n            color: #334155;\n            font-size: 12px;\n            font-weight: 600;\n            padding: 4px 10px;\n            border-radius: 20px;\n        }\n\n        /* SMS Phone Number Section */\n        .section-card {\n            background: var(--surface);\n            border-radius: var(--radius-lg);\n            padding: 18px;\n            border: 1px solid var(--border);\n            box-shadow: var(--shadow-sm);\n            margin-bottom: 16px;\n        }\n\n        .section-header {\n            display: flex;\n            align-items: center;\n            gap: 8px;\n            margin-bottom: 6px;\n        }\n\n        .section-title {\n            font-size: 14px;\n            font-weight: 700;\n            color: var(--text-main);\n        }\n\n        .section-subtitle {\n            font-size: 12px;\n            color: var(--text-secondary);\n            line-height: 1.5;\n            margin-bottom: 14px;\n        }\n\n        .phone-input-group {\n            display: flex;\n            align-items: center;\n            border: 1.5px solid var(--border);\n            border-radius: var(--radius-md);\n            background: #F8FAFC;\n            transition: all 0.2s ease;\n            overflow: hidden;\n        }\n\n        .phone-input-group:focus-within {\n            border-color: var(--primary);\n            background: #FFFFFF;\n            box-shadow: 0 0 0 3px rgba(10, 135, 84, 0.12);\n        }\n\n        .uae-badge {\n            display: flex;\n            align-items: center;\n            gap: 6px;\n            padding: 12px 14px;\n            background: #F1F5F9;\n            border-left: 1px solid var(--border);\n            font-size: 13px;\n            font-weight: 700;\n            color: var(--text-main);\n            direction: ltr;\n        }\n\n        .flag-icon {\n            font-size: 18px;\n            line-height: 1;\n        }\n\n        .phone-field {\n            flex: 1;\n            border: none;\n            outline: none;\n            background: transparent;\n            padding: 12px 14px;\n            font-size: 15px;\n            font-family: 'Readex Pro', sans-serif;\n            font-weight: 600;\n            color: var(--text-main);\n            direction: ltr;\n            text-align: right;\n            width: 100%;\n        }\n\n        .phone-field::placeholder {\n            color: #94A3B8;\n            font-weight: 400;\n            text-align: right;\n        }\n\n        .sms-badge {\n            display: flex;\n            align-items: center;\n            gap: 6px;\n            margin-top: 10px;\n            font-size: 11px;\n            color: #059669;\n            font-weight: 600;\n        }\n\n        /* Payment Summary Breakdown (Fintech Trust Polish) */\n        .breakdown-list {\n            padding-top: 6px;\n        }\n\n        .breakdown-row {\n            display: flex;\n            justify-content: space-between;\n            font-size: 12.5px;\n            color: var(--text-secondary);\n            margin-bottom: 8px;\n        }\n\n        .breakdown-row.total {\n            border-top: 1px dashed var(--border);\n            padding-top: 10px;\n            margin-top: 10px;\n            font-size: 14px;\n            font-weight: 700;\n            color: var(--text-main);\n        }\n\n        /* Bottom Fixed Action Bar */\n        .bottom-action-bar {\n            position: absolute;\n            bottom: 0;\n            left: 0;\n            right: 0;\n            background: rgba(255, 255, 255, 0.95);\n            backdrop-filter: blur(16px);\n            -webkit-backdrop-filter: blur(16px);\n            border-top: 1px solid var(--border);\n            padding: 14px 20px 24px;\n            display: flex;\n            flex-direction: column;\n            gap: 10px;\n            z-index: 20;\n        }\n\n        .pay-now-btn {\n            width: 100%;\n            height: 54px;\n            border: none;\n            outline: none;\n            background: linear-gradient(135deg, #0A8754, #057045);\n            color: #ffffff;\n            font-family: 'Cairo', sans-serif;\n            font-size: 16.5px;\n            font-weight: 700;\n            border-radius: var(--radius-md);\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 10px;\n            cursor: pointer;\n            box-shadow: 0 10px 20px -3px rgba(10, 135, 84, 0.4);\n            transition: all 0.2s ease;\n        }\n\n        .pay-now-btn:active {\n            transform: scale(0.98);\n            box-shadow: 0 4px 10px rgba(10, 135, 84, 0.3);\n        }\n\n        .security-badge {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 6px;\n            font-size: 11px;\n            color: var(--text-muted);\n            font-weight: 500;\n        }\n\n        .security-badge svg {\n            width: 13px;\n            height: 13px;\n            fill: #64748B;\n        }\n    </style>\n</head>\n<body>\n\n<div class=\"mobile-container\">\n    <!-- Phone Top Status Bar -->\n    <div class=\"status-bar\">\n        <span class=\"status-time\">9:41</span>\n        <div class=\"status-icons\">\n            <svg width=\"15\" height=\"11\" viewBox=\"0 0 16 12\" fill=\"currentColor\">\n                <path d=\"M1 9h2v3H1V9zm4-3h2v6H5V6zm4-3h2v9H9V3zm4-3h2v12h-2V0z\"/>\n            </svg>\n            <svg width=\"15\" height=\"11\" viewBox=\"0 0 16 12\" fill=\"currentColor\">\n                <path d=\"M8 2.5a8.5 8.5 0 0 1 6 2.5.75.75 0 0 1-.05 1.05l-1.05 1a.75.75 0 0 1-1.03-.03A5.7 5.7 0 0 0 8 5.5a5.7 5.7 0 0 0-3.87 1.52.75.75 0 0 1-1.03.03l-1.05-1a.75.75 0 0 1-.05-1.05A8.5 8.5 0 0 1 8 2.5zm0 4a5 5 0 0 1 3.5 1.5.75.75 0 0 1-.05 1.06l-1.06 1a.75.75 0 0 1-1.04-.04 2.2 2.2 0 0 0-2.7 0 .75.75 0 0 1-1.04.04l-1.06-1A.75.75 0 0 1 4.5 8 5 5 0 0 1 8 6.5zm0 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z\"/>\n            </svg>\n            <svg width=\"22\" height=\"11\" viewBox=\"0 0 24 12\" fill=\"currentColor\">\n                <rect x=\"1\" y=\"1\" width=\"19\" height=\"10\" rx=\"3\" stroke=\"currentColor\" stroke-width=\"1.2\" fill=\"none\"/>\n                <rect x=\"3\" y=\"3\" width=\"13\" height=\"6\" rx=\"1.5\"/>\n                <path d=\"M22 4.5v3a1.5 1.5 0 0 0 0-3z\"/>\n            </svg>\n        </div>\n    </div>\n\n    <!-- App Header -->\n    <header class=\"app-header\">\n        <button class=\"back-btn\" aria-label=\"رجوع\" onclick=\"history.back()\">\n            <!-- RTL Back chevron pointing to right -->\n            <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <polyline points=\"9 18 15 12 9 6\"></polyline>\n            </svg>\n        </button>\n        <h1 class=\"header-title\">ملخص الدفع</h1>\n        <div class=\"header-placeholder\"></div>\n    </header>\n\n    <!-- Scrollable Content -->\n    <main class=\"content-scroll\">\n        <!-- Hero Amount Card -->\n        <section class=\"amount-card\">\n            <span class=\"amount-label\">المبلغ الإجمالي المستحق</span>\n            <div class=\"amount-wrapper\">\n                <span class=\"amount-value\">1,234.50</span>\n                <span class=\"amount-currency\">درهم إماراتي</span>\n            </div>\n\n            <!-- Due Date (Gregorian & Hijri) -->\n            <div class=\"due-date-box\">\n                <div class=\"calendar-icon-wrap\">\n                    <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                        <rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\" ry=\"2\"></rect>\n                        <line x1=\"16\" y1=\"2\" x2=\"16\" y2=\"6\"></line>\n                        <line x1=\"8\" y1=\"2\" x2=\"8\" y2=\"6\"></line>\n                        <line x1=\"3\" y1=\"10\" x2=\"21\" y2=\"10\"></line>\n                    </svg>\n                </div>\n                <div class=\"date-content\">\n                    <span class=\"date-title\">تاريخ الاستحقاق</span>\n                    <span class=\"date-primary\">٣ نوفمبر ٢٠٢٦م</span>\n                    <span class=\"date-hijri\">الموافق ٢٣ جمادى الأولى ١٤٤٨هـ</span>\n                </div>\n            </div>\n        </section>\n\n        <!-- Order Items Notice -->\n        <section class=\"order-card\">\n            <div class=\"order-info\">\n                <div class=\"order-icon-badge\">\n                    <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                        <path d=\"M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z\"></path>\n                        <line x1=\"3\" y1=\"6\" x2=\"21\" y2=\"6\"></line>\n                        <path d=\"M16 10a4 4 0 0 1-8 0\"></path>\n                    </svg>\n                </div>\n                <div>\n                    <div class=\"order-text-main\">لديك ٣ عناصر في هذا الطلب</div>\n                    <div class=\"order-text-sub\">رقم الطلب: #DXB-98421</div>\n                </div>\n            </div>\n            <span class=\"items-pill\">٣ سلع</span>\n        </section>\n\n        <!-- SMS Receipt Phone Number Field -->\n        <section class=\"section-card\">\n            <div class=\"section-header\">\n                <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"var(--primary)\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                    <path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z\"></path>\n                </svg>\n                <h2 class=\"section-title\">إرسال الإيصال عبر رسالة نصية (SMS)</h2>\n            </div>\n            <p class=\"section-subtitle\">أدخل رقم هاتفك المتحرك لتلقي إيصال الدفع الإلكتروني وتأكيد المعاملة فوراً.</p>\n\n            <div class=\"phone-input-group\">\n                <input \n                    type=\"tel\" \n                    id=\"phoneInput\"\n                    class=\"phone-field\" \n                    placeholder=\"050 123 4567\" \n                    dir=\"ltr\"\n                    value=\"\"\n                    autocomplete=\"tel\"\n                />\n                <div class=\"uae-badge\">\n                    <span>+971</span>\n                    <span class=\"flag-icon\">🇦🇪</span>\n                </div>\n            </div>\n\n            <div class=\"sms-badge\">\n                <svg width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                    <path d=\"M20 6L9 17l-5-5\"></path>\n                </svg>\n                <span>خدمة الإشعار الفوري مجانية لجميع شبكات الإمارات</span>\n            </div>\n        </section>\n\n        <!-- Brief Breakdown for Fintech Context -->\n        <section class=\"section-card\">\n            <h3 class=\"section-title\" style=\"margin-bottom: 12px; font-size: 13px;\">تفاصيل الفاتورة</h3>\n            <div class=\"breakdown-list\">\n                <div class=\"breakdown-row\">\n                    <span>مجموع المنتجات (٣ عناصر)</span>\n                    <span>1,175.71 د.إ</span>\n                </div>\n                <div class=\"breakdown-row\">\n                    <span>ضريبة القيمة المضافة (٥٪)</span>\n                    <span>58.79 د.إ</span>\n                </div>\n                <div class=\"breakdown-row\">\n                    <span>رسوم المعاملة</span>\n                    <span style=\"color: #0A8754; font-weight: 600;\">مجاناً</span>\n                </div>\n                <div class=\"breakdown-row total\">\n                    <span>الإجمالي النهائي</span>\n                    <span>1,234.50 د.إ</span>\n                </div>\n            </div>\n        </section>\n    </main>\n\n    <!-- Fixed Bottom CTA Bar -->\n    <footer class=\"bottom-action-bar\">\n        <button class=\"pay-now-btn\" id=\"payBtn\" onclick=\"handlePayment()\">\n            <svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <rect x=\"1\" y=\"4\" width=\"22\" height=\"16\" rx=\"2\" ry=\"2\"></rect>\n                <line x1=\"1\" y1=\"10\" x2=\"23\" y2=\"10\"></line>\n            </svg>\n            <span>ادفع الآن • 1,234.50 د.إ</span>\n        </button>\n\n        <div class=\"security-badge\">\n            <svg viewBox=\"0 0 24 24\">\n                <path d=\"M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z\"/>\n            </svg>\n            <span>مدفوعات آمنة ومشفرة وفق معايير مصرف الإمارات المركزي</span>\n        </div>\n    </footer>\n</div>\n\n<script>\n    function handlePayment() {\n        const phone = document.getElementById('phoneInput').value.trim() || '050 123 4567';\n        const btn = document.getElementById('payBtn');\n        btn.innerHTML = `\n            <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"animation: spin 1s linear infinite;\">\n                <circle cx=\"12\" cy=\"12\" r=\"10\" stroke-opacity=\"0.25\"></circle>\n                <path d=\"M12 2a10 10 0 0 1 10 10\"></path>\n            </svg>\n            <span>جاري المعالجة...</span>\n        `;\n        btn.style.opacity = '0.85';\n        btn.disabled = true;\n\n        setTimeout(() => {\n            alert(`تم الدفع بنجاح بقيمة 1,234.50 درهم إماراتي!\\nتم إرسال إيصال الدفع عبر رسالة نصية إلى: +971 ${phone}`);\n            btn.innerHTML = `\n                <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                    <polyline points=\"20 6 9 17 4 12\"></polyline>\n                </svg>\n                <span>تم الدفع بنجاح</span>\n            `;\n            btn.style.background = '#065F3A';\n        }, 1200);\n    }\n</script>\n\n<style>\n    @keyframes spin {\n        from { transform: rotate(0deg); }\n        to { transform: rotate(360deg); }\n    }\n</style>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 188,
+    "output": 7435
+  },
+  "ms": 66767,
+  "finish": "STOP",
+  "reasoningTokens": 1684,
+  "servedModel": "gemini-3.8-flash",
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 66,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 170,
+        "y": 420,
+        "width": 125,
+        "height": 23
+      },
+      "message": "\"#DXB-98421\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-text-sub\">رقم الطلب: #DXB-98421</div>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 170,
+        "y": 420,
+        "width": 125,
+        "height": 23
+      },
+      "message": "\"رقم الطلب: #DXB-98421\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<div class=\"order-text-sub\">رقم الطلب: #DXB-98421</div>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 39,
+        "y": 755,
+        "width": 63,
+        "height": 23
+      },
+      "message": "\"1,175.71 د.إ\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span>1,175.71 د.إ</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 39,
+        "y": 786,
+        "width": 46,
+        "height": 23
+      },
+      "message": "\"58.79 د.إ\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span>58.79 د.إ</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 39,
+        "y": 861,
+        "width": 71,
+        "height": 26
+      },
+      "message": "\"1,234.50 د.إ\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span>1,234.50 د.إ</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 98.5,
+        "y": 954,
+        "width": 164,
+        "height": 30
+      },
+      "message": "\"ادفع الآن • 1,234.50 د.إ\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span>ادفع الآن • 1,234.50 د.إ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 214,
+        "y": 148,
+        "width": 136,
+        "height": 24
+      },
+      "message": "\"المبلغ الإجمالي المستحق\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"amount-label\">المبلغ الإجمالي المستحق</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 216,
+        "y": 247,
+        "width": 71,
+        "height": 20
+      },
+      "message": "\"تاريخ الاستحقاق\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-title\">تاريخ الاستحقاق</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 197,
+        "y": 269,
+        "width": 90,
+        "height": 26
+      },
+      "message": "\"٣ نوفمبر ٢٠٢٦م\" is 13.5px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-primary\">٣ نوفمبر ٢٠٢٦م</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 126,
+        "y": 297,
+        "width": 161,
+        "height": 22
+      },
+      "message": "\"الموافق ٢٣ جمادى الأولى ١٤٤٨هـ\" is 11.5px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"date-hijri\">الموافق ٢٣ جمادى الأولى ١٤٤٨هـ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 170,
+        "y": 420,
+        "width": 125,
+        "height": 23
+      },
+      "message": "\"رقم الطلب: #DXB-98421\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"order-text-sub\">رقم الطلب: #DXB-98421</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 49,
+        "y": 405.5,
+        "width": 33,
+        "height": 23
+      },
+      "message": "\"٣ سلع\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"items-pill\">٣ سلع</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 45,
+        "y": 526,
+        "width": 306,
+        "height": 41
+      },
+      "message": "\"أدخل رقم هاتفك المتحرك لتلقي إيصال الدفع…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"section-subtitle\">أدخل رقم هاتفك المتحرك لتلقي إيصال الدفع الإلكتروني وتأكيد المعاملة فوراً.</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 107,
+        "y": 639,
+        "width": 225,
+        "height": 20
+      },
+      "message": "\"خدمة الإشعار الفوري مجانية لجميع شبكات ا…\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>خدمة الإشعار الفوري مجانية لجميع شبكات الإمارات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 258,
+        "y": 713,
+        "width": 93,
+        "height": 24
+      },
+      "message": "\"تفاصيل الفاتورة\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<h3 class=\"section-title\" style=\"margin-bottom: 12px; font-size: 13px;\">تفاصيل الفاتورة</h3>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 217,
+        "y": 755,
+        "width": 134,
+        "height": 23
+      },
+      "message": "\"مجموع المنتجات (٣ عناصر)\" is 12.5px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>مجموع المنتجات (٣ عناصر)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 39,
+        "y": 755,
+        "width": 63,
+        "height": 23
+      },
+      "message": "\"1,175.71 د.إ\" is 12.5px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>1,175.71 د.إ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 215,
+        "y": 786,
+        "width": 136,
+        "height": 23
+      },
+      "message": "\"ضريبة القيمة المضافة (٥٪)\" is 12.5px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>ضريبة القيمة المضافة (٥٪)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 39,
+        "y": 786,
+        "width": 46,
+        "height": 23
+      },
+      "message": "\"58.79 د.إ\" is 12.5px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>58.79 د.إ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 275,
+        "y": 817,
+        "width": 76,
+        "height": 23
+      },
+      "message": "\"رسوم المعاملة\" is 12.5px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>رسوم المعاملة</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 39,
+        "y": 817,
+        "width": 27,
+        "height": 23
+      },
+      "message": "\"مجاناً\" is 12.5px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span style=\"color: #0A8754; font-weight: 600;\">مجاناً</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 52,
+        "y": 1006,
+        "width": 267,
+        "height": 20
+      },
+      "message": "\"مدفوعات آمنة ومشفرة وفق معايير مصرف الإم…\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>مدفوعات آمنة ومشفرة وفق معايير مصرف الإمارات المركزي</span>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 1050
 }

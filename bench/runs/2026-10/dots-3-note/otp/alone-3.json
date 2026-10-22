@@ -4,16 +4,64 @@
   "screen": "otp",
   "condition": "alone",
   "run": 3,
-  "at": "2026-10-21T16:57:24.133Z",
-  "reply": "",
+  "at": "2026-10-22T07:15:46.716Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>أدخل الرمز</title>\n  <style>\n    body {\n      font-family: 'Arial', sans-serif;\n      background-color: #f7f7f7;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      min-height: 100vh;\n      margin: 0;\n      direction: rtl;\n    }\n    .container {\n      background: #fff;\n      padding: 30px 20px;\n      border-radius: 12px;\n      box-shadow: 0 4px 12px rgba(0,0,0,0.1);\n      width: 90%;\n      max-width: 360px;\n      text-align: center;\n    }\n    .title {\n      font-size: 22px;\n      font-weight: bold;\n      margin-bottom: 10px;\n      color: #333;\n    }\n    .subtitle {\n      font-size: 14px;\n      color: #666;\n      margin-bottom: 25px;\n      line-height: 1.5;\n    }\n    .code-inputs {\n      display: flex;\n      justify-content: center;\n      gap: 8px;\n      margin-bottom: 25px;\n    }\n    .code-inputs input {\n      width: 45px;\n      height: 55px;\n      text-align: center;\n      font-size: 22px;\n      border: 1px solid #ccc;\n      border-radius: 6px;\n      outline: none;\n    }\n    .code-inputs input:focus {\n      border-color: #007aff;\n    }\n    .countdown {\n      font-size: 14px;\n      color: #007aff;\n      margin-bottom: 20px;\n    }\n    button {\n      width: 100%;\n      padding: 14px;\n      background-color: #007aff;\n      color: white;\n      border: none;\n      border-radius: 6px;\n      font-size: 16px;\n      font-weight: bold;\n      cursor: pointer;\n    }\n    button:disabled {\n      background-color: #a0a0a0;\n      cursor: not-allowed;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"title\">أدخل الرمز</div>\n    <div class=\"subtitle\">أرسلنا رمزًا مكونًا من 6 أرقام إلى +966 55 123 4567</div>\n    <div class=\"code-inputs\">\n      <input type=\"text\" maxlength=\"1\" inputmode=\"numeric\">\n      <input type=\"text\" maxlength=\"1\" inputmode=\"numeric\">\n      <input type=\"text\" maxlength=\"1\" inputmode=\"numeric\">\n      <input type=\"text\" maxlength=\"1\" inputmode=\"numeric\">\n      <input type=\"text\" maxlength=\"1\" inputmode=\"numeric\">\n      <input type=\"text\" maxlength=\"1\" inputmode=\"numeric\">\n    </div>\n    <div class=\"countdown\" id=\"countdown\">أعد الإرسال خلال 0:45</div>\n    <button id=\"verifyBtn\">تحقق</button>\n  </div>\n\n  <script>\n    // Countdown timer\n    let time = 45;\n    const countdownEl = document.getElementById('countdown');\n    const verifyBtn = document.getElementById('verifyBtn');\n\n    function updateCountdown() {\n      if (time <= 0) {\n        countdownEl.textContent = \"أعد الإرسال\";\n        verifyBtn.disabled = false;\n        return;\n      }\n      const minutes = Math.floor(time / 60);\n      const seconds = time % 60;\n      countdownEl.textContent = `أعد الإرسال خلال ${minutes}:${seconds.toString().padStart(2, '0')}`;\n      time--;\n    }\n\n    // Initial update\n    updateCountdown();\n    setInterval(updateCountdown, 1000);\n\n    // Simple input handling: move to next box on input\n    const inputs = document.querySelectorAll('.code-inputs input');\n    inputs.forEach((input, index) => {\n      input.addEventListener('input', () => {\n        if (input.value.length === 1 && index < inputs.length - 1) {\n          inputs[index + 1].focus();\n        }\n      });\n    });\n  </script>\n</body>\n</html>\n```",
   "usage": {
     "input": 151,
-    "output": 16000
+    "output": 5260
   },
-  "finish": "length",
-  "reasoningTokens": 12732,
+  "ms": 50932,
+  "finish": "stop",
+  "reasoningTokens": 4383,
   "servedModel": "dots-studio/dots-3-note-preview:free",
-  "ms": 134216,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 82,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 38.828125,
+        "y": 335.5,
+        "width": 312.34375,
+        "height": 16
+      },
+      "message": "\"أرسلنا رمزًا مكونًا من 6 أرقام إلى +966 …\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"subtitle\">أرسلنا رمزًا مكونًا من 6 أرقام إلى +966 55 123 4567</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 143.9375,
+        "y": 297.5,
+        "width": 102.125,
+        "height": 25
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"title\">أدخل الرمز</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 177.5,
+        "y": 514.5,
+        "width": 35,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button id=\"verifyBtn\">تحقق</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
 }

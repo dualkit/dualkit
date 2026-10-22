@@ -4,16 +4,64 @@
   "screen": "address-form",
   "condition": "dualkit",
   "run": 1,
-  "at": "2026-10-21T17:03:44.556Z",
-  "reply": "",
+  "at": "2026-10-22T07:21:27.676Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>نموذج عنوان التسليم</title>\n  <style>\n    body {\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n      background: #f4f6f9;\n      margin: 0;\n      padding: 20px;\n      color: #333;\n    }\n    .form-container {\n      max-width: 480px;\n      margin: 0 auto;\n      background: #fff;\n      padding: 24px;\n      border-radius: 12px;\n      box-shadow: 0 4px 12px rgba(0,0,0,0.08);\n    }\n    h1 {\n      font-size: 20px;\n      margin-top: 0;\n      margin-bottom: 20px;\n      color: #1a1a1a;\n    }\n    label {\n      display: block;\n      font-size: 14px;\n      margin-bottom: 6px;\n      color: #444;\n    }\n    input, select {\n      width: 100%;\n      padding: 12px;\n      font-size: 16px;\n      border: 1px solid #ccc;\n      border-radius: 8px;\n      box-sizing: border-box;\n      margin-bottom: 18px;\n      text-align: right;\n    }\n    input[type=\"tel\"] {\n      direction: ltr;\n      text-align: left;\n    }\n    .hint {\n      font-size: 13px;\n      color: #777;\n      margin-top: -12px;\n      margin-bottom: 18px;\n      text-align: right;\n    }\n    .btn-save {\n      width: 100%;\n      background: #0d6efd;\n      color: #fff;\n      border: none;\n      padding: 14px;\n      font-size: 16px;\n      border-radius: 8px;\n      cursor: pointer;\n      transition: background 0.2s;\n    }\n    .btn-save:hover {\n      background: #0b5ed7;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"form-container\">\n    <h1>عنوان التسليم</h1>\n    <form id=\"addressForm\">\n      <label for=\"building\">المبنى أو الفيلا</label>\n      <input type=\"text\" id=\"building\" name=\"building\" placeholder=\"مثال: المبنى ١٢ أو الفيلا ٤٥\" />\n\n      <label for=\"street\">الشارع</label>\n      <input type=\"text\" id=\"street\" name=\"street\" placeholder=\"اختر الشارع\" />\n\n      <label for=\"area\">المنطقة</label>\n      <input type=\"text\" id=\"area\" name=\"area\" placeholder=\"مثال: دبي مارينا\" />\n\n      <label for=\"makani\">رقم المكاني</label>\n      <input type=\"text\" id=\"makani\" name=\"makani\" inputmode=\"numeric\" placeholder=\"أدخل رقم المكاني\" />\n\n      <label for=\"emirate\">الإمارة</label>\n      <select id=\"emirate\" name=\"emirate\">\n        <option value=\"Dubai\" selected>دبي</option>\n        <option value=\"Abu Dhabi\">أبوظبي</option>\n        <option value=\"Sharjah\">الشارقة</option>\n        <option value=\"Ajman\">عجمان</option>\n        <option value=\"Umm Al-Quwain\">أم القيوين</option>\n        <option value=\"Ras Al-Khaimah\">رأس الخيمة</option>\n        <option value=\"Fujairah\">الفجيرة</option>\n      </select>\n\n      <label for=\"phone\">رقم الهاتف</label>\n      <input type=\"tel\" id=\"phone\" name=\"phone\" inputmode=\"tel\" placeholder=\"050 123 4567\" />\n      <div class=\"hint\">مثال: <bdi dir=\"ltr\">050 123 4567</bdi></div>\n\n      <button type=\"submit\" class=\"btn-save\">حفظ العنوان</button>\n    </form>\n  </div>\n</body>\n</html>\n```",
   "usage": {
     "input": 6484,
-    "output": 16000
+    "output": 1143
   },
-  "finish": "length",
-  "reasoningTokens": 16040,
+  "ms": 23903,
+  "finish": "stop",
+  "reasoningTokens": 0,
   "servedModel": "poolside/laguna-s-2.1:free",
-  "ms": 224753,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 27,
+  "score": 88,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 229.4375,
+        "y": 45,
+        "width": 116.5625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>عنوان التسليم</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 153.265625,
+        "y": 629,
+        "width": 83.453125,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button type=\"submit\" class=\"btn-save\">حفظ العنوان</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 314.765625,
+        "y": 581,
+        "width": 31.234375,
+        "height": 15
+      },
+      "message": "\"مثال:\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"hint\">مثال: <bdi dir=\"ltr\">050 123 4567</bdi></div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
 }

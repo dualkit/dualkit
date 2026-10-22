@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أدخل الرمز</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    p {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    .code-inputs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+    .code-inputs input {
+      width: 45px;
+      height: 55px;
+      font-size: 24px;
+      text-align: center;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .code-inputs input:focus {
+      border-color: #0077cc;
+    }
+    #countdown {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    #verify {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      background-color: #0077cc;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #verify:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>أدخل الرمز</h1>
+    <p>أرسلنا رمزًا مكوّن من 6 أرقام إلى +966 55 123 4567</p>
+    <div class="code-inputs">
+      <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+      <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]">
+    </div>
+    <div id="countdown">إعادة الإرسال بعد 0:45</div>
+    <button id="verify">التحقق</button>
+  </div>
+
+  <script>
+    const inputs = document.querySelectorAll('.code-inputs input');
+    const countdownEl = document.getElementById('countdown');
+    const verifyBtn = document.getElementById('verify');
+
+    // Focus first input
+    inputs[0].focus();
+
+    // Auto move to next input
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        if (input.value.length === 1) {
+          if (index < inputs.length - 1) {
+            inputs[index + 1].focus();
+          }
+        }
+      });
+    });
+
+    // Countdown timer
+    let time = 45;
+    function updateCountdown() {
+      const minutes = Math.floor(time / 60);
+      const seconds = time % 60;
+      countdownEl.textContent = `إعادة الإرسال بعد ${minutes}:${seconds.toString().padStart(2, '0')}`;
+      if (time > 0) {
+        time--;
+        setTimeout(updateCountdown, 1000);
+      } else {
+        countdownEl.textContent = 'أعد الإرسال';
+      }
+    }
+    updateCountdown();
+
+    // Verify button handler
+    verifyBtn.addEventListener('click', () => {
+      const code = Array.from(inputs).map(i => i.value).join('');
+      if (/^\d{6}$/.test(code)) {
+        alert('تم إرسال الرمز: ' + code);
+      } else {
+        alert('يرجى إدخال الرمز الكامل المكوّن من 6 أرقام');
+      }
+    });
+  </script>
+</body>
+</html>

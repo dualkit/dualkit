@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>نموذج عنوان التسليم</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :lang(ar) {
+      --type-body-size: 16px;
+      --type-label-size: 14px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+    body {
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
+      font-size: var(--type-body-size);
+      margin: 0;
+      padding: 16px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, button {
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
+    }
+    h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    label {
+      font-size: var(--type-label-size);
+      margin-bottom: 4px;
+      display: block;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      font-size: var(--type-body-size);
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+    input[dir="ltr"] {
+      text-align: left;
+    }
+    input[dir="ltr"]::placeholder {
+      text-align: right;
+    }
+    .phone-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .phone-wrapper bdi {
+      font-weight: bold;
+    }
+    button {
+      background-color: #00796B;
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: var(--type-body-size);
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00695C;
+    }
+  </style>
+</head>
+<body>
+  <h1>عنوان التسليم</h1>
+  <form>
+    <div>
+      <label for="building-villa">المبنى أو الفيلا</label>
+      <input type="text" id="building-villa" name="building_villa" placeholder="مثال: المبنى ١٢ أو الفيلا ٣" />
+    </div>
+
+    <div>
+      <label for="street">الشارع</label>
+      <input type="text" id="street" name="street" placeholder="مثال: شارع الملك فهد" />
+    </div>
+
+    <div>
+      <label for="area">المنطقة</label>
+      <input type="text" id="area" name="area" placeholder="مثال: دبي الكبرى" />
+    </div>
+
+    <div>
+      <label for="makani">رقم المكاني</label>
+      <input type="text" id="makani" name="makani" inputmode="numeric" dir="ltr" placeholder="مثال: ٣٣٣٣٣٣٣٣٣٣٣٣٣٣٣٣" />
+    </div>
+
+    <div>
+      <label for="emirate">الإمارة</label>
+      <select id="emirate" name="emirate">
+        <option value="Dubai">دبي</option>
+        <option value="Abu Dhabi">أبوظبي</option>
+        <option value="Sharjah">الشارقة</option>
+        <option value="Ajman">عجمان</option>
+        <option value="Umm Al-Quwain">أم القيوين</option>
+        <option value="Ras Al-Khaimah">رأس الخيمة</option>
+        <option value="Fujairah">الفجيرة</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="phone">رقم الهاتف</label>
+      <div class="phone-wrapper">
+        <bdi dir="ltr">+971</bdi>
+        <input type="tel" id="phone" name="phone" inputmode="tel" dir="ltr" placeholder="مثال: 050 123 4567" />
+      </div>
+    </div>
+
+    <button type="submit">حفظ العنوان</button>
+  </form>
+</body>
+</html>

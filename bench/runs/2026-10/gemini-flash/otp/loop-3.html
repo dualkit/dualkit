@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إدخال رمز التحقق | مصرف الأمان</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-arabic: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --color-primary: #0b5e42;
+      --color-primary-hover: #084833;
+      --color-primary-light: #e8f5f0;
+      --color-bg-page: #f4f6f5;
+      --color-surface: #ffffff;
+      --color-text-main: #13221c;
+      --color-text-muted: #536b63;
+      --color-border: #d7e2dc;
+      --color-border-focus: #0b5e42;
+      --color-warning-bg: #fffbf0;
+      --color-warning-border: #f0deb4;
+      --color-warning-text: #7c5800;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-arabic);
+      font-size: var(--type-body-size);
+      color: var(--color-text-main);
+      background-color: var(--color-bg-page);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    /* Screen Frame (sized like modern smartphone) */
+    .mobile-frame {
+      width: 100%;
+      max-width: 412px;
+      min-height: 720px;
+      background: var(--color-surface);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 12px 36px rgba(11, 40, 30, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid rgba(11, 94, 66, 0.08);
+    }
+
+    /* Directional Icon Mirroring */
+    .icon-directional:dir(rtl) {
+      transform: scaleX(-1);
+    }
+
+    /* App Header */
+    .app-header {
+      padding-block: 16px;
+      padding-inline: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-block-end: 1px solid #edf2ef;
+    }
+
+    .icon-button {
+      background: transparent;
+      border: none;
+      padding: 8px;
+      margin-inline-start: -8px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-main);
+      border-radius: 50%;
+      transition: background-color 0.15s ease;
+    }
+
+    .icon-button:hover {
+      background-color: #ebf1ee;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    .header-logo svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .header-placeholder {
+      width: 32px;
+    }
+
+    /* Main Content */
+    .screen-content {
+      flex: 1;
+      padding-block: 28px 24px;
+      padding-inline: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Icon Badge */
+    .shield-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-md);
+      background-color: var(--color-primary-light);
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-block-end: 20px;
+    }
+
+    /* Titles */
+    .screen-title {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--color-text-main);
+      margin-block-end: 10px;
+    }
+
+    .screen-subtitle {
+      font-size: var(--type-body-size);
+      color: var(--color-text-muted);
+      line-height: 1.7;
+      margin-block-end: 32px;
+    }
+
+    .phone-highlight {
+      font-weight: 600;
+      color: var(--color-text-main);
+      display: inline-block;
+    }
+
+    /* Code Inputs Container */
+    .otp-form-group {
+      margin-block-end: 24px;
+    }
+
+    .otp-label {
+      display: block;
+      font-size: var(--type-label-size);
+      font-weight: 600;
+      color: var(--color-text-main);
+      margin-block-end: 12px;
+    }
+
+    /* OTP Inputs are strictly left-to-right numbers */
+    .otp-grid {
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
+    }
+
+    .otp-input {
+      width: 100%;
+      height: 56px;
+      max-width: 52px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--color-border);
+      background-color: #fafcfb;
+      font-family: inherit;
+      font-size: 24px;
+      font-weight: 700;
+      text-align: center;
+      color: var(--color-text-main);
+      font-variant-numeric: tabular-nums;
+      outline: none;
+      transition: all 0.15s ease;
+      caret-color: var(--color-primary);
+    }
+
+    .otp-input:focus {
+      border-color: var(--color-border-focus);
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(11, 94, 66, 0.15);
+    }
+
+    .otp-input.is-filled {
+      border-color: var(--color-primary);
+      background-color: #ffffff;
+    }
+
+    /* Countdown & Resend */
+    .resend-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-block-end: 32px;
+      padding-block: 4px;
+      font-size: var(--type-label-size);
+    }
+
+    .resend-timer {
+      color: var(--color-text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tabular-timer {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+      color: var(--color-text-main);
+    }
+
+    .resend-button {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: var(--type-label-size);
+      font-weight: 600;
+      color: var(--color-primary);
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 4px;
+      transition: opacity 0.15s ease;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .resend-button:disabled {
+      color: #92a49d;
+      text-decoration: none;
+      cursor: not-allowed;
+    }
+
+    /* Verify Action */
+    .action-container {
+      margin-block-start: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .btn-verify {
+      width: 100%;
+      height: 52px;
+      background-color: var(--color-primary);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.15s ease, transform 0.05s ease, opacity 0.15s ease;
+      box-shadow: 0 4px 12px rgba(11, 94, 66, 0.2);
+    }
+
+    .btn-verify:hover:not(:disabled) {
+      background-color: var(--color-primary-hover);
+    }
+
+    .btn-verify:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    .btn-verify:disabled {
+      background-color: #c7d6d0;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    /* Security disclaimer note */
+    .security-callout {
+      background-color: var(--color-warning-bg);
+      border: 1px solid var(--color-warning-border);
+      color: var(--color-warning-text);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      display: flex;
+      gap: 10px;
+      font-size: var(--type-caption-size);
+      line-height: 1.6;
+    }
+
+    .security-callout svg {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      margin-block-start: 2px;
+    }
+
+    /* Status Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      inset-inline-start: 50%;
+      transform: translateX(50%);
+      background-color: #13221c;
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateX(50%) translateY(-10px);
+    }
+  </style>
+</head>
+<body>
+
+  <main class="mobile-frame" role="region" aria-label="شاشة التحقق من الهوية">
+    <!-- Top Bar -->
+    <header class="app-header">
+      <button type="button" class="icon-button" aria-label="الرجوع إلى الصفحة السابقة">
+        <svg class="icon-directional" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <div class="header-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <span>مصرف الأمان</span>
+      </div>
+
+      <div class="header-placeholder" aria-hidden="true"></div>
+    </header>
+
+    <!-- Main Content Area -->
+    <div class="screen-content">
+      <!-- Shield / Security Icon -->
+      <div class="shield-badge" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          <path d="M9 12l2 2 4-4"></path>
+        </svg>
+      </div>
+
+      <!-- Title & Explanation with Isolated Phone Number -->
+      <h1 class="screen-title">إدخال رمز التحقق</h1>
+      <p class="screen-subtitle">
+        تم إرسال رمز مؤلف من 6 أرقام إلى رقم الجوال <span class="phone-highlight"><bdi dir="ltr">+966 55 123 4567</bdi></span>
+      </p>
+
+      <!-- 6-digit Code Inputs -->
+      <form id="otpForm" onsubmit="event.preventDefault(); handleVerification();">
+        <div class="otp-form-group">
+          <label id="otpLabel" class="otp-label" for="otp-0">رمز التحقق لمرة واحدة</label>
+          <div class="otp-grid" dir="ltr" aria-labelledby="otpLabel">
+            <input id="otp-0" class="otp-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" autocomplete="one-time-code" aria-label="الرقم الأول" autofocus>
+            <input id="otp-1" class="otp-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="الرقم الثاني">
+            <input id="otp-2" class="otp-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="الرقم الثالث">
+            <input id="otp-3" class="otp-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="الرقم الرابع">
+            <input id="otp-4" class="otp-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="الرقم الخامس">
+            <input id="otp-5" class="otp-input" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" aria-label="الرقم السادس">
+          </div>
+        </div>
+
+        <!-- Resend Countdown Row -->
+        <div class="resend-row">
+          <div class="resend-timer" id="timerContainer">
+            <span>إعادة الإرسال خلال</span>
+            <bdi dir="ltr" class="tabular-timer" id="timerValue">0:45</bdi>
+          </div>
+          <button type="button" id="resendBtn" class="resend-button" disabled onclick="handleResend()">
+            إعادة إرسال الرمز
+          </button>
+        </div>
+
+        <!-- Verify Button & Fraud Advisory -->
+        <div class="action-container">
+          <button type="submit" id="verifyBtn" class="btn-verify" disabled>
+            <span>التحقق</span>
+          </button>
+
+          <aside class="security-callout" role="note" aria-label="تنبيه أمني">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <p>لا تشارك هذا الرمز مع أي شخص. موظفو المصرف لن يطلبوا منك رمز التحقق أبداً.</p>
+          </aside>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // Normalise any Arabic-Indic or Persian typed digits into Western standard digits
+    function toWesternDigits(str) {
+      return str
+        .replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d))
+        .replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+    }
+
+    const inputs = Array.from(document.querySelectorAll('.otp-input'));
+    const verifyBtn = document.getElementById('verifyBtn');
+    const resendBtn = document.getElementById('resendBtn');
+    const timerValue = document.getElementById('timerValue');
+    const timerContainer = document.getElementById('timerContainer');
+    const toast = document.getElementById('toast');
+
+    function checkCompletion() {
+      const isComplete = inputs.every(input => input.value.trim().length === 1);
+      verifyBtn.disabled = !isComplete;
+    }
+
+    inputs.forEach((input, index) => {
+      // Input event handling
+      input.addEventListener('input', (e) => {
+        const normalized = toWesternDigits(e.target.value).replace(/\D/g, '');
+        
+        if (normalized.length > 0) {
+          input.value = normalized[0];
+          input.classList.add('is-filled');
+          // Advance to next box if available
+          if (index < inputs.length - 1) {
+            inputs[index + 1].focus();
+          }
+        } else {
+          input.value = '';
+          input.classList.remove('is-filled');
+        }
+        checkCompletion();
+      });
+
+      // Keydown: Handle Backspace movement
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          inputs[index - 1].focus();
+          inputs[index - 1].value = '';
+          inputs[index - 1].classList.remove('is-filled');
+          checkCompletion();
+        }
+      });
+
+      // Paste: auto-distribute across all 6 boxes
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+        const digits = toWesternDigits(pasteData).replace(/\D/g, '').slice(0, inputs.length);
+
+        digits.split('').forEach((char, idx) => {
+          if (inputs[idx]) {
+            inputs[idx].value = char;
+            inputs[idx].classList.add('is-filled');
+          }
+        });
+
+        const nextIndex = Math.min(digits.length, inputs.length - 1);
+        inputs[nextIndex].focus();
+        checkCompletion();
+      });
+    });
+
+    // 45-second countdown timer
+    let remainingSeconds = 45;
+    let timerInterval = null;
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function startTimer() {
+      remainingSeconds = 45;
+      resendBtn.disabled = true;
+      timerContainer.style.opacity = '1';
+      timerValue.textContent = formatTime(remainingSeconds);
+
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        remainingSeconds--;
+        timerValue.textContent = formatTime(remainingSeconds);
+
+        if (remainingSeconds <= 0) {
+          clearInterval(timerInterval);
+          resendBtn.disabled = false;
+          timerContainer.style.opacity = '0.4';
+        }
+      }, 1000);
+    }
+
+    startTimer();
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('visible');
+      setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 3200);
+    }
+
+    function handleResend() {
+      if (resendBtn.disabled) return;
+      inputs.forEach(i => {
+        i.value = '';
+        i.classList.remove('is-filled');
+      });
+      inputs[0].focus();
+      checkCompletion();
+      startTimer();
+      showToast('تمت إعادة إرسال رمز التحقق بنجاح');
+    }
+
+    function handleVerification() {
+      const code = inputs.map(i => i.value).join('');
+      if (code.length === 6) {
+        verifyBtn.disabled = true;
+        verifyBtn.textContent = 'جاري التحقق...';
+
+        setTimeout(() => {
+          showToast('تم التحقق بنجاح');
+          verifyBtn.textContent = 'تم التأكيد ✓';
+          verifyBtn.style.backgroundColor = '#0b5e42';
+        }, 900);
+      }
+    }
+  </script>
+</body>
+</html>
