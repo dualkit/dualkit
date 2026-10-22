@@ -1,4 +1,5 @@
 import type { HTMLElement } from 'node-html-parser'
+import { rulesOf, textAround, textBefore } from './inject-style.js'
 import {
   ARABIC,
   addStyle,
@@ -36,8 +37,6 @@ function unisolate(html: string, el: HTMLElement, kind: string): readonly Edit[]
   return tagOf(el) === 'bdi' ? retag(html, el, kind, { tag: 'span', transform }) : retag(html, el, kind, { transform })
 }
 
-const arabicAround = (el: HTMLElement) => ARABIC.test(el.parentNode?.textContent ?? el.textContent)
-
 /** The date as digits joined by dashes, month names turned into their number. */
 function westernDate(m: RegExpExecArray): string {
   if (m[2] !== undefined && MONTHS.includes(m[2])) {
@@ -47,10 +46,12 @@ function westernDate(m: RegExpExecArray): string {
 }
 
 export const dateOrder: Finder = (html, body) => {
+  const rules = rulesOf(html)
   for (const el of elementsOf(body)) {
     for (const t of ownTexts(el)) {
       const m = DATE.exec(t.rawText) ?? WORDED_DATE.exec(t.rawText)
-      if (!m || !ARABIC.test(el.textContent)) continue
+      // Only a date that follows Arabic letters in the same line of text can be pulled out of order.
+      if (!m || !ARABIC.test(textBefore(el, t, m.index, rules))) continue
       const date = westernDate(m)
       const edits = isolates(el) ? unisolate(html, el, 'date-order') : retag(html, el, 'date-order')
       if (date === m[0] && !isolates(el)) continue
@@ -61,8 +62,11 @@ export const dateOrder: Finder = (html, body) => {
 }
 
 export const numberIsolation: Finder = (html, body) => {
+  const rules = rulesOf(html)
   for (const el of elementsOf(body)) {
-    if (!isolates(el) || hasElementChild(el) || !NUMBERISH.test(el.textContent) || !REORDERS.test(el.textContent.trim()) || !arabicAround(el)) continue
+    if (!isolates(el) || hasElementChild(el) || !NUMBERISH.test(el.textContent) || !REORDERS.test(el.textContent.trim())) continue
+    // The number must sit inline with Arabic words. In a flex row or its own block there is nothing to reorder against.
+    if (!ARABIC.test(textAround(el, rules))) continue
     return unisolate(html, el, 'number-isolation')
   }
   return null
@@ -72,20 +76,19 @@ const CURRENCIES = ['SAR', 'AED', 'EGP', 'KWD', 'QAR', 'BHD', 'OMR', 'JOD', 'USD
 const CUR = CURRENCIES.map((c) => (/^[A-Z]+$/.test(c) ? `(?<![A-Za-z])${c}(?![A-Za-z])` : c.replace(/[.$]/g, '\\$&'))).join('|')
 const NUM = `${DIGIT}(?:[0-9\u0660-\u0669,\u066c.\u066b]*${DIGIT})?`
 const SEP = '(?:\\s|&nbsp;|&#160;|\\u00a0)*'
-const AMOUNT = new RegExp(`(?<n1>${NUM})(?<s1>${SEP})(?<c1>${CUR})|(?<c2>${CUR})(?<s2>${SEP})(?<n2>${NUM})`)
+// Arabic text puts the currency after the number, so only that order is moved: it is the correct one.
+const AMOUNT = new RegExp(`(?<n>${NUM})(?<s>${SEP})(?<c>${CUR})`)
 
 function swapCurrency(m: RegExpExecArray): string {
-  const g = m.groups!
-  const [num, cur, sep] = g.n1 !== undefined ? [g.n1, g.c1!, g.s1!] : [g.n2!, g.c2!, g.s2!]
-  const gap = sep === '' && /[^$€£﷼]/.test(cur) ? ' ' : sep
-  return g.n1 !== undefined ? `${cur}${gap}${num}` : `${num}${gap}${cur}`
+  const { n, s, c } = m.groups as { n: string; s: string; c: string }
+  return `${c}${s === '' && !/^[$€£﷼]$/.test(c) ? ' ' : s}${n}`
 }
 
 export const currencySide: Finder = (html, body) => {
   for (const el of elementsOf(body)) {
     for (const t of ownTexts(el)) {
       const m = AMOUNT.exec(t.rawText)
-      if (m) return [...retag(html, el, 'currency-side'), textEdit(t, t.rawText.replace(m[0], swapCurrency(m)))]
+      if (m && ARABIC.test(el.textContent)) return [...retag(html, el, 'currency-side'), textEdit(t, t.rawText.replace(m[0], swapCurrency(m)))]
     }
   }
   return null
