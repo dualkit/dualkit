@@ -3,7 +3,7 @@ import { contentRules } from '../../src/rules/content'
 import { RULES } from '../../src/rules'
 import { runRules } from '../../src/run'
 import { coversCodePoint } from '../../src/fonts'
-import { face, screen, text } from '../helpers/model'
+import { face, field, screen, text } from '../helpers/model'
 import type { LabelNode, TextRun } from '../../src/model'
 
 const ids = (m: Parameters<typeof runRules>[0]) => runRules(m, { rules: contentRules }).map((f) => f.rule)
@@ -192,10 +192,32 @@ describe('content/currency-order', () => {
   })
 })
 
+describe('content/drops-arabic-digits', () => {
+  const id = 'content/drops-arabic-digits'
+  const flagged = (drops: boolean | null) =>
+    runRules(screen({ fields: [field({ id: 'input#otp', kind: 'code', dropsArabicDigits: drops })] }), { rules: contentRules }).filter((f) => f.rule === id)
+  it('flags a field the probe saw delete typed Arabic digits, as an error on the field itself', () => {
+    const [f] = flagged(true)
+    expect(f?.node?.id).toBe('input#otp')
+    expect(f?.severity).toBe('error')
+  })
+  it('stays quiet when the digits survived or the field was not probed', () => {
+    expect(flagged(false)).toEqual([])
+    expect(flagged(null)).toEqual([])
+  })
+  it('stays quiet on an English page, and flags an untagged page whose text is Arabic', () => {
+    const fields = [field({ kind: 'code', dropsArabicDigits: true })]
+    const english = screen({ root: { lang: 'en', dir: 'ltr', computedDir: 'ltr' }, fields, texts: [text({ text: 'Enter the code' })] })
+    const untagged = screen({ root: { lang: null, dir: null, computedDir: 'ltr' }, fields, texts: [text()] })
+    expect(runRules(english, { rules: contentRules }).filter((f) => f.rule === id)).toEqual([])
+    expect(runRules(untagged, { rules: contentRules }).filter((f) => f.rule === id)).toHaveLength(1)
+  })
+})
+
 describe('RULES', () => {
-  it('ships thirty-three rules with unique ids, in five groups', () => {
-    expect(RULES).toHaveLength(33)
-    expect(new Set(RULES.map((r) => r.id)).size).toBe(33)
+  it('ships thirty-four rules with unique ids, in five groups', () => {
+    expect(RULES).toHaveLength(34)
+    expect(new Set(RULES.map((r) => r.id)).size).toBe(34)
     expect(new Set(RULES.map((r) => r.group))).toEqual(new Set(['bidi', 'layout', 'icons', 'type', 'content']))
   })
   it('gives every rule a why and a fix with no em dash', () => {

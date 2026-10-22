@@ -1,5 +1,5 @@
 import { coversCodePoint } from '../fonts'
-import type { LoadedFace, TextRun } from '../model'
+import type { FieldKind, LoadedFace, ScreenModel, TextRun } from '../model'
 import { defineRule, pick } from '../rule'
 import { ARABIC_INDIC_DIGIT, PLACEHOLDER, currencyFirst, latinPunctuationMarks, WESTERN_DIGIT, arabicShare, arabicWordCount, excerpt, isArabicScriptLang, latinWordCount } from '../text'
 
@@ -155,4 +155,21 @@ export const currencyOrder = defineRule({
     }),
 })
 
-export const contentRules = [missingLang, missingDir, langMismatch, mixedDigits, placeholderText, oldRialSign, currencySignFont, dirhamSignWithCode, labelLanguage, latinPunctuation, currencyOrder]
+/** Tagged Arabic-script or right to left, or mostly Arabic text as content/missing-dir measures it. */
+const FIELD_WORD: Partial<Record<FieldKind, string>> = { tel: 'phone' }
+
+const isArabicPage = (m: ScreenModel): boolean =>
+  isArabicScriptLang(m.root.lang) || m.root.computedDir === 'rtl' || arabicShare(m.texts.map((t) => t.text).join(' ')) > 0.3
+
+export const dropsArabicDigits = defineRule({
+  id: 'content/drops-arabic-digits', group: 'content', severity: 'error',
+  title: 'A code field that deletes Arabic digits',
+  why: 'Arabic keyboards type ٠ to ٩. A field that keeps only 0 to 9 deletes them as they are typed, so the code never fills and the field looks broken. Nothing on screen shows it: dualkit check types ١٢ into code and phone fields to find out.',
+  fix: 'Accept Arabic-Indic digits and convert them to 0 to 9 before checking or sending the value, instead of stripping them.',
+  check: (m) => (isArabicPage(m)
+    ? m.fields.filter((f) => f.dropsArabicDigits === true)
+      .map((f) => ({ node: pick(f), message: `Typing ١٢ into this ${FIELD_WORD[f.kind] ?? f.kind} field kept neither ١٢ nor 12, so Arabic digits are deleted.` }))
+    : []),
+})
+
+export const contentRules = [missingLang, missingDir, langMismatch, mixedDigits, placeholderText, oldRialSign, currencySignFont, dirhamSignWithCode, labelLanguage, latinPunctuation, currencyOrder, dropsArabicDigits]

@@ -2,6 +2,7 @@ import { createRequire } from 'node:module'
 import { runRules, score, type Finding, type ScreenModel } from '@dualkit/rules'
 import { chromium, type Browser, type Page } from 'playwright'
 import { UserError, type Config } from './config'
+import { markDroppedDigits, probeArabicDigits } from './probe'
 
 export type AuditOptions = { url: string; width: number; height: number; config: Config }
 export type AuditResult = {
@@ -100,7 +101,9 @@ export async function audit(options: AuditOptions, launch: () => Promise<Browser
     await page.waitForLoadState('load', { timeout: LOAD_WAIT_MS }).catch(() => {})
     await waitForFonts(page)
     await page.waitForTimeout(SETTLE_MS)
-    const { model, pageHeight, shot } = await read(page, options)
+    const { model: seen, pageHeight, shot } = await read(page, options)
+    // After the read and the screenshot, so typing cannot change what they show.
+    const model = { ...seen, fields: markDroppedDigits(seen.fields, await probeArabicDigits(page, seen.fields)) }
     const findings = runRules(model, { ignore: options.config.ignore })
     return {
       url: options.url, date: new Date().toISOString(), width: options.width, height: options.height,

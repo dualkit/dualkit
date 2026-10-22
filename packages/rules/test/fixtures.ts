@@ -19,7 +19,15 @@ const backLeft = '<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>'
 const ARROW_CSS = 'svg{width:20px;height:20px}'
 const long = 'نص عربي طويل يمتد على عدة أسطر في هذه الفقرة الصغيرة'
 
-export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: string[]; moreBad?: string[] }> = {
+/** The eval injector's otp-digits bug: an oninput that deletes every typed character outside 0-9, Arabic-Indic digits included. */
+const STRIP_DIGITS = `pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'')"`
+const otp = (attrs = '') => `<label>رمز التحقق <input autocomplete="one-time-code" inputmode="numeric" ${attrs}></label>`
+
+/**
+ * `probe`: the reader leaves every field's dropsArabicDigits null, and only dualkit check's audit types into fields.
+ * The fixture test runs the CLI's own probe on these pages after the read, the way audit does, so the rule sees true or false.
+ */
+export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: string[]; moreBad?: string[]; probe?: true }> = {
   'bidi/unisolated-number': { bad: page('<p>رقم الهاتف 050 123 4567</p>'), good: page('<p>رقم الهاتف <bdi>050 123 4567</bdi></p>') },
   'bidi/unisolated-latin': { bad: page('<p>رقم الطلب #A-10293 تم</p>'), good: page('<p>رقم الطلب <bdi>#A-10293</bdi> تم</p>') },
   'bidi/date-order': {
@@ -149,6 +157,18 @@ export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: st
       page('<p>السعر AED 12</p>'),
       page('<p>السعر \u20C3 500</p>'),
       page('<p>Total: 300 riyal, or AED 12.</p>', { lang: 'en', dir: 'ltr' }),
+    ],
+  },
+  'content/drops-arabic-digits': {
+    probe: true,
+    bad: page(otp(STRIP_DIGITS)),
+    good: page(otp()),
+    moreBad: [page(['', '', '', ''].map(() => `<input maxlength="1" inputmode="numeric" name="otp" ${STRIP_DIGITS}>`).join(''))],
+    moreGood: [
+      page(otp(`oninput="this.value=this.value.replace(/[٠-٩]/g,(d)=>String(d.charCodeAt(0)-1632))"`)),
+      page(['', '', '', ''].map(() => '<input maxlength="1" inputmode="numeric" name="otp">').join('')),
+      page(`<label>البريد الإلكتروني <input type="email" ${STRIP_DIGITS}></label>`),
+      page(`<label>Verification code <input autocomplete="one-time-code" inputmode="numeric" ${STRIP_DIGITS}></label>`, { lang: 'en', dir: 'ltr' }),
     ],
   },
   'content/placeholder-text': { bad: page('<p>لوريم إيبسوم دولور</p>'), good: page('<p>مرحبا</p>') },

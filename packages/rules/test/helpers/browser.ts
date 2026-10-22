@@ -2,6 +2,8 @@ import { fileURLToPath } from 'node:url'
 import { build } from 'esbuild'
 import { chromium, type Browser, type Page } from 'playwright'
 import type { ReadOptions } from '../../src/dom/reader'
+// The CLI's own probe, so fixtures see exactly what dualkit check sees. It imports only Playwright types.
+import { markDroppedDigits, probeArabicDigits } from '../../../cli/src/probe'
 import type { ScreenModel } from '../../src/model'
 
 export const FONT_WAIT_MS = 3000
@@ -50,6 +52,18 @@ export async function modelOf(html: string, options: ReadOptions = {}): Promise<
   try {
     await p.setContent(html)
     return await read(p, options)
+  } finally {
+    await p.close()
+  }
+}
+
+/** Reads the page, then types Arabic digits into its code fields and marks dropsArabicDigits, as dualkit check's audit does. */
+export async function probedModelOf(html: string): Promise<ScreenModel> {
+  const p = await page()
+  try {
+    await p.setContent(html)
+    const model = await read(p, {})
+    return { ...model, fields: markDroppedDigits(model.fields, await probeArabicDigits(p, model.fields)) }
   } finally {
     await p.close()
   }

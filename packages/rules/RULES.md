@@ -243,6 +243,13 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 
 **Fix:** Put the number first and the currency after it.
 
+<a id="content-drops-arabic-digits"></a>
+### `content/drops-arabic-digits` A code field that deletes Arabic digits
+
+**error.** Arabic keyboards type ٠ to ٩. A field that keeps only 0 to 9 deletes them as they are typed, so the code never fills and the field looks broken. Nothing on screen shows it: dualkit check types ١٢ into code and phone fields to find out.
+
+**Fix:** Accept Arabic-Indic digits and convert them to 0 to 9 before checking or sending the value, instead of stripping them.
+
 ## Known limits
 
 - A closing mark in the middle of a line, such as the ! in "Hello world! مرحبا", is not checked. Only the end of a paragraph, or of a line that a `<br>` closes on its own, is.
@@ -270,4 +277,5 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 - layout/text-align-left flags a block only when its text sits at least 4px short of its content box, so text that fills its box or a shrink-wrapped inline-block is not flagged, and only when Arabic is at least half of the block's own letters.
 - type/arabic-leading flags Arabic under 22px set on two or more lines at a line height below 1.45. Display type at 22px and above, and text whose box lies wholly outside the viewport's width, such as a parked carousel slide, are left alone.
 - type/arabic-tracking flags letter-spacing of 0.025em or more of the font size (0.4px at 16px), so 0.15px at 16px passes and 0.5px at 9px does not.
+- content/drops-arabic-digits is measured only by dualkit check: after the read and the screenshot, it types ١٢ into up to 8 code, tel and number fields, reads the value back and puts the old value back without an input event. It never presses Enter or submits, and stops if typing navigates the page. A field it cannot type into is not judged, which includes disabled and read-only fields and type="number" fields, which Playwright refuses to fill with Arabic digits. It runs only on pages tagged Arabic-script or right to left, or whose text is mostly Arabic.
 - Findings are named by the element's id (only when it is unique and does not look generated), then its data-testid, then a class combination that is unique on the page, and only then by a path of tags and nth-of-type positions.

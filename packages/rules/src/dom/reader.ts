@@ -235,7 +235,7 @@ function readFields(doc: Document, style: Style, skipped: Pred, visible: Pred, r
     const s = style(el)
     out.push({
       ...ref(el), kind: fieldKind(el), dir: dirOf(s), dirAttr: el.getAttribute('dir'), placeholder: el.getAttribute('placeholder') ?? '',
-      placeholderShown: el.matches(':placeholder-shown'), placeholderSide: placeholderSide(el, s),
+      placeholderShown: el.matches(':placeholder-shown'), placeholderSide: placeholderSide(el, s), dropsArabicDigits: null,
     })
   }
   return out

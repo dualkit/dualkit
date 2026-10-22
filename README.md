@@ -107,7 +107,7 @@ Swap `amount` for `button`, `date-display`, `digit-input`, `field`, `sheet`, `ta
 
 ## Check
 
-Point one command at any page, local or live. It opens it in Chromium, runs 33 Arabic and right-to-left rules, and writes a report with a score out of 100 and every bug marked on a screenshot.
+Point one command at any page, local or live. It opens it in Chromium, runs 34 Arabic and right-to-left rules, and writes a report with a score out of 100 and every bug marked on a screenshot.
 
 ```
 npx playwright@1.55.0 install chromium   # once
@@ -150,7 +150,7 @@ The most useful help right now:
 | Path | Contents |
 | --- | --- |
 | `packages/format` | The format library, with its tests |
-| `packages/rules` | The 33 check rules and the page reader, with their tests |
+| `packages/rules` | The 34 check rules and the page reader, with their tests |
 | `packages/lint` | The source rules behind `dualkit lint`, with their tests |
 | `packages/cli` | The `dualkit` CLI and its report |
 | `action` | The GitHub Action that runs check or lint on pull requests |

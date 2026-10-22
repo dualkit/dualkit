@@ -78,7 +78,14 @@ export type IconNode = NodeRef & { name: string | null; dir: Direction; mirrored
 export type FieldKind = 'email' | 'tel' | 'url' | 'number' | 'code' | 'text'
 /** Which edge of the field the placeholder is painted against: its text-align, start and end resolved against the field's direction. */
 export type PlaceholderSide = 'left' | 'right' | 'center'
-export type FieldNode = NodeRef & { kind: FieldKind; dir: Direction; dirAttr: string | null; placeholder: string; placeholderShown: boolean; placeholderSide: PlaceholderSide }
+/**
+ * `dropsArabicDigits`: true when typing ١٢ into the field left neither ١٢ nor 12 behind. The reader always sets null;
+ * only dualkit check's audit, which types into code, tel and number fields after the read, sets true or false.
+ */
+export type FieldNode = NodeRef & {
+  kind: FieldKind; dir: Direction; dirAttr: string | null; placeholder: string; placeholderShown: boolean; placeholderSide: PlaceholderSide
+  dropsArabicDigits: boolean | null
+}
 
 export type LoadedFace = {
   /** No quotes. */

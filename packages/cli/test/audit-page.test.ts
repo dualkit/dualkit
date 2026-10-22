@@ -12,6 +12,11 @@ const HERO = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-
 const TALL_RTL = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><style>html,body{margin:0}.b{position:absolute;top:0;width:40px;height:40px}</style></head>
 <body><div class="b" style="inset-inline-start:0;background:#f00"></div><div class="b" style="left:0;background:#00f"></div><div style="height:3000px"></div></body></html>`
 
+// The eval injector's otp-digits bug on the first box; the second box is correct.
+const OTP = `<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"></head><body><p>رمز التحقق</p>
+<input id="bad" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+<input id="good" autocomplete="one-time-code" inputmode="numeric"></body></html>`
+
 const VERY_TALL = '<!doctype html><html lang="ar" dir="rtl"><body style="margin:0"><div style="height:6000px"></div></body></html>'
 
 let server: Server
@@ -27,7 +32,7 @@ beforeAll(async () => {
       res.writeHead(500, { 'content-type': 'text/html; charset=utf-8' }).end('<!doctype html><html><body><p>Oops</p></body></html>')
       return
     }
-    const page = req.url === '/tall-rtl' ? TALL_RTL : req.url === '/very-tall' ? VERY_TALL : HERO
+    const page = req.url === '/otp' ? OTP : req.url === '/tall-rtl' ? TALL_RTL : req.url === '/very-tall' ? VERY_TALL : HERO
     res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' }).end(page)
   })
   await new Promise<void>((r) => server.listen(0, r))
@@ -85,6 +90,12 @@ describe('audit on real page shapes', () => {
     expect(r.pageHeight).toBe(6000)
     expect(shot.width).toBe(1024)
     expect(shot.height).toBe(6000)
+  })
+
+  it('types Arabic digits into code fields and reports the one that deletes them', async () => {
+    const r = await audit(options(`${base}/otp`))
+    const found = r.findings.filter((f) => f.rule === 'content/drops-arabic-digits')
+    expect(found.map((f) => [f.severity, f.node?.id])).toEqual([['error', 'input#bad']])
   })
 
   it('picks a 2x capture for pages up to 4000px tall', () => {
