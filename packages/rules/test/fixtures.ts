@@ -15,6 +15,8 @@ export const page = (body: string, o: Page = {}): string => {
 
 const icon = (name: string, style = '') =>
   `<button><svg data-icon="${name}" style="${style}" width="16" height="16" viewBox="0 0 16 16"><path d="M2 8h12"/></svg></button>`
+const backLeft = '<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>'
+const ARROW_CSS = 'svg{width:20px;height:20px}'
 const long = 'نص عربي طويل يمتد على عدة أسطر في هذه الفقرة الصغيرة'
 
 export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: string[]; moreBad?: string[] }> = {
@@ -71,6 +73,20 @@ export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: st
     ],
   },
   'icons/not-mirrored': { bad: page(icon('arrow-right')), good: page(icon('arrow-right', 'transform:scaleX(-1)')) },
+  'icons/arrow-points-forward': {
+    bad: page(`<button aria-label="رجوع">${backLeft}</button>`, { css: ARROW_CSS }),
+    good: page(`<button aria-label="رجوع">${backLeft}</button>`, { css: `${ARROW_CSS}svg{transform:scaleX(-1)}` }),
+    moreBad: [page('<a aria-label="السابق">←</a>')],
+    moreGood: [
+      // A back arrow that already points right in RTL.
+      page(`<button aria-label="رجوع">${backLeft.replace('m15 18-6-6 6-6', 'm 9 18 6 -6 -6 -6')}</button>`, { css: ARROW_CSS }),
+      page('<a aria-label="السابق">→</a>'),
+      // A next arrow pointing left, and a back glyph that bidi already mirrors.
+      page(`<button aria-label="التالي">${backLeft}</button><button aria-label="رجوع">‹</button>`, { css: ARROW_CSS }),
+      // An all-English page, where back points left.
+      page(`<button aria-label="Back">${backLeft}</button><a aria-label="Back" href="#">←</a>`, { lang: 'en', dir: 'ltr', css: ARROW_CSS }),
+    ],
+  },
   'icons/mirrored-by-mistake': { bad: page(icon('play', 'transform:scaleX(-1)')), good: page(icon('play')) },
   'type/arabic-leading': {
     bad: page(`<p>${long}</p>`, { css: 'p{line-height:1.2;width:120px}' }),

@@ -66,7 +66,14 @@ export type LayoutNode = NodeRef & {
 }
 
 /** `mirrored`: a flip (negative determinant) on the icon or up to 4 ancestors. `turned`: a turn that points it the other way without mirroring, such as rotate(180deg). */
-export type IconNode = NodeRef & { name: string | null; dir: Direction; mirrored: boolean; turned: boolean }
+export type ArrowHead = 'left' | 'right'
+export type ArrowRole = 'back' | 'forward'
+/**
+ * `head`: where the drawn arrow head points on screen, after the icon's own and its ancestors' transforms; null when it is
+ * not an arrow or cannot be read (an <img>, a font icon, a <use> sprite). `role`: back or forward, from the label, class,
+ * id or title of the icon and the button or link around it.
+ */
+export type IconNode = NodeRef & { name: string | null; dir: Direction; mirrored: boolean; turned: boolean; head: ArrowHead | null; role: ArrowRole | null }
 
 export type FieldKind = 'email' | 'tel' | 'url' | 'number' | 'code' | 'text'
 /** Which edge of the field the placeholder is painted against: its text-align, start and end resolved against the field's direction. */

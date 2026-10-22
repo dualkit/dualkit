@@ -7,7 +7,7 @@ import { closeBrowser, modelOf } from './helpers/browser'
 afterAll(closeBrowser)
 
 describe('every rule has fixtures', () => {
-  it('covers all thirty-two rules', () => {
+  it('covers all thirty-three rules', () => {
     expect(Object.keys(FIXTURES).sort()).toEqual(RULES.map((r) => r.id).sort())
   })
 })

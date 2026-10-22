@@ -193,9 +193,9 @@ describe('content/currency-order', () => {
 })
 
 describe('RULES', () => {
-  it('ships thirty-two rules with unique ids, in five groups', () => {
-    expect(RULES).toHaveLength(32)
-    expect(new Set(RULES.map((r) => r.id)).size).toBe(32)
+  it('ships thirty-three rules with unique ids, in five groups', () => {
+    expect(RULES).toHaveLength(33)
+    expect(new Set(RULES.map((r) => r.id)).size).toBe(33)
     expect(new Set(RULES.map((r) => r.group))).toEqual(new Set(['bidi', 'layout', 'icons', 'type', 'content']))
   })
   it('gives every rule a why and a fix with no em dash', () => {

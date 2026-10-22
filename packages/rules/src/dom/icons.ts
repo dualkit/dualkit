@@ -1,4 +1,5 @@
 import type { IconNode } from '../model'
+import { arrowHead, glyphHosts, iconRole } from './arrow'
 import { offScreenWithin } from './hidden'
 import { flipSign, MIRROR_DEPTH, turns } from './mirror'
 import { clean, dirOf, type Pred, type Ref, type Style } from './types'
@@ -83,7 +84,18 @@ export function readIcons(doc: Document, style: Style, skipped: Pred, visible: P
     if (wrappers.has(el) || el.parentElement?.closest('svg') || skipped(el) || !visible(el)) continue
     const r = el.getBoundingClientRect()
     if (r.width > 64 || r.height > 64) continue
-    out.push({ ...ref(el), name: iconName(el), dir: dirOf(style(el)), ...orientation(el, style) })
+    out.push(iconNode(el, style, ref, iconName(el)))
+  }
+  // An arrow glyph in a button or link is an icon too. It has no name, so the name-based rules leave it alone.
+  const taken = new Set(candidates)
+  for (const el of glyphHosts(doc)) {
+    if (taken.has(el) || wrappers.has(el) || candidates.some((c) => c.contains(el)) || skipped(el) || !visible(el)) continue
+    out.push(iconNode(el, style, ref, null))
   }
   return out
+}
+
+function iconNode(el: Element, style: Style, ref: Ref, name: string | null): IconNode {
+  const dir = dirOf(style(el))
+  return { ...ref(el), name, dir, ...orientation(el, style), head: arrowHead(el, style, dir), role: iconRole(el) }
 }
