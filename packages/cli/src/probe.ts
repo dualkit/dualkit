@@ -25,6 +25,8 @@ function keptDigits(value: string, maxLength: number): boolean {
 async function probeOne(field: Locator): Promise<boolean | null> {
   const timeout = STEP_TIMEOUT_MS
   try {
+    // A selector that matches nothing would otherwise wait out the full timeout.
+    if ((await field.count()) === 0) return null
     if (!(await field.isEditable({ timeout }))) return null
     const original = await field.inputValue({ timeout })
     const maxLength = await field.evaluate((el) => (el as unknown as { maxLength: number }).maxLength, undefined, { timeout })

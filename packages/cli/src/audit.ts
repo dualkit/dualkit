@@ -1,5 +1,5 @@
 import { createRequire } from 'node:module'
-import { runRules, score, type Finding, type ScreenModel } from '@dualkit/rules'
+import { runRules, score, wantsDigitProbe, type Finding, type ScreenModel } from '@dualkit/rules'
 import { chromium, type Browser, type Page } from 'playwright'
 import { UserError, type Config } from './config'
 import { markDroppedDigits, probeArabicDigits } from './probe'
@@ -102,8 +102,10 @@ export async function audit(options: AuditOptions, launch: () => Promise<Browser
     await waitForFonts(page)
     await page.waitForTimeout(SETTLE_MS)
     const { model: seen, pageHeight, shot } = await read(page, options)
-    // After the read and the screenshot, so typing cannot change what they show.
-    const model = { ...seen, fields: markDroppedDigits(seen.fields, await probeArabicDigits(page, seen.fields)) }
+    // After the read and the screenshot, so typing cannot change what they show. Only when the rule can fire, since
+    // this types into the live page.
+    const probed = wantsDigitProbe(seen, options.config.ignore) ? await probeArabicDigits(page, seen.fields) : new Map<string, boolean>()
+    const model = { ...seen, fields: markDroppedDigits(seen.fields, probed) }
     const findings = runRules(model, { ignore: options.config.ignore })
     return {
       url: options.url, date: new Date().toISOString(), width: options.width, height: options.height,

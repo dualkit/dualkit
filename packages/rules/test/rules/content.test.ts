@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { contentRules } from '../../src/rules/content'
+import { contentRules, wantsDigitProbe } from '../../src/rules/content'
 import { RULES } from '../../src/rules'
 import { runRules } from '../../src/run'
 import { coversCodePoint } from '../../src/fonts'
@@ -211,6 +211,21 @@ describe('content/drops-arabic-digits', () => {
     const untagged = screen({ root: { lang: null, dir: null, computedDir: 'ltr' }, fields, texts: [text()] })
     expect(runRules(english, { rules: contentRules }).filter((f) => f.rule === id)).toEqual([])
     expect(runRules(untagged, { rules: contentRules }).filter((f) => f.rule === id)).toHaveLength(1)
+  })
+  it('stays quiet on a Hebrew page that runs right to left', () => {
+    const hebrew = screen({
+      root: { lang: 'he', dir: 'rtl', computedDir: 'rtl' }, fields: [field({ kind: 'code', dropsArabicDigits: true })],
+      texts: [text({ text: 'הזן את הקוד', blockText: 'הזן את הקוד' })],
+    })
+    expect(runRules(hebrew, { rules: contentRules }).filter((f) => f.rule === id)).toEqual([])
+    expect(wantsDigitProbe(hebrew)).toBe(false)
+  })
+  it('wants the probe only on an Arabic page where the rule is not ignored', () => {
+    const arabic = screen({ texts: [text()] })
+    expect(wantsDigitProbe(arabic)).toBe(true)
+    expect(wantsDigitProbe(arabic, [id])).toBe(false)
+    expect(wantsDigitProbe(arabic, ['content/missing-lang'])).toBe(true)
+    expect(wantsDigitProbe(screen({ root: { lang: 'en', dir: 'ltr', computedDir: 'ltr' }, texts: [text({ text: 'Enter the code' })] }))).toBe(false)
   })
 })
 

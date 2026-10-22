@@ -4,5 +4,6 @@ export type {
 } from './model'
 export type { Finding, Group, Hit, Rule, Severity } from './rule'
 export { RULES } from './rules'
+export { wantsDigitProbe } from './rules/content'
 export { PER_RULE_CAP, WEIGHT, docsUrl, runRules, score } from './run'
 export { renderRulesMarkdown } from './docs'

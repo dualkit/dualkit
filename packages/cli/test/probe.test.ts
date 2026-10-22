@@ -49,6 +49,12 @@ describe('probeArabicDigits', () => {
       (p) => probeArabicDigits(p, [field('#a'), field('#b'), field('#gone')]))
     expect(found.size).toBe(0)
   })
+  it('gives up on a selector that matches nothing without waiting out the timeout', async () => {
+    const started = Date.now()
+    const found = await onPage('<p>no fields</p>', (p) => probeArabicDigits(p, [field('#gone')]))
+    expect(found.size).toBe(0)
+    expect(Date.now() - started).toBeLessThan(500)
+  })
   it('only types into code, tel and number fields', async () => {
     const body = ['email', 'url', 'text'].map((t) => `<input id="${t}" type="${t === 'text' ? 'text' : t}" ${STRIP}>`).join('')
     const found = await onPage(body, (p) => probeArabicDigits(p, [field('#email', 'email'), field('#url', 'url'), field('#text', 'text')]))

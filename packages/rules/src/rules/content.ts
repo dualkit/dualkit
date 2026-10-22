@@ -155,18 +155,29 @@ export const currencyOrder = defineRule({
     }),
 })
 
-/** Tagged Arabic-script or right to left, or mostly Arabic text as content/missing-dir measures it. */
 const FIELD_WORD: Partial<Record<FieldKind, string>> = { tel: 'phone' }
 
+/**
+ * Tagged with an Arabic-script lang, or mostly Arabic text as content/missing-dir measures it. Right to left alone is
+ * not enough: a Hebrew page runs right to left too.
+ */
 const isArabicPage = (m: ScreenModel): boolean =>
-  isArabicScriptLang(m.root.lang) || m.root.computedDir === 'rtl' || arabicShare(m.texts.map((t) => t.text).join(' ')) > 0.3
+  isArabicScriptLang(m.root.lang) || arabicShare(m.texts.map((t) => t.text).join(' ')) > 0.3
+
+const DROPS_ARABIC_DIGITS = 'content/drops-arabic-digits'
+
+/**
+ * Whether content/drops-arabic-digits can fire on this page, so audit only types into fields when it can. The rule
+ * uses the same test, so the two cannot drift apart.
+ */
+export const wantsDigitProbe = (m: ScreenModel, ignore: readonly string[] = []): boolean => !ignore.includes(DROPS_ARABIC_DIGITS) && isArabicPage(m)
 
 export const dropsArabicDigits = defineRule({
-  id: 'content/drops-arabic-digits', group: 'content', severity: 'error',
+  id: DROPS_ARABIC_DIGITS, group: 'content', severity: 'error',
   title: 'A code field that deletes Arabic digits',
   why: 'Arabic keyboards type ٠ to ٩. A field that keeps only 0 to 9 deletes them as they are typed, so the code never fills and the field looks broken. Nothing on screen shows it: dualkit check types ١٢ into code and phone fields to find out.',
   fix: 'Accept Arabic-Indic digits and convert them to 0 to 9 before checking or sending the value, instead of stripping them.',
-  check: (m) => (isArabicPage(m)
+  check: (m) => (wantsDigitProbe(m)
     ? m.fields.filter((f) => f.dropsArabicDigits === true)
       .map((f) => ({ node: pick(f), message: `Typing ١٢ into this ${FIELD_WORD[f.kind] ?? f.kind} field kept neither ١٢ nor 12, so Arabic digits are deleted.` }))
     : []),
