@@ -1,0 +1,22 @@
+{
+  "name": "@dualkit/eval",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "eval": "tsx src/cli.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@dualkit/bench": "*",
+    "@dualkit/lint": "*",
+    "@dualkit/rules": "*",
+    "playwright": "1.55.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  }
+}
