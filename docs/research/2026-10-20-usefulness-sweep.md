@@ -159,3 +159,53 @@ We reran the sweep after the fixes above. Lint used the same 10 repos at pinned 
 - The 6 dropped real bugs: 5 sit on carousel slides a reader cannot see until the carousel moves, and 1 is letter-spacing of 0.008em, under the new 0.025em threshold.
 - Check now reads text inside display:contents wrappers, which Framer sites use and which it skipped before. On Salla that found 5 more real problems in a sample of 10.
 - Notes still weigh 1 point each in the score, capped at 3 per rule.
+
+## Test 2: the check loop, 21 and 22 Oct 2026
+
+Test 2 asks whether the way people would really use Dualkit helps: the model builds the page with the skills, `dualkit check` and `dualkit lint` report problems, and the model fixes them, for at most 2 rounds. The design is in `docs/superpowers/specs/2026-10-21-check-loop-design.md`. Ten screens, three runs each, three setups: the model alone, with skills, and with skills plus the loop.
+
+Two runs fed the numbers: 39637164105 on 21 Oct and 39738101008, which filled the gaps on 22 Oct. The second run built 31 pages. 52 of its 65 failures were Gemini quota errors, so it added little.
+
+### Changes made after the first results, with Sam's approval
+
+On 22 Oct Sam agreed to loosen three required-part checks that failed correct pages (PR #22):
+
+- Transactions: 8 amounts with three decimals.
+- Toggles: styled elements count, not only checkbox inputs.
+- Orders: an order number may start with any 1 to 3 letters, Arabic included.
+
+24 stored pages were scored again. No page was built again.
+
+### Results
+
+| Model | Failed rules alone | With skills | With loop | Halved | Fix rounds that made things worse |
+| --- | ---: | ---: | ---: | --- | ---: |
+| Gemini Flash Lite | 22 | 14 | 1 | yes | 0 of 28 |
+| MiniMax M3.1 Flash | 23 | 11 | 0 | yes | 0 of 22 |
+| Dots3 Note Preview | 17 | did not run | did not run | n/a | 6 of 30 |
+| Laguna S 2.1 | 56 | did not run | did not run | n/a | 0 of 44 |
+| Gemini Flash | did not run | did not run | did not run | n/a | 0 of 0 |
+| Nemotron 3 Super | did not run | did not run | did not run | n/a | 0 of 0 |
+
+- **Gain, fail.** 2 of 6 models at least halved their failed rules with the loop; the bar needs 4. Both models with full data halved, but 4 models never finished. Gemini Flash hit its quota on every call. Nemotron returned "Function not found" from its provider. Dots3 and Laguna ran out of tokens with the skills.
+- **Harm, pass.** A fix round counts as worse when a rule that passed before fails after, or a required part goes missing. Only rounds that ran and rendered count, since a round that never ran can't make a page worse. 5 of 118 rounds were worse, 4.2%, under the 10% bar.
+- **Honest, pass.** Over 116 runs with both builds, 1 page was incomplete with the loop and 2 with skills.
+- **Shrunk Arabic.** 0 of 118 rounds kept less than 90% of the Arabic text.
+
+An earlier reading said the skills made Gemini Flash Lite worse (47 alone, 68 with skills). That came from the strict part checks, and it went away after rescoring.
+
+### By eye
+
+30 pairs, each a page before and after a fix round, picked at random and judged blind:
+
+- 26 looked the same.
+- 3 were better after the fix.
+- 1 was better before the fix. In Gemini Flash Lite's booking page, round 1 garbled the order of a date, and no rule noticed.
+- 0 were broken.
+
+The loop clears what the checker counts, but a person mostly can't see the difference. That result led to the v2 design (`docs/superpowers/specs/2026-10-22-dualkit-v2-design.md`). The missed date is now a planted bug in the v2 miss set.
+
+### Open
+
+- The Laguna OTP pages from loop run 3, round 2 render as blank screenshots. The cause has not been found yet.
+- Gemini Flash and Nemotron have no data for October.
