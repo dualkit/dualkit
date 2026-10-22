@@ -82,7 +82,7 @@ export const mirroredText = defineRule({
 })
 
 export const clippedText = defineRule({
-  id: 'layout/clipped-text', group: 'layout', severity: 'note',
+  id: 'layout/clipped-text', group: 'layout', severity: 'warning',
   title: 'Arabic text cut off by its box',
   why: 'A fixed-size box with overflow hidden cuts off Arabic text that runs long or sits tall, such as a label wider than its button or dots below a tight line. An ellipsis that leaves a letter or two of a short label says nothing.',
   fix: 'Let the box grow with min-width or min-height. If shortening is intended, add text-overflow: ellipsis and leave room for most of the text.',
