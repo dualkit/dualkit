@@ -200,14 +200,14 @@ describe('lintCaught', () => {
 <p>مرحبا</p>
 ${line}
 </body></html>`
-  const digits = "<script>new Intl.NumberFormat('ar').format(5)</script>"
+  const digits = "<script>new Intl.DateTimeFormat('ar', { calendar: 'islamic' }).format(5)</script>"
 
   it('counts a lint finding on the marked line as caught', () => {
     expect(lintCaught(page(digits.replace('<script>', '<script data-eval-bug="k">')), page('<script>1</script>'))).toBe(true)
   })
 
   it('reads lint lines as 1-based', () => {
-    const digits = "<script>new Intl.NumberFormat('ar').format(5)</script>"
+    const digits = "<script>new Intl.DateTimeFormat('ar', { calendar: 'islamic' }).format(5)</script>"
     const second = `<p>x</p>\n${digits.replace('<script>', '<script data-eval-bug="k">')}`
     const first = `${digits.replace('<script>', '<script data-eval-bug="k">')}\n<p>x</p>`
     expect(lintCaught(second, '<p>x</p>\n<script>1</script>')).toBe(true)
