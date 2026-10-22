@@ -36,10 +36,10 @@ describe('decoration and own-direction elements', () => {
 })
 
 describe('registration', () => {
-  it('is a warning with no em dashes', () => {
+  it('is a note with no em dashes', () => {
     expect(rules).toHaveLength(1)
     const [r] = rules
-    expect(r!.severity).toBe('warning')
+    expect(r!.severity).toBe('note')
     expect(`${r!.title}${r!.why}${r!.fix}`).not.toContain('—')
   })
 

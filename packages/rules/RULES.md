@@ -86,7 +86,7 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 <a id="layout-clipped-text"></a>
 ### `layout/clipped-text` Arabic text cut off by its box
 
-**warning.** A fixed-size box with overflow hidden cuts off Arabic text that runs long or sits tall, such as a label wider than its button or dots below a tight line. An ellipsis that leaves a letter or two of a short label says nothing.
+**note.** A fixed-size box with overflow hidden cuts off Arabic text that runs long or sits tall, such as a label wider than its button or dots below a tight line. An ellipsis that leaves a letter or two of a short label says nothing.
 
 **Fix:** Let the box grow with min-width or min-height. If shortening is intended, add text-overflow: ellipsis and leave room for most of the text.
 
@@ -267,6 +267,7 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 - A clipped box is found when it scrolls and its own text, measured by the painted text boxes, reaches past its padding box. A box that scrolls only for an oversized image is not flagged. Only boxes whose cut-off text contains Arabic are flagged. Ink that sticks out of a text box that still fits its line, such as a dot just under a tight line, is not measured.
 - Only text at least partly inside a clipped box counts. Text painted wholly outside it, such as the other slides of a carousel, is ignored. -webkit-line-clamp (Tailwind line-clamp-2) draws its own ellipsis, so it counts as one. A box with an ellipsis is flagged only when less than half its text width shows, the ellipsis itself not counted, so a long sentence cut at the end passes and a short label cut to a letter or two does not. Text the ellipsis hides counts even when it sits in its own element wholly past the box. A line clamp that keeps 2 or more lines is an excerpt and is not flagged. Scroll overflow that is only padding is not flagged: the text boxes themselves must reach past the box. A tall Arabic font at a tight line height paints text boxes taller than the line, so its last line can reach past the box while its letters still show, and that is flagged.
 - A "read more" box cut off with max-height and overflow: hidden is reported, though the cut may be on purpose.
+- layout/clipped-text is a note, not a warning. In the precision measurement only 1 of 4 decided findings was real, and even if all 3 unlabelled findings were real it could not pass 57%, so it is listed as a hint to check rather than a defect.
 - Text inside a translated track (carousels, odometers) is not checked for clipping. A track that is wider than its box but not moved by a translate still reads as clipped text.
 - A word counts as split only when both halves sit in one line of inline content, with no list item, table cell, block, or flex or grid item between them, and the two letters at the boundary touch on the same line, less than 1px apart. Separate boxes with no space between them in the markup, such as nav links, tabs, table cells or a badge with a margin, are not one word.
 - A webfont with the default unicode-range counts as Arabic when its name says so, or when it draws alef (U+0627) at a width different from its own missing-glyph box and from the sans-serif or serif fallback, by more than 0.5px at 48px. A font whose alef matched every fallback that closely would be missed.

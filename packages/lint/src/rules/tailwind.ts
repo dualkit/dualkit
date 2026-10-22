@@ -191,7 +191,7 @@ function checkSource(fragments: readonly ClassFragment[], version: SemVer, bothN
 
 const physicalTailwind: LintRule = {
   id: 'source/physical-tailwind',
-  severity: 'warning',
+  severity: 'note',
   title: 'Use logical Tailwind classes instead of left and right',
   why: 'A physical class such as ml-4, pr-2, left-0, text-left or rounded-l-lg stays on the same side in Arabic, so the margin, padding, offset, alignment or corner is on the wrong edge.',
   fix: 'Use the logical class, such as ms-4, pe-2, start-0 (inset-s-0 from Tailwind 4.2), text-start or rounded-s-lg, so the side follows the reading direction. Keep a physical class only under an rtl:, ltr: or side variant such as data-[side=left]:, or beside an rtl: or ltr: class that resets the same property, as in ml-4 rtl:ml-0 rtl:mr-4.',
