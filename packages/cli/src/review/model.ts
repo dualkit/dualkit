@@ -28,7 +28,9 @@ const MAX_TOKENS = 4096
 const ERROR_BODY_CHARS = 200
 const KEY: Record<VisionModel['provider'], string> = { openrouter: 'OPENROUTER_API_KEY', gemini: 'GEMINI_API_KEY' }
 
-type Call = { url: string; init: RequestInit; read: (body: any) => { text: string; costUsd: number; finish: string | null } }
+const asRecord = (v: unknown): Record<string, any> => (typeof v === 'object' && v !== null ? (v as Record<string, any>) : {})
+
+type Call = { url: string; init: RequestInit; read: (body: unknown) => { text: string; costUsd: number; finish: string | null } }
 
 /** OpenRouter says length and Gemini says MAX_TOKENS when the reply ran into the output cap. */
 const CAPPED = ['length', 'MAX_TOKENS']
@@ -42,13 +44,13 @@ function request(model: VisionModel, key: string, { system, text, images }: Ask)
         { role: 'system', content: system },
         { role: 'user', content: [{ type: 'text', text }, ...images.map((i) => ({ type: 'image_url', image_url: { url: `data:${i.mime};base64,${i.base64}` } }))] },
       ] }) },
-    read: (b) => ({ text: String(b?.choices?.[0]?.message?.content ?? ''), costUsd: Number(b?.usage?.cost) || 0, finish: finishOf(b?.choices?.[0]?.finish_reason) }),
+    read: (raw) => { const b = asRecord(raw); return { text: String(b?.choices?.[0]?.message?.content ?? ''), costUsd: Number(b?.usage?.cost) || 0, finish: finishOf(b?.choices?.[0]?.finish_reason) } },
   }
   return {
     url: `https://generativelanguage.googleapis.com/v1beta/models/${model.model}:generateContent`,
     init: { method: 'POST', headers: { 'x-goog-api-key': key, 'content-type': 'application/json' },
       body: JSON.stringify({ systemInstruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text }, ...images.map((i) => ({ inline_data: { mime_type: i.mime, data: i.base64 } }))] }], generationConfig: { temperature: 0, maxOutputTokens: MAX_TOKENS } }) },
-    read: (b) => ({ text: (b?.candidates?.[0]?.content?.parts ?? []).map((p: { text?: string }) => p.text ?? '').join(''), costUsd: 0, finish: finishOf(b?.candidates?.[0]?.finishReason) }),
+    read: (raw) => { const b = asRecord(raw); return { text: (b?.candidates?.[0]?.content?.parts ?? []).map((p: { text?: string }) => p.text ?? '').join(''), costUsd: 0, finish: finishOf(b?.candidates?.[0]?.finishReason) } },
   }
 }
 
@@ -96,13 +98,13 @@ export function makeVision({ env, fetch: f = fetch, sleep = (ms) => new Promise(
       }
       if (res.ok) {
         // The cost is lost when the reply fails to parse or the request times out: the body is the only place it is reported.
-        const body: any = await res.json().catch(() => null)
+        const body: unknown = await res.json().catch(() => null)
         const { text, costUsd, finish } = call.read(body)
         // A reply that cost money is recorded even if it is empty or cut off.
         ledger?.add(costUsd)
         if (finish !== null && CAPPED.includes(finish)) return { ok: false, error: 'Hit the token cap' }
         if (text.trim()) return { ok: true, text, costUsd }
-        const message = body?.error?.message
+        const message = asRecord(asRecord(body).error).message
         return { ok: false, error: typeof message === 'string' && message ? `Provider error: ${clipBody(message, key)}` : 'Empty reply' }
       }
       const text = await res.text().catch(() => '')

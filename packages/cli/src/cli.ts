@@ -7,7 +7,7 @@ import type { audit } from './audit'
 import { UserError, loadConfig } from './config'
 import { formatLint, formatSkipped, isFailOn, shouldFail } from './lint'
 import { renderReport } from './report'
-import { review, type Vision } from './review'
+import { review, type ReviewResult, type Vision } from './review'
 import { DEFAULT_REVIEW_MODEL, makeVision, type VisionModel } from './review/model'
 import { formatReview, formatSummary } from './summary'
 import { toUrl } from './target'
@@ -103,6 +103,16 @@ function readSource(url: string): string | null {
   }
 }
 
+/** Review is extra: whatever goes wrong in it, the check result, report and exit code stay as they were. */
+async function safeReview(result: Awaited<ReturnType<typeof audit>>, url: string, io: Io, model: VisionModel): Promise<ReviewResult> {
+  try {
+    // The CLI runs on the user's own key, so it passes no spend cap or ledger. The total is still reported.
+    return await review(result, { source: readSource(url), vision: io.vision ?? makeVision({ env: process.env }), model, log: (line) => io.err(`${line}\n`) })
+  } catch (e) {
+    return { findings: [], spentUsd: 0, skipped: `Review failed: ${e instanceof Error ? e.message : String(e)}`, unchecked: 0 }
+  }
+}
+
 export async function run(argv: string[], io: Io = defaultIo): Promise<number> {
   try {
     const { values, positionals } = parseArgs({
@@ -126,9 +136,7 @@ export async function run(argv: string[], io: Io = defaultIo): Promise<number> {
     const config = loadConfig(values.config, io.cwd)
     const result = await io.audit({ url, width, height, config })
     // The CLI runs on the user's own key, so it passes no spend cap or ledger. The total is still reported.
-    const reviewed = values.review
-      ? await review(result, { source: readSource(url), vision: io.vision ?? makeVision({ env: process.env }), model: reviewModel, log: (line) => io.err(`${line}\n`) })
-      : null
+    const reviewed = values.review ? await safeReview(result, url, io, reviewModel) : null
     if (reviewed?.skipped) io.err(`Review skipped: ${reviewed.skipped}\n`)
     const out = resolve(io.cwd, values.out ?? 'dualkit-report.html')
     io.write(values.out ?? 'dualkit-report.html', renderReport(result, reviewed?.findings ?? []))

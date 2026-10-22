@@ -126,6 +126,28 @@ describe('dualkit check --review', () => {
     expect(json.screen).toBeUndefined()
   })
 
+  it('survives a vision that throws: same exit code, report still written', async () => {
+    const t = withReview(async () => { throw new Error('boom') })
+    const plain = io(80)
+    expect(await run(['check', 'https://example.com', '--review', '--min-score', '90'], t.io)).toBe(await run(['check', 'https://example.com', '--min-score', '90'], plain.io))
+    expect(t.err.join('')).toBe('Review skipped: Review failed: boom\n')
+    expect(Object.keys(t.files)).toEqual(['dualkit-report.html'])
+  })
+
+  it('reports how many findings it could not double-check in --json', async () => {
+    const t = withReview(async (_m: unknown, ask: { text: string }) => (ask.text.includes('claimed problem') ? { ok: false, error: 'HTTP 429' } : { ok: true, costUsd: 0, text: found }))
+    await run(['check', 'https://example.com', '--review', '--json'], t.io)
+    expect(JSON.parse(t.out.join('')).review).toMatchObject({ unchecked: 1, skipped: null, findings: [] })
+    expect(t.err.join('')).toContain('Review could not double-check 1 findings: HTTP 429')
+  })
+
+  it('says when review found nothing, and still shows spend', async () => {
+    const t = withReview(async () => ({ ok: true, costUsd: 0.5, text: '{"findings":[]}' }))
+    await run(['check', 'https://example.com', '--review'], t.io)
+    expect(t.out.join('')).toContain('Review found nothing')
+    expect(t.out.join('')).toContain('Review spent $0.5000')
+  })
+
   it('does not change the score or the exit code', async () => {
     const t = withReview(sure)
     expect(await run(['check', 'https://example.com', '--review', '--min-score', '80'], t.io)).toBe(0)

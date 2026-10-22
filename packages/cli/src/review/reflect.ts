@@ -31,8 +31,10 @@ export function cropPng(png: string, box: NodeRef['box'], scale: number): string
 
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null
 
-/** Asks the model to confirm one finding on a crop. Returns the finding with the reflection's confidence, or null to drop it. */
-export async function reflect(f: Finding, crop: string, sourceExcerpt: string | null, vision: Vision, model: VisionModel): Promise<Finding | null> {
+export type Reflection = { kept: Finding | null } | { failed: string }
+
+/** Asks the model to confirm one finding on a crop. `kept` is the finding with the reflection's confidence, or null when the model rejects it. `failed` means the call itself failed, so the finding is unchecked. */
+export async function reflect(f: Finding, crop: string, sourceExcerpt: string | null, vision: Vision, model: VisionModel): Promise<Reflection> {
   const parts = [
     `The image is a close-up of the screen around one element: ${f.node?.snippet ?? 'the page'}`,
     `The claimed problem (${f.rule}): ${f.message}`,
@@ -40,9 +42,9 @@ export async function reflect(f: Finding, crop: string, sourceExcerpt: string | 
     `Is the problem real? Reply with JSON in exactly this shape:\n${REPLY}`,
   ]
   const answer = await vision(model, { system: SYSTEM, text: parts.join('\n\n'), images: [{ mime: 'image/png', base64: crop }] })
-  if (!answer.ok) return null
+  if (!answer.ok) return { failed: answer.error }
   const reply = parseJson(answer.text)
-  if (!isObject(reply) || reply.confirmed !== true || typeof reply.confidence !== 'number' || !Number.isFinite(reply.confidence)) return null
+  if (!isObject(reply) || reply.confirmed !== true || typeof reply.confidence !== 'number' || !Number.isFinite(reply.confidence)) return { kept: null }
   const confidence = Math.min(1, Math.max(0, reply.confidence))
-  return confidence >= MIN_CONFIDENCE ? { ...f, confidence } : null
+  return { kept: confidence >= MIN_CONFIDENCE ? { ...f, confidence } : null }
 }

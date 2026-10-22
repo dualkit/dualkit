@@ -30,10 +30,10 @@ export function formatSummary(result: AuditResult, color = Boolean(process.stdou
   return `${lines.join('\n')}\n`
 }
 
-/** Review findings under the check summary, each marked `review` with its confidence. They never change the score. */
-export function formatReview({ findings, spentUsd }: { findings: readonly Finding[]; spentUsd: number }, color = Boolean(process.stdout.isTTY)): string {
-  if (findings.length === 0) return ''
-  const lines = ['', paint(color, 1, `Review found ${plural(findings.length, 'thing')} worth a look (the model can be wrong)`)]
+/** Review findings under the check summary, each marked `review` with its confidence. They never change the score. Nothing prints when review was skipped. */
+export function formatReview({ findings, spentUsd, skipped }: { findings: readonly Finding[]; spentUsd: number; skipped: string | null }, color = Boolean(process.stdout.isTTY)): string {
+  if (skipped !== null) return ''
+  const lines = ['', findings.length === 0 ? paint(color, 1, 'Review found nothing') : paint(color, 1, `Review found ${plural(findings.length, 'thing')} worth a look (the model can be wrong)`)]
   for (const f of findings) {
     const where = f.line ? ` line ${f.line}` : ''
     lines.push(`${paint(color, 33, MARK.warning)} ${paint(color, 2, 'review')} ${f.rule}${where}  ${f.message} (${Math.round((f.confidence ?? 0) * 100)}% sure)`)

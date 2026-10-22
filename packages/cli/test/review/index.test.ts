@@ -39,7 +39,7 @@ describe('review', () => {
 
   it('is skipped with the reason when the model call fails', async () => {
     const f = fake(() => ({ ok: false, error: 'No GEMINI_API_KEY' }))
-    expect(await review(audited(), { source: null, vision: f.vision, model: MODEL, log: () => {} })).toEqual({ findings: [], spentUsd: 0, skipped: 'No GEMINI_API_KEY' })
+    expect(await review(audited(), { source: null, vision: f.vision, model: MODEL, log: () => {} })).toEqual({ findings: [], spentUsd: 0, skipped: 'No GEMINI_API_KEY', unchecked: 0 })
   })
 
   it('reflects one finding at a time, in order', async () => {
@@ -60,6 +60,32 @@ describe('review', () => {
     await review(audited({ screenshot: png(2560, 2 * 800 * 7), pageHeight: 800 * 7 }), { source: null, vision: f.vision, model: MODEL, log: (s) => logs.push(s) })
     expect(f.asks[0]!.images).toHaveLength(4)
     expect(logs).toContain('Review covered the first 4 screens of 7')
+  })
+
+  it('counts findings it could not double-check, logs one line, and drops them', async () => {
+    const logs: string[] = []
+    const f = fake((n) => (n === 0 ? { ok: true, costUsd: 0, text: found } : { ok: false, error: 'HTTP 429: slow down' }))
+    const out = await review(audited(), { source: null, vision: f.vision, model: MODEL, log: (s) => logs.push(s) })
+    expect(out).toMatchObject({ findings: [], unchecked: 1, skipped: null })
+    expect(logs).toEqual(['Review could not double-check 1 findings: HTTP 429: slow down'])
+  })
+
+  it('counts the rest as unchecked when the budget runs out mid-loop', async () => {
+    const two = JSON.stringify({ findings: [0, 0, 0].map((element) => ({ rule: 'review/date-reads-wrong', element, message: 'm', confidence: 0.9 })) })
+    const logs: string[] = []
+    const f = fake((n) => (n === 0 ? { ok: true, costUsd: 0, text: two } : n === 1 ? { ok: true, costUsd: 0.01, text: '{"confirmed": true, "confidence": 0.9}' } : { ok: false, error: 'Monthly review budget spent' }))
+    const out = await review(audited(), { source: null, vision: f.vision, model: MODEL, log: (s) => logs.push(s) })
+    expect(out.findings).toHaveLength(1)
+    expect(out.unchecked).toBe(2)
+    expect(logs).toEqual(['Review could not double-check 2 findings: Monthly review budget spent'])
+  })
+
+  it('logs the truncation only after the first model call works', async () => {
+    const logs: string[] = []
+    const f = fake(() => ({ ok: false, error: 'No GEMINI_API_KEY' }))
+    const out = await review(audited({ screenshot: png(2560, 2 * 800 * 7), pageHeight: 800 * 7 }), { source: null, vision: f.vision, model: MODEL, log: (s) => logs.push(s) })
+    expect(out.skipped).toBe('No GEMINI_API_KEY')
+    expect(logs).toEqual([])
   })
 
   it('does not log when everything fit', async () => {
