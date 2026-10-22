@@ -16,6 +16,7 @@ export type Dropped = { id: string; why: string }
 
 export const MARKER = 'data-eval-bug'
 const REPO_ROOT = fileURLToPath(new URL('../../..', import.meta.url))
+export const FROZEN_FILE = fileURLToPath(new URL('../cases/miss-set-2026-10.json', import.meta.url))
 const REAL_FILE = fileURLToPath(new URL('../cases/real.json', import.meta.url))
 /**
  * Kinds exempt from the identical-screenshot drop, because Chromium's render cannot show them.
@@ -25,6 +26,9 @@ const REAL_FILE = fileURLToPath(new URL('../cases/real.json', import.meta.url))
 export const BEHAVIOURAL_OR_ENGINE_KINDS: ReadonlySet<string> = new Set(['otp-digits', 'arabic-tracking'])
 const CACHE_PAGES = 200
 const SNIPPET_MARKER = new RegExp(`\\s*${MARKER}="[^"]*"`, 'g')
+
+/** One planted-bug case, kept as the bug kind and the page it goes into (a path under the repo root). */
+export type FrozenCase = { kind: BugKind; page: string }
 
 type RealEntry = { id: string; base: string; bugged: string; selector: string }
 
@@ -94,6 +98,8 @@ const baseOf = (page: string): string => relative(REPO_ROOT, resolve(page))
 type BuildOpts = {
   /** What a page looks like, as a string that is equal exactly when the renders are equal. Defaults to the real screenshot. */
   render?: (html: string) => Promise<string>
+  /** A fixed case list. When set, exactly these pages are used in this order, and the pages argument and the render check are skipped. */
+  frozen?: readonly FrozenCase[]
   /** Real misses to add. Defaults to cases/real.json. */
   real?: readonly RealEntry[]
 }
@@ -108,6 +114,27 @@ export function loadReal(file: string = REAL_FILE): RealEntry[] {
   return JSON.parse(readFileSync(file, 'utf8')) as RealEntry[]
 }
 
+export function loadFrozenCases(file: string = FROZEN_FILE): FrozenCase[] {
+  return JSON.parse(readFileSync(file, 'utf8')) as FrozenCase[]
+}
+
+/** The frozen form of a built case list: bug kind and page, without the real misses. */
+export function freezeCases(cases: readonly MissCase[]): FrozenCase[] {
+  return cases.flatMap((c) => (c.kind === 'real' ? [] : [{ kind: c.kind, page: c.base }]))
+}
+
+function frozenCases(frozen: readonly FrozenCase[]): MissCase[] {
+  return frozen.map(({ kind, page }) => {
+    const path = resolve(REPO_ROOT, page)
+    if (!existsSync(path)) throw new Error(`Frozen page not found: ${page}`)
+    const injector = INJECTORS.find((i) => i.kind === kind)
+    if (!injector) throw new Error(`Frozen case has an unknown bug kind: ${kind}`)
+    const html = injector.inject(readFileSync(path, 'utf8'))
+    if (html === null) throw new Error(`Frozen page no longer fits ${kind}: ${page}`)
+    return { id: `${kind}:${baseOf(path)}`, kind, base: baseOf(path), html }
+  })
+}
+
 /** The bugged page with the marker added as the first attribute of the element the selector finds. */
 export function markSelector(html: string, selector: string): string {
   const el = parse(html).querySelector(selector)
@@ -115,8 +142,16 @@ export function markSelector(html: string, selector: string): string {
   return applyEdits(html, retag(html, el, 'real'))
 }
 
+function realCases(real: readonly RealEntry[] = loadReal()): MissCase[] {
+  return real.map((r) => ({
+    id: `real:${r.id}`, kind: 'real', base: r.base,
+    html: markSelector(readFileSync(resolve(REPO_ROOT, r.bugged), 'utf8'), r.selector),
+  }))
+}
+
 /** At most one case per kind per page, in page order, until a kind has perKind cases that change the render. */
 export async function buildCases(pages: string[], perKind: number, opts: BuildOpts = {}): Promise<{ cases: MissCase[]; dropped: Dropped[] }> {
+  if (opts.frozen) return { cases: [...frozenCases(opts.frozen), ...realCases(opts.real)], dropped: [] }
   const render = opts.render ?? screenshotOf
   const clean = new Map<string, string>()
   const cleanLook = async (page: string, html: string): Promise<string> => {
@@ -150,11 +185,7 @@ export async function buildCases(pages: string[], perKind: number, opts: BuildOp
     }
     if (kept < perKind) dropped.push({ id: injector.kind, why: `fewer than ${perKind} pages fit: ${kept}` })
   }
-  for (const r of opts.real ?? loadReal()) {
-    const html = markSelector(readFileSync(resolve(REPO_ROOT, r.bugged), 'utf8'), r.selector)
-    cases.push({ id: `real:${r.id}`, kind: 'real', base: r.base, html })
-  }
-  return { cases, dropped }
+  return { cases: [...cases, ...realCases(opts.real)], dropped }
 }
 
 const stripMarker = (text: string): string => text.replace(SNIPPET_MARKER, '')

@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
-import { basePages, buildCases, closeBrowser, runCase } from './misses.js'
+import { basePages, buildCases, closeBrowser, freezeCases, FROZEN_FILE, loadFrozenCases, runCase } from './misses.js'
 import { listProducts, runCheck, runLint, scoreRun, type ProductScore, type RunFinding } from './precision.js'
 import { renderReport, type Coverage, type EvalResult, type PrecisionResult } from './report.js'
 import type { CaseResult, Tally } from './types.js'
@@ -14,14 +14,14 @@ const COMMANDS = ['precision', 'misses', 'all'] as const
 type Command = (typeof COMMANDS)[number]
 const EMPTY: Tally = { real: 0, handled: 0, intended: 0, unclear: 0 }
 
-export type Parsed = { command: Command; data?: string | undefined }
+export type Parsed = { command: Command; data?: string | undefined; rebuildCases: boolean }
 
 export function parseArgs(argv: readonly string[]): Parsed {
   const [command, ...rest] = argv
-  if (!COMMANDS.includes(command as Command)) throw new Error(`Usage: eval <${COMMANDS.join('|')}> [--data <dir>]`)
+  if (!COMMANDS.includes(command as Command)) throw new Error(`Usage: eval <${COMMANDS.join('|')}> [--data <dir>] [--rebuild-cases]`)
   const i = rest.indexOf('--data')
   if (i >= 0 && !rest[i + 1]) throw new Error('--data needs a folder')
-  return { command: command as Command, data: i >= 0 ? rest[i + 1] : undefined }
+  return { command: command as Command, data: i >= 0 ? rest[i + 1] : undefined, rebuildCases: rest.includes('--rebuild-cases') }
 }
 
 /** --data first, then DUALKIT_SWEEP_DATA. */
@@ -74,8 +74,10 @@ async function precisionSet(data: string): Promise<PrecisionResult[]> {
   return out
 }
 
-async function missSet(): Promise<EvalResult['misses']> {
-  const { cases, dropped } = await buildCases(basePages(RUNS), PER_KIND)
+async function missSet(rebuild: boolean): Promise<EvalResult['misses']> {
+  const built = rebuild ? await buildCases(basePages(RUNS), PER_KIND) : await buildCases([], PER_KIND, { frozen: loadFrozenCases() })
+  const { cases, dropped } = built
+  if (rebuild) writeFileSync(FROZEN_FILE, `${JSON.stringify(freezeCases(cases), null, 1)}\n`)
   const results: CaseResult[] = []
   try {
     for (const c of cases) results.push(...(await runCase(c, readFileSync(resolve(ROOT, c.base), 'utf8'))))
@@ -86,11 +88,11 @@ async function missSet(): Promise<EvalResult['misses']> {
 }
 
 export async function main(argv: readonly string[], env: NodeJS.ProcessEnv): Promise<string> {
-  const { command, data } = parseArgs(argv)
+  const { command, data, rebuildCases } = parseArgs(argv)
   const dir = command === 'misses' ? undefined : resolveData(data, env)
   const at = new Date().toISOString().slice(0, 10)
   const precision = dir ? await precisionSet(dir) : []
-  const misses = command === 'precision' ? { cases: 0, dropped: 0, results: [] } : await missSet()
+  const misses = command === 'precision' ? { cases: 0, dropped: 0, results: [] } : await missSet(rebuildCases)
   const result: EvalResult = { at, precision, misses }
   mkdirSync(OUT, { recursive: true })
   writeFileSync(join(OUT, `${at}.json`), JSON.stringify(result, null, 1))

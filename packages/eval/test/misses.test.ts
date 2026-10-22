@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterAll, describe, expect, it } from 'vitest'
 import { INJECTORS } from '../src/inject.js'
-import { BEHAVIOURAL_OR_ENGINE_KINDS, EMPTY_PAGE, basePages, buildCases, roundRobin, checkCaught, closeBrowser, lintCaught, markSelector, runCase, sharedLine } from '../src/misses.js'
+import { BEHAVIOURAL_OR_ENGINE_KINDS, EMPTY_PAGE, basePages, buildCases, loadFrozenCases, roundRobin, checkCaught, closeBrowser, lintCaught, markSelector, runCase, sharedLine } from '../src/misses.js'
 
 const fixture = (name: string) => new URL(`./fixtures/pages/${name}.html`, import.meta.url).pathname
 const KINDS = INJECTORS.map((i) => i.kind)
@@ -104,6 +104,34 @@ describe('buildCases', () => {
     expect(cases).toHaveLength(1)
     expect(cases[0]).toMatchObject({ id: 'real:r', kind: 'real', base: 'x.html' })
     expect(cases[0]!.html).toMatch(/<[a-z0-9]+ data-eval-bug="real"/)
+  })
+})
+
+describe('frozen cases', () => {
+  const FROZEN = new URL('../cases/miss-set-2026-10.json', import.meta.url).pathname
+
+  it('loads the committed list: 64 planted cases, plus the one real miss makes 65', () => {
+    const cases = loadFrozenCases(FROZEN)
+    expect(cases).toHaveLength(64)
+    expect(cases.every((c) => KINDS.includes(c.kind) && c.page.startsWith('bench/runs/2026-10/'))).toBe(true)
+  })
+
+  it('builds exactly the frozen pages in order and never looks for pages itself', async () => {
+    const a = join(temp, 'frozen-a.html')
+    const b = join(temp, 'frozen-b.html')
+    copyFileSync(fixture('back-arrow'), a)
+    copyFileSync(fixture('arabic-tracking'), b)
+    const frozen = [{ kind: 'arabic-tracking' as const, page: b }, { kind: 'back-arrow' as const, page: a }]
+    const render = async () => { throw new Error('render must not run') }
+    const { cases, dropped } = await buildCases([], 8, { frozen, render, real: [] })
+    expect(cases.map((c) => c.kind)).toEqual(['arabic-tracking', 'back-arrow'])
+    expect(cases.map((c) => c.base.split('/').pop())).toEqual(['frozen-b.html', 'frozen-a.html'])
+    expect(dropped).toEqual([])
+  })
+
+  it('throws a message naming a frozen page that no longer exists', async () => {
+    const frozen = [{ kind: 'back-arrow' as const, page: join(temp, 'gone.html') }]
+    await expect(buildCases([], 8, { frozen, real: [] })).rejects.toThrow(/gone\.html/)
   })
 })
 

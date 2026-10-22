@@ -9,8 +9,9 @@ describe('data folder', () => {
   })
 
   it('parses the command and the flag', () => {
-    expect(parseArgs(['all', '--data', '/x'])).toEqual({ command: 'all', data: '/x' })
-    expect(parseArgs(['misses'])).toEqual({ command: 'misses', data: undefined })
+    expect(parseArgs(['all', '--data', '/x'])).toEqual({ command: 'all', data: '/x', rebuildCases: false })
+    expect(parseArgs(['misses'])).toEqual({ command: 'misses', data: undefined, rebuildCases: false })
+    expect(parseArgs(['misses', '--rebuild-cases']).rebuildCases).toBe(true)
     expect(() => parseArgs(['nope'])).toThrow(/Usage/)
     expect(() => parseArgs(['all', '--data'])).toThrow(/needs a folder/)
   })
