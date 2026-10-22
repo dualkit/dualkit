@@ -4,16 +4,179 @@
   "screen": "booking",
   "condition": "dualkit",
   "run": 3,
-  "at": "2026-10-21T17:54:08.662Z",
-  "reply": "",
+  "at": "2026-10-22T07:27:37.152Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>حجز موعد - العيادة</title>\n<style>\n  :root {\n    --primary: #0f766e;\n    --primary-dark: #0d4f4c;\n    --primary-light: #ccfbf1;\n    --bg: #f0fdfa;\n    --surface: #ffffff;\n    --text: #134e4a;\n    --text-muted: #64748b;\n    --border: #e2e8f0;\n    --today: #0f766e;\n    --today-text: #ffffff;\n    --selected: #0d4f4c;\n    --weekend: #fee2e2;\n  }\n  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }\n  body {\n    font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif;\n    background: var(--bg);\n    color: var(--text);\n    display: flex;\n    justify-content: center;\n    align-items: min-height: 100vh;\n    padding: 20px;\n    direction: rtl;\n  }\n  .phone {\n    width: 100%;\n    max-width: 420px;\n    background: var(--surface);\n    border-radius: 28px;\n    box-shadow: 0 20px 60px rgba(0,0,0,0.15);\n    overflow: hidden;\n    min-height: 850px;\n    display: flex;\n    flex-direction: column;\n  }\n  /* Header */\n  .app-bar {\n    background: var(--primary);\n    color: #fff;\n    padding: 20px 20px 16px;\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n  }\n  .app-bar .title { font-size: 20px; font-weight: 700; }\n  .app-bar .subtitle { font-size: 13px; opacity: 0.9; margin-top: 2px; }\n  .icon-btn {\n    background: rgba(255,255,255,0.15);\n    border: none;\n    width: 38px;\n    height: 38px;\n    border-radius: 50%;\n    color: #fff;\n    font-size: 18px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: background 0.15s;\n  }\n  .icon-btn:hover { background: rgba(255,255,255,0.25); }\n\n  /* Month navigator */\n  .month-bar {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 12px;\n    padding: 16px 20px 8px;\n  }\n  .month-bar .month-name {\n    font-size: 18px;\n    font-weight: 700;\n    color: var(--text);\n    min-width: 140px;\n    text-align: center;\n  }\n  .month-bar .year { font-size: 14px; color: var(--text-muted); font-weight: 500; }\n\n  /* Weekday headers */\n  .weekdays {\n    display: grid;\n    grid-template-columns: repeat(7, 1fr);\n    padding: 8px 16px 4px;\n    font-size: 12px;\n    color: var(--text-muted);\n    font-weight: 600;\n  }\n  .weekdays div { text-align: center; }\n\n  /* Calendar grid */\n  .calendar {\n    display: grid;\n    grid-template-columns: repeat(7, 1fr);\n    gap: 2px;\n    padding: 4px 16px 12px;\n  }\n  .day {\n    aspect-ratio: 1;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    font-size: 15px;\n    font-weight: 500;\n    border-radius: 50%;\n    cursor: pointer;\n    color: var(--text);\n    position: relative;\n    transition: background 0.12s, color 0.12s;\n  }\n  .day:hover:not(.empty):not(.selected) { background: var(--primary-light); color: var(--primary-dark); }\n  .day.empty { cursor: default; }\n  .day.weekend { color: #ef4444; }\n  .day.today {\n    background: var(--today);\n    color: var(--today-text);\n    font-weight: 700;\n  }\n  .day.selected {\n    background: var(--selected);\n    color: #fff;\n    font-weight: 700;\n  }\n  .day.other-month { color: #cbd5e1; }\n\n  /* Divider */\n  .section-divider {\n    height: 1px;\n    background: var(--border);\n    margin: 0 20px;\n  }\n  .section-label {\n    padding: 14px 20px 8px;\n    font-size: 14px;\n    font-weight: 700;\n    color: var(--text);\n    display: flex;\n    align-items: center;\n    gap: 8px;\n  }\n  .section-label .dot {\n    width: 8px; height: 8px; border-radius: 50%;\n    background: var(--primary);\n  }\n\n  /* Doctor card */\n  .doctor-card {\n    margin: 0 20px;\n    background: var(--bg);\n    border-radius: 16px;\n    padding: 14px 16px;\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    border: 1px solid var(--border);\n  }\n  .doctor-avatar {\n    width: 48px; height: 48px;\n    border-radius: 50%;\n    background: var(--primary);\n    color: #fff;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    font-size: 20px;\n    font-weight: 700;\n    flex-shrink: 0;\n  }\n  .doctor-info { flex: 1; }\n  .doctor-name { font-size: 16px; font-weight: 700; }\n  .doctor-specialty { font-size: 13px; color: var(--text-muted); margin-top: 2px; }\n  .doctor-rating { font-size: 13px; color: var(--primary); font-weight: 600; }\n\n  /* Time slots */\n  .time-slots {\n    display: grid;\n    grid-template-columns: repeat(4, 1fr);\n    gap: 8px;\n    padding: 8px 20px 16px;\n  }\n  .time-slot {\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: 12px;\n    padding: 12px 4px;\n    text-align: center;\n    font-size: 14px;\n    font-weight: 600;\n    cursor: pointer;\n    transition: all 0.12s;\n    color: var(--text);\n  }\n  .time-slot:hover:not(.taken) { border-color: var(--primary); background: var(--primary-light); }\n  .time-slot.taken { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; border-color: transparent; }\n  .time-slot.selected { background: var(--primary); color: #fff; border-color: var(--primary); }\n\n  /* Bottom bar */\n  .bottom-bar {\n    margin-top: auto;\n    padding: 12px 20px 20px;\n    background: var(--surface);\n    border-top: 1px solid var(--border);\n  }\n  .selected-summary {\n    font-size: 14px;\n    color: var(--text-muted);\n    text-align: center;\n    margin-bottom: 10px;\n    min-height: 20px;\n  }\n  .selected-summary strong { color: var(--text); }\n  .confirm-btn {\n    width: 100%;\n    background: var(--primary);\n    color: #fff;\n    border: none;\n    border-radius: 14px;\n    padding: 16px;\n    font-size: 17px;\n    font-weight: 700;\n    cursor: pointer;\n    transition: background 0.15s;\n    font-family: inherit;\n  }\n  .confirm-btn:hover { background: var(--primary-dark); }\n  .confirm-btn:disabled { background: #cbd5e1; cursor: not-allowed; }\n\n  /* Arabic digits via font-variant */\n  .arabic-digits { font-variant-numeric: tabular-nums; }\n</style>\n</head>\n<body>\n<div class=\"phone\">\n  <!-- App Bar -->\n  <div class=\"app-bar\">\n    <div>\n      <div class=\"title\">حجز موعد</div>\n      <div class=\"subtitle\">العيادة-multispeciality</div>\n    </div>\n    <button class=\"icon-btn\" aria-label=\"النباهة\">🔔</button>\n  </div>\n\n  <!-- Month Navigator -->\n  <div class=\"month-bar\">\n    <button class=\"icon-btn\" id=\"prevMonth\" aria-label=\"الشهر_previous\">‹</button>\n    <div>\n      <div class=\"month-name\" id=\"monthName\">ديسمبر ٢٠٢٥</div>\n    </div>\n    <button class=\"icon-btn\" id=\"nextMonth\" aria-label=\"الشهر_next\">›</button>\n  </div>\n\n  <!-- Weekday headers: Sat Sun Mon Tue Wed Thu Fri -->\n  <div class=\"weekdays\">\n    <div>س</div>\n    <div>د</div>\n    <div>أ</div>\n    <div>ث</div>\n    <div>خ</div>\n    <div>ج</div>\n    <div>ح</div>\n  </div>\n\n  <!-- Calendar grid -->\n  <div class=\"calendar\" id=\"calendar\"></div>\n\n  <div class=\"section-divider\"></div>\n\n  <!-- Doctor -->\n  <div class=\"section-label\"><span class=\"dot\"></span>الطبيب</div>\n  <div class=\"doctor-card\">\n    <div class=\"doctor-avatar\">د</div>\n    <div class=\"doctor-info\">\n      <div class=\"doctor-name\">د. فهد العتيبي</div>\n      <div class=\"doctor-specialty\">طبيب أسرة • قسم الداخلية</div>\n    </div>\n    <div class=\"doctor-rating\">★★★★★ ٤.٩</div>\n  </div>\n\n  <!-- Time slots -->\n  <div class=\"section-label\"><span class=\"dot\"></span>الوقت المتاح</div>\n  <div class=\"time-slots\" id=\"timeSlots\"></div>\n\n  <!-- Bottom -->\n  <div class=\"bottom-bar\">\n    <div class=\"selected-summary\" id=\"selectedSummary\">اختر موعدًا</div>\n    <button class=\"confirm-btn\" id=\"confirmBtn\" disabled>تأكيد الحجز</button>\n  </div>\n</div>\n\n<script>\n(function () {\n  const monthNames = [\n    'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',\n    'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'\n  ];\n  const weekdayNames = ['س', 'د', 'أ', 'ث', 'خ', 'ج', 'ح'];\n  const timeSlots = [];\n  for (let h = 9; h <= 12; h++) {\n    for (let m = 0; m < 60; m += 30) {\n      if (h === 12 && m > 0) continue;\n      const hh = h.toString().padStart(2, '0');\n      const mm = m.toString().padStart(2, '0');\n      timeSlots.push(hh + ':' + mm);\n    }\n  }\n\n  // Convert Western digits to Arabic-Indic for display\n  function toArabic(n) {\n    const digits = '٠١٢٣٤٥٦٧٨٩';\n    return n.toString().split('').map(c => {\n      if (c >= '0' && c <= '9') return digits.charCodeAt(c.charCodeAt(0) - 48) - 48 + 1632;\n      return c;\n    }).join('');\n  }\n\n  function formatTime(t) {\n    const [h, m] = t.split(':');\n    const hour = parseInt(h, 10);\n    const min = parseInt(m, 10);\n    let hDisplay = hour > 12 ? hour - 12 : hour;\n    if (hDisplay === 0) hDisplay = 12;\n    const period = hour >= 12 ? 'م' : 'ص';\n    return toArabic(hDisplay) + ':' + toArabic(min) + ' ' + period;\n  }\n\n  let currentDate = new Date();\n  let viewYear = currentDate.getFullYear();\n  let viewMonth = currentDate.getMonth();\n  let selectedDate = null;\n  let selectedTime = null;\n\n  const calendarEl = document.getElementById('calendar');\n  const monthNameEl = document.getElementById('monthName');\n  const timeSlotsEl = document.getElementById('timeSlots');\n  const selectedSummaryEl = document.getElementById('selectedSummary');\n  const confirmBtn = document.getElementById('confirmBtn');\n\n  function isToday(d) {\n    const t = new Date();\n    return d.getFullYear() === t.getFullYear() &&\n           d.getMonth() === t.getMonth() &&\n           d.getDate() === t.getDate();\n  }\n\n  function renderCalendar() {\n    monthNameEl.textContent = monthNames[viewMonth] + ' ' + toArabic(viewYear);\n    calendarEl.innerHTML = '';\n\n    const firstDay = new Date(viewYear, viewMonth, 1);\n    // 0 = Sunday, we want Saturday as first column\n    // Map: Sat=0, Sun=1, Mon=2, Tue=3, Wed=4, Thu=5, Fri=6\n    let startOffset = (firstDay.getDay() + 2) % 7;\n    const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();\n    const daysInPrev = new Date(viewYear, viewMonth, 0).getDate();\n\n    const today = new Date();\n    const isCurrentView = viewYear === today.getFullYear() && viewMonth === today.getMonth();\n\n    // Empty cells before first day\n    for (let i = 0; i < startOffset; i++) {\n      const empty = document.createElement('div');\n      empty.className = 'day empty';\n      calendarEl.appendChild(empty);\n    }\n\n    for (let d = 1; d <= daysInMonth; d++) {\n      const dayEl = document.createElement('div');\n      dayEl.className = 'day';\n      dayEl.textContent = toArabic(d);\n      const date = new Date(viewYear, viewMonth, d);\n\n      const dow = date.getDay(); // 0 Sun ... 6 Sat\n      if (dow === 5 || dow === 6) dayEl.classList.add('weekend'); // Fri, Sat\n\n      if (isToday(date)) dayEl.classList.add('today');\n\n      if (selectedDate &&\n          selectedDate.getFullYear() === date.getFullYear() &&\n          selectedDate.getMonth() === date.getMonth() &&\n          selectedDate.getDate() === date.getDate()) {\n        dayEl.classList.add('selected');\n      }\n\n      dayEl.addEventListener('click', () => selectDate(date, dayEl));\n      calendarEl.appendChild(dayEl);\n    }\n  }\n\n  function selectDate(date, el) {\n    // Remove previous selection\n    document.querySelectorAll('.day.selected').forEach(d => d.classList.remove('selected'));\n    selectedDate = date;\n    selectedTime = null;\n    el.classList.add('selected');\n    renderTimeSlots();\n    updateSummary();\n  }\n\n  function renderTimeSlots() {\n    timeSlotsEl.innerHTML = '';\n    timeSlots.forEach(t => {\n      const slot = document.createElement('div');\n      slot.className = 'time-slot';\n      slot.textContent = formatTime(t);\n      slot.dataset.time = t;\n\n      // Mark some as taken randomly-ish for realism\n      const taken = (t === '09:30' || t === '11:00');\n      if (taken) slot.classList.add('taken');\n\n      if (selectedDate && selectedTime === t) slot.classList.add('selected');\n\n      slot.addEventListener('click', () => {\n        if (slot.classList.contains('taken')) return;\n        document.querySelectorAll('.time-slot.selected').forEach(s => s.classList.remove('selected'));\n        selectedTime = t;\n        slot.classList.add('selected');\n        updateSummary();\n      });\n      timeSlotsEl.appendChild(slot);\n    });\n  }\n\n  function updateSummary() {\n    if (!selectedDate) {\n      selectedSummaryEl.textContent = 'اختر موعدًا';\n      confirmBtn.disabled = true;\n      return;\n    }\n    const dateStr = toArabic(selectedDate.getDate()) + ' ' + monthNames[selectedDate.getMonth()] + ' ' + toArabic(selectedDate.getFullYear());\n    if (!selectedTime) {\n      selectedSummaryEl.innerHTML = 'الموعد المختار: <strong>' + dateStr + '</strong> — اختر وقتًا';\n      confirmBtn.disabled = true;\n    } else {\n      selectedSummaryEl.innerHTML = 'الموعد المختار: <strong>' + dateStr + ' ' + formatTime(selectedTime) + '</strong>';\n      confirmBtn.disabled = false;\n    }\n  }\n\n  document.getElementById('prevMonth').addEventListener('click', () => {\n    viewMonth--;\n    if (viewMonth < 0) { viewMonth = 11; viewYear--; }\n    renderCalendar();\n  });\n  document.getElementById('nextMonth').addEventListener('click', () => {\n    viewMonth++;\n    if (viewMonth > 11) { viewMonth = 0; viewYear++; }\n    renderCalendar();\n  });\n\n  confirmBtn.addEventListener('click', () => {\n    if (!selectedDate || !selectedTime) return;\n    const dateStr = toArabic(selectedDate.getDate()) + ' ' + monthNames[selectedDate.getMonth()] + ' ' + toArabic(selectedDate.getFullYear());\n    alert('تم تأكيد الحجز!\\nالطبيب: د. فهد العتيبي\\nالتاريخ: ' + dateStr + '\\nالوقت: ' + formatTime(selectedTime));\n  });\n\n  renderCalendar();\n  renderTimeSlots();\n})();\n</script>\n</body>\n</html>\n```",
   "usage": {
     "input": 6299,
-    "output": 16000
+    "output": 4762
   },
-  "finish": "length",
-  "reasoningTokens": 11380,
+  "ms": 43618,
+  "finish": "stop",
+  "reasoningTokens": 583,
   "servedModel": "dots-studio/dots-3-note-preview:free",
-  "ms": 133416,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 80,
+  "missing": [
+    "calendar days",
+    "time slots"
+  ],
+  "findings": [
+    {
+      "rule": "layout/clipped-text",
+      "title": "Arabic text cut off by its box",
+      "severity": "warning",
+      "box": {
+        "x": 20,
+        "y": 20,
+        "width": 350,
+        "height": 1013.5
+      },
+      "message": "36px of this text is cut off sideways.",
+      "fix": "Let the box grow with min-width or min-height, or add text-overflow: ellipsis if shortening is intended.",
+      "snippet": "<div class=\"phone\">\n  <!-- App Bar -->\n  <div class=\"app-bar\">\n    <div>\n      <div class=\"title\">حجز موعد</div>\n      <div class=\"subtitle\">العيادة-multispecia"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 264.4375,
+        "y": 41,
+        "width": 85.5625,
+        "height": 22
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"title\">حجز موعد</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 229.734375,
+        "y": 66,
+        "width": 120.265625,
+        "height": 15
+      },
+      "message": "\"العيادة-multispeciality\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"subtitle\">العيادة-multispeciality</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 323.78125,
+        "y": 167,
+        "width": 15,
+        "height": 14
+      },
+      "message": "\"س\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>س</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 283.359375,
+        "y": 167,
+        "width": 5,
+        "height": 14
+      },
+      "message": "\"د\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>د</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 238.9375,
+        "y": 167,
+        "width": 3,
+        "height": 14
+      },
+      "message": "\"أ\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>أ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 189.5,
+        "y": 167,
+        "width": 11,
+        "height": 14
+      },
+      "message": "\"ث\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>ث</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 145.578125,
+        "y": 167,
+        "width": 8,
+        "height": 14
+      },
+      "message": "\"خ\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>خ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 100.140625,
+        "y": 167,
+        "width": 8,
+        "height": 14
+      },
+      "message": "\"ج\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>ج</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 54.71875,
+        "y": 167,
+        "width": 8,
+        "height": 14
+      },
+      "message": "\"ح\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div>ح</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 170.609375,
+        "y": 686.5,
+        "width": 102.390625,
+        "height": 30
+      },
+      "message": "\"طبيب أسرة • قسم الداخلية\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"doctor-specialty\">طبيب أسرة • قسم الداخلية</div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 1054
 }

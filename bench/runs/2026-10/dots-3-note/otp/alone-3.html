@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أدخل الرمز</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      direction: rtl;
+    }
+    .container {
+      background: #fff;
+      padding: 30px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 360px;
+      text-align: center;
+    }
+    .title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 25px;
+      line-height: 1.5;
+    }
+    .code-inputs {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 25px;
+    }
+    .code-inputs input {
+      width: 45px;
+      height: 55px;
+      text-align: center;
+      font-size: 22px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+    }
+    .code-inputs input:focus {
+      border-color: #007aff;
+    }
+    .countdown {
+      font-size: 14px;
+      color: #007aff;
+      margin-bottom: 20px;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #007aff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:disabled {
+      background-color: #a0a0a0;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="title">أدخل الرمز</div>
+    <div class="subtitle">أرسلنا رمزًا مكونًا من 6 أرقام إلى +966 55 123 4567</div>
+    <div class="code-inputs">
+      <input type="text" maxlength="1" inputmode="numeric">
+      <input type="text" maxlength="1" inputmode="numeric">
+      <input type="text" maxlength="1" inputmode="numeric">
+      <input type="text" maxlength="1" inputmode="numeric">
+      <input type="text" maxlength="1" inputmode="numeric">
+      <input type="text" maxlength="1" inputmode="numeric">
+    </div>
+    <div class="countdown" id="countdown">أعد الإرسال خلال 0:45</div>
+    <button id="verifyBtn">تحقق</button>
+  </div>
+
+  <script>
+    // Countdown timer
+    let time = 45;
+    const countdownEl = document.getElementById('countdown');
+    const verifyBtn = document.getElementById('verifyBtn');
+
+    function updateCountdown() {
+      if (time <= 0) {
+        countdownEl.textContent = "أعد الإرسال";
+        verifyBtn.disabled = false;
+        return;
+      }
+      const minutes = Math.floor(time / 60);
+      const seconds = time % 60;
+      countdownEl.textContent = `أعد الإرسال خلال ${minutes}:${seconds.toString().padStart(2, '0')}`;
+      time--;
+    }
+
+    // Initial update
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // Simple input handling: move to next box on input
+    const inputs = document.querySelectorAll('.code-inputs input');
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        if (input.value.length === 1 && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المعاملات</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Noto Sans Arabic', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  .menu-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+  }
+
+  /* Balance Card */
+  .balance-card {
+    background: linear-gradient(135deg, #005e7a 0%, #0a7d9b 100%);
+    color: #fff;
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: start;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .balance-label {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    font-weight: 400;
+  }
+
+  .balance-amount {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+    letter-spacing: -0.5px;
+  }
+
+  /* Filter */
+  .filter {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+  }
+
+  .filter-pill {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 24px;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    color: #333;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .filter-pill span:last-child {
+    font-size: 0.7rem;
+  }
+
+  /* Transactions List */
+  .transactions-list {
+    list-style: none;
+  }
+
+  .transaction-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+    gap: 1rem;
+  }
+
+  .transaction-item:last-child {
+    border-bottom: none;
+  }
+
+  .transaction-date {
+    font-size: 0.9rem;
+    color: #666;
+    white-space: nowrap;
+    min-width: 110px;
+    text-align: start;
+  }
+
+  .transaction-merchant {
+    font-weight: 500;
+    font-size: 1rem;
+    color: #1a1a1a;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .transaction-amount {
+    font-weight: 700;
+    font-size: 1.05rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .incoming {
+    color: #0a7d9b;
+  }
+
+  .outgoing {
+    color: #e74c3c;
+  }
+
+  .type-indicator {
+    font-size: 0.8rem;
+    font-weight: 500;
+    background: rgba(0, 0, 0, 0.06);
+    padding: 0.2rem 0.5rem;
+    border-radius: 8px;
+  }
+
+  .incoming .type-indicator {
+    background: rgba(13, 166, 155, 0.12);
+    color: #0a7d9b;
+  }
+
+  .outgoing .type-indicator {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+  }
+
+  /* Isolation for LTR runs */
+  bdi {
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1 class="title">المعاملات</h1>
+      <button class="menu-btn" aria-label="القائمة">⋮</button>
+    </header>
+
+    <div class="balance-card">
+      <div class="balance-label">الrhsة المتاحة</div>
+      <div class="balance-amount"><bdi dir="ltr">500.000 ر.ع</bdi></div>
+    </div>
+
+    <div class="filter">
+      <div class="filter-pill">
+        <span>هذا الشهر</span>
+        <span>▼</span>
+      </div>
+    </div>
+
+    <ul class="transactions-list">
+      <li class="transaction-item">
+        <span class="transaction-date">15 يناير 2025</span>
+        <span class="transaction-merchant"><bdi dir="ltr">Lulu Hypermarket</bdi></span>
+        <span class="transaction-amount outgoing"><bdi>12.345 ر.ع</bdi> <span class="type-indicator">خرج</span></span>
+      </li>
+      <li class="transaction-item">
+        <span class="transaction-date">14 يناير 2025</span>
+        <span class="transaction-merchant"><bdi dir="ltr">Netflix</bdi></span>
+        <span class="transaction-amount outgoing"><bdi>5.678 ر.ع</bdi> <span class="type-indicator">خرج</span></span>
+      </li>
+      <li class="transaction-item">
+        <span class="transaction-date">13 يناير 2025</span>
+        <span class="transaction-merchant"><bdi dir="ltr">Bank Muscat</bdi></span>
+        <span class="transaction-amount incoming"><bdi>100.000 ر.ع</bdi> <span class="type-indicator">دخل</span></span>
+      </li>
+      <li class="transaction-item">
+        <span class="transaction-date">12 يناير 2025</span>
+        <span class="transaction-merchant"><bdi dir="ltr">Shell Oman</bdi></span>
+        <span class="transaction-amount outgoing"><bdi>25.500 ر.ع</bdi> <span class="type-indicator">خرج</span></span>
+      </li>
+      <li class="transaction-item">
+        <span class="transaction-date">11 يناير 2025</span>
+        <span class="transaction-merchant"><bdi dir="ltr">Ooredoo Oman</bdi></span>
+        <span class="transaction-amount outgoing"><bdi>3.200 ر.ع</bdi> <span class="type-indicator">خرج</span></span>
+      </li>
+      <li class="transaction-item">
+        <span class="transaction-date">10 يناير 2025</span>
+        <span class="transaction-merchant"><bdi dir="ltr">Starbucks</bdi></span>
+        <span class="transaction-amount outgoing"><bdi>4.750 ر.ع</bdi> <span class="type-indicator">خرج</span></span>
+      </li>
+      <li class="transaction-item">
+        <span class="transaction-date">9 يناير 2025</span>
+        <span class="transaction-merchant"><bdi dir="ltr">Petra Gas</bdi></span>
+        <span class="transaction-amount outgoing"><bdi>15.000 ر.ع</bdi> <span class="type-indicator">خرج</span></span>
+      </li>
+      <li class="transaction-item">
+        <span class="transaction-date">8 يناير 2025</span>
+        <span class="transaction-merchant"><bdi dir="ltr">Ahmed Transfer</bdi></span>
+        <span class="transaction-amount incoming"><bdi>50.000 ر.ع</bdi> <span class="type-indicator">دخل</span></span>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>

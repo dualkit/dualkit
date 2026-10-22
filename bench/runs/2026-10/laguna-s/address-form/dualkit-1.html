@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>نموذج عنوان التسليم</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .form-container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    h1 {
+      font-size: 20px;
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #1a1a1a;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: #444;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+      margin-bottom: 18px;
+      text-align: right;
+    }
+    input[type="tel"] {
+      direction: ltr;
+      text-align: left;
+    }
+    .hint {
+      font-size: 13px;
+      color: #777;
+      margin-top: -12px;
+      margin-bottom: 18px;
+      text-align: right;
+    }
+    .btn-save {
+      width: 100%;
+      background: #0d6efd;
+      color: #fff;
+      border: none;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-save:hover {
+      background: #0b5ed7;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>عنوان التسليم</h1>
+    <form id="addressForm">
+      <label for="building">المبنى أو الفيلا</label>
+      <input type="text" id="building" name="building" placeholder="مثال: المبنى ١٢ أو الفيلا ٤٥" />
+
+      <label for="street">الشارع</label>
+      <input type="text" id="street" name="street" placeholder="اختر الشارع" />
+
+      <label for="area">المنطقة</label>
+      <input type="text" id="area" name="area" placeholder="مثال: دبي مارينا" />
+
+      <label for="makani">رقم المكاني</label>
+      <input type="text" id="makani" name="makani" inputmode="numeric" placeholder="أدخل رقم المكاني" />
+
+      <label for="emirate">الإمارة</label>
+      <select id="emirate" name="emirate">
+        <option value="Dubai" selected>دبي</option>
+        <option value="Abu Dhabi">أبوظبي</option>
+        <option value="Sharjah">الشارقة</option>
+        <option value="Ajman">عجمان</option>
+        <option value="Umm Al-Quwain">أم القيوين</option>
+        <option value="Ras Al-Khaimah">رأس الخيمة</option>
+        <option value="Fujairah">الفجيرة</option>
+      </select>
+
+      <label for="phone">رقم الهاتف</label>
+      <input type="tel" id="phone" name="phone" inputmode="tel" placeholder="050 123 4567" />
+      <div class="hint">مثال: <bdi dir="ltr">050 123 4567</bdi></div>
+
+      <button type="submit" class="btn-save">حفظ العنوان</button>
+    </form>
+  </div>
+</body>
+</html>

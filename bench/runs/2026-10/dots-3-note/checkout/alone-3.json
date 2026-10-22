@@ -4,16 +4,162 @@
   "screen": "checkout",
   "condition": "alone",
   "run": 3,
-  "at": "2026-10-21T17:25:52.860Z",
-  "reply": "",
+  "at": "2026-10-22T07:19:48.991Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>الدفعة</title>\n<style>\n  body {\n    margin: 0;\n    padding: 0;\n    font-family: 'Arial', sans-serif;\n    direction: rtl;\n    background-color: #f5f5f5;\n  }\n  .phone {\n    max-width: 480px;\n    margin: 0 auto;\n    background: #fff;\n    min-height: 100vh;\n    padding: 16px;\n    box-sizing: border-box;\n  }\n  .header {\n    display: flex;\n    align-items: center;\n    margin-bottom: 16px;\n  }\n  .back-arrow {\n    background: none;\n    border: none;\n    font-size: 24px;\n    cursor: pointer;\n    color: #333;\n  }\n  .cart-items {\n    margin-bottom: 16px;\n  }\n  .item {\n    display: flex;\n    align-items: center;\n    padding: 8px;\n    border-bottom: 1px solid #eee;\n  }\n  .photo {\n    width: 60px;\n    height: 60px;\n    background-color: #ddd;\n    margin-left: 12px;\n    border-radius: 4px;\n  }\n  .info {\n    flex: 1;\n    display: flex;\n    flex-direction: column;\n  }\n  .name {\n    font-size: 16px;\n    margin-bottom: 4px;\n  }\n  .stepper {\n    display: flex;\n    align-items: center;\n    margin-bottom: 4px;\n  }\n  .stepper button {\n    width: 30px;\n    height: 30px;\n    border: none;\n    background: #f0f0f0;\n    border-radius: 4px;\n    font-size: 18px;\n    cursor: pointer;\n  }\n  .stepper input {\n    width: 40px;\n    height: 30px;\n    text-align: center;\n    margin: 0 4px;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n  }\n  .price {\n    font-size: 14px;\n    color: #666;\n  }\n  .promo {\n    display: flex;\n    margin-bottom: 16px;\n  }\n  .promo input {\n    flex: 1;\n    padding: 8px;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    font-size: 14px;\n  }\n  .promo button {\n    margin-right: 8px;\n    padding: 8px 12px;\n    border: none;\n    background: #007bff;\n    color: #fff;\n    border-radius: 4px;\n    cursor: pointer;\n  }\n  .summary {\n    margin-bottom: 16px;\n  }\n  .summary .row {\n    display: flex;\n    justify-content: space-between;\n    padding: 4px 0;\n    font-size: 14px;\n  }\n  .summary .total {\n    font-weight: bold;\n    font-size: 16px;\n    border-top: 1px solid #eee;\n    margin-top: 4px;\n    padding-top: 4px;\n  }\n  .place-order {\n    width: 100%;\n    padding: 12px;\n    background: #28a745;\n    color: #fff;\n    border: none;\n    border-radius: 4px;\n    font-size: 16px;\n    cursor: pointer;\n  }\n</style>\n</head>\n<body>\n<div class=\"phone\">\n  <header class=\"header\">\n    <button class=\"back-arrow\">←</button>\n  </header>\n  <section class=\"cart-items\">\n    <!-- Item 1 -->\n    <div class=\"item\">\n      <div class=\"photo\"></div>\n      <div class=\"info\">\n        <span class=\"name\">تفاحة</span>\n        <div class=\"stepper\">\n          <button class=\"dec\">-</button>\n          <input type=\"number\" value=\"1\" min=\"0\" data-price=\"5\" class=\"qty\">\n          <button class=\"inc\">+</button>\n        </div>\n        <span class=\"price\">5.00 AED</span>\n      </div>\n    </div>\n    <!-- Item 2 -->\n    <div class=\"item\">\n      <div class=\"photo\"></div>\n      <div class=\"info\">\n        <span class=\"name\">حليب</span>\n        <div class=\"stepper\">\n          <button class=\"dec\">-</button>\n          <input type=\"number\" value=\"2\" min=\"0\" data-price=\"3\" class=\"qty\">\n          <button class=\"inc\">+</button>\n        </div>\n        <span class=\"price\">6.00 AED</span>\n      </div>\n    </div>\n    <!-- Item 3 -->\n    <div class=\"item\">\n      <div class=\"photo\"></div>\n      <div class=\"info\">\n        <span class=\"name\">خبز</span>\n        <div class=\"stepper\">\n          <button class=\"dec\">-</button>\n          <input type=\"number\" value=\"1\" min=\"0\" data-price=\"2\" class=\"qty\">\n          <button class=\"inc\">+</button>\n        </div>\n        <span class=\"price\">2.00 AED</span>\n      </div>\n    </div>\n  </section>\n  <section class=\"promo\">\n    <input type=\"text\" placeholder=\"رمز الخصم\">\n    <button>تطبيق</button>\n  </section>\n  <section class=\"summary\">\n    <div class=\"row\">\n      <span>المجموع الفرعي</span>\n      <span id=\"subtotal\">13.00 AED</span>\n    </div>\n    <div class=\"row\">\n      <span>ال شحن</span>\n      <span>10.00 AED</span>\n    </div>\n    <div class=\"row\">\n      <span>ضريبة القيمة المضافة (5%)</span>\n      <span id=\"vat\">0.65 AED</span>\n    </div>\n    <div class=\"row total\">\n      <span>الإجمالي</span>\n      <span id=\"total\">23.65 AED</span>\n    </div>\n  </section>\n  <button class=\"place-order\">إتمام الطلب</button>\n</div>\n<script>\n  // Update prices\n  document.querySelectorAll('.stepper').forEach(function(stepper){\n    const dec = stepper.querySelector('.dec');\n    const inc = stepper.querySelector('.inc');\n    const input = stepper.querySelector('.qty');\n    const priceEl = stepper.closest('.item').querySelector('.price');\n    const unitPrice = parseFloat(input.dataset.price);\n    function update(){\n      const qty = parseInt(input.value) || 0;\n      const total = (qty * unitPrice).toFixed(2);\n      priceEl.textContent = total + ' AED';\n      updateSummary();\n    }\n    dec.addEventListener('click', function(){\n      if(parseInt(input.value) > 0){\n        input.value = parseInt(input.value) - 1;\n        update();\n      }\n    });\n    inc.addEventListener('click', function(){\n      input.value = parseInt(input.value) + 1;\n      update();\n    });\n    input.addEventListener('change', update);\n  });\n  function updateSummary(){\n    let subtotal = 0;\n    document.querySelectorAll('.item').forEach(function(item){\n      const priceText = item.querySelector('.price').textContent;\n      const price = parseFloat(priceText);\n      subtotal += price;\n    });\n    const delivery = 10;\n    const vat = subtotal * 0.05;\n    const total = subtotal + delivery + vat;\n    document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' AED';\n    document.getElementById('vat').textContent = vat.toFixed(2) + ' AED';\n    document.getElementById('total').textContent = total.toFixed(2) + ' AED';\n  }\n  // initial update\n  updateSummary();\n</script>\n</body>\n</html>\n```",
   "usage": {
     "input": 148,
-    "output": 16000
+    "output": 7442
   },
-  "finish": "length",
-  "reasoningTokens": 14611,
+  "ms": 74578,
+  "finish": "stop",
+  "reasoningTokens": 5867,
   "servedModel": "dots-studio/dots-3-note-preview:free",
-  "ms": 141292,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 26,
+  "score": 73,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 214,
+        "y": 93,
+        "width": 46,
+        "height": 34
+      },
+      "message": "This number field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"number\" value=\"1\" min=\"0\" data-price=\"5\" class=\"qty\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 214,
+        "y": 187,
+        "width": 46,
+        "height": 34
+      },
+      "message": "This number field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"number\" value=\"2\" min=\"0\" data-price=\"3\" class=\"qty\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 214,
+        "y": 281,
+        "width": 46,
+        "height": 34
+      },
+      "message": "This number field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"number\" value=\"1\" min=\"0\" data-price=\"2\" class=\"qty\">"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 258,
+        "y": 71,
+        "width": 36,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<span class=\"name\">تفاحة</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 28,
+        "y": 369.5,
+        "width": 34,
+        "height": 15
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button>تطبيق</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 28,
+        "y": 369.5,
+        "width": 34,
+        "height": 15
+      },
+      "message": "\"تطبيق\" is 13.3333px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button>تطبيق</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 306,
+        "y": 78.5,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo\"></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 306,
+        "y": 172.5,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo\"></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 306,
+        "y": 266.5,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo\"></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 360,
+        "width": 58,
+        "height": 34
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button>تطبيق</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
 }

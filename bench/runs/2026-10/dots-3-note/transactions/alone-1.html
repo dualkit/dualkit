@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المعاملات</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 16px;
+    direction: rtl;
+  }
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 16px;
+  }
+  .balance {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #007bff;
+    color: #fff;
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+  .balance .label {
+    font-size: 1.1rem;
+  }
+  .balance .amount {
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+  .filter {
+    margin-bottom: 16px;
+  }
+  .filter label {
+    margin-left: 8px;
+    font-size: 1rem;
+  }
+  .filter select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+  }
+  th, td {
+    padding: 10px;
+    text-align: right;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  th {
+    background-color: #f0f0f0;
+    font-weight: 600;
+  }
+  tr:hover {
+    background-color: #f9f9f9;
+  }
+  .in {
+    color: #28a745;
+    font-weight: bold;
+  }
+  .out {
+    color: #dc3545;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="balance">
+    <span class="label">الإجمالي:</span>
+    <span class="amount">1234.567 OMR</span>
+  </div>
+  <div class="filter">
+    <label for="monthFilter">تصفية:</label>
+    <select id="monthFilter">
+      <option value="thisMonth">هذا الشهر</option>
+      <option value="lastMonth">الشهر الماضي</option>
+      <option value="all">كل الأوقات</option>
+    </select>
+  </div>
+  <table class="transactions">
+    <thead>
+      <tr>
+        <th>التاريخ</th>
+        <th>التاجر</th>
+        <th>المبلغ</th>
+        <th>الحالة</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2025-11-01</td>
+        <td>Lulu Hypermarket</td>
+        <td>12.345 OMR</td>
+        <td class="out">خرج</td>
+      </tr>
+      <tr>
+        <td>2025-11-02</td>
+        <td>Netflix</td>
+        <td>9.990 OMR</td>
+        <td class="out">خرج</td>
+      </tr>
+      <tr>
+        <td>2025-11-03</td>
+        <td>Amazon</td>
+        <td>45.678 OMR</td>
+        <td class="out">خرج</td>
+      </tr>
+      <tr>
+        <td>2025-11-04</td>
+        <td>Starbucks</td>
+        <td>5.432 OMR</td>
+        <td class="out">خرج</td>
+      </tr>
+      <tr>
+        <td>2025-11-05</td>
+        <td>Uber</td>
+        <td>12.000 OMR</td>
+        <td class="out">خرج</td>
+      </tr>
+      <tr>
+        <td>2025-11-06</td>
+        <td>Etisalat</td>
+        <td>30.500 OMR</td>
+        <td class="out">خرج</td>
+      </tr>
+      <tr>
+        <td>2025-11-07</td>
+        <td>Oman Oil</td>
+        <td>150.750 OMR</td>
+        <td class="out">خرج</td>
+      </tr>
+      <tr>
+        <td>2025-11-08</td>
+        <td>Salary</td>
+        <td>1000.000 OMR</td>
+        <td class="in">دخل</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

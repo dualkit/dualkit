@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدفعة</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    direction: rtl;
+    background-color: #f5f5f5;
+  }
+  .phone {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #fff;
+    min-height: 100vh;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .back-arrow {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+  }
+  .cart-items {
+    margin-bottom: 16px;
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+  }
+  .photo {
+    width: 60px;
+    height: 60px;
+    background-color: #ddd;
+    margin-left: 12px;
+    border-radius: 4px;
+  }
+  .info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .name {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+  .stepper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .stepper button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: #f0f0f0;
+    border-radius: 4px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .stepper input {
+    width: 40px;
+    height: 30px;
+    text-align: center;
+    margin: 0 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .price {
+    font-size: 14px;
+    color: #666;
+  }
+  .promo {
+    display: flex;
+    margin-bottom: 16px;
+  }
+  .promo input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  .promo button {
+    margin-right: 8px;
+    padding: 8px 12px;
+    border: none;
+    background: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .summary {
+    margin-bottom: 16px;
+  }
+  .summary .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 14px;
+  }
+  .summary .total {
+    font-weight: bold;
+    font-size: 16px;
+    border-top: 1px solid #eee;
+    margin-top: 4px;
+    padding-top: 4px;
+  }
+  .place-order {
+    width: 100%;
+    padding: 12px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+  <header class="header">
+    <button class="back-arrow">←</button>
+  </header>
+  <section class="cart-items">
+    <!-- Item 1 -->
+    <div class="item">
+      <div class="photo"></div>
+      <div class="info">
+        <span class="name">تفاحة</span>
+        <div class="stepper">
+          <button class="dec">-</button>
+          <input type="number" value="1" min="0" data-price="5" class="qty">
+          <button class="inc">+</button>
+        </div>
+        <span class="price">5.00 AED</span>
+      </div>
+    </div>
+    <!-- Item 2 -->
+    <div class="item">
+      <div class="photo"></div>
+      <div class="info">
+        <span class="name">حليب</span>
+        <div class="stepper">
+          <button class="dec">-</button>
+          <input type="number" value="2" min="0" data-price="3" class="qty">
+          <button class="inc">+</button>
+        </div>
+        <span class="price">6.00 AED</span>
+      </div>
+    </div>
+    <!-- Item 3 -->
+    <div class="item">
+      <div class="photo"></div>
+      <div class="info">
+        <span class="name">خبز</span>
+        <div class="stepper">
+          <button class="dec">-</button>
+          <input type="number" value="1" min="0" data-price="2" class="qty">
+          <button class="inc">+</button>
+        </div>
+        <span class="price">2.00 AED</span>
+      </div>
+    </div>
+  </section>
+  <section class="promo">
+    <input type="text" placeholder="رمز الخصم">
+    <button>تطبيق</button>
+  </section>
+  <section class="summary">
+    <div class="row">
+      <span>المجموع الفرعي</span>
+      <span id="subtotal">13.00 AED</span>
+    </div>
+    <div class="row">
+      <span>ال شحن</span>
+      <span>10.00 AED</span>
+    </div>
+    <div class="row">
+      <span>ضريبة القيمة المضافة (5%)</span>
+      <span id="vat">0.65 AED</span>
+    </div>
+    <div class="row total">
+      <span>الإجمالي</span>
+      <span id="total">23.65 AED</span>
+    </div>
+  </section>
+  <button class="place-order">إتمام الطلب</button>
+</div>
+<script>
+  // Update prices
+  document.querySelectorAll('.stepper').forEach(function(stepper){
+    const dec = stepper.querySelector('.dec');
+    const inc = stepper.querySelector('.inc');
+    const input = stepper.querySelector('.qty');
+    const priceEl = stepper.closest('.item').querySelector('.price');
+    const unitPrice = parseFloat(input.dataset.price);
+    function update(){
+      const qty = parseInt(input.value) || 0;
+      const total = (qty * unitPrice).toFixed(2);
+      priceEl.textContent = total + ' AED';
+      updateSummary();
+    }
+    dec.addEventListener('click', function(){
+      if(parseInt(input.value) > 0){
+        input.value = parseInt(input.value) - 1;
+        update();
+      }
+    });
+    inc.addEventListener('click', function(){
+      input.value = parseInt(input.value) + 1;
+      update();
+    });
+    input.addEventListener('change', update);
+  });
+  function updateSummary(){
+    let subtotal = 0;
+    document.querySelectorAll('.item').forEach(function(item){
+      const priceText = item.querySelector('.price').textContent;
+      const price = parseFloat(priceText);
+      subtotal += price;
+    });
+    const delivery = 10;
+    const vat = subtotal * 0.05;
+    const total = subtotal + delivery + vat;
+    document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' AED';
+    document.getElementById('vat').textContent = vat.toFixed(2) + ' AED';
+    document.getElementById('total').textContent = total.toFixed(2) + ' AED';
+  }
+  // initial update
+  updateSummary();
+</script>
+</body>
+</html>

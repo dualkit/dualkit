@@ -4,16 +4,50 @@
   "screen": "transactions",
   "condition": "alone",
   "run": 1,
-  "at": "2026-10-21T18:07:19.737Z",
-  "reply": "",
+  "at": "2026-10-22T07:30:09.336Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>المعاملات</title>\n<style>\n  body {\n    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    background-color: #f5f5f5;\n    margin: 0;\n    padding: 16px;\n    direction: rtl;\n  }\n  .container {\n    max-width: 480px;\n    margin: 0 auto;\n    background: #fff;\n    border-radius: 8px;\n    box-shadow: 0 2px 8px rgba(0,0,0,0.1);\n    padding: 16px;\n  }\n  .balance {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding: 12px;\n    background: #007bff;\n    color: #fff;\n    border-radius: 6px;\n    margin-bottom: 16px;\n  }\n  .balance .label {\n    font-size: 1.1rem;\n  }\n  .balance .amount {\n    font-size: 1.3rem;\n    font-weight: bold;\n  }\n  .filter {\n    margin-bottom: 16px;\n  }\n  .filter label {\n    margin-left: 8px;\n    font-size: 1rem;\n  }\n  .filter select {\n    width: 100%;\n    padding: 8px;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    font-size: 1rem;\n  }\n  table {\n    width: 100%;\n    border-collapse: collapse;\n    font-size: 0.95rem;\n  }\n  th, td {\n    padding: 10px;\n    text-align: right;\n    border-bottom: 1px solid #e0e0e0;\n  }\n  th {\n    background-color: #f0f0f0;\n    font-weight: 600;\n  }\n  tr:hover {\n    background-color: #f9f9f9;\n  }\n  .in {\n    color: #28a745;\n    font-weight: bold;\n  }\n  .out {\n    color: #dc3545;\n    font-weight: bold;\n  }\n</style>\n</head>\n<body>\n<div class=\"container\">\n  <div class=\"balance\">\n    <span class=\"label\">الإجمالي:</span>\n    <span class=\"amount\">1234.567 OMR</span>\n  </div>\n  <div class=\"filter\">\n    <label for=\"monthFilter\">تصفية:</label>\n    <select id=\"monthFilter\">\n      <option value=\"thisMonth\">هذا الشهر</option>\n      <option value=\"lastMonth\">الشهر الماضي</option>\n      <option value=\"all\">كل الأوقات</option>\n    </select>\n  </div>\n  <table class=\"transactions\">\n    <thead>\n      <tr>\n        <th>التاريخ</th>\n        <th>التاجر</th>\n        <th>المبلغ</th>\n        <th>الحالة</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr>\n        <td>2025-11-01</td>\n        <td>Lulu Hypermarket</td>\n        <td>12.345 OMR</td>\n        <td class=\"out\">خرج</td>\n      </tr>\n      <tr>\n        <td>2025-11-02</td>\n        <td>Netflix</td>\n        <td>9.990 OMR</td>\n        <td class=\"out\">خرج</td>\n      </tr>\n      <tr>\n        <td>2025-11-03</td>\n        <td>Amazon</td>\n        <td>45.678 OMR</td>\n        <td class=\"out\">خرج</td>\n      </tr>\n      <tr>\n        <td>2025-11-04</td>\n        <td>Starbucks</td>\n        <td>5.432 OMR</td>\n        <td class=\"out\">خرج</td>\n      </tr>\n      <tr>\n        <td>2025-11-05</td>\n        <td>Uber</td>\n        <td>12.000 OMR</td>\n        <td class=\"out\">خرج</td>\n      </tr>\n      <tr>\n        <td>2025-11-06</td>\n        <td>Etisalat</td>\n        <td>30.500 OMR</td>\n        <td class=\"out\">خرج</td>\n      </tr>\n      <tr>\n        <td>2025-11-07</td>\n        <td>Oman Oil</td>\n        <td>150.750 OMR</td>\n        <td class=\"out\">خرج</td>\n      </tr>\n      <tr>\n        <td>2025-11-08</td>\n        <td>Salary</td>\n        <td>1000.000 OMR</td>\n        <td class=\"in\">دخل</td>\n      </tr>\n    </tbody>\n  </table>\n</div>\n</body>\n</html>\n```",
   "usage": {
     "input": 144,
-    "output": 16000
+    "output": 5181
   },
-  "finish": "length",
-  "reasoningTokens": 15225,
+  "ms": 53167,
+  "finish": "stop",
+  "reasoningTokens": 4134,
   "servedModel": "dots-studio/dots-3-note-preview:free",
-  "ms": 139256,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 28,
+  "score": 95,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 280.109375,
+        "y": 45.5,
+        "width": 65.890625,
+        "height": 20
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<span class=\"label\">الإجمالي:</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 313.546875,
+        "y": 97,
+        "width": 44.453125,
+        "height": 17
+      },
+      "message": "margin-left: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<label for=\"monthFilter\">تصفية:</label>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
 }
