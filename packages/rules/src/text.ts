@@ -144,3 +144,98 @@ export function firstStrong(s: string): 'ltr' | 'rtl' | null {
 }
 
 export const excerpt = (s: string, max = 40): string => (s.length > max ? `${s.slice(0, max)}…` : s)
+
+/**
+ * Digits joined by "-" with no spaces: d-m-y or y-m-d. The bidi algorithm reorders the parts when they are Arabic numbers,
+ * because a "-" does not join those, while a "/" or "." does. Measured in Chromium (verify.test.ts, "bidi/date-order").
+ */
+export const DASH_DATE = /(?<![0-9٠-٩۰-۹\-/.])([0-9٠-٩۰-۹]{1,4})-([0-9٠-٩۰-۹]{1,2})-([0-9٠-٩۰-۹]{1,4})(?![0-9٠-٩۰-۹\-/.]?[0-9٠-٩۰-۹])/g
+
+const digitValue = (c: string): number => {
+  const code = c.charCodeAt(0)
+  return code >= 0x06f0 ? code - 0x06f0 : code >= 0x0660 ? code - 0x0660 : code - 0x30
+}
+const toNumber = (s: string): number => [...s].reduce((n, c) => n * 10 + digitValue(c), 0)
+
+/** A year of four digits first or last, and a day and month between 1 and 31 with one of them at most 12. A version such as 4-2-0 is not one. */
+function isDate(parts: readonly string[]): boolean {
+  const yearAt = parts.findIndex((p) => p.length === 4)
+  if (yearAt !== 0 && yearAt !== 2) return false
+  const rest = parts.filter((_, i) => i !== yearAt).map(toNumber)
+  return rest.every((v) => v >= 1 && v <= 31) && rest.some((v) => v <= 12)
+}
+
+/**
+ * The dash-joined dates in a run that Chromium paints in reverse. Arabic-Indic digits (U+0660 to U+0669) are always Arabic numbers.
+ * Western and Extended Arabic-Indic digits become Arabic numbers only when the last strong letter before them is Arabic: in the
+ * block before the run, or, for an isolated run, in the run alone. A Latin letter or no letter before them keeps the date whole.
+ */
+export function reorderedDashDates(text: string, blockText: string, isolated: boolean): string[] {
+  const found: string[] = []
+  for (const m of text.matchAll(DASH_DATE)) {
+    if (!isDate([m[1]!, m[2]!, m[3]!])) continue
+    const arabicNumbers = /[٠-٩]/.test(m[0])
+    const before = isolated ? text.slice(0, m.index) : surroundings(m.index ?? 0, m[0].length, text, blockText).before
+    if (arabicNumbers || lastStrong(before) === 'rtl') found.push(m[0])
+  }
+  return found
+}
+
+// Gregorian (Gulf and Levant names) and Hijri month names, as the eval's date injector writes them.
+const ARABIC_MONTHS = [
+  'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر',
+  'كانون الثاني', 'شباط', 'آذار', 'نيسان', 'أيار', 'حزيران', 'تموز', 'آب', 'أيلول', 'تشرين الأول', 'تشرين الثاني', 'كانون الأول',
+  'محرم', 'صفر', 'ربيع الأول', 'ربيع الآخر', 'جمادى الأولى', 'جمادى الآخرة', 'رجب', 'شعبان', 'رمضان', 'شوال', 'ذو القعدة', 'ذو الحجة',
+]
+const NOT_ARABIC_LETTER = '(?<![\\u0621-\\u064A])'
+const NO_ARABIC_AFTER = '(?![\\u0621-\\u064A])'
+/** An Arabic month name, or ص or م after a time, each standing as its own word. */
+export const ARABIC_DATE_WORD = new RegExp(`${NOT_ARABIC_LETTER}(?:${ARABIC_MONTHS.join('|')})${NO_ARABIC_AFTER}|[0-9\\u0660-\\u0669\\u06F0-\\u06F9]{1,2}:[0-9\\u0660-\\u0669\\u06F0-\\u06F9]{2}\\s*[صم]${NO_ARABIC_AFTER}`)
+/** Western or Extended Arabic-Indic digits before the first Arabic letter: they stay left to right, apart from the Arabic after them. */
+const LEADING_LTR_DIGITS = /^[^ء-ي]*[0-9۰-۹][^ء-ي]*[ء-ي]/
+
+/**
+ * A worded Arabic date in a run forced left to right paints its pieces left to right, so an Arabic reader meets them backwards:
+ * "15 مارس 2025، 10:00 ص" reads as ص 10:00، 2025 مارس 15. Only a Western digit before the first Arabic letter splits the run like this:
+ * after an Arabic letter, Western digits join the right-to-left piece and the date reads whole.
+ */
+export const forcedLtrDateScrambles = (text: string): boolean => ARABIC_DATE_WORD.test(text) && LEADING_LTR_DIGITS.test(text)
+
+const ARABIC_LETTER = /(?=\p{L})\p{Script=Arabic}/u
+const ANY_DIGIT = /[0-9٠-٩۰-۹]/
+
+/**
+ * Latin commas, semicolons and question marks standing where Arabic punctuation (، ؛ ؟) belongs: the nearest character
+ * before is an Arabic letter, and the nearest after is an Arabic letter or the end of the run. Digits (1,000), Latin words
+ * on either side (iPhone, iPad) and the Arabic marks themselves are left alone.
+ */
+export function latinPunctuationMarks(text: string): string[] {
+  const found: string[] = []
+  for (const m of text.matchAll(/[,;?]/g)) {
+    const at = m.index ?? 0
+    const before = text.slice(0, at).trimEnd().slice(-1)
+    const after = text.slice(at + 1).trimStart()[0]
+    if (before !== '' && ARABIC_LETTER.test(before) && (after === undefined || ARABIC_LETTER.test(after))) found.push(m[0])
+  }
+  return found
+}
+
+/** Arabic abbreviations (UAE, Saudi, Qatar, Kuwait, Bahrain, Oman, Egypt) and words for the currencies written before a number. */
+const CURRENCY_ABBREVIATION = 'د\\.إ|ر\\.س|ر\\.ق|د\\.ك|د\\.ب|ر\\.ع|ج\\.م'
+const CURRENCY_WORD = 'درهم|ريال|دينار|جنيه'
+const CURRENCY_FIRST = new RegExp(`(?<![\\p{L}\\p{N}])(?:(?:${CURRENCY_ABBREVIATION})\\.?[ \\u00A0]*|(?:${CURRENCY_WORD})[ \\u00A0]+)[0-9\\u0660-\\u0669\\u06F0-\\u06F9]`, 'gu')
+
+/**
+ * Arabic currencies written before their number, such as "د.إ 2.50" or "ريال ٣٠٠". Arabic readers expect the number first.
+ * Latin codes (AED 12) and the new currency signs are left alone, because Gulf apps use both orders for them.
+ * A number just before the currency ("100 ريال 200") means the currency follows that number, so it is skipped.
+ */
+export function currencyFirst(text: string): string[] {
+  const found: string[] = []
+  for (const m of text.matchAll(CURRENCY_FIRST)) {
+    const before = text.slice(0, m.index ?? 0).trimEnd().slice(-1)
+    if (before !== '' && ANY_DIGIT.test(before)) continue
+    found.push(m[0])
+  }
+  return found
+}

@@ -25,6 +25,12 @@ export type Finding = {
   fix: string
   docs: string
   node: NodeRef | null
+  /** Set on review findings only; check findings leave it out. */
+  source?: 'check' | 'review'
+  /** 0 to 1, review findings only. */
+  confidence?: number
+  /** Line in the local source file, or null when the target is a URL. */
+  line?: number | null
 }
 
 export const defineRule = (rule: Rule): Rule => rule

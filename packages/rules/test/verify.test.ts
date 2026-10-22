@@ -712,11 +712,16 @@ describe('layout/clipped-text matches what Chromium cuts off', () => {
     expect(await found(html, 'layout/clipped-text')).toEqual(['layout/clipped-text'])
   })
 
-  it('stays quiet for an ellipsis, a scrolling container, and an .sr-only label', async () => {
+  it('stays quiet for an ellipsis that keeps most of the label, a scrolling container, and an .sr-only label', async () => {
     const q = (css: string, cls = 'b') => page(`<div class="${cls}">${label}</div>`, { css })
-    expect(await found(q('.b{width:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}'), 'layout/clipped-text')).toEqual([])
+    expect(await found(q('.b{width:160px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}'), 'layout/clipped-text')).toEqual([])
     expect(await found(q('.b{width:60px;overflow:auto;white-space:nowrap}'), 'layout/clipped-text')).toEqual([])
     expect(await found(q('.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}', 'sr-only'), 'layout/clipped-text')).toEqual([])
+  })
+
+  it('flags an ellipsis that leaves under half the label showing', async () => {
+    const q = page(`<div class="b">${label}</div>`, { css: '.b{width:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' })
+    expect(await found(q, 'layout/clipped-text')).toEqual(['layout/clipped-text'])
   })
 })
 
@@ -794,5 +799,27 @@ describe('type/arabic-broken-join matches what Chromium paints', () => {
     expect(model.joins).toHaveLength(1)
     expect(model.joins[0]).toMatchObject({ reason: 'font-family' })
     expect(await found(html, 'type/arabic-broken-join')).toEqual(['type/arabic-broken-join'])
+  })
+})
+
+// Task 4: the date-order rule flags what Chromium paints out of order, read from character x positions.
+describe('bidi/date-order', () => {
+  const painted = (body: string) => withPage(page(body), async (p) => visualText(await charBoxes(p, '#d')))
+  it('Chromium reverses dash-joined Arabic numbers and keeps slashed or Western-only dates whole', async () => {
+    expect(await painted('<div dir="rtl"><span id="d">٣-١١-٢٠٢٦</span></div>')).toBe('٢٠٢٦-١١-٣')
+    expect(await painted('<p id="d">تاريخ 15-03-2025</p>')).toMatch(/^2025-03-15/)
+    expect(await painted('<div dir="rtl"><span id="d">٣/١١/٢٠٢٦</span></div>')).toBe('٣/١١/٢٠٢٦')
+    expect(await painted('<p id="d">تاريخ 15/03/2025</p>')).toMatch(/^15\/03\/2025/)
+    expect(await painted('<p id="d">Date 15-03-2025</p>')).toBe('Date15-03-2025')
+    expect(await painted('<p>تاريخ <bdi dir="ltr" id="d">15-03-2025</bdi></p>')).toBe('15-03-2025')
+  })
+  it('Chromium paints a worded date forced left to right with its pieces backwards, and keeps it whole right to left', async () => {
+    expect(await painted('<p>تحديث <bdi dir="ltr" id="d">15 مارس 2025، 10:00 ص</bdi></p>')).toBe('15ص10:00،2025سرام')
+    expect(await painted('<p id="d">15 مارس 2025، 10:00 ص</p>')).toBe('ص10:00،2025سرام15')
+    expect(await painted('<p>تحديث <bdi dir="ltr" id="d">الأحد 15 مارس 2025</bdi></p>')).toBe('2025سرام15دحألا')
+  })
+  it('reports the date element itself, not its block', async () => {
+    const findings = runRules(await modelOf(page('<div dir="rtl"><span>٣-١١-٢٠٢٦</span></div>')), { rules: RULES.filter((r) => r.id === 'bidi/date-order') })
+    expect(findings.map((f) => f.node?.snippet.startsWith('<span'))).toEqual([true])
   })
 })

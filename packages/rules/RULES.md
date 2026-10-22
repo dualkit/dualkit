@@ -18,6 +18,13 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 
 **Fix:** Wrap it in `<bdi>`, or give its element dir="ltr".
 
+<a id="bidi-date-order"></a>
+### `bidi/date-order` A date that will show in the wrong order
+
+**error.** Inside right-to-left text, digits joined by - become Arabic numbers when they are Arabic-Indic or follow an Arabic word, and a - does not hold those together, so 15-03-2025 shows as 2025-03-15. A worded Arabic date such as 15 مارس 2025، 10:00 ص, forced left to right with dir="ltr", shows its words and numbers backwards.
+
+**Fix:** Join the parts with / instead of -, or wrap a Western-digit date in `<bdi dir="ltr">`. Leave a worded Arabic date right to left.
+
 <a id="bidi-punctuation-flip"></a>
 ### `bidi/punctuation-flip` Punctuation at the wrong end
 
@@ -79,9 +86,9 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 <a id="layout-clipped-text"></a>
 ### `layout/clipped-text` Arabic text cut off by its box
 
-**warning.** A fixed-size box with overflow hidden cuts off Arabic text that runs long or sits tall, such as a label wider than its button or dots below a tight line.
+**warning.** A fixed-size box with overflow hidden cuts off Arabic text that runs long or sits tall, such as a label wider than its button or dots below a tight line. An ellipsis that leaves a letter or two of a short label says nothing.
 
-**Fix:** Let the box grow with min-width or min-height, or add text-overflow: ellipsis if shortening is intended.
+**Fix:** Let the box grow with min-width or min-height. If shortening is intended, add text-overflow: ellipsis and leave room for most of the text.
 
 ## Icons
 
@@ -91,6 +98,13 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 **warning.** Back, forward and chevron icons describe reading order, so in Arabic they must point the other way.
 
 **Fix:** Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.
+
+<a id="icons-arrow-points-forward"></a>
+### `icons/arrow-points-forward` A back or next arrow drawn pointing the wrong way
+
+**warning.** Arabic reads right to left, so a back arrow points right and a next arrow points left. An arrow drawn the other way sends the reader the wrong way.
+
+**Fix:** In right to left, draw the arrow the other way, mirror it with a :dir(rtl) { transform: scaleX(-1) } rule, or swap the glyph, such as ← for →.
 
 <a id="icons-mirrored-by-mistake"></a>
 ### `icons/mirrored-by-mistake` An icon that must never mirror
@@ -215,6 +229,27 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 
 **Fix:** Put lang on the element to match the label, or write the label in the language of the element.
 
+<a id="content-latin-punctuation"></a>
+### `content/latin-punctuation` A Latin comma, semicolon or question mark in Arabic text
+
+**warning.** Arabic has its own ، ؛ and ؟. The Latin marks look different, sit differently against Arabic letters, and read as copied from an English template.
+
+**Fix:** Use ، for the comma, ؛ for the semicolon and ؟ for the question mark.
+
+<a id="content-currency-order"></a>
+### `content/currency-order` An Arabic currency before its number
+
+**warning.** Arabic prices read number first, as in 2.50 د.إ or ٣٠٠ ريال. A currency abbreviation or word placed before the number follows the English order. An isolate such as `<bdi>` does not change the order a reader sees.
+
+**Fix:** Put the number first and the currency after it.
+
+<a id="content-drops-arabic-digits"></a>
+### `content/drops-arabic-digits` A code field that deletes Arabic digits
+
+**error.** Arabic keyboards type ٠ to ٩. A field that keeps only 0 to 9 deletes them as they are typed, so the code never fills and the field looks broken. Nothing on screen shows it: dualkit check types ١٢ into code and phone fields to find out.
+
+**Fix:** Accept Arabic-Indic digits and convert them to 0 to 9 before checking or sending the value, instead of stripping them.
+
 ## Known limits
 
 - A closing mark in the middle of a line, such as the ! in "Hello world! مرحبا", is not checked. Only the end of a paragraph, or of a line that a `<br>` closes on its own, is.
@@ -225,11 +260,12 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 - Only the pairing of the dirham sign with AED is flagged, because that is the one the Central Bank of the UAE guideline forbids. Dh and the Arabic word are not in the guideline, so they are left alone.
 - A label is flagged only when it is wholly in the other script, such as a Latin sentence on an Arabic page. Labels that mix scripts, and one-word names like Visa, are left alone.
 - A label-language note still fires on brand names of more than one word, such as "Apple Pay" or "American Express" in an image alt on an Arabic page.
-- An icon is named from its data attribute, sprite reference, class, glyph text, aria-label, title, SVG `<title>`, or the aria-label of the button or link around it when the icon is the only content of that control. A fully unnamed SVG that is not alone in a labelled control is not recognised, so its direction is not checked. An unnamed icon that is the only content of a control takes the name of that control, so a non-directional glyph in a control named with a direction word is read as directional.
+- An icon is named from its data attribute, sprite reference, class, glyph text, aria-label, title, SVG `<title>`, or the aria-label of the button or link around it when the icon is the only content of that control. A fully unnamed SVG that is not alone in a labelled control is not recognised, so icons/not-mirrored does not check it. An unnamed icon that is the only content of a control takes the name of that control, so a non-directional glyph in a control named with a direction word is read as directional.
 - Text is checked for a flip on its own element and up to 4 ancestors. A flip is a transform whose determinant is negative, such as scaleX(-1), scale: -1 1 or rotateY(180deg). rotate(180deg) and scale(-1,-1) turn text upside down without mirroring it, so they are not counted. Only text with Arabic letters is reported, so a flipped arrow glyph or icon-font ligature is left to the icon rules. A face hidden by backface-visibility, such as the back of a flip card that has not turned, is not reported. A flip applied further up, or by a filter or animation, is not seen.
+- icons/arrow-points-forward reads the head of an inline SVG from its paths, polylines and polygons, or of a single ←, →, ‹, ›, « or » in a button or link, after the transforms on the icon and up to 4 ancestors. An arrow in an `<img>`, an icon font or a `<use>` sprite has no head it can read. Back or forward comes from the label, class, id or title of the icon and of the button or link around it. A label or title counts only as a whole phrase: back, prev, previous, next or forward, or رجوع, ارجع, السابق, عودة, التالي or متابعة, alone, followed by to or إلى, or paired with a unit such as a month. A class or id counts when it is one of those words, ends in one after a hyphen (swiper-button-prev), or pairs one with btn, link or a unit (back-btn, prevMonth), so previous-orders and back-office do not count. The rule is a warning until it has precision data from real sites. A glyph is taken to sit in text of its own element's direction, so ‹, ›, « and » count as drawn the other way round in right to left.
 - A direction icon counts as pointing the other way when it is flipped or turned, so rotate(180deg) (Tailwind rtl:rotate-180) passes icons/not-mirrored. A play icon that is only turned is not reported as mirrored by mistake.
 - A clipped box is found when it scrolls and its own text, measured by the painted text boxes, reaches past its padding box. A box that scrolls only for an oversized image is not flagged. Only boxes whose cut-off text contains Arabic are flagged. Ink that sticks out of a text box that still fits its line, such as a dot just under a tight line, is not measured.
-- Only text at least partly inside a clipped box counts. Text painted wholly outside it, such as the other slides of a carousel, is ignored. -webkit-line-clamp (Tailwind line-clamp-2) draws its own ellipsis, so it counts as one.
+- Only text at least partly inside a clipped box counts. Text painted wholly outside it, such as the other slides of a carousel, is ignored. -webkit-line-clamp (Tailwind line-clamp-2) draws its own ellipsis, so it counts as one. A box with an ellipsis is flagged only when less than half its text width shows, the ellipsis itself not counted, so a long sentence cut at the end passes and a short label cut to a letter or two does not. Text the ellipsis hides counts even when it sits in its own element wholly past the box. A line clamp that keeps 2 or more lines is an excerpt and is not flagged. Scroll overflow that is only padding is not flagged: the text boxes themselves must reach past the box. A tall Arabic font at a tight line height paints text boxes taller than the line, so its last line can reach past the box while its letters still show, and that is flagged.
 - A "read more" box cut off with max-height and overflow: hidden is reported, though the cut may be on purpose.
 - Text inside a translated track (carousels, odometers) is not checked for clipping. A track that is wider than its box but not moved by a translate still reads as clipped text.
 - A word counts as split only when both halves sit in one line of inline content, with no list item, table cell, block, or flex or grid item between them, and the two letters at the boundary touch on the same line, less than 1px apart. Separate boxes with no space between them in the markup, such as nav links, tabs, table cells or a badge with a margin, are not one word.
@@ -239,5 +275,7 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 - layout/physical-spacing and layout/physical-inset are notes now, not warnings. On real pages they mostly flagged sides that were already right to left, such as a margin that a script or a framework flips for Arabic, so they are kept as a hint to check rather than a defect.
 - layout/physical-spacing and layout/physical-inset skip a declaration when the selector that matched the element is scoped to right to left (:dir(rtl), [dir=rtl], .rtl, [lang^=ar], [lang|=ar], [lang=ar] or :lang(ar)), judged per selector in a comma list. Inline styles are skipped too, because script sets them already computed for the direction. A scope inside :not(), at any depth, does not count as scoped.
 - layout/text-align-left flags a block only when its text sits at least 4px short of its content box, so text that fills its box or a shrink-wrapped inline-block is not flagged, and only when Arabic is at least half of the block's own letters.
+- type/arabic-leading flags Arabic under 22px set on two or more lines at a line height below 1.45. Display type at 22px and above, and text whose box lies wholly outside the viewport's width, such as a parked carousel slide, are left alone.
 - type/arabic-tracking flags letter-spacing of 0.025em or more of the font size (0.4px at 16px), so 0.15px at 16px passes and 0.5px at 9px does not.
+- content/drops-arabic-digits is measured only by dualkit check: after the read and the screenshot, it types ١٢ into up to 8 code, tel and number fields, reads the value back and puts the old value back without an input event. It never presses Enter or submits, and stops if typing navigates the page. A field it cannot type into is not judged, which includes disabled and read-only fields and type="number" fields, which Playwright refuses to fill with Arabic digits. It runs only on pages tagged with an Arabic-script lang or whose text is mostly Arabic, so a Hebrew page is never typed into, and not at all when the rule is ignored in the config.
 - Findings are named by the element's id (only when it is unique and does not look generated), then its data-testid, then a class combination that is unique on the page, and only then by a path of tags and nth-of-type positions.

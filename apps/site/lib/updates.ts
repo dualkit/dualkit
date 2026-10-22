@@ -6,6 +6,26 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'v2-step-2',
+    date: '2026-10-22',
+    version: 'dualkit 0.5.0-beta.0',
+    tags: ['Check', 'Lint', 'Rules'],
+    title: 'Five new check rules and an experimental reviewer',
+    body: [
+      'Dualkit check now has 34 rules, up from 29. The five new ones are bidi/date-order, content/latin-punctuation, content/currency-order, icons/arrow-points-forward and content/drops-arabic-digits. The last one types Arabic digits into one-time code and phone fields and reports the field if it deletes them. On the frozen set of 65 cases, check now finds all of them, up from 31%. That set was built from the same eight bug kinds the new rules were written for, so it shows each rule works on its own bug, not that it finds bugs nobody planted. On the 10 recorded real sites the new rules found nothing.',
+      'Two rules are stricter. type/arabic-leading now flags lines tighter than 1.45 and skips display text at 22px and up. layout/clipped-text skips a line clamp that shows two or more lines. On the labelled sample, 82% of check warnings and errors are real, up from 76%. We wanted 90%, so check did not get there.',
+      'Two lint rules are now notes: source/physical-tailwind, which was right 64% of the time on 28 decided findings, and source/intl-digits, which was wrong on both of its findings. If your CI fails on lint warnings, it may now report fewer. If your CI fails on check warnings, the five new rules may add some. Lint notes do not fail a run unless you set --fail-on note.',
+      'dualkit check --review is new and experimental. A vision model reads the screenshot against rules picked for what the page contains, then checks each finding again on a crop. It needs GEMINI_API_KEY (the default model, gemini-flash-lite-latest, has a free tier) or OPENROUTER_API_KEY with --review-model provider:model. Review findings are warnings marked review, with a confidence. They never change the score or the exit code. It is not yet measured against hand labels, so treat its findings as suggestions. The $3 a month cap on model spend applies only to Dualkit\'s own measurement runs. With check --review, the calls run on your key and your bill, and Gemini reports no cost, so spend on a billing-enabled Gemini key is not counted.',
+      'The CLI now depends on pngjs, which it uses to cut tall screenshots into tiles for the reviewer.',
+      'The full numbers and method are in docs/research/2026-10-22-v2-step2.md in the repo.',
+    ],
+    shipped: [
+      { name: '@dualkit/rules 0.4.0-beta.0', line: 'Five new rules, stricter arabic-leading and clipped-text' },
+      { name: '@dualkit/lint 0.3.0-beta.0', line: 'physical-tailwind and intl-digits are notes' },
+      { name: 'dualkit 0.5.0-beta.0', line: 'check --review (experimental), uses lint 0.3 and rules 0.4, adds pngjs' },
+    ],
+  },
+  {
     slug: 'precision-pass',
     date: '2026-10-21',
     version: 'dualkit 0.4.0-beta.0',

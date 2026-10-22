@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { contentRules } from '../../src/rules/content'
+import { contentRules, wantsDigitProbe } from '../../src/rules/content'
 import { RULES } from '../../src/rules'
 import { runRules } from '../../src/run'
 import { coversCodePoint } from '../../src/fonts'
-import { face, screen, text } from '../helpers/model'
-import type { LabelNode } from '../../src/model'
+import { face, field, screen, text } from '../helpers/model'
+import type { LabelNode, TextRun } from '../../src/model'
 
 const ids = (m: Parameters<typeof runRules>[0]) => runRules(m, { rules: contentRules }).map((f) => f.rule)
 
@@ -152,10 +152,87 @@ describe('content/label-language', () => {
   })
 })
 
+describe('content/latin-punctuation', () => {
+  const id = 'content/latin-punctuation'
+  const flagged = (t: string) => runRules(screen({ texts: [text({ text: t })] }), { rules: contentRules }).filter((f) => f.rule === id)
+  it.each(['مع أي شخص, بما في ذلك', 'هل أنت متأكد?', 'الاسم; العمر', 'مرحبا ,  بكم'])('flags %s', (t) => {
+    expect(flagged(t)).toHaveLength(1)
+  })
+  it.each(['رقم ١,٠٠٠ ريال', 'مبلغ 1,000 ريال', 'استخدم iPhone, iPad أو Mac', 'مرحبا، كيف حالك؟', 'Hello, world?', 'ما هو iPhone?', 'ادفع, 5 ريال'])('stays quiet on %s', (t) => {
+    expect(flagged(t)).toEqual([])
+  })
+  it('reports the run\'s own node, not the block', () => {
+    const run = text({ id: 'span.msg', text: 'هل أنت متأكد?', blockId: 'p', blockText: 'هل أنت متأكد? نعم' })
+    const [f] = runRules(screen({ texts: [run] }), { rules: contentRules }).filter((x) => x.rule === id)
+    expect(f?.node?.id).toBe('span.msg')
+    expect(f?.severity).toBe('warning')
+  })
+})
+
+describe('content/currency-order', () => {
+  const id = 'content/currency-order'
+  const flagged = (t: string, p: Partial<TextRun> = {}) => runRules(screen({ texts: [text({ text: t, ...p })] }), { rules: contentRules }).filter((f) => f.rule === id)
+  it.each(['د.إ 2.50', 'ريال ٣٠٠', 'السعر: ر.ق 300', 'درهم 12', 'دينار 5', 'جنيه 100', 'ر.س 50', 'د.ك 3', 'د.ب 2', 'ر.ع 4', 'ج.م 90'])('flags %s', (t) => {
+    expect(flagged(t)).toHaveLength(1)
+  })
+  it('still flags a currency first inside an isolate', () => {
+    expect(flagged('ر.ق 300', { isolated: true })).toHaveLength(1)
+  })
+  it.each(['2.50 د.إ', '٣٠٠ ريال', 'AED 12', 'SAR 50', 'ريال واحد', 'الريال 300', '\u20C3 500', 'ريال سعودي 300', '100 ريال 200'])('stays quiet on %s', (t) => {
+    expect(flagged(t)).toEqual([])
+  })
+  it('stays quiet in English text and in left-to-right blocks', () => {
+    expect(flagged('Price: 12 dirham', { blockDir: 'ltr', dir: 'ltr', blockText: 'Price: 12 dirham', blockHasArabic: false })).toEqual([])
+    expect(flagged('درهم 12', { blockDir: 'ltr' })).toEqual([])
+  })
+  it('reports the run\'s own node', () => {
+    const [f] = runRules(screen({ texts: [text({ id: 'div.price', text: 'د.إ 2.50', blockId: 'section' })] }), { rules: contentRules }).filter((x) => x.rule === id)
+    expect(f?.node?.id).toBe('div.price')
+    expect(f?.severity).toBe('warning')
+  })
+})
+
+describe('content/drops-arabic-digits', () => {
+  const id = 'content/drops-arabic-digits'
+  const flagged = (drops: boolean | null) =>
+    runRules(screen({ fields: [field({ id: 'input#otp', kind: 'code', dropsArabicDigits: drops })] }), { rules: contentRules }).filter((f) => f.rule === id)
+  it('flags a field the probe saw delete typed Arabic digits, as an error on the field itself', () => {
+    const [f] = flagged(true)
+    expect(f?.node?.id).toBe('input#otp')
+    expect(f?.severity).toBe('error')
+  })
+  it('stays quiet when the digits survived or the field was not probed', () => {
+    expect(flagged(false)).toEqual([])
+    expect(flagged(null)).toEqual([])
+  })
+  it('stays quiet on an English page, and flags an untagged page whose text is Arabic', () => {
+    const fields = [field({ kind: 'code', dropsArabicDigits: true })]
+    const english = screen({ root: { lang: 'en', dir: 'ltr', computedDir: 'ltr' }, fields, texts: [text({ text: 'Enter the code' })] })
+    const untagged = screen({ root: { lang: null, dir: null, computedDir: 'ltr' }, fields, texts: [text()] })
+    expect(runRules(english, { rules: contentRules }).filter((f) => f.rule === id)).toEqual([])
+    expect(runRules(untagged, { rules: contentRules }).filter((f) => f.rule === id)).toHaveLength(1)
+  })
+  it('stays quiet on a Hebrew page that runs right to left', () => {
+    const hebrew = screen({
+      root: { lang: 'he', dir: 'rtl', computedDir: 'rtl' }, fields: [field({ kind: 'code', dropsArabicDigits: true })],
+      texts: [text({ text: 'הזן את הקוד', blockText: 'הזן את הקוד' })],
+    })
+    expect(runRules(hebrew, { rules: contentRules }).filter((f) => f.rule === id)).toEqual([])
+    expect(wantsDigitProbe(hebrew)).toBe(false)
+  })
+  it('wants the probe only on an Arabic page where the rule is not ignored', () => {
+    const arabic = screen({ texts: [text()] })
+    expect(wantsDigitProbe(arabic)).toBe(true)
+    expect(wantsDigitProbe(arabic, [id])).toBe(false)
+    expect(wantsDigitProbe(arabic, ['content/missing-lang'])).toBe(true)
+    expect(wantsDigitProbe(screen({ root: { lang: 'en', dir: 'ltr', computedDir: 'ltr' }, texts: [text({ text: 'Enter the code' })] }))).toBe(false)
+  })
+})
+
 describe('RULES', () => {
-  it('ships twenty-nine rules with unique ids, in five groups', () => {
-    expect(RULES).toHaveLength(29)
-    expect(new Set(RULES.map((r) => r.id)).size).toBe(29)
+  it('ships thirty-four rules with unique ids, in five groups', () => {
+    expect(RULES).toHaveLength(34)
+    expect(new Set(RULES.map((r) => r.id)).size).toBe(34)
     expect(new Set(RULES.map((r) => r.group))).toEqual(new Set(['bidi', 'layout', 'icons', 'type', 'content']))
   })
   it('gives every rule a why and a fix with no em dash', () => {

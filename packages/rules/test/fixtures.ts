@@ -15,11 +15,37 @@ export const page = (body: string, o: Page = {}): string => {
 
 const icon = (name: string, style = '') =>
   `<button><svg data-icon="${name}" style="${style}" width="16" height="16" viewBox="0 0 16 16"><path d="M2 8h12"/></svg></button>`
+const backLeft = '<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>'
+const ARROW_CSS = 'svg{width:20px;height:20px}'
 const long = 'نص عربي طويل يمتد على عدة أسطر في هذه الفقرة الصغيرة'
 
-export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: string[] }> = {
+/** The eval injector's otp-digits bug: an oninput that deletes every typed character outside 0-9, Arabic-Indic digits included. */
+const STRIP_DIGITS = `pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'')"`
+const otp = (attrs = '') => `<label>رمز التحقق <input autocomplete="one-time-code" inputmode="numeric" ${attrs}></label>`
+
+/**
+ * `probe`: the reader leaves every field's dropsArabicDigits null, and only dualkit check's audit types into fields.
+ * The fixture test runs the CLI's own probe on these pages after the read, the way audit does, so the rule sees true or false.
+ */
+export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: string[]; moreBad?: string[]; probe?: true }> = {
   'bidi/unisolated-number': { bad: page('<p>رقم الهاتف 050 123 4567</p>'), good: page('<p>رقم الهاتف <bdi>050 123 4567</bdi></p>') },
   'bidi/unisolated-latin': { bad: page('<p>رقم الطلب #A-10293 تم</p>'), good: page('<p>رقم الطلب <bdi>#A-10293</bdi> تم</p>') },
+  'bidi/date-order': {
+    bad: page('<div dir="rtl"><span>٣-١١-٢٠٢٦</span></div>'),
+    good: page('<div dir="rtl"><span>٣/١١/٢٠٢٦</span></div>'),
+    moreBad: [
+      page('<p>تاريخ الطلب 15-03-2025</p>'),
+      page('<p>آخر تحديث <bdi dir="ltr">15 مارس 2025، 10:00 ص</bdi></p>'),
+      page('<p>آخر تحديث <span style="direction:ltr;unicode-bidi:isolate">14 ربيع الأول 1447</span></p>'),
+    ],
+    moreGood: [
+      page('<p>تاريخ الطلب 15/03/2025</p>'),
+      page('<p>تاريخ الطلب <bdi dir="ltr">15-03-2025</bdi></p>'),
+      page('<p>Date 15-03-2025</p>'),
+      page('<p>آخر تحديث 15 مارس 2025، 10:00 ص</p>'),
+      page('<p>Order placed on 15-03-2025 at 10:00 am.</p>', { lang: 'en', dir: 'ltr' }),
+    ],
+  },
   'bidi/punctuation-flip': { bad: page('<p>Hello world!</p>'), good: page('<p dir="ltr">Hello world!</p>') },
   'bidi/field-direction': { bad: page('<label>البريد <input type="email"></label>'), good: page('<label>البريد <input type="email" dir="ltr"></label>') },
   'bidi/field-placeholder': {
@@ -39,11 +65,56 @@ export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: st
   },
   'layout/clipped-text': {
     bad: page('<div class="b">اشتري الآن واحصل على خصم</div>', { css: '.b{width:60px;overflow:hidden;white-space:nowrap}' }),
-    good: page('<div class="b">اشتري الآن واحصل على خصم</div>', { css: '.b{width:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' }),
+    good: page('<div class="b">اشتري الآن واحصل على خصم</div>', { css: '.b{width:160px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' }),
+    moreGood: [
+      // Overflow that is only padding below fully visible lines.
+      page('<div class="b"><p>اشتري الآن واحصل على خصم</p></div>', { css: '.b{height:60px;overflow:hidden}.b p{margin:0;padding-bottom:40px}' }),
+      // A long sentence cut by an ellipsis at the end of a wide box shows most of itself.
+      page(`<p class="s">${long}</p>`, { css: '.s{width:300px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' }),
+      // A two-line clamp over a long paragraph.
+      page(`<p class="c">${long} ${long} ${long} ${long}</p>`, { css: '.c{width:200px;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}' }),
+    ],
+    // A short label an ellipsis cuts to a letter or two, with and without inline markup.
+    moreBad: [
+      page('<h1 style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:3em">عنوان التوصيل</h1>'),
+      page('<h1 style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:3em">عنوان <span>التوصيل</span></h1>'),
+    ],
   },
   'icons/not-mirrored': { bad: page(icon('arrow-right')), good: page(icon('arrow-right', 'transform:scaleX(-1)')) },
+  'icons/arrow-points-forward': {
+    bad: page(`<button aria-label="رجوع">${backLeft}</button>`, { css: ARROW_CSS }),
+    good: page(`<button aria-label="رجوع">${backLeft}</button>`, { css: `${ARROW_CSS}svg{transform:scaleX(-1)}` }),
+    moreBad: [page('<a aria-label="السابق">←</a>')],
+    moreGood: [
+      // A back arrow that already points right in RTL.
+      page(`<button aria-label="رجوع">${backLeft.replace('m15 18-6-6 6-6', 'm 9 18 6 -6 -6 -6')}</button>`, { css: ARROW_CSS }),
+      page('<a aria-label="السابق">→</a>'),
+      // A next arrow pointing left, and a back glyph that bidi already mirrors.
+      page(`<button aria-label="التالي">${backLeft}</button><button aria-label="رجوع">‹</button>`, { css: ARROW_CSS }),
+      // An all-English page, where back points left.
+      page(`<button aria-label="Back">${backLeft}</button><a aria-label="Back" href="#">←</a>`, { lang: 'en', dir: 'ltr', css: ARROW_CSS }),
+      // Correct drill-in chevrons whose label, class or id only contains a role word.
+      page(`<a href="#" aria-label="الطلبات السابقة">${backLeft}</a>`, { css: ARROW_CSS }),
+      page(`<a href="#" class="previous-orders">${backLeft}</a>`, { css: ARROW_CSS }),
+      page(`<a href="#" class="previousOrders">${backLeft}</a>`, { css: ARROW_CSS }),
+      page(`<a href="#" class="cash-back-offer">${backLeft}</a>`, { css: ARROW_CSS }),
+      page(`<a href="#" id="back-office">${backLeft}</a>`, { css: ARROW_CSS }),
+      page('<a href="#" class="previous-orders">←</a>'),
+    ],
+  },
   'icons/mirrored-by-mistake': { bad: page(icon('play', 'transform:scaleX(-1)')), good: page(icon('play')) },
-  'type/arabic-leading': { bad: page(`<p>${long}</p>`, { css: 'p{line-height:1.2;width:120px}' }), good: page(`<p>${long}</p>`, { css: 'p{line-height:1.7;width:120px}' }) },
+  'type/arabic-leading': {
+    bad: page(`<p>${long}</p>`, { css: 'p{line-height:1.2;width:120px}' }),
+    good: page(`<p>${long}</p>`, { css: 'p{line-height:1.7;width:120px}' }),
+    moreGood: [
+      // Display type.
+      page(`<h2>${long}</h2>`, { css: 'h2{font-size:24px;line-height:1.2;width:160px}' }),
+      // A carousel slide parked past the viewport's edge.
+      page(`<div class="t"><p>${long}</p></div>`, { css: '.t{position:absolute;left:100vw;top:0}p{line-height:1.2;width:120px}' }),
+    ],
+    // Body text at 1.35 is still too tight for Arabic.
+    moreBad: [page(`<p>${long}</p>`, { css: 'p{line-height:1.35;width:120px}' })],
+  },
   'type/arabic-tracking': { bad: page('<p>مرحبا بكم</p>', { css: 'p{letter-spacing:0.1em}' }), good: page('<p>مرحبا بكم</p>', { css: 'p{letter-spacing:0}' }) },
   'type/arabic-italic': { bad: page('<p><em>مرحبا</em></p>'), good: page('<p><em style="font-style:normal">مرحبا</em></p>') },
   'type/arabic-font': { bad: page('<p>مرحبا</p>', { css: 'p{font-family:"Inter",sans-serif}' }), good: page('<p>مرحبا</p>', { css: 'p{font-family:"Inter","IBM Plex Sans Arabic",sans-serif}' }) },
@@ -72,6 +143,40 @@ export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: st
   'content/label-language': {
     bad: page('<button aria-label="Close the dialog">x</button>'),
     good: page('<button aria-label="إغلاق النافذة">x</button>'),
+  },
+  'content/latin-punctuation': {
+    bad: page('<p>لا تشارك هذا الرمز مع أي شخص, بما في ذلك الدعم</p>'),
+    good: page('<p>لا تشارك هذا الرمز مع أي شخص، بما في ذلك الدعم</p>'),
+    moreBad: [page('<p>هل أنت متأكد?</p>'), page('<p>الاسم; العمر</p>')],
+    moreGood: [
+      page('<p>المبلغ 1,000 ريال</p>'),
+      page('<p>نقبل iPhone, iPad وأجهزة أخرى</p>'),
+      page('<p>هل أنت متأكد؟</p>'),
+      page('<p>Are you sure, or not? Yes; no.</p>', { lang: 'en', dir: 'ltr' }),
+    ],
+  },
+  'content/currency-order': {
+    bad: page('<div class="price">د.إ 2.50</div>'),
+    good: page('<div class="price">2.50 د.إ</div>'),
+    moreBad: [page('<p>الإجمالي ريال ٣٠٠</p>'), page('<p>السعر <bdi>ر.ق 300</bdi></p>')],
+    moreGood: [
+      page('<p>السعر 300 ريال</p>'),
+      page('<p>السعر AED 12</p>'),
+      page('<p>السعر \u20C3 500</p>'),
+      page('<p>Total: 300 riyal, or AED 12.</p>', { lang: 'en', dir: 'ltr' }),
+    ],
+  },
+  'content/drops-arabic-digits': {
+    probe: true,
+    bad: page(otp(STRIP_DIGITS)),
+    good: page(otp()),
+    moreBad: [page(['', '', '', ''].map(() => `<input maxlength="1" inputmode="numeric" name="otp" ${STRIP_DIGITS}>`).join(''))],
+    moreGood: [
+      page(otp(`oninput="this.value=this.value.replace(/[٠-٩]/g,(d)=>String(d.charCodeAt(0)-1632))"`)),
+      page(['', '', '', ''].map(() => '<input maxlength="1" inputmode="numeric" name="otp">').join('')),
+      page(`<label>البريد الإلكتروني <input type="email" ${STRIP_DIGITS}></label>`),
+      page(`<label>Verification code <input autocomplete="one-time-code" inputmode="numeric" ${STRIP_DIGITS}></label>`, { lang: 'en', dir: 'ltr' }),
+    ],
   },
   'content/placeholder-text': { bad: page('<p>لوريم إيبسوم دولور</p>'), good: page('<p>مرحبا</p>') },
 }

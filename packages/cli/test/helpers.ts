@@ -8,5 +8,5 @@ export const finding = (p: Partial<Finding> = {}): Finding => ({
 })
 export const result = (findings: Finding[], extra: Partial<AuditResult> = {}): AuditResult => ({
   url: 'https://example.com/ar', date: '2026-10-16T12:00:00.000Z', width: 1280, height: 800, score: 72,
-  findings, screenshot: 'iVBORw0KGgo=', pageHeight: 1600, unreadableStylesheets: 0, ...extra,
+  findings, screenshot: 'iVBORw0KGgo=', pageHeight: 1600, unreadableStylesheets: 0, tags: {}, ...extra,
 })

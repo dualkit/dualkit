@@ -1,16 +1,21 @@
 import { createRequire } from 'node:module'
-import { runRules, score, type Finding, type ScreenModel } from '@dualkit/rules'
+import { runRules, score, wantsDigitProbe, type Finding, type ScreenModel } from '@dualkit/rules'
 import { chromium, type Browser, type Page } from 'playwright'
 import { UserError, type Config } from './config'
+import { markDroppedDigits, probeArabicDigits } from './probe'
 
 export type AuditOptions = { url: string; width: number; height: number; config: Config }
 export type AuditResult = {
   url: string; date: string; width: number; height: number
   score: number; findings: Finding[]; screenshot: string; pageHeight: number; unreadableStylesheets: number
+  /** How many elements of each kind the page has (table, form, input, chat), for choosing review rules. */
+  tags: Record<string, number>
+  /** What the rules read, kept for the reviewer. Left out of JSON output. */
+  screen?: ScreenModel
 }
 
 // Browser-side globals: the CLI tsconfig has no DOM lib, and these only run inside the page.
-declare const document: { documentElement: { scrollHeight: number }; fonts: { ready: Promise<unknown> } }
+declare const document: { documentElement: { scrollHeight: number }; fonts: { ready: Promise<unknown> }; querySelectorAll: (selector: string) => { length: number } }
 type PageReader = { readScreen: (d: unknown, o: { exclude: string[] }) => ScreenModel }
 
 const READER = createRequire(import.meta.url).resolve('@dualkit/rules/reader')
@@ -29,6 +34,13 @@ const waitForFonts = async (page: Page): Promise<void> => {
   }
 }
 const MAX_SHOT_HEIGHT = 8000
+/** The element kinds detectFeatures reads from `tags`, each as the selector that counts it. */
+const TAG_SELECTORS: Record<string, string> = {
+  table: 'table,[role="table"],[role="grid"]',
+  form: 'form,[role="form"]',
+  input: 'input:not([type="hidden"]),textarea,select',
+  chat: '[role="log"],[class*="chat" i],[class*="bubble" i],[class*="message-list" i]',
+}
 /** Device pixels: a 2x capture is used while it stays this tall, so zoomed crops stay sharp and the PNG stays a sensible size. */
 const MAX_2X_DEVICE_HEIGHT = 8000
 const HTTP_ERROR = 400
@@ -67,7 +79,7 @@ async function capture(page: Page, width: number, height: number, viewportHeight
   }
 }
 
-async function read(page: Page, options: AuditOptions): Promise<{ model: ScreenModel; pageHeight: number; shot: Buffer }> {
+async function read(page: Page, options: AuditOptions): Promise<{ model: ScreenModel; pageHeight: number; shot: Buffer; tags: Record<string, number> }> {
   try {
     await page.addScriptTag({ path: READER })
     const model = await page.evaluate(
@@ -75,8 +87,9 @@ async function read(page: Page, options: AuditOptions): Promise<{ model: ScreenM
       options.config.exclude,
     )
     const pageHeight = Math.min(MAX_SHOT_HEIGHT, await page.evaluate(() => document.documentElement.scrollHeight))
+    const tags = await page.evaluate((selectors) => Object.fromEntries(Object.entries(selectors).map(([k, q]) => [k, document.querySelectorAll(q).length])), TAG_SELECTORS)
     const shot = await capture(page, options.width, pageHeight, options.height)
-    return { model, pageHeight, shot }
+    return { model, pageHeight, shot, tags }
   } catch (e) {
     throw new UserError(`Could not read ${options.url}: ${firstLine(e)}`)
   }
@@ -100,12 +113,16 @@ export async function audit(options: AuditOptions, launch: () => Promise<Browser
     await page.waitForLoadState('load', { timeout: LOAD_WAIT_MS }).catch(() => {})
     await waitForFonts(page)
     await page.waitForTimeout(SETTLE_MS)
-    const { model, pageHeight, shot } = await read(page, options)
+    const { model: seen, pageHeight, shot, tags } = await read(page, options)
+    // After the read and the screenshot, so typing cannot change what they show. Only when the rule can fire, since
+    // this types into the live page.
+    const probed = wantsDigitProbe(seen, options.config.ignore) ? await probeArabicDigits(page, seen.fields) : new Map<string, boolean>()
+    const model = { ...seen, fields: markDroppedDigits(seen.fields, probed) }
     const findings = runRules(model, { ignore: options.config.ignore })
     return {
       url: options.url, date: new Date().toISOString(), width: options.width, height: options.height,
       score: score(findings), findings, screenshot: shot.toString('base64'), pageHeight,
-      unreadableStylesheets: model.unreadableStylesheets,
+      unreadableStylesheets: model.unreadableStylesheets, tags, screen: model,
     }
   } finally {
     await browser.close().catch(() => {})

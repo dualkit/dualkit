@@ -57,12 +57,13 @@ export default async function Docs() {
         </section>
         <section className="doc-block" id="check">
           <h2 className="h2">Check a screen</h2>
-          <p className="soft">Point it at any page, local or live. It runs 29 Arabic and right-to-left rules and writes a report you can share.</p>
+          <p className="soft">Point it at any page, local or live. It runs 34 Arabic and right-to-left rules and writes a report you can share.</p>
           <p className="small soft">Install the browser once:</p>
           <CopyCommand command="npx playwright@1.55.0 install chromium" />
           <p className="small soft">Then check a page:</p>
           <CopyCommand command={CHECK_COMMAND} />
           <p className="small soft">In CI, add <code>uses: dualkit/dualkit/action@main</code> to a workflow. It scores every pull request and uploads the report; the inputs are in the <a href={ACTION_URL}>Action README</a>. Every rule is in <a href="https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md">RULES.md</a>.</p>
+          <p className="small soft"><strong>Experimental:</strong> add <code>--review</code> and a vision model reads a screenshot for problems the rules cannot measure. It uses <code>GEMINI_API_KEY</code> (the default model, <code>gemini-flash-lite-latest</code>, has a free tier) or <code>OPENROUTER_API_KEY</code> with <code>--review-model provider:model</code>, so any cost is on your own key. Not yet measured against hand labels, so treat its findings as suggestions. They are marked review, carry a confidence, and never change the score or the exit code.</p>
         </section>
         <section className="doc-block" id="lint">
           <h2 className="h2">Lint your source</h2>

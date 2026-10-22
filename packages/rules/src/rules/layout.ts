@@ -1,4 +1,4 @@
-import type { LayoutNode } from '../model'
+import type { ClipNode, LayoutNode } from '../model'
 import { defineRule, pick, type Hit } from '../rule'
 import { excerpt, hasArabic } from '../text'
 
@@ -61,6 +61,12 @@ export const arabicLtrBlock = defineRule({
 
 /** Under this many pixels cut off, the gap is rounding, not lost text. */
 const MIN_CLIPPED = 2
+/** An ellipsis that leaves less than this share of the text showing cuts a label to a letter or two. */
+const MIN_VISIBLE_SHARE = 0.5
+/** A line clamp that keeps this many lines is an excerpt, not a cut label. */
+const EXCERPT_LINES = 2
+/** An ellipsis box cuts too much when it keeps under half its text, unless it is a clamp that keeps whole lines. */
+const cutShort = (c: ClipNode): boolean => c.visibleLines < EXCERPT_LINES && c.visibleShare < MIN_VISIBLE_SHARE
 
 export const mirroredText = defineRule({
   id: 'layout/mirrored-text', group: 'layout', severity: 'error',
@@ -78,11 +84,16 @@ export const mirroredText = defineRule({
 export const clippedText = defineRule({
   id: 'layout/clipped-text', group: 'layout', severity: 'warning',
   title: 'Arabic text cut off by its box',
-  why: 'A fixed-size box with overflow hidden cuts off Arabic text that runs long or sits tall, such as a label wider than its button or dots below a tight line.',
-  fix: 'Let the box grow with min-width or min-height, or add text-overflow: ellipsis if shortening is intended.',
+  why: 'A fixed-size box with overflow hidden cuts off Arabic text that runs long or sits tall, such as a label wider than its button or dots below a tight line. An ellipsis that leaves a letter or two of a short label says nothing.',
+  fix: 'Let the box grow with min-width or min-height. If shortening is intended, add text-overflow: ellipsis and leave room for most of the text.',
   check: (m) => m.clips
-    .filter((c) => c.hasArabic && !c.ellipsis && c.hidden > MIN_CLIPPED)
-    .map((c) => ({ node: pick(c), message: `${Math.round(c.hidden)}px of this text is cut off ${c.axis === 'x' ? 'sideways' : 'at the bottom'}.` })),
+    .filter((c) => c.hasArabic && (c.ellipsis ? cutShort(c) : c.textHidden > MIN_CLIPPED))
+    .map((c) => ({
+      node: pick(c),
+      message: c.ellipsis
+        ? `Only ${Math.round(c.visibleShare * 100)}% of this text shows before the ellipsis.`
+        : `${Math.round(c.textHidden)}px of this text is cut off ${c.axis === 'x' ? 'sideways' : 'at the bottom'}.`,
+    })),
 })
 
 export const layoutRules = [physicalSpacing, physicalInset, textAlignLeft, arabicLtrBlock, mirroredText, clippedText]

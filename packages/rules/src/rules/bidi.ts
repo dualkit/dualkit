@@ -1,5 +1,6 @@
+import type { TextRun } from '../model'
 import { defineRule, pick } from '../rule'
-import { ENDS_WITH_ARABIC_MARK, ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, arabicShare, excerpt, hasArabic, firstStrong, hashNumberScrambles, lastStrong, scrambledLatinTokens } from '../text'
+import { ENDS_WITH_ARABIC_MARK, ENDS_WITH_PUNCTUATION, GROUPED_NUMBER, arabicShare, excerpt, hasArabic, firstStrong, forcedLtrDateScrambles, hashNumberScrambles, lastStrong, reorderedDashDates, scrambledLatinTokens } from '../text'
 
 const LATIN_LETTER = /[A-Za-zÀ-ɏ]/
 
@@ -28,6 +29,27 @@ export const unisolatedLatin = defineRule({
   check: (m) => m.texts
     .filter((t) => t.blockDir === 'rtl' && !t.isolated)
     .flatMap((t) => scrambledLatinTokens(t.text, t.blockText).slice(0, 1).map((token) => ({ node: pick(t), message: `"${excerpt(token)}" sits in right-to-left text without isolation, so part of it can move.` }))),
+})
+
+/** The first date in this run that Chromium paints in the wrong order, with why, or null. */
+function misorderedDate(t: TextRun): { date: string; why: string } | null {
+  const dashed = reorderedDashDates(t.text, t.blockText, t.isolated)[0]
+  if (dashed !== undefined) return { date: dashed, why: 'its dashes do not hold Arabic numbers together, so the parts show in reverse order' }
+  if (t.forcedLtr && forcedLtrDateScrambles(t.text)) return { date: t.text, why: 'it is forced left to right, so its Arabic and its numbers show in reverse order' }
+  return null
+}
+
+export const dateOrder = defineRule({
+  id: 'bidi/date-order', group: 'bidi', severity: 'error',
+  title: 'A date that will show in the wrong order',
+  why: 'Inside right-to-left text, digits joined by - become Arabic numbers when they are Arabic-Indic or follow an Arabic word, and a - does not hold those together, so 15-03-2025 shows as 2025-03-15. A worded Arabic date such as 15 مارس 2025، 10:00 ص, forced left to right with dir="ltr", shows its words and numbers backwards.',
+  fix: 'Join the parts with / instead of -, or wrap a Western-digit date in <bdi dir="ltr">. Leave a worded Arabic date right to left.',
+  check: (m) => m.texts
+    .filter((t) => t.blockDir === 'rtl')
+    .flatMap((t) => {
+      const found = misorderedDate(t)
+      return found === null ? [] : [{ node: pick(t), message: `"${excerpt(found.date)}": ${found.why}.` }]
+    }),
 })
 
 /**
@@ -75,4 +97,4 @@ export const fieldPlaceholder = defineRule({
     .map((f) => ({ node: pick(f), message: `The placeholder "${excerpt(f.placeholder)}" is Arabic in a left-to-right field.` })),
 })
 
-export const bidiRules = [unisolatedNumber, unisolatedLatin, punctuationFlip, fieldDirection, fieldPlaceholder]
+export const bidiRules = [unisolatedNumber, unisolatedLatin, dateOrder, punctuationFlip, fieldDirection, fieldPlaceholder]

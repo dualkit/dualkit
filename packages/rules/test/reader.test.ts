@@ -13,6 +13,10 @@ describe('root and texts', () => {
     expect((await modelOf(doc('', '', ''))).root).toEqual({ lang: null, dir: null, computedDir: 'ltr' })
   })
 
+  it('reads the viewport width without a scrollbar', async () => {
+    expect((await modelOf(doc(''))).viewportWidth).toBe(1024)
+  })
+
   it('treats an empty lang attribute as null', async () => {
     const m = await modelOf(doc('<p>مرحبا</p>', '', 'lang="" dir="rtl"'))
     expect(m.root.lang).toBeNull()

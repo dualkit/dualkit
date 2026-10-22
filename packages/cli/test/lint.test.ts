@@ -29,9 +29,8 @@ const harness = (cwd: string) => {
 
 /** physical-css, a note. */
 const WARN = '.a { margin-left: 8px; }\n'
-/** physical-tailwind, a warning. It needs a Tailwind version from package.json. */
-const WARN_TW = '<div class="ml-4"></div>\n'
-const TAILWIND = JSON.stringify({ devDependencies: { tailwindcss: '^3.4.0' } })
+/** The bare islamic calendar, a warning. */
+const WARN_ISLAMIC = "<script>new Intl.DateTimeFormat('ar', { calendar: 'islamic' }).format(5)</script>\n"
 /** A locale file is a right-to-left signal, so the physical finding is reported on its own instead of collapsing into the repo note. */
 const RTL = { 'locales/ar.json': '{}' }
 const CLEAN = '.a { margin-inline-start: 8px; }\n'
@@ -44,7 +43,7 @@ describe('dualkit lint', () => {
   })
 
   it('exits 0 on warnings at the default fail-on, 1 at --fail-on warning', async () => {
-    const cwd = project({ 'a.html': WARN_TW, 'package.json': TAILWIND, ...RTL })
+    const cwd = project({ 'a.html': WARN_ISLAMIC, ...RTL })
     expect(await run(['lint', '.'], harness(cwd).io)).toBe(0)
     expect(await run(['lint', '.', '--fail-on', 'warning'], harness(cwd).io)).toBe(1)
     expect(await run(['lint', '.', '--fail-on', 'note'], harness(cwd).io)).toBe(1)

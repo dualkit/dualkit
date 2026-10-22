@@ -50,11 +50,12 @@ function wholeScreen(numbered: readonly Numbered[], ctx: ViewContext): string {
   return `<section class="full"><h2>The whole screen</h2><p class="lede">${lede}</p><div class="card stage">${view}</div></section>`
 }
 
-export function renderReport(result: AuditResult): string {
+/** `reviewFindings` get their own cards, marked as review. The score, verdict and tallies count the check findings only. */
+export function renderReport(result: AuditResult, reviewFindings: readonly Finding[] = []): string {
   const screenshot = BASE64.test(result.screenshot) ? result.screenshot : ''
   const ctx = viewContext(result, screenshot)
-  const groups = numberGroups(result.findings)
-  const firsts = groups.map((g) => g.all)
+  const groups = numberGroups([...result.findings, ...reviewFindings])
+  const firsts = groupByRule(result.findings)
   const cards = groups.length > 0
     ? `<section class="grid">${groups.map((g) => renderCard(g, ctx)).join('')}</section>`
     : `<section class="card clean"><p>No issues found.</p><p>This screen is Gulf-ready by every Dualkit rule.</p></section>`

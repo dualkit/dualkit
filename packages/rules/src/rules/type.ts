@@ -1,14 +1,18 @@
-import type { ScreenModel } from '../model'
+import type { ScreenModel, TextRun } from '../model'
 import { defineRule, pick } from '../rule'
 import { effectiveSize, loadedArabicFace, webfontFamily, coversArabic } from '../fonts'
 import { ARABIC_FAMILY_NAME, excerpt, hasArabic, isSystemArabicFont } from '../text'
 
-export const MIN_ARABIC_LEADING = 1.5
+export const MIN_ARABIC_LEADING = 1.45
+/** Display type from this size up carries tighter leading by design. */
+const DISPLAY_SIZE = 22
 export const MIN_ARABIC_SIZE = 14
 /** Chromium synthesises bold only when the matched face is lighter than this and the run asks for this or more (measured in verify.test.ts). */
 const SYNTHETIC_BOLD_BELOW = 600
 
 const arabicRuns = (m: ScreenModel) => m.texts.filter((t) => hasArabic(t.text))
+/** False for a run painted wholly past either side of the viewport, such as a parked carousel slide. */
+const inViewportWidth = (t: TextRun, m: ScreenModel): boolean => t.box.x + t.box.width > 0 && t.box.x < m.viewportWidth
 
 export const arabicLeading = defineRule({
   id: 'type/arabic-leading', group: 'type', severity: 'warning',
@@ -16,7 +20,8 @@ export const arabicLeading = defineRule({
   why: 'Arabic has tall ascenders, deep descenders and dots, which clip or collide at Latin line heights.',
   fix: 'Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.',
   check: (m) => arabicRuns(m)
-    .filter((t) => t.font.lineHeight !== null && t.lines >= 2 && t.font.lineHeight / t.font.size < MIN_ARABIC_LEADING)
+    .filter((t) => t.font.lineHeight !== null && t.lines >= 2 && t.font.size < DISPLAY_SIZE && inViewportWidth(t, m)
+      && t.font.lineHeight / t.font.size < MIN_ARABIC_LEADING)
     .map((t) => ({ node: pick(t), message: `Line height is ${((t.font.lineHeight ?? 0) / t.font.size).toFixed(2)} on "${excerpt(t.text)}".` })),
 })
 

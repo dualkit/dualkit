@@ -6,6 +6,7 @@ import { listProducts, scoreRun, type RunFinding } from '../src/precision.js'
 const DATA = join(dirname(fileURLToPath(import.meta.url)), 'fixtures', 'sweep')
 const FX = { tool: 'lint', name: 'fx' } as const
 const PG = { tool: 'check', name: 'pg' } as const
+const RV = { tool: 'review', name: 'pg' } as const
 
 const at = (rule: string, severity: string, file: string, line: number): RunFinding => ({ rule, severity, file, line })
 const fxFindings = (): RunFinding[] => [
@@ -50,9 +51,19 @@ describe('precision set', () => {
 
   it('skips a product with a label file but no sample file, and says why', () => {
     const { products, skipped } = listProducts(DATA)
-    expect(products).toHaveLength(2)
-    expect(products).toEqual(expect.arrayContaining([FX, PG]))
+    expect(products).toHaveLength(3)
+    expect(products).toEqual(expect.arrayContaining([FX, PG, RV]))
     expect(skipped).toHaveLength(1)
-    expect(skipped[0]).toMatchObject({ tool: expect.stringMatching(/^(check|lint)$/), name: 'orphan', why: expect.stringMatching(/sample/) })
+    expect(skipped[0]).toMatchObject({ tool: expect.stringMatching(/^(check|lint|review)$/), name: 'orphan', why: expect.stringMatching(/sample/) })
+  })
+
+  it('reads review labels from labels/review-<name>.json and scores review findings against them', () => {
+    const score = scoreRun(DATA, RV, [
+      { rule: 'layout/demo-review', severity: 'warning', snippet: '<p class="demo">made up paragraph</p>' },
+      { rule: 'layout/demo-review', severity: 'warning', snippet: '<p>never labelled</p>' },
+    ])
+    expect(score.byRule['layout/demo-review']).toEqual({ real: 1, handled: 0, intended: 0, unclear: 0 })
+    expect(score.lost).toEqual(['pg#2'])
+    expect(score.unlabelled).toBe(1)
   })
 })

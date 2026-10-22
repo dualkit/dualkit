@@ -3,7 +3,8 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterAll, describe, expect, it } from 'vitest'
 import { INJECTORS } from '../src/inject.js'
-import { BEHAVIOURAL_OR_ENGINE_KINDS, EMPTY_PAGE, basePages, buildCases, roundRobin, checkCaught, closeBrowser, lintCaught, markSelector, runCase, sharedLine } from '../src/misses.js'
+import { BEHAVIOURAL_OR_ENGINE_KINDS, EMPTY_PAGE, basePages, buildCases, loadFrozenCases, roundRobin, checkCaught, closeBrowser, lintCaught, markSelector, runCase, sharedBrowser, sharedLine } from '../src/misses.js'
+import type { Browser } from 'playwright'
 
 const fixture = (name: string) => new URL(`./fixtures/pages/${name}.html`, import.meta.url).pathname
 const KINDS = INJECTORS.map((i) => i.kind)
@@ -107,6 +108,34 @@ describe('buildCases', () => {
   })
 })
 
+describe('frozen cases', () => {
+  const FROZEN = new URL('../cases/miss-set-2026-10.json', import.meta.url).pathname
+
+  it('loads the committed list: 64 planted cases, plus the one real miss makes 65', () => {
+    const cases = loadFrozenCases(FROZEN)
+    expect(cases).toHaveLength(64)
+    expect(cases.every((c) => KINDS.includes(c.kind) && c.page.startsWith('bench/runs/2026-10/'))).toBe(true)
+  })
+
+  it('builds exactly the frozen pages in order and never looks for pages itself', async () => {
+    const a = join(temp, 'frozen-a.html')
+    const b = join(temp, 'frozen-b.html')
+    copyFileSync(fixture('back-arrow'), a)
+    copyFileSync(fixture('arabic-tracking'), b)
+    const frozen = [{ kind: 'arabic-tracking' as const, page: b }, { kind: 'back-arrow' as const, page: a }]
+    const render = async () => { throw new Error('render must not run') }
+    const { cases, dropped } = await buildCases([], 8, { frozen, render, real: [] })
+    expect(cases.map((c) => c.kind)).toEqual(['arabic-tracking', 'back-arrow'])
+    expect(cases.map((c) => c.base.split('/').pop())).toEqual(['frozen-b.html', 'frozen-a.html'])
+    expect(dropped).toEqual([])
+  })
+
+  it('throws a message naming a frozen page that no longer exists', async () => {
+    const frozen = [{ kind: 'back-arrow' as const, page: join(temp, 'gone.html') }]
+    await expect(buildCases([], 8, { frozen, real: [] })).rejects.toThrow(/gone\.html/)
+  })
+})
+
 describe('markSelector', () => {
   it('marks the first match as its first attribute and fails on no match', () => {
     const out = markSelector('<p><b class="x" id="y">a</b></p>', 'b.x')
@@ -160,7 +189,7 @@ describe('checkCaught', () => {
     const clean = readFileSync(fixture('arabic-tracking'), 'utf8')
     const bugged = INJECTORS.find((i) => i.kind === 'arabic-tracking')!.inject(clean)!
     const results = await runCase({ id: 'x', kind: 'arabic-tracking', base: 'x', html: bugged }, clean)
-    expect(results.map((r) => r.tool)).toEqual(['check', 'lint'])
+    expect(results.map((r) => r.tool)).toEqual(['check', 'lint', 'dualkit'])
     expect(results[0]!.caught).toBe(true)
   })
 })
@@ -171,14 +200,14 @@ describe('lintCaught', () => {
 <p>مرحبا</p>
 ${line}
 </body></html>`
-  const digits = "<script>new Intl.NumberFormat('ar').format(5)</script>"
+  const digits = "<script>new Intl.DateTimeFormat('ar', { calendar: 'islamic' }).format(5)</script>"
 
   it('counts a lint finding on the marked line as caught', () => {
     expect(lintCaught(page(digits.replace('<script>', '<script data-eval-bug="k">')), page('<script>1</script>'))).toBe(true)
   })
 
   it('reads lint lines as 1-based', () => {
-    const digits = "<script>new Intl.NumberFormat('ar').format(5)</script>"
+    const digits = "<script>new Intl.DateTimeFormat('ar', { calendar: 'islamic' }).format(5)</script>"
     const second = `<p>x</p>\n${digits.replace('<script>', '<script data-eval-bug="k">')}`
     const first = `${digits.replace('<script>', '<script data-eval-bug="k">')}\n<p>x</p>`
     expect(lintCaught(second, '<p>x</p>\n<script>1</script>')).toBe(true)
@@ -200,5 +229,66 @@ describe('sharedLine', () => {
   it('flags a marked element that shares its line with other markup', () => {
     expect(sharedLine('<div>\n<p data-eval-bug="k">a</p>\n</div>')).toBe(false)
     expect(sharedLine('<div><p data-eval-bug="k">a</p></div>')).toBe(true)
+  })
+})
+
+describe('sharedBrowser', () => {
+  it('launches once when two callers ask at the same time, and closeBrowser closes that one browser', async () => {
+    await closeBrowser()
+    let launches = 0
+    let closes = 0
+    const launch = async (): Promise<Browser> => {
+      launches += 1
+      await new Promise((r) => setTimeout(r, 10))
+      return { close: async () => { closes += 1 } } as unknown as Browser
+    }
+    const [a, b] = await Promise.all([sharedBrowser(launch), sharedBrowser(launch)])
+    expect(a).toBe(b)
+    expect(launches).toBe(1)
+    await closeBrowser()
+    expect(closes).toBe(1)
+  })
+  it('does not keep a failed launch', async () => {
+    await closeBrowser()
+    await expect(sharedBrowser(async () => { throw new Error('no browser') })).rejects.toThrow('no browser')
+    let launches = 0
+    await sharedBrowser(async () => { launches += 1; return { close: async () => {} } as unknown as Browser })
+    expect(launches).toBe(1)
+    await closeBrowser()
+  })
+})
+
+describe('review in a case', () => {
+  const quiet = async () => ({ ok: true as const, findings: [], screenshot: '' }) as never
+  const bugged = '<p data-eval-bug="k">x</p>'
+  const finding = (over: object) => ({
+    rule: 'review/x', group: 'layout', severity: 'warning', title: 't', message: 'm', fix: 'f', docs: '', source: 'review', confidence: 0.9, line: null,
+    node: { id: 'n', snippet: '<p data-eval-bug="k">x</p>', box: { x: 0, y: 0, width: 10, height: 10 } },
+    ...over,
+  }) as never
+  const review = (findings: unknown[], skipped: string | null = null) => async () => ({ findings, spentUsd: 0, skipped, unchecked: 0 }) as never
+  const tools = async (r: ReturnType<typeof review> | undefined) =>
+    Object.fromEntries((await runCase({ id: 'x:1', kind: 'back-arrow', base: 'x', html: bugged }, '<p>x</p>', { score: quiet, ...(r ? { review: r } : {}) })).map((x) => [x.tool, x.caught]))
+
+  it('counts a case only review caught for dualkit', async () => {
+    expect(await tools(review([finding({})]))).toEqual({ check: false, lint: false, review: true, dualkit: true })
+  })
+
+  it('ignores a review finding below 0.7 or away from the marked element', async () => {
+    expect((await tools(review([finding({ confidence: 0.69 })]))).review).toBe(false)
+    const elsewhere = finding({ node: { id: 'm', snippet: '<p>other</p>', box: { x: 50, y: 50, width: 5, height: 5 } } })
+    const out = await runCase({ id: 'x:1', kind: 'back-arrow', base: 'x', html: bugged }, '<p>x</p>', { score: quiet, review: review([elsewhere]), box: async () => ({ x: 0, y: 0, width: 10, height: 10 }) })
+    expect(out.find((x) => x.tool === 'review')?.caught).toBe(false)
+  })
+
+  it('counts a review finding on a descendant of the marked element', async () => {
+    const inner = finding({ node: { id: 'm', snippet: '<span>in</span>', box: { x: 1, y: 1, width: 4, height: 4 } } })
+    const out = await runCase({ id: 'x:1', kind: 'back-arrow', base: 'x', html: bugged }, '<p>x</p>', { score: quiet, review: review([inner]), box: async () => ({ x: 0, y: 0, width: 10, height: 10 }) })
+    expect(out.find((x) => x.tool === 'review')?.caught).toBe(true)
+  })
+
+  it('leaves review out when it was skipped, and without it dualkit is check or lint', async () => {
+    expect(await tools(review([], 'No GEMINI_API_KEY'))).toEqual({ check: false, lint: false, dualkit: false })
+    expect(await tools(undefined)).toEqual({ check: false, lint: false, dualkit: false })
   })
 })

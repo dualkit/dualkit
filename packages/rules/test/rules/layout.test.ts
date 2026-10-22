@@ -71,12 +71,21 @@ describe('layout/mirrored-text', () => {
 
 describe('layout/clipped-text', () => {
   it('flags a box that cuts text off, on either axis', () => {
-    expect(ids(screen({ clips: [clip({ hidden: 40 }), clip({ axis: 'y', hidden: 5 })] }))).toEqual(['layout/clipped-text', 'layout/clipped-text'])
+    expect(ids(screen({ clips: [clip({ textHidden: 40 }), clip({ axis: 'y', hidden: 5, textHidden: 5 })] }))).toEqual(['layout/clipped-text', 'layout/clipped-text'])
   })
   it('stays quiet for a clipped box with no Arabic in its text', () => {
     expect(ids(screen({ clips: [clip({ hasArabic: false })] }))).toEqual([])
   })
-  it('passes an ellipsis, and a gap of 2px or less', () => {
-    expect(ids(screen({ clips: [clip({ ellipsis: true }), clip({ hidden: 2 })] }))).toEqual([])
+  it('passes a gap of 2px or less in the text, even when the scroll size overflows by more (padding)', () => {
+    expect(ids(screen({ clips: [clip({ axis: 'y', hidden: 10, textHidden: 2 }), clip({ hidden: 10, textHidden: 0 })] }))).toEqual([])
+    expect(ids(screen({ clips: [clip({ axis: 'y', hidden: 10, textHidden: 3 })] }))).toEqual(['layout/clipped-text'])
+  })
+  it('flags an ellipsis that leaves under half the text visible, and passes one that shows most of it', () => {
+    expect(ids(screen({ clips: [clip({ ellipsis: true, visibleShare: 0.3 })] }))).toEqual(['layout/clipped-text'])
+    expect(ids(screen({ clips: [clip({ ellipsis: true, visibleShare: 0.5 }), clip({ ellipsis: true, visibleShare: 0.9 })] }))).toEqual([])
+  })
+  it('passes a line clamp that shows 2 or more lines, however much it hides', () => {
+    expect(ids(screen({ clips: [clip({ axis: 'y', ellipsis: true, visibleShare: 0.2, visibleLines: 2 }), clip({ axis: 'y', ellipsis: true, visibleShare: 0.1, visibleLines: 3 })] }))).toEqual([])
+    expect(ids(screen({ clips: [clip({ axis: 'y', ellipsis: true, visibleShare: 0.2, visibleLines: 1 })] }))).toEqual(['layout/clipped-text'])
   })
 })

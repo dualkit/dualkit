@@ -138,3 +138,42 @@ describe('bidi/field-placeholder', () => {
     expect(ids(screen({ root: { lang: 'en', dir: 'ltr', computedDir: 'ltr' }, fields: [field({ dir: 'ltr', ...hint })] }))).toEqual([])
   })
 })
+
+describe('bidi/date-order', () => {
+  const at = (t: string, p: Parameters<typeof text>[0] = {}) => ids(screen({ texts: [text({ text: t, blockText: t, ...p })] }))
+  it('flags a dash-joined date in Arabic-Indic digits alone in an RTL block', () => {
+    expect(at('١٥-٠٣-٢٠٢٥')).toEqual(['bidi/date-order'])
+  })
+  it('flags a Western dash-joined date after an Arabic letter', () => {
+    expect(at('تاريخ 15-03-2025')).toEqual(['bidi/date-order'])
+    expect(ids(screen({ texts: [text({ text: '2025-03-15', blockText: 'تاريخ 2025-03-15' })] }))).toEqual(['bidi/date-order'])
+  })
+  it('passes a slash-joined date, which holds Arabic numbers together', () => {
+    expect(at('تاريخ 15/03/2025')).toEqual([])
+    expect(at('15/03/2025')).toEqual([])
+    expect(at('١٥/٠٣/٢٠٢٥')).toEqual([])
+  })
+  it('passes a Western dash-joined date after a Latin letter or with no letter before it', () => {
+    expect(at('Date 15-03-2025')).toEqual([])
+    expect(at('15-03-2025')).toEqual([])
+  })
+  it('passes a Western date isolated left to right', () => {
+    expect(ids(screen({ texts: [text({ text: '15-03-2025', blockText: 'تاريخ 15-03-2025', isolated: true, forcedLtr: true })] }))).toEqual([])
+  })
+  it('passes digits that are not a date', () => {
+    for (const t of ['هاتف 050-123-4567', 'رمز 12-34-56', 'إصدار 4-2-0']) expect(at(t), t).toEqual([])
+  })
+  it('flags a worded Arabic date forced left to right', () => {
+    expect(at('15 مارس 2025، 10:00 ص', { isolated: true, forcedLtr: true })).toEqual(['bidi/date-order'])
+    expect(at('14 ربيع الأول 1447', { isolated: true, forcedLtr: true })).toEqual(['bidi/date-order'])
+  })
+  it('passes a worded date that is not forced left to right, or that reads whole when forced', () => {
+    expect(at('15 مارس 2025، 10:00 ص')).toEqual([])
+    expect(at('الأحد 15 مارس 2025', { isolated: true, forcedLtr: true })).toEqual([])
+    expect(at('١٥ مارس ٢٠٢٥', { isolated: true, forcedLtr: true })).toEqual([])
+  })
+  it('stays silent in an LTR block', () => {
+    expect(at('١٥-٠٣-٢٠٢٥', { blockDir: 'ltr', dir: 'ltr' })).toEqual([])
+    expect(at('15 مارس 2025، 10:00 ص', { blockDir: 'ltr', dir: 'ltr', forcedLtr: true })).toEqual([])
+  })
+})

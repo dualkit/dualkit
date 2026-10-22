@@ -11,7 +11,7 @@ export type Coverage = {
 }
 
 export type PrecisionResult = {
-  tool: 'check' | 'lint'
+  tool: 'check' | 'lint' | 'review'
   byRule: Record<string, Tally>
   /** Labels given to note-severity findings. Not part of the warning and error figures. */
   noteTally: Tally
@@ -26,6 +26,8 @@ export type EvalResult = {
   at: string
   precision: PrecisionResult[]
   misses: { cases: number; dropped: number; results: CaseResult[] }
+  /** Set when the run used --review. `skipped` holds the reason review did not run. */
+  review?: { skipped: string | null; spentUsd: number }
 }
 
 const TOOLS: readonly ('check' | 'lint')[] = ['check', 'lint']
@@ -52,7 +54,36 @@ function recallOf(results: readonly CaseResult[], tool: string, kind?: string): 
   return { caught: rows.filter((r) => r.caught).length, n: rows.length }
 }
 
+const BASE_TOOLS = ['check', 'lint'] as const
+const WITH_REVIEW = ['check', 'lint', 'review', 'dualkit'] as const
+
+/** Review columns appear only when review ran for at least one case or page. */
+const reviewRan = (r: EvalResult): boolean =>
+  r.misses.results.some((x) => x.tool === 'review') || r.precision.some((p) => p.tool === 'review' && p.products > 0)
+const recallTools = (r: EvalResult): readonly string[] => (reviewRan(r) ? WITH_REVIEW : BASE_TOOLS)
+
+/** Review precision needs hand labels. Without them, say so and give the number of findings waiting for a label. */
+function reviewPrecision(p: PrecisionResult | undefined, labelled: number): string | null {
+  if (!p || labelled > 0) return null
+  return `unlabelled (${p.coverage.unlabelled} finding${p.coverage.unlabelled === 1 ? '' : 's'})`
+}
+
 function toolRows(r: EvalResult): (string | number)[][] {
+  const base = checkLintRows(r)
+  const extra = (reviewRan(r) ? (['review', 'dualkit'] as const) : []).flatMap((tool) => {
+    const p = r.precision.find((x) => x.tool === tool)
+    const rec = recallOf(r.misses.results, tool)
+    if (rec.n === 0 && !p) return []
+    const loud = sumRules(p)
+    const hasData = p !== undefined && total(loud) > 0
+    const pLoud = hasData ? precision(loud) : null
+    const rLoud = recall(rec.caught, rec.n)
+    return [[tool, reviewPrecision(p, total(loud)) ?? pct(pLoud), p && hasData ? pct(precision(add(loud, p.noteTally))) : NO_DATA, pct(rLoud), pct(f1(pLoud, rLoud)), hasData ? total(loud) : NO_DATA, p && hasData ? loud.unclear + p.noteTally.unclear : NO_DATA]]
+  })
+  return [...base, ...extra]
+}
+
+function checkLintRows(r: EvalResult): (string | number)[][] {
   return TOOLS.map((tool) => {
     const p = r.precision.find((x) => x.tool === tool)
     const loud = sumRules(p)
@@ -105,9 +136,12 @@ function kindRows(r: EvalResult): (string | number)[][] {
       const { caught, n } = recallOf(r.misses.results, tool, kind)
       return n === 0 ? NO_DATA : `${pct(recall(caught, n))} (${caught}/${n})`
     }
-    return [name, cell('check'), cell('lint')]
+    return [name, ...recallTools(r).map(cell)]
   })
 }
+
+const reviewLine = (r: EvalResult): string[] =>
+  !r.review ? [] : [r.review.skipped !== null ? `Review was skipped: ${r.review.skipped}.` : `Review ran and spent $${r.review.spentUsd.toFixed(2)} on this run.`]
 
 /** Markdown with aggregates only: no product names, no snippets. */
 export function renderReport(r: EvalResult): string {
@@ -117,6 +151,7 @@ export function renderReport(r: EvalResult): string {
   const rules = ruleRows(r)
   return [
     header,
+    ...reviewLine(r),
     '## Per tool',
     table(['tool', 'precision (warning and error)', 'precision (all severities)', 'recall', 'F1', 'findings', 'unclear'], toolRows(r)),
     '## Notes',
@@ -128,7 +163,7 @@ export function renderReport(r: EvalResult): string {
       ? table(['tool', 'rule', 'precision', 'real', 'handled', 'intended', 'unclear'], rules)
       : NO_DATA,
     '## Recall per bug kind',
-    r.misses.results.length ? table(['kind', 'check', 'lint'], kindRows(r)) : NO_DATA,
+    r.misses.results.length ? table(['kind', ...recallTools(r)], kindRows(r)) : NO_DATA,
     '',
   ].join('\n\n')
 }

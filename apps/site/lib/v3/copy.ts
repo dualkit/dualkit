@@ -56,7 +56,7 @@ export const V3 = {
     ],
     command: '/plugin install dualkit@dualkit',
     loaded: '4 skills loaded',
-    check: { name: 'dualkit check', failing: ['rule failing', 'rules failing'], of: 'of 29', startFailing: 6, startPassing: 23 },
+    check: { name: 'dualkit check', failing: ['rule failing', 'rules failing'], of: 'of 34', startFailing: 6, startPassing: 28 },
     direction: { label: 'dir', values: ['ltr', 'rtl'] },
     chips: { bdi: '<bdi>', iban: 'valid, UAE' },
     ar: {
@@ -77,7 +77,7 @@ export const V3 = {
     steps: [
       ['01', 'Install the skills', 'One command adds four skills to Claude Code or Cursor. There is nothing to configure.'],
       ['02', 'Build as usual', 'Ask for the screen you need. The skills load on their own and handle direction, digits and type.'],
-      ['03', 'Check before you ship', 'Run npx dualkit check. It scores the page against 29 rules and shows every failure next to its fix.'],
+      ['03', 'Check before you ship', 'Run npx dualkit check. It scores the page against 34 rules and shows every failure next to its fix.'],
     ],
     media: { loaded: 'Loaded for this task', now: 'now', ranks: ['rtl-layout', 'gulf-formats', 'type-pairing'] },
   },
@@ -109,7 +109,7 @@ export const V3 = {
         ],
       },
       starter: { components: ['Amount', 'Button', 'DateDisplay', 'DigitInput', 'Field', 'Sheet', 'Tabs', 'Toast'], amount: { en: 'AED 1,234.50', ar: '١٬٢٣٤٫٥٠ د.إ' } },
-      check: { title: 'dualkit check', score: '29 of 29', families: [['Bidi', 5], ['Layout', 6], ['Icons', 2], ['Type', 7], ['Content', 9]], open: 'Open report', copy: 'Copy' },
+      check: { title: 'dualkit check', score: '34 of 34', families: [['Bidi', 6], ['Layout', 6], ['Icons', 3], ['Type', 7], ['Content', 12]], open: 'Open report', copy: 'Copy' },
       bench: { head: 'Alone, then with Dualkit', sample: 'Sample data until 1 November' },
     },
   },
@@ -148,7 +148,7 @@ export const V3 = {
   numbers: {
     label: 'In numbers',
     heading: 'Open source, tested,\nand checked every month.',
-    stats: [['1,031', 'tests across the kit'], ['29', 'rules in dualkit check'], ['6', 'Gulf currencies'], ['4', 'skills for your agent']],
+    stats: [['1,031', 'tests across the kit'], ['34', 'rules in dualkit check'], ['6', 'Gulf currencies'], ['4', 'skills for your agent']],
     phoneHeading: 'Open source, tested,\nand checked\nevery month.',
   },
   closing: { heading: 'Ship in both directions today.', command: '/plugin install dualkit@dualkit', primary: 'Get started', secondary: 'Read the docs' },

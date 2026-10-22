@@ -12,7 +12,7 @@ npx dualkit@beta lint .
 
 There are 9 source rules and 8 run by default. Each one, why it matters and how to fix it is in [LINT.md](./LINT.md), with the known limits.
 
-A note is listed and counted in the summary, but it does not fail the run unless you set `--fail-on note`. `source/physical-css` is a note because on real repositories most of its findings were sides that were already handled or did not matter.
+A note is listed and counted in the summary, but it does not fail the run unless you set `--fail-on note`. `source/physical-css` is a note because on real repositories most of its findings were sides that were already handled or did not matter. `source/physical-tailwind` is a note because only 64% of its findings were real in the precision measurement, and `source/intl-digits` because the digits it flags depend on the runtime.
 
 When a build step already flips your CSS, `source/physical-css` is skipped for the CSS that step processes, with one summary line. PostCSS tools (rtlcss, postcss-rtlcss, postcss-rtl, cssjanus) cover stylesheets and Vue and Svelte `<style>` blocks. Stylis plugins (stylis-plugin-rtl, @mui/stylis-plugin-rtl) cover CSS in styled and css templates.
 
@@ -21,8 +21,8 @@ When a build step already flips your CSS, `source/physical-css` is skipped for t
 | `source/physical-css` | note | Left and right in CSS, such as `margin-left` or `text-align: left`, where a logical property follows the reading direction |
 | `source/arabic-letter-spacing` | error | Letter-spacing on a selector that targets Arabic |
 | `source/dir-attribute-selector` | note | A `[dir]` attribute selector where `:dir()` also catches inherited direction. Off by default. The CLI cannot turn it on; pass `RULES` to `lint()` in the API to run it |
-| `source/physical-tailwind` | warning | Physical Tailwind classes such as `ml-4` or `text-left`. The fix follows your installed Tailwind version |
-| `source/intl-digits` | warning | An Arabic `Intl` number or date format that leaves the digits to the runtime |
+| `source/physical-tailwind` | note | Physical Tailwind classes such as `ml-4` or `text-left`. The fix follows your installed Tailwind version |
+| `source/intl-digits` | note | An Arabic `Intl` number or date format that leaves the digits to the runtime |
 | `source/islamic-calendar` | warning | The bare `islamic` calendar instead of `islamic-umalqura`, the Hijri calendar CLDR ranks first for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar |
 | `source/hijri-time-zone` | warning | A Hijri date format with no `timeZone` |
 | `source/old-rial-sign` | warning | U+FDFC, the old rial sign, used as the Saudi riyal sign |

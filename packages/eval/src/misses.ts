@@ -9,6 +9,7 @@ import { RUN } from '@dualkit/bench/src/config'
 import { scoreHtml, type Scored } from '@dualkit/bench/src/score'
 import { applyEdits, retag } from './inject-html.js'
 import { INJECTORS, type BugKind } from './inject.js'
+import type { ReviewResult } from '../../cli/src/review'
 import type { CaseResult } from './types.js'
 
 export type MissCase = { id: string; kind: BugKind | 'real'; base: string; html: string }
@@ -16,6 +17,7 @@ export type Dropped = { id: string; why: string }
 
 export const MARKER = 'data-eval-bug'
 const REPO_ROOT = fileURLToPath(new URL('../../..', import.meta.url))
+export const FROZEN_FILE = fileURLToPath(new URL('../cases/miss-set-2026-10.json', import.meta.url))
 const REAL_FILE = fileURLToPath(new URL('../cases/real.json', import.meta.url))
 /**
  * Kinds exempt from the identical-screenshot drop, because Chromium's render cannot show them.
@@ -26,18 +28,33 @@ export const BEHAVIOURAL_OR_ENGINE_KINDS: ReadonlySet<string> = new Set(['otp-di
 const CACHE_PAGES = 200
 const SNIPPET_MARKER = new RegExp(`\\s*${MARKER}="[^"]*"`, 'g')
 
+/** One planted-bug case, kept as the bug kind and the page it goes into (a path under the repo root). */
+export type FrozenCase = { kind: BugKind; page: string }
+
 type RealEntry = { id: string; base: string; bugged: string; selector: string }
 
 // One browser for the whole run; callers close it with closeBrowser().
-let browser: Browser | null = null
+// The launch itself is shared: checkCaught scores two pages at once, and two callers that each saw no browser and
+// launched their own left one open, which kept the process alive after the report printed.
+let browser: Promise<Browser> | null = null
 const scored = new Map<string, Promise<Scored>>()
+
+/** The run's browser, launched once however many callers ask at the same time. A failed launch is not kept. */
+export function sharedBrowser(launch: () => Promise<Browser> = () => chromium.launch()): Promise<Browser> {
+  browser ??= launch().catch((e: unknown) => {
+    browser = null
+    throw e
+  })
+  return browser
+}
 
 export async function closeBrowser(): Promise<void> {
   const b = browser
   browser = null
   scored.clear()
   boxes.clear()
-  await b?.close().catch(() => {})
+  const open = await b?.catch(() => null)
+  await open?.close().catch(() => {})
 }
 
 /** Renders a page at 390x844 and returns what check reports, once per distinct page. */
@@ -45,8 +62,7 @@ export function scorePage(html: string): Promise<Scored> {
   const known = scored.get(html)
   if (known) return known
   const run = (async () => {
-    browser ??= await chromium.launch()
-    return scoreHtml(html, [], { browser })
+    return scoreHtml(html, [], { browser: await sharedBrowser() })
   })()
   if (scored.size >= CACHE_PAGES) scored.delete(scored.keys().next().value as string)
   scored.set(html, run)
@@ -94,6 +110,8 @@ const baseOf = (page: string): string => relative(REPO_ROOT, resolve(page))
 type BuildOpts = {
   /** What a page looks like, as a string that is equal exactly when the renders are equal. Defaults to the real screenshot. */
   render?: (html: string) => Promise<string>
+  /** A fixed case list. When set, exactly these pages are used in this order, and the pages argument and the render check are skipped. */
+  frozen?: readonly FrozenCase[]
   /** Real misses to add. Defaults to cases/real.json. */
   real?: readonly RealEntry[]
 }
@@ -108,6 +126,27 @@ export function loadReal(file: string = REAL_FILE): RealEntry[] {
   return JSON.parse(readFileSync(file, 'utf8')) as RealEntry[]
 }
 
+export function loadFrozenCases(file: string = FROZEN_FILE): FrozenCase[] {
+  return JSON.parse(readFileSync(file, 'utf8')) as FrozenCase[]
+}
+
+/** The frozen form of a built case list: bug kind and page, without the real misses. */
+export function freezeCases(cases: readonly MissCase[]): FrozenCase[] {
+  return cases.flatMap((c) => (c.kind === 'real' ? [] : [{ kind: c.kind, page: c.base }]))
+}
+
+function frozenCases(frozen: readonly FrozenCase[]): MissCase[] {
+  return frozen.map(({ kind, page }) => {
+    const path = resolve(REPO_ROOT, page)
+    if (!existsSync(path)) throw new Error(`Frozen page not found: ${page}`)
+    const injector = INJECTORS.find((i) => i.kind === kind)
+    if (!injector) throw new Error(`Frozen case has an unknown bug kind: ${kind}`)
+    const html = injector.inject(readFileSync(path, 'utf8'))
+    if (html === null) throw new Error(`Frozen page no longer fits ${kind}: ${page}`)
+    return { id: `${kind}:${baseOf(path)}`, kind, base: baseOf(path), html }
+  })
+}
+
 /** The bugged page with the marker added as the first attribute of the element the selector finds. */
 export function markSelector(html: string, selector: string): string {
   const el = parse(html).querySelector(selector)
@@ -115,8 +154,16 @@ export function markSelector(html: string, selector: string): string {
   return applyEdits(html, retag(html, el, 'real'))
 }
 
+function realCases(real: readonly RealEntry[] = loadReal()): MissCase[] {
+  return real.map((r) => ({
+    id: `real:${r.id}`, kind: 'real', base: r.base,
+    html: markSelector(readFileSync(resolve(REPO_ROOT, r.bugged), 'utf8'), r.selector),
+  }))
+}
+
 /** At most one case per kind per page, in page order, until a kind has perKind cases that change the render. */
 export async function buildCases(pages: string[], perKind: number, opts: BuildOpts = {}): Promise<{ cases: MissCase[]; dropped: Dropped[] }> {
+  if (opts.frozen) return { cases: [...frozenCases(opts.frozen), ...realCases(opts.real)], dropped: [] }
   const render = opts.render ?? screenshotOf
   const clean = new Map<string, string>()
   const cleanLook = async (page: string, html: string): Promise<string> => {
@@ -150,11 +197,7 @@ export async function buildCases(pages: string[], perKind: number, opts: BuildOp
     }
     if (kept < perKind) dropped.push({ id: injector.kind, why: `fewer than ${perKind} pages fit: ${kept}` })
   }
-  for (const r of opts.real ?? loadReal()) {
-    const html = markSelector(readFileSync(resolve(REPO_ROOT, r.bugged), 'utf8'), r.selector)
-    cases.push({ id: `real:${r.id}`, kind: 'real', base: r.base, html })
-  }
-  return { cases, dropped }
+  return { cases: [...cases, ...realCases(opts.real)], dropped }
 }
 
 const stripMarker = (text: string): string => text.replace(SNIPPET_MARKER, '')
@@ -174,7 +217,7 @@ const newKeys = (bugged: readonly string[], clean: readonly string[]): string[] 
 type Scorer = (html: string) => Promise<Scored>
 export type Box = { x: number; y: number; width: number; height: number }
 type BoxOf = (html: string) => Promise<Box | null>
-export type Deps = { score?: Scorer; box?: BoxOf }
+export type Deps = { score?: Scorer; box?: BoxOf; review?: (html: string) => Promise<ReviewResult> }
 
 const boxes = new Map<string, Promise<Box | null>>()
 const SETTLE_MS = 800
@@ -184,9 +227,9 @@ export function markedBox(html: string): Promise<Box | null> {
   const known = boxes.get(html)
   if (known) return known
   const run = (async () => {
-    browser ??= await chromium.launch()
+    const shared = await sharedBrowser()
     const dir = mkdtempSync(join(tmpdir(), 'eval-box-'))
-    const context = await browser.newContext({ viewport: { width: RUN.width, height: RUN.height } })
+    const context = await shared.newContext({ viewport: { width: RUN.width, height: RUN.height } })
     try {
       const file = join(dir, 'index.html')
       writeFileSync(file, html)
@@ -273,8 +316,29 @@ export function sharedLine(html: string): boolean {
 /** What a real-world miss is compared with: nothing. Its base page was an earlier draft with its own warnings. */
 export const EMPTY_PAGE = '<!doctype html><html><body></body></html>'
 
+/** A review finding only counts at this confidence or above. Reflection already enforces it; this guards a stored result. */
+const MIN_REVIEW_CONFIDENCE = 0.7
+
+/** Review found it: a confident review finding on the marked element or on a descendant, by the same rule check uses. */
+export async function reviewCaught(bugged: string, findings: ReviewResult['findings'], deps: Deps = {}): Promise<boolean> {
+  const sure = findings.filter((f) => f.source === 'review' && (f.confidence ?? 0) >= MIN_REVIEW_CONFIDENCE && f.node !== null)
+  if (sure.some((f) => MARKED_FIRST_TAG.test(f.node?.snippet ?? ''))) return true
+  if (sure.length === 0) return false
+  const marked = await (deps.box ?? markedBox)(bugged)
+  return marked !== null && sure.some((f) => f.node !== null && inside(f.node.box, marked))
+}
+
 export async function runCase(c: MissCase, clean: string, deps: Deps = {}): Promise<CaseResult[]> {
   const against = c.kind === 'real' ? EMPTY_PAGE : clean
   const result = (tool: CaseResult['tool'], caught: boolean): CaseResult => ({ id: c.id, kind: c.kind, tool, caught })
-  return [result('check', await checkCaught(c.html, against, deps)), result('lint', lintCaught(c.html, against))]
+  const check = await checkCaught(c.html, against, deps)
+  const lint = lintCaught(c.html, against)
+  const reviewed = deps.review ? await deps.review(c.html) : null
+  // A skipped review adds no review row, and dualkit is then what check and lint found.
+  const review = reviewed && reviewed.skipped === null ? await reviewCaught(c.html, reviewed.findings, deps) : null
+  return [
+    result('check', check), result('lint', lint),
+    ...(review === null ? [] : [result('review', review)]),
+    result('dualkit', check || lint || review === true),
+  ]
 }

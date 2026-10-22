@@ -1,7 +1,7 @@
 import { coversCodePoint } from '../fonts'
-import type { LoadedFace, TextRun } from '../model'
+import type { FieldKind, LoadedFace, ScreenModel, TextRun } from '../model'
 import { defineRule, pick } from '../rule'
-import { ARABIC_INDIC_DIGIT, PLACEHOLDER, WESTERN_DIGIT, arabicShare, arabicWordCount, excerpt, isArabicScriptLang, latinWordCount } from '../text'
+import { ARABIC_INDIC_DIGIT, PLACEHOLDER, currencyFirst, latinPunctuationMarks, WESTERN_DIGIT, arabicShare, arabicWordCount, excerpt, isArabicScriptLang, latinWordCount } from '../text'
 
 
 export const missingLang = defineRule({
@@ -131,4 +131,56 @@ export const labelLanguage = defineRule({
   }),
 })
 
-export const contentRules = [missingLang, missingDir, langMismatch, mixedDigits, placeholderText, oldRialSign, currencySignFont, dirhamSignWithCode, labelLanguage]
+export const latinPunctuation = defineRule({
+  id: 'content/latin-punctuation', group: 'content', severity: 'warning',
+  title: 'A Latin comma, semicolon or question mark in Arabic text',
+  why: 'Arabic has its own ، ؛ and ؟. The Latin marks look different, sit differently against Arabic letters, and read as copied from an English template.',
+  fix: 'Use ، for the comma, ؛ for the semicolon and ؟ for the question mark.',
+  check: (m) => m.texts.flatMap((t) => {
+    const marks = latinPunctuationMarks(t.text)
+    return marks.length === 0 ? [] : [{ node: pick(t), message: `"${excerpt(t.text)}" uses ${[...new Set(marks)].join(' ')} where Arabic punctuation belongs.` }]
+  }),
+})
+
+export const currencyOrder = defineRule({
+  id: 'content/currency-order', group: 'content', severity: 'warning',
+  title: 'An Arabic currency before its number',
+  why: 'Arabic prices read number first, as in 2.50 د.إ or ٣٠٠ ريال. A currency abbreviation or word placed before the number follows the English order. An isolate such as <bdi> does not change the order a reader sees.',
+  fix: 'Put the number first and the currency after it.',
+  check: (m) => m.texts
+    .filter((t) => t.blockDir === 'rtl' && t.blockHasArabic)
+    .flatMap((t) => {
+      const found = currencyFirst(t.text)
+      return found.length === 0 ? [] : [{ node: pick(t), message: `"${excerpt(t.text)}" puts the currency before the number.` }]
+    }),
+})
+
+const FIELD_WORD: Partial<Record<FieldKind, string>> = { tel: 'phone' }
+
+/**
+ * Tagged with an Arabic-script lang, or mostly Arabic text as content/missing-dir measures it. Right to left alone is
+ * not enough: a Hebrew page runs right to left too.
+ */
+const isArabicPage = (m: ScreenModel): boolean =>
+  isArabicScriptLang(m.root.lang) || arabicShare(m.texts.map((t) => t.text).join(' ')) > 0.3
+
+const DROPS_ARABIC_DIGITS = 'content/drops-arabic-digits'
+
+/**
+ * Whether content/drops-arabic-digits can fire on this page, so audit only types into fields when it can. The rule
+ * uses the same test, so the two cannot drift apart.
+ */
+export const wantsDigitProbe = (m: ScreenModel, ignore: readonly string[] = []): boolean => !ignore.includes(DROPS_ARABIC_DIGITS) && isArabicPage(m)
+
+export const dropsArabicDigits = defineRule({
+  id: DROPS_ARABIC_DIGITS, group: 'content', severity: 'error',
+  title: 'A code field that deletes Arabic digits',
+  why: 'Arabic keyboards type ٠ to ٩. A field that keeps only 0 to 9 deletes them as they are typed, so the code never fills and the field looks broken. Nothing on screen shows it: dualkit check types ١٢ into code and phone fields to find out.',
+  fix: 'Accept Arabic-Indic digits and convert them to 0 to 9 before checking or sending the value, instead of stripping them.',
+  check: (m) => (wantsDigitProbe(m)
+    ? m.fields.filter((f) => f.dropsArabicDigits === true)
+      .map((f) => ({ node: pick(f), message: `Typing ١٢ into this ${FIELD_WORD[f.kind] ?? f.kind} field kept neither ١٢ nor 12, so Arabic digits are deleted.` }))
+    : []),
+})
+
+export const contentRules = [missingLang, missingDir, langMismatch, mixedDigits, placeholderText, oldRialSign, currencySignFont, dirhamSignWithCode, labelLanguage, latinPunctuation, currencyOrder, dropsArabicDigits]

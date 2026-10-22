@@ -1,6 +1,6 @@
 # @dualkit/rules
 
-29 rules that catch Arabic and right-to-left bugs in a rendered interface: numbers that reverse, layouts that do not mirror, icons pointing the wrong way, cramped Arabic type, and missing language tags.
+34 rules that catch Arabic and right-to-left bugs in a rendered interface: numbers that reverse, layouts that do not mirror, icons pointing the wrong way, cramped Arabic type, and missing language tags.
 
 Most people want the CLI, [`dualkit`](https://www.npmjs.com/package/dualkit): `npx dualkit check <url>`. Use this package to run the rules yourself:
 

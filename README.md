@@ -107,7 +107,7 @@ Swap `amount` for `button`, `date-display`, `digit-input`, `field`, `sheet`, `ta
 
 ## Check
 
-Point one command at any page, local or live. It opens it in Chromium, runs 29 Arabic and right-to-left rules, and writes a report with a score out of 100 and every bug marked on a screenshot.
+Point one command at any page, local or live. It opens it in Chromium, runs 34 Arabic and right-to-left rules, and writes a report with a score out of 100 and every bug marked on a screenshot.
 
 ```
 npx playwright@1.55.0 install chromium   # once
@@ -121,9 +121,11 @@ npx dualkit check https://your-site.com/ar
 
 In CI, `uses: dualkit/dualkit/action@main` scores every pull request and uploads the report ([action/README.md](action/README.md)). Every rule, why it matters and how to fix it is in [RULES.md](packages/rules/RULES.md).
 
+Add `--review` to also have a vision model read a screenshot (needs `GEMINI_API_KEY` or `OPENROUTER_API_KEY`). It is experimental and not yet measured against hand labels, so treat its findings as suggestions. See [the CLI README](packages/cli/README.md#review).
+
 ## Lint
 
-Lint reads your source instead of a rendered page, so it needs no browser and runs in seconds. It checks CSS, SCSS, HTML, JavaScript and TypeScript, including JSX, plus Vue and Svelte files and CSS in styled and css templates, against 8 source rules: left and right in CSS and Tailwind classes, letter-spacing on Arabic, Arabic formats that leave the digits to the runtime, the bare `islamic` calendar instead of `islamic-umalqura` (the Hijri calendar CLDR ranks first for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar), Hijri dates with no time zone, and the old rial sign. Left and right in CSS is a note, so it is listed but does not fail the run unless you set `--fail-on note`. A ninth rule, which prefers `:dir()` to a `[dir]` selector, is off by default and can be turned back on through the API: pass `RULES` from `@dualkit/lint` to `lint()`.
+Lint reads your source instead of a rendered page, so it needs no browser and runs in seconds. It checks CSS, SCSS, HTML, JavaScript and TypeScript, including JSX, plus Vue and Svelte files and CSS in styled and css templates, against 8 source rules: left and right in CSS and Tailwind classes, letter-spacing on Arabic, Arabic formats that leave the digits to the runtime, the bare `islamic` calendar instead of `islamic-umalqura` (the Hijri calendar CLDR ranks first for Saudi Arabia, the UAE, Bahrain, Kuwait and Qatar), Hijri dates with no time zone, and the old rial sign. Left and right in CSS and Tailwind classes, and digits left to the runtime, are notes, so they are listed but do not fail the run unless you set `--fail-on note`. A ninth rule, which prefers `:dir()` to a `[dir]` selector, is off by default and can be turned back on through the API: pass `RULES` from `@dualkit/lint` to `lint()`.
 
 ```
 npx dualkit@beta lint .
@@ -150,7 +152,7 @@ The most useful help right now:
 | Path | Contents |
 | --- | --- |
 | `packages/format` | The format library, with its tests |
-| `packages/rules` | The 29 check rules and the page reader, with their tests |
+| `packages/rules` | The 34 check rules and the page reader, with their tests |
 | `packages/lint` | The source rules behind `dualkit lint`, with their tests |
 | `packages/cli` | The `dualkit` CLI and its report |
 | `action` | The GitHub Action that runs check or lint on pull requests |

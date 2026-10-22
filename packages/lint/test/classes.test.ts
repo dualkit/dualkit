@@ -151,7 +151,25 @@ describe('deliberate geometry', () => {
     expect(classStrings(jsx('<div className="absolute left-2" />')!)[0]?.deliberate).toBeUndefined()
     expect(classStrings(html('<div class="absolute left-2"></div>')!)[0]?.deliberate).toBeUndefined()
     expect(classStrings(jsx('<div dir="ltr"><b className="ml-2" /></div>')!)[0]?.deliberate).toBeUndefined()
-    expect(classStrings(jsx('<span dir="rtl" className="ml-2" />')!)[0]?.deliberate).toBeUndefined()
+  })
+
+  it('marks an element with any dir of its own, but not the children of one', () => {
+    expect(classStrings(jsx('<span dir="rtl" className="ml-2" />')!)[0]?.deliberate).toBe(true)
+    expect(classStrings(html('<span dir="rtl" class="ml-2"></span>')!)[0]?.deliberate).toBe(true)
+  })
+
+  it('marks an element whose inline style sets left or right', () => {
+    expect(classStrings(jsx('<b style={{ left: x }} className="ml-2" />')!)[0]?.deliberate).toBe(true)
+    expect(classStrings(html('<b style="top: 1px; left: 4px" class="ml-2"></b>')!)[0]?.deliberate).toBe(true)
+    expect(classStrings(jsx('<b style={{ top: x }} className="ml-2" />')!)[0]?.deliberate).toBeUndefined()
+    expect(classStrings(html('<b style="margin-top: 1px" class="ml-2"></b>')!)[0]?.deliberate).toBeUndefined()
+  })
+
+  it('marks the children of an aria-hidden element, in JSX and HTML', () => {
+    expect(classStrings(jsx('<div aria-hidden="true"><p><b className="ml-2" /></p></div>')!).map((f) => f.deliberate)).toEqual([true])
+    expect(classStrings(html('<div aria-hidden="true"><p><b class="ml-2"></b></p></div>')!).map((f) => f.deliberate)).toEqual([true])
+    expect(classStrings(jsx('<div aria-hidden="false"><b className="ml-2" /></div>')!)[0]?.deliberate).toBeUndefined()
+    expect(classStrings(html('<div aria-hidden="false"><b class="ml-2"></b></div>')!)[0]?.deliberate).toBeUndefined()
   })
 
   it('marks classes read from a call inside a deliberate element', () => {
@@ -164,7 +182,7 @@ describe('deliberate geometry', () => {
     expect(lintText('a.tsx', 'export const A = () => <i className="ml-2" />', { rules: TAILWIND_RULES, ctx })).toHaveLength(1)
   })
 
-  describe('decorative overlays skip only a negative left or right offset', () => {
+  describe('decorative overlays skip their left and right offsets', () => {
     const ctx = { tailwindVersion: () => '3.4.0' }
     const hits = (path: string, markup: string): number => lintText(path, path.endsWith('.html') ? `<body>${markup}</body>` : `export const A = () => ${markup}`, { rules: TAILWIND_RULES, ctx }).length
     const both = (jsxClass: string): number[] => [
@@ -172,7 +190,7 @@ describe('deliberate geometry', () => {
       hits('a.html', `<div class="${jsxClass}"></div>`),
     ]
 
-    it('reports a positive offset', () => expect(both('pointer-events-none absolute inset-y-0 right-3')).toEqual([1, 1]))
+    it('skips a positive offset', () => expect(both('pointer-events-none absolute inset-y-0 left-0')).toEqual([0, 0]))
     it('skips a negative offset', () => expect(both('pointer-events-none absolute -right-8')).toEqual([0, 0]))
     it('skips a negative offset under a variant and important', () => expect(both('pointer-events-none absolute md:-left-8 !-right-4')).toEqual([0, 0]))
     it('still reports a margin beside a negative offset', () => expect(both('pointer-events-none absolute -right-8 mr-2')).toEqual([1, 1]))

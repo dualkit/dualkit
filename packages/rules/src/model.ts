@@ -33,6 +33,11 @@ export type TextRun = NodeRef & {
   lang: string | null
   /** Inside <bdi>, an element with a dir attribute, or unicode-bidi isolate or plaintext, below its block. */
   isolated: boolean
+  /**
+   * The run's text order is forced left to right inside right-to-left content: an element at or above it runs ltr while its parent
+   * runs rtl, through <bdi dir="ltr">, a dir attribute, or CSS direction on a block or with unicode-bidi set. Separate from `isolated`.
+   */
+  forcedLtr: boolean
   isLastInBlock: boolean
   /** The run is a whole line closed by a <br>, with nothing else on that line. */
   endsLine: boolean
@@ -61,12 +66,26 @@ export type LayoutNode = NodeRef & {
 }
 
 /** `mirrored`: a flip (negative determinant) on the icon or up to 4 ancestors. `turned`: a turn that points it the other way without mirroring, such as rotate(180deg). */
-export type IconNode = NodeRef & { name: string | null; dir: Direction; mirrored: boolean; turned: boolean }
+export type ArrowHead = 'left' | 'right'
+export type ArrowRole = 'back' | 'forward'
+/**
+ * `head`: where the drawn arrow head points on screen, after the icon's own and its ancestors' transforms; null when it is
+ * not an arrow or cannot be read (an <img>, a font icon, a <use> sprite). `role`: back or forward, from the label, class,
+ * id or title of the icon and the button or link around it.
+ */
+export type IconNode = NodeRef & { name: string | null; dir: Direction; mirrored: boolean; turned: boolean; head: ArrowHead | null; role: ArrowRole | null }
 
 export type FieldKind = 'email' | 'tel' | 'url' | 'number' | 'code' | 'text'
 /** Which edge of the field the placeholder is painted against: its text-align, start and end resolved against the field's direction. */
 export type PlaceholderSide = 'left' | 'right' | 'center'
-export type FieldNode = NodeRef & { kind: FieldKind; dir: Direction; dirAttr: string | null; placeholder: string; placeholderShown: boolean; placeholderSide: PlaceholderSide }
+/**
+ * `dropsArabicDigits`: true when typing ١٢ into the field left neither ١٢ nor 12 behind. The reader always sets null;
+ * only dualkit check's audit, which types into code, tel and number fields after the read, sets true or false.
+ */
+export type FieldNode = NodeRef & {
+  kind: FieldKind; dir: Direction; dirAttr: string | null; placeholder: string; placeholderShown: boolean; placeholderSide: PlaceholderSide
+  dropsArabicDigits: boolean | null
+}
 
 export type LoadedFace = {
   /** No quotes. */
@@ -86,8 +105,16 @@ export type LoadedFace = {
 
 export type LabelNode = NodeRef & { attr: 'aria-label' | 'alt' | 'title'; text: string; lang: string | null }
 
-/** `hidden` is the px cut off: scrollWidth - clientWidth, or scrollHeight - clientHeight. */
-export type ClipNode = NodeRef & { axis: 'x' | 'y'; hidden: number; ellipsis: boolean; hasArabic: boolean }
+/**
+ * `hidden` is the scroll overflow: scrollWidth - clientWidth, or scrollHeight - clientHeight. It counts padding too.
+ * `textHidden` is how far the painted text boxes reach past the clip rect on that axis, in px.
+ * `visibleShare` is the visible text width divided by the full text width, 0 to 1. On a line cut sideways, the
+ * ellipsis's width is taken off the visible part, since it is painted over it.
+ * `visibleLines` is how many lines of text show inside the box, at least partly.
+ */
+export type ClipNode = NodeRef & {
+  axis: 'x' | 'y'; hidden: number; textHidden: number; visibleShare: number; visibleLines: number; ellipsis: boolean; hasArabic: boolean
+}
 
 /** An Arabic word that an inline-block or inline-flex box splits, so its letters cannot join across the box. */
 export type JoinBreak = NodeRef & { reason: 'inline-block' | 'font-family' | 'other'; word: string }
@@ -104,4 +131,6 @@ export type ScreenModel = {
   clips: ClipNode[]
   joins: JoinBreak[]
   unreadableStylesheets: number
+  /** The width of the viewport the page was read at, in CSS px, without a scrollbar. Boxes are in page coordinates. */
+  viewportWidth: number
 }

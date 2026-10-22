@@ -28,14 +28,14 @@ Generated from `src/rules`. Each rule reads source files, before anything render
 <a id="source-physical-tailwind"></a>
 ### `source/physical-tailwind` Use logical Tailwind classes instead of left and right
 
-**warning.** A physical class such as ml-4, pr-2, left-0, text-left or rounded-l-lg stays on the same side in Arabic, so the margin, padding, offset, alignment or corner is on the wrong edge.
+**note.** A physical class such as ml-4, pr-2, left-0, text-left or rounded-l-lg stays on the same side in Arabic, so the margin, padding, offset, alignment or corner is on the wrong edge.
 
 **Fix:** Use the logical class, such as ms-4, pe-2, start-0 (inset-s-0 from Tailwind 4.2), text-start or rounded-s-lg, so the side follows the reading direction. Keep a physical class only under an rtl:, ltr: or side variant such as data-[side=left]:, or beside an rtl: or ltr: class that resets the same property, as in ml-4 rtl:ml-0 rtl:mr-4.
 
 <a id="source-intl-digits"></a>
 ### `source/intl-digits` Digits left to the runtime
 
-**warning.** The default digits for Arabic locales come from the runtime's CLDR data. CLDR changed bare ar from Arabic-Indic to Latin digits between releases 45 and 46 (Node 18 prints Arabic-Indic, Node 20 and later print Latin), so the same code shows different digits on different machines. Regional tags differ from each other too: ar-SA and ar-EG default to Arabic-Indic, ar-AE and ar-MA to Latin.
+**note.** The default digits for Arabic locales come from the runtime's CLDR data. CLDR changed bare ar from Arabic-Indic to Latin digits between releases 45 and 46 (Node 18 prints Arabic-Indic, Node 20 and later print Latin), so the same code shows different digits on different machines. Regional tags differ from each other too: ar-SA and ar-EG default to Arabic-Indic, ar-AE and ar-MA to Latin.
 
 **Fix:** Pin numberingSystem, or add a -u-nu- extension to the locale, set to latn or arab.
 
@@ -75,7 +75,7 @@ Generated from `src/rules`. Each rule reads source files, before anything render
 - A file over 1 MB, or with an average line longer than 500 characters, is treated as minified and skipped.
 - A file that does not parse is listed as skipped with the parser message, and none of its lines are checked.
 - One inline `<script>` or `<style>` that does not parse, for example one holding template syntax, skips the whole HTML file.
-- physical-css is a note, not a warning. A note is listed and counted in the summary but does not fail the run unless --fail-on note is set. On real repositories most physical-css findings were sides that were already handled or did not matter. physical-tailwind stays a warning.
+- physical-css is a note, not a warning. A note is listed and counted in the summary but does not fail the run unless --fail-on note is set. On real repositories most physical-css findings were sides that were already handled or did not matter. physical-tailwind is a note too. In the precision measurement only 64% of its findings were real, 18 of 28 decided, and the rest were sides that were already handled or intended, so it is kept as a hint to check rather than a defect.
 - physical-css skips left and right set to a negative offset of 999 or more, such as left: -9999px in a visually-hidden block, and a pair of sides set to the same value, such as left: 0 with right: 0.
 - physical-css skips left: 50% or right: 50% when the same block translates 50% on x, the centring idiom, because it looks the same in both directions.
 - physical-css skips a declaration when the same file has a :dir(), [dir] or :lang(ar) rule for the same selector, with the direction part removed, that resets the same property, directly or by a shorthand such as margin or inset-inline, as in .n { left: 0 } .n:dir(rtl) { left: auto; right: 0 }. An override that sets only the other side, such as margin-right for a base margin-left, still fires. An override in another file is not seen.

@@ -120,9 +120,6 @@ const isOffscreen = (negative: string, core: string): boolean => {
   return match !== null && (negative === '-') !== (match[1] === '-') && Number(match[2]) >= OFFSCREEN_MIN
 }
 
-/** -left-10 or -right-8: a negative offset on an inert overlay pushes decoration out past an edge. */
-const isNegativeSideOffset = (parsed: ParsedClass): boolean => parsed.negative === '-' && /^(?:left|right)-/.test(parsed.core)
-
 /** The release that renamed start-* and end-* to inset-s-* and inset-e-*. */
 const INSET_RENAME = '4.2.0'
 
@@ -181,7 +178,7 @@ function checkSource(fragments: readonly ClassFragment[], version: SemVer, bothN
   const hits: LintHit[] = []
   for (const { token, at, parsed, placed, sided, deliberate, overlay } of tokens) {
     const matches = TAILWIND_MAP.filter((e) => e.pattern.test(parsed.core))
-    if (matches.length === 0 || sided || deliberate || (overlay && isNegativeSideOffset(parsed)) || sideScoped(parsed.variants) || isOffscreen(parsed.negative, parsed.core)) continue
+    if (matches.length === 0 || sided || deliberate || (overlay && /^-?(?:left|right)-/.test(parsed.core)) || sideScoped(parsed.variants) || isOffscreen(parsed.negative, parsed.core)) continue
     const property = propertyOf(parsed.core)
     if (property !== null && overridden.has(property)) continue
     const near = (map: Map<string, Placed[]>, k: string): boolean => (map.get(k) ?? []).some((p) => together(placed, p))
@@ -194,7 +191,7 @@ function checkSource(fragments: readonly ClassFragment[], version: SemVer, bothN
 
 const physicalTailwind: LintRule = {
   id: 'source/physical-tailwind',
-  severity: 'warning',
+  severity: 'note',
   title: 'Use logical Tailwind classes instead of left and right',
   why: 'A physical class such as ml-4, pr-2, left-0, text-left or rounded-l-lg stays on the same side in Arabic, so the margin, padding, offset, alignment or corner is on the wrong edge.',
   fix: 'Use the logical class, such as ms-4, pe-2, start-0 (inset-s-0 from Tailwind 4.2), text-start or rounded-s-lg, so the side follows the reading direction. Keep a physical class only under an rtl:, ltr: or side variant such as data-[side=left]:, or beside an rtl: or ltr: class that resets the same property, as in ml-4 rtl:ml-0 rtl:mr-4.',
