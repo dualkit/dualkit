@@ -67,7 +67,7 @@ describe('review', () => {
     const f = fake((n) => (n === 0 ? { ok: true, costUsd: 0, text: found } : { ok: false, error: 'HTTP 429: slow down' }))
     const out = await review(audited(), { source: null, vision: f.vision, model: MODEL, log: (s) => logs.push(s) })
     expect(out).toMatchObject({ findings: [], unchecked: 1, skipped: null })
-    expect(logs).toEqual(['Review could not double-check 1 findings: HTTP 429: slow down'])
+    expect(logs).toEqual(['Review could not double-check 1 finding: HTTP 429: slow down'])
   })
 
   it('counts the rest as unchecked when the budget runs out mid-loop', async () => {

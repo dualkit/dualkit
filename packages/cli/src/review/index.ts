@@ -62,6 +62,6 @@ export async function review(result: AuditResult, { source, vision, model, log }
     if ('failed' in reflection) failures.push(reflection.failed)
     else if (reflection.kept) kept.push(reflection.kept)
   }
-  if (failures.length > 0) log(`Review could not double-check ${failures.length} findings: ${failures[0]}`)
+  if (failures.length > 0) log(`Review could not double-check ${failures.length} finding${failures.length === 1 ? '' : 's'}: ${failures[0]}`)
   return { findings: kept, spentUsd, skipped: null, unchecked: failures.length }
 }

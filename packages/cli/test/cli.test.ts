@@ -138,7 +138,14 @@ describe('dualkit check --review', () => {
     const t = withReview(async (_m: unknown, ask: { text: string }) => (ask.text.includes('claimed problem') ? { ok: false, error: 'HTTP 429' } : { ok: true, costUsd: 0, text: found }))
     await run(['check', 'https://example.com', '--review', '--json'], t.io)
     expect(JSON.parse(t.out.join('')).review).toMatchObject({ unchecked: 1, skipped: null, findings: [] })
-    expect(t.err.join('')).toContain('Review could not double-check 1 findings: HTTP 429')
+    expect(t.err.join('')).toContain('Review could not double-check 1 finding: HTTP 429')
+  })
+
+  it('does not say found nothing when findings could not be double-checked', async () => {
+    const t = withReview(async (_m: unknown, ask: { text: string }) => (ask.text.includes('claimed problem') ? { ok: false, error: 'HTTP 429' } : { ok: true, costUsd: 0, text: found }))
+    await run(['check', 'https://example.com', '--review'], t.io)
+    expect(t.out.join('')).not.toContain('Review found nothing')
+    expect(t.out.join('')).toContain('Review could not double-check 1 finding')
   })
 
   it('says when review found nothing, and still shows spend', async () => {
