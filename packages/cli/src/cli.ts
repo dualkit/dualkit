@@ -137,10 +137,11 @@ export async function run(argv: string[], io: Io = defaultIo): Promise<number> {
     const result = await io.audit({ url, width, height, config })
     // The CLI runs on the user's own key, so it passes no spend cap or ledger. The total is still reported.
     const reviewed = values.review ? await safeReview(result, url, io, reviewModel) : null
-    if (reviewed?.skipped) io.err(`Review skipped: ${reviewed.skipped}\n`)
+    // A failure already says "Review failed", so it is not prefixed again.
+    if (reviewed?.skipped) io.err(`${reviewed.skipped.startsWith('Review failed') ? '' : 'Review skipped: '}${reviewed.skipped}\n`)
     const out = resolve(io.cwd, values.out ?? 'dualkit-report.html')
     io.write(values.out ?? 'dualkit-report.html', renderReport(result, reviewed?.findings ?? []))
-    const json = { ...result, screenshot: undefined, screen: undefined, report: out, ...(reviewed ? { review: reviewed } : {}) }
+    const json = { ...result, screenshot: undefined, screen: undefined, tags: undefined, report: out, ...(reviewed ? { review: reviewed } : {}) }
     io.out(values.json ? `${JSON.stringify(json)}\n` : `${formatSummary(result)}${reviewed ? formatReview(reviewed, Boolean(process.stdout.isTTY)) : ''}\nReport: ${out}\n`)
     return result.score < min ? 1 : 0
   } catch (e) {

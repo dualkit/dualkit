@@ -124,13 +124,14 @@ describe('dualkit check --review', () => {
     expect(json.review).toMatchObject({ spentUsd: expect.closeTo(0.02), skipped: null })
     expect(json.review.findings[0]).toMatchObject({ source: 'review', line: null })
     expect(json.screen).toBeUndefined()
+    expect(json.tags).toBeUndefined()
   })
 
   it('survives a vision that throws: same exit code, report still written', async () => {
     const t = withReview(async () => { throw new Error('boom') })
     const plain = io(80)
     expect(await run(['check', 'https://example.com', '--review', '--min-score', '90'], t.io)).toBe(await run(['check', 'https://example.com', '--min-score', '90'], plain.io))
-    expect(t.err.join('')).toBe('Review skipped: Review failed: boom\n')
+    expect(t.err.join('')).toBe('Review failed: boom\n')
     expect(Object.keys(t.files)).toEqual(['dualkit-report.html'])
   })
 
