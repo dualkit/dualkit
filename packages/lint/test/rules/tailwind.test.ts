@@ -12,6 +12,29 @@ const run = (text: string, path = 'a.tsx', version: string | null = '3.4.0') =>
 const jsx = (cls: string, version?: string | null) => run(`export const A = () => <div className="${cls}" />`, 'a.tsx', version)
 const fired = (cls: string, version?: string | null): string[] => jsx(cls, version).map((f) => f.message)
 
+describe('decoration and own-direction elements', () => {
+  const quiet = (markup: string): void => expect(run(`export const A = () => ${markup}`), markup).toEqual([])
+  const html = (markup: string) => run(`<body>${markup}</body>`, 'a.html')
+
+  it('is silent on aria-hidden decoration, its children, inert overlays, own dir and inline left', () => {
+    quiet('<div aria-hidden="true" className="absolute left-4" />')
+    quiet('<div aria-hidden="true"><span className="absolute left-4" /></div>')
+    quiet('<div className="pointer-events-none absolute left-0" />')
+    quiet('<p dir="rtl" className="ml-2" />')
+    quiet('<p style={{ left: x }} className="absolute left-4" />')
+  })
+
+  it('is silent on the same cases in HTML', () => {
+    for (const m of ['<div aria-hidden="true" class="absolute left-4"></div>', '<div aria-hidden="true"><i class="absolute left-4"></i></div>', '<div class="pointer-events-none absolute left-0"></div>', '<p dir="rtl" class="ml-2"></p>', '<p style="left: 4px" class="absolute left-4"></p>'])
+      expect(html(m), m).toEqual([])
+  })
+
+  it('still fires on a button with Arabic siblings', () => {
+    expect(run('export const A = () => <div><span>مرحبا</span><button className="ml-2">حفظ</button></div>')).toHaveLength(1)
+    expect(html('<div><span>مرحبا</span><button class="ml-2">حفظ</button></div>')).toHaveLength(1)
+  })
+})
+
 describe('registration', () => {
   it('is a warning with no em dashes', () => {
     expect(rules).toHaveLength(1)

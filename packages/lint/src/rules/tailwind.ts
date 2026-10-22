@@ -120,9 +120,6 @@ const isOffscreen = (negative: string, core: string): boolean => {
   return match !== null && (negative === '-') !== (match[1] === '-') && Number(match[2]) >= OFFSCREEN_MIN
 }
 
-/** -left-10 or -right-8: a negative offset on an inert overlay pushes decoration out past an edge. */
-const isNegativeSideOffset = (parsed: ParsedClass): boolean => parsed.negative === '-' && /^(?:left|right)-/.test(parsed.core)
-
 /** The release that renamed start-* and end-* to inset-s-* and inset-e-*. */
 const INSET_RENAME = '4.2.0'
 
@@ -181,7 +178,7 @@ function checkSource(fragments: readonly ClassFragment[], version: SemVer, bothN
   const hits: LintHit[] = []
   for (const { token, at, parsed, placed, sided, deliberate, overlay } of tokens) {
     const matches = TAILWIND_MAP.filter((e) => e.pattern.test(parsed.core))
-    if (matches.length === 0 || sided || deliberate || (overlay && isNegativeSideOffset(parsed)) || sideScoped(parsed.variants) || isOffscreen(parsed.negative, parsed.core)) continue
+    if (matches.length === 0 || sided || deliberate || (overlay && /^-?(?:left|right)-/.test(parsed.core)) || sideScoped(parsed.variants) || isOffscreen(parsed.negative, parsed.core)) continue
     const property = propertyOf(parsed.core)
     if (property !== null && overridden.has(property)) continue
     const near = (map: Map<string, Placed[]>, k: string): boolean => (map.get(k) ?? []).some((p) => together(placed, p))

@@ -124,7 +124,7 @@ const BARE_ISLAMIC = 'islamic'
 export const INTL_RULES: readonly LintRule[] = [
   {
     id: 'source/intl-digits',
-    severity: 'warning',
+    severity: 'note',
     title: 'Digits left to the runtime',
     why: "The default digits for Arabic locales come from the runtime's CLDR data. CLDR changed bare ar from Arabic-Indic to Latin digits between releases 45 and 46 (Node 18 prints Arabic-Indic, Node 20 and later print Latin), so the same code shows different digits on different machines. Regional tags differ from each other too: ar-SA and ar-EG default to Arabic-Indic, ar-AE and ar-MA to Latin.",
     fix: 'Pin numberingSystem, or add a -u-nu- extension to the locale, set to latn or arab.',

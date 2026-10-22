@@ -196,9 +196,16 @@ const OVERLAY = bareToken('(?:absolute|fixed)')
 /** An overlay that cannot be hit: it takes no pointer events, so its side is decoration. */
 const isInertOverlay = (classText: string): boolean => POINTER_NONE.test(classText) && OVERLAY.test(classText)
 
-/** dir="ltr" or aria-hidden="true" on an element: its geometry is not part of the reading flow. */
+/** aria-hidden with no value or "true". */
+const isHiddenAttr = (name: string, value: string | null): boolean =>
+  name === 'aria-hidden' && (value === null || value.trim().toLowerCase() === 'true')
+
+/** A style that sets left or right: the side is placed by hand. */
+const STYLE_SIDE = /(?:^|[;{\s,])['"]?(?:left|right)['"]?\s*:/i
+
+/** Any dir, aria-hidden="true" or an inline left or right on an element: its geometry is not part of the reading flow. */
 const isDeliberateAttr = (name: string, value: string | null): boolean =>
-  (name === 'dir' && value?.trim().toLowerCase() === 'ltr') || (name === 'aria-hidden' && (value === null || value.trim().toLowerCase() === 'true'))
+  (name === 'dir' && value !== null && value.trim() !== '') || isHiddenAttr(name, value) || (name === 'style' && value !== null && STYLE_SIDE.test(value))
 
 function jsxAttrValue(attr: Node): string | null | undefined {
   if (attr.type !== 'JSXAttribute') return undefined
@@ -207,14 +214,18 @@ function jsxAttrValue(attr: Node): string | null | undefined {
   if (value.type === 'StringLiteral') return value.value
   if (value.type !== 'JSXExpressionContainer') return undefined
   const e = value.expression
+  if (e.type === 'ObjectExpression') {
+    const sides = e.properties.some((p) => p.type === 'ObjectProperty' && !p.computed && SIDE_WORDS.has(propName(p) ?? ''))
+    return sides ? 'left:' : undefined
+  }
   if (e.type === 'StringLiteral') return e.value
   if (e.type === 'BooleanLiteral') return String(e.value)
   return undefined
 }
 
 /** What a JSX opening element keeps on purpose: a deliberate attribute, or a class list that makes it an inert overlay. */
-function jsxMarks(sink: Sink, node: Node): { deliberate: boolean; overlay: boolean } {
-  const marks = { deliberate: false, overlay: false }
+function jsxMarks(sink: Sink, node: Node): { deliberate: boolean; overlay: boolean; hidden: boolean } {
+  const marks = { deliberate: false, overlay: false, hidden: false }
   if (node.type !== 'JSXOpeningElement') return marks
   for (const attr of node.attributes) {
     if (attr.type !== 'JSXAttribute' || attr.name.type !== 'JSXIdentifier') continue
@@ -225,6 +236,7 @@ function jsxMarks(sink: Sink, node: Node): { deliberate: boolean; overlay: boole
     }
     const value = jsxAttrValue(attr)
     if (value !== undefined && isDeliberateAttr(name, value)) marks.deliberate = true
+    if (value !== undefined && isHiddenAttr(name, value)) marks.hidden = true
   }
   return marks
 }
@@ -232,6 +244,10 @@ function jsxMarks(sink: Sink, node: Node): { deliberate: boolean; overlay: boole
 const SKIP_KEYS = new Set(['loc', 'leadingComments', 'trailingComments', 'innerComments', 'extra'])
 
 function visit(parent: Sink, node: Node): void {
+  // An aria-hidden JSX element hides everything inside it, so its children keep their geometry too.
+  if (node.type === 'JSXElement' && jsxMarks(parent, node.openingElement).hidden && !parent.deliberate) {
+    return visit({ ...parent, deliberate: true as const }, node)
+  }
   const marks = jsxMarks(parent, node)
   const sink = marks.deliberate || marks.overlay
     ? { ...parent, ...(marks.deliberate ? { deliberate: true as const } : {}), ...(marks.overlay ? { overlay: true as const } : {}) }
@@ -262,6 +278,15 @@ function* elements(node: HtmlNode): Generator<Element> {
   if ('content' in node) yield* elements(node.content)
 }
 
+/** The element or any ancestor in the same file is aria-hidden. */
+function insideHidden(el: Element): boolean {
+  for (let node: HtmlNode | undefined = el; node && 'attrs' in node; node = node.parentNode ?? undefined) {
+    const hidden = node.attrs.find((a) => a.name === 'aria-hidden')
+    if (hidden && isHiddenAttr('aria-hidden', hidden.value)) return true
+  }
+  return false
+}
+
 const QUOTED_VALUE = /^[^=]*=\s*(["']?)/
 
 function htmlClasses(file: SourceFile, out: Out): void {
@@ -277,7 +302,7 @@ function htmlClasses(file: SourceFile, out: Out): void {
     if (end <= start) continue
     const text = file.text.slice(start, end)
     const attr = (name: string): string | null => el.attrs.find((a) => a.name === name)?.value ?? null
-    const deliberate = isDeliberateAttr('dir', attr('dir')) || (el.attrs.some((a) => a.name === 'aria-hidden') && isDeliberateAttr('aria-hidden', attr('aria-hidden')))
+    const deliberate = isDeliberateAttr('dir', attr('dir')) || isDeliberateAttr('style', attr('style')) || insideHidden(el)
     const overlay = isInertOverlay(text)
     out.map.set(start, { offset: start, text, group: nextGroup(out), conditional: false, ...(deliberate ? { deliberate: true as const } : {}), ...(overlay ? { overlay: true as const } : {}) })
   }

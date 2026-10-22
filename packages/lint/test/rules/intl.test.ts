@@ -11,9 +11,9 @@ const cal = (c: string, p?: string) => run('source/islamic-calendar', c, p)
 const tz = (c: string, p?: string) => run('source/hijri-time-zone', c, p)
 
 describe('registration', () => {
-  it('registers three warnings with no em dashes', () => {
+  it('registers two warnings and a note with no em dashes', () => {
     const mine = RULES.filter((r) => IDS.includes(r.id))
-    expect(mine.map((r) => [r.id, r.severity])).toEqual(IDS.map((id) => [id, 'warning']))
+    expect(mine.map((r) => [r.id, r.severity])).toEqual(IDS.map((id) => [id, id === 'source/intl-digits' ? 'note' : 'warning']))
     for (const r of mine) expect(`${r.title}${r.why}${r.fix}`).not.toContain('—')
   })
   it('keeps the agreed wording', () => {
