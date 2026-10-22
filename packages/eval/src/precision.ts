@@ -18,6 +18,7 @@ export type RunFinding = {
 export type ProductScore = {
   byRule: Record<string, Tally>
   notes: number
+  noteTally: Tally
   lost: string[]
   findings: number
   unlabelled: number
@@ -89,6 +90,7 @@ export function scoreRun(data: string, product: SweepProduct, findings: RunFindi
 
   let byRule: Record<string, Tally> = {}
   let notes = 0
+  let noteTally = EMPTY
   const lost: string[] = []
   for (const { id, label } of readLabels(data, product)) {
     const key = keys.get(id)
@@ -99,13 +101,14 @@ export function scoreRun(data: string, product: SweepProduct, findings: RunFindi
     }
     if (hit.severity === 'note') {
       notes += 1
+      noteTally = { ...noteTally, [label]: noteTally[label] + 1 }
       continue
     }
     const tally = byRule[hit.rule] ?? EMPTY
     byRule = { ...byRule, [hit.rule]: { ...tally, [label]: tally[label] + 1 } }
   }
   const unlabelled = findings.filter((f) => !labelled.has(runKey(product, f))).length
-  return { byRule, notes, lost, findings: findings.length, unlabelled }
+  return { byRule, notes, noteTally, lost, findings: findings.length, unlabelled }
 }
 
 /** Lint the pinned clone at <data>/repos/<name> with today's lint package. */
