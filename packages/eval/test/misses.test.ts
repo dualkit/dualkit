@@ -189,7 +189,7 @@ describe('checkCaught', () => {
     const clean = readFileSync(fixture('arabic-tracking'), 'utf8')
     const bugged = INJECTORS.find((i) => i.kind === 'arabic-tracking')!.inject(clean)!
     const results = await runCase({ id: 'x', kind: 'arabic-tracking', base: 'x', html: bugged }, clean)
-    expect(results.map((r) => r.tool)).toEqual(['check', 'lint'])
+    expect(results.map((r) => r.tool)).toEqual(['check', 'lint', 'dualkit'])
     expect(results[0]!.caught).toBe(true)
   })
 })
@@ -255,5 +255,40 @@ describe('sharedBrowser', () => {
     await sharedBrowser(async () => { launches += 1; return { close: async () => {} } as unknown as Browser })
     expect(launches).toBe(1)
     await closeBrowser()
+  })
+})
+
+describe('review in a case', () => {
+  const quiet = async () => ({ ok: true as const, findings: [], screenshot: '' }) as never
+  const bugged = '<p data-eval-bug="k">x</p>'
+  const finding = (over: object) => ({
+    rule: 'review/x', group: 'layout', severity: 'warning', title: 't', message: 'm', fix: 'f', docs: '', source: 'review', confidence: 0.9, line: null,
+    node: { id: 'n', snippet: '<p data-eval-bug="k">x</p>', box: { x: 0, y: 0, width: 10, height: 10 } },
+    ...over,
+  }) as never
+  const review = (findings: unknown[], skipped: string | null = null) => async () => ({ findings, spentUsd: 0, skipped, unchecked: 0 }) as never
+  const tools = async (r: ReturnType<typeof review> | undefined) =>
+    Object.fromEntries((await runCase({ id: 'x:1', kind: 'back-arrow', base: 'x', html: bugged }, '<p>x</p>', { score: quiet, ...(r ? { review: r } : {}) })).map((x) => [x.tool, x.caught]))
+
+  it('counts a case only review caught for dualkit', async () => {
+    expect(await tools(review([finding({})]))).toEqual({ check: false, lint: false, review: true, dualkit: true })
+  })
+
+  it('ignores a review finding below 0.7 or away from the marked element', async () => {
+    expect((await tools(review([finding({ confidence: 0.69 })]))).review).toBe(false)
+    const elsewhere = finding({ node: { id: 'm', snippet: '<p>other</p>', box: { x: 50, y: 50, width: 5, height: 5 } } })
+    const out = await runCase({ id: 'x:1', kind: 'back-arrow', base: 'x', html: bugged }, '<p>x</p>', { score: quiet, review: review([elsewhere]), box: async () => ({ x: 0, y: 0, width: 10, height: 10 }) })
+    expect(out.find((x) => x.tool === 'review')?.caught).toBe(false)
+  })
+
+  it('counts a review finding on a descendant of the marked element', async () => {
+    const inner = finding({ node: { id: 'm', snippet: '<span>in</span>', box: { x: 1, y: 1, width: 4, height: 4 } } })
+    const out = await runCase({ id: 'x:1', kind: 'back-arrow', base: 'x', html: bugged }, '<p>x</p>', { score: quiet, review: review([inner]), box: async () => ({ x: 0, y: 0, width: 10, height: 10 }) })
+    expect(out.find((x) => x.tool === 'review')?.caught).toBe(true)
+  })
+
+  it('leaves review out when it was skipped, and without it dualkit is check or lint', async () => {
+    expect(await tools(review([], 'No GEMINI_API_KEY'))).toEqual({ check: false, lint: false, dualkit: false })
+    expect(await tools(undefined)).toEqual({ check: false, lint: false, dualkit: false })
   })
 })

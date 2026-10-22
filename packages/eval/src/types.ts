@@ -13,6 +13,6 @@ export type Tally = {
 export type CaseResult = {
   readonly id: string
   readonly kind: string
-  readonly tool: 'check' | 'lint'
+  readonly tool: 'check' | 'lint' | 'review' | 'dualkit'
   readonly caught: boolean
 }

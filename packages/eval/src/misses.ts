@@ -9,6 +9,7 @@ import { RUN } from '@dualkit/bench/src/config'
 import { scoreHtml, type Scored } from '@dualkit/bench/src/score'
 import { applyEdits, retag } from './inject-html.js'
 import { INJECTORS, type BugKind } from './inject.js'
+import type { ReviewResult } from '../../cli/src/review'
 import type { CaseResult } from './types.js'
 
 export type MissCase = { id: string; kind: BugKind | 'real'; base: string; html: string }
@@ -216,7 +217,7 @@ const newKeys = (bugged: readonly string[], clean: readonly string[]): string[] 
 type Scorer = (html: string) => Promise<Scored>
 export type Box = { x: number; y: number; width: number; height: number }
 type BoxOf = (html: string) => Promise<Box | null>
-export type Deps = { score?: Scorer; box?: BoxOf }
+export type Deps = { score?: Scorer; box?: BoxOf; review?: (html: string) => Promise<ReviewResult> }
 
 const boxes = new Map<string, Promise<Box | null>>()
 const SETTLE_MS = 800
@@ -315,8 +316,29 @@ export function sharedLine(html: string): boolean {
 /** What a real-world miss is compared with: nothing. Its base page was an earlier draft with its own warnings. */
 export const EMPTY_PAGE = '<!doctype html><html><body></body></html>'
 
+/** A review finding only counts at this confidence or above. Reflection already enforces it; this guards a stored result. */
+const MIN_REVIEW_CONFIDENCE = 0.7
+
+/** Review found it: a confident review finding on the marked element or on a descendant, by the same rule check uses. */
+export async function reviewCaught(bugged: string, findings: ReviewResult['findings'], deps: Deps = {}): Promise<boolean> {
+  const sure = findings.filter((f) => f.source === 'review' && (f.confidence ?? 0) >= MIN_REVIEW_CONFIDENCE && f.node !== null)
+  if (sure.some((f) => MARKED_FIRST_TAG.test(f.node?.snippet ?? ''))) return true
+  if (sure.length === 0) return false
+  const marked = await (deps.box ?? markedBox)(bugged)
+  return marked !== null && sure.some((f) => f.node !== null && inside(f.node.box, marked))
+}
+
 export async function runCase(c: MissCase, clean: string, deps: Deps = {}): Promise<CaseResult[]> {
   const against = c.kind === 'real' ? EMPTY_PAGE : clean
   const result = (tool: CaseResult['tool'], caught: boolean): CaseResult => ({ id: c.id, kind: c.kind, tool, caught })
-  return [result('check', await checkCaught(c.html, against, deps)), result('lint', lintCaught(c.html, against))]
+  const check = await checkCaught(c.html, against, deps)
+  const lint = lintCaught(c.html, against)
+  const reviewed = deps.review ? await deps.review(c.html) : null
+  // A skipped review adds no review row, and dualkit is then what check and lint found.
+  const review = reviewed && reviewed.skipped === null ? await reviewCaught(c.html, reviewed.findings, deps) : null
+  return [
+    result('check', check), result('lint', lint),
+    ...(review === null ? [] : [result('review', review)]),
+    result('dualkit', check || lint || review === true),
+  ]
 }

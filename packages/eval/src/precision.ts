@@ -3,9 +3,12 @@ import { createRequire } from 'node:module'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { lint } from '@dualkit/lint'
+import type { AuditResult as CliAudit } from '../../cli/src/audit'
+import type { ReviewResult } from '../../cli/src/review'
 import type { Label, Tally } from './types.js'
 
-export type SweepProduct = { tool: 'check' | 'lint'; name: string }
+/** `review` products are check pages whose review findings have hand labels in labels/review-<name>.json. */
+export type SweepProduct = { tool: 'check' | 'lint' | 'review'; name: string }
 
 export type RunFinding = {
   rule: string
@@ -34,21 +37,22 @@ const LABELS: readonly Label[] = ['real', 'handled', 'intended', 'unclear']
 const LINT_HEADING = /^### (\S+) (\S+) (.+):(\d+)$/gm
 const SNIPPET_LINE = /^snippet: `(.*)`$/m
 
-const labelFile = (data: string, p: SweepProduct): string =>
-  join(data, 'labels', p.tool === 'lint' ? `${p.name}.json` : `check-${p.name}.json`)
-const sampleFile = (data: string, p: SweepProduct): string =>
-  join(data, p.tool === 'lint' ? 'samples' : 'csamples', `${p.name}.md`)
+const LABEL_PREFIX = { lint: '', check: 'check-', review: 'review-' } as const
+const SAMPLE_DIR = { lint: 'samples', check: 'csamples', review: 'rsamples' } as const
+const labelFile = (data: string, p: SweepProduct): string => join(data, 'labels', `${LABEL_PREFIX[p.tool]}${p.name}.json`)
+const sampleFile = (data: string, p: SweepProduct): string => join(data, SAMPLE_DIR[p.tool], `${p.name}.md`)
 
 /** Every product that has a label file, split into scorable ones and ones missing a sample file. */
-export function listProducts(data: string): { products: SweepProduct[]; skipped: { tool: 'check' | 'lint'; name: string; why: string }[] } {
+export function listProducts(data: string): { products: SweepProduct[]; skipped: { tool: SweepProduct['tool']; name: string; why: string }[] } {
   const files = readdirSync(join(data, 'labels')).filter((f) => f.endsWith('.json')).sort()
   const products: SweepProduct[] = []
-  const skipped: { tool: 'check' | 'lint'; name: string; why: string }[] = []
+  const skipped: { tool: SweepProduct['tool']; name: string; why: string }[] = []
   for (const f of files) {
     const base = f.slice(0, -'.json'.length)
-    const product: SweepProduct = base.startsWith('check-') ? { tool: 'check', name: base.slice('check-'.length) } : { tool: 'lint', name: base }
+    const product: SweepProduct = base.startsWith('review-') ? { tool: 'review', name: base.slice('review-'.length) }
+      : base.startsWith('check-') ? { tool: 'check', name: base.slice('check-'.length) } : { tool: 'lint', name: base }
     if (existsSync(sampleFile(data, product))) products.push(product)
-    else skipped.push({ tool: product.tool, name: product.name, why: `no sample file at ${product.tool === 'lint' ? 'samples' : 'csamples'}/${product.name}.md` })
+    else skipped.push({ tool: product.tool, name: product.name, why: `no sample file at ${SAMPLE_DIR[product.tool]}/${product.name}.md` })
   }
   return { products, skipped }
 }
@@ -123,9 +127,8 @@ export async function runLint(data: string, name: string): Promise<RunFinding[]>
   return result.findings.map((f) => ({ rule: f.rule, severity: f.severity, file: f.file, line: f.line }))
 }
 
-type AuditResult = { findings: { rule: string; severity: string; node?: { snippet?: string } | null }[] }
 type Launch = () => Promise<{ newContext: (o?: unknown) => Promise<{ routeFromHAR: (h: string, o: { notFound: 'abort' }) => Promise<void> }> }>
-type Audit = (o: unknown, launch: Launch) => Promise<AuditResult>
+type Audit = (o: unknown, launch: Launch) => Promise<CliAudit>
 
 const CLI_DIR = new URL('../../cli/', import.meta.url)
 
@@ -147,7 +150,7 @@ function pageUrl(data: string, name: string): string {
 }
 
 /** Replay <data>/har/<name>.har.zip through the built CLI's audit. Requests missing from the recording abort. */
-export async function runCheck(data: string, name: string): Promise<RunFinding[]> {
+export async function auditRecorded(data: string, name: string): Promise<CliAudit> {
   const audit = await loadAudit()
   const har = join(data, 'har', `${name}.har.zip`)
   if (!existsSync(har)) throw new Error(`no recording at ${har}`)
@@ -162,6 +165,16 @@ export async function runCheck(data: string, name: string): Promise<RunFinding[]
     }
     return browser
   }
-  const result = await audit({ url: pageUrl(data, name), ...VIEWPORT, config: { ignore: [], exclude: [] } }, launch)
-  return result.findings.map((f) => ({ rule: f.rule, severity: f.severity, snippet: f.node?.snippet ?? null }))
+  return audit({ url: pageUrl(data, name), ...VIEWPORT, config: { ignore: [], exclude: [] } }, launch)
+}
+
+export const checkFindings = (result: CliAudit): RunFinding[] =>
+  result.findings.map((f) => ({ rule: f.rule, severity: f.severity, snippet: f.node?.snippet ?? null }))
+
+/** What review found, in the shape scoreRun matches against check labels. */
+export const reviewFindings = (result: ReviewResult): RunFinding[] =>
+  result.findings.map((f) => ({ rule: f.rule, severity: f.severity, snippet: f.node?.snippet ?? null }))
+
+export async function runCheck(data: string, name: string): Promise<RunFinding[]> {
+  return checkFindings(await auditRecorded(data, name))
 }

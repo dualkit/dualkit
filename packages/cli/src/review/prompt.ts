@@ -2,6 +2,9 @@ import type { Finding, NodeRef } from '@dualkit/rules'
 import type { Ask } from './model'
 import type { ReviewRule } from './rules'
 
+/** Bump when the review prompt changes, so the eval's cached results stop matching. */
+export const REVIEW_PROMPT_VERSION = '1'
+
 const SYSTEM = [
   'You review screenshots of a right-to-left Arabic screen for problems an Arabic reader would see as wrong.',
   'Only report what you can see in the images. Do not guess. Reply with JSON only, with no other text.',
