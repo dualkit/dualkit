@@ -40,7 +40,7 @@ GEMINI_API_KEY=your-key npx dualkit check https://example.com/ar --review
 
 By default it uses `gemini-flash-lite-latest` from Google, which has a free tier. Pick another model with `--review-model provider:model`, where the provider is `gemini` or `openrouter`, for example `--review-model openrouter:google/gemma-3-27b-it:free`.
 
-The keys are read from your environment: `GEMINI_API_KEY` for Gemini and `OPENROUTER_API_KEY` for OpenRouter. The run uses your own key, so any cost is yours. The summary and the `--json` output say how much it spent. Without a key, the check runs as normal and one line says that review was skipped.
+The keys are read from your environment: `GEMINI_API_KEY` for Gemini and `OPENROUTER_API_KEY` for OpenRouter. The run uses your own key and your bill. The $3 a month cap on model spend applies only to Dualkit's own measurement runs, not to yours. The summary and the `--json` output say how much it spent, but Gemini reports no cost, so spend on a billing-enabled Gemini key is not counted. Without a key, the check runs as normal and one line says that review was skipped.
 
 Review findings are warnings. They are marked `review`, they carry a confidence from 0 to 1, and they point at a source line when you check a local file. They never change the score or the exit code, and they never replace or remove a finding from the rules.
 
