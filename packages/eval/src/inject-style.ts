@@ -64,9 +64,25 @@ export function flippedBetween(el: HTMLElement, stop: HTMLElement, rules: readon
 
 const INLINE_TAGS = new Set(['span', 'bdi', 'bdo', 'a', 'b', 'strong', 'i', 'em', 'small', 'time', 'mark', 'u', 's', 'abbr', 'cite', 'code', 'label', 'sup', 'sub', 'q', 'font'])
 
+// Utility classes (Tailwind and the like) that set display without any rule in the page's own style tags.
+const CLASS_DISPLAY: Readonly<Record<string, string>> = {
+  flex: 'flex',
+  'inline-flex': 'inline-flex',
+  grid: 'grid',
+  'inline-grid': 'inline-grid',
+  block: 'block',
+  'inline-block': 'inline-block',
+  inline: 'inline',
+  hidden: 'none',
+  contents: 'contents',
+  table: 'table',
+}
+
 function displayOf(el: HTMLElement, rules: readonly Rule[]): string {
   const all = [...declsOf(el, rules).matchAll(/(?:^|;)\s*display\s*:\s*([a-z-]+)/gi)]
-  return all.length > 0 ? all[all.length - 1]![1]!.toLowerCase() : INLINE_TAGS.has(tagOf(el)) ? 'inline' : 'block'
+  if (all.length > 0) return all[all.length - 1]![1]!.toLowerCase()
+  const fromClass = (el.getAttribute('class') ?? '').split(/\s+/).map((c) => CLASS_DISPLAY[c]).filter((d) => d !== undefined)
+  return fromClass[fromClass.length - 1] ?? (INLINE_TAGS.has(tagOf(el)) ? 'inline' : 'block')
 }
 
 export const isInline = (el: HTMLElement, rules: readonly Rule[]) => displayOf(el, rules) === 'inline'

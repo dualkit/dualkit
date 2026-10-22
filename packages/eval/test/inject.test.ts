@@ -104,10 +104,30 @@ describe('INJECTORS', () => {
     expect(INJECTORS[1]!.inject('<button aria-label="السابق">›</button>')).toBeNull()
   })
 
-  it('date-order needs Arabic letters before the date in the same line', () => {
-    expect(INJECTORS[0]!.inject('<div>15/03/2025</div>')).toBeNull()
-    expect(INJECTORS[0]!.inject('<div style="display:flex"><span>تاريخ</span><span>15/03/2025</span></div>')).toBeNull()
-    expect(INJECTORS[0]!.inject('<div>تاريخ <span>15/03/2025</span></div>')).toContain('15-03-2025')
+  it('date-order uses Western digits after an Arabic letter and Arabic-Indic digits when no letter comes before', () => {
+    expect(INJECTORS[0]!.inject('<div>تاريخ <span>15/03/2025</span></div>')).toContain('>15-03-2025<')
+    expect(INJECTORS[0]!.inject('<div>15/03/2025</div>')).toContain('>١٥-٠٣-٢٠٢٥<')
+  })
+
+  it('date-order skips a Latin letter before the date, a version number, and a date that already reorders', () => {
+    expect(INJECTORS[0]!.inject('<div>Order 15/03/2025</div>')).toBeNull()
+    expect(INJECTORS[0]!.inject('<p>الإصدار 4.2.0</p>')).toBeNull()
+    expect(INJECTORS[0]!.inject('<p>حدث في 2025-09-12</p>')).toBeNull()
+    expect(INJECTORS[0]!.inject('<p>حدث في ٢٠٢٥-٠٩-١٢</p>')).toBeNull()
+  })
+
+  it('date-order skips a date a script rewrites at runtime', () => {
+    expect(INJECTORS[0]!.inject('<p>تاريخ <b class="when">15/03/2025</b></p><script>document.querySelector(".when").textContent = x</script>')).toBeNull()
+  })
+
+  it('date-order sees a Tailwind flex row as separate items, not one flow', () => {
+    const row = '<div class="flex justify-between"><span>تاريخ الحجز</span><span>15/03/2025</span></div>'
+    expect(INJECTORS[0]!.inject(row)).toContain('>١٥-٠٣-٢٠٢٥<')
+    expect(INJECTORS[0]!.inject(row.replace('flex justify-between', 'block'))).toContain('>15-03-2025<')
+  })
+
+  it('treats Arabic-Indic digits and punctuation as not being Arabic letters', () => {
+    expect(INJECTORS[0]!.inject('<div>١٢، <span>15/03/2025</span></div>')).toContain('>١٥-٠٣-٢٠٢٥<')
   })
 
   it('number-isolation needs the number inline with Arabic text', () => {

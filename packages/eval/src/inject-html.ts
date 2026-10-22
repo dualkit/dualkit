@@ -3,7 +3,8 @@ import { HTMLElement, NodeType, parse, type Node, type TextNode } from 'node-htm
 /** One splice into the original source: replace [start, end) with text. */
 export type Edit = { readonly start: number; readonly end: number; readonly text: string }
 
-export const ARABIC = /[؀-ۿ]/
+/** A strong Arabic letter. Arabic-Indic digits and Arabic punctuation are not strong. */
+export const ARABIC = /[\u0621-\u064A\u0671-\u06D3]/
 const SKIPPED_TAGS = new Set(['script', 'style', 'noscript', 'template', 'head', 'title', 'svg', 'textarea'])
 const ATTR = (name: string) => new RegExp(`\\s+${name}(?:\\s*=\\s*(?:"[^"]*"|'[^']*'|[^\\s>]+))?(?=[\\s/>])`, 'gi')
 

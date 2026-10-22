@@ -1,5 +1,6 @@
 import type { HTMLElement } from 'node-html-parser'
-import { rulesOf, textAround, textBefore } from './inject-style.js'
+import { isolates, scriptNames, unisolate } from './inject-isolation.js'
+import { rulesOf, textAround } from './inject-style.js'
 import {
   ARABIC,
   addStyle,
@@ -7,8 +8,6 @@ import {
   hasElementChild,
   isText,
   ownTexts,
-  removeAttr,
-  removeStyleDecl,
   retag,
   tagOf,
   textEdit,
@@ -19,54 +18,16 @@ import {
 export type Finder = (html: string, body: HTMLElement) => readonly Edit[] | null
 
 const DIGIT = '[0-9\u0660-\u0669]'
-const WEST: Readonly<Record<string, string>> = Object.fromEntries([...'\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669'].map((c, i) => [c, String(i)]))
-const toWestern = (s: string) => s.replace(/[\u0660-\u0669]/g, (c) => WEST[c] ?? c)
-const DATE = new RegExp(`${DIGIT}{1,4}\\s?[/.\\-]\\s?${DIGIT}{1,2}\\s?[/.\\-]\\s?${DIGIT}{1,4}`)
-const MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر']
-const WORDED_DATE = new RegExp(`(${DIGIT}{1,2})\\s+(${MONTHS.join('|')})\\s+(${DIGIT}{4})`)
 /** Where the weak characters sit decides whether an unisolated number visibly reorders. */
 const REORDERS = /[+\-\u2212/:\s]/
 const NUMBERISH = /^[\s\u200e\u200f]*[+\-\u2212]?[0-9\u0660-\u0669][0-9\u0660-\u0669\s,.\u066c\u066b:/\-+()]*$/
-
-const isolates = (el: HTMLElement) =>
-  tagOf(el) === 'bdi' || el.hasAttribute('dir') || /unicode-bidi\s*:\s*(isolate|embed|plaintext)/i.test(el.getAttribute('style') ?? '')
-
-/** Opening-tag edit that takes the isolation off an element. A bdi becomes a span so the marker has a home. */
-function unisolate(html: string, el: HTMLElement, kind: string): readonly Edit[] {
-  const transform = (rest: string) => removeStyleDecl(removeAttr(rest, 'dir'), 'unicode-bidi')
-  return tagOf(el) === 'bdi' ? retag(html, el, kind, { tag: 'span', transform }) : retag(html, el, kind, { transform })
-}
-
-/** The date as digits joined by dashes, month names turned into their number. */
-function westernDate(m: RegExpExecArray): string {
-  if (m[2] !== undefined && MONTHS.includes(m[2])) {
-    return [toWestern(m[1]!), String(MONTHS.indexOf(m[2]) + 1).padStart(2, '0'), toWestern(m[3]!)].join('-')
-  }
-  return toWestern(m[0]).replace(/\s?[/.]\s?/g, '-').replace(/\s?-\s?/g, '-')
-}
-
-export const dateOrder: Finder = (html, body) => {
-  const rules = rulesOf(html)
-  for (const el of elementsOf(body)) {
-    for (const t of ownTexts(el)) {
-      const m = DATE.exec(t.rawText) ?? WORDED_DATE.exec(t.rawText)
-      // Only a date that follows Arabic letters in the same line of text can be pulled out of order.
-      if (!m || !ARABIC.test(textBefore(el, t, m.index, rules))) continue
-      const date = westernDate(m)
-      const edits = isolates(el) ? unisolate(html, el, 'date-order') : retag(html, el, 'date-order')
-      if (date === m[0] && !isolates(el)) continue
-      return [...edits, textEdit(t, t.rawText.replace(m[0], date))]
-    }
-  }
-  return null
-}
 
 export const numberIsolation: Finder = (html, body) => {
   const rules = rulesOf(html)
   for (const el of elementsOf(body)) {
     if (!isolates(el) || hasElementChild(el) || !NUMBERISH.test(el.textContent) || !REORDERS.test(el.textContent.trim())) continue
     // The number must sit inline with Arabic words. In a flex row or its own block there is nothing to reorder against.
-    if (!ARABIC.test(textAround(el, rules))) continue
+    if (!ARABIC.test(textAround(el, rules)) || scriptNames(html, el)) continue
     return unisolate(html, el, 'number-isolation')
   }
   return null
@@ -124,7 +85,7 @@ export const cutLabel: Finder = (html, body) => {
 
 export const arabicTracking: Finder = (html, body) => {
   for (const el of elementsOf(body)) {
-    if (!ownTexts(el).some((t) => (t.rawText.match(/[\u0600-\u06FF]/g) ?? []).length >= 3)) continue
+    if (!ownTexts(el).some((t) => (t.rawText.match(/[\u0621-\u064A\u0671-\u06D3]/g) ?? []).length >= 3)) continue
     return retag(html, el, 'arabic-tracking', { transform: (rest) => addStyle(rest, 'letter-spacing: 0.08em;') })
   }
   return null

@@ -1,5 +1,6 @@
 import { applyEdits, bodyOf } from './inject-html.js'
-import { arabicTracking, currencySide, cutLabel, dateOrder, latinPunctuation, numberIsolation, type Finder } from './inject-text.js'
+import { dateOrder } from './inject-date.js'
+import { arabicTracking, currencySide, cutLabel, latinPunctuation, numberIsolation, type Finder } from './inject-text.js'
 import { backArrow, otpDigits } from './inject-ui.js'
 
 export type BugKind =
