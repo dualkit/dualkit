@@ -200,3 +200,42 @@ const LEADING_LTR_DIGITS = /^[^ء-ي]*[0-9۰-۹][^ء-ي]*[ء-ي]/
  * after an Arabic letter, Western digits join the right-to-left piece and the date reads whole.
  */
 export const forcedLtrDateScrambles = (text: string): boolean => ARABIC_DATE_WORD.test(text) && LEADING_LTR_DIGITS.test(text)
+
+const ARABIC_LETTER = /(?=\p{L})\p{Script=Arabic}/u
+const ANY_DIGIT = /[0-9٠-٩۰-۹]/
+
+/**
+ * Latin commas, semicolons and question marks standing where Arabic punctuation (، ؛ ؟) belongs: the nearest character
+ * before is an Arabic letter, and the nearest after is an Arabic letter or the end of the run. Digits (1,000), Latin words
+ * on either side (iPhone, iPad) and the Arabic marks themselves are left alone.
+ */
+export function latinPunctuationMarks(text: string): string[] {
+  const found: string[] = []
+  for (const m of text.matchAll(/[,;?]/g)) {
+    const at = m.index ?? 0
+    const before = text.slice(0, at).trimEnd().slice(-1)
+    const after = text.slice(at + 1).trimStart()[0]
+    if (before !== '' && ARABIC_LETTER.test(before) && (after === undefined || ARABIC_LETTER.test(after))) found.push(m[0])
+  }
+  return found
+}
+
+/** Arabic abbreviations (UAE, Saudi, Qatar, Kuwait, Bahrain, Oman, Egypt) and words for the currencies written before a number. */
+const CURRENCY_ABBREVIATION = 'د\\.إ|ر\\.س|ر\\.ق|د\\.ك|د\\.ب|ر\\.ع|ج\\.م'
+const CURRENCY_WORD = 'درهم|ريال|دينار|جنيه'
+const CURRENCY_FIRST = new RegExp(`(?<![\\p{L}\\p{N}])(?:(?:${CURRENCY_ABBREVIATION})\\.?[ \\u00A0]*|(?:${CURRENCY_WORD})[ \\u00A0]+)[0-9\\u0660-\\u0669\\u06F0-\\u06F9]`, 'gu')
+
+/**
+ * Arabic currencies written before their number, such as "د.إ 2.50" or "ريال ٣٠٠". Arabic readers expect the number first.
+ * Latin codes (AED 12) and the new currency signs are left alone, because Gulf apps use both orders for them.
+ * A number just before the currency ("100 ريال 200") means the currency follows that number, so it is skipped.
+ */
+export function currencyFirst(text: string): string[] {
+  const found: string[] = []
+  for (const m of text.matchAll(CURRENCY_FIRST)) {
+    const before = text.slice(0, m.index ?? 0).trimEnd().slice(-1)
+    if (before !== '' && ANY_DIGIT.test(before)) continue
+    found.push(m[0])
+  }
+  return found
+}

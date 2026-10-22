@@ -222,6 +222,20 @@ Generated from `src/rules`. Each rule runs on the rendered page.
 
 **Fix:** Put lang on the element to match the label, or write the label in the language of the element.
 
+<a id="content-latin-punctuation"></a>
+### `content/latin-punctuation` A Latin comma, semicolon or question mark in Arabic text
+
+**warning.** Arabic has its own ، ؛ and ؟. The Latin marks look different, sit differently against Arabic letters, and read as copied from an English template.
+
+**Fix:** Use ، for the comma, ؛ for the semicolon and ؟ for the question mark.
+
+<a id="content-currency-order"></a>
+### `content/currency-order` An Arabic currency before its number
+
+**warning.** Arabic prices read number first, as in 2.50 د.إ or ٣٠٠ ريال. A currency abbreviation or word placed before the number follows the English order. An isolate such as `<bdi>` does not change the order a reader sees.
+
+**Fix:** Put the number first and the currency after it.
+
 ## Known limits
 
 - A closing mark in the middle of a line, such as the ! in "Hello world! مرحبا", is not checked. Only the end of a paragraph, or of a line that a `<br>` closes on its own, is.

@@ -12,7 +12,7 @@ npx playwright@1.55.0 install chromium   # once
 npx dualkit check https://example.com/ar
 ```
 
-It opens the page in Chromium, runs 30 rules (bidi, layout, icons, type, content), prints a summary and writes `dualkit-report.html` with a score out of 100 and every issue marked on a screenshot.
+It opens the page in Chromium, runs 32 rules (bidi, layout, icons, type, content), prints a summary and writes `dualkit-report.html` with a score out of 100 and every issue marked on a screenshot.
 
 | Option | Default | |
 | --- | --- | --- |

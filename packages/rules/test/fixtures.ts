@@ -113,5 +113,27 @@ export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: st
     bad: page('<button aria-label="Close the dialog">x</button>'),
     good: page('<button aria-label="إغلاق النافذة">x</button>'),
   },
+  'content/latin-punctuation': {
+    bad: page('<p>لا تشارك هذا الرمز مع أي شخص, بما في ذلك الدعم</p>'),
+    good: page('<p>لا تشارك هذا الرمز مع أي شخص، بما في ذلك الدعم</p>'),
+    moreBad: [page('<p>هل أنت متأكد?</p>'), page('<p>الاسم; العمر</p>')],
+    moreGood: [
+      page('<p>المبلغ 1,000 ريال</p>'),
+      page('<p>نقبل iPhone, iPad وأجهزة أخرى</p>'),
+      page('<p>هل أنت متأكد؟</p>'),
+      page('<p>Are you sure, or not? Yes; no.</p>', { lang: 'en', dir: 'ltr' }),
+    ],
+  },
+  'content/currency-order': {
+    bad: page('<div class="price">د.إ 2.50</div>'),
+    good: page('<div class="price">2.50 د.إ</div>'),
+    moreBad: [page('<p>الإجمالي ريال ٣٠٠</p>'), page('<p>السعر <bdi>ر.ق 300</bdi></p>')],
+    moreGood: [
+      page('<p>السعر 300 ريال</p>'),
+      page('<p>السعر AED 12</p>'),
+      page('<p>السعر \u20C3 500</p>'),
+      page('<p>Total: 300 riyal, or AED 12.</p>', { lang: 'en', dir: 'ltr' }),
+    ],
+  },
   'content/placeholder-text': { bad: page('<p>لوريم إيبسوم دولور</p>'), good: page('<p>مرحبا</p>') },
 }

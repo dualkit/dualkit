@@ -1,7 +1,7 @@
 import { coversCodePoint } from '../fonts'
 import type { LoadedFace, TextRun } from '../model'
 import { defineRule, pick } from '../rule'
-import { ARABIC_INDIC_DIGIT, PLACEHOLDER, WESTERN_DIGIT, arabicShare, arabicWordCount, excerpt, isArabicScriptLang, latinWordCount } from '../text'
+import { ARABIC_INDIC_DIGIT, PLACEHOLDER, currencyFirst, latinPunctuationMarks, WESTERN_DIGIT, arabicShare, arabicWordCount, excerpt, isArabicScriptLang, latinWordCount } from '../text'
 
 
 export const missingLang = defineRule({
@@ -131,4 +131,28 @@ export const labelLanguage = defineRule({
   }),
 })
 
-export const contentRules = [missingLang, missingDir, langMismatch, mixedDigits, placeholderText, oldRialSign, currencySignFont, dirhamSignWithCode, labelLanguage]
+export const latinPunctuation = defineRule({
+  id: 'content/latin-punctuation', group: 'content', severity: 'warning',
+  title: 'A Latin comma, semicolon or question mark in Arabic text',
+  why: 'Arabic has its own ، ؛ and ؟. The Latin marks look different, sit differently against Arabic letters, and read as copied from an English template.',
+  fix: 'Use ، for the comma, ؛ for the semicolon and ؟ for the question mark.',
+  check: (m) => m.texts.flatMap((t) => {
+    const marks = latinPunctuationMarks(t.text)
+    return marks.length === 0 ? [] : [{ node: pick(t), message: `"${excerpt(t.text)}" uses ${[...new Set(marks)].join(' ')} where Arabic punctuation belongs.` }]
+  }),
+})
+
+export const currencyOrder = defineRule({
+  id: 'content/currency-order', group: 'content', severity: 'warning',
+  title: 'An Arabic currency before its number',
+  why: 'Arabic prices read number first, as in 2.50 د.إ or ٣٠٠ ريال. A currency abbreviation or word placed before the number follows the English order. An isolate such as <bdi> does not change the order a reader sees.',
+  fix: 'Put the number first and the currency after it.',
+  check: (m) => m.texts
+    .filter((t) => t.blockDir === 'rtl' && t.blockHasArabic)
+    .flatMap((t) => {
+      const found = currencyFirst(t.text)
+      return found.length === 0 ? [] : [{ node: pick(t), message: `"${excerpt(t.text)}" puts the currency before the number.` }]
+    }),
+})
+
+export const contentRules = [missingLang, missingDir, langMismatch, mixedDigits, placeholderText, oldRialSign, currencySignFont, dirhamSignWithCode, labelLanguage, latinPunctuation, currencyOrder]
