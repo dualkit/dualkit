@@ -15,8 +15,12 @@ export type Dropped = { id: string; why: string }
 export const MARKER = 'data-eval-bug'
 const REPO_ROOT = fileURLToPath(new URL('../../..', import.meta.url))
 const REAL_FILE = fileURLToPath(new URL('../cases/real.json', import.meta.url))
-/** Behavioural bug: the page looks the same until someone types Arabic digits, so it skips the identical-screenshot drop. */
-const INVISIBLE_KINDS: ReadonlySet<string> = new Set(['otp-digits'])
+/**
+ * Kinds exempt from the identical-screenshot drop, because Chromium's render cannot show them.
+ * otp-digits: behavioural, the page looks the same until someone types Arabic digits.
+ * arabic-tracking: Chromium skips letter-spacing on connected Arabic, but Safari and Firefox apply it and break the joins.
+ */
+export const BEHAVIOURAL_OR_ENGINE_KINDS: ReadonlySet<string> = new Set(['otp-digits', 'arabic-tracking'])
 const CACHE_PAGES = 200
 const SNIPPET_MARKER = new RegExp(`\\s*${MARKER}="[^"]*"`, 'g')
 
@@ -119,7 +123,7 @@ export async function buildCases(pages: string[], perKind: number, opts: BuildOp
       if (bugged === null) continue
       const id = `${injector.kind}:${baseOf(page)}`
       try {
-        if (!INVISIBLE_KINDS.has(injector.kind) && (await render(bugged)) === (await cleanLook(page, html))) {
+        if (!BEHAVIOURAL_OR_ENGINE_KINDS.has(injector.kind) && (await render(bugged)) === (await cleanLook(page, html))) {
           dropped.push({ id, why: 'renders the same as the clean page' })
           continue
         }

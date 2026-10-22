@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterAll, describe, expect, it } from 'vitest'
 import { INJECTORS } from '../src/inject.js'
-import { basePages, buildCases, checkCaught, closeBrowser, lintCaught, markSelector, runCase, sharedLine } from '../src/misses.js'
+import { BEHAVIOURAL_OR_ENGINE_KINDS, basePages, buildCases, checkCaught, closeBrowser, lintCaught, markSelector, runCase, sharedLine } from '../src/misses.js'
 
 const fixture = (name: string) => new URL(`./fixtures/pages/${name}.html`, import.meta.url).pathname
 const KINDS = INJECTORS.map((i) => i.kind)
@@ -53,29 +53,30 @@ describe('buildCases', () => {
     expect(cases.every((c) => c.html.includes('data-eval-bug'))).toBe(true)
   })
 
-  it('drops a case that renders the same as its clean page, but not otp-digits', async () => {
+  it('drops a case that renders the same as its clean page, but not the behavioural or engine kinds', async () => {
     const { cases, dropped } = await buildCases(pages, 1, { render: async () => 'same', real: [] })
-    expect(cases).toEqual([])
+    expect(cases.map((c) => c.kind)).toEqual(['arabic-tracking'])
     const same = dropped.filter((d) => d.why === 'renders the same as the clean page').map((d) => d.id.split(':')[0])
-    expect(same).toContain('arabic-tracking')
     expect(same).toContain('back-arrow')
+    expect(same).not.toContain('arabic-tracking')
     const otp = join(temp, 'otp.html')
     copyFileSync(fixture('otp-digits'), otp)
     const kept = await buildCases([otp], 1, { render: async () => 'same', real: [] })
-    expect(kept.cases.map((c) => c.kind)).toEqual(['otp-digits'])
+    expect(kept.cases.map((c) => c.kind)).toContain('otp-digits')
+    expect([...BEHAVIOURAL_OR_ENGINE_KINDS].sort()).toEqual(['arabic-tracking', 'otp-digits'])
   })
 
   it('keeps taking pages until a kind has enough surviving cases', async () => {
     const copies = [1, 2, 3].map((n) => {
       const path = join(temp, `track-${n}.html`)
-      writeFileSync(path, `${readFileSync(fixture('arabic-tracking'), 'utf8')}<!--${n === 1 ? 'first' : 'later'}-->`)
+      writeFileSync(path, `${readFileSync(fixture('back-arrow'), 'utf8')}<!--${n === 1 ? 'first' : 'later'}-->`)
       return path
     })
     // The first page renders the same after injection, the others differ.
     const render = async (html: string) => (html.includes('data-eval-bug') && !html.includes('<!--first-->') ? html : 'clean')
     const { cases, dropped } = await buildCases(copies, 2, { render, real: [] })
-    expect(cases.filter((c) => c.kind === 'arabic-tracking').map((c) => c.base.split('/').pop())).toEqual(['track-2.html', 'track-3.html'])
-    expect(dropped.some((d) => d.id.startsWith('arabic-tracking:') && /same/.test(d.why))).toBe(true)
+    expect(cases.filter((c) => c.kind === 'back-arrow').map((c) => c.base.split('/').pop())).toEqual(['track-2.html', 'track-3.html'])
+    expect(dropped.some((d) => d.id.startsWith('back-arrow:') && /same/.test(d.why))).toBe(true)
   })
 
   it('adds the marker to a real miss by selector', async () => {
