@@ -60,6 +60,7 @@ export function readScreen(doc: Document, options: ReadOptions = {}): ScreenMode
     clips: readClips(doc, style, skipped, visible, ref, screenReaderOnly),
     joins: readJoins(doc, style, skipped, ref),
     unreadableStylesheets: unreadable,
+    viewportWidth: doc.documentElement.clientWidth,
   }
 }
 

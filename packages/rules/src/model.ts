@@ -86,8 +86,13 @@ export type LoadedFace = {
 
 export type LabelNode = NodeRef & { attr: 'aria-label' | 'alt' | 'title'; text: string; lang: string | null }
 
-/** `hidden` is the px cut off: scrollWidth - clientWidth, or scrollHeight - clientHeight. */
-export type ClipNode = NodeRef & { axis: 'x' | 'y'; hidden: number; ellipsis: boolean; hasArabic: boolean }
+/**
+ * `hidden` is the scroll overflow: scrollWidth - clientWidth, or scrollHeight - clientHeight. It counts padding too.
+ * `textHidden` is how far the painted text boxes reach past the clip rect on that axis, in px.
+ * `visibleShare` is the visible text width divided by the full text width, 0 to 1. On a line cut sideways, the
+ * ellipsis's width is taken off the visible part, since it is painted over it.
+ */
+export type ClipNode = NodeRef & { axis: 'x' | 'y'; hidden: number; textHidden: number; visibleShare: number; ellipsis: boolean; hasArabic: boolean }
 
 /** An Arabic word that an inline-block or inline-flex box splits, so its letters cannot join across the box. */
 export type JoinBreak = NodeRef & { reason: 'inline-block' | 'font-family' | 'other'; word: string }
@@ -104,4 +109,6 @@ export type ScreenModel = {
   clips: ClipNode[]
   joins: JoinBreak[]
   unreadableStylesheets: number
+  /** The width of the viewport the page was read at, in CSS px, without a scrollbar. Boxes are in page coordinates. */
+  viewportWidth: number
 }

@@ -16,6 +16,19 @@ describe('type rules', () => {
     expect(ids(screen({ texts: [text({ lines: 1, font: { ...font, lineHeight: 19 } })] }))).toEqual([])
     expect(ids(screen({ texts: [text({ lines: 3, font: { ...font, lineHeight: null } })] }))).toEqual([])
   })
+  it('flags leading under 1.3 on body text, not readable 1.35 body text or display type', () => {
+    const at = (size: number, ratio: number) => ids(screen({ texts: [text({ lines: 3, font: { ...font, size, lineHeight: size * ratio } })] }))
+    expect(at(16, 1.2)).toEqual(['type/arabic-leading'])
+    expect(at(16, 1.35)).toEqual([])
+    expect(at(24, 1.2)).toEqual([])
+  })
+  it('skips a run whose box lies wholly outside the viewport width, such as a hidden carousel slide', () => {
+    const tight = { lines: 3, font: { ...font, size: 16, lineHeight: 19 } }
+    const at = (x: number) => ids(screen({ viewportWidth: 390, texts: [text({ ...tight, box: { x, y: 0, width: 100, height: 60 } })] }))
+    expect(at(390)).toEqual([])
+    expect(at(-100)).toEqual([])
+    expect(at(300)).toEqual(['type/arabic-leading'])
+  })
   it('flags letter-spacing, italics and small sizes', () => {
     expect(ids(screen({ texts: [text({ font: { ...font, letterSpacing: 1.6 } })] }))).toEqual(['type/arabic-tracking'])
     expect(ids(screen({ texts: [text({ font: { ...font, style: 'italic' } })] }))).toEqual(['type/arabic-italic'])

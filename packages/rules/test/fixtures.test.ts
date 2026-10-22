@@ -17,6 +17,9 @@ describe.each(RULES.map((r) => [r.id, r] as const))('%s in a real browser', (id,
     const found = runRules(await modelOf(FIXTURES[id]!.bad), { rules: [rule] })
     expect(found.length).toBeGreaterThan(0)
   })
+  it('catches every other bad page', async () => {
+    for (const html of FIXTURES[id]!.moreBad ?? []) expect(runRules(await modelOf(html), { rules: [rule] }).length).toBeGreaterThan(0)
+  })
   it('stays quiet on the good page', async () => {
     expect(runRules(await modelOf(FIXTURES[id]!.good), { rules: [rule] })).toEqual([])
   })

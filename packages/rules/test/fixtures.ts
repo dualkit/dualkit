@@ -17,7 +17,7 @@ const icon = (name: string, style = '') =>
   `<button><svg data-icon="${name}" style="${style}" width="16" height="16" viewBox="0 0 16 16"><path d="M2 8h12"/></svg></button>`
 const long = 'نص عربي طويل يمتد على عدة أسطر في هذه الفقرة الصغيرة'
 
-export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: string[] }> = {
+export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: string[]; moreBad?: string[] }> = {
   'bidi/unisolated-number': { bad: page('<p>رقم الهاتف 050 123 4567</p>'), good: page('<p>رقم الهاتف <bdi>050 123 4567</bdi></p>') },
   'bidi/unisolated-latin': { bad: page('<p>رقم الطلب #A-10293 تم</p>'), good: page('<p>رقم الطلب <bdi>#A-10293</bdi> تم</p>') },
   'bidi/punctuation-flip': { bad: page('<p>Hello world!</p>'), good: page('<p dir="ltr">Hello world!</p>') },
@@ -39,11 +39,29 @@ export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: st
   },
   'layout/clipped-text': {
     bad: page('<div class="b">اشتري الآن واحصل على خصم</div>', { css: '.b{width:60px;overflow:hidden;white-space:nowrap}' }),
-    good: page('<div class="b">اشتري الآن واحصل على خصم</div>', { css: '.b{width:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' }),
+    good: page('<div class="b">اشتري الآن واحصل على خصم</div>', { css: '.b{width:160px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' }),
+    moreGood: [
+      // Overflow that is only padding below fully visible lines.
+      page('<div class="b"><p>اشتري الآن واحصل على خصم</p></div>', { css: '.b{height:60px;overflow:hidden}.b p{margin:0;padding-bottom:40px}' }),
+      // A long sentence cut by an ellipsis at the end of a wide box shows most of itself.
+      page(`<p class="s">${long}</p>`, { css: '.s{width:300px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' }),
+    ],
+    // A short label an ellipsis cuts to a letter or two.
+    moreBad: [page('<h1 style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:3em">عنوان التوصيل</h1>')],
   },
   'icons/not-mirrored': { bad: page(icon('arrow-right')), good: page(icon('arrow-right', 'transform:scaleX(-1)')) },
   'icons/mirrored-by-mistake': { bad: page(icon('play', 'transform:scaleX(-1)')), good: page(icon('play')) },
-  'type/arabic-leading': { bad: page(`<p>${long}</p>`, { css: 'p{line-height:1.2;width:120px}' }), good: page(`<p>${long}</p>`, { css: 'p{line-height:1.7;width:120px}' }) },
+  'type/arabic-leading': {
+    bad: page(`<p>${long}</p>`, { css: 'p{line-height:1.2;width:120px}' }),
+    good: page(`<p>${long}</p>`, { css: 'p{line-height:1.7;width:120px}' }),
+    moreGood: [
+      // Readable body text at 1.35, and display type.
+      page(`<p>${long}</p>`, { css: 'p{line-height:1.35;width:120px}' }),
+      page(`<h2>${long}</h2>`, { css: 'h2{font-size:24px;line-height:1.2;width:160px}' }),
+      // A carousel slide parked past the viewport's edge.
+      page(`<div class="t"><p>${long}</p></div>`, { css: '.t{position:absolute;left:100vw;top:0}p{line-height:1.2;width:120px}' }),
+    ],
+  },
   'type/arabic-tracking': { bad: page('<p>مرحبا بكم</p>', { css: 'p{letter-spacing:0.1em}' }), good: page('<p>مرحبا بكم</p>', { css: 'p{letter-spacing:0}' }) },
   'type/arabic-italic': { bad: page('<p><em>مرحبا</em></p>'), good: page('<p><em style="font-style:normal">مرحبا</em></p>') },
   'type/arabic-font': { bad: page('<p>مرحبا</p>', { css: 'p{font-family:"Inter",sans-serif}' }), good: page('<p>مرحبا</p>', { css: 'p{font-family:"Inter","IBM Plex Sans Arabic",sans-serif}' }) },

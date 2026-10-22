@@ -712,11 +712,16 @@ describe('layout/clipped-text matches what Chromium cuts off', () => {
     expect(await found(html, 'layout/clipped-text')).toEqual(['layout/clipped-text'])
   })
 
-  it('stays quiet for an ellipsis, a scrolling container, and an .sr-only label', async () => {
+  it('stays quiet for an ellipsis that keeps most of the label, a scrolling container, and an .sr-only label', async () => {
     const q = (css: string, cls = 'b') => page(`<div class="${cls}">${label}</div>`, { css })
-    expect(await found(q('.b{width:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}'), 'layout/clipped-text')).toEqual([])
+    expect(await found(q('.b{width:160px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}'), 'layout/clipped-text')).toEqual([])
     expect(await found(q('.b{width:60px;overflow:auto;white-space:nowrap}'), 'layout/clipped-text')).toEqual([])
     expect(await found(q('.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}', 'sr-only'), 'layout/clipped-text')).toEqual([])
+  })
+
+  it('flags an ellipsis that leaves under half the label showing', async () => {
+    const q = page(`<div class="b">${label}</div>`, { css: '.b{width:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' })
+    expect(await found(q, 'layout/clipped-text')).toEqual(['layout/clipped-text'])
   })
 })
 
