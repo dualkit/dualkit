@@ -1,0 +1,258 @@
+# Dualkit v2 step 2: code map
+
+Repo `~/Documents/Code/dualkit-rules`, detached at origin/main `ac4b47d` (22 Oct). All paths are relative to the repo root.
+
+## 1. Check (`packages/rules`, npm `@dualkit/rules` 0.3.0-beta.0)
+
+**Where the rules live.** The rules are in `packages/rules/src/rules/{bidi,layout,icons,type,content}.ts`. Each file exports an array, such as `bidiRules`. They are registered by concatenation in `src/rules/index.ts:8`:
+`export const RULES: readonly Rule[] = [...bidiRules, ...layoutRules, ...iconRules, ...typeRules, ...contentRules]`.
+A new rule needs three things: append it to its group array, add a bad/good fixture in `test/fixtures.ts`, and bump the hard-coded "29" (see the traps below). There are 29 rules today.
+
+**Types.** From `src/rule.ts`:
+```ts
+export type Severity = 'error' | 'warning' | 'note'                        // :3
+export type Group = 'bidi' | 'layout' | 'icons' | 'type' | 'content'        // :4
+export type Hit = { node: NodeRef | null; message: string }                 // :5
+export type Rule = { id; group; severity; title; why; fix; check: (model: ScreenModel) => Hit[] }  // :7-17
+export type Finding = { rule; group; severity; title; message; fix; docs: string; node: NodeRef | null } // :19-28
+export const defineRule = (rule: Rule): Rule => rule                        // :30
+export const pick = ({ id, snippet, box }: NodeRef): NodeRef => ({ id, snippet, box }) // :33
+```
+- `NodeRef = { id: string /* selector */; snippet: string /* short outerHTML */; box: Rect }` is at `src/model.ts:6`.
+- **A check Finding has no line number and no `source` or `confidence` field.** Only lint findings carry `file`/`line`/`column` (`packages/lint/src/types.ts:56-69`).
+- The selector is built in this order: a unique non-generated id, then data-testid, then a unique class combination, then an nth-of-type path (`src/docs.ts:34`).
+- `ScreenModel` (`src/model.ts:95-107`) holds `root{lang,dir,computedDir}`, `texts: TextRun[]`, `layouts`, `icons: IconNode[]`, `fields: FieldNode[]`, `fonts`, `labels`, `clips: ClipNode[]`, `joins` and `unreadableStylesheets`.
+  - `TextRun` (:21-47) carries `blockId`, `blockText`, `blockArabicShare`, `blockDir`, `dir`, `isolated`, `isLastInBlock`, `endsLine`, `font`, `lines`, `mirrored` and more.
+  - `FieldNode` (:69) has only `kind`, `dir`, `dirAttr`, `placeholder*`. It does **not** read `pattern`, `oninput` or `inputmode`.
+  - `IconNode` (:64) is `{name, dir, mirrored, turned}`. It has **no geometry or drawn direction**.
+
+**Running the rules.** In `src/run.ts`:
+- `runRules(model, { ignore?, rules? }): Finding[]` (:13) sorts findings error, then warning, then note, then by id.
+- `score(findings)` (:26) uses `WEIGHT = { error: 10, warning: 4, note: 1 }` and `PER_RULE_CAP = 3`.
+- `docsUrl(id)` (:10) builds a RULES.md anchor.
+
+**The audit in the browser.** The reader is DOM code in `src/dom/*.ts`. `src/dom/reader.ts` defines `readScreen(doc, { exclude })`, which returns a ScreenModel. `src/dom/entry.ts` sets `globalThis.dualkitReader`. `tsup.config.ts` builds a second entry, `reader` (an IIFE, minified, browser platform), exported as `@dualkit/rules/reader` → `dist/reader.global.js`. The rules themselves run in Node on the serialised model.
+
+The CLI drives this in `packages/cli/src/audit.ts:85` `audit(options, launch?)`:
+1. `chromium.launch` → `newContext({ viewport, bypassCSP: true })` → `goto` (domcontentloaded, 30 s).
+2. Fail on HTTP 400 or above.
+3. Wait up to 10 s for `load`, up to 3 s for `document.fonts.ready`, then settle 800 ms.
+4. `addScriptTag(READER)`, then `page.evaluate(readScreen)`.
+5. Take a CDP `Page.captureScreenshot` (2x when the page is at most 4000 CSS px tall, capped at 8000 px).
+6. Run `runRules(model, { ignore })`.
+
+The result is `AuditResult = { url, date, width, height, score, findings: Finding[], screenshot: base64 PNG, pageHeight, unreadableStylesheets }` (:7-10).
+
+**Test style.** Vitest has three layers:
+- Unit tests on a hand-built model (`test/rules/*.test.ts`, helpers in `test/helpers/model.ts`).
+- Browser fixtures for every rule (`test/fixtures.ts` + `test/fixtures.test.ts`). Each rule must catch its `bad` page and stay quiet on `good` and on `moreGood[]` in real Chromium.
+- Chromium measurements behind the known limits (`test/verify.test.ts`).
+
+An example from `test/rules/type.test.ts:14-18`:
+```ts
+const ids = (m) => runRules(m, { rules: typeRules }).map((f) => f.rule)
+it('flags tight leading only on multi-line Arabic', () => {
+  expect(ids(screen({ texts: [text({ lines: 3, font: { ...font, lineHeight: 19 } })] }))).toEqual(['type/arabic-leading'])
+  expect(ids(screen({ texts: [text({ lines: 1, font: { ...font, lineHeight: 19 } })] }))).toEqual([])
+})
+```
+A fixture looks like this (`test/fixtures.ts:46`): `'type/arabic-leading': { bad: page('<p>…</p>', { css: 'p{line-height:1.2;width:120px}' }), good: … }`.
+
+**Docs, changelog and versioning.**
+- `RULES.md` is generated by `renderRulesMarkdown(RULES)` (`src/docs.ts:38`) from each rule's id, title, why and fix, plus the `KNOWN_LIMITS` string array (`src/docs.ts:10-35`). `test/docs.test.ts` fails on drift. Regenerate with `UPDATE_RULES_MD=1 npm test -w @dualkit/rules`. LINT.md works the same way (`UPDATE_LINT_MD=1`, `packages/lint/src/docs.ts`).
+- **There is no CHANGELOG.md anywhere.** The changelog is `apps/site/lib/updates.ts`: `RELEASES: Release[]` holds `{ slug, date, version, tags, title, body[], shipped[{ name, line }] }` newest first, and the RSS feed reads it too. A `UP_NEXT` roadmap sits at :182. The spec says rule changes ship as a minor version with a changelog line, so the line goes there.
+- Versions are bumped by hand in each `package.json`. The CLI pins exact versions of rules and lint (`packages/cli/package.json:15-18`).
+- **Hard-coded "29 rules" traps:**
+  - `packages/rules/test/fixtures.test.ts:10` ("covers all twenty-nine rules")
+  - `packages/rules/test/rules/content.test.ts:156`
+  - `packages/skills/test/render.test.ts:67,124` (`toHaveLength(29)`)
+  - `packages/rules/README.md:3`, `packages/cli/README.md:15`, `README.md:153`
+
+## 2. Noisy or blind rules
+
+Precision per rule comes from the baseline. Label reasons were read from `~/Documents/Code/dualkit-sweep-data/labels` and `csamples`.
+
+- **type/arabic-leading** (`src/rules/type.ts:13-21`, warning; 55%, with 5 intended and 11 unclear). It fires on any Arabic run where `lineHeight !== null && lines >= 2 && lineHeight/size < 1.5`.
+  - Noise: the labels say it fires on headings and display type (24 px and 44 px titles at 1.27–1.32 with no collision), on 1.35–1.4 body and footer text that reads fine, and on hidden carousel slides.
+  - Likely fixes: exempt size ≥ about 20 px or heading tags, lower the threshold to about 1.3 for warnings or make the rest notes, and skip invisible slides. The run has no tag field, so the reader may need one.
+- **layout/clipped-text** (`src/rules/layout.ts:78-86`, warning; 25%, with 3 handled). It fires on a `ClipNode` that has Arabic, no ellipsis and `hidden > 2` px. ClipNode comes from `src/dom/clips.ts`, which uses scrollWidth/Height − clientWidth/Height against the painted text boxes.
+  - Noise: the labels say the overflow was empty padding below fully visible lines. The rule should measure the text's last line box against the visible clip rect, not the scroll size.
+  - Recall: `ellipsis` (`text-overflow: ellipsis` or line-clamp, `clips.ts:101`) exempts the box outright, which is why cut-label scores 0/8.
+- **icons/not-mirrored** (`src/rules/icons.ts:12-21`, warning). It needs `i.dir === 'rtl' && !mirrored && !turned` and an `i.name` matching `DIRECTIONAL_ICON` (arrow, chevron, back and similar).
+  - The name comes from `iconName()` (`src/dom/icons.ts:28-51`), which reads data-icon, `<use>`, the class prefix (`icon-` and others), aria-label, title, then the label of the only control around it.
+  - Icon candidates are `svg, img, i, span[class*=icon], [data-icon]…` (:8), so **Unicode glyph arrows (← ›) in a button are never icons**.
+  - The rule never looks at drawn geometry. A named back icon whose path is drawn the wrong way, with no transform, looks identical to the rule.
+- **Punctuation, bidi/punctuation-flip** (`src/rules/bidi.ts:37-55`, warning). It fires only on the **last run of a block or a `<br>`-ended line**, only when the closing mark is a neutral (`ENDS_WITH_PUNCTUATION`, `text.ts:85`) or an Arabic mark, and only when the paragraph's natural direction is not `blockDir`. A Latin `,` `;` `?` inside Arabic text in a correct RTL block is never examined. No rule checks Arabic versus Latin punctuation at all.
+- **bidi/unisolated-number** (`bidi.ts:13-21`, error; 67% on 3 findings). It fires on an RTL block run, not isolated, matching `GROUPED_NUMBER` (`text.ts:18`: digit groups split by spaces with at least one Western digit, or `+digit`) or `hashNumberScrambles`.
+  - Dash- and slash-joined digits (dates) are not covered, nor are Arabic-Indic-only groups (a deliberate limit, `docs.ts:14`).
+  - The injector writes exactly this shape, so 8/8 says nothing about generalising.
+  - The 1 "handled" finding is a number the page already isolated by layout.
+- **Date rule: none exists.** Some date-order cases are caught only by accident, through `content/mixed-digits`.
+- **content/mixed-digits** (`src/rules/content.ts:46-59`, warning; 75%, with 1 intended). It takes runs whose **block** has Arabic, splits them into Western-digit and Indic-digit runs, and flags the minority set.
+  - Intended case: deliberate dual systems, such as a Hijri line in Indic and a timetable in Latin.
+  - It misses runs whose block has no Arabic letter. A flex item or a lone `<span>` date is its own block, which explains the date-order misses (§3).
+- **lint source/physical-tailwind** (`packages/lint/src/rules/tailwind.ts:196-216`, warning; 63%, with 10 intended). For each class it maps through `TAILWIND_MAP` and skips rtl:/ltr:/side variants, symmetric pairs, centring, offscreen positions and properties overridden by rtl:. The 10 intended cases are:
+  - decorative aria-hidden blobs, stars and ornaments
+  - offscreen font-probe spans (`-left-full`)
+  - JS-pixel-positioned map pins and tooltip beaks
+  - an element that sets its own `dir`
+
+  Candidate fixes: skip when the element or an ancestor is `aria-hidden` or `pointer-events-none` decoration, when there is an inline `style` left, or when the element sets `dir`.
+- **lint source/intl-digits** (`packages/lint/src/rules/intl.ts:125-140`, warning; 0%, 2 of 2 intended). It fires on an `Intl.*`/`toLocale*` call whose first locale is Arabic, when options are not null and set no `numberingSystem` and no `-u-nu-`, unless the call is text-only. Both labels were `toLocaleString("ar")` used on purpose, with a comment saying Arabic-Indic digits were wanted. Options: make it a note, or skip when a comment sits on the line before.
+
+## 3. Eval (`packages/eval`, private `@dualkit/eval`)
+
+**Commands.** First build: `npm run build -w @dualkit/format && npm run build -w @dualkit/rules && npm run build -w @dualkit/lint && npm run build -w dualkit`. Then:
+```
+npm run eval -w @dualkit/eval -- precision --data ~/Documents/Code/dualkit-sweep-data
+npm run eval -w @dualkit/eval -- misses
+npm run eval -w @dualkit/eval -- all --data ~/Documents/Code/dualkit-sweep-data
+```
+- **Code:** `src/cli.ts` (`parseArgs`, `resolveData`: `--data` first, then `DUALKIT_SWEEP_DATA`, :19-32). The report goes to stdout. The JSON goes to `packages/eval/out/<date>.json`, which is gitignored (`.gitignore:33`).
+- **Private data** lives in `~/Documents/Code/dualkit-sweep-data/`:
+  - `labels/{name}.json` and `labels/check-{name}.json` (`{ id, label: real|handled|intended|unclear, reason }`)
+  - `samples/` (lint) and `csamples/` (check) as `.md`
+  - `har/{name}.har.zip` (check is replayed with `routeFromHAR`, `precision.ts:150`)
+  - `repos/`
+- **How the miss set is built.** `src/misses.ts`:
+  - `basePages(bench/runs/2026-10)` takes pages whose stored JSON is ok with only notes, round-robin by model.
+  - `buildCases(pages, 8)` drops a case whose screenshot is unchanged, except for otp-digits and arabic-tracking.
+  - `checkCaught` (:243) counts a case as caught when there is a new warning or error whose snippet's first tag carries `data-eval-bug`, or whose box sits inside the marked box. **Notes do not count.**
+  - Check runs through bench's `scoreHtml` at 390×844 (`packages/bench/src/score.ts:95`), which calls the CLI `audit`.
+  - `lintCaught` (:255) needs a new finding on the marked line, via `lintText('page.html', html)`.
+- **Real misses** go in `cases/real.json` (1 entry).
+- **Unit tests:** `test/inject.test.ts` and others, 66 `it`s in total.
+
+**What each injector does.** Code is in `src/inject*.ts`. Each injector marks the element with `data-eval-bug=<kind>`.
+- **back-arrow** (`inject-ui.ts:66-82`): finds a button, a, div, span or i whose aria-label, class, id or title says back, prev, رجوع, السابق or similar.
+  - With an SVG of path or polyline only, it mirrors the path geometry so the head points left (wrong in RTL), allowing for CSS flips.
+  - Otherwise it swaps a glyph such as → to ←.
+- **currency-side** (`inject-text.ts:36-56`): in an element that has Arabic, it rewrites `<number> <currency>` to `<currency> <number>` (`2.50 د.إ` → `د.إ 2.50`). The currencies include codes, Arabic abbreviations and signs.
+- **cut-label** (`inject-text.ts:70-84`): takes the first leaf element with 7–32 chars of Arabic text and adds inline `white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:3em` (and inline-block for inline tags).
+- **latin-punctuation** (`inject-text.ts:58-68`): takes the first Arabic text node containing ، ؛ ؟ and replaces those with , ; ?.
+- **otp-digits** (`inject-ui.ts:84-98`): takes an input with `autocomplete=one-time-code`, or a `maxlength=1` box among 4 or more, or a numeric input on an OTP screen. It adds `pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'')"`, so typed ٠-٩ are deleted. The page renders the same.
+- **date-order** (`inject-date.ts:63-78`): finds a numeric or worded date not under forced LTR and rewrites it dash-joined (`15-03-2025`), in Arabic-Indic digits when no Arabic letter precedes it (`١٥-٠٣-٢٠٢٥`). The bidi algorithm then reverses the parts on screen. If the element was isolated, it removes the isolation.
+
+**Recall rerun (today, 375 s, 65 cases).** Output and script are in `scratchpad/step2/diag.{json,mts}`.
+
+| kind | baseline | today |
+| --- | --- | --- |
+| arabic-tracking | 8/8 | 8/8 |
+| number-isolation | 8/8 | 8/8 |
+| date-order | 4/8 | **2/8** |
+| back-arrow, currency-side, cut-label, latin-punctuation, otp-digits | 0/8 | 0/8 |
+| real | 0/1 | 0/1 |
+
+**The case set has drifted.** `bench/runs/2026-10` gained pages after the baseline (commit `441dbd1 chore(bench): results`), so the cases changed: today's set includes laguna-s and gemini-flash pages. The README says "reproduces only while that folder is unchanged". **Pin the base page list (or a commit) before measuring step 2.**
+
+Why check missed each kind, case by case. **No new warning or error appeared in any missed case.**
+- **back-arrow.** Example: gemini-flash/otp/dualkit-1 is `<svg class="icon-directional" viewBox="0 0 24 24"><path d="m 9 18 6 -6 -6 -6"/>`.
+  - The icon is named "directional" from its `icon-` class prefix, which does not match `DIRECTIONAL_ICON`.
+  - The minimax/address-form case is an `aria-hidden` SVG with no name.
+  - Even when named, the rule only asks whether the icon is mirrored or turned. The injector changes path data, not transforms, so the state the rule sees does not change.
+  - **Fix:** read the head direction of the drawn path in the reader (eval already has `headDirection(subpaths)`, `inject-path.ts:118`, which can be reused or ported). Combine it with a back or prev context (control label or class), and treat glyph arrows in controls as icons.
+- **currency-side.** Example: dots-3-note/checkout is `<div class="price">د.إ 2.50</div>`, and the bdi case is `<bdi>ر.ق 300</bdi>`.
+  - **No rule looks at currency order.** A new rule is needed. In an Arabic run or block, an Arabic currency abbreviation or word placed before the number should be flagged.
+  - Decide the policy for Latin codes and for the dirham and riyal signs, since conventions differ.
+- **cut-label.** Example: `<h1 style="…overflow:hidden;text-overflow:ellipsis;max-width:3em">عنوان التوصيل</h1>`.
+  - `clipped-text` drops every box with `ellipsis: true` (`layout.ts:84`), on the theory that an ellipsis means truncation was intended.
+  - **Fix:** still flag when the ellipsis leaves fewer than about N visible Arabic letters, or under about 40% of the text shown (for example, one word of a 2–3 word label), or always flag a heading or label. Needs the visible and total text width ratio from `clips.ts`.
+- **latin-punctuation.** Example: `<p>لا تشارك هذا الرمز مع أي شخص, بما في ذلك…</p>`.
+  - `punctuation-flip` only checks the last mark of a block whose direction is wrong. This block is correctly RTL, and the mark sits mid-sentence.
+  - **Fix:** a new content rule for Latin `,` `;` `?` touching Arabic letters on both sides, or after an Arabic word, in an Arabic run. Skip numbers such as 1,000 and Latin tokens.
+- **otp-digits.** Example: `<input autocomplete="one-time-code" inputmode="numeric" maxlength="1" pattern="[0-9]*" oninput="this.value=this.value.replace(/[^0-9]/g,'')">`.
+  - The reader does not record `pattern` or `oninput`, and nothing types into fields.
+  - **Fix options:** an audit-side probe that types `١` into code, tel and numeric fields with Playwright and checks the value survives (in `audit.ts`, after the read), or a static reader field for `pattern` that excludes ٠-٩ plus an inline handler regex. A lint rule (`/\[\^0-9\]/` in a replace on an input value) would also catch it in source.
+- **date-order.** **None of the catches came from a date rule.**
+  - **Caught 2/8 today, both by content/mixed-digits.** The cases were `<span>١٥-٠٣-٢٠٢٥، 10:00 ص</span>` and `<div class="date-line">١٥-٠٣-٢٠٢٥ <small>(ميلادي)</small></div>`. In each, the injected Indic date shares a block with Arabic letters on a page with Western digits.
+  - **The baseline's 4 misses** were gemini-flash-lite order-history/loop-2 and payment-summary dualkit-2, dualkit-3 and loop-2. I re-injected them:
+    - The date is a **lone span with no Arabic in its own block**: `<div><span>٣-١١-٢٠٢٦</span></div>`, or a flex item next to a `•` span.
+    - `mixed-digits` filters to `t.blockHasArabic`, so the run is invisible to it, even though those pages have about 200 Western digits.
+  - **Today's 6 misses** add pages written all in Indic digits (laguna-s order-history: `٢٥-٠١-٢٠٢٥ <span>١٤ ربيع أول…</span>`), where no digit mix exists. There is also gemini-flash payment-summary `٣-١١-٢٠٢٦`.
+  - **The real miss** is `<bdi dir="ltr">15 مارس 2025، 10:00 ص</bdi>`, an Arabic worded date forced LTR inside an isolate. Every rule skips `isolated` runs, and `arabic-ltr-block` only looks at `blockDir`.
+  - **New rule:** `bidi/date-order` (error). In `blockDir === 'rtl'` text that is not isolated LTR, flag a d-m-y or y-m-d run whose parts are joined by `-` or `/` and are Arabic numbers. A Western date after an Arabic letter also reverses (the injector's `rewrite` comment, `inject-date.ts:45-50`, gives the exact conditions). Also flag a run with Arabic month names or ص/م whose element **forces `dir=ltr`** (that needs a new `TextRun` field, such as `forcedLtr`, since `isolated` conflates bdi, dir and unicode-bidi).
+  - It needs fixtures measured in Chromium, as for `GROUPED_NUMBER`.
+
+## 4. CLI (`packages/cli`, npm `dualkit` 0.4.0-beta.0, bin `dist/cli.js`)
+
+- **Entry:** `src/cli.ts`, `export async function run(argv: string[], io: Io = defaultIo): Promise<number>` (:75).
+  - `Io = { out, err, write, audit: typeof audit, lint?, cwd }` (:13) is injectable, which is how `test/cli.test.ts` fakes audit.
+  - Arguments are parsed with `node:util` `parseArgs` (:77-83). The options are `out, json, width, height, min-score, fail-on, config, help`. Positionals are `[command, target]`.
+  - Dispatch: `lint` goes to `runLint` (:56). `check` validates ints, then `toUrl(target)` (`src/target.ts:9`, http/https/file, or an existing local path made into a file URL), then `loadConfig` (`src/config.ts:13`, `dualkit.config.json` `{ ignore, exclude }`, with ignore validated against both registries), then `io.audit`. `audit` is lazy-imported so lint never loads Playwright (:39).
+- **Output:**
+  - The HTML report is always written: `--out` or `dualkit-report.html` via `renderReport(result)` (`src/report.ts` plus `src/report/*`: cards, geometry, pins, paint, view). It shows the screenshot with numbered pins, up to `MAX_PER_RULE = 20` per rule.
+  - stdout gets `formatSummary` (`src/summary.ts:14`), or with `--json` `JSON.stringify({ ...result, screenshot: undefined, report })` (:97).
+  - Lint prints `formatLint` or JSON.
+- **Exit codes:**
+  - 0 means ok.
+  - 1 means `score < --min-score` (check), or `shouldFail(result, failOn)` (lint, default `error`).
+  - 2 means a `UserError` or any thrown error (:99-103).
+- **Where `review` goes.** Add a `review` branch in `run()` beside `check` at `cli.ts:86-87`, a new `src/review/*` module, and HELP text (:15-33). Add `review` and `review-*` options to `parseArgs`, and to `CHECK_ONLY` handling if lint must reject them.
+  - The spec says it runs with `--review`, so `check --review` is also possible. Decide whether it is a flag on check or a subcommand. Reusing `audit()` gives the model, findings and screenshot in one browser session.
+- **Screenshots: yes.** `audit()` already returns a full-page base64 PNG at 2x for any URL or local file, with boxes in CSS px (`shotScale`, `audit.ts:56`). Crops for reflection can come from that PNG plus `finding.node.box` (the report code already crops: `src/report/png.ts`, `geometry.ts`). Alternatively, pass a Playwright `Page` and take `locator.screenshot`, but audit closes the browser before returning, so that needs a refactor or a hook.
+- **Source and line for review findings.** Nothing maps a check finding to a source line today. Options: search the snippet or selector in the source file (local HTML only), use parse5 locations (lint already parses with parse5, `packages/lint/src/parse.ts`), or leave line null for URLs.
+- **Action:** `action/action.yml` (GitHub Action, `test/action.test.ts`, `.github/workflows/action-selftest.yml`).
+
+## 5. Model calls (`packages/bench/src/providers.ts`, private `@dualkit/bench`)
+
+- **Main function:** `makeGenerate({ env, fetch?, sleep?, now?, timeoutMs?, deadline?, budget? }): Generate` (:79). Its type is `Generate = (model: ModelEntry, req: { system, prompt, turns?: Turn[] }) => Promise<Generated>` (:10).
+- **Return type:** `Generated = { ok: true; ms; text; usage{input,output}; finish; reasoningTokens; servedModel } | { ok: false; error; ms; reply? }`.
+- **Models:** `ModelEntry = { id, provider: 'openrouter'|'gemini', model, label, since, by, mark }` (`config.ts:6`). Models come from `packages/bench/models.json`, and `loadModels` requires a mark SVG in `design/assets/marks`.
+- **Keys** are read from the passed `env`: `OPENROUTER_API_KEY` and `GEMINI_API_KEY` (:35). A missing key returns `{ ok: false, error: 'No …_API_KEY' }`.
+- **Requests** (`request()`, :42-63):
+  - OpenRouter calls `/api/v1/chat/completions` with `messages: [{ role, content: string }]`, plus `reasoning.max_tokens` and `x-title`/`http-referer` headers.
+  - Gemini calls `v1beta/models/{m}:generateContent` with `parts: [{ text }]`.
+  - Temperature, maxTokens and reasoningTokens are hard-wired from bench `RUN` (0.4, 16000, 4000).
+- **Vision: none.** Content is text-only on both providers. Adding it means OpenRouter `content: [{ type: 'text' }, { type: 'image_url', image_url: { url: 'data:image/png;base64,…' } }]` and Gemini `parts: [{ inline_data: { mime_type, data } }]`.
+- **Budget: request counting only.** `OPENROUTER_DAILY_BUDGET = 950` (:15) counts attempts per `makeGenerate` instance in memory, including retries. Gemini is not counted. When it runs out the call returns `'Daily request budget spent'`.
+  - Pacing is `MIN_GAP_MS = 3100`, at most 20/min.
+  - Retries: `MAX_RETRIES = 4` with backoff 15/30/60/120 s on 429 and 5xx, with retry-after capped at 120 s.
+  - **There is no dollar, price or spend tracking and nothing persisted across runs.** The $3/month cap needs new code: a pricing lookup (OpenRouter `usage.cost`, or `/api/v1/generation`, or the models price list) and a monthly ledger file.
+- **Free models in use:** these are all text models, and none is known to take vision input. `nvidia/nemotron-3-super-120b-a12b:free`, `dots-studio/dots-3-note-preview:free`, `poolside/laguna-s-2.1:free`, `minimax/minimax-m3.1-flash:free` (OpenRouter), and `gemini-flash-latest` / `gemini-flash-lite-latest` (Gemini key, multimodal). Gemini Flash and Flash Lite are the obvious free vision candidates. The bench saw Gemini quota failures on 22 Oct (52 failed, per memory). A free OpenRouter vision model still has to be picked.
+- **Reuse.** Bench is `private: true`, has no `exports`, and runs as raw TS through tsx. Eval imports it by deep path (`@dualkit/bench/src/config`, `src/score`), which works only inside the monorepo. **The published `dualkit` CLI cannot depend on it.** Move or port `providers.ts` (132 lines, no dependencies beyond `RUN` and `ModelEntry`) into the CLI's `src/review/` or a new published package. Bench can then import it back. Parameterise `RUN`, add image parts, and add a spend ledger. Tests to copy from: `packages/bench/test/providers.test.ts`.
+
+## 6. Package conventions
+
+| package | name | version | private | tests | build |
+| --- | --- | --- | --- | --- | --- |
+| rules | `@dualkit/rules` | 0.3.0-beta.0 | no | vitest (browser fixtures need Chromium) | tsup (esm+cjs+iife reader) |
+| lint | `@dualkit/lint` | 0.2.0-beta.0 | no | vitest | tsup |
+| cli | `dualkit` | 0.4.0-beta.0 | no | vitest | tsup (esm, node18, shebang) |
+| format | `@dualkit/format` | 0.2.0-beta.0 | no | vitest | tsup |
+| starter | `@dualkit/starter` | 0.1.0-beta.1 | no | vitest | scripts/build.mjs |
+| bench | `@dualkit/bench` | none | yes | vitest | none (tsx) |
+| eval | `@dualkit/eval` | none | yes | vitest | none (tsx) |
+| skills | `@dualkit/skills-tooling` | none | yes | vitest | build-cursor.mjs |
+| site | `@dualkit/site` (apps/site) | | yes | vitest | next |
+
+- **Root scripts:** `npm test` (all workspaces), `npm run typecheck` (`tsc --noEmit` per workspace), `npm run build` (the site). There is **no ESLint or lint script**: typecheck plus tests is the gate.
+- **Per package:** `npm test -w @dualkit/rules`, or `npm test -w dualkit` for the CLI. Coverage is `npm run coverage -w @dualkit/rules`, with thresholds of 90% lines and 85% branches excluding `src/dom`, in `packages/rules/vitest.config.ts`. Rules tests use a 30 s timeout.
+- **CI** (`.github/workflows/ci.yml`):
+  1. `npm ci`
+  2. Build format, rules and lint.
+  3. `npx playwright@1.55.0 install --with-deps chromium`
+  4. typecheck, then test.
+  5. Build skills-tooling with a `git diff --exit-code cursor/rules` check, and starter with a `git diff --exit-code packages/starter/generated` check.
+  6. Build the CLI, then the site.
+
+  **Order matters: the CLI and eval import the built `dist` of rules and lint.**
+- **Publish:** `.github/workflows/publish.yml` uses `workflow_dispatch` with `package` ∈ {format, starter, rules, lint, cli} and a dist-tag (default beta). It runs `npm publish --provenance --access public`, then points `latest` at the new version. The order is **rules, then lint, then cli**, because each pins the one before it. Each package's `prepublishOnly` runs typecheck, test and build. npm account notes are in memory (`npm-publishing.md`).
+- **Changelogs:** there are no CHANGELOG.md files. Release notes go in `apps/site/lib/updates.ts` `RELEASES` (rendered at `apps/site/app/updates/page.tsx`, plus `app/updates/rss.xml`) and on GitHub releases.
+- **Docs:**
+  - Site docs: `apps/site/app/docs/page.tsx`, with command strings in `apps/site/lib/copy.ts` (`CHECK_COMMAND`, `LINT_COMMAND`, …).
+  - Rule docs: `packages/rules/RULES.md` and `packages/lint/LINT.md` (both generated).
+  - Package READMEs, plus the root `README.md` package table (:153).
+  - Research reports go in `docs/research/`, specs in `docs/superpowers/specs/`, plans in `docs/superpowers/plans/`.
+- **Spec placement:** the open-code-review rule pack goes in `packages/rules/ocr`. The MCP server goes in `packages/mcp` (`@dualkit/mcp`, a later step).
+
+## 7. Test count
+
+`apps/site/lib/v3/testcount.ts` reads **`TEST_COUNT = 2375`**. It was last regenerated on 22 Oct at 08:34. That predates the eval package merge, and eval adds about 66 `it`s, some parameterised. I did not rerun `node apps/site/scripts/count-tests.mjs`: it runs every workspace's full vitest suite, including the Chromium suites, and **it writes the tracked file `lib/v3/testcount.ts`**, which I was told not to edit. Rerun it in the implementation branch.
+
+## Plan traps
+
+- The baseline recall cannot be reproduced: the cases changed when `bench/runs/2026-10` gained pages. Freeze the case list, for example by writing the case ids into `cases/`, before step 2 measures.
+- Notes do not count for recall, and a rule demoted to note stops counting toward recall even when it is right.
+- `checkCaught` only credits findings whose snippet's first tag carries the marker, or whose box sits strictly inside the marked box. A new rule must report the **marked element or a descendant**, not its block parent.
+- Eval runs check at 390×844 through bench's `scoreHtml`. The CLI default is 1280×800.
+- otp-digits and arabic-tracking skip the identical-render drop (`BEHAVIOURAL_OR_ENGINE_KINDS`, `misses.ts:25`), so otp cases render the same as the clean page. Only a typing probe or a source rule can catch them.
