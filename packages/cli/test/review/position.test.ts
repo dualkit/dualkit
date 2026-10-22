@@ -40,6 +40,22 @@ describe('findingsFrom', () => {
     expect(findingsFrom('null', cands, rules)).toEqual([])
   })
 
+  const good = JSON.stringify({ findings: [{ rule: date, element: 1, message: 'm', confidence: 0.5 }] })
+  it('reads a fenced block with text before it', () => {
+    expect(findingsFrom('Here is what I found:\n```json\n' + good + '\n```', cands, rules)).toHaveLength(1)
+  })
+  it('reads a fenced block with text after it', () => {
+    expect(findingsFrom('```\n' + good + '\n```\nHope that helps.', cands, rules)).toHaveLength(1)
+  })
+  it('reads JSON with prose around it and no fence', () => {
+    expect(findingsFrom('Sure. ' + good + ' Let me know.', cands, rules)).toHaveLength(1)
+  })
+  it('accepts element as a numeric string, counted from 0 like the prompt', () => {
+    const reply = JSON.stringify({ findings: [{ rule: date, element: '2', message: 'm', confidence: 1 }, { rule: date, element: 'two', message: 'm', confidence: 1 }, { rule: date, element: '3', message: 'm', confidence: 1 }] })
+    const out = findingsFrom(reply, cands, rules)
+    expect(out).toHaveLength(1)
+    expect(out[0].node?.id).toBe('c')
+  })
   it('reads JSON inside a code fence', () => {
     const reply = '```json\n' + JSON.stringify({ findings: [{ rule: date, element: 1, message: 'm', confidence: 0.5 }] }) + '\n```'
     expect(findingsFrom(reply, cands, rules)).toHaveLength(1)

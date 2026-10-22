@@ -43,4 +43,14 @@ describe('candidates', () => {
     expect(candidates(m).map((c) => c.id)).toEqual(['t1', 'i', 't2'])
     expect(candidates(m, 2)).toHaveLength(2)
   })
+
+  it('puts items 1px apart in y on one line, right edge first', () => {
+    const at = (id: string, x: number, y: number) => run(id, 'نص', { box: { x, y, width: 20, height: 20 } })
+    const m = model([at('left', 10, 100), at('right', 200, 101), at('below', 300, 140)])
+    expect(candidates(m).map((c) => c.id)).toEqual(['right', 'left', 'below'])
+  })
+  it('orders by right edge, not left edge', () => {
+    const m = model([run('narrow', 'نص', { box: { x: 90, y: 0, width: 10, height: 20 } }), run('wide', 'نص', { box: { x: 50, y: 0, width: 80, height: 20 } })])
+    expect(candidates(m).map((c) => c.id)).toEqual(['wide', 'narrow'])
+  })
 })
