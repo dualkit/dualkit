@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
@@ -20,6 +20,9 @@ export type ProductScore = {
   notes: number
   noteTally: Tally
   lost: string[]
+  /** How many labels the file holds, and the lost ones split by label. */
+  labels: number
+  lostByLabel: Tally
   findings: number
   unlabelled: number
 }
@@ -92,11 +95,14 @@ export function scoreRun(data: string, product: SweepProduct, findings: RunFindi
   let notes = 0
   let noteTally = EMPTY
   const lost: string[] = []
-  for (const { id, label } of readLabels(data, product)) {
+  let lostByLabel = EMPTY
+  const all = readLabels(data, product)
+  for (const { id, label } of all) {
     const key = keys.get(id)
     const hit = key === undefined ? undefined : present.get(key)
     if (!hit) {
       lost.push(id)
+      lostByLabel = { ...lostByLabel, [label]: lostByLabel[label] + 1 }
       continue
     }
     if (hit.severity === 'note') {
@@ -108,7 +114,7 @@ export function scoreRun(data: string, product: SweepProduct, findings: RunFindi
     byRule = { ...byRule, [hit.rule]: { ...tally, [label]: tally[label] + 1 } }
   }
   const unlabelled = findings.filter((f) => !labelled.has(runKey(product, f))).length
-  return { byRule, notes, noteTally, lost, findings: findings.length, unlabelled }
+  return { byRule, notes, noteTally, lost, labels: all.length, lostByLabel, findings: findings.length, unlabelled }
 }
 
 /** Lint the pinned clone at <data>/repos/<name> with today's lint package. */
@@ -125,7 +131,10 @@ const CLI_DIR = new URL('../../cli/', import.meta.url)
 
 async function loadAudit(): Promise<Audit> {
   const dist = new URL('dist/', CLI_DIR)
-  const file = existsSync(dist) ? readdirSync(dist).find((f) => /^audit-.*\.js$/.test(f)) : undefined
+  const files = existsSync(dist) ? readdirSync(dist).filter((f) => /^audit-.*\.js$/.test(f)) : []
+  // A rebuild can leave an older hashed file behind. Use the newest and say which.
+  const file = [...files].sort((a, b) => statSync(join(dist.pathname, b)).mtimeMs - statSync(join(dist.pathname, a)).mtimeMs)[0]
+  if (files.length > 1) console.error(`packages/cli/dist has ${files.length} audit-*.js files. Using the newest: ${file}`)
   if (!file) throw new Error('packages/cli/dist has no audit-*.js. Run: npm run build -w @dualkit/cli')
   return ((await import(pathToFileURL(join(dist.pathname, file)).href)) as { audit: Audit }).audit
 }

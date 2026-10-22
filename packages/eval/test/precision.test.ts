@@ -32,6 +32,8 @@ describe('precision set', () => {
   it('counts a labelled finding that no longer appears as lost, by id', () => {
     const score = scoreRun(DATA, FX, fxFindings().filter((f) => f.line !== 9))
     expect(score.lost).toEqual(['fx#2'])
+    expect(score.labels).toBeGreaterThan(score.lost.length)
+    expect(Object.values(score.lostByLabel).reduce((a, b) => a + b, 0)).toBe(1)
     expect(score.byRule['source/demo-rule']).toEqual({ real: 2, handled: 1, intended: 0, unclear: 1 })
   })
 

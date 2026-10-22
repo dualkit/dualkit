@@ -1,12 +1,23 @@
 import { f1, precision, recall } from './metrics.js'
 import type { CaseResult, Tally } from './types.js'
 
+export type Coverage = {
+  labels: number
+  matched: number
+  /** Labels with no matching finding today, by label. */
+  lost: Tally
+  /** Findings today with no label at all. */
+  unlabelled: number
+}
+
 export type PrecisionResult = {
   tool: 'check' | 'lint'
   byRule: Record<string, Tally>
   /** Labels given to note-severity findings. Not part of the warning and error figures. */
   noteTally: Tally
   notes: number
+  /** How many hand labels still match a finding in today's run. */
+  coverage: Coverage
   products: number
   skipped: number
 }
@@ -69,6 +80,15 @@ function noteRows(r: EvalResult): (string | number)[][] {
   })
 }
 
+function coverageRows(r: EvalResult): (string | number)[][] {
+  return TOOLS.map((tool) => {
+    const c = r.precision.find((x) => x.tool === tool)?.coverage
+    if (!c || c.labels === 0) return [tool, NO_DATA, NO_DATA, NO_DATA, NO_DATA, NO_DATA, NO_DATA, NO_DATA]
+    const l = c.lost
+    return [tool, c.labels, `${c.matched} (${pct(c.matched / c.labels)})`, l.real, l.handled, l.intended, l.unclear, c.unlabelled]
+  })
+}
+
 function ruleRows(r: EvalResult): (string | number)[][] {
   return r.precision.flatMap((p) =>
     Object.entries(p.byRule)
@@ -101,6 +121,8 @@ export function renderReport(r: EvalResult): string {
     table(['tool', 'precision (warning and error)', 'precision (all severities)', 'recall', 'F1', 'findings', 'unclear'], toolRows(r)),
     '## Notes',
     table(['tool', 'notes', 'precision on notes'], noteRows(r)),
+    '## Label coverage',
+    table(['tool', 'labels', 'still match', 'lost real', 'lost handled', 'lost intended', 'lost unclear', 'unlabelled findings'], coverageRows(r)),
     '## Precision per rule',
     rules.length
       ? table(['tool', 'rule', 'precision', 'real', 'handled', 'intended', 'unclear'], rules)

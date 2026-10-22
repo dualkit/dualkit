@@ -1,6 +1,6 @@
 import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { join, relative, resolve } from 'node:path'
+import { join, relative, resolve, sep } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { lintText } from '@dualkit/lint'
 import { chromium, type Browser } from 'playwright'
@@ -68,14 +68,25 @@ function isClean(record: StoredRecord): boolean {
   return record.findings.every((f: { severity?: string }) => f.severity === 'note')
 }
 
-/** Final pages whose stored record is ok, complete and free of warnings and errors, in sorted order. */
+const modelOf = (runs: string, page: string): string => relative(runs, page).split(sep)[0] ?? ''
+
+/** Clean pages, one model at a time in turn (each model's pages sorted), so early cases spread across models. */
+export function roundRobin(runs: string, pages: readonly string[]): string[] {
+  const byModel = new Map<string, string[]>()
+  for (const page of [...pages].sort()) byModel.set(modelOf(runs, page), [...(byModel.get(modelOf(runs, page)) ?? []), page])
+  const queues = [...byModel.keys()].sort().map((m) => byModel.get(m)!)
+  const out: string[] = []
+  for (let i = 0; queues.some((q) => i < q.length); i += 1) for (const q of queues) if (i < q.length) out.push(q[i]!)
+  return out
+}
+
+/** Final pages whose stored record is ok, complete and free of warnings and errors, taken round-robin by model. */
 export function basePages(runs: string): string[] {
-  return walkHtml(runs)
+  return roundRobin(runs, walkHtml(runs)
     .filter((page) => {
       const record = page.replace(/\.html$/, '.json')
       return existsSync(record) && isClean(JSON.parse(readFileSync(record, 'utf8')) as StoredRecord)
-    })
-    .sort()
+    }))
 }
 
 const baseOf = (page: string): string => relative(REPO_ROOT, resolve(page))
@@ -259,7 +270,11 @@ export function sharedLine(html: string): boolean {
   return (line.match(/<[a-zA-Z]/g) ?? []).length > 1
 }
 
+/** What a real-world miss is compared with: nothing. Its base page was an earlier draft with its own warnings. */
+export const EMPTY_PAGE = '<!doctype html><html><body></body></html>'
+
 export async function runCase(c: MissCase, clean: string, deps: Deps = {}): Promise<CaseResult[]> {
+  const against = c.kind === 'real' ? EMPTY_PAGE : clean
   const result = (tool: CaseResult['tool'], caught: boolean): CaseResult => ({ id: c.id, kind: c.kind, tool, caught })
-  return [result('check', await checkCaught(c.html, clean, deps)), result('lint', lintCaught(c.html, clean))]
+  return [result('check', await checkCaught(c.html, against, deps)), result('lint', lintCaught(c.html, against))]
 }

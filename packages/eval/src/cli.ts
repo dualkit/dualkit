@@ -2,8 +2,8 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { basePages, buildCases, closeBrowser, runCase } from './misses.js'
-import { listProducts, runCheck, runLint, scoreRun, type RunFinding } from './precision.js'
-import { renderReport, type EvalResult, type PrecisionResult } from './report.js'
+import { listProducts, runCheck, runLint, scoreRun, type ProductScore, type RunFinding } from './precision.js'
+import { renderReport, type Coverage, type EvalResult, type PrecisionResult } from './report.js'
 import type { CaseResult, Tally } from './types.js'
 
 const ROOT = fileURLToPath(new URL('../../..', import.meta.url))
@@ -31,10 +31,21 @@ export function resolveData(flag: string | undefined, env: NodeJS.ProcessEnv): s
   return resolve(dir)
 }
 
+function addCoverage(c: Coverage, s: ProductScore): Coverage {
+  const l = c.lost
+  return {
+    labels: c.labels + s.labels,
+    matched: c.matched + s.labels - s.lost.length,
+    lost: { real: l.real + s.lostByLabel.real, handled: l.handled + s.lostByLabel.handled, intended: l.intended + s.lostByLabel.intended, unclear: l.unclear + s.lostByLabel.unclear },
+    unlabelled: c.unlabelled + s.unlabelled,
+  }
+}
+
 async function precisionSet(data: string): Promise<PrecisionResult[]> {
   const { products, skipped } = listProducts(data)
   const out: PrecisionResult[] = (['check', 'lint'] as const).map((tool) => ({
     tool, byRule: {}, noteTally: EMPTY, notes: 0, products: 0,
+    coverage: { labels: 0, matched: 0, lost: EMPTY, unlabelled: 0 },
     skipped: skipped.filter((s) => s.tool === tool).length,
   }))
   for (const p of products) {
@@ -56,7 +67,7 @@ async function precisionSet(data: string): Promise<PrecisionResult[]> {
     }
     const n = cur.noteTally
     out[slot] = {
-      ...cur, byRule, notes: cur.notes + s.notes, products: cur.products + 1,
+      ...cur, byRule, coverage: addCoverage(cur.coverage, s), notes: cur.notes + s.notes, products: cur.products + 1,
       noteTally: { real: n.real + s.noteTally.real, handled: n.handled + s.noteTally.handled, intended: n.intended + s.noteTally.intended, unclear: n.unclear + s.noteTally.unclear },
     }
   }

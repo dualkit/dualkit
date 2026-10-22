@@ -4,8 +4,8 @@ import { renderReport, type EvalResult } from '../src/report.js'
 const fixture = (): EvalResult => ({
   at: '2026-10-22',
   precision: [
-    { tool: 'check', byRule: { 'a11y/demo': { real: 8, handled: 1, intended: 1, unclear: 2 } }, noteTally: { real: 0, handled: 2, intended: 0, unclear: 0 }, notes: 2, products: 3, skipped: 1 },
-    { tool: 'lint', byRule: {}, noteTally: { real: 0, handled: 0, intended: 0, unclear: 0 }, notes: 0, products: 0, skipped: 0 },
+    { tool: 'check', byRule: { 'a11y/demo': { real: 8, handled: 1, intended: 1, unclear: 2 } }, noteTally: { real: 0, handled: 2, intended: 0, unclear: 0 }, notes: 2, coverage: { labels: 20, matched: 16, lost: { real: 3, handled: 1, intended: 0, unclear: 0 }, unlabelled: 5 }, products: 3, skipped: 1 },
+    { tool: 'lint', byRule: {}, noteTally: { real: 0, handled: 0, intended: 0, unclear: 0 }, notes: 0, coverage: { labels: 0, matched: 0, lost: { real: 0, handled: 0, intended: 0, unclear: 0 }, unlabelled: 0 }, products: 0, skipped: 0 },
   ],
   misses: {
     cases: 4,
@@ -59,6 +59,8 @@ describe('renderReport', () => {
     })
     expect(md).toContain('| check | 2 | 0% |')
     expect(md).toContain('| lint | 0 | no data |')
+    expect(md).toContain('| check | 20 | 16 (80%) | 3 | 1 | 0 | 0 | 5 |')
+    expect(md).toContain('| lint | no data | no data |')
     expect(md).toContain('| real-world miss | 0% (0/1) | no data |')
     expect(md).toMatch(/\| check \| 80% \| 67% \| \d+% \| \d+% \| 12 \| 2 \|/)
   })

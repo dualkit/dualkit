@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterAll, describe, expect, it } from 'vitest'
 import { INJECTORS } from '../src/inject.js'
-import { BEHAVIOURAL_OR_ENGINE_KINDS, basePages, buildCases, checkCaught, closeBrowser, lintCaught, markSelector, runCase, sharedLine } from '../src/misses.js'
+import { BEHAVIOURAL_OR_ENGINE_KINDS, EMPTY_PAGE, basePages, buildCases, roundRobin, checkCaught, closeBrowser, lintCaught, markSelector, runCase, sharedLine } from '../src/misses.js'
 
 const fixture = (name: string) => new URL(`./fixtures/pages/${name}.html`, import.meta.url).pathname
 const KINDS = INJECTORS.map((i) => i.kind)
@@ -32,6 +32,25 @@ describe('basePages', () => {
     record(join(runs, 'm', 's'), 'd-failed', { ok: false })
     writeFileSync(join(runs, 'm', 's', 'e-no-record.html'), '<html></html>')
     expect(basePages(runs)).toEqual([join(runs, 'm', 's', 'a-clean.html')])
+  })
+})
+
+describe('roundRobin', () => {
+  it('takes pages one model at a time, sorted within each model', () => {
+    const runs = join(temp, 'rr')
+    const at = (m: string, n: string) => join(runs, m, 's', `${n}.html`)
+    const out = roundRobin(runs, [at('b', '2'), at('a', '2'), at('a', '1'), at('b', '1'), at('a', '3')])
+    expect(out).toEqual([at('a', '1'), at('b', '1'), at('a', '2'), at('b', '2'), at('a', '3')])
+  })
+})
+
+describe('real-world misses', () => {
+  it('compare against an empty page, not the earlier draft', async () => {
+    const seen: string[] = []
+    const score = async (html: string) => { seen.push(html); return { ok: true as const, findings: [], screenshot: '' } as never }
+    await runCase({ id: 'real:x', kind: 'real', base: 'x', html: '<p data-eval-bug="k">x</p>' }, 'DRAFT PAGE', { score })
+    expect(seen).toContain(EMPTY_PAGE)
+    expect(seen).not.toContain('DRAFT PAGE')
   })
 })
 

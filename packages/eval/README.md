@@ -18,3 +18,5 @@ npm run eval -w @dualkit/eval -- all --data <dir>
 ```
 
 The report prints to stdout. The full result goes to `packages/eval/out/<date>.json`, which is gitignored and may hold names. The miss set takes a few minutes. Precision replays recordings and takes longer.
+
+The miss set is pinned to `bench/runs/2026-10` and reproduces only while that folder is unchanged.
