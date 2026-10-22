@@ -33,15 +33,27 @@ export type FrozenCase = { kind: BugKind; page: string }
 type RealEntry = { id: string; base: string; bugged: string; selector: string }
 
 // One browser for the whole run; callers close it with closeBrowser().
-let browser: Browser | null = null
+// The launch itself is shared: checkCaught scores two pages at once, and two callers that each saw no browser and
+// launched their own left one open, which kept the process alive after the report printed.
+let browser: Promise<Browser> | null = null
 const scored = new Map<string, Promise<Scored>>()
+
+/** The run's browser, launched once however many callers ask at the same time. A failed launch is not kept. */
+export function sharedBrowser(launch: () => Promise<Browser> = () => chromium.launch()): Promise<Browser> {
+  browser ??= launch().catch((e: unknown) => {
+    browser = null
+    throw e
+  })
+  return browser
+}
 
 export async function closeBrowser(): Promise<void> {
   const b = browser
   browser = null
   scored.clear()
   boxes.clear()
-  await b?.close().catch(() => {})
+  const open = await b?.catch(() => null)
+  await open?.close().catch(() => {})
 }
 
 /** Renders a page at 390x844 and returns what check reports, once per distinct page. */
@@ -49,8 +61,7 @@ export function scorePage(html: string): Promise<Scored> {
   const known = scored.get(html)
   if (known) return known
   const run = (async () => {
-    browser ??= await chromium.launch()
-    return scoreHtml(html, [], { browser })
+    return scoreHtml(html, [], { browser: await sharedBrowser() })
   })()
   if (scored.size >= CACHE_PAGES) scored.delete(scored.keys().next().value as string)
   scored.set(html, run)
@@ -215,9 +226,9 @@ export function markedBox(html: string): Promise<Box | null> {
   const known = boxes.get(html)
   if (known) return known
   const run = (async () => {
-    browser ??= await chromium.launch()
+    const shared = await sharedBrowser()
     const dir = mkdtempSync(join(tmpdir(), 'eval-box-'))
-    const context = await browser.newContext({ viewport: { width: RUN.width, height: RUN.height } })
+    const context = await shared.newContext({ viewport: { width: RUN.width, height: RUN.height } })
     try {
       const file = join(dir, 'index.html')
       writeFileSync(file, html)

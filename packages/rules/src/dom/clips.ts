@@ -29,15 +29,31 @@ function lineSpans(rects: DOMRect[]): Box[] {
   return [...lines.values()]
 }
 
-type Reach = { x: number; y: number; text: string; full: number; visible: number }
+type Reach = { x: number; y: number; text: string; full: number; visible: number; lines: number }
+
+/** True when a rect lies across the box's rows or columns: beside it on the line an ellipsis cuts, or under it in a clamp. */
+const inLine = (r: DOMRect, b: Box): boolean => (r.bottom > b.top && r.top < b.bottom) || (r.right > b.left && r.left < b.right)
+
+/** How many lines the spans make: spans that overlap vertically sit on one line, whatever their font size. */
+function countLines(spans: Box[]): number {
+  let lines = 0
+  let bottom = -Infinity
+  for (const s of [...spans].sort((a, b) => a.top - b.top)) {
+    if (s.top >= bottom - MIN_GAP) lines += 1
+    bottom = Math.max(bottom, s.bottom)
+  }
+  return lines
+}
 
 /**
  * How far the text under the element (its own and its descendants') paints past the element's padding box, which is
  * where overflow clips, per axis, and how much of its width is painted inside that box. On a line cut sideways, the
  * ellipsis is painted over the end of what fits, so its width does not count as shown text.
  * Only text runs at least partly inside the box count; a run painted wholly outside it is not cut off, it is elsewhere.
+ * In a box with an ellipsis, a run wholly past it on its line (a <span> the ellipsis cut away) or below it in a clamp
+ * counts too, since that is the text the ellipsis hides.
  */
-function textReach(el: HTMLElement, style: Style, ellipsisWidth: number): Reach {
+function textReach(el: HTMLElement, style: Style, ellipsis: boolean, ellipsisWidth: number): Reach {
   const box = el.getBoundingClientRect()
   const left = box.left + el.clientLeft
   const top = box.top + el.clientTop
@@ -47,6 +63,8 @@ function textReach(el: HTMLElement, style: Style, ellipsisWidth: number): Reach 
   let y = 0
   let full = 0
   let visible = 0
+  const shown: Box[] = []
+  const cut: Box[] = []
   const texts: string[] = []
   const walker = el.ownerDocument.createTreeWalker(el, NodeFilter.SHOW_TEXT)
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
@@ -56,7 +74,8 @@ function textReach(el: HTMLElement, style: Style, ellipsisWidth: number): Reach 
     const range = el.ownerDocument.createRange()
     range.selectNodeContents(node)
     const rects = Array.from(range.getClientRects()).filter((r) => r.width > 0 || r.height > 0)
-    if (!rects.some((r) => overlaps(r, { left, top, right, bottom }))) continue
+    const clip = { left, top, right, bottom }
+    if (!rects.some((r) => overlaps(r, clip) || (ellipsis && inLine(r, clip)))) continue
     texts.push(own)
     for (const r of rects) {
       x = Math.max(x, r.right - right, left - r.left)
@@ -65,11 +84,16 @@ function textReach(el: HTMLElement, style: Style, ellipsisWidth: number): Reach 
     // A line counts as shown across the width it keeps inside the box, and as hidden when it sits wholly above or below.
     for (const line of lineSpans(rects)) {
       full += line.right - line.left
-      const cut = line.left < left - MIN_GAP || line.right > right + MIN_GAP
-      if (inside(line.top, line.bottom, top, bottom) > 0) visible += Math.max(0, inside(line.left, line.right, left, right) - (cut ? ellipsisWidth : 0))
+      const rows = inside(line.top, line.bottom, top, bottom) > 0
+      const kept = rows ? inside(line.left, line.right, left, right) : 0
+      if (kept > 0) shown.push(line)
+      if (rows && (line.left < left - MIN_GAP || line.right > right + MIN_GAP)) cut.push(line)
+      visible += kept
     }
   }
-  return { x, y, text: texts.join(' '), full, visible }
+  // The ellipsis is painted once per line it cuts, over the end of what fits, whichever run that end belongs to.
+  visible = Math.max(0, visible - ellipsisWidth * countLines(cut))
+  return { x, y, text: texts.join(' '), full, visible, lines: countLines(shown) }
 }
 
 /** The width of the ellipsis the box paints in its own font, or 0 when it paints none at the line end. */
@@ -132,16 +156,18 @@ export function readClips(
     const y = CLIPS.test(s.overflowY)
     if (!x && !y) continue
     if (el.closest('svg') || skipped(el) || !visible(el)) continue
-    const reach = textReach(el, style, ellipsisWidth(doc, s))
+    const ellipsis = s.textOverflow === 'ellipsis' || lineClamped(s)
+    const reach = textReach(el, style, ellipsis, ellipsisWidth(doc, s))
     if (!reach.text) continue
     // A visually hidden box (or one inside one) is cut off on purpose.
     let hide = false
     for (let n: Element | null = el; n && n !== doc.body && !hide; n = n.parentElement) hide = hiddenFromView(n, style(n))
     if (hide) continue
     const base = {
-      ellipsis: s.textOverflow === 'ellipsis' || lineClamped(s),
+      ellipsis,
       hasArabic: hasArabic(reach.text),
       visibleShare: reach.full > 0 ? Math.min(1, reach.visible / reach.full) : 1,
+      visibleLines: reach.lines,
     }
     // A box also scrolls for an oversized image or track, which cuts no text. Both the scroll size and the box's own text must overflow.
     const scrollX = el.scrollWidth - el.clientWidth

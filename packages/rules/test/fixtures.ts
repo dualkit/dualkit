@@ -45,9 +45,14 @@ export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: st
       page('<div class="b"><p>اشتري الآن واحصل على خصم</p></div>', { css: '.b{height:60px;overflow:hidden}.b p{margin:0;padding-bottom:40px}' }),
       // A long sentence cut by an ellipsis at the end of a wide box shows most of itself.
       page(`<p class="s">${long}</p>`, { css: '.s{width:300px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}' }),
+      // A two-line clamp over a long paragraph.
+      page(`<p class="c">${long} ${long} ${long} ${long}</p>`, { css: '.c{width:200px;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}' }),
     ],
-    // A short label an ellipsis cuts to a letter or two.
-    moreBad: [page('<h1 style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:3em">عنوان التوصيل</h1>')],
+    // A short label an ellipsis cuts to a letter or two, with and without inline markup.
+    moreBad: [
+      page('<h1 style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:3em">عنوان التوصيل</h1>'),
+      page('<h1 style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:3em">عنوان <span>التوصيل</span></h1>'),
+    ],
   },
   'icons/not-mirrored': { bad: page(icon('arrow-right')), good: page(icon('arrow-right', 'transform:scaleX(-1)')) },
   'icons/mirrored-by-mistake': { bad: page(icon('play', 'transform:scaleX(-1)')), good: page(icon('play')) },
@@ -55,12 +60,13 @@ export const FIXTURES: Record<string, { bad: string; good: string; moreGood?: st
     bad: page(`<p>${long}</p>`, { css: 'p{line-height:1.2;width:120px}' }),
     good: page(`<p>${long}</p>`, { css: 'p{line-height:1.7;width:120px}' }),
     moreGood: [
-      // Readable body text at 1.35, and display type.
-      page(`<p>${long}</p>`, { css: 'p{line-height:1.35;width:120px}' }),
+      // Display type.
       page(`<h2>${long}</h2>`, { css: 'h2{font-size:24px;line-height:1.2;width:160px}' }),
       // A carousel slide parked past the viewport's edge.
       page(`<div class="t"><p>${long}</p></div>`, { css: '.t{position:absolute;left:100vw;top:0}p{line-height:1.2;width:120px}' }),
     ],
+    // Body text at 1.35 is still too tight for Arabic.
+    moreBad: [page(`<p>${long}</p>`, { css: 'p{line-height:1.35;width:120px}' })],
   },
   'type/arabic-tracking': { bad: page('<p>مرحبا بكم</p>', { css: 'p{letter-spacing:0.1em}' }), good: page('<p>مرحبا بكم</p>', { css: 'p{letter-spacing:0}' }) },
   'type/arabic-italic': { bad: page('<p><em>مرحبا</em></p>'), good: page('<p><em style="font-style:normal">مرحبا</em></p>') },

@@ -3,7 +3,8 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterAll, describe, expect, it } from 'vitest'
 import { INJECTORS } from '../src/inject.js'
-import { BEHAVIOURAL_OR_ENGINE_KINDS, EMPTY_PAGE, basePages, buildCases, loadFrozenCases, roundRobin, checkCaught, closeBrowser, lintCaught, markSelector, runCase, sharedLine } from '../src/misses.js'
+import { BEHAVIOURAL_OR_ENGINE_KINDS, EMPTY_PAGE, basePages, buildCases, loadFrozenCases, roundRobin, checkCaught, closeBrowser, lintCaught, markSelector, runCase, sharedBrowser, sharedLine } from '../src/misses.js'
+import type { Browser } from 'playwright'
 
 const fixture = (name: string) => new URL(`./fixtures/pages/${name}.html`, import.meta.url).pathname
 const KINDS = INJECTORS.map((i) => i.kind)
@@ -228,5 +229,31 @@ describe('sharedLine', () => {
   it('flags a marked element that shares its line with other markup', () => {
     expect(sharedLine('<div>\n<p data-eval-bug="k">a</p>\n</div>')).toBe(false)
     expect(sharedLine('<div><p data-eval-bug="k">a</p></div>')).toBe(true)
+  })
+})
+
+describe('sharedBrowser', () => {
+  it('launches once when two callers ask at the same time, and closeBrowser closes that one browser', async () => {
+    await closeBrowser()
+    let launches = 0
+    let closes = 0
+    const launch = async (): Promise<Browser> => {
+      launches += 1
+      await new Promise((r) => setTimeout(r, 10))
+      return { close: async () => { closes += 1 } } as unknown as Browser
+    }
+    const [a, b] = await Promise.all([sharedBrowser(launch), sharedBrowser(launch)])
+    expect(a).toBe(b)
+    expect(launches).toBe(1)
+    await closeBrowser()
+    expect(closes).toBe(1)
+  })
+  it('does not keep a failed launch', async () => {
+    await closeBrowser()
+    await expect(sharedBrowser(async () => { throw new Error('no browser') })).rejects.toThrow('no browser')
+    let launches = 0
+    await sharedBrowser(async () => { launches += 1; return { close: async () => {} } as unknown as Browser })
+    expect(launches).toBe(1)
+    await closeBrowser()
   })
 })

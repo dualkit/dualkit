@@ -3,9 +3,9 @@ import { defineRule, pick } from '../rule'
 import { effectiveSize, loadedArabicFace, webfontFamily, coversArabic } from '../fonts'
 import { ARABIC_FAMILY_NAME, excerpt, hasArabic, isSystemArabicFont } from '../text'
 
-export const MIN_ARABIC_LEADING = 1.3
+export const MIN_ARABIC_LEADING = 1.45
 /** Display type from this size up carries tighter leading by design. */
-const DISPLAY_SIZE = 20
+const DISPLAY_SIZE = 22
 export const MIN_ARABIC_SIZE = 14
 /** Chromium synthesises bold only when the matched face is lighter than this and the run asks for this or more (measured in verify.test.ts). */
 const SYNTHETIC_BOLD_BELOW = 600

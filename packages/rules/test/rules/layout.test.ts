@@ -84,4 +84,8 @@ describe('layout/clipped-text', () => {
     expect(ids(screen({ clips: [clip({ ellipsis: true, visibleShare: 0.3 })] }))).toEqual(['layout/clipped-text'])
     expect(ids(screen({ clips: [clip({ ellipsis: true, visibleShare: 0.5 }), clip({ ellipsis: true, visibleShare: 0.9 })] }))).toEqual([])
   })
+  it('passes a line clamp that shows 2 or more lines, however much it hides', () => {
+    expect(ids(screen({ clips: [clip({ axis: 'y', ellipsis: true, visibleShare: 0.2, visibleLines: 2 }), clip({ axis: 'y', ellipsis: true, visibleShare: 0.1, visibleLines: 3 })] }))).toEqual([])
+    expect(ids(screen({ clips: [clip({ axis: 'y', ellipsis: true, visibleShare: 0.2, visibleLines: 1 })] }))).toEqual(['layout/clipped-text'])
+  })
 })

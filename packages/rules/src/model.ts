@@ -91,8 +91,11 @@ export type LabelNode = NodeRef & { attr: 'aria-label' | 'alt' | 'title'; text: 
  * `textHidden` is how far the painted text boxes reach past the clip rect on that axis, in px.
  * `visibleShare` is the visible text width divided by the full text width, 0 to 1. On a line cut sideways, the
  * ellipsis's width is taken off the visible part, since it is painted over it.
+ * `visibleLines` is how many lines of text show inside the box, at least partly.
  */
-export type ClipNode = NodeRef & { axis: 'x' | 'y'; hidden: number; textHidden: number; visibleShare: number; ellipsis: boolean; hasArabic: boolean }
+export type ClipNode = NodeRef & {
+  axis: 'x' | 'y'; hidden: number; textHidden: number; visibleShare: number; visibleLines: number; ellipsis: boolean; hasArabic: boolean
+}
 
 /** An Arabic word that an inline-block or inline-flex box splits, so its letters cannot join across the box. */
 export type JoinBreak = NodeRef & { reason: 'inline-block' | 'font-family' | 'other'; word: string }

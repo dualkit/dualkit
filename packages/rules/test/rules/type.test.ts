@@ -16,10 +16,14 @@ describe('type rules', () => {
     expect(ids(screen({ texts: [text({ lines: 1, font: { ...font, lineHeight: 19 } })] }))).toEqual([])
     expect(ids(screen({ texts: [text({ lines: 3, font: { ...font, lineHeight: null } })] }))).toEqual([])
   })
-  it('flags leading under 1.3 on body text, not readable 1.35 body text or display type', () => {
+  it('flags leading under 1.45 on text under 22px, and leaves display type alone', () => {
     const at = (size: number, ratio: number) => ids(screen({ texts: [text({ lines: 3, font: { ...font, size, lineHeight: size * ratio } })] }))
     expect(at(16, 1.2)).toEqual(['type/arabic-leading'])
-    expect(at(16, 1.35)).toEqual([])
+    expect(at(16, 1.35)).toEqual(['type/arabic-leading'])
+    expect(at(14, 1.43)).toEqual(['type/arabic-leading'])
+    expect(at(16, 1.5)).toEqual([])
+    expect(at(21, 1.3)).toEqual(['type/arabic-leading'])
+    expect(at(22, 1.2)).toEqual([])
     expect(at(24, 1.2)).toEqual([])
   })
   it('skips a run whose box lies wholly outside the viewport width, such as a hidden carousel slide', () => {

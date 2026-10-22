@@ -17,7 +17,7 @@ const run = (p: Partial<TextRun>): TextRun => ({
 })
 export const layout = (p: Partial<LayoutNode> = {}): LayoutNode => ({ ...base, dir: 'rtl', textAlign: 'start', hasOwnText: true, hasArabicText: true, textSlack: 100, physical: [], ...p })
 export const icon = (p: Partial<IconNode> = {}): IconNode => ({ ...base, name: 'arrow-right', dir: 'rtl', mirrored: false, turned: false, ...p })
-export const clip = (p: Partial<ClipNode> = {}): ClipNode => ({ ...base, axis: 'x', hidden: 40, textHidden: 40, visibleShare: 0.7, ellipsis: false, hasArabic: true, ...p })
+export const clip = (p: Partial<ClipNode> = {}): ClipNode => ({ ...base, axis: 'x', hidden: 40, textHidden: 40, visibleShare: 0.7, visibleLines: 1, ellipsis: false, hasArabic: true, ...p })
 export const field = (p: Partial<FieldNode> = {}): FieldNode => ({ ...base, kind: 'email', dir: 'rtl', dirAttr: null, placeholder: '', placeholderShown: true, placeholderSide: 'left', ...p })
 /** A loaded face, defaulting to IBM Plex Sans Arabic at 400 with the default unicode-range. */
 export const face = (p: Partial<LoadedFace> = {}): LoadedFace => ({
