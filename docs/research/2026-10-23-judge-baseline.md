@@ -9,9 +9,11 @@ The judge agrees with Sam on 11 of 20 blind pairs. The bar is 16. Every judge nu
 | judge model | agrees with Sam | result |
 | --- | --- | --- |
 | gemini-flash-lite-latest (default) | 11 of 20 | does not pass |
-| gemini-flash-latest | no score | not completed |
+| gemini-flash-latest | unmeasured (14 of 20 hit quota) | not scored |
 
-gemini-flash-latest could not be scored. Its free tier allows 20 requests per day per project, and the first attempt used that up with 6 pair verdicts read from the cache and the rest failing with HTTP 429 (quota exceeded, retry in about 17 hours). A free-tier score for it is not possible today. No paid call was made, as agreed, so the search for a passing model stops here. The 4 of 20 figure mentioned in a handoff note is not a result I could reproduce: the run never finished and wrote no result file.
+gemini-flash-latest is unmeasured. Its free tier allows 20 requests per day per project, and 14 of the 20 pairs failed with HTTP 429 (quota exceeded) before they could be judged. The tool's result file counts 4 of 20, but that counts the failed pairs as disagreements. Of the 6 pairs that were actually judged, 4 agreed with Sam, which is too few to say anything. A free-tier score for it is not possible today. No paid call was made, so the search for a passing model stops here.
+
+Two notes on how the lite score is counted. Under the plan's rule, Sam's "about the same" counts as agreeing with a verdict that did not hold when the sides were swapped. Three of the 11 lite agreements are that case (slots 10, 16 and 19), so a strict count, where those do not agree, is 8 of 20. The result is below the bar of 16 either way.
 
 Sam's note on the 20 pairs: "Some are janky and the spacing is off." That is about the pages, not a request to change the checklists, so the checklists and the prompt version are unchanged. It does suggest that Sam weighs polish and spacing, and the checklists do not ask about either. They are about Arabic correctness, such as numbers, arrows and alignment. A judge that follows the checklists can disagree with a person who is reacting to how finished a page looks.
 
@@ -37,7 +39,7 @@ Across all 20 pairs the judge failed to hold its answer 8 times, the largest sin
 
 Judge: gemini-flash-lite-latest. Every pair is judged twice with the sides swapped, and only an answer that holds both ways counts.
 
-**Dualkit wins 40 of 110 pairs. Alone wins 36, 1 tie, and 33 did not hold when swapped.** 1 pair failed and 1 was excluded because both pages were blank. 1 result was a win by default for the page that was not blank. Spend: $0.00.
+**Dualkit wins 39 of 109 blind side-by-sides. Alone wins 36, 1 tie, and 33 did not hold when swapped.** 1 pair failed and 1 was excluded because both pages were blank. 1 more was a win by default for the Dualkit page, because the other page was blank. A win by default is not a real comparison, so it is left out of the 109 and the Dualkit count. Spend: $0.00.
 
 ### By model
 
@@ -45,7 +47,7 @@ Judge: gemini-flash-lite-latest. Every pair is judged twice with the sides swapp
 | --- | --- | --- | --- | --- | --- | --- |
 | dots-3-note | 10 | 6 | 0 | 9 | 0 | 0 |
 | gemini-flash-lite | 10 | 14 | 0 | 5 | 1 | 0 |
-| laguna-s | 10 | 7 | 0 | 9 | 0 | 1 |
+| laguna-s | 9 | 7 | 0 | 9 | 0 | 1 |
 | minimax-m3.1-flash | 10 | 9 | 1 | 10 | 0 | 0 |
 
 ### By screen
@@ -56,14 +58,14 @@ Judge: gemini-flash-lite-latest. Every pair is judged twice with the sides swapp
 | booking | 5 | 5 | 0 | 1 | 0 | 0 |
 | checkout | 2 | 6 | 0 | 4 | 0 | 0 |
 | order-history | 7 | 2 | 0 | 2 | 0 | 0 |
-| otp | 2 | 2 | 0 | 7 | 0 | 1 |
+| otp | 1 | 2 | 0 | 7 | 0 | 1 |
 | payment-summary | 2 | 2 | 0 | 3 | 0 | 0 |
 | profile | 4 | 5 | 0 | 3 | 0 | 0 |
 | settings | 9 | 0 | 0 | 2 | 1 | 0 |
 | support-chat | 4 | 4 | 1 | 3 | 0 | 0 |
 | transactions | 4 | 2 | 0 | 5 | 0 | 0 |
 
-Each model has 10 Dualkit wins, so the table does not separate models. The screens do differ: settings and order-history lean to Dualkit, address-form and checkout lean to alone. With 33 of 110 not holding, none of this is firm.
+Dualkit wins are 9 or 10 for every model, so the table does not separate models. The screens do differ: settings and order-history lean to Dualkit, address-form and checkout lean to alone. With 33 of 109 not holding, none of this is firm.
 
 ### Which checklist points the judge marked differently between sides most often
 
