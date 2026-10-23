@@ -72,3 +72,31 @@ export function agreement(key: Key, sam: SamAnswer[], judged: Record<string, Win
   const agree = rows.filter((r) => r.agrees).length
   return { agree, total: key.length, passed: agree >= PASS_AT, rows }
 }
+
+const PICKS: readonly string[] = ['left', 'right', 'same']
+
+/** Checks Sam's answers file against the key; throws a plain error naming the first bad entry. */
+export function parseAnswers(given: unknown, key: Key): SamAnswer[] {
+  const list = (given as { answers?: unknown } | null)?.answers
+  if (!Array.isArray(list)) throw new Error('The answers file needs an "answers" list.')
+  const slots = new Set(key.map((k) => k.slot))
+  const seen = new Set<number>()
+  return list.map((entry: unknown, i) => {
+    const { slot, pick } = (entry ?? {}) as { slot?: unknown; pick?: unknown }
+    if (typeof slot !== 'number' || !slots.has(slot)) throw new Error(`Answer ${i + 1} has slot ${JSON.stringify(slot)}, which is not one of the ${key.length} slots in key.json.`)
+    if (typeof pick !== 'string' || !PICKS.includes(pick)) throw new Error(`Answer for slot ${slot} has pick ${JSON.stringify(pick)}, it must be left, right or same.`)
+    if (seen.has(slot)) throw new Error(`Slot ${slot} is answered more than once.`)
+    seen.add(slot)
+    return { slot, pick: pick as SamAnswer['pick'] }
+  })
+}
+
+/** Wraps a pair check so a throw (a shot that fails) logs the pair and counts as unusable, and the pick moves on. */
+export const skipOnError = (check: (p: Pair) => Promise<boolean>, log: (line: string) => void) => async (p: Pair): Promise<boolean> => {
+  try {
+    return await check(p)
+  } catch (e) {
+    log(`Skipping ${p.id}: ${e instanceof Error ? e.message : String(e)}`)
+    return true
+  }
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { agreement, pickCalibration, type Key, type SamAnswer } from './calibrate.js'
+import { agreement, parseAnswers, pickCalibration, skipOnError, type Key, type SamAnswer } from './calibrate.js'
 import { calibrationPage } from './calibrate-page.js'
 import type { Winner } from './judge.js'
 import type { Pair } from './pairs.js'
@@ -68,5 +68,33 @@ describe('agreement', () => {
     const sam = (n: number): SamAnswer[] => k.map((x) => ({ slot: x.slot, pick: x.slot <= n ? 'left' : 'right' }))
     expect(agreement(k, sam(16), judged)).toMatchObject({ agree: 16, total: 20, passed: true })
     expect(agreement(k, sam(15), judged)).toMatchObject({ agree: 15, passed: false })
+  })
+})
+
+describe('parseAnswers', () => {
+  const key: Key = [{ slot: 1, pairId: 'a', leftIs: 'alone' }, { slot: 2, pairId: 'b', leftIs: 'dualkit' }]
+  it('accepts good answers, even partial', () => {
+    expect(parseAnswers({ answers: [{ slot: 2, pick: 'same' }] }, key)).toEqual([{ slot: 2, pick: 'same' }])
+  })
+  it.each([
+    [{}, /answers/],
+    [{ answers: [{ slot: 1, pick: 'middle' }] }, /left, right or same/],
+    [{ answers: [{ slot: 3, pick: 'left' }] }, /not one of the 2 slots/],
+    [{ answers: [{ slot: '1', pick: 'left' }] }, /slot/],
+    [{ answers: [null] }, /slot/],
+    [{ answers: [{ slot: 1, pick: 'left' }, { slot: 1, pick: 'right' }] }, /more than once/],
+  ])('rejects %j', (given, message) => {
+    expect(() => parseAnswers(given, key)).toThrow(message)
+  })
+})
+
+describe('skipOnError', () => {
+  it('a pair whose shot throws is skipped and another is picked', async () => {
+    const logs: string[] = []
+    const check = skipOnError(async (p) => { if (p.model === 'm1') throw new Error('shot failed'); return false }, (l) => logs.push(l))
+    const picked = await pickCalibration(synthetic(), check)
+    expect(picked).toHaveLength(20)
+    expect(picked.some((p) => p.model === 'm1')).toBe(false)
+    expect(logs[0]).toMatch(/Skipping .* shot failed/)
   })
 })

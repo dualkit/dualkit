@@ -6,7 +6,8 @@ import type { Answer, Ask } from '../../../cli/src/review/model'
 import { SCREENS } from '../../../bench/src/config'
 import type { Pair } from './pairs.js'
 import { fileJudgeCache, type JudgeCache } from './cache.js'
-import { headline, judgeAll, type JudgeSummary } from './run.js'
+import { cacheKey } from './cache.js'
+import { headline, isDailyQuota, judgeAll, QUOTA_SPENT, type JudgeSummary } from './run.js'
 import type { PairVerdict } from './judge.js'
 
 const SCREEN = SCREENS[0] as string
@@ -112,10 +113,74 @@ describe('judgeAll', () => {
   })
 })
 
+describe('judgeAll resilience', () => {
+  it('a throwing shootFn records failed with the error and the run continues', async () => {
+    const shoot = async (p: string) => {
+      if (p.includes('o1-')) throw new Error('browser crashed')
+      return PNG_OF(p)
+    }
+    const { results } = await judgeAll({ ...base, shootFn: shoot, ask: async (a) => good(a), cache: memCache(), pairs: [pair(1), pair(2)] })
+    expect(results.map((r) => r.winner)).toEqual(['failed', 'tie'])
+    expect(results[0]?.error).toBe('browser crashed')
+  })
+
+  it('a throwing ask records failed and the run continues', async () => {
+    let n = 0
+    const ask = async (a: Ask): Promise<Answer> => {
+      if (n++ < 2) throw new Error('network down')
+      return good(a)
+    }
+    const { results } = await judgeAll({ ...base, ask, cache: memCache(), pairs: [pair(1), pair(2)] })
+    expect(results.map((r) => r.winner)).toEqual(['failed', 'tie'])
+    expect(results[0]?.error).toBe('network down')
+  })
+
+  it('a daily quota 429 stops further asks and the rest fail with a clear error', async () => {
+    let calls = 0
+    const ask = async (): Promise<Answer> => {
+      calls++
+      return { ok: false, error: 'Gemini 429: You exceeded your current quota, please check your plan' }
+    }
+    const { results } = await judgeAll({ ...base, ask, cache: memCache(), pairs: [pair(1), pair(2), pair(3)] })
+    expect(results.map((r) => r.winner)).toEqual(['failed', 'failed', 'failed'])
+    expect(results.map((r) => r.error)).toEqual([QUOTA_SPENT, QUOTA_SPENT, QUOTA_SPENT])
+    expect(calls).toBeLessThanOrEqual(2)
+  })
+
+  it('RESOURCE_EXHAUSTED counts only when it is a per-day quota', () => {
+    expect(isDailyQuota('RESOURCE_EXHAUSTED: GenerateRequestsPerDayPerProjectPerModel-FreeTier')).toBe(true)
+    expect(isDailyQuota('RESOURCE_EXHAUSTED: requests per minute')).toBe(false)
+    expect(isDailyQuota('HTTP 500')).toBe(false)
+  })
+
+  it('reports progress after every pair so a killed run keeps its results', async () => {
+    const seen: number[] = []
+    const { results } = await judgeAll({
+      ...base, ask: async (a) => good(a), cache: memCache(), pairs: [pair(1), pair(2), pair(3)],
+      onProgress: (rs) => seen.push(rs.length),
+    })
+    expect(seen).toEqual([1, 2, 3])
+    expect(results).toHaveLength(3)
+  })
+
+  it('a checklist edit does not reuse a cached verdict', () => {
+    const k = (checklist: string) => cacheKey({ aloneHtml: 'a', otherHtml: 'o', model: 'm', version: '1', checklist })
+    expect(k('a')).not.toBe(k('b'))
+  })
+})
+
 describe('headline', () => {
+  it('counts wins by default apart from blind side-by-sides', async () => {
+    const { summary } = await judgeAll({ ...base, ask: async (a) => good(a), cache: memCache(), pairs: [pair(1, 'BLANK'), pair(2)] })
+    expect(summary.byDefault).toBe(1)
+    expect(summary.dualkit).toBe(0)
+    expect(summary.judged).toBe(1)
+    expect(headline(summary)).toBe('Dualkit wins 0 of 1 blind side-by-sides')
+  })
+
   it('leaves out failed and excluded pairs', () => {
     const s: JudgeSummary = {
-      against: 'dualkit', judged: 10, dualkit: 5, alone: 2, tie: 1, inconsistent: 0, failed: 1, excluded: 1, byModel: {}, byScreen: {},
+      against: 'dualkit', judged: 10, dualkit: 5, alone: 2, tie: 1, inconsistent: 0, failed: 1, excluded: 1, byDefault: 0, byModel: {}, byScreen: {},
     }
     expect(headline(s)).toBe('Dualkit wins 5 of 8 blind side-by-sides')
   })
