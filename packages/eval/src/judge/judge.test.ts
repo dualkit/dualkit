@@ -54,6 +54,7 @@ describe('judgePair', () => {
   it('a winner must hold both ways', async () => {
     const r = await judgePair({ checklist, alone: ALONE, other: OTHER, ask: prefers('other'), flip: false })
     expect(r).toMatchObject({ winner: 'dualkit', byDefault: false })
+    expect((await judgePair({ checklist, alone: ALONE, other: OTHER, ask: prefers('none'), flip: false })).byDefault).toBe(false)
     expect(r.costUsd).toBeCloseTo(0.02)
     expect((await judgePair({ checklist, alone: ALONE, other: OTHER, ask: prefers('alone'), flip: true })).winner).toBe('alone')
   })

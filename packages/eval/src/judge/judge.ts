@@ -89,11 +89,10 @@ export async function judgePair(input: {
     const d = decide(v)
     const aloneLeft = plans[i]
     const who = d === 'same' ? 'same' : (d === 'left') === aloneLeft ? 'alone' : 'dualkit'
-    return { who, tiebreak: d !== 'same' && byPoints(v) === 'same' }
+    return who
   })
   const [a, b] = results
-  const winner: Winner = a?.who === b?.who ? (a?.who === 'same' ? 'tie' : (a?.who as Winner)) : 'inconsistent'
-  // byDefault: the winner leaned on the holistic pick in at least one call.
-  const byDefault = (winner === 'alone' || winner === 'dualkit') && results.some((r) => r.tiebreak)
-  return { winner, byDefault, calls, costUsd }
+  const winner: Winner = a === b ? (a === 'same' ? 'tie' : (a as Winner)) : 'inconsistent'
+  // byDefault is for blank-side wins decided without a call (set elsewhere); a judged pair is never one.
+  return { winner, byDefault: false, calls, costUsd }
 }
