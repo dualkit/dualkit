@@ -1,13 +1,14 @@
 import { createHash } from 'node:crypto'
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { writeFileAtomic } from './atomic.js'
 import type { PairVerdict } from './judge.js'
 
 export type JudgeCache = { get(key: string): PairVerdict | null; put(key: string, verdict: PairVerdict): void }
 
-/** sha256 over both pages, the model id and the prompt version, so any change asks again. */
-export const cacheKey = (parts: { aloneHtml: string; otherHtml: string; model: string; version: string }): string =>
-  createHash('sha256').update(JSON.stringify([parts.aloneHtml, parts.otherHtml, parts.model, parts.version])).digest('hex')
+/** sha256 over both pages, the model id, the prompt version and the checklist JSON, so any change asks again. */
+export const cacheKey = (parts: { aloneHtml: string; otherHtml: string; model: string; version: string; checklist: string }): string =>
+  createHash('sha256').update(JSON.stringify([parts.aloneHtml, parts.otherHtml, parts.model, parts.version, parts.checklist])).digest('hex')
 
 const isVerdict = (v: unknown): v is PairVerdict => {
   const x = v as Partial<PairVerdict> | null
@@ -31,9 +32,7 @@ export function fileJudgeCache(dir: string): JudgeCache {
       if (verdict.winner === 'failed') return
       mkdirSync(dir, { recursive: true })
       const file = join(dir, `${key}.json`)
-      const temp = `${file}.${process.pid}.tmp`
-      writeFileSync(temp, JSON.stringify(verdict))
-      renameSync(temp, file)
+      writeFileAtomic(file, JSON.stringify(verdict))
     },
   }
 }

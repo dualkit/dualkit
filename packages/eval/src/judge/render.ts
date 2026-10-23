@@ -1,8 +1,9 @@
 import { createHash } from 'node:crypto'
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import type { Browser } from 'playwright'
 import { PNG } from 'pngjs'
+import { writeFileAtomic } from './atomic.js'
 import { RUN } from '@dualkit/bench/src/config'
 
 export const SHOT_WIDTH = 390
@@ -28,7 +29,7 @@ export async function shoot(htmlPath: string, browser: Browser, cacheDir: string
       clip: { x: 0, y: 0, width: RUN.width, height: Math.min(height, SHOT_MAX_HEIGHT) },
     })
     mkdirSync(cacheDir, { recursive: true })
-    writeFileSync(cached, png)
+    writeFileAtomic(cached, png)
     return png
   } finally {
     await context.close()
