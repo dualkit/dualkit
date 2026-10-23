@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { Answer, Ask } from '../../../cli/src/review/model'
-import type { Checklist } from './checklist.js'
+import { SCREENS } from '../../../bench/src/config'
+import { loadChecklist, type Checklist } from './checklist.js'
 import { buildJudgeAsk, decide, judgePair, parseVerdict, type CallVerdict, type Mark } from './judge.js'
 
 const checklist: Checklist = { screen: 's', points: [{ id: 'p1', text: 'one' }, { id: 'p2', text: 'two' }, { id: 'p3', text: 'three' }] }
@@ -95,5 +96,11 @@ describe('buildJudgeAsk', () => {
     expect(a.text).not.toMatch(/dualkit|alone|model|gemini|minimax/i)
     expect(a.text).toContain('p2')
     expect(a.images).toHaveLength(2)
+  })
+  it('every real checklist builds a blind prompt', () => {
+    for (const screen of SCREENS) {
+      const a = buildJudgeAsk(loadChecklist(screen), ALONE, OTHER)
+      expect(`${a.system}\n${a.text}`, screen).not.toMatch(/dualkit|alone|model|gemini|minimax/i)
+    }
   })
 })

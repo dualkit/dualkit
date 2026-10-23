@@ -15,7 +15,7 @@ const PICKS: readonly string[] = ['left', 'right', 'same']
 
 const SYSTEM = `You are comparing two screenshots of the same Arabic app screen. Image 1 is on the left and image 2 is on the right.
 
-Judge as a native Arabic reader would. Right-to-left norms apply: reading and flow start on the right, back arrows point right, and a calendar week starts on Saturday. Judge only what is visible in the screenshots. Do not guess at anything hidden or off screen.
+Judge as a native Arabic reader would. Judge only what is visible in the screenshots. Do not guess at anything hidden or off screen.
 
 You get a checklist of points. For each point, mark image 1 (left) and image 2 (right) separately:
 - "pass": the point is clearly met.
