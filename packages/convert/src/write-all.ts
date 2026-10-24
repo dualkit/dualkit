@@ -30,6 +30,16 @@ async function install(project: Project, io: ConvertIo): Promise<Flag[]> {
   return [{ file: 'package.json', line: 1, kind: 'unsupported', message, suggestion: `Run ${cmd} yourself and fix what it reports.` }]
 }
 
+/** Runs install, records any lockfile it created for rollback, and throws when the run was interrupted meanwhile. */
+async function installed(disk: Disk, project: Project, io: ConvertIo): Promise<Flag[]> {
+  const lockfiles = LOCKFILES[project.packageManager]
+  const before = new Set(lockfiles.filter((f) => readText(disk.root, f) !== null))
+  const flags = await install(project, io)
+  disk.created.push(...lockfiles.filter((f) => !before.has(f) && readText(disk.root, f) !== null))
+  if (io.signal?.aborted) throw new Error('the run was interrupted')
+  return flags
+}
+
 /**
  * The disk phase, in order: converted files, wiring (moves, writes, edits), stylesheet and messages,
  * ledger, package.json, install, .gitignore, then one commit of the named paths when anything changed.
@@ -52,7 +62,7 @@ export async function writeAll(input: WriteInput): Promise<{ changed: string[]; 
   const added = addDependencies(disk, plan.deps)
   if (added) touched.push('package.json')
   step.name = 'installing packages'
-  const flags = options.install && added ? await install(project, io) : []
+  const flags = options.install && added ? await installed(disk, project, io) : []
   if (options.install && added) touched.push(...LOCKFILES[project.packageManager].filter((f) => readText(disk.root, f) !== null))
   step.name = 'updating .gitignore'
   if (ignoreStateDir(disk)) touched.push('.gitignore')

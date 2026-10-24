@@ -56,12 +56,14 @@ export type PageOptions = { cookies?: Record<string, string> }
 /** Takes a screenshot of url at a viewport width and returns the PNG. Injected by the CLI. */
 export type Shooter = (url: string, width: number, options?: PageOptions) => Promise<Buffer>
 
-/** What convert needs from outside: a logger, a command runner, the app's config and, for the baseline, a shooter. */
+/** What convert needs from outside: a logger, a command runner, the app's config, for the baseline a shooter, and an interrupt signal. */
 export type ConvertIo = {
   log: (s: string) => void
   shoot?: Shooter
   run: (cmd: string, cwd: string) => Promise<{ code: number; out: string }>
   config: ConvertConfig
+  /** Fires when the person interrupts the run. Convert checks it after slow steps and rolls back. */
+  signal?: AbortSignal
 }
 
 /** The passes that make edits, plus wiring. */

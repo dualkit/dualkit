@@ -77,6 +77,12 @@ describe('dualkit convert', () => {
     expect(t.calls[0]?.args[0]).toMatchObject({ mode: 'bilingual', install: false, baseline: true })
   })
 
+  it('hands the interrupt signal to convert so an interrupted install rolls back', async () => {
+    const t = setup()
+    expect(await run(['convert', '--mode', 'arabic'], t.io)).toBe(0)
+    expect((t.calls[0]?.args[1] as { signal?: unknown }).signal).toBeInstanceOf(AbortSignal)
+  })
+
   it('skips the baseline with a note when there is no start command', async () => {
     const t = setup()
     expect(await run(['convert', '--mode', 'arabic'], t.io)).toBe(0)

@@ -96,7 +96,7 @@ export async function runConvert(flags: ConvertFlags, io: Out, env: ConvertEnv =
       if (!finishing && !flags['no-baseline'] && !settings.start) io.out(`${NO_START}\n`)
       const kit = env.shoot || env.audit ? null : makeBrowserKit(settings, config, io.cwd, signal)
       const base: ConvertIo = {
-        log: (s) => io.out(`${s}\n`), config: settings, run: env.run ?? ((cmd, cwd) => runCommand(cmd, cwd, signal)),
+        log: (s) => io.out(`${s}\n`), config: settings, run: env.run ?? ((cmd, cwd) => runCommand(cmd, cwd, signal)), signal,
         ...((finishing || baseline) && (env.shoot ?? kit?.shoot) ? { shoot: (env.shoot ?? kit?.shoot) as NonNullable<ConvertIo['shoot']> } : {}),
       }
       // The answers go to convert and finish, which commit them. The CLI never writes the config file itself.

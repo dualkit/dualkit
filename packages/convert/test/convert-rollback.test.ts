@@ -25,6 +25,13 @@ const git = (dir: string, ...args: string[]): string => execFileSync('git', args
 const io = { log: () => {}, run: async () => ({ code: 0, out: '' }), config: {} }
 const options = (root: string) => ({ root, mode: 'bilingual' as const, install: false, baseline: false })
 
+/** Removes the fixture's tracked lockfile, so an install that writes one creates it. */
+function withoutLockfile(dir: string): string {
+  git(dir, 'rm', '-q', 'package-lock.json')
+  git(dir, '-c', 'commit.gpgsign=false', 'commit', '-q', '-m', 'no lockfile')
+  return dir
+}
+
 function failingHook(dir: string): void {
   const hook = join(dir, '.git/hooks/pre-commit')
   writeFileSync(hook, '#!/bin/sh\nexit 1\n')
@@ -74,5 +81,28 @@ describe('convert rollback', () => {
     expect(git(dir, 'status', '--porcelain', '--untracked-files=all')).toBe('')
     expect(git(dir, 'show', 'HEAD:components/extra.tsx')).toContain('ml-2')
     rmSync(join(dir, '.git/hooks/pre-commit'))
+  })
+
+  it('deletes a lockfile the install created when a later step fails', async () => {
+    const dir = withoutLockfile(fixtureRepo('next-app'))
+    failingHook(dir)
+    const run = async (_cmd: string, cwd: string) => { writeFileSync(join(cwd, 'package-lock.json'), '{}\n'); return { code: 0, out: '' } }
+    await expect(convert({ ...options(dir), install: true }, { ...io, run })).rejects.toThrow(/^convert failed at committing/)
+    expectBackOn(dir, 'main')
+    expect(existsSync(join(dir, 'package-lock.json'))).toBe(false)
+  })
+
+  it('rolls back when the run is interrupted during install', async () => {
+    const dir = withoutLockfile(fixtureRepo('next-app'))
+    const controller = new AbortController()
+    const run = async (_cmd: string, cwd: string) => {
+      writeFileSync(join(cwd, 'package-lock.json'), '{}\n')
+      controller.abort()
+      return { code: 1, out: 'killed' }
+    }
+    await expect(convert({ ...options(dir), install: true }, { ...io, run, signal: controller.signal })).rejects.toThrow('convert failed at installing packages: the run was interrupted. Your repo is back on main as it was.')
+    expectBackOn(dir, 'main')
+    expect(git(dir, 'branch', '--list', 'dualkit/*')).toBe('')
+    expect(existsSync(join(dir, 'package-lock.json'))).toBe(false)
   })
 })
