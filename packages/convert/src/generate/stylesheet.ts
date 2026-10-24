@@ -44,16 +44,12 @@ export function importEdit(entry: SourceFile, cssPath: string): Edit | null {
   const body = block.ast.program.body as unknown as Node[]
   const imports = body.filter((node) => node.type === 'ImportDeclaration')
   if (imports.some((node) => node.source?.value === spec)) return null
-  const statement = (end: number): string => `import '${spec}'${entry.text[end - 1] === ';' ? ';' : ''}`
-  const last = imports.at(-1)
-  if (last) {
-    const at = block.offset + last.end
-    return { start: at, end: at, text: `\n${statement(last.end)}` }
+  // `at` is a file offset, so the character before it is read from the file text.
+  const statement = (at: number): string => `import '${spec}'${entry.text[at - 1] === ';' ? ';' : ''}`
+  const after = imports.at(-1) ?? (block.ast.program.directives as unknown as Node[]).at(-1)
+  if (after) {
+    const at = block.offset + after.end
+    return { start: at, end: at, text: `\n${statement(at)}` }
   }
-  const directive = (block.ast.program.directives as unknown as Node[]).at(-1)
-  if (directive) {
-    const at = block.offset + directive.end
-    return { start: at, end: at, text: `\n${statement(directive.end)}` }
-  }
-  return { start: 0, end: 0, text: `${statement(0)}\n` }
+  return { start: block.offset, end: block.offset, text: `import '${spec}'\n` }
 }

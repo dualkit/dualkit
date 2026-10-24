@@ -55,6 +55,16 @@ describe('markupEdits icons', () => {
     expect(run('export const A = () => <a href="/"><svg />Home</a>\n').flags).toEqual([])
     expect(run('export const A = () => <a href="/"><svg />Backlog</a>\n').flags).toEqual([])
   })
+
+  it('does not flag an inline svg the person already mirrored', () => {
+    expect(run('export const A = () => <a href="/n"><svg data-dk-mirror="" />Next</a>\n').flags).toEqual([])
+    expect(run('export const A = () => <a href="/n"><svg className="h-4 rtl:-scale-x-100" />Next</a>\n').flags).toEqual([])
+    expect(run('export const A = () => <a href="/n"><svg className={`h-4 ${c} rtl:-scale-x-100`} />Next</a>\n').flags).toEqual([])
+  })
+
+  it('leaves an icon alone that already mirrors with an rtl: class', () => {
+    expect(run(withIcon('lucide-react', 'ChevronRight', '<ChevronRight className="rtl:-scale-x-100" />')).edits).toEqual([])
+  })
 })
 
 describe('markupEdits numbers', () => {
@@ -81,6 +91,12 @@ describe('markupEdits numbers', () => {
   it('leaves an expression already in bdi or in an element with dir', () => {
     expect(run(page('<bdi>{price}</bdi>')).edits).toEqual([])
     expect(run('export const A = ({ price }) => <p dir="ltr">{price}</p>\n').edits).toEqual([])
+  })
+
+  it('leaves an expression alone when any element above it is bdi or has dir', () => {
+    expect(run(page('<bdi><span>{price}</span></bdi>')).edits).toEqual([])
+    expect(run('export const A = ({ price }) => <div dir="ltr"><p><b>{price}</b></p></div>\n').edits).toEqual([])
+    expect(run('export const A = ({ items }) => <bdi>{items.map((i) => <span key={i.id}>{i.price}</span>)}</bdi>\n').edits).toEqual([])
   })
 })
 

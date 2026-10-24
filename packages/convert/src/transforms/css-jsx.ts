@@ -90,9 +90,13 @@ export function jsxStyleResult(file: SourceFile): FileResult {
       const entries = ((object.properties as Node[]) ?? [])
         .map((p) => entryOf(p, block.offset, file.text, dynamic))
         .filter((e): e is Entry => e !== null)
-      const css = entries.map((e) => `${e.prop}: ${e.value};\n`).join('')
+      // Each entry is one declaration line; its start offset is where lint reports the declaration.
       const starts: number[] = []
-      entries.reduce((at, e) => (starts.push(at), at + e.prop.length + e.value.length + 4), 0)
+      let css = ''
+      for (const e of entries) {
+        starts.push(css.length)
+        css += `${e.prop}: ${e.value};\n`
+      }
       const synthetic = parseSource('style-object.css', css)
       if (!synthetic) continue
       const entryAt = (offset: number): Entry | undefined => entries[starts.indexOf(offset)]

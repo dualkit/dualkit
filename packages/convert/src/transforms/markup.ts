@@ -77,11 +77,20 @@ function labelOf(element: Node): string {
 
 type Context = { file: SourceFile; base: number; icons: Map<string, string>; edits: Edit[]; flags: Flag[] }
 
+/** Whether the element already mirrors in Arabic: it has data-dk-mirror, or an rtl: variant in its class. */
+function alreadyMirrored(opening: Node, ctx: Context): boolean {
+  if (attributeNamed(opening, 'data-dk-mirror')) return true
+  return ['className', 'class'].some((name) => {
+    const attribute = attributeNamed(opening, name)
+    return attribute !== undefined && /(?:^|[\s"'`{])rtl:/.test(ctx.file.text.slice(ctx.base + attribute.start!, ctx.base + attribute.end!))
+  })
+}
+
 function visitOpening(opening: Node, ctx: Context, ancestors: Node[]): void {
   const name = tagName(opening)
   if (!name) return
   const after = ctx.base + (opening.name as Node).end!
-  if (ctx.icons.has(name) && isMirrored(ctx.icons.get(name)!) && !attributeNamed(opening, 'data-dk-mirror')) {
+  if (ctx.icons.has(name) && isMirrored(ctx.icons.get(name)!) && !alreadyMirrored(opening, ctx)) {
     ctx.edits.push({ start: after, end: after, text: ' data-dk-mirror=""' })
   }
   if (name === 'input' && LTR_TYPES.has(literalValue(attributeNamed(opening, 'type')) ?? '') && !attributeNamed(opening, 'dir')) {
@@ -91,6 +100,7 @@ function visitOpening(opening: Node, ctx: Context, ancestors: Node[]): void {
 }
 
 function flagSvg(opening: Node, ctx: Context, ancestors: Node[]): void {
+  if (alreadyMirrored(opening, ctx)) return
   const control = [...ancestors].reverse().find((a) => a.type === 'JSXElement' && ['button', 'a'].includes(tagName(a.openingElement as Node) ?? ''))
   if (!control || !DIRECTION_LABEL.test(labelOf(control))) return
   ctx.flags.push({
@@ -100,12 +110,16 @@ function flagSvg(opening: Node, ctx: Context, ancestors: Node[]): void {
   })
 }
 
-function visitExpression(container: Node, parent: Node, ctx: Context): void {
+/** Whether an element is bdi or sets dir, so the text inside it is already isolated. */
+const isolates = (element: Node): boolean => {
+  const opening = element.openingElement as Node
+  return tagName(opening) === 'bdi' || attributeNamed(opening, 'dir') !== undefined
+}
+
+function visitExpression(container: Node, ancestors: Node[], ctx: Context): void {
+  const parent = ancestors[ancestors.length - 1]!
   if (parent.type !== 'JSXElement' && parent.type !== 'JSXFragment') return
-  if (parent.type === 'JSXElement') {
-    const opening = parent.openingElement as Node
-    if (tagName(opening) === 'bdi' || attributeNamed(opening, 'dir')) return
-  }
+  if (ancestors.some((a) => a.type === 'JSXElement' && isolates(a))) return
   const expression = container.expression as Node
   if (!isNumberExpression(expression)) return
   ctx.edits.push({ start: ctx.base + container.start!, end: ctx.base + container.start!, text: '<bdi>' })
@@ -117,7 +131,7 @@ function walk(node: unknown, ctx: Context, ancestors: Node[]): void {
   if (!node || typeof node !== 'object') return
   const n = node as Node
   if (n.type === 'JSXOpeningElement') visitOpening(n, ctx, ancestors)
-  if (n.type === 'JSXExpressionContainer' && ancestors.length) visitExpression(n, ancestors[ancestors.length - 1]!, ctx)
+  if (n.type === 'JSXExpressionContainer' && ancestors.length) visitExpression(n, ancestors, ctx)
   const next = typeof n.type === 'string' ? [...ancestors, n] : ancestors
   for (const [key, child] of Object.entries(n)) if (!SKIP.has(key)) walk(child, ctx, next)
 }

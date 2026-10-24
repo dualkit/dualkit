@@ -86,6 +86,18 @@ describe('importEdit', () => {
     expect(applyEdits(root.text, [importEdit(root, 'src/dualkit.css')!])).toContain("import './src/dualkit.css'")
   })
 
+  it('reads the semicolon and inserts at file offsets when the script block does not start the file', () => {
+    const prefix = '<!-- head -->\n'
+    const shifted = (text: string) => {
+      const file = source('src/main.tsx', text)
+      return { ...file, text: prefix + text, js: file.js.map((b) => ({ ...b, offset: prefix.length })) }
+    }
+    const semi = shifted("import a from 'a';\nconst b = 1\n")
+    expect(applyEdits(semi.text, [importEdit(semi, 'src/dualkit.css')!])).toBe(`${prefix}import a from 'a';\nimport './dualkit.css';\nconst b = 1\n`)
+    const bare = shifted('export const a = 1;\n')
+    expect(applyEdits(bare.text, [importEdit(bare, 'src/dualkit.css')!])).toBe(`${prefix}import './dualkit.css'\nexport const a = 1;\n`)
+  })
+
   it('inserts at the top when there are no imports, after a directive', () => {
     const plain = source('src/main.tsx', 'export const a = 1\n')
     expect(applyEdits(plain.text, [importEdit(plain, 'src/dualkit.css')!])).toBe("import './dualkit.css'\nexport const a = 1\n")
