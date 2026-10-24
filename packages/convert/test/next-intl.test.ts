@@ -228,6 +228,38 @@ describe('wireNextIntl bilingual', () => {
     expect(card).toContain("from '@/components/other'")
   })
 
+  it('flags an import through an alias with no * that points at a moved file', () => {
+    const m = memory({
+      'package.json': pkg('15.0.0'), 'app/layout.tsx': fixture.files('app/layout.tsx')!,
+      'tsconfig.json': JSON.stringify({ compilerOptions: { paths: { '@button': ['./app/ui/button.tsx'] } } }),
+      'app/ui/button.tsx': 'export const Button = 1\n',
+      'components/card.tsx': "import { Button } from '@button'\nexport const Card = Button\n",
+    })
+    const p = wireNextIntl(project, 'bilingual', m.files, m.paths)
+    expect(p.edits['components/card.tsx']).toBeUndefined()
+    const flag = p.flags.find((f) => f.file === 'components/card.tsx')
+    expect(flag).toMatchObject({ kind: 'unsupported', line: 1 })
+    expect(flag!.message).toContain('@button')
+  })
+
+  it('keeps a $ in an alias capture as it is', () => {
+    const m = memory({
+      'package.json': pkg('15.0.0'), 'app/layout.tsx': fixture.files('app/layout.tsx')!,
+      'tsconfig.json': JSON.stringify({ compilerOptions: { paths: { '@/*': ['./*'] } } }),
+      'app/ui/$&button.tsx': 'export const Button = 1\n',
+      'components/card.tsx': "import { Button } from '@/app/ui/$&button'\nexport const Card = Button\n",
+    })
+    const p = wireNextIntl(project, 'bilingual', m.files, m.paths)
+    expect(after(p, m.files, 'components/card.tsx')).toContain("from '@/app/[locale]/ui/$&button'")
+  })
+
+  it('treats a top-level catch-all route handler as already catching every path', () => {
+    const m = memory({ 'package.json': pkg('15.0.0'), 'app/layout.tsx': fixture.files('app/layout.tsx')!, 'app/page.tsx': 'export default function P() { return null }\n', 'app/[...slug]/route.ts': 'export function GET() {}\n' })
+    const p = wireNextIntl(project, 'bilingual', m.files, m.paths)
+    expect(p.writes['app/[locale]/[...rest]/page.tsx']).toBeUndefined()
+    expect(p.flags.some((f) => f.message.includes('already catches every path'))).toBe(true)
+  })
+
   it('rewrites alias imports with ./src/* paths when the app dir is src/app', () => {
     const m = memory({
       'package.json': pkg('15.0.0'), 'src/app/layout.tsx': fixture.files('app/layout.tsx')!,

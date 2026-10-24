@@ -67,7 +67,7 @@ export function resolveFile(target: string, has: (path: string) => boolean): str
   return candidates.find(has) ?? null
 }
 
-/** An alias import resolved to a module path, with a way to write a new module path back in the same alias form. */
+/** An alias import resolved to a module path, with a way to write a new module path back in the same alias form. `respell` gives null when the alias has no `*` and cannot name another path. */
 export type AliasTarget = { path: string; file: string; respell: (path: string) => string | null }
 
 /** Resolves an aliased specifier the way TypeScript does: the best matching key, then its targets in order. Null when nothing resolves. */
@@ -76,12 +76,13 @@ export function resolveAlias(spec: string, aliases: Alias[], has: (path: string)
   if (!alias) return null
   const star = capture(alias.key, spec)!
   for (const target of alias.targets) {
-    const path = target.replace('*', star)
+    // Function replacers, so a `$` in a path is never read as a replacement pattern.
+    const path = target.replace('*', () => star)
     const file = resolveFile(path, has)
     if (!file) continue
     const respell = (next: string): string | null => {
       const middle = target.includes('*') ? capture(target, next) : null
-      return middle === null ? null : alias.key.replace('*', middle)
+      return middle === null ? null : alias.key.replace('*', () => middle)
     }
     return { path, file, respell }
   }

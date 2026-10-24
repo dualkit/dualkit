@@ -1,7 +1,8 @@
 import { parseSourceOutcome } from '@dualkit/lint'
 import { posix } from 'node:path'
 import type { Node } from '../transforms/strings'
-import type { Edit } from '../types'
+import { lineOf } from '../transforms/lines'
+import type { Edit, Flag } from '../types'
 import { resolveAlias, resolveFile, type Alias } from './aliases'
 
 const SKIP = new Set(['loc', 'leadingComments', 'trailingComments', 'innerComments', 'extra'])
@@ -101,12 +102,18 @@ function relativeSpec(scope: Scope, from: string, to: string, spec: string): str
   return posix.normalize(next) === posix.normalize(spec) ? null : next
 }
 
-/** The new text of an aliased specifier that resolves to a moved file, in the same alias form, or null. */
-function aliasSpec(scope: Scope, spec: string): string | null {
+/** The new text of an aliased specifier that resolves to a moved file, in the same alias form; null when unchanged; `stuck` when its alias cannot name the new path. */
+function aliasSpec(scope: Scope, spec: string): string | null | 'stuck' {
   const resolved = resolveAlias(spec, scope.aliases, scope.has)
   if (!resolved || !scope.moved.has(resolved.file)) return null
-  return resolved.respell(localePath(scope.appDir, resolved.path))
+  return resolved.respell(localePath(scope.appDir, resolved.path)) ?? 'stuck'
 }
+
+const stuckFlag = (file: string, line: number, spec: string): Flag => ({
+  file, line, kind: 'unsupported',
+  message: `The import "${spec}" uses a path alias with no * that points at a file convert moved under [locale], so it still points at the old path.`,
+  suggestion: 'Point that alias in tsconfig.json at the new path, or import the file by a relative path.',
+})
 
 /** Next's typed route helpers, whose first type argument is the route of the file. */
 const ROUTE_TYPES = new Set(['PageProps', 'LayoutProps', 'RouteContext'])
@@ -132,32 +139,39 @@ function routeTypeEdits(program: Node, offset: number): Edit[] {
   })
 }
 
-/** The edits that keep one file's specifiers pointing at the same files after the moves, and its typed routes right. */
-function fileRewrites(scope: Scope, from: string, to: string, text: string): Edit[] {
+/** The edits that keep one file's specifiers pointing at the same files after the moves, its typed routes right, and flags for imports it cannot fix. */
+function fileRewrites(scope: Scope, from: string, to: string, text: string): { edits: Edit[]; flags: Flag[] } {
   const outcome = parseSourceOutcome(from, text)
   const block = 'file' in outcome ? outcome.file.js[0] : undefined
-  if (!block) return []
+  if (!block) return { edits: [], flags: [] }
   const edits: Edit[] = from === to ? [] : routeTypeEdits(block.ast.program as unknown as Node, block.offset)
+  const flags: Flag[] = []
   for (const node of specifierLiterals(block.ast.program as unknown as Node)) {
     const spec = String(node.value)
     const next = RELATIVE.test(spec) ? relativeSpec(scope, from, to, spec) : aliasSpec(scope, spec)
-    if (next !== null && next !== spec) edits.push({ start: block.offset + node.start! + 1, end: block.offset + node.end! - 1, text: next })
+    if (next === 'stuck') flags.push(stuckFlag(to, lineOf(text, block.offset + node.start!), spec))
+    else if (next !== null && next !== spec) edits.push({ start: block.offset + node.start! + 1, end: block.offset + node.end! - 1, text: next })
   }
-  return edits
+  return { edits, flags }
 }
 
-/** Edits, keyed by post-move path, that keep every relative import, path alias import and font path working after the moves. */
-export function importRewrites(appDir: string, moveList: [string, string][], paths: readonly string[], files: (rel: string) => string | null, aliases: Alias[]): Record<string, Edit[]> {
+/**
+ * Edits, keyed by post-move path, that keep every relative import, path alias import and font path working
+ * after the moves, and flags for alias imports that cannot follow a moved file.
+ */
+export function importRewrites(appDir: string, moveList: [string, string][], paths: readonly string[], files: (rel: string) => string | null, aliases: Alias[]): { edits: Record<string, Edit[]>; flags: Flag[] } {
   const known = new Set(paths)
   const scope: Scope = { appDir, moved: new Map(moveList), has: (p) => known.has(p), aliases }
-  const out: Record<string, Edit[]> = {}
+  const edits: Record<string, Edit[]> = {}
+  const flags: Flag[] = []
   for (const path of paths) {
     if (!CODE.test(path)) continue
     const text = files(path)
     if (text === null) continue
     const to = scope.moved.get(path) ?? path
-    const edits = fileRewrites(scope, path, to, text)
-    if (edits.length) out[to] = edits
+    const result = fileRewrites(scope, path, to, text)
+    if (result.edits.length) edits[to] = result.edits
+    flags.push(...result.flags)
   }
-  return out
+  return { edits, flags }
 }

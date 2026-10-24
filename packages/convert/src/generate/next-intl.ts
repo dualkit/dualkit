@@ -141,19 +141,22 @@ export default function CatchAll() {
 `
 
 const PAGE = /^page\.(tsx?|jsx?|mdx?)$/
+const ROUTE = /^route\.(tsx?|jsx?)$/
 const LAYOUT = /^layout\.(tsx?|jsx?)$/
 
 const flagAt = (file: string, kind: Flag['kind'], message: string, suggestion: string): Flag => ({ file, line: 1, kind, message, suggestion })
 
-/** The post-move path of a page that already catches every top-level path under [locale], if any. */
-function topCatchAll(appDir: string, moves: [string, string][]): string | null {
-  const hit = moves.find(([from]) => {
-    const parts = from.slice(appDir.length + 1).split('/')
+/** The post-move path of a page or route handler that already catches every top-level path, if any. */
+function topCatchAll(appDir: string, moves: [string, string][], paths: readonly string[]): string | null {
+  const catches = (path: string): boolean => {
+    const parts = path.slice(appDir.length + 1).split('/')
     const name = parts.pop()!
     const url = urlSegments(parts)
-    return PAGE.test(name) && url.length === 1 && /^\[\[?\.\.\./.test(url[0]!)
-  })
-  return hit?.[1] ?? null
+    return (PAGE.test(name) || ROUTE.test(name)) && url.length === 1 && /^\[\[?\.\.\./.test(url[0]!)
+  }
+  const moved = moves.find(([from]) => catches(from))
+  if (moved) return moved[1]
+  return paths.find((p) => p.startsWith(`${appDir}/`) && catches(p)) ?? null
 }
 
 /** Whether convert already wired this app: a [locale] root layout in bilingual mode, the provider and request config in arabic mode. */
@@ -191,7 +194,7 @@ function bilingualParts(project: Project, appDir: string, files: (rel: string) =
   const middlewarePath = `${base}${nextMajor(files) >= 16 ? 'proxy' : 'middleware'}.ts`
   const middleware = middlewareFile(specifierTo(middlewarePath, `${base}i18n/routing.ts`))
   guardMiddleware(base, middlewarePath, middleware, files)
-  const catchAll = topCatchAll(appDir, moves)
+  const catchAll = topCatchAll(appDir, moves, paths)
   const flags = keptPages.map((page) => flagAt(page, 'unsupported',
     `${page} stays outside [locale], because the middleware skips its path, so it has no Arabic version.`,
     'Move the page to a path the middleware matches, or translate it by hand.'))
@@ -207,7 +210,8 @@ function bilingualParts(project: Project, appDir: string, files: (rel: string) =
     [switchPath(project)]: switchFile(specifierTo(switchPath(project), `${base}i18n/navigation.ts`)),
     ...(catchAll ? {} : { [`${appDir}/[locale]/[...rest]/page.tsx`]: CATCH_ALL }),
   }
-  return { moves, writes, flags, edits: importRewrites(appDir, moves, paths, files, readAliases(files)) }
+  const rewrites = importRewrites(appDir, moves, paths, files, readAliases(files))
+  return { moves, writes, flags: [...flags, ...rewrites.flags], edits: rewrites.edits }
 }
 
 /**
