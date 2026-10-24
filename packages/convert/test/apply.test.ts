@@ -10,34 +10,35 @@ const dir = (files: Record<string, string> = {}): string => {
   for (const [rel, text] of Object.entries(files)) writeFileSync(join(root, rel), text)
   return root
 }
+const disk = (root: string) => ({ root, created: [] as string[] })
 const read = (root: string, rel: string): string => readFileSync(join(root, rel), 'utf8')
 
 describe('addDependencies', () => {
   it('adds missing deps sorted, keeps the indent, and leaves declared ones alone', () => {
     const root = dir({ 'package.json': '{\n    "dependencies": { "react": "19.0.0" },\n    "devDependencies": { "i18next": "^25.0.0" }\n}\n' })
-    expect(addDependencies(root, { 'react-i18next': '17.1.6', i18next: '26.5.8' })).toBe(true)
+    expect(addDependencies(disk(root), { 'react-i18next': '17.1.6', i18next: '26.5.8' })).toBe(true)
     const pkg = JSON.parse(read(root, 'package.json'))
     expect(Object.keys(pkg.dependencies)).toEqual(['react', 'react-i18next'])
     expect(pkg.devDependencies.i18next).toBe('^25.0.0')
     expect(read(root, 'package.json')).toContain('\n    "dependencies"')
-    expect(addDependencies(root, { 'react-i18next': '17.1.6' })).toBe(false)
+    expect(addDependencies(disk(root), { 'react-i18next': '17.1.6' })).toBe(false)
   })
 
   it('throws when there is no package.json', () => {
-    expect(() => addDependencies(dir(), { a: '1.0.0' })).toThrow(/package.json/)
+    expect(() => addDependencies(disk(dir()), { a: '1.0.0' })).toThrow(/package.json/)
   })
 })
 
 describe('ignoreStateDir', () => {
   it('appends .dualkit/ on its own line once', () => {
     const root = dir({ '.gitignore': 'node_modules' })
-    expect(ignoreStateDir(root)).toBe(true)
+    expect(ignoreStateDir(disk(root))).toBe(true)
     expect(read(root, '.gitignore')).toBe('node_modules\n.dualkit/\n')
-    expect(ignoreStateDir(root)).toBe(false)
+    expect(ignoreStateDir(disk(root))).toBe(false)
   })
 
   it('accepts an existing .dualkit entry without a slash', () => {
-    expect(ignoreStateDir(dir({ '.gitignore': '.dualkit\n' }))).toBe(false)
+    expect(ignoreStateDir(disk(dir({ '.gitignore': '.dualkit\n' })))).toBe(false)
   })
 })
 

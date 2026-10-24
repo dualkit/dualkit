@@ -49,6 +49,38 @@ describe('convert refusals', () => {
   })
 })
 
+describe('convert refusals before the branch', () => {
+  it('ignores an untracked .dualkit folder and names the existing branch', async () => {
+    const dir = fixtureRepo('next-app')
+    git(dir, 'branch', 'dualkit/bilingual')
+    mkdirSync(join(dir, '.dualkit'))
+    writeFileSync(join(dir, '.dualkit/convert.json'), '{}')
+    const error = (await convert(options(dir), fakeIo()).catch((e: unknown) => e)) as Error
+    expect(error.message).toContain('dualkit/bilingual already exists')
+    expect(error.message).not.toContain('uncommitted')
+  })
+
+  it('refuses an app that already has its own messages file and leaves the repo alone', async () => {
+    const dir = fixtureRepo('next-app')
+    commitFiles(dir, { 'messages/en.json': '{ "Hello": "Hello" }\n' })
+    await expect(convert(options(dir), fakeIo())).rejects.toThrow('This app already has messages/en.json')
+    expect(git(dir, 'branch', '--show-current')).toBe('main')
+    expect(git(dir, 'branch', '--list', 'dualkit/*')).toBe('')
+    expect(git(dir, 'status', '--porcelain', '--ignored')).toBe('')
+  })
+
+  it('says git is missing when it cannot be run', async () => {
+    const dir = fixtureRepo('next-app')
+    const path = process.env.PATH
+    process.env.PATH = ''
+    try {
+      await expect(convert(options(dir), fakeIo())).rejects.toThrow('git is not installed or not on PATH')
+    } finally {
+      process.env.PATH = path
+    }
+  })
+})
+
 describe('convert bilingual on Next.js', () => {
   it('converts on a new branch in one commit, and a second run changes nothing', async () => {
     const dir = fixtureRepo('next-app')
@@ -110,6 +142,8 @@ describe('convert bilingual on Next.js', () => {
   it('runs the install with the detected package manager when asked', async () => {
     const dir = fixtureRepo('next-app')
     const io = fakeIo()
+    await convert({ ...options(dir), install: true }, io)
+    expect(io.ran).toEqual(['npm install'])
     await convert({ ...options(dir), install: true }, io)
     expect(io.ran).toEqual(['npm install'])
   })

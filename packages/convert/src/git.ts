@@ -1,6 +1,5 @@
 import { execFile } from 'node:child_process'
-import { mkdirSync } from 'node:fs'
-import { dirname, join } from 'node:path'
+import { STATE_DIR } from './state'
 
 /** Thrown when convert will not start. The message is one line saying why. */
 export class RefusedError extends Error {
@@ -10,14 +9,17 @@ export class RefusedError extends Error {
   }
 }
 
-type Result = { code: number; out: string }
+type Result = { code: number; out: string; stdout: string }
+
+export const NO_GIT = 'git is not installed or not on PATH'
 
 /** Runs git in cwd with literal pathspecs, so a path such as app/[locale]/page.tsx is never read as a pattern. */
 function git(cwd: string, args: string[]): Promise<Result> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     execFile('git', ['--literal-pathspecs', ...args], { cwd, maxBuffer: 64 * 1024 * 1024 }, (error, stdout, stderr) => {
+      if (error && error.code === 'ENOENT') return reject(new Error(NO_GIT))
       const code = error ? (typeof error.code === 'number' ? error.code : 1) : 0
-      resolve({ code, out: `${stdout}${stderr}`.trim() })
+      resolve({ code, out: `${stdout}${stderr}`.trim(), stdout })
     })
   })
 }
@@ -25,16 +27,22 @@ function git(cwd: string, args: string[]): Promise<Result> {
 /** Runs git and throws with its output when it fails. */
 async function must(cwd: string, args: string[]): Promise<string> {
   const result = await git(cwd, args)
-  if (result.code !== 0) throw new Error(`git ${args[0]} failed: ${result.out}`)
+  if (result.code !== 0) throw new Error(`git ${args[0]} failed${result.out ? `: ${result.out}` : ''}`)
   return result.out
 }
 
-/** Refuses unless root is inside a git work tree with nothing uncommitted. */
+/** Paths in `git status` that are convert's own state folder, which is never part of the person's work. */
+const isStatePath = (entry: string, prefix: string): boolean => entry.slice(3).startsWith(`${prefix}${STATE_DIR}/`)
+
+/** Refuses unless root is inside a git work tree with nothing uncommitted, convert's own .dualkit folder aside. */
 export async function assertCleanRepo(root: string): Promise<void> {
   const inside = await git(root, ['rev-parse', '--is-inside-work-tree'])
   if (inside.code !== 0 || inside.out !== 'true') throw new RefusedError(`${root} is not inside a git repo. Convert works on a new branch, so run git init and commit first.`)
-  const status = await must(root, ['status', '--porcelain'])
-  if (status !== '') throw new RefusedError('This repo has uncommitted changes. Commit or stash them, then run convert again.')
+  const prefix = await must(root, ['rev-parse', '--show-prefix'])
+  const status = await git(root, ['status', '--porcelain', '-z'])
+  if (status.code !== 0) throw new Error(`git status failed: ${status.out}`)
+  const entries = status.stdout.split('\0').filter(Boolean)
+  if (entries.some((entry) => !isStatePath(entry, prefix))) throw new RefusedError('This repo has uncommitted changes. Commit or stash them, then run convert again.')
 }
 
 /** The current branch name, or the short commit when HEAD is detached. */
@@ -52,10 +60,22 @@ export async function createBranch(root: string, branch: string): Promise<void> 
   await must(root, ['checkout', '-q', '-b', branch])
 }
 
-/** Moves a tracked file with git mv, creating the destination folder first. Paths are relative to root. */
+/** Moves a tracked file with git mv. The destination folder must exist. Paths are relative to root. */
 export async function moveFile(root: string, from: string, to: string): Promise<void> {
-  mkdirSync(dirname(join(root, to)), { recursive: true })
   await must(root, ['mv', '--', from, to])
+}
+
+/** Resets the index and tracked files to HEAD. Untracked and ignored files are left alone. */
+export async function resetHard(root: string): Promise<void> {
+  await must(root, ['reset', '-q', '--hard'])
+}
+
+export async function checkout(root: string, ref: string): Promise<void> {
+  await must(root, ['checkout', '-q', ref])
+}
+
+export async function deleteBranch(root: string, branch: string): Promise<void> {
+  await must(root, ['branch', '-q', '-D', branch])
 }
 
 /** Stages the named paths, relative to root. A path that no longer exists is staged as removed. */

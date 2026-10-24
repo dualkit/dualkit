@@ -1,26 +1,23 @@
 import { isMinified, walk } from '@dualkit/lint'
 import { join } from 'node:path'
-import { addDependencies, addStylesheet, applyPlan, ignoreStateDir, messagesPath, readText, writeStrings, writeText } from './apply'
+import { ownFiles, readText, type Disk } from './apply'
 import { shootBaseline } from './baseline'
-import { localeHelperPath } from './generate/locale'
+import { guardWrites, localeHelperPath } from './generate/locale'
 import { wireNextIntl } from './generate/next-intl'
 import { wireReactI18next } from './generate/react-i18next'
-import { stylesheetPath } from './generate/stylesheet'
-import { RefusedError, assertCleanRepo, branchExists, commit, createBranch, currentBranch, stage, stagedFiles, trackedFiles } from './git'
-import { LEDGER_FILE, readLedger, type LedgerEntry } from './ledger'
+import { RefusedError, assertCleanRepo, branchExists, createBranch, currentBranch, trackedFiles } from './git'
+import { LEDGER_FILE, mergeLedger, readLedger, type LedgerEntry } from './ledger'
 import { physicalContext } from './lint-context'
 import { runPasses, type PassContext } from './passes'
 import { detectProject } from './project'
+import { rollBack } from './rollback'
 import { readState, saveState } from './state'
+import { writeAll } from './write-all'
 import type { ConvertIo, ConvertOptions, ConvertState, ConvertSummary, Flag, Mode, Plan, Project } from './types'
 
 export type { ConvertIo, ConvertOptions, ConvertState, ConvertSummary, Shooter } from './types'
 
 const BOM = '﻿'
-
-const LOCKFILES: Record<Project['packageManager'], readonly string[]> = {
-  npm: ['package-lock.json'], pnpm: ['pnpm-lock.yaml'], yarn: ['yarn.lock'], bun: ['bun.lock', 'bun.lockb'],
-}
 
 /** The branch a mode converts on. */
 export const branchFor = (mode: Mode): string => `dualkit/${mode}`
@@ -80,7 +77,7 @@ async function start(options: ConvertOptions): Promise<{ state: ConvertState | n
   await assertCleanRepo(options.root)
   const branch = branchFor(options.mode)
   const base = await currentBranch(options.root)
-  const state = readState(options.root)
+  const state = base === branch ? readState(options.root) : null
   const rerun = base === branch && state?.phase === 'converted' && state.mode === options.mode
   if (!rerun && (await branchExists(options.root, branch))) {
     throw new RefusedError(`The branch ${branch} already exists. Delete it, or switch to it if convert made it, then run convert again.`)
@@ -100,16 +97,6 @@ async function baseline(project: Project, options: ConvertOptions, io: ConvertIo
   for (const page of unreachable) io.log(`No baseline for ${page.route}: ${page.reason}.`)
 }
 
-/** Runs the package manager install. A failed install becomes a flag rather than stopping the run. */
-async function install(project: Project, io: ConvertIo): Promise<Flag[]> {
-  const cmd = `${project.packageManager} install`
-  io.log(`Running ${cmd}.`)
-  const result = await io.run(cmd, project.root)
-  if (result.code === 0) return []
-  const message = `${cmd} exited with code ${result.code}, so the new packages may not be installed.`
-  return [{ file: 'package.json', line: 1, kind: 'unsupported', message, suggestion: `Run ${cmd} yourself and fix what it reports.` }]
-}
-
 /**
  * Phase 1: converts the app at `options.root` on the branch `dualkit/<mode>` and commits it with the
  * person's own git identity. Transforms run in memory first, so a refusal changes nothing. A re-run on
@@ -121,42 +108,28 @@ export async function convert(options: ConvertOptions, io: ConvertIo): Promise<C
   const project = detectProject(root)
   const branch = branchFor(mode)
   const generated = new Set(state?.generated ?? [])
-  const taken = new Set(readLedger(root).map((e) => e.key))
+  const existing = readLedger(root)
 
-  const done = transformAll(project, generated, taken)
+  const done = transformAll(project, generated, new Set(existing.map((e) => e.key)))
   const plan = await planFor(project, mode, done.texts)
   const moved = new Map(plan.moves)
-  const at = (path: string): string => moved.get(path) ?? path
+  const ledger = mergeLedger(existing, done.entries.map((e) => ({ ...e, file: moved.get(e.file) ?? e.file })))
+  guardWrites(ownFiles(project, ledger), (rel) => readText(root, rel), generated)
 
   if (!rerun) {
     await baseline(project, options, io)
     await createBranch(root, branch)
     io.log(`Created the branch ${branch}.`)
   }
-  const touched: string[] = []
-  for (const [path, text] of done.texts) if (writeText(root, path, text)) touched.push(at(path))
-  const wired = await applyPlan(root, plan)
-  const styled = addStylesheet(root, project, at(project.entry))
-  const entries = done.entries.map((e) => ({ ...e, file: at(e.file) }))
-  const strings = writeStrings(root, entries)
-  touched.push(...wired.touched, ...styled.touched, ...strings.touched)
-  if (addDependencies(root, plan.deps)) touched.push('package.json')
-  const installFlags = options.install ? await install(project, io) : []
-  if (options.install) touched.push(...LOCKFILES[project.packageManager].filter((f) => readText(root, f) !== null))
-  if (ignoreStateDir(root)) touched.push('.gitignore')
+  const disk: Disk = { root, created: [] }
+  const step = { name: 'writing the converted files' }
+  const written = await writeAll({ disk, project, options, io, texts: done.texts, plan, ledger, step })
+    .catch((error: unknown) => rollBack({ root, base: rerun ? branch : base, branch, madeBranch: !rerun, created: disk.created }, step.name, error))
+  io.log(written.changed.length ? `Committed ${written.changed.length} changed files on ${branch}.` : 'Nothing changed, so there is nothing to commit.')
 
-  const written = [...Object.keys(plan.writes), stylesheetPath(project), LEDGER_FILE, messagesPath('en'), messagesPath('ar')]
-  saveState(root, { mode, base: rerun ? state?.base ?? base : base, branch, framework: project.framework, phase: 'converted', generated: [...new Set([...generated, ...written])].sort() })
-
-  await stage(root, [...new Set(touched)])
-  const changed = await stagedFiles(root)
-  if (changed.length) {
-    await commit(root, `dualkit: convert to ${mode}`)
-    io.log(`Committed ${changed.length} changed files on ${branch}.`)
-  } else {
-    io.log('Nothing changed, so there is nothing to commit.')
-  }
-  const flags = finalFlags([...done.flags, ...plan.flags, ...installFlags], moved)
+  const ours = [...Object.keys(plan.writes), ...Object.keys(ownFiles(project, ledger)), LEDGER_FILE]
+  saveState(root, { mode, base: state?.base ?? base, branch, framework: project.framework, phase: 'converted', generated: [...new Set([...generated, ...ours])].sort() })
+  const flags = finalFlags([...done.flags, ...plan.flags, ...written.flags], moved)
   io.log(`${problems(flags).length} things are left to finish. ${done.skipped.length} files were skipped.`)
-  return { branch, filesChanged: changed.length, edits: done.edits + wired.edits + styled.edits, flags, strings: strings.ledger.length - taken.size, skipped: done.skipped }
+  return { branch, filesChanged: written.changed.length, edits: done.edits + written.edits, flags, strings: ledger.length - existing.length, skipped: done.skipped }
 }
