@@ -135,6 +135,23 @@ describe('wireNextIntl bilingual', () => {
     expect(after(p, m.files, 'app/api/route.ts')).toContain("from '../[locale]/util'")
   })
 
+  it('reads the locale from next/root-params on Next 16.3 and later, so cache components can prerender', () => {
+    const request = (next: string, installed?: string): string => {
+      const m = memory({
+        'package.json': pkg(next), 'app/layout.tsx': fixture.files('app/layout.tsx')!,
+        ...(installed ? { 'node_modules/next/package.json': JSON.stringify({ version: installed }) } : {}),
+      })
+      return wireNextIntl(project, 'bilingual', m.files, m.paths.filter((p) => !p.startsWith('node_modules/'))).writes['i18n/request.ts']!
+    }
+    expect(request('16.4.3')).toContain("import * as rootParams from 'next/root-params'")
+    expect(request('16.4.3')).toContain('await rootParams.locale()')
+    expect(request('16.4.3')).toContain('import(`../messages/${locale}.json`)')
+    expect(request('^16.0.0', '16.3.1')).toContain('rootParams.locale()')
+    expect(request('16.2.0')).toContain('await requestLocale')
+    expect(request('15.1.0')).not.toContain('root-params')
+    parses('i18n/request.ts', request('16.4.3'))
+  })
+
   it('moves the route in typed LayoutProps and PageProps under [locale]', () => {
     const layoutText = 'export default function RootLayout({ children }: LayoutProps<"/">) {\n  return <html><body>{children}</body></html>\n}\n'
     const m = memory({

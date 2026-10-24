@@ -11,18 +11,33 @@ import { importRewrites, localePath, routeMoves, urlSegments } from './next-rout
 const DEPS = { 'next-intl': '4.14.9' }
 /** Used when the declared next version names no major, such as `latest` or `canary`. */
 const LATEST_NEXT_MAJOR = 16
+const LATEST_NEXT_MINOR = 4
 
-/** The major version of next the app declares. */
-function nextMajor(files: (rel: string) => string | null): number {
-  let version = ''
+/** The version of a package.json field, or ''. */
+function versionIn(text: string | null, read: (json: Record<string, unknown>) => unknown): string {
   try {
-    const json = JSON.parse(files('package.json') ?? '{}') as Record<string, Record<string, string> | undefined>
-    version = json.dependencies?.next ?? json.devDependencies?.next ?? ''
+    const value = read(JSON.parse(text ?? '{}') as Record<string, unknown>)
+    return typeof value === 'string' ? value : ''
   } catch {
-    version = ''
+    return ''
   }
-  const major = /(\d+)/.exec(version)?.[1]
-  return major ? Number(major) : LATEST_NEXT_MAJOR
+}
+
+/** The Next.js major and minor version: the installed one when present, else the package.json range. */
+function nextVersion(files: (rel: string) => string | null): { major: number; minor: number } {
+  const deps = (json: Record<string, unknown>, field: string): unknown => (json[field] as Record<string, unknown> | undefined)?.next
+  const version = versionIn(files('node_modules/next/package.json'), (json) => json.version)
+    || versionIn(files('package.json'), (json) => deps(json, 'dependencies') ?? deps(json, 'devDependencies'))
+  const match = /(\d+)(?:\.(\d+))?/.exec(version)
+  return match ? { major: Number(match[1]), minor: Number(match[2] ?? 0) } : { major: LATEST_NEXT_MAJOR, minor: LATEST_NEXT_MINOR }
+}
+
+const nextMajor = (files: (rel: string) => string | null): number => nextVersion(files).major
+
+/** Whether next/root-params exists (Next 16.3 and later), which next-intl reads the locale from under cache components. */
+function hasRootParams(files: (rel: string) => string | null): boolean {
+  const { major, minor } = nextVersion(files)
+  return major > 16 || (major === 16 && minor >= 3)
 }
 
 const ROUTING = `import { defineRouting } from 'next-intl/routing'
@@ -41,7 +56,8 @@ export const { Link, redirect, usePathname, useRouter, getPathname } = createNav
 `
 
 /** The request config: the requested locale when it is known, else English; Arabic alone in arabic mode. */
-function requestFile(mode: Mode, messages: string): string {
+/** The request config. Bilingual apps on Next 16.3 and later read the locale from next/root-params. */
+function requestFile(mode: Mode, messages: string, rootParams: boolean): string {
   if (mode === 'arabic') {
     return `import { getRequestConfig } from 'next-intl/server'
 
@@ -49,6 +65,22 @@ export default getRequestConfig(async () => ({
   locale: 'ar',
   messages: (await import('${messages}/ar.json')).default,
 }))
+`
+  }
+  if (rootParams) {
+    return `import * as rootParams from 'next/root-params'
+import { hasLocale } from 'next-intl'
+import { getRequestConfig } from 'next-intl/server'
+import { routing } from './routing'
+
+export default getRequestConfig(async ({ locale: given }) => {
+  const requested = given ?? await rootParams.locale()
+  const locale = hasLocale(routing.locales, requested) ? requested : routing.defaultLocale
+  return {
+    locale,
+    messages: (await import(\`${messages}/\${locale}.json\`)).default,
+  }
+})
 `
   }
   return `import { hasLocale } from 'next-intl'
@@ -199,7 +231,7 @@ export function wireNextIntl(project: Project, mode: Mode, files: (relPath: stri
   const parts = mode === 'bilingual' ? bilingualParts(project, appDir, files, paths) : { moves: [], writes: {}, edits: {}, flags: [] }
   const writes: Record<string, string> = {
     ...parts.writes,
-    [`${i18nDir}/request.ts`]: requestFile(mode, messages),
+    [`${i18nDir}/request.ts`]: requestFile(mode, messages, hasRootParams(files)),
     [localeHelperPath(project)]: LOCALE_HELPER,
     ...config.writes,
   }
