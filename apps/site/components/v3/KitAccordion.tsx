@@ -13,7 +13,7 @@ const CHECK = (
   </svg>
 )
 
-/** Five buttons that each own a panel; one panel is open. The preview pane beside the list (wide screens) and the one
+/** Buttons that each own a panel; one panel is open. The preview pane beside the list (wide screens) and the one
  *  inside each panel (phones) both come from `previews`; CSS shows one of them. */
 export function KitAccordion({ items, previews }: { items: readonly KitItem[]; previews: readonly ReactNode[] }) {
   const count = items.length

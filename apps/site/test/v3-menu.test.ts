@@ -1,16 +1,19 @@
 import { describe, expect, it } from 'vitest'
 import { V3 } from '../lib/v3/copy'
 import { checkFamilies, parsedFormatLines } from '../lib/v3/kit-data'
-import { LEAVE_MS, MENU_CLOSED, benchCountdown, daysUntil, insideAny, menuReducer, nextBenchRun, type MenuState } from '../lib/v3/menu'
+import { LEAVE_MS, MENU_CLOSED, PART_COUNT, benchCountdown, daysUntil, insideAny, menuReducer, nextBenchRun, type MenuState } from '../lib/v3/menu'
 
 const open = (active = 0, via: MenuState['via'] = 'pointer', away = false, step: MenuState['step'] = 'pointer'): MenuState => ({ open: true, active, via, step, away })
 
 describe('menuReducer', () => {
+  it('has a part for each product, Convert included', () => {
+    expect(PART_COUNT).toBe(6)
+  })
   it('wraps a move down from the last part to the first', () => {
-    expect(menuReducer(open(4), { type: 'move', dir: 1 }).active).toBe(0)
+    expect(menuReducer(open(PART_COUNT - 1), { type: 'move', dir: 1 }).active).toBe(0)
   })
   it('wraps a move up from the first part to the last', () => {
-    expect(menuReducer(open(0), { type: 'move', dir: -1 }).active).toBe(4)
+    expect(menuReducer(open(0), { type: 'move', dir: -1 }).active).toBe(PART_COUNT - 1)
   })
   it('moves one step without wrapping in the middle', () => {
     expect(menuReducer(open(2), { type: 'move', dir: 1 }).active).toBe(3)

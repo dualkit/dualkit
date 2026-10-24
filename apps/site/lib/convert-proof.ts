@@ -31,10 +31,13 @@ export const PROOF_SCREENS: readonly ProofScreen[] = [
 ]
 
 /** Convert's counts come from its own summary; the agent's from the branch. English shots compared at a channel tolerance of 8. */
-export const PROOF_COUNTS = { edits: 679, convertStrings: 310, strings: 464, agentMinutes: 38, englishShots: 16, worstEnglishDiff: '0.008%' } as const
+export const PROOF_COUNTS = { files: 96, flags: 102, edits: 679, convertStrings: 310, strings: 464, agentMinutes: 38, englishShots: 16, worstEnglishDiff: '0.008%' } as const
 
 /** Shot sizes in css px. Desktop shots are cropped to one screen; phone shots to two. */
 export const SHOT = { desktop: { w: 1280, h: 800 }, phone: { w: 390, h: 844 } } as const
 
 export const shotSrc = (slug: string, lang: 'en' | 'ar', device: 'desktop' | 'phone') =>
   `/convert/${lang}-${slug}-${device === 'desktop' ? 1280 : 390}.webp`
+
+/** Where the four numbered pins sit on the Arabic dashboard at 1280 wide, in % of the shot. Order matches the copy's pins. */
+export const DASHBOARD_PINS: readonly (readonly [number, number])[] = [[79.5, 19], [18.5, 17.5], [75.4, 60], [65.4, 31.5]]

@@ -39,7 +39,8 @@ const boxOf = (el: Element | null | undefined): Box[] => {
 /** A click with detail 0 came from Enter or Space, so it opens without animation. */
 const viaOf = (e: MouseEvent): MenuVia => clickVia(e.detail)
 
-function CopyLine({ command }: { command: string }) {
+/** A command with a copy button; shared with the /convert steps. */
+export function CopyLine({ command }: { command: string }) {
   const [copied, setCopied] = useState(false)
   const code = useRef<HTMLElement>(null)
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined)

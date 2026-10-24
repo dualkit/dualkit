@@ -4,11 +4,12 @@ export const V3 = {
   nav: { links: ['Products', 'Docs', 'Bench', 'Updates'], github: 'GitHub', cta: 'Get started' },
   menu: {
     parts: [
-      ['01', 'Skills', 'Teach Claude Code and Cursor to build right to left', '4 skills'],
+      ['01', 'Skills', 'Teach Claude Code and Cursor to build right to left', '5 skills'],
       ['02', 'Format', 'Money, dates, phones and IBANs from the digits people type', 'npm'],
       ['03', 'Starter', 'Eight bilingual components to copy into your app', 'shadcn'],
       ['04', 'Check', 'Score live pages, or lint your source before it ships', 'CLI'],
-      ['05', 'Bench', 'How free AI models build Arabic, every month', 'Monthly'],
+      ['05', 'Convert', 'Turn an English app into an Arabic one on a new branch', 'Beta'],
+      ['06', 'Bench', 'How free AI models build Arabic, every month', 'Monthly'],
     ],
     command: '/plugin install dualkit@dualkit',
     installLabel: 'Install the skills',
@@ -21,7 +22,7 @@ export const V3 = {
     skills: {
       head: 'Loads when a task needs it',
       ready: 'ready',
-      rows: [['rtl-layout', 'on dir="rtl"'], ['gulf-formats', 'on money, dates'], ['type-pairing', 'on Arabic type'], ['bilingual-copy', 'on copy']],
+      rows: [['rtl-layout', 'on dir="rtl"'], ['gulf-formats', 'on money, dates'], ['type-pairing', 'on Arabic type'], ['bilingual-copy', 'on copy'], ['convert', 'on dualkit convert']],
       docs: 'Open the Skills docs',
       note: 'Listed in the Claude plugin directory',
     },
@@ -43,7 +44,7 @@ export const V3 = {
   story: {
     rail: {
       build: ['00', 'Without Dualkit', 'An agent builds the screen with no Arabic rules. Six of them fail.'],
-      install: ['00', 'Install', 'One command adds four skills. They load when a task touches Arabic.'],
+      install: ['00', 'Install', 'One command adds five skills. They load when a task touches Arabic.'],
       checked: ['06', 'Checked', 'Every rule passes. Same screen, both directions.'],
     },
     pins: [
@@ -55,7 +56,7 @@ export const V3 = {
       { chapter: 6, row: 'iban', side: 'r', title: 'IBAN', line: 'Groups and validates the IBAN, even when it is typed in Arabic digits.' },
     ],
     command: '/plugin install dualkit@dualkit',
-    loaded: '4 skills loaded',
+    loaded: '5 skills loaded',
     check: { name: 'dualkit check', failing: ['rule failing', 'rules failing'], of: 'of 34', startFailing: 6, startPassing: 28 },
     direction: { label: 'dir', values: ['ltr', 'rtl'] },
     chips: { bdi: '<bdi>', iban: 'valid, UAE' },
@@ -75,7 +76,7 @@ export const V3 = {
     heading: 'Three steps to Arabic\nyou don’t have to fix.',
     lede: 'Dualkit plugs into the agent you already use, loads when a task touches Arabic, and checks the result before a user sees it.',
     steps: [
-      ['01', 'Install the skills', 'One command adds four skills to Claude Code or Cursor. There is nothing to configure.'],
+      ['01', 'Install the skills', 'One command adds five skills to Claude Code or Cursor. There is nothing to configure.'],
       ['02', 'Build as usual', 'Ask for the screen you need. The skills load on their own and handle direction, digits and type.'],
       ['03', 'Check before you ship', 'Run npx dualkit check. It scores the page against 34 rules and shows every failure next to its fix.'],
     ],
@@ -90,14 +91,14 @@ export const V3 = {
   },
   kit: {
     label: 'The kit',
-    heading: 'Five parts, each\ninstalled on its own.',
-    lede: 'Start with the skills, then add formats, components and checks when you need them.',
+    heading: 'Six parts, each\ninstalled on its own.',
+    lede: 'Start with the skills, then add formats, components, checks and conversion when you need them.',
     open: {
       name: 'Skills', title: 'Teach your agent Arabic.',
-      body: 'Four skills for Claude Code and Cursor: right-to-left layout, type pairing, Gulf formats and bilingual copy.',
+      body: 'Five skills for Claude Code and Cursor: right-to-left layout, type pairing, Gulf formats, bilingual copy and finishing a conversion.',
       points: ['Load on their own when a task touches Arabic', 'Took a fresh agent from 0 of 3 to 3 of 3 on bidi bugs', 'Listed in the Claude plugin directory'],
     },
-    rest: ['Format', 'Starter', 'Check', 'Bench'],
+    rest: ['Format', 'Starter', 'Check', 'Convert', 'Bench'],
     skillsPanel: { fixed: 'Fixed', diff: 'View the diff' },
     previews: {
       format: {
@@ -110,6 +111,11 @@ export const V3 = {
       },
       starter: { components: ['Amount', 'Button', 'DateDisplay', 'DigitInput', 'Field', 'Sheet', 'Tabs', 'Toast'], amount: { en: 'AED 1,234.50', ar: '١٬٢٣٤٫٥٠ د.إ' } },
       check: { title: 'dualkit check', score: '34 of 34', families: [['Bidi', 6], ['Layout', 6], ['Icons', 3], ['Type', 7], ['Content', 12]], open: 'Open report', copy: 'Copy' },
+      convert: {
+        title: 'dualkit convert', status: 'Branch ready', branch: 'dualkit/bilingual',
+        edits: [['ml-auto', 'ms-auto'], ['text-left', 'text-start'], ['Orders', "t('ecommerce-metrics.orders')"]],
+        summary: ['679 edits', '310 strings', '27 s'],
+      },
       bench: { head: 'Alone, then with Dualkit', sample: 'Sample data until 1 November' },
     },
   },
@@ -155,7 +161,7 @@ export const V3 = {
   footer: {
     line: 'Arabic and English, built right the first time.',
     columns: [
-      ['Product', ['Skills', 'Format', 'Starter', 'Check', 'Lint', 'Bench']],
+      ['Product', ['Skills', 'Format', 'Starter', 'Check', 'Lint', 'Convert', 'Bench']],
       ['Resources', ['Docs', 'Updates', 'Status', 'Registry']],
       ['Community', ['GitHub', 'Discussions', 'npm', 'Plugin directory']],
       ['Legal', ['MIT licence']],
