@@ -12,6 +12,7 @@ import { runPasses, type PassContext, type PassKind } from './passes'
 import { detectProject } from './project'
 import { rollBack } from './rollback'
 import { readState, saveState } from './state'
+import { mergeSummary, readSummary, saveSummary } from './summary'
 import { writeAll } from './write-all'
 import type { ConvertIo, ConvertOptions, ConvertState, ConvertSummary, Flag, Mode, Plan, Project } from './types'
 
@@ -144,5 +145,8 @@ export async function convert(options: ConvertOptions, io: ConvertIo): Promise<C
   io.log(`${problems(flags).length} things are left to finish. ${done.skipped.length} files were skipped.`)
   const byKind = { ...done.byKind, wiring: written.edits + Object.keys(plan.writes).length }
   const changed = changedFiles(done.perFile, moved, plan.edits)
-  return { branch, filesChanged: written.changed.length, edits: done.edits + written.edits, byKind, changed, flags, strings: ledger.length - existing.length, skipped: done.skipped }
+  const summary: ConvertSummary = { branch, filesChanged: written.changed.length, edits: done.edits + written.edits, byKind, changed, flags, strings: ledger.length - existing.length, skipped: done.skipped }
+  const earlier = readSummary(root)
+  if (!earlier || written.changed.length > 0) saveSummary(root, mergeSummary(earlier, summary))
+  return summary
 }

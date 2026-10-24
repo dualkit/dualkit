@@ -10,11 +10,13 @@ import { renderConvertReport, type ReportData } from './report'
 import { listRoutes } from './routes'
 import { startServer } from './server'
 import { STATE_DIR, readState, saveState } from './state'
+import { readSummary } from './summary'
 import type { ConvertIo, ConvertState, ConvertSummary, PageOptions, Project, Shooter } from './types'
 
 export const REPORT_FILE = 'dualkit-convert.md'
 export const DIFF_DIR = `${STATE_DIR}/diff`
 const TEST_TAIL_LINES = 40
+const NEEDS_BROWSER = 'Finish needs a start command in dualkit.config.json and a browser to take screenshots with.'
 const LOCALE_COOKIE = 'dk-locale'
 
 /** What phase 2 needs from outside: phase 1's io plus an accessibility audit and a lint count. */
@@ -32,10 +34,21 @@ export function arabicTarget(project: Project, state: ConvertState, route: strin
   return { path: route, options: { cookies: { [LOCALE_COOKIE]: 'ar' } } }
 }
 
+const OWN_FILES = [messagesPath('en'), messagesPath('ar'), REPORT_FILE, LEDGER_FILE]
+
+/** Refuses when the index already holds staged files finish would otherwise commit along with its own. */
+async function assertNothingElseStaged(root: string): Promise<void> {
+  const others = (await stagedFiles(root)).filter((f) => !OWN_FILES.includes(f))
+  if (others.length > 0) throw new RefusedError(`You have staged changes in ${others.join(', ')}. Commit or unstage them, then run finish again.`)
+}
+
 /** Refuses unless this is a branch convert made and phase 1 finished on it. Returns the state. */
 async function guard(root: string): Promise<ConvertState> {
   const state = readState(root)
   if (!state) throw new RefusedError('There is no saved convert state here. Run dualkit convert first, then fill in the Arabic and run this again.')
+  if (state.phase !== 'converted' && state.phase !== 'finished') {
+    throw new RefusedError('This conversion has not finished converting yet. Run dualkit convert until it completes, then run this again.')
+  }
   const branch = await currentBranch(root)
   if (branch !== `dualkit/${state.mode}`) {
     throw new RefusedError(`You are on ${branch}, but this conversion lives on dualkit/${state.mode}. Switch to that branch, then run dualkit convert --finish again.`)
@@ -79,29 +92,31 @@ async function englishChecks(root: string, base: string, routes: string[], shoot
   return { english, noBaseline }
 }
 
-async function arabicChecks(project: Project, state: ConvertState, base: string, routes: string[], io: FinishIo): Promise<Checks['arabic']> {
+async function arabicChecks(project: Project, state: ConvertState, base: string, routes: string[], audit: FinishIo['audit']): Promise<Checks['arabic']> {
   const arabic: Checks['arabic'] = []
   for (const route of routes) {
     const { path, options } = arabicTarget(project, state, route)
     for (const width of WIDTHS) {
-      const result = await io.audit(`${base}${path}`, width, options)
-      arabic.push({ route: `${path} at ${width}px`, ...result })
+      const result = await audit(`${base}${path}`, width, options)
+      const usable = result && Number.isFinite(result.errors)
+      const failed = { score: Number.NaN, errors: Number.NaN, warnings: Number.NaN }
+      arabic.push({ route: `${path} at ${width}px`, ...(usable ? result : failed) })
     }
   }
   return arabic
 }
 
 /** Starts the app, runs every page check and stops the server, also when a check throws. */
-async function runChecks(project: Project, state: ConvertState, routes: string[], io: FinishIo): Promise<Checks> {
-  const { start: cmd, shoot } = { start: io.config.start, shoot: io.shoot }
-  if (!cmd || !shoot) throw new RefusedError('Finish needs a start command in dualkit.config.json and a browser to take screenshots with.')
-  const port = io.config.port ?? DEFAULT_PORTS[project.framework]
+async function runChecks(project: Project, state: ConvertState, routes: string[], { config, shoot, audit }: FinishIo): Promise<Checks> {
+  const { start: cmd } = config
+  if (!cmd || !shoot) throw new RefusedError(NEEDS_BROWSER)
+  const port = config.port ?? DEFAULT_PORTS[project.framework]
   const server = await startServer(cmd, port, project.root).catch((error: unknown) => {
-    throw new Error(`Could not start the app with "${cmd}". ${(error as Error).message}`)
+    throw new Error(`Could not start the app with "${cmd}". ${(error as Error).message}`, { cause: error })
   })
   try {
     const english = state.mode === 'bilingual' ? await englishChecks(project.root, server.url, routes, shoot) : { english: [], noBaseline: [] }
-    return { ...english, arabic: await arabicChecks(project, state, server.url, routes, io) }
+    return { ...english, arabic: await arabicChecks(project, state, server.url, routes, audit) }
   } finally {
     await server.stop()
   }
@@ -118,23 +133,29 @@ const tail = (out: string): string => out.trimEnd().split('\n').slice(-TEST_TAIL
  */
 export async function finish(options: { root: string; force?: boolean }, io: FinishIo): Promise<{ reportPath: string; passed: boolean }> {
   const { root } = options
+  const { config, log } = io
   const state = await guard(root)
   const ledger = readLedger(root)
   pendingCheck(ledger, options.force)
+  if (!config.start || !io.shoot) throw new RefusedError(NEEDS_BROWSER)
+  await assertNothingElseStaged(root)
   const project = detectProject(root)
+  const { routes, unreachable } = listRoutes(project, config)
   writeMessages(root, ledger)
-  const { routes, unreachable } = listRoutes(project, io.config)
   const checks = await runChecks(project, state, routes, io)
-  const tests = io.config.test ? await io.run(io.config.test, root) : undefined
+  const tests = config.test ? await io.run(config.test, root) : undefined
+  const earlier = readSummary(root)
   const data: ReportData = {
-    mode: state.mode, base: state.base, branch: state.branch, summary: emptySummary(state, ledger.length), ledger, ...checks,
+    mode: state.mode, base: state.base, branch: state.branch, summary: earlier ?? emptySummary(state, ledger.length), ledger, ...checks,
+    ...(earlier ? {} : { summaryMissing: true }),
     unreachable, remainingLint: await io.lint(root), ...(tests ? { tests: { code: tests.code, tail: tail(tests.out) } } : {}),
   }
   writeFileSync(join(root, REPORT_FILE), renderConvertReport(data))
   saveState(root, { ...state, phase: 'finished' })
-  await stage(root, [messagesPath('en'), messagesPath('ar'), REPORT_FILE, LEDGER_FILE].filter((p) => existsSync(join(root, p))))
+  await stage(root, OWN_FILES.filter((p) => existsSync(join(root, p))))
   if ((await stagedFiles(root)).length) await commit(root, `dualkit: finish ${state.mode} conversion`)
-  const passed = checks.english.every((p) => p.ratio < MAX_DIFF_RATIO) && checks.arabic.every((p) => p.errors === 0) && (tests?.code ?? 0) === 0
-  io.log(passed ? 'All checks passed.' : 'Some checks failed. The report lists them.')
+  const checked = checks.arabic.length > 0
+  const passed = checked && checks.english.every((p) => p.ratio < MAX_DIFF_RATIO) && checks.arabic.every((p) => p.errors === 0) && (tests?.code ?? 0) === 0
+  log(passed ? 'All checks passed.' : 'Some checks failed. The report lists them.')
   return { reportPath: join(root, REPORT_FILE), passed }
 }

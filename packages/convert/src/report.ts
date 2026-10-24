@@ -16,6 +16,8 @@ export type ReportData = {
   unreachable: { route: string; reason: string }[]
   remainingLint: number
   tests?: { code: number; tail: string }
+  /** True when the phase 1 summary file was not found, so the What changed counts are unknown. */
+  summaryMissing?: boolean
 }
 
 const NATIVE_SPEAKER_LINE = 'Drafted by a model. A native speaker should check these before release.'
@@ -73,6 +75,7 @@ function changed(data: ReportData): string {
   const { summary } = data
   const notes = summary.flags.filter((f) => f.kind === 'info')
   const lines = [
+    ...(data.summaryMissing ? ['The phase 1 summary was not found, so the counts below are unknown.', ''] : []),
     `Mode: ${data.mode}. Branch: ${esc(data.branch)}, made from ${esc(data.base)}.`,
     '',
     `- ${plural(summary.filesChanged, 'file', 'files')} changed with ${plural(summary.edits, 'edit', 'edits')}.`,
@@ -113,14 +116,15 @@ function english(data: ReportData): string {
     return `- ${esc(p.route)} at ${p.width}px: ${pass ? 'pass' : 'fail'}: ${share}${diff}`
   })
   const missing = (data.noBaseline ?? []).map((p) => `- ${esc(p.route)} at ${p.width}px: no English baseline was taken`)
-  return section('English pages', [...lines, ...missing], 'No English pages were checked.')
+  const unproven = lines.length === 0 && missing.length > 0 ? ['', 'Warning: No English pages were compared, so the English match is not proven.'] : []
+  return section('English pages', [...lines, ...missing, ...unproven], 'No English pages were checked.')
 }
 
 function arabic(data: ReportData): string {
   const lines = data.arabic.map(
-    (p) => `- ${esc(p.route)}: score ${p.score}, ${plural(p.errors, 'error', 'errors')}, ${plural(p.warnings, 'warning', 'warnings')}`
+    (p) => !Number.isFinite(p.errors) ? `- ${esc(p.route)}: the check returned no result` : `- ${esc(p.route)}: score ${p.score}, ${plural(p.errors, 'error', 'errors')}, ${plural(p.warnings, 'warning', 'warnings')}`
   )
-  return section('Arabic pages', lines, 'No Arabic pages were checked.')
+  return section('Arabic pages', lines, 'No pages were checked.')
 }
 
 function notConverted(data: ReportData): string {

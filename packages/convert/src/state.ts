@@ -6,13 +6,11 @@ import type { ConvertState } from './types'
 export const STATE_DIR = '.dualkit'
 export const STATE_FILE = `${STATE_DIR}/convert.json`
 
-const PHASES = new Set(['converted', 'finished'])
-
 function isState(value: unknown): value is ConvertState {
   if (!value || typeof value !== 'object') return false
   const s = value as Record<string, unknown>
   return ['mode', 'base', 'branch', 'framework'].every((k) => typeof s[k] === 'string')
-    && PHASES.has(s.phase as string) && Array.isArray(s.generated) && s.generated.every((p) => typeof p === 'string')
+    && typeof s.phase === 'string' && Array.isArray(s.generated) && s.generated.every((p) => typeof p === 'string')
 }
 
 /** The saved state, or null when there is none. Throws when the file is there but malformed. */
