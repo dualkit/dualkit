@@ -1,6 +1,6 @@
 # Convert smoke run, 24 October 2026
 
-We ran `dualkit convert` on two fresh apps, end to end. One is a Next.js app in bilingual mode and one is a Vite app in arabic mode. Each defect we hit got a failing test first, then a fix in its own commit. Each time we fixed something, we reset both apps to a fresh base and ran them again. It took five full cycles. Cycles 4 and 5 gave identical reports, and both apps pass.
+We ran `dualkit convert` on two fresh apps, end to end. One is a Next.js app in bilingual mode and one is a Vite app in arabic mode. Each defect we hit got a failing test first, then a fix in its own commit. Each time we fixed something, we reset both apps to a fresh base and ran them again. It took five full cycles. Cycles 4 and 5 gave identical reports, and both apps pass. A sixth cycle after the final review fixes gave the same result.
 
 ## The apps
 
@@ -96,6 +96,15 @@ In the first cycle, next-smoke failed in three places before finish could pass. 
 | The `convert.params` error did not show the shape finish reads. | `2cff204` fix: describe convert.params as the route to sample path map finish reads |
 | Phase 1 refused to run again on a finished branch, with a message about the branch already existing. | `693f8f9` fix: let convert run again on its branch after finish |
 
+## Cycle 6, after the final review fixes
+
+We reset both apps to their base branch, deleted the convert branch and ran the same commands again. Both apps pass, and the counts and reports match cycle 5 exactly. These things changed:
+
+- `.dualkit/convert.json` and `.dualkit/summary.json` are now committed on the branch. The rest of `.dualkit` stays ignored.
+- The base branch shows a clean status after the English screenshots, because convert adds `/.dualkit/*` to `.git/info/exclude`.
+- vite-smoke, in arabic mode, no longer takes English screenshots.
+- Phase 1 again on the finished branch says "Nothing changed, so there is nothing to commit." Finish again passes and leaves a clean tree.
+
 ## What the screenshots show
 
 We took 390 pixel wide screenshots of the Arabic pages in both apps and looked at each one.
@@ -118,5 +127,4 @@ These are known and either flagged or listed in the report. None of them blocked
 - The Next.js `metadata` title and the Vite `index.html` title are flagged, not translated.
 - Convert does not place the language switch. It writes the component and tells you to add it.
 - In next-smoke, a browser that asks for Arabic, or has the `NEXT_LOCALE` cookie set, is sent from `/pricing` to `/ar/pricing`. That is next-intl's locale detection, and convert leaves it on.
-- In arabic mode, phase 1 still takes English screenshots that finish does not use.
 - A `dir="ltr"` field shows its Arabic hint on the right, but once you type, the text runs left to right. That is what a phone number needs, and convert does not change it.

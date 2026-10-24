@@ -24,11 +24,11 @@ In a bilingual Next.js app the locale lives in the URL. English keeps its URLs, 
 Phase 1, `dualkit convert --mode <mode>`:
 
 1. Checks the repo. It needs a clean git working tree, and it refuses with a one-line reason if anything is uncommitted or the branch already exists.
-2. Takes English screenshots of every page it can reach, at 390 and 1280 pixels wide, if you gave it a start command.
+2. In bilingual mode, takes English screenshots of every page it can reach, at 390 and 1280 pixels wide, if you gave it a start command. Arabic mode has no English pages to compare, so it skips them.
 3. Makes the branch from your current commit. It never pushes and never touches your main branch.
 4. Rewrites the code: physical Tailwind classes and CSS to logical ones, `dir="ltr"` on phone, email and url fields, `<bdi>` around prices and other numbers inside text, mirrored arrow icons from known icon packages, and every English string moved into `messages/en.json` behind a translation hook.
 5. Wires in the translation library: next-intl for Next.js, react-i18next for Vite. It adds an Arabic font stylesheet scoped to Arabic pages.
-6. Writes `dualkit-strings.json`, one entry per string with its Arabic left empty, and commits.
+6. Writes `dualkit-strings.json`, one entry per string with its Arabic left empty, and commits. If you stop it or a step fails, it puts the repo back as it was.
 
 Then you fill the Arabic in `dualkit-strings.json`. The [dualkit-convert skill](../../plugin/skills/dualkit-convert/SKILL.md) walks an agent through it.
 
@@ -40,9 +40,23 @@ Phase 2, `dualkit convert --finish`:
 4. Runs your tests, if the config names a test command.
 5. Writes `dualkit-convert.md` and commits. It exits 1 when an English page changed, an Arabic page has errors or the tests fail.
 
+If a finish step itself fails, such as a start command that does not start, finish puts back the files it wrote and commits nothing. Your Arabic drafts in `dualkit-strings.json` stay as you left them.
+
+## What goes into git
+
+Convert keeps its state in `.dualkit/convert.json` and a run summary in `.dualkit/summary.json`. Both are committed on the branch, so a fresh clone of the branch can run convert again or run finish. The branch `.gitignore` gets three lines that ignore the rest of `.dualkit`, such as screenshots:
+
+```
+.dualkit/*
+!.dualkit/convert.json
+!.dualkit/summary.json
+```
+
+The English screenshots are taken on your base branch before the convert branch exists, so convert also adds `/.dualkit/*` to the repo's `.git/info/exclude`. Your base branch stays clean and nothing is added to its files.
+
 ## The config block
 
-Convert reads a `convert` block from `dualkit.config.json`. The `--start` and `--port` flags are saved there for you.
+Convert reads a `convert` block from `dualkit.config.json`, or from the file `--config` names, which must be inside the app folder. The `--start` and `--port` flags are saved there for you.
 
 ```json
 {
@@ -87,7 +101,6 @@ It refuses, with a one-line reason, when:
 
 - Convert does not place the language switch, because that would change the English look. It writes `components/dualkit-language-switch.tsx` and tells you to add it.
 - Next.js sends a visitor whose browser asks for Arabic from an English URL to the Arabic page. That is next-intl's locale detection, and convert leaves it on.
-- In arabic mode, phase 1 still takes English screenshots when it has a start command, although finish does not compare them.
 
 ## Use from code
 

@@ -99,7 +99,7 @@ Finish compares each English page with its screenshot from before the conversion
 | `--start <cmd>` | | The command that starts your app, saved under `convert` in the config file |
 | `--port <n>` | | The port it listens on, saved with the start command |
 | `--no-install` | | Do not install next-intl or react-i18next |
-| `--no-baseline` | | Skip the English screenshots, so English is not proven unchanged |
-| `--config <file>` | `dualkit.config.json` | The `convert` block also takes `test`, `routes`, `params` and `storageState` |
+| `--no-baseline` | | Skip the English screenshots, so English is not proven unchanged. Arabic mode never takes them |
+| `--config <file>` | `dualkit.config.json` | Where the `convert` block is read and the start command saved. It must be inside the app folder. The block also takes `test`, `routes`, `params` and `storageState` |
 
 Exit codes: 0 phase 1 done or finish passed, 1 finish failed, 2 refused or a problem with the input, 130 interrupted. What it converts, what it flags and the config block in full: [@dualkit/convert](https://github.com/dualkit/dualkit/blob/main/packages/convert/README.md).
