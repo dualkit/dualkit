@@ -55,7 +55,7 @@ const ZERO_WITH_UNIT = /(^|[\s(,])[+-]?0*\.?0+[a-z%]*(?=$|[\s),])/g
 const normalise = (value: string): string =>
   value.replace(/!\s*important/i, '').trim().replace(/\s+/g, ' ').toLowerCase().replace(ZERO_WITH_UNIT, '$10')
 
-const PHYSICAL_PROPS: Readonly<Record<string, string>> = {
+export const PHYSICAL_PROPS: Readonly<Record<string, string>> = {
   'margin-left': 'margin-inline-start', 'margin-right': 'margin-inline-end',
   'padding-left': 'padding-inline-start', 'padding-right': 'padding-inline-end',
   'border-left': 'border-inline-start', 'border-right': 'border-inline-end',
