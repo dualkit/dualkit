@@ -57,15 +57,19 @@ export async function startServer(
     throw new ServerError(`Port ${port} is already in use. Stop whatever is running there or set another port in dualkit.config.json.`)
   }
   const child = spawn(cmd, { cwd, shell: true, detached: true, stdio: ['ignore', 'pipe', 'pipe'] })
-  const pid = child.pid
-  if (pid === undefined) throw new ServerError(`Could not start "${cmd}".`)
   let output = ''
   let exited = false
+  let spawnError: Error | null = null
+  child.on('error', (error) => { spawnError = error; output += `${error.message}\n` })
+  const pid = child.pid
+  if (pid === undefined) {
+    await new Promise((resolve) => setImmediate(resolve))
+    throw new ServerError(`Could not start "${cmd}": ${(spawnError as Error | null)?.message ?? 'no process id'}`)
+  }
   const collect = (chunk: Buffer): void => { output += chunk.toString() }
   child.stdout?.on('data', collect)
   child.stderr?.on('data', collect)
   child.on('exit', () => { exited = true })
-  child.on('error', (error) => { output += `${error.message}\n` })
 
   const stop = async (): Promise<void> => {
     signalGroup(pid, 'SIGTERM')

@@ -69,4 +69,26 @@ describe('listRoutes', () => {
     expect(listRoutes(project, {})).toEqual({ routes: ['/'], unreachable: [] })
     expect(listRoutes(project, { routes: ['/', '/about'] }).routes).toEqual(['/', '/about'])
   })
+
+  it('sends a user catch-all under [locale] to unreachable unless mapped', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'dualkit-routes-'))
+    touch(dir, 'app/[locale]/page.tsx')
+    touch(dir, 'app/[locale]/[...slug]/page.tsx')
+    const plain = listRoutes(nextProject(dir), {})
+    expect(plain.routes).toEqual(['/'])
+    expect(plain.unreachable).toEqual([{ route: '/[...slug]', reason: NEEDS }])
+    expect(listRoutes(nextProject(dir), { params: { '/[...slug]': '/a/b' } }).routes).toEqual(['/', '/a/b'])
+  })
+
+  it('skips _private folders', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'dualkit-routes-'))
+    touch(dir, 'app/page.tsx')
+    touch(dir, 'app/_components/page.tsx')
+    expect(listRoutes(nextProject(dir), {}).routes).toEqual(['/'])
+  })
+
+  it('names the path when the app dir is missing', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'dualkit-routes-'))
+    expect(() => listRoutes(nextProject(dir), {})).toThrow(join(dir, 'app'))
+  })
 })

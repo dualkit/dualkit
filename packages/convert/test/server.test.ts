@@ -57,4 +57,19 @@ describe('startServer', () => {
     const pid = Number(readFileSync(join(cwd, 'pid'), 'utf8'))
     expect(() => process.kill(pid, 0)).toThrow()
   })
+
+  it('rejects with ServerError when the cwd does not exist', async () => {
+    const error = await startServer(listener(4521), 4521, join(dir(), 'missing'), 5_000).catch((e: unknown) => e)
+    expect(error).toBeInstanceOf(ServerError)
+    expect((error as Error).message).toMatch(/ENOENT|missing/)
+  })
+
+  it('kills grandchildren in the group', async () => {
+    const cmd = `sh -c 'node -e "require(\\"http\\").createServer((q,s)=>s.end(1)).listen(4522)" & wait'`
+    const server = await startServer(cmd, 4522, dir(), 20_000)
+    stops.push(server.stop)
+    expect(await inUse(4522)).toBe(true)
+    await server.stop()
+    expect(await inUse(4522)).toBe(false)
+  })
 })
