@@ -34,3 +34,11 @@ export type Project = {
   i18n: 'next-intl' | 'react-i18next' | null
   packageManager: 'npm' | 'pnpm' | 'yarn' | 'bun'
 }
+
+/** What locale wiring changes, with paths relative to the project root. Edits are keyed by post-move paths. */
+export type Plan = {
+  writes: Record<string, string>
+  edits: Record<string, Edit[]>
+  moves: [from: string, to: string][]
+  deps: Record<string, string>
+}

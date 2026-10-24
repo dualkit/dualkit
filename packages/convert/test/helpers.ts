@@ -1,7 +1,7 @@
-import { cpSync, mkdtempSync } from 'node:fs'
+import { cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, type Dirent } from 'node:fs'
 import { execFileSync } from 'node:child_process'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { join, relative, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const FIXTURES = fileURLToPath(new URL('./fixtures', import.meta.url))
@@ -17,3 +17,17 @@ export function fixtureRepo(name: 'next-app' | 'vite-app', root: string = FIXTUR
   git('commit', '-q', '-m', 'fixture')
   return dir
 }
+
+/** Every file under root as root-relative paths, and a reader that returns a file's text or null. */
+export function projectFiles(root: string): { paths: string[]; files: (rel: string) => string | null } {
+  const paths = (readdirSync(root, { recursive: true, withFileTypes: true }) as Dirent[])
+    .filter((d) => d.isFile())
+    .map((d) => relative(root, join(d.parentPath, d.name)).split(sep).join('/'))
+    .filter((p) => !p.startsWith('node_modules/'))
+    .sort()
+  const files = (rel: string): string | null => (existsSync(join(root, rel)) ? readFileSync(join(root, rel), 'utf8') : null)
+  return { paths, files }
+}
+
+/** The fixture directory for a fixture name. */
+export const fixtureDir = (name: 'next-app' | 'vite-app'): string => join(FIXTURES, name)

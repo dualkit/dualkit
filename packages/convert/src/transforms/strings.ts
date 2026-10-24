@@ -3,7 +3,7 @@ import type { LedgerEntry } from '../ledger'
 import type { Edit, FileResult, Flag, FlagKind } from '../types'
 import { lineOf } from './lines'
 
-type Node = { type?: string; start?: number; end?: number; [key: string]: unknown }
+export type Node = { type?: string; start?: number; end?: number; [key: string]: unknown }
 const SKIP = new Set(['loc', 'leadingComments', 'trailingComments', 'innerComments', 'extra'])
 const TEXT_ATTRIBUTES = new Set(['alt', 'title', 'placeholder', 'aria-label', 'label'])
 const FUNCTIONS = new Set(['FunctionDeclaration', 'FunctionExpression', 'ArrowFunctionExpression'])
@@ -11,7 +11,7 @@ const LETTER = /\p{L}/u
 const PROSE = /^\p{Lu}\p{Ll}/u
 const NOT_PROSE = /[/\\_=<>{}@#|]/
 
-type Lib = 'next-intl' | 'react-i18next'
+export type Lib = 'next-intl' | 'react-i18next'
 
 type Context = {
   file: SourceFile; base: number; stem: string; used: Set<string>; byText: Map<string, string>
@@ -73,7 +73,7 @@ function isComponent(fn: Node, parent: Node | undefined, grand: Node | undefined
 }
 
 /** The nearest enclosing component function, or null. */
-function componentOf(ancestors: Node[]): Node | null {
+export function componentOf(ancestors: Node[]): Node | null {
   for (let i = ancestors.length - 1; i >= 0; i--) {
     const node = ancestors[i]!
     if (FUNCTIONS.has(node.type!) && isComponent(node, ancestors[i - 1], ancestors[i - 2])) return node
@@ -96,7 +96,7 @@ function patternNames(pattern: Node | null | undefined): string[] {
 }
 
 /** Whether a statement is a translation hook convert adds: `const t = useTranslations()`, `const { t } = useTranslation()` or `const t = await getTranslations()`. */
-function isOwnHook(statement: Node): boolean {
+export function isOwnHook(statement: Node): boolean {
   const [d, extra] = (statement.declarations as Node[] | undefined) ?? []
   if (statement.type !== 'VariableDeclaration' || !d || extra) return false
   const init = (d.init as Node | null)?.type === 'AwaitExpression' ? ((d.init as Node).argument as Node) : (d.init as Node | null)
@@ -118,7 +118,7 @@ function statementNames(statement: Node): string[] {
 }
 
 /** The names a scope-making node binds, other than a hook convert added. */
-function scopeNames(node: Node): string[] {
+export function scopeNames(node: Node): string[] {
   if (FUNCTIONS.has(node.type!)) return [...((node.params as Node[]) ?? []).flatMap(patternNames), ...(node.type === 'FunctionExpression' ? patternNames(node.id as Node) : [])]
   if (node.type === 'BlockStatement' || node.type === 'Program') return ((node.body as Node[]) ?? []).flatMap(statementNames)
   if (node.type === 'CatchClause') return patternNames(node.param as Node)
@@ -332,10 +332,10 @@ function flagModuleStrings(program: Node, ctx: Context): void {
 }
 
 type Import = { name: string; source: string }
-type Style = { semi: string; quote: string }
+export type Style = { semi: string; quote: string }
 
 /** Whether the file ends statements with semicolons, and which quote its imports use. */
-function styleOf(program: Node, text: string, base: number): Style {
+export function styleOf(program: Node, text: string, base: number): Style {
   const first = ((program.body as Node[]) ?? [])[0]
   const semi = first && text[base + first.end! - 1] === ';' ? ';' : ''
   const source = ((program.body as Node[]) ?? []).find((s) => s.type === 'ImportDeclaration')?.source as Node | undefined
