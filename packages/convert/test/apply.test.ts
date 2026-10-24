@@ -30,15 +30,21 @@ describe('addDependencies', () => {
 })
 
 describe('ignoreStateDir', () => {
-  it('appends .dualkit/ on its own line once', () => {
+  const LINES = '.dualkit/*\n!.dualkit/convert.json\n!.dualkit/summary.json\n'
+
+  it('ignores the state folder but keeps the state and summary files, once', () => {
     const root = dir({ '.gitignore': 'node_modules' })
     expect(ignoreStateDir(disk(root))).toBe(true)
-    expect(read(root, '.gitignore')).toBe('node_modules\n.dualkit/\n')
+    expect(read(root, '.gitignore')).toBe(`node_modules\n${LINES}`)
     expect(ignoreStateDir(disk(root))).toBe(false)
   })
 
-  it('accepts an existing .dualkit entry without a slash', () => {
-    expect(ignoreStateDir(disk(dir({ '.gitignore': '.dualkit\n' })))).toBe(false)
+  it('replaces an old entry that ignores the whole folder', () => {
+    for (const old of ['.dualkit', '.dualkit/', '/.dualkit/']) {
+      const root = dir({ '.gitignore': `dist\n${old}\nout\n` })
+      expect(ignoreStateDir(disk(root))).toBe(true)
+      expect(read(root, '.gitignore')).toBe(`dist\nout\n${LINES}`)
+    }
   })
 })
 

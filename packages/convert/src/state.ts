@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import type { ConvertState } from './types'
 
-/** The folder convert keeps its own files in. It is added to the app's .gitignore. */
+/** The folder convert keeps its own files in. Only the state and summary files in it are tracked. */
 export const STATE_DIR = '.dualkit'
 export const STATE_FILE = `${STATE_DIR}/convert.json`
 
@@ -27,8 +27,11 @@ export function readState(root: string): ConvertState | null {
   return parsed
 }
 
-/** Writes the state as 2-space JSON with a trailing newline. */
+/** The state as 2-space JSON with a trailing newline. */
+export const stateText = (state: ConvertState): string => JSON.stringify(state, null, 2) + '\n'
+
+/** Writes the state file. */
 export function saveState(root: string, state: ConvertState): void {
   mkdirSync(join(root, STATE_DIR), { recursive: true })
-  writeFileSync(join(root, STATE_FILE), JSON.stringify(state, null, 2) + '\n')
+  writeFileSync(join(root, STATE_FILE), stateText(state))
 }

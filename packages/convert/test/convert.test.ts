@@ -175,6 +175,7 @@ describe('convert after finish', () => {
     const dir = fixtureRepo('next-app')
     await convert(options(dir), fakeIo())
     saveState(dir, { ...readState(dir)!, phase: 'finished' })
+    git(dir, 'commit', '-q', '-am', 'finish')
     const before = commits(dir)
     await convert(options(dir), fakeIo())
     expect(commits(dir)).toBe(before)

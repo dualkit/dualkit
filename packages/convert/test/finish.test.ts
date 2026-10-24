@@ -238,13 +238,13 @@ describe('finish fix round 1', () => {
     expect(read(dir, 'dualkit-convert.md')).toContain('the check returned no result')
   })
 
-  it('shows the phase 1 edit count in What changed and keeps the summary file out of git', async () => {
+  it('shows the phase 1 edit count in What changed and tracks only the state and summary in .dualkit', async () => {
     const dir = await converted('next-app', 'bilingual', 'drafted', ['/', '/pricing', '/settings'])
     await finish({ root: dir }, finishIo(await freePort()))
     const report = read(dir, 'dualkit-convert.md')
     expect(report).not.toMatch(/- 0 files changed with 0 edits/)
     expect(report).toMatch(/changed with [1-9]\d* edits/)
-    expect(git(dir, 'ls-files', '.dualkit')).toBe('')
+    expect(git(dir, 'ls-files', '.dualkit')).toBe('.dualkit/convert.json\n.dualkit/summary.json')
   })
 
   it('says so when the phase 1 summary is missing', async () => {

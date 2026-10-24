@@ -2,11 +2,16 @@ import { addDependencies, addOwnFiles, applyPlan, ignoreStateDir, readText, save
 import { writeConfigAnswers, CONFIG_FILE } from './config-answers'
 import { commit, stage, stagedFiles } from './git'
 import { LEDGER_FILE, type LedgerEntry } from './ledger'
-import type { ConvertIo, ConvertOptions, Flag, Plan, Project } from './types'
+import { STATE_FILE, stateText } from './state'
+import { SUMMARY_FILE, summaryText } from './summary'
+import type { ConvertIo, ConvertOptions, ConvertState, ConvertSummary, Flag, Plan, Project } from './types'
 
 const LOCKFILES: Record<Project['packageManager'], readonly string[]> = {
   npm: ['package-lock.json'], pnpm: ['pnpm-lock.yaml'], yarn: ['yarn.lock'], bun: ['bun.lock', 'bun.lockb'],
 }
+
+/** What the disk phase applied: the staged files, wiring edits and any install flag. */
+export type Written = { changed: string[]; edits: number; flags: Flag[] }
 
 /** Everything the disk phase needs. `step.name` is kept current so a failure can say where it happened. */
 export type WriteInput = {
@@ -18,6 +23,8 @@ export type WriteInput = {
   plan: Plan
   ledger: LedgerEntry[]
   step: { name: string }
+  /** The state and summary to commit, given what the disk phase applied. Called only when something changed. */
+  record: (applied: Written) => { state: ConvertState; summary: ConvertSummary }
 }
 
 /** Runs the package manager install. A failed install becomes a flag rather than stopping the run. */
@@ -42,9 +49,9 @@ async function installed(disk: Disk, project: Project, io: ConvertIo): Promise<F
 
 /**
  * The disk phase, in order: converted files, wiring (moves, writes, edits), stylesheet and messages,
- * ledger, package.json, install, .gitignore, then one commit of the named paths when anything changed.
+ * ledger, package.json, install, .gitignore, then, when anything changed, the state and summary and one commit of the named paths.
  */
-export async function writeAll(input: WriteInput): Promise<{ changed: string[]; edits: number; flags: Flag[] }> {
+export async function writeAll(input: WriteInput): Promise<Written> {
   const { disk, project, options, io, plan, step } = input
   const moved = new Map(plan.moves)
   const touched: string[] = []
@@ -70,6 +77,15 @@ export async function writeAll(input: WriteInput): Promise<{ changed: string[]; 
   step.name = 'committing'
   await stage(disk.root, [...new Set(touched)])
   const changed = await stagedFiles(disk.root)
-  if (changed.length) await commit(disk.root, `dualkit: convert to ${options.mode}`)
-  return { changed, edits: wired.edits + own.edits, flags }
+  const edits = wired.edits + own.edits
+  if (changed.length) {
+    step.name = 'saving the state'
+    const { state, summary } = input.record({ changed, edits, flags })
+    writeText(disk, STATE_FILE, stateText(state))
+    writeText(disk, SUMMARY_FILE, summaryText(summary))
+    await stage(disk.root, [STATE_FILE, SUMMARY_FILE])
+    step.name = 'committing'
+    await commit(disk.root, `dualkit: convert to ${options.mode}`)
+  }
+  return { changed, edits, flags }
 }

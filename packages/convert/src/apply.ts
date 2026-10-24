@@ -5,7 +5,8 @@ import { applyEdits } from './edits'
 import { dualkitCss, importEdit, stylesheetPath } from './generate/stylesheet'
 import { moveFile } from './git'
 import { LEDGER_FILE, messagesFor, writeLedger, type LedgerEntry } from './ledger'
-import { STATE_DIR } from './state'
+import { STATE_DIR, STATE_FILE } from './state'
+import { SUMMARY_FILE } from './summary'
 import type { Plan, Project } from './types'
 
 /** What a step changed on disk: root-relative paths to stage, and how many edits it applied. */
@@ -103,11 +104,22 @@ export function addDependencies(disk: Disk, deps: Record<string, string>): boole
   return writeText(disk, 'package.json', JSON.stringify({ ...pkg, dependencies }, null, indent) + '\n')
 }
 
-/** Adds the state folder to the app's .gitignore. Returns whether it changed. */
+/** The .gitignore lines that keep convert's state and summary tracked and the rest of its folder ignored. */
+export const STATE_IGNORE = [`${STATE_DIR}/*`, `!${STATE_FILE}`, `!${SUMMARY_FILE}`]
+const WHOLE_FOLDER = [STATE_DIR, `${STATE_DIR}/`, `/${STATE_DIR}`, `/${STATE_DIR}/`]
+
+/**
+ * Ignores the state folder in the app's .gitignore except the state and summary files. An older line that
+ * ignores the whole folder is dropped, because git cannot re-include a file inside an ignored folder.
+ * Returns whether it changed.
+ */
 export function ignoreStateDir(disk: Disk): boolean {
   const text = readText(disk.root, '.gitignore') ?? ''
-  const lines = text.split(/\r?\n/).map((l) => l.trim())
-  if (lines.includes(`${STATE_DIR}/`) || lines.includes(STATE_DIR) || lines.includes(`/${STATE_DIR}/`)) return false
-  const gap = text === '' || text.endsWith('\n') ? '' : '\n'
-  return writeText(disk, '.gitignore', `${text}${gap}${STATE_DIR}/\n`)
+  const lines = text.split(/\r?\n/)
+  const kept = lines.filter((l) => !WHOLE_FOLDER.includes(l.trim()))
+  const missing = STATE_IGNORE.filter((l) => !kept.some((k) => k.trim() === l))
+  if (missing.length === 0 && kept.length === lines.length) return false
+  const body = kept.join('\n').replace(/\n*$/, '')
+  const out = body === '' ? missing : [body, ...missing]
+  return writeText(disk, '.gitignore', `${out.join('\n')}\n`)
 }

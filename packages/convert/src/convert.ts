@@ -6,15 +6,15 @@ import { shootBaseline } from './baseline'
 import { guardWrites, localeHelperPath } from './generate/locale'
 import { wireNextIntl } from './generate/next-intl'
 import { wireReactI18next } from './generate/react-i18next'
-import { RefusedError, assertCleanRepo, branchExists, createBranch, currentBranch, trackedFiles } from './git'
+import { RefusedError, assertCleanRepo, branchExists, createBranch, currentBranch, excludeStateDir, trackedFiles } from './git'
 import { LEDGER_FILE, mergeLedger, readLedger, type LedgerEntry } from './ledger'
 import { physicalContext } from './lint-context'
 import { runPasses, type PassContext, type PassKind } from './passes'
 import { detectProject } from './project'
 import { rollBack } from './rollback'
-import { readState, saveState } from './state'
-import { mergeSummary, readSummary, saveSummary } from './summary'
-import { writeAll } from './write-all'
+import { STATE_FILE, readState } from './state'
+import { mergeSummary, readSummary } from './summary'
+import { writeAll, type Written } from './write-all'
 import type { ConvertIo, ConvertOptions, ConvertState, ConvertSummary, Flag, Mode, Plan, Project } from './types'
 
 export type { ConvertIo, ConvertOptions, ConvertState, ConvertSummary, Shooter } from './types'
@@ -85,6 +85,15 @@ function finalFlags(flags: readonly Flag[], moved: ReadonlyMap<string, string>):
   })
 }
 
+type Run = { branch: string; done: Transformed; plan: Plan; moved: ReadonlyMap<string, string>; strings: number }
+
+/** What this run changed and left to finish, from the in-memory passes and what the disk phase applied. */
+function summarise({ branch, done, plan, moved, strings }: Run, written: Written): ConvertSummary {
+  const byKind = { ...done.byKind, wiring: written.edits + Object.keys(plan.writes).length }
+  const flags = finalFlags([...done.flags, ...plan.flags, ...written.flags], moved)
+  return { branch, filesChanged: written.changed.length, edits: done.edits + written.edits, byKind, changed: changedFiles(done.perFile, moved, plan.edits), flags, strings, skipped: done.skipped }
+}
+
 /** Refuses unless the tree is clean and the branch is free, or this is a re-run on a branch convert already converted. */
 async function start(options: ConvertOptions): Promise<{ state: ConvertState | null; rerun: boolean; base: string }> {
   await assertCleanRepo(options.root)
@@ -93,6 +102,9 @@ async function start(options: ConvertOptions): Promise<{ state: ConvertState | n
   const state = base === branch ? readState(options.root) : null
   // A finished conversion can run again too, for example after new pages are added on the branch.
   const rerun = base === branch && (state?.phase === 'converted' || state?.phase === 'finished') && state.mode === options.mode
+  if (base === branch && !state) {
+    throw new RefusedError(`You are on ${branch}, but it has no convert state in ${STATE_FILE}. Switch back to the branch you started from, delete ${branch}, then run convert again.`)
+  }
   if (!rerun && (await branchExists(options.root, branch))) {
     throw new RefusedError(`The branch ${branch} already exists. Delete it, or switch to it if convert made it, then run convert again.`)
   }
@@ -141,25 +153,22 @@ export async function convert(options: ConvertOptions, ioIn: ConvertIo): Promise
   const ledger = mergeLedger(existing, done.entries.map((e) => ({ ...e, file: moved.get(e.file) ?? e.file })))
   guardWrites(ownFiles(project, ledger), (rel) => readText(root, rel), generated)
 
+  await excludeStateDir(root)
   if (!rerun) {
     await baseline(project, options, io)
     await createBranch(root, branch)
     io.log(`Created the branch ${branch}.`)
   }
+  const ours = [...Object.keys(plan.writes), ...Object.keys(ownFiles(project, ledger)), LEDGER_FILE]
+  const nextState: ConvertState = { mode, base: state?.base ?? base, branch, framework: project.framework, phase: 'converted', generated: [...new Set([...generated, ...ours])].sort() }
+  const run: Run = { branch, done, plan, moved, strings: ledger.length - existing.length }
   const disk: Disk = { root, created: [] }
   const step = { name: 'writing the converted files' }
-  const written = await writeAll({ disk, project, options, io, texts: done.texts, plan, ledger, step })
+  const record = (applied: Written) => ({ state: nextState, summary: mergeSummary(readSummary(root), summarise(run, applied)) })
+  const written = await writeAll({ disk, project, options, io, texts: done.texts, plan, ledger, step, record })
     .catch((error: unknown) => rollBack({ root, base: rerun ? branch : base, branch, madeBranch: !rerun, created: disk.created }, step.name, error))
   io.log(written.changed.length ? committedLine(written.changed.length, branch) : 'Nothing changed, so there is nothing to commit.')
-
-  const ours = [...Object.keys(plan.writes), ...Object.keys(ownFiles(project, ledger)), LEDGER_FILE]
-  saveState(root, { mode, base: state?.base ?? base, branch, framework: project.framework, phase: 'converted', generated: [...new Set([...generated, ...ours])].sort() })
-  const flags = finalFlags([...done.flags, ...plan.flags, ...written.flags], moved)
-  io.log(leftLine(problems(flags).length, done.skipped.length))
-  const byKind = { ...done.byKind, wiring: written.edits + Object.keys(plan.writes).length }
-  const changed = changedFiles(done.perFile, moved, plan.edits)
-  const summary: ConvertSummary = { branch, filesChanged: written.changed.length, edits: done.edits + written.edits, byKind, changed, flags, strings: ledger.length - existing.length, skipped: done.skipped }
-  const earlier = readSummary(root)
-  if (!earlier || written.changed.length > 0) saveSummary(root, mergeSummary(earlier, summary))
+  const summary = summarise(run, written)
+  io.log(leftLine(problems(summary.flags).length, done.skipped.length))
   return summary
 }

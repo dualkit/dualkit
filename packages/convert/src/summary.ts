@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { STATE_DIR } from './state'
 import type { ConvertSummary, Flag } from './types'
@@ -27,8 +27,5 @@ export function mergeSummary(earlier: ConvertSummary | null, next: ConvertSummar
   return { ...next, flags }
 }
 
-/** Writes the summary as 2-space JSON next to the state. */
-export function saveSummary(root: string, summary: ConvertSummary): void {
-  mkdirSync(join(root, STATE_DIR), { recursive: true })
-  writeFileSync(join(root, SUMMARY_FILE), JSON.stringify(summary, null, 2) + '\n')
-}
+/** The summary as 2-space JSON with a trailing newline. */
+export const summaryText = (summary: ConvertSummary): string => JSON.stringify(summary, null, 2) + '\n'

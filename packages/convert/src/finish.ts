@@ -37,7 +37,7 @@ export function arabicTarget(project: Project, state: ConvertState, route: strin
 }
 
 /** The files finish writes and commits, with the config file it was given. */
-const ownFiles = (configFile: string): string[] => [messagesPath('en'), messagesPath('ar'), REPORT_FILE, LEDGER_FILE, configFile]
+const ownFiles = (configFile: string): string[] => [messagesPath('en'), messagesPath('ar'), REPORT_FILE, STATE_FILE, LEDGER_FILE, configFile]
 
 /** Refuses when the index already holds staged files finish would otherwise commit along with its own. */
 async function assertNothingElseStaged(root: string, own: readonly string[]): Promise<void> {

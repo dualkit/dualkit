@@ -1,4 +1,6 @@
 import { execFile } from 'node:child_process'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { dirname, resolve } from 'node:path'
 import { STATE_DIR } from './state'
 
 /** Thrown when convert will not start. The message is one line saying why. */
@@ -116,4 +118,18 @@ export async function restoreFromHead(root: string, paths: readonly string[]): P
 /** Unstages the named paths, leaving the work tree alone. */
 export async function unstage(root: string, paths: readonly string[]): Promise<void> {
   if (paths.length) await must(root, ['reset', '-q', '--', ...paths])
+}
+
+/**
+ * Adds the state folder to the repo's own exclude file, which is local and never committed, so baseline
+ * screenshots never show as untracked on the base branch. The app's .gitignore on the branch re-includes
+ * the state and summary files, and wins over this file.
+ */
+export async function excludeStateDir(root: string): Promise<void> {
+  const file = resolve(root, await must(root, ['rev-parse', '--git-path', 'info/exclude']))
+  const line = `/${await must(root, ['rev-parse', '--show-prefix'])}${STATE_DIR}/*`
+  const text = existsSync(file) ? readFileSync(file, 'utf8') : ''
+  if (text.split(/\r?\n/).some((l) => l.trim() === line)) return
+  mkdirSync(dirname(file), { recursive: true })
+  writeFileSync(file, `${text}${text === '' || text.endsWith('\n') ? '' : '\n'}${line}\n`)
 }
