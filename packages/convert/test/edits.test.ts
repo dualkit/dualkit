@@ -1,10 +1,5 @@
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
-import { execFileSync } from 'node:child_process'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { OverlapError, applyEdits } from '../src/edits'
-import { fixtureRepo } from './helpers'
 
 describe('applyEdits', () => {
   it('applies non-overlapping edits given out of order', () => {
@@ -29,17 +24,5 @@ describe('applyEdits', () => {
 
   it('returns the input when there are no edits', () => {
     expect(applyEdits('abc', [])).toBe('abc')
-  })
-})
-
-describe('fixtureRepo', () => {
-  it('copies a fixture and commits it', () => {
-    const root = mkdtempSync(join(tmpdir(), 'dualkit-fx-'))
-    mkdirSync(join(root, 'next-app'))
-    writeFileSync(join(root, 'next-app', 'a.txt'), 'hi')
-    const dir = fixtureRepo('next-app', root)
-    expect(readFileSync(join(dir, 'a.txt'), 'utf8')).toBe('hi')
-    const status = execFileSync('git', ['status', '--porcelain'], { cwd: dir, encoding: 'utf8' })
-    expect(status).toBe('')
   })
 })

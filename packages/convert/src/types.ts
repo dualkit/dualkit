@@ -23,3 +23,14 @@ export type ConvertConfig = {
   storageState?: string
   test?: string
 }
+
+/** What convert detected about the app it will convert. `entry` is the root layout (Next) or the createRoot file (Vite). */
+export type Project = {
+  root: string
+  framework: 'next-app' | 'vite-react'
+  appDir: string | null
+  entry: string
+  tailwind: string | null
+  i18n: 'next-intl' | 'react-i18next' | null
+  packageManager: 'npm' | 'pnpm' | 'yarn' | 'bun'
+}

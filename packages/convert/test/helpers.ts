@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const FIXTURES = fileURLToPath(new URL('./fixtures', import.meta.url))
-const GIT_ID = ['-c', 'user.email=test@dualkit.dev', '-c', 'user.name=dualkit test']
+const GIT_ID = ['-c', 'user.email=test@dualkit.dev', '-c', 'user.name=dualkit test', '-c', 'commit.gpgsign=false']
 
 /** Copies a fixture to a temp dir, makes it a git repo with one commit, and returns the path. */
 export function fixtureRepo(name: 'next-app' | 'vite-app', root: string = FIXTURES): string {
