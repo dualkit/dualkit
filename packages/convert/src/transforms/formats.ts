@@ -2,7 +2,8 @@ import type { SourceFile } from '@dualkit/lint'
 import type { Edit, FileResult, Flag } from '../types'
 import { addImports, specifierTo, type NamedImport } from './imports'
 import { lineOf } from './lines'
-import { componentOf, isOwnHook, scopeNames, styleOf, type Lib, type Node, type Style } from './strings'
+import { componentOf, isOwnHook, scopeNames, type Node } from './scope'
+import { styleOf, type Lib, type Style } from './strings'
 
 const SKIP = new Set(['loc', 'leadingComments', 'trailingComments', 'innerComments', 'extra'])
 const INTL = new Set(['NumberFormat', 'DateTimeFormat'])

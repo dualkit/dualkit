@@ -192,6 +192,21 @@ describe('extractStrings hooks', () => {
     )
   })
 
+  it('flags text in an async component under react-i18next instead of giving it a hook it cannot call', () => {
+    const { edits, flags, entries } = run('export default async function Page() {\n  return <h1>Orders</h1>\n}\n', 'src/Page.tsx', 'react-i18next')
+    expect(edits).toEqual([])
+    expect(entries).toEqual([])
+    expect(flags).toHaveLength(1)
+    expect(flags[0]).toMatchObject({ kind: 'unsupported', line: 2 })
+    expect(flags[0]!.message).toContain('async component')
+  })
+
+  it('treats memo(forwardRef(...)) as a component', () => {
+    const { out } = run("'use client'\nexport const Field = memo(forwardRef((props, ref) => <label ref={ref}>Name</label>))\n", 'components/field.tsx')
+    expect(out).toContain("const t = useTranslations()")
+    expect(out).toContain("{t('field.name')}")
+  })
+
   it('turns an expression-bodied arrow into a block', () => {
     const { out } = run(`'use client'\nimport { x } from './x'\n\nexport const Badge = () => (\n  <span>New</span>\n)\n`)
     expect(out).toBe(

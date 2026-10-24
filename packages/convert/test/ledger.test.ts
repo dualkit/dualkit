@@ -96,3 +96,19 @@ describe('messagesFor', () => {
     expect(() => messagesFor([entry('a'), entry('a.b')], 'en')).toThrow(/a\.b/)
   })
 })
+
+describe('messagesFor with hand-edited keys', () => {
+  it('keeps __proto__ and constructor keys as plain messages', () => {
+    const entry = (key: string) => ({ key, en: key, ar: '', status: 'pending' as const, file: 'a.tsx', line: 1 })
+    const messages = messagesFor([entry('__proto__.title'), entry('home.__proto__'), entry('home.constructor')], 'en')
+    expect(JSON.parse(JSON.stringify(messages))).toEqual(JSON.parse('{"__proto__":{"title":"__proto__.title"},"home":{"__proto__":"home.__proto__","constructor":"home.constructor"}}'))
+    expect(({} as Record<string, unknown>).title).toBeUndefined()
+  })
+})
+
+describe('mergeLedger duplicates', () => {
+  it('keeps the first of two added entries with the same key', () => {
+    const entry = (key: string, en: string) => ({ key, en, ar: '', status: 'pending' as const, file: 'a.tsx', line: 1 })
+    expect(mergeLedger([], [entry('a', 'one'), entry('a', 'two')]).map((e) => e.en)).toEqual(['one'])
+  })
+})

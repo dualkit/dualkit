@@ -1,7 +1,8 @@
 import { parseSourceOutcome } from '@dualkit/lint'
 import { UnsupportedError } from '../project'
 import { addImports, type NamedImport } from '../transforms/imports'
-import { isOwnHook, styleOf, type Node, type Style } from '../transforms/strings'
+import { isOwnHook, type Node } from '../transforms/scope'
+import { styleOf, type Style } from '../transforms/strings'
 import type { Edit, Mode } from '../types'
 
 const FUNCTIONS = new Set(['FunctionDeclaration', 'FunctionExpression', 'ArrowFunctionExpression'])

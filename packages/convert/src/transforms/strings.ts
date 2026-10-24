@@ -2,11 +2,12 @@ import type { SourceFile } from '@dualkit/lint'
 import type { LedgerEntry } from '../ledger'
 import type { Edit, FileResult, Flag, FlagKind } from '../types'
 import { lineOf } from './lines'
+import { FUNCTIONS, componentOf, isOwnHook, tInScope, type Node } from './scope'
 
-export type Node = { type?: string; start?: number; end?: number; [key: string]: unknown }
+export type { Node } from './scope'
+
 const SKIP = new Set(['loc', 'leadingComments', 'trailingComments', 'innerComments', 'extra'])
 const TEXT_ATTRIBUTES = new Set(['alt', 'title', 'placeholder', 'aria-label', 'label'])
-const FUNCTIONS = new Set(['FunctionDeclaration', 'FunctionExpression', 'ArrowFunctionExpression'])
 const LETTER = /\p{L}/u
 const PROSE = /^\p{Lu}\p{Ll}/u
 const NOT_PROSE = /[/\\_=<>{}@#|]/
@@ -14,7 +15,7 @@ const NOT_PROSE = /[/\\_=<>{}@#|]/
 export type Lib = 'next-intl' | 'react-i18next'
 
 type Context = {
-  file: SourceFile; base: number; stem: string; used: Set<string>; byText: Map<string, string>
+  file: SourceFile; base: number; lib: Lib; stem: string; used: Set<string>; byText: Map<string, string>
   entries: LedgerEntry[]; edits: Edit[]; flags: Flag[]; components: Set<Node>; sawJsx: boolean
 }
 
@@ -51,87 +52,6 @@ function stemOf(path: string): string {
 const keyWords = (en: string): string =>
   ascii(en.replace(/\{[^}]*\}/g, ' ')).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).slice(0, 4).join('-') || 'text'
 
-const isPascal = (name: unknown): boolean => typeof name === 'string' && /^[A-Z]/.test(name)
-const idName = (node: Node | undefined): unknown => (node?.type === 'Identifier' ? node.name : undefined)
-
-const WRAPPERS = new Set(['memo', 'forwardRef'])
-
-/** Whether a call is `memo(...)`, `forwardRef(...)`, or the same on `React`. */
-function isWrapper(call: Node | undefined): boolean {
-  const callee = call?.type === 'CallExpression' ? (call.callee as Node) : undefined
-  if (callee?.type === 'Identifier') return WRAPPERS.has(callee.name as string)
-  return callee?.type === 'MemberExpression' && idName(callee.object as Node) === 'React'
-    && WRAPPERS.has(idName(callee.property as Node) as string)
-}
-
-/** Whether a function is a component: PascalCase by its own or its variable's name, or the default export, optionally through memo or forwardRef. */
-function isComponent(fn: Node, parent: Node | undefined, grand: Node | undefined): boolean {
-  if (isPascal(idName(fn.id as Node))) return true
-  const holder = isWrapper(parent) ? grand : parent
-  if (holder?.type === 'VariableDeclarator' && isPascal(idName(holder.id as Node))) return true
-  return holder?.type === 'ExportDefaultDeclaration'
-}
-
-/** The nearest enclosing component function, or null. */
-export function componentOf(ancestors: Node[]): Node | null {
-  for (let i = ancestors.length - 1; i >= 0; i--) {
-    const node = ancestors[i]!
-    if (FUNCTIONS.has(node.type!) && isComponent(node, ancestors[i - 1], ancestors[i - 2])) return node
-  }
-  return null
-}
-
-/** The names a binding pattern declares. */
-function patternNames(pattern: Node | null | undefined): string[] {
-  if (!pattern) return []
-  switch (pattern.type) {
-    case 'Identifier': return [pattern.name as string]
-    case 'AssignmentPattern': return patternNames(pattern.left as Node)
-    case 'RestElement': return patternNames(pattern.argument as Node)
-    case 'TSParameterProperty': return patternNames(pattern.parameter as Node)
-    case 'ArrayPattern': return ((pattern.elements as Node[]) ?? []).flatMap(patternNames)
-    case 'ObjectPattern': return ((pattern.properties as Node[]) ?? []).flatMap((p) => patternNames((p.type === 'RestElement' ? p : p.value) as Node))
-    default: return []
-  }
-}
-
-/** Whether a statement is a translation hook convert adds: `const t = useTranslations()`, `const { t } = useTranslation()` or `const t = await getTranslations()`. */
-export function isOwnHook(statement: Node): boolean {
-  const [d, extra] = (statement.declarations as Node[] | undefined) ?? []
-  if (statement.type !== 'VariableDeclaration' || !d || extra) return false
-  const init = (d.init as Node | null)?.type === 'AwaitExpression' ? ((d.init as Node).argument as Node) : (d.init as Node | null)
-  if (init?.type !== 'CallExpression' || ((init.arguments as Node[]) ?? []).length) return false
-  const callee = idName(init.callee as Node)
-  const id = d.id as Node
-  if (id.type === 'Identifier') return id.name === 't' && (callee === 'useTranslations' || callee === 'getTranslations')
-  return callee === 'useTranslation' && patternNames(id).join() === 't'
-}
-
-/** The names a statement declares in its block. */
-function statementNames(statement: Node): string[] {
-  const s = statement.type === 'ExportNamedDeclaration' || statement.type === 'ExportDefaultDeclaration' ? (statement.declaration as Node | null) : statement
-  if (!s) return []
-  if (s.type === 'VariableDeclaration') return isOwnHook(s) ? [] : ((s.declarations as Node[]) ?? []).flatMap((d) => patternNames(d.id as Node))
-  if (s.type === 'FunctionDeclaration' || s.type === 'ClassDeclaration') return patternNames(s.id as Node)
-  if (s.type === 'ImportDeclaration') return ((s.specifiers as Node[]) ?? []).map((spec) => (spec.local as Node).name as string)
-  return []
-}
-
-/** The names a scope-making node binds, other than a hook convert added. */
-export function scopeNames(node: Node): string[] {
-  if (FUNCTIONS.has(node.type!)) return [...((node.params as Node[]) ?? []).flatMap(patternNames), ...(node.type === 'FunctionExpression' ? patternNames(node.id as Node) : [])]
-  if (node.type === 'BlockStatement' || node.type === 'Program') return ((node.body as Node[]) ?? []).flatMap(statementNames)
-  if (node.type === 'CatchClause') return patternNames(node.param as Node)
-  if (/^For(In|Of)?Statement$/.test(node.type!)) {
-    const head = (node.init ?? node.left) as Node | null
-    return head?.type === 'VariableDeclaration' ? statementNames(head) : []
-  }
-  return []
-}
-
-/** Whether a binding named `t` other than convert's own hook is visible where a string sits. */
-const tInScope = (ancestors: Node[]): boolean => ancestors.some((node) => scopeNames(node).includes('t'))
-
 function flag(ctx: Context, offset: number, kind: FlagKind, message: string, suggestion: string): void {
   ctx.flags.push({ file: ctx.file.path, line: lineOf(ctx.file.text, offset), kind, message, suggestion })
 }
@@ -153,6 +73,11 @@ function place(ctx: Context, ancestors: Node[], start: number, end: number, en: 
   if (!component) {
     flag(ctx, start, 'outside-component', `"${en}" sits outside a component, so convert cannot give it a translation hook.`,
       'Move the text into a component, or translate it where it is used.')
+    return
+  }
+  if (ctx.lib === 'react-i18next' && component.async) {
+    flag(ctx, start, 'unsupported', `"${en}" sits in an async component, where the react-i18next hook cannot run, so it was left as it is.`,
+      'Move the text into a component that is not async, or translate it there with i18n.t from the i18n setup convert added.')
     return
   }
   if (tInScope(ancestors)) {
@@ -428,7 +353,7 @@ export function extractStrings(file: SourceFile, lib: Lib, taken: Set<string>): 
   for (const block of file.js) {
     const program = block.ast.program as unknown as Node
     if (isServerFile(program)) continue
-    const ctx: Context = { file, base: block.offset, stem: stemOf(file.path), used, byText: new Map(), entries, edits, flags, components: new Set(), sawJsx: false }
+    const ctx: Context = { file, base: block.offset, lib, stem: stemOf(file.path), used, byText: new Map(), entries, edits, flags, components: new Set(), sawJsx: false }
     walk(program, ctx, [])
     if (ctx.sawJsx) flagModuleStrings(program, ctx)
     const style = styleOf(program, file.text, ctx.base)

@@ -40,21 +40,29 @@ export function writeLedger(root: string, entries: LedgerEntry[]): void {
 /** Adds entries whose keys are new. An existing entry is kept as it is, so its `ar` and `status` survive a re-run. */
 export function mergeLedger(existing: LedgerEntry[], added: LedgerEntry[]): LedgerEntry[] {
   const keys = new Set(existing.map((e) => e.key))
-  const fresh = added.filter((e) => !keys.has(e.key) && keys.add(e.key))
+  const fresh: LedgerEntry[] = []
+  for (const entry of added) {
+    if (keys.has(entry.key)) continue
+    keys.add(entry.key)
+    fresh.push(entry)
+  }
   return [...existing, ...fresh].sort(byKey)
 }
 
 const textFor = (entry: LedgerEntry, locale: 'en' | 'ar'): string =>
   locale === 'en' || entry.status === 'pending' || entry.ar === '' ? entry.en : entry.ar
 
+/** An object with no prototype, so a hand-edited key such as __proto__ is kept as a plain message. */
+const group = (): Record<string, unknown> => Object.create(null) as Record<string, unknown>
+
 /** The messages object for one locale, nested by dotted key. A pending Arabic entry uses its English so the app still runs. */
 export function messagesFor(entries: LedgerEntry[], locale: 'en' | 'ar'): Record<string, unknown> {
-  const root: Record<string, unknown> = {}
+  const root = group()
   for (const entry of [...entries].sort(byKey)) {
     const parts = entry.key.split('.')
     let node = root
     for (const part of parts.slice(0, -1)) {
-      const next = Object.hasOwn(node, part) ? node[part] : {}
+      const next = Object.hasOwn(node, part) ? node[part] : group()
       if (typeof next !== 'object') throw new Error(`Key ${entry.key} sits under a key that is already a message.`)
       node[part] = next
       node = next as Record<string, unknown>
