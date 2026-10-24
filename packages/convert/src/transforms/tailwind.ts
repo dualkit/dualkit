@@ -1,5 +1,6 @@
 import { classStrings, parseClass, physicalTokens, sideScoped, type ClassFragment, type ParsedClass, type SourceFile, type TailwindEntry } from '@dualkit/lint'
 import type { Edit, FileResult, Flag } from '../types'
+import { lineOf } from './lines'
 
 /** The first release with logical margin, padding, inset, rounded, border and scroll classes. */
 const FLOOR = '3.3.0'
@@ -86,12 +87,6 @@ function shadowAdvice(core: string): string | null {
   const parts = inner.split('_').filter((p) => p !== 'inset')
   const x = OFFSET.exec(parts[0] ?? '')?.[1]
   return x !== undefined && Number(x) !== 0 ? 'A shadow with a horizontal offset falls on the same side in Arabic. Add an rtl: variant with the offset negated.' : null
-}
-
-const lineOf = (text: string, offset: number): number => {
-  let line = 1
-  for (let i = text.indexOf('\n'); i !== -1 && i < offset; i = text.indexOf('\n', i + 1)) line++
-  return line
 }
 
 function formFlags(file: SourceFile, fragments: readonly ClassFragment[]): Flag[] {
