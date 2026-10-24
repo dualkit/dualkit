@@ -2,7 +2,8 @@ import { parseSourceOutcome } from '@dualkit/lint'
 import { posix } from 'node:path'
 import { sideEffectImport, specifierTo } from '../transforms/imports'
 import { styleOf, type Node } from '../transforms/strings'
-import type { Edit, Mode, Plan, Project } from '../types'
+import { lineOf } from '../transforms/lines'
+import type { Edit, Flag, Mode, Plan, Project } from '../types'
 import { LOCALE_COOKIE, LOCALE_HELPER, SWITCH_CHOICES, guardWrites, localeHelperPath, switchPath } from './locale'
 
 const DEPS = { 'react-i18next': '17.1.6', i18next: '26.5.8' }
@@ -70,6 +71,18 @@ function htmlEdits(html: string, mode: Mode): Edit[] {
   return text === open[0] ? [] : [{ start: open.index, end: open.index + open[0].length, text }]
 }
 
+/** A flag for an English <title> in index.html, which stays as it is because no translation hook reaches it. */
+function titleFlags(html: string): Flag[] {
+  const title = /<title\b[^>]*>([^<]*)<\/title>/i.exec(html)
+  const text = title?.[1]!.trim() ?? ''
+  if (!title || !/[A-Za-z]/.test(text) || /\{\{|%\w+%/.test(text)) return []
+  return [{
+    file: HTML_PATH, line: lineOf(html, title.index), kind: 'outside-component',
+    message: `The page title "${text}" in index.html stays in English.`,
+    suggestion: 'Translate it in index.html for an Arabic-only app, or set document.title from a translated string in a component.',
+  }]
+}
+
 /** The entry edit that imports the i18n init, or nothing when it is already imported. */
 function entryEdits(entry: string, text: string): Edit[] {
   const outcome = parseSourceOutcome(entry, text)
@@ -102,5 +115,5 @@ export function wireReactI18next(project: Project, mode: Mode, files: (relPath: 
   const entry = files(project.entry)
   const entryChange = entry === null ? [] : entryEdits(project.entry, entry)
   if (entryChange.length) edits[project.entry] = entryChange
-  return { writes, edits, moves: [], deps: { ...DEPS }, flags: [] }
+  return { writes, edits, moves: [], deps: { ...DEPS }, flags: html === null ? [] : titleFlags(html) }
 }

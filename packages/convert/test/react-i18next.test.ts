@@ -82,6 +82,16 @@ describe('wireReactI18next arabic', () => {
     expect(plan.writes['src/components/dualkit-language-switch.tsx']).toBeUndefined()
   })
 
+  it('flags the English page title in index.html, which no translation hook reaches', () => {
+    expect(plan.flags).toEqual([{
+      file: 'index.html', line: 6, kind: 'outside-component',
+      message: 'The page title "Acme tasks" in index.html stays in English.',
+      suggestion: 'Translate it in index.html for an Arabic-only app, or set document.title from a translated string in a component.',
+    }])
+    const bare = wireReactI18next(project, 'arabic', (p) => (p === 'index.html' ? '<html><head><title>{{x}}</title></head></html>' : files(p)))
+    expect(bare.flags).toEqual([])
+  })
+
   it('sets the html element to Arabic and right to left without a script', () => {
     const html = edited(plan, 'index.html')
     expect(html).toContain('<html lang="ar" dir="rtl">')
