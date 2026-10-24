@@ -18,6 +18,11 @@ describe('checklists', () => {
     }
   })
 
+  it.each(SCREENS)('%s asks about spacing and polish', (screen) => {
+    const texts = loadChecklist(screen).points.map((p) => p.text)
+    expect(texts).toContain('Is the spacing even and the page tidy, with nothing cramped, overlapping or out of line?')
+  })
+
   it('throws for an unknown screen', () => {
     expect(() => loadChecklist('nope')).toThrow()
   })
