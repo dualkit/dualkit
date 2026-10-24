@@ -29,6 +29,14 @@ describe('convert configAnswers', () => {
     expect(git(dir, 'show', '--name-only', '--format=', 'HEAD')).toContain(CONFIG)
   })
 
+  it('writes the answers to the config file it is given', async () => {
+    const dir = fixtureRepo('next-app')
+    await convert({ ...options(dir), configAnswers: answers, configFile: 'config/dk.json' }, io)
+    expect(git(dir, 'status', '--porcelain', '--untracked-files=all')).toBe('')
+    expect(JSON.parse(git(dir, 'show', 'HEAD:config/dk.json'))).toEqual({ convert: answers })
+    expect(existsSync(join(dir, CONFIG))).toBe(false)
+  })
+
   it('creates the config when there is none, and uses the answers for the baseline', async () => {
     const dir = fixtureRepo('next-app')
     const port = await freePort()
@@ -90,6 +98,22 @@ describe('finish configAnswers', () => {
     expect(git(dir, 'status', '--porcelain')).toBe('')
     expect(JSON.parse(git(dir, 'show', `HEAD:${CONFIG}`))).toEqual({ convert: { start, port } })
     expect(git(dir, 'show', '--name-only', '--format=', 'HEAD')).toContain(CONFIG)
+  }, 30_000)
+
+  it('writes and commits the answers to the config file it is given, even when that file was staged', async () => {
+    const port = await freePort()
+    const dir = fixtureRepo('next-app')
+    await convert(options(dir), io)
+    writeLedger(dir, readLedger(dir).map((e) => ({ ...e, status: 'drafted' as const, ar: `ar:${e.en}` })))
+    mkdirSync(join(dir, 'config'), { recursive: true })
+    writeFileSync(join(dir, 'config/dk.json'), text({ ignore: [] }))
+    git(dir, 'add', 'config/dk.json')
+    const start = `node -e "require('http').createServer((q,s)=>s.end('ok')).listen(${port})"`
+    const finishIo: FinishIo = { ...io, shoot: async () => png(), audit: async () => ({ score: 100, errors: 0, warnings: 0 }), lint: async () => 0 }
+    await finish({ root: dir, configAnswers: { start, port }, configFile: 'config/dk.json' }, finishIo)
+    expect(git(dir, 'status', '--porcelain', '--untracked-files=all')).toBe('')
+    expect(JSON.parse(git(dir, 'show', 'HEAD:config/dk.json'))).toEqual({ ignore: [], convert: { start, port } })
+    expect(existsSync(join(dir, CONFIG))).toBe(false)
   }, 30_000)
 
   it('leaves an unrelated uncommitted config edit alone when there are no answers', async () => {

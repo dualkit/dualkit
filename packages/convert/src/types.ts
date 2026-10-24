@@ -47,8 +47,11 @@ export type Plan = {
 /** Answers the person gave at a prompt. They are merged into dualkit.config.json under `convert` and committed. */
 export type ConfigAnswers = { start?: string; port?: number }
 
-/** What phase 1 is asked to do. `root` is the app folder, inside a git repo. */
-export type ConvertOptions = { root: string; mode: Mode; install: boolean; baseline: boolean; configAnswers?: ConfigAnswers }
+/** What phase 1 is asked to do. `root` is the app folder, inside a git repo. `configFile` is relative to root, dualkit.config.json by default. */
+export type ConvertOptions = { root: string; mode: Mode; install: boolean; baseline: boolean; configAnswers?: ConfigAnswers; configFile?: string }
+
+/** What phase 2 is asked to do. `force` uses English for pending strings. `configFile` is as for ConvertOptions. */
+export type FinishOptions = { root: string; force?: boolean; configAnswers?: ConfigAnswers; configFile?: string }
 
 /** Per-request browser settings. `cookies` are set before the page loads. */
 export type PageOptions = { cookies?: Record<string, string> }

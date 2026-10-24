@@ -127,7 +127,7 @@ export const leftLine = (open: number, skipped: number): string =>
 export async function convert(options: ConvertOptions, ioIn: ConvertIo): Promise<ConvertSummary> {
   const { root, mode } = options
   const { state, rerun, base } = await start(options)
-  if (options.configAnswers) checkConfigAnswers(root)
+  if (options.configAnswers) checkConfigAnswers(root, options.configFile)
   // Answers taken before the branch existed are part of the config this run uses, the baseline included.
   const io: ConvertIo = options.configAnswers ? { ...ioIn, config: { ...ioIn.config, ...options.configAnswers } } : ioIn
   const project = detectProject(root)

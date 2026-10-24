@@ -12,7 +12,7 @@ import { listRoutes } from './routes'
 import { startServer } from './server'
 import { STATE_DIR, readState, saveState } from './state'
 import { readSummary } from './summary'
-import type { ConfigAnswers, ConvertIo, ConvertState, ConvertSummary, PageOptions, Project, Shooter } from './types'
+import type { ConvertIo, ConvertState, ConvertSummary, FinishOptions, PageOptions, Project, Shooter } from './types'
 
 export const REPORT_FILE = 'dualkit-convert.md'
 export const DIFF_DIR = `${STATE_DIR}/diff`
@@ -35,11 +35,12 @@ export function arabicTarget(project: Project, state: ConvertState, route: strin
   return { path: route, options: { cookies: { [LOCALE_COOKIE]: 'ar' } } }
 }
 
-const OWN_FILES = [messagesPath('en'), messagesPath('ar'), REPORT_FILE, LEDGER_FILE, CONFIG_FILE]
+/** The files finish writes and commits, with the config file it was given. */
+const ownFiles = (configFile: string): string[] => [messagesPath('en'), messagesPath('ar'), REPORT_FILE, LEDGER_FILE, configFile]
 
 /** Refuses when the index already holds staged files finish would otherwise commit along with its own. */
-async function assertNothingElseStaged(root: string): Promise<void> {
-  const others = (await stagedFiles(root)).filter((f) => !OWN_FILES.includes(f))
+async function assertNothingElseStaged(root: string, own: readonly string[]): Promise<void> {
+  const others = (await stagedFiles(root)).filter((f) => !own.includes(f))
   if (others.length > 0) throw new RefusedError(`You have staged changes in ${others.join(', ')}. Commit or unstage them, then run finish again.`)
 }
 
@@ -132,16 +133,18 @@ const tail = (out: string): string => out.trimEnd().split('\n').slice(-TEST_TAIL
  * Phase 2: writes the messages from the ledger, serves the app, checks English against the baseline and
  * audits the Arabic pages, writes dualkit-convert.md and commits it with the messages and the ledger.
  */
-export async function finish(options: { root: string; force?: boolean; configAnswers?: ConfigAnswers }, ioIn: FinishIo): Promise<{ reportPath: string; passed: boolean }> {
+export async function finish(options: FinishOptions, ioIn: FinishIo): Promise<{ reportPath: string; passed: boolean }> {
   const { root } = options
+  const configFile = options.configFile ?? CONFIG_FILE
+  const own = ownFiles(configFile)
   const io: FinishIo = options.configAnswers ? { ...ioIn, config: { ...ioIn.config, ...options.configAnswers } } : ioIn
   const { config, log } = io
-  if (options.configAnswers) checkConfigAnswers(root)
+  if (options.configAnswers) checkConfigAnswers(root, configFile)
   const state = await guard(root)
   const ledger = readLedger(root)
   pendingCheck(ledger, options.force)
   if (!config.start || !io.shoot) throw new RefusedError(NEEDS_BROWSER)
-  await assertNothingElseStaged(root)
+  await assertNothingElseStaged(root, own)
   const project = detectProject(root)
   const { routes, unreachable } = listRoutes(project, config)
   writeMessages(root, ledger)
@@ -156,8 +159,8 @@ export async function finish(options: { root: string; force?: boolean; configAns
   writeFileSync(join(root, REPORT_FILE), renderConvertReport(data))
   saveState(root, { ...state, phase: 'finished' })
   // The config is written and staged only now, after the checks, and only when the person gave answers.
-  if (options.configAnswers) writeConfigAnswers({ root, created: [] }, options.configAnswers)
-  await stage(root, OWN_FILES.filter((p) => (p !== CONFIG_FILE || options.configAnswers) && existsSync(join(root, p))))
+  if (options.configAnswers) writeConfigAnswers({ root, created: [] }, options.configAnswers, configFile)
+  await stage(root, own.filter((p) => (p !== configFile || options.configAnswers) && existsSync(join(root, p))))
   if ((await stagedFiles(root)).length) await commit(root, `dualkit: finish ${state.mode} conversion`)
   const checked = checks.arabic.length > 0
   const passed = checked && checks.english.every((p) => p.ratio < MAX_DIFF_RATIO) && checks.arabic.every((p) => p.errors === 0) && (tests?.code ?? 0) === 0

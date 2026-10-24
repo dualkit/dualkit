@@ -57,7 +57,8 @@ export async function writeAll(input: WriteInput): Promise<{ changed: string[]; 
   if (saveLedger(disk, input.ledger)) touched.push(LEDGER_FILE)
   touched.push(...wired.touched, ...own.touched)
   step.name = 'saving your answers'
-  if (options.configAnswers && writeConfigAnswers(disk, options.configAnswers)) touched.push(CONFIG_FILE)
+  const configFile = options.configFile ?? CONFIG_FILE
+  if (options.configAnswers && writeConfigAnswers(disk, options.configAnswers, configFile)) touched.push(configFile)
   step.name = 'updating package.json'
   const added = addDependencies(disk, plan.deps)
   if (added) touched.push('package.json')

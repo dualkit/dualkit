@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import { RULES as LINT_RULES } from '@dualkit/lint'
 import { RULES } from '@dualkit/rules'
 import type { ConvertConfig } from '@dualkit/convert'
@@ -42,7 +42,7 @@ export function parseConvert(raw: unknown): ConvertConfig {
 }
 
 export function loadConfig(path?: string, cwd = process.cwd()): Config {
-  const file = path ?? join(cwd, 'dualkit.config.json')
+  const file = path ? resolve(cwd, path) : join(cwd, 'dualkit.config.json')
   if (!existsSync(file)) {
     if (path) throw new UserError(`Could not find the config file ${path}.`)
     return { ignore: [], exclude: [] }

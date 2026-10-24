@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
@@ -106,6 +106,24 @@ describe('dualkit convert', () => {
     const t = setup({}, { shoot: async () => Buffer.alloc(0) })
     expect(await run(['convert', '--mode', 'bilingual', '--start', 'npm start', '--port', '4610'], t.io)).toBe(0)
     expect(t.calls[0]?.args[0]).toMatchObject({ baseline: true, configAnswers: { start: 'npm start', port: 4610 } })
+  })
+
+  it('hands the --config file to convert and finish as a path relative to the app', async () => {
+    const t = setup()
+    mkdirSync(join(t.cwd, 'conf'))
+    writeFileSync(join(t.cwd, 'conf/dk.json'), JSON.stringify({ convert: { start: 'npm run dev' } }))
+    expect(await run(['convert', '--mode', 'arabic', '--config', 'conf/dk.json'], t.io)).toBe(0)
+    expect(await run(['convert', '--finish', '--config', join(t.cwd, 'conf/dk.json')], t.io)).toBe(0)
+    expect(t.calls.map((c) => (c.args[0] as { configFile?: string }).configFile)).toEqual(['conf/dk.json', 'conf/dk.json'])
+  })
+
+  it('exits 2 when the --config file is outside the app folder', async () => {
+    const t = setup()
+    const outside = join(mkdtempSync(join(tmpdir(), 'dualkit-outside-')), 'dk.json')
+    writeFileSync(outside, '{}')
+    expect(await run(['convert', '--mode', 'arabic', '--config', outside], t.io)).toBe(2)
+    expect(t.err.join('')).toContain('inside the app folder')
+    expect(t.calls).toEqual([])
   })
 
   it('hands the answers to finish too', async () => {

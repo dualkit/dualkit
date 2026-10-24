@@ -1,11 +1,12 @@
-import type { ConfigAnswers, ConvertConfig, ConvertIo, ConvertOptions, ConvertSummary, Mode, FinishIo } from '@dualkit/convert'
+import { isAbsolute, relative, resolve, sep } from 'node:path'
+import type { ConfigAnswers, ConvertConfig, ConvertIo, ConvertOptions, ConvertSummary, FinishIo, FinishOptions, Mode } from '@dualkit/convert'
 import { UserError, loadConfig, type Config } from './config'
 import { askOnTerminal, InterruptedError, makeBrowserKit, runCommand, withInterrupt } from './convert-env'
 
 /** The pieces of @dualkit/convert the command calls, so tests can stand in for them. */
 export type ConvertApi = {
   convert: (options: ConvertOptions, io: ConvertIo) => Promise<ConvertSummary>
-  finish: (options: { root: string; force?: boolean }, io: FinishIo) => Promise<{ reportPath: string; passed: boolean }>
+  finish: (options: FinishOptions, io: FinishIo) => Promise<{ reportPath: string; passed: boolean }>
   refusals: readonly (new (...args: never[]) => Error)[]
 }
 
@@ -44,6 +45,14 @@ const parsePort = (value: string, label: string): number => {
 }
 
 type Ask = (question: string) => Promise<string>
+
+/** The --config file as a path relative to the app folder, where convert and finish write answers to it. */
+function configFileFor(flag: string | undefined, cwd: string): { configFile?: string } {
+  if (flag === undefined) return {}
+  const rel = relative(cwd, resolve(cwd, flag))
+  if (rel === '' || rel.startsWith('..') || isAbsolute(rel)) throw new UserError(`The config file ${flag} must be inside the app folder, because convert commits your answers to it.`)
+  return { configFile: rel.split(sep).join('/') }
+}
 
 async function chooseMode(flags: ConvertFlags, ask: Ask, interactive: boolean): Promise<Mode> {
   const given = flags.mode ?? (interactive ? await ask(MODE_QUESTION) : undefined)
@@ -88,6 +97,7 @@ export async function runConvert(flags: ConvertFlags, io: Out, env: ConvertEnv =
       const finishing = Boolean(flags.finish)
       if (finishing && flags.mode !== undefined && !MODES.some((m) => m === flags.mode)) throw new UserError(`--mode must be bilingual or arabic, got "${flags.mode}".`)
       const mode = finishing ? undefined : await chooseMode(flags, ask, interactive)
+      const configFile = configFileFor(flags.config, io.cwd)
       const config = loadConfig(flags.config, io.cwd)
       const { settings, answers } = await settingsFor(flags, config, ask, interactive)
       const api = env.api ?? await loadApi()
@@ -99,8 +109,8 @@ export async function runConvert(flags: ConvertFlags, io: Out, env: ConvertEnv =
         log: (s) => io.out(`${s}\n`), config: settings, run: env.run ?? ((cmd, cwd) => runCommand(cmd, cwd, signal)), signal,
         ...((finishing || baseline) && (env.shoot ?? kit?.shoot) ? { shoot: (env.shoot ?? kit?.shoot) as NonNullable<ConvertIo['shoot']> } : {}),
       }
-      // The answers go to convert and finish, which commit them. The CLI never writes the config file itself.
-      const configAnswers = answers ? { configAnswers: answers } : {}
+      // The answers and the config file go to convert and finish, which commit them. The CLI never writes the config file itself.
+      const configAnswers = { ...(answers ? { configAnswers: answers } : {}), ...configFile }
       try {
         if (!finishing) {
           printSummary(await api.convert({ root: io.cwd, mode: mode as Mode, install: !flags['no-install'], baseline, ...configAnswers }, base), io)
