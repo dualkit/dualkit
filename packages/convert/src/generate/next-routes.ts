@@ -2,37 +2,49 @@ import { parseSourceOutcome } from '@dualkit/lint'
 import { posix } from 'node:path'
 import type { Node } from '../transforms/strings'
 import type { Edit } from '../types'
+import { resolveAlias, resolveFile, type Alias } from './aliases'
 
 const SKIP = new Set(['loc', 'leadingComments', 'trailingComments', 'innerComments', 'extra'])
 const CODE = /\.(tsx?|jsx?|mjs|cjs|mts|cts)$/
 const MOVED = /\.(tsx?|jsx?|mjs|cjs|mts|cts|mdx?)$/
-const EXTENSIONS = ['', '.tsx', '.ts', '.jsx', '.js', '.mjs', '.cjs', '.mts', '.cts']
-/** Files that only work at the app root, or that convert's ruling keeps there. */
-const ROOT_KEPT = /^(favicon\.ico|not-found\.[jt]sx?|global-error\.[jt]sx?|(icon|apple-icon|opengraph-image|twitter-image)\d*(\.alt)?\.\w+|robots\.\w+|sitemap\.\w+|manifest\.\w+)$/
+const PAGE = /^page\.(tsx?|jsx?|mdx?)$/
+/** Files that only work at the app root. Not-found moves under [locale] like any route; global-error stays. */
+const ROOT_KEPT = /^(favicon\.ico|global-error\.[jt]sx?|(icon|apple-icon|opengraph-image|twitter-image)\d*(\.alt)?\.\w+|robots\.\w+|sitemap\.\w+|manifest\.\w+)$/
 /** Image metadata files, which belong to their segment and so move with it. */
 const SEGMENT_METADATA = /^(icon|apple-icon|opengraph-image|twitter-image)\d*(\.alt)?\.\w+$/
 /** URL segments the middleware matcher skips, so routes under them must stay where they are. */
-const UNMATCHED = /^(api|_next|_vercel)/
+const UNMATCHED = /^(api|_next|_vercel)$/
 
 /** The `[locale]` path of a file under the app dir. */
 export const localePath = (appDir: string, path: string): string => `${appDir}/[locale]/${path.slice(appDir.length + 1)}`
 
-/** Whether a file under the app dir moves under `[locale]`: code and segment image metadata do, api routes, root-only files and assets do not. */
-function moves(appDir: string, path: string): boolean {
-  if (!path.startsWith(`${appDir}/`)) return false
+/** The URL segments of a path under the app dir: route groups and parallel slots are left out. */
+export const urlSegments = (dirs: string[]): string[] => dirs.filter((d) => !/^\(.*\)$/.test(d) && !d.startsWith('@'))
+
+type Fate = 'move' | 'kept-route' | 'stay'
+
+/** What happens to a file: code and segment image metadata move, routes the middleware skips are kept, the rest stays. */
+function fateOf(appDir: string, path: string): Fate {
+  if (!path.startsWith(`${appDir}/`)) return 'stay'
   const parts = path.slice(appDir.length + 1).split('/')
   const name = parts.pop()!
-  if (parts[0] === '[locale]') return false
-  const url = parts.filter((d) => !/^\(.*\)$/.test(d) && !d.startsWith('@'))
-  if (url[0] && UNMATCHED.test(url[0])) return false
-  if (url.some((d) => d.includes('.'))) return false
-  if (!parts.length && ROOT_KEPT.test(name)) return false
-  return MOVED.test(name) || (parts.length > 0 && SEGMENT_METADATA.test(name))
+  if (parts[0] === '[locale]') return 'stay'
+  const url = urlSegments(parts)
+  if ((url[0] && UNMATCHED.test(url[0])) || url.some((d) => d.includes('.') && !d.startsWith('['))) return 'kept-route'
+  if (!parts.length && ROOT_KEPT.test(name)) return 'stay'
+  return MOVED.test(name) || (parts.length > 0 && SEGMENT_METADATA.test(name)) ? 'move' : 'stay'
 }
 
-/** Every move that puts the app's routes under `app/[locale]/`. */
-export function routeMoves(appDir: string, paths: readonly string[]): [string, string][] {
-  return paths.filter((p) => moves(appDir, p)).map((p) => [p, localePath(appDir, p)])
+/** The moves that put the app's routes under `[locale]`, and the pages left outside it because the middleware skips their path. */
+export function routeMoves(appDir: string, paths: readonly string[]): { moves: [string, string][]; keptPages: string[] } {
+  const moves: [string, string][] = []
+  const keptPages: string[] = []
+  for (const p of paths) {
+    const fate = fateOf(appDir, p)
+    if (fate === 'move') moves.push([p, localePath(appDir, p)])
+    if (fate === 'kept-route' && PAGE.test(posix.basename(p))) keptPages.push(p)
+  }
+  return { moves, keptPages }
 }
 
 function eachNode(node: unknown, visit: (n: Node) => void): void {
@@ -43,78 +55,84 @@ function eachNode(node: unknown, visit: (n: Node) => void): void {
   for (const [key, child] of Object.entries(n)) if (!SKIP.has(key)) eachNode(child, visit)
 }
 
-const literal = (node: Node | undefined): Node | null =>
-  node?.type === 'StringLiteral' && /^\.\.?\//.test(String(node.value)) ? node : null
+const RELATIVE = /^\.\.?\//
+const stringLiteral = (node: Node | undefined): Node | null => (node?.type === 'StringLiteral' ? node : null)
 
 /** The local names of the default import from next/font/local. */
 const localFontNames = (program: Node): Set<string> =>
   new Set(((program.body as Node[]) ?? []).filter((s) => s.type === 'ImportDeclaration' && (s.source as Node).value === 'next/font/local')
     .flatMap((s) => ((s.specifiers as Node[]) ?? []).filter((spec) => spec.type === 'ImportDefaultSpecifier').map((spec) => (spec.local as Node).name as string)))
 
-/** Relative path strings in a file: import and export sources, dynamic imports, requires, and next/font/local sources. */
-function relativeLiterals(program: Node): Node[] {
+/** Module specifiers (import and export sources, dynamic imports, requires) and relative next/font/local sources. */
+function specifierLiterals(program: Node): Node[] {
   const fonts = localFontNames(program)
   const found: Node[] = []
   eachNode(program, (n) => {
     if (/^(Import|ExportNamed|ExportAll)Declaration$/.test(n.type!)) {
-      const hit = literal(n.source as Node | undefined)
+      const hit = stringLiteral(n.source as Node | undefined)
       if (hit) found.push(hit)
       return
     }
     if (n.type !== 'CallExpression') return
     const callee = n.callee as Node
     const args = (n.arguments as Node[]) ?? []
-    const isLoader = callee.type === 'Import' || (callee.type === 'Identifier' && callee.name === 'require')
-    if (isLoader) {
-      const hit = literal(args[0])
+    if (callee.type === 'Import' || (callee.type === 'Identifier' && callee.name === 'require')) {
+      const hit = stringLiteral(args[0])
       if (hit) found.push(hit)
     } else if (callee.type === 'Identifier' && fonts.has(callee.name as string)) {
-      eachNode(args[0], (inner) => { const hit = literal(inner); if (hit) found.push(hit) })
+      eachNode(args[0], (inner) => { const hit = stringLiteral(inner); if (hit && RELATIVE.test(String(hit.value))) found.push(hit) })
     }
   })
   return found
 }
 
-/** The moved file a resolved import target refers to, trying the usual extensions and index files. */
-function movedTarget(target: string, moved: Map<string, string>): string | null {
-  const stem = target.replace(/\.(js|jsx|mjs|cjs)$/, '')
-  const candidates = [target, ...EXTENSIONS.map((e) => `${stem}${e}`), ...EXTENSIONS.slice(1).map((e) => `${target}/index${e}`)]
-  return candidates.find((c) => moved.has(c)) ?? null
+type Scope = { appDir: string; moved: Map<string, string>; has: (path: string) => boolean; aliases: Alias[] }
+
+/** Where a module path points after the moves: under `[locale]` when its file moved, else unchanged. */
+const newTarget = (scope: Scope, target: string): string =>
+  resolveFile(target, (p) => scope.moved.has(p)) ? localePath(scope.appDir, target) : target
+
+/** The new text of a relative specifier, or null when it still points at the same file. */
+function relativeSpec(scope: Scope, from: string, to: string, spec: string): string | null {
+  const target = posix.join(posix.dirname(from), spec)
+  let next = posix.relative(posix.dirname(to), newTarget(scope, target))
+  if (!next.startsWith('.')) next = `./${next}`
+  if (spec.endsWith('/') && !next.endsWith('/')) next += '/'
+  return posix.normalize(next) === posix.normalize(spec) ? null : next
 }
 
-/** Where a target lives after the moves: under `[locale]` when it or its file moved, else unchanged. */
-function newTarget(appDir: string, target: string, moved: Map<string, string>): string {
-  return movedTarget(target, moved) ? localePath(appDir, target) : target
+/** The new text of an aliased specifier that resolves to a moved file, in the same alias form, or null. */
+function aliasSpec(scope: Scope, spec: string): string | null {
+  const resolved = resolveAlias(spec, scope.aliases, scope.has)
+  if (!resolved || !scope.moved.has(resolved.file)) return null
+  return resolved.respell(localePath(scope.appDir, resolved.path))
 }
 
-/** The edits that keep one file's relative paths pointing at the same files after the moves. */
-function fileRewrites(appDir: string, from: string, to: string, text: string, moved: Map<string, string>): Edit[] {
+/** The edits that keep one file's specifiers pointing at the same files after the moves. */
+function fileRewrites(scope: Scope, from: string, to: string, text: string): Edit[] {
   const outcome = parseSourceOutcome(from, text)
   const block = 'file' in outcome ? outcome.file.js[0] : undefined
   if (!block) return []
   const edits: Edit[] = []
-  for (const node of relativeLiterals(block.ast.program as unknown as Node)) {
+  for (const node of specifierLiterals(block.ast.program as unknown as Node)) {
     const spec = String(node.value)
-    const target = posix.join(posix.dirname(from), spec)
-    let next = posix.relative(posix.dirname(to), newTarget(appDir, target, moved))
-    if (!next.startsWith('.')) next = `./${next}`
-    if (spec.endsWith('/') && !next.endsWith('/')) next += '/'
-    if (posix.normalize(next) === posix.normalize(spec)) continue
-    edits.push({ start: block.offset + node.start! + 1, end: block.offset + node.end! - 1, text: next })
+    const next = RELATIVE.test(spec) ? relativeSpec(scope, from, to, spec) : aliasSpec(scope, spec)
+    if (next !== null && next !== spec) edits.push({ start: block.offset + node.start! + 1, end: block.offset + node.end! - 1, text: next })
   }
   return edits
 }
 
-/** Edits, keyed by post-move path, that keep every relative import and font path working after the moves. */
-export function importRewrites(appDir: string, moveList: [string, string][], paths: readonly string[], files: (rel: string) => string | null): Record<string, Edit[]> {
-  const moved = new Map(moveList)
+/** Edits, keyed by post-move path, that keep every relative import, path alias import and font path working after the moves. */
+export function importRewrites(appDir: string, moveList: [string, string][], paths: readonly string[], files: (rel: string) => string | null, aliases: Alias[]): Record<string, Edit[]> {
+  const known = new Set(paths)
+  const scope: Scope = { appDir, moved: new Map(moveList), has: (p) => known.has(p), aliases }
   const out: Record<string, Edit[]> = {}
   for (const path of paths) {
     if (!CODE.test(path)) continue
     const text = files(path)
     if (text === null) continue
-    const to = moved.get(path) ?? path
-    const edits = fileRewrites(appDir, path, to, text, moved)
+    const to = scope.moved.get(path) ?? path
+    const edits = fileRewrites(scope, path, to, text)
     if (edits.length) out[to] = edits
   }
   return out

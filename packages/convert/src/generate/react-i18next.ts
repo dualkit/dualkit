@@ -102,5 +102,5 @@ export function wireReactI18next(project: Project, mode: Mode, files: (relPath: 
   const entry = files(project.entry)
   const entryChange = entry === null ? [] : entryEdits(project.entry, entry)
   if (entryChange.length) edits[project.entry] = entryChange
-  return { writes, edits, moves: [], deps: { ...DEPS } }
+  return { writes, edits, moves: [], deps: { ...DEPS }, flags: [] }
 }

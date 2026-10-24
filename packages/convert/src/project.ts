@@ -60,7 +60,7 @@ function withExtension(root: string, base: string): string | null {
 
 function nextLayout(root: string): { appDir: string; entry: string } {
   for (const appDir of ['app', 'src/app']) {
-    const entry = withExtension(root, `${appDir}/layout`)
+    const entry = withExtension(root, `${appDir}/[locale]/layout`) ?? withExtension(root, `${appDir}/layout`)
     if (entry) return { appDir, entry }
   }
   const hasPages = ['pages', 'src/pages'].some((d) => existsSync(join(root, d)))

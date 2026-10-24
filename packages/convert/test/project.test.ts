@@ -29,6 +29,16 @@ describe('detectProject', () => {
     expect(detectProject(dir)).toMatchObject({ appDir: 'src/app', entry: 'src/app/layout.tsx' })
   })
 
+  it('finds the [locale] layout of an app convert already wired, under app and src/app', () => {
+    const dir = fixtureRepo('next-app')
+    mkdirSync(join(dir, 'app/[locale]'))
+    renameSync(join(dir, 'app/layout.tsx'), join(dir, 'app/[locale]/layout.tsx'))
+    expect(detectProject(dir)).toMatchObject({ appDir: 'app', entry: 'app/[locale]/layout.tsx' })
+    mkdirSync(join(dir, 'src'))
+    renameSync(join(dir, 'app'), join(dir, 'src/app'))
+    expect(detectProject(dir)).toMatchObject({ appDir: 'src/app', entry: 'src/app/[locale]/layout.tsx' })
+  })
+
   it('detects the Vite fixture and its createRoot entry', () => {
     const project = detectProject(fixtureRepo('vite-app'))
     expect(project).toMatchObject({ framework: 'vite-react', appDir: null, entry: 'src/main.tsx' })

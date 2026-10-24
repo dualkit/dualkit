@@ -3,7 +3,7 @@ export type Edit = { start: number; end: number; text: string }
 
 export type FlagKind =
   | 'no-logical-form' | 'computed-class' | 'inline-svg-icon' | 'mixed-text'
-  | 'outside-component' | 'format' | 'unparsed' | 'unsupported'
+  | 'outside-component' | 'format' | 'unparsed' | 'unsupported' | 'info'
 
 /** Something convert left for a person or agent to finish. */
 export type Flag = { file: string; line: number; kind: FlagKind; message: string; suggestion: string }
@@ -35,10 +35,11 @@ export type Project = {
   packageManager: 'npm' | 'pnpm' | 'yarn' | 'bun'
 }
 
-/** What locale wiring changes, with paths relative to the project root. Edits are keyed by post-move paths. */
+/** What locale wiring changes, with paths relative to the project root. Edits are keyed by post-move paths. Flags are for the report. */
 export type Plan = {
   writes: Record<string, string>
   edits: Record<string, Edit[]>
   moves: [from: string, to: string][]
   deps: Record<string, string>
+  flags: Flag[]
 }

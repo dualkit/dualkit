@@ -1,11 +1,12 @@
 import { posix } from 'node:path'
 import { UnsupportedError } from '../project'
 import { specifierTo } from '../transforms/imports'
-import type { Edit, Mode, Plan, Project } from '../types'
+import type { Edit, Flag, Mode, Plan, Project } from '../types'
+import { readAliases } from './aliases'
 import { LOCALE_HELPER, SWITCH_CHOICES, guardWrites, localeHelperPath, sourceBase, switchPath } from './locale'
 import { nextConfigPlan } from './next-config'
 import { layoutEdits } from './next-layout'
-import { importRewrites, localePath, routeMoves } from './next-routes'
+import { importRewrites, localePath, routeMoves, urlSegments } from './next-routes'
 
 const DEPS = { 'next-intl': '4.14.9' }
 /** Used when the declared next version names no major, such as `latest` or `canary`. */
@@ -71,7 +72,7 @@ import { routing } from '${routing}'
 export default createMiddleware(routing)
 
 export const config = {
-  matcher: '/((?!api|_next|_vercel|.*\\\\..*).*)',
+  matcher: '/((?!(?:api|_next|_vercel)(?:/|$)|.*\\\\..*).*)',
 }
 `
 
@@ -98,13 +99,40 @@ export function DualkitLanguageSwitch() {
 }
 `
 
-const PASS_THROUGH = `import type { ReactNode } from 'react'
+/** Sends every unknown path under a locale to not-found, so a 404 renders inside the [locale] layout as before. */
+const CATCH_ALL = `import { notFound } from 'next/navigation'
 
-/** Passes pages through to the [locale] layout, which renders html and body. The root not-found page needs it. */
-export default function RootLayout({ children }: { children: ReactNode }) {
-  return children
+/** Every path no other route matches shows the not-found page, inside the [locale] layout. */
+export default function CatchAll() {
+  notFound()
 }
 `
+
+const PAGE = /^page\.(tsx?|jsx?|mdx?)$/
+const LAYOUT = /^layout\.(tsx?|jsx?)$/
+
+const flagAt = (file: string, kind: Flag['kind'], message: string, suggestion: string): Flag => ({ file, line: 1, kind, message, suggestion })
+
+/** The post-move path of a page that already catches every top-level path under [locale], if any. */
+function topCatchAll(appDir: string, moves: [string, string][]): string | null {
+  const hit = moves.find(([from]) => {
+    const parts = from.slice(appDir.length + 1).split('/')
+    const name = parts.pop()!
+    const url = urlSegments(parts)
+    return PAGE.test(name) && url.length === 1 && /^\[\[?\.\.\./.test(url[0]!)
+  })
+  return hit?.[1] ?? null
+}
+
+/** Whether convert already wired this app: a [locale] root layout in bilingual mode, the provider and request config in arabic mode. */
+function alreadyWired(project: Project, mode: Mode, appDir: string, files: (rel: string) => string | null, paths: readonly string[]): string | null {
+  if (mode === 'bilingual') {
+    const prefix = `${appDir}/[locale]/`
+    return paths.find((p) => p.startsWith(prefix) && LAYOUT.test(p.slice(prefix.length))) ?? null
+  }
+  const wired = (files(project.entry) ?? '').includes('NextIntlClientProvider') && files(`${sourceBase(project)}i18n/request.ts`) !== null
+  return wired ? project.entry : null
+}
 
 /** Throws when the app has its own middleware or proxy, which convert cannot merge with next-intl's. */
 function guardMiddleware(base: string, ours: string, text: string, files: (rel: string) => string | null): void {
@@ -124,22 +152,30 @@ const merge = (into: Record<string, Edit[]>, from: Record<string, Edit[]>): Reco
   return out
 }
 
-/** The bilingual writes, moves and edits: routes under [locale], middleware or proxy, navigation and the switch. */
+/** The bilingual writes, moves, edits and flags: routes under [locale], the catch-all, middleware or proxy, navigation and the switch. */
 function bilingualParts(project: Project, appDir: string, files: (rel: string) => string | null, paths: readonly string[]) {
   const base = sourceBase(project)
-  const moves = routeMoves(appDir, paths)
+  const { moves, keptPages } = routeMoves(appDir, paths)
   const middlewarePath = `${base}${nextMajor(files) >= 16 ? 'proxy' : 'middleware'}.ts`
   const middleware = middlewareFile(specifierTo(middlewarePath, `${base}i18n/routing.ts`))
   guardMiddleware(base, middlewarePath, middleware, files)
-  const keepsNotFound = paths.some((p) => /^not-found\.[jt]sx?$/.test(p.slice(appDir.length + 1)))
+  const catchAll = topCatchAll(appDir, moves)
+  const flags = keptPages.map((page) => flagAt(page, 'unsupported',
+    `${page} stays outside [locale], because the middleware skips its path, so it has no Arabic version.`,
+    'Move the page to a path the middleware matches, or translate it by hand.'))
+  if (catchAll) {
+    flags.push(flagAt(catchAll, 'unsupported',
+      `${catchAll} already catches every path under [locale], so convert did not add its own catch-all.`,
+      'Call notFound() from next/navigation in that page for paths it does not know, so unknown URLs keep showing the not-found page.'))
+  }
   const writes: Record<string, string> = {
     [`${base}i18n/routing.ts`]: ROUTING,
     [`${base}i18n/navigation.ts`]: NAVIGATION,
     [middlewarePath]: middleware,
     [switchPath(project)]: switchFile(specifierTo(switchPath(project), `${base}i18n/navigation.ts`)),
-    ...(keepsNotFound ? { [`${appDir}/layout.tsx`]: PASS_THROUGH } : {}),
+    ...(catchAll ? {} : { [`${appDir}/[locale]/[...rest]/page.tsx`]: CATCH_ALL }),
   }
-  return { moves, writes, edits: importRewrites(appDir, moves, paths, files) }
+  return { moves, writes, flags, edits: importRewrites(appDir, moves, paths, files, readAliases(files)) }
 }
 
 /**
@@ -151,11 +187,16 @@ function bilingualParts(project: Project, appDir: string, files: (rel: string) =
  */
 export function wireNextIntl(project: Project, mode: Mode, files: (relPath: string) => string | null, paths: readonly string[]): Plan {
   const appDir = project.appDir ?? 'app'
+  const wired = alreadyWired(project, mode, appDir, files, paths)
+  if (wired) {
+    const flag = flagAt(wired, 'info', 'This app is already wired for next-intl, so convert left its locale setup as it is.', 'Nothing to do.')
+    return { writes: {}, edits: {}, moves: [], deps: {}, flags: [flag] }
+  }
   const base = sourceBase(project)
   const i18nDir = `${base}i18n`
   const messages = posix.relative(i18nDir, 'messages')
   const config = nextConfigPlan(files)
-  const parts = mode === 'bilingual' ? bilingualParts(project, appDir, files, paths) : { moves: [], writes: {}, edits: {} }
+  const parts = mode === 'bilingual' ? bilingualParts(project, appDir, files, paths) : { moves: [], writes: {}, edits: {}, flags: [] }
   const writes: Record<string, string> = {
     ...parts.writes,
     [`${i18nDir}/request.ts`]: requestFile(mode, messages),
@@ -172,5 +213,5 @@ export function wireNextIntl(project: Project, mode: Mode, files: (relPath: stri
     promiseParams: nextMajor(files) >= 15,
   })
   const edits = merge(merge(parts.edits, config.edits), layout.length ? { [layoutPath]: layout } : {})
-  return { writes, edits, moves: parts.moves, deps: { ...DEPS } }
+  return { writes, edits, moves: parts.moves, deps: { ...DEPS }, flags: parts.flags }
 }

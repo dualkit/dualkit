@@ -28,6 +28,25 @@ function after(plan: Plan, files: (rel: string) => string | null, path: string):
   return applyEdits(files(from)!, plan.edits[path] ?? [])
 }
 
+const routeOf = (plan: Plan, from: string): string | undefined => plan.moves.find(([f]) => f === from)?.[1]
+
+/** An app with a root not-found and global-error. */
+const notFoundApp = (): Record<string, string> => ({
+  'package.json': pkg('15.0.0'), 'app/layout.tsx': fixture.files('app/layout.tsx')!,
+  'app/page.tsx': 'export default function P() { return null }\n',
+  'app/not-found.tsx': 'export default function N() { return null }\n',
+  'app/global-error.tsx': "'use client'\nexport default function E() { return null }\n",
+})
+
+/** The project files after a plan: moves, then writes, then edits. */
+function applyPlan(map: Record<string, string>, plan: Plan): Record<string, string> {
+  const out = { ...map }
+  for (const [from, to] of plan.moves) { out[to] = out[from]!; delete out[from] }
+  Object.assign(out, plan.writes)
+  for (const [path, edits] of Object.entries(plan.edits)) out[path] = applyEdits(out[path]!, edits)
+  return out
+}
+
 describe('wireNextIntl bilingual', () => {
   const plan = wireNextIntl(project, 'bilingual', fixture.files, fixture.paths)
 
@@ -64,14 +83,14 @@ describe('wireNextIntl bilingual', () => {
     expect(plan.writes['proxy.ts']).toBeUndefined()
     expect(middleware).toContain("import createMiddleware from 'next-intl/middleware'")
     expect(middleware).toContain('export default createMiddleware(routing)')
-    expect(middleware).toContain("matcher: '/((?!api|_next|_vercel|.*\\\\..*).*)'")
+    expect(middleware).toContain("matcher: '/((?!(?:api|_next|_vercel)(?:/|$)|.*\\\\..*).*)'")
   })
 
   it('writes proxy.ts for Next 16 and puts files under src when the app dir is src/app', () => {
     const src = memory({ 'package.json': pkg('^16.0.1'), 'src/app/layout.tsx': fixture.files('app/layout.tsx')!, 'src/app/page.tsx': 'export default function P() { return null }\n' })
     const p = wireNextIntl({ ...project, appDir: 'src/app', entry: 'src/app/layout.tsx' }, 'bilingual', src.files, src.paths)
     expect(Object.keys(p.writes).sort()).toEqual([
-      'next.config.mjs', 'src/components/dualkit-language-switch.tsx', 'src/i18n/navigation.ts', 'src/i18n/request.ts',
+      'next.config.mjs', 'src/app/[locale]/[...rest]/page.tsx', 'src/components/dualkit-language-switch.tsx', 'src/i18n/navigation.ts', 'src/i18n/request.ts',
       'src/i18n/routing.ts', 'src/lib/dualkit-locale.ts', 'src/proxy.ts',
     ])
     expect(p.writes['src/i18n/request.ts']).toContain('import(`../../messages/${locale}.json`)')
@@ -122,14 +141,72 @@ describe('wireNextIntl bilingual', () => {
     expect(layout).toContain('& { params: { locale: string } }')
   })
 
-  it('keeps not-found and global-error at the root and adds a pass-through root layout', () => {
-    const m = memory({ 'package.json': pkg('15.0.0'), 'app/layout.tsx': fixture.files('app/layout.tsx')!, 'app/not-found.tsx': 'export default function N() { return null }\n', 'app/global-error.tsx': "'use client'\nexport default function E() { return null }\n" })
+  it('moves not-found under [locale], keeps global-error at the root and adds the catch-all', () => {
+    const m = memory(notFoundApp())
     const p = wireNextIntl(project, 'bilingual', m.files, m.paths)
-    const from = p.moves.map(([f]) => f)
-    expect(from).not.toContain('app/not-found.tsx')
-    expect(from).not.toContain('app/global-error.tsx')
-    expect(p.writes['app/layout.tsx']).toContain('return children')
-    parses('app/layout.tsx', p.writes['app/layout.tsx']!)
+    expect(p.moves).toContainEqual(['app/not-found.tsx', 'app/[locale]/not-found.tsx'])
+    expect(p.moves.map(([f]) => f)).not.toContain('app/global-error.tsx')
+    expect(p.writes['app/layout.tsx']).toBeUndefined()
+    const rest = p.writes['app/[locale]/[...rest]/page.tsx']!
+    expect(rest).toContain("import { notFound } from 'next/navigation'")
+    expect(rest).toContain('notFound()')
+    parses('app/[locale]/[...rest]/page.tsx', rest)
+    expect(p.flags).toEqual([])
+  })
+
+  it('flags an existing top-level catch-all instead of adding one', () => {
+    const m = memory({ ...notFoundApp(), 'app/(site)/[...slug]/page.tsx': 'export default function P() { return null }\n' })
+    const p = wireNextIntl(project, 'bilingual', m.files, m.paths)
+    expect(Object.keys(p.writes).some((w) => w.includes('[...rest]'))).toBe(false)
+    expect(p.flags.map((f) => [f.kind, f.file])).toEqual([['unsupported', 'app/[locale]/(site)/[...slug]/page.tsx']])
+  })
+
+  it('returns an empty plan with one info flag once the app is wired, under app and src/app', () => {
+    for (const appDir of ['app', 'src/app']) {
+      const map = Object.fromEntries(Object.entries(notFoundApp()).map(([k, v]) => [k.replace(/^app\//, `${appDir}/`), v]))
+      const first = { ...project, appDir, entry: `${appDir}/layout.tsx` }
+      const wired = applyPlan(map, wireNextIntl(first, 'bilingual', memory(map).files, memory(map).paths))
+      const m = memory(wired)
+      const again = wireNextIntl({ ...first, entry: `${appDir}/[locale]/layout.tsx` }, 'bilingual', m.files, m.paths)
+      expect(again).toMatchObject({ moves: [], writes: {}, edits: {}, deps: {} })
+      expect(again.flags.map((f) => f.kind)).toEqual(['info'])
+    }
+  })
+
+  it('anchors the kept segments: apiary moves, a page under api stays and is flagged', () => {
+    const m = memory({ 'package.json': pkg('15.0.0'), 'app/layout.tsx': fixture.files('app/layout.tsx')!, 'app/apiary/page.tsx': 'export default function P() { return null }\n', 'app/api/page.tsx': 'export default function P() { return null }\n', 'app/feed.xml/route.ts': 'export function GET() {}\n', 'app/docs/[...slug]/page.tsx': 'export default function P() { return null }\n' })
+    const p = wireNextIntl(project, 'bilingual', m.files, m.paths)
+    expect(p.moves).toContainEqual(['app/apiary/page.tsx', 'app/[locale]/apiary/page.tsx'])
+    expect(p.moves.map(([f]) => f)).not.toContain('app/api/page.tsx')
+    expect(p.moves.map(([f]) => f)).not.toContain('app/feed.xml/route.ts')
+    expect(routeOf(p, 'app/docs/[...slug]/page.tsx')).toBe('app/[locale]/docs/[...slug]/page.tsx')
+    expect(p.flags.map((f) => [f.kind, f.file])).toEqual([['unsupported', 'app/api/page.tsx']])
+  })
+
+  it('rewrites alias imports into the app dir and keeps their alias form, with ./* paths', () => {
+    const m = memory({
+      'package.json': pkg('15.0.0'), 'app/layout.tsx': fixture.files('app/layout.tsx')!,
+      'tsconfig.json': '{\n  // aliases\n  "$schema": "https://json.schemastore.org/tsconfig",\n  "compilerOptions": { "paths": { "@/*": ["./*"] }, },\n}\n',
+      'app/ui/button.tsx': 'export const Button = 1\n',
+      'components/card.tsx': "import { Button } from '@/app/ui/button'\nimport { Gone } from '@/app/ui/missing'\nimport { Other } from '@/components/other'\nexport const Card = [Button, Gone, Other]\n",
+      'components/other.tsx': 'export const Other = 1\n',
+    })
+    const p = wireNextIntl(project, 'bilingual', m.files, m.paths)
+    const card = after(p, m.files, 'components/card.tsx')
+    expect(card).toContain("from '@/app/[locale]/ui/button'")
+    expect(card).toContain("from '@/app/ui/missing'")
+    expect(card).toContain("from '@/components/other'")
+  })
+
+  it('rewrites alias imports with ./src/* paths when the app dir is src/app', () => {
+    const m = memory({
+      'package.json': pkg('15.0.0'), 'src/app/layout.tsx': fixture.files('app/layout.tsx')!,
+      'tsconfig.json': JSON.stringify({ compilerOptions: { paths: { '@/*': ['./src/*'] } } }),
+      'src/app/ui/button.tsx': 'export const Button = 1\n',
+      'src/components/card.tsx': "import { Button } from '@/app/ui/button'\nexport const Card = Button\n",
+    })
+    const p = wireNextIntl({ ...project, appDir: 'src/app', entry: 'src/app/layout.tsx' }, 'bilingual', m.files, m.paths)
+    expect(after(p, m.files, 'src/components/card.tsx')).toContain("from '@/app/[locale]/ui/button'")
   })
 
   it('writes the language switch with next-intl navigation', () => {
