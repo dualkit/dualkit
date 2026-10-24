@@ -99,3 +99,21 @@ export async function trackedFiles(root: string): Promise<string[]> {
   const out = await must(root, ['ls-files', '-z'])
   return out.split('\0').filter(Boolean).sort()
 }
+
+/** Of the given paths relative to root, those in HEAD with no change in the index or the work tree. */
+export async function cleanAtHead(root: string, paths: readonly string[]): Promise<string[]> {
+  if (!paths.length) return []
+  const inHead = new Set((await must(root, ['ls-tree', '-r', '--name-only', '-z', 'HEAD', '--', ...paths])).split('\0').filter(Boolean))
+  const changed = new Set((await must(root, ['diff', 'HEAD', '--relative', '--name-only', '-z', '--', ...paths])).split('\0').filter(Boolean))
+  return paths.filter((p) => inHead.has(p) && !changed.has(p))
+}
+
+/** Puts the named paths back as they are in HEAD, in the index and the work tree. */
+export async function restoreFromHead(root: string, paths: readonly string[]): Promise<void> {
+  if (paths.length) await must(root, ['checkout', 'HEAD', '--', ...paths])
+}
+
+/** Unstages the named paths, leaving the work tree alone. */
+export async function unstage(root: string, paths: readonly string[]): Promise<void> {
+  if (paths.length) await must(root, ['reset', '-q', '--', ...paths])
+}

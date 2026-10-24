@@ -13,7 +13,9 @@ export class ConvertFailedError extends Error {
   }
 }
 
-const reasonOf = (error: unknown): string => (error instanceof Error ? error.message : String(error)).replace(/\.$/, '')
+/** An error's message on one line, without its closing full stop. */
+export const reasonOf = (error: unknown): string =>
+  (error instanceof Error ? error.message : String(error)).replace(/\s*\n\s*/g, ' ').trim().replace(/\.$/, '')
 
 /** The commands that put the repo back by hand. */
 function manualSteps(target: RollbackTarget): string {

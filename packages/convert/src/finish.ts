@@ -6,11 +6,12 @@ import { CONFIG_FILE, checkConfigAnswers, writeConfigAnswers } from './config-an
 import { RefusedError, commit, currentBranch, stage, stagedFiles } from './git'
 import { LEDGER_FILE, messagesFor, readLedger, type LedgerEntry } from './ledger'
 import { MAX_DIFF_RATIO, compare } from './match'
+import { failFinish, snapshot } from './finish-undo'
 import { detectProject } from './project'
 import { renderConvertReport, type ReportData } from './report'
 import { listRoutes } from './routes'
 import { startServer } from './server'
-import { STATE_DIR, readState, saveState } from './state'
+import { STATE_DIR, STATE_FILE, readState, saveState } from './state'
 import { readSummary } from './summary'
 import type { ConvertIo, ConvertState, ConvertSummary, FinishOptions, PageOptions, Project, Shooter } from './types'
 
@@ -109,14 +110,16 @@ async function arabicChecks(project: Project, state: ConvertState, base: string,
 }
 
 /** Starts the app, runs every page check and stops the server, also when a check throws. */
-async function runChecks(project: Project, state: ConvertState, routes: string[], { config, shoot, audit }: FinishIo): Promise<Checks> {
+async function runChecks(project: Project, state: ConvertState, routes: string[], { config, shoot, audit }: FinishIo, step: Step): Promise<Checks> {
   const { start: cmd } = config
   if (!cmd || !shoot) throw new RefusedError(NEEDS_BROWSER)
   const port = config.port ?? DEFAULT_PORTS[project.framework]
+  step.name = 'starting the app'
   const server = await startServer(cmd, port, project.root).catch((error: unknown) => {
     throw new Error(`Could not start the app with "${cmd}". ${(error as Error).message}`, { cause: error })
   })
   try {
+    step.name = 'checking the pages'
     const english = state.mode === 'bilingual' ? await englishChecks(project.root, server.url, routes, shoot) : { english: [], noBaseline: [] }
     return { ...english, arabic: await arabicChecks(project, state, server.url, routes, audit) }
   } finally {
@@ -129,41 +132,69 @@ const emptySummary = (state: ConvertState, strings: number): ConvertSummary =>
 
 const tail = (out: string): string => out.trimEnd().split('\n').slice(-TEST_TAIL_LINES).join('\n')
 
-/**
- * Phase 2: writes the messages from the ledger, serves the app, checks English against the baseline and
- * audits the Arabic pages, writes dualkit-convert.md and commits it with the messages and the ledger.
- */
-export async function finish(options: FinishOptions, ioIn: FinishIo): Promise<{ reportPath: string; passed: boolean }> {
+type Step = { name: string }
+type Ready = { root: string; options: FinishOptions; io: FinishIo; state: ConvertState; ledger: LedgerEntry[]; configFile: string; own: string[] }
+
+/** Refuses, without writing anything, unless finish can run. Returns what the run needs. */
+async function prepare(options: FinishOptions, ioIn: FinishIo): Promise<Ready> {
   const { root } = options
   const configFile = options.configFile ?? CONFIG_FILE
-  const own = ownFiles(configFile)
   const io: FinishIo = options.configAnswers ? { ...ioIn, config: { ...ioIn.config, ...options.configAnswers } } : ioIn
-  const { config, log } = io
   if (options.configAnswers) checkConfigAnswers(root, configFile)
   const state = await guard(root)
   const ledger = readLedger(root)
   pendingCheck(ledger, options.force)
-  if (!config.start || !io.shoot) throw new RefusedError(NEEDS_BROWSER)
+  if (!io.config.start || !io.shoot) throw new RefusedError(NEEDS_BROWSER)
+  const own = ownFiles(configFile)
   await assertNothingElseStaged(root, own)
+  return { root, options, io, state, ledger, configFile, own }
+}
+
+/** Writes the messages, runs the checks, writes the report and state, and commits. `step` names where it is. */
+async function run(ready: Ready, step: Step): Promise<{ reportPath: string; passed: boolean }> {
+  const { root, options, io, state, ledger, configFile, own } = ready
   const project = detectProject(root)
-  const { routes, unreachable } = listRoutes(project, config)
+  const { routes, unreachable } = listRoutes(project, io.config)
+  step.name = 'writing the messages'
   writeMessages(root, ledger)
-  const checks = await runChecks(project, state, routes, io)
-  const tests = config.test ? await io.run(config.test, root) : undefined
+  const checks = await runChecks(project, state, routes, io, step)
+  step.name = 'running the tests'
+  const tests = io.config.test ? await io.run(io.config.test, root) : undefined
+  step.name = 'counting lint findings'
+  const remainingLint = await io.lint(root)
+  step.name = 'writing the report'
   const earlier = readSummary(root)
   const data: ReportData = {
     mode: state.mode, base: state.base, branch: state.branch, summary: earlier ?? emptySummary(state, ledger.length), ledger, ...checks,
     ...(earlier ? {} : { summaryMissing: true }),
-    unreachable, remainingLint: await io.lint(root), ...(tests ? { tests: { code: tests.code, tail: tail(tests.out) } } : {}),
+    unreachable, remainingLint, ...(tests ? { tests: { code: tests.code, tail: tail(tests.out) } } : {}),
   }
   writeFileSync(join(root, REPORT_FILE), renderConvertReport(data))
+  step.name = 'saving the state'
   saveState(root, { ...state, phase: 'finished' })
   // The config is written and staged only now, after the checks, and only when the person gave answers.
+  step.name = 'saving your answers'
   if (options.configAnswers) writeConfigAnswers({ root, created: [] }, options.configAnswers, configFile)
+  step.name = 'committing'
   await stage(root, own.filter((p) => (p !== configFile || options.configAnswers) && existsSync(join(root, p))))
   if ((await stagedFiles(root)).length) await commit(root, `dualkit: finish ${state.mode} conversion`)
   const checked = checks.arabic.length > 0
   const passed = checked && checks.english.every((p) => p.ratio < MAX_DIFF_RATIO) && checks.arabic.every((p) => p.errors === 0) && (tests?.code ?? 0) === 0
-  log(passed ? 'All checks passed.' : 'Some checks failed. The report lists them.')
   return { reportPath: join(root, REPORT_FILE), passed }
+}
+
+/**
+ * Phase 2: writes the messages from the ledger, serves the app, checks English against the baseline and
+ * audits the Arabic pages, writes dualkit-convert.md and commits it with the messages and the ledger.
+ * When a step fails after writing starts, finish puts its own files back and commits nothing.
+ */
+export async function finish(options: FinishOptions, ioIn: FinishIo): Promise<{ reportPath: string; passed: boolean }> {
+  const ready = await prepare(options, ioIn)
+  const { root, configFile, own } = ready
+  const written = [messagesPath('en'), messagesPath('ar'), REPORT_FILE, STATE_FILE, ...(options.configAnswers ? [configFile] : [])]
+  const saved = await snapshot(root, written)
+  const step: Step = { name: 'writing the messages' }
+  const result = await run(ready, step).catch((error: unknown) => failFinish(root, saved, own.filter((p) => !written.includes(p)), step.name, error))
+  ready.io.log(result.passed ? 'All checks passed.' : 'Some checks failed. The report lists them.')
+  return result
 }
