@@ -167,8 +167,22 @@ function place(ctx: Context, ancestors: Node[], start: number, end: number, en: 
   ctx.components.add(component)
 }
 
-/** The placeholder name of an identifier or non-computed member chain, or null. */
+/** Methods that turn a value into text, so a call to one reads as that value in a sentence. */
+const TEXT_METHODS = /^(toLocale(Date|Time)?String|toFixed|toPrecision|toString|toUpperCase|toLowerCase|trim(Start|End)?|padStart|padEnd)$/
+
+/** The value a text method is called on, as in `renewsOn` for `renewsOn.toLocaleDateString()`, or null. */
+function textMethodTarget(expression: Node): Node | null {
+  if (expression.type !== 'CallExpression' && expression.type !== 'OptionalCallExpression') return null
+  const callee = expression.callee as Node
+  if ((callee.type !== 'MemberExpression' && callee.type !== 'OptionalMemberExpression') || callee.computed) return null
+  const method = callee.property as Node
+  return method.type === 'Identifier' && TEXT_METHODS.test(method.name as string) ? (callee.object as Node) : null
+}
+
+/** The placeholder name of an identifier, a non-computed member chain or a text method called on one, or null. */
 function placeholderName(expression: Node): string | null {
+  const target = textMethodTarget(expression)
+  if (target) return placeholderName(target)
   if (expression.type === 'Identifier') return expression.name as string
   if ((expression.type === 'MemberExpression' || expression.type === 'OptionalMemberExpression') && !expression.computed) {
     const property = expression.property as Node

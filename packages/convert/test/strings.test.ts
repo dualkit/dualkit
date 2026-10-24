@@ -119,6 +119,19 @@ describe('extractStrings interpolation and mixed text', () => {
     expect(entries[0]!.en).toBe('Hi {name}, welcome')
   })
 
+  it('names a method call placeholder after the value it is called on', () => {
+    const { out, entries } = run('export function Home({ renewsOn }) {\n  return <p>Renews on {renewsOn.toLocaleDateString()}</p>\n}\n', 'app/home.tsx')
+    expect(out).toContain(`<p>{t('home.renews-on', { renewsOn: renewsOn.toLocaleDateString() })}</p>`)
+    expect(entries[0]!.en).toBe('Renews on {renewsOn}')
+    expect(run('export function A({ user }) {\n  return <p>Hi {user.name.trim()}</p>\n}\n').entries[0]!.en).toBe('Hi {name}')
+  })
+
+  it('still flags a plain function call, which has no value to name the placeholder after', () => {
+    const { edits, flags } = run('export function A({ d }) {\n  return <p>Due {format(d)}</p>\n}\n')
+    expect(edits).toEqual([])
+    expect(flags.map((f) => f.kind)).toEqual(['mixed-text'])
+  })
+
   it('flags text whose element also holds a child element and leaves it', () => {
     const text = 'export function Home({ name }) {\n  return <p>Hello <b>{name}</b></p>\n}\n'
     const { edits, flags, entries } = run(text)
