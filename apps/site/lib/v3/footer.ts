@@ -13,6 +13,7 @@ export const FOOTER_LINKS: Record<string, string | null> = {
   Starter: '/docs#starter',
   Check: '/docs#check',
   Lint: '/docs#lint',
+  Convert: '/convert',
   Bench: '/bench',
   Docs: '/docs',
   Updates: '/updates',

@@ -3,13 +3,14 @@ import { KitAccordion, type KitItem } from './KitAccordion'
 import { Label } from './primitives'
 import { BenchPreview } from './previews/Bench'
 import { CheckPreview } from './previews/Check'
+import { ConvertPreview } from './previews/Convert'
 import { FormatPreview } from './previews/Format'
 import { SkillsDiffPreview } from './previews/SkillsDiff'
 import { StarterPreview } from './previews/Starter'
 import './kit.css'
 
 const K = V3.kit
-const PREVIEWS = [<SkillsDiffPreview key="s" />, <FormatPreview key="f" />, <StarterPreview key="t" />, <CheckPreview key="c" />, <BenchPreview key="b" />]
+const PREVIEWS = [<SkillsDiffPreview key="s" />, <FormatPreview key="f" />, <StarterPreview key="t" />, <CheckPreview key="c" />, <ConvertPreview key="v" />, <BenchPreview key="b" />]
 
 const PART_LINES = new Map<string, string>(V3.menu.parts.map(([, name, line]) => [name, line]))
 
@@ -22,7 +23,7 @@ const ITEMS: readonly KitItem[] = [K.open.name, ...K.rest].map((name, k) => ({
   points: k === 0 ? K.open.points : [],
 }))
 
-/** The kit: a one-open accordion of the five parts on the left, the open part's glass preview on the dusk painting on the right. */
+/** The kit: a one-open accordion of the six parts on the left, the open part's glass preview on the dusk painting on the right. */
 export function Kit() {
   return (
     <section className="v3-kit" aria-labelledby="v3-kit-title">
