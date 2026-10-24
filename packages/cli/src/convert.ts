@@ -57,11 +57,13 @@ async function chooseMode(flags: ConvertFlags, ask: Ask, interactive: boolean): 
 async function settingsFor(flags: ConvertFlags, config: Config, ask: Ask, interactive: boolean): Promise<{ settings: ConvertConfig; answers?: ConfigAnswers }> {
   const fromFlags: ConvertConfig = { ...(flags.start !== undefined ? { start: flags.start } : {}), ...(flags.port !== undefined ? { port: parsePort(flags.port, '--port') } : {}) }
   const merged: ConvertConfig = { ...config.convert, ...fromFlags }
-  if (merged.start || !interactive || flags['no-baseline']) return { settings: merged }
+  // Flags are saved like answers, so finish finds the same start command and port.
+  const flagged: { answers?: ConfigAnswers } = Object.keys(fromFlags).length ? { answers: fromFlags } : {}
+  if (merged.start || !interactive || flags['no-baseline']) return { settings: merged, ...flagged }
   const start = await ask('Command that starts your app, for example "npm run dev" (leave empty to skip the English baseline):')
   if (start === '') return { settings: merged }
   const portAnswer = merged.port === undefined ? await ask('Port it listens on (leave empty for the default):') : ''
-  const answers: ConfigAnswers = { start, ...(portAnswer === '' ? {} : { port: parsePort(portAnswer, 'The port') }) }
+  const answers: ConfigAnswers = { start, ...(fromFlags.port === undefined ? {} : { port: fromFlags.port }), ...(portAnswer === '' ? {} : { port: parsePort(portAnswer, 'The port') }) }
   return { settings: { ...merged, ...answers }, answers }
 }
 

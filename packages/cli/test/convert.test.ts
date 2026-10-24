@@ -90,6 +90,12 @@ describe('dualkit convert', () => {
     expect(t.calls[0]?.args[1]).toMatchObject({ config: { start: 'npm run dev', port: 5173 } })
   })
 
+  it('saves --start and --port as config answers so finish can find them', async () => {
+    const t = setup({}, { shoot: async () => Buffer.alloc(0) })
+    expect(await run(['convert', '--mode', 'bilingual', '--start', 'npm start', '--port', '4610'], t.io)).toBe(0)
+    expect(t.calls[0]?.args[0]).toMatchObject({ baseline: true, configAnswers: { start: 'npm start', port: 4610 } })
+  })
+
   it('hands the answers to finish too', async () => {
     const answers = ['npm run dev', '']
     const t = setup({}, { interactive: true, shoot: async () => Buffer.alloc(0), audit: async () => ({ score: 1, errors: 0, warnings: 0 }), ask: async () => answers.shift() ?? '' })
