@@ -74,6 +74,11 @@ describe('tailwindEdits', () => {
     expect(flags.map((f) => f.kind)).toEqual(Array(8).fill('no-logical-form'))
   })
 
+  it('flags a 2D rotate but not a 3D rotate on the x or y axis', () => {
+    const { flags } = run(jsx('rotate-x-45 rotate-y-12 -rotate-x-6 rotate-z-45 rotate-90'), '4.1.0')
+    expect(flags).toHaveLength(2)
+  })
+
   it('does not flag a centred translate or a zero-offset shadow', () => {
     const { flags } = run(jsx('left-1/2 -translate-x-1/2 shadow-[0_4px_8px_#000]'), '4.1.0')
     expect(flags).toEqual([])

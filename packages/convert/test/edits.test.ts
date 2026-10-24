@@ -25,4 +25,10 @@ describe('applyEdits', () => {
   it('returns the input when there are no edits', () => {
     expect(applyEdits('abc', [])).toBe('abc')
   })
+
+  it('throws a clear error for an edit outside the text or with its end before its start', () => {
+    expect(() => applyEdits('abc', [{ start: 2, end: 9, text: 'x' }])).toThrow('edit [2, 9) is outside the text, which is 3 characters long')
+    expect(() => applyEdits('abc', [{ start: -1, end: 1, text: 'x' }])).toThrow('edit [-1, 1) is outside the text')
+    expect(() => applyEdits('abc', [{ start: 2, end: 1, text: 'x' }])).toThrow('edit [2, 1) ends before it starts')
+  })
 })

@@ -108,6 +108,7 @@ describe('detectProject refusals', () => {
 
   it.each([
     ['Remix', { '@remix-run/react': '^2.0.0', react: '^18.0.0' }],
+    ['Remix', { '@remix-run/dev': '^2.0.0', react: '^18.0.0' }],
     ['Create React App', { 'react-scripts': '5.0.1', react: '^18.0.0' }],
     ['Vue', { vue: '^3.0.0' }],
     ['Svelte', { svelte: '^5.0.0' }],
@@ -134,5 +135,13 @@ describe('detectProject refusals', () => {
 
   it('refuses a malformed package.json', () => {
     refuse({ 'package.json': '{' }, /not valid JSON/)
+  })
+
+  it.each(['null', '[]', '"app"', '3'])('refuses a package.json that holds %s instead of an object', (text) => {
+    refuse({ 'package.json': text }, /package\.json in .* must hold a JSON object/)
+  })
+
+  it('ignores a dependency field that is not an object', () => {
+    refuse({ 'package.json': JSON.stringify({ dependencies: 'react' }) }, /does not use React/)
   })
 })

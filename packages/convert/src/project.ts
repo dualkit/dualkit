@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { createTailwindVersion } from '@dualkit/lint'
+import { isRecord } from './guards'
 import type { Project } from './types'
 
 /** Thrown when the app is not one convert can handle. The message names what is supported. */
@@ -15,7 +16,7 @@ const SUPPORTED = 'Next.js App Router and Vite React apps'
 
 const REFUSED: ReadonlyArray<readonly [string, string]> = [
   ['@remix-run/react', 'Remix'],
-  ['react-router-dom-remix', 'Remix'],
+  ['@remix-run/dev', 'Remix'],
   ['react-scripts', 'Create React App'],
   ['vue', 'Vue'],
   ['svelte', 'Svelte'],
@@ -39,15 +40,17 @@ const unsupported = (what: string): UnsupportedError =>
 function readDeps(root: string): Record<string, string> {
   const path = join(root, 'package.json')
   if (!existsSync(path)) throw new UnsupportedError(`No package.json in ${root}. Convert supports ${SUPPORTED}.`)
-  let json: Record<string, unknown>
+  let json: unknown
   try {
-    json = JSON.parse(readFileSync(path, 'utf8')) as Record<string, unknown>
+    json = JSON.parse(readFileSync(path, 'utf8'))
   } catch {
     throw new UnsupportedError(`The package.json in ${root} is not valid JSON. Convert supports ${SUPPORTED}.`)
   }
+  if (!isRecord(json)) throw new UnsupportedError(`The package.json in ${root} must hold a JSON object. Convert supports ${SUPPORTED}.`)
   const deps: Record<string, string> = {}
   for (const field of ['dependencies', 'devDependencies', 'peerDependencies']) {
-    Object.assign(deps, json[field] as Record<string, string> | undefined)
+    const list = json[field]
+    if (isRecord(list)) Object.assign(deps, list)
   }
   return deps
 }

@@ -8,8 +8,20 @@ export class OverlapError extends Error {
   }
 }
 
-/** Applies non-overlapping edits in any order. Equal-start inserts keep their given order. */
+/** Throws when an edit's span is not inside the text. */
+function checkBounds(text: string, edit: Edit): void {
+  const span = `edit [${edit.start}, ${edit.end})`
+  if (edit.end < edit.start) throw new RangeError(`${span} ends before it starts`)
+  if (edit.start < 0 || edit.end > text.length) throw new RangeError(`${span} is outside the text, which is ${text.length} characters long`)
+}
+
+/**
+ * Applies non-overlapping edits in any order. Edits that start at the same offset apply in their given
+ * order, so an insert listed before a replacement at that offset lands before it. Throws on an edit
+ * outside the text.
+ */
 export function applyEdits(text: string, edits: Edit[]): string {
+  for (const edit of edits) checkBounds(text, edit)
   const ordered = edits
     .map((edit, index) => ({ edit, index }))
     .sort((a, b) => a.edit.start - b.edit.start || a.index - b.index)

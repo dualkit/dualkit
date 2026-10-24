@@ -74,7 +74,7 @@ function adviceFor(core: string, negative: string, tokens: readonly Token[]): st
   if (new RegExp(`^bg-(?:gradient|linear)-to-${CORNER_SHORT}$`).test(core)) return 'A gradient direction stays physical. Add an rtl: variant with the opposite side, such as rtl:bg-gradient-to-l.'
   if (new RegExp(`^origin-${CORNERS}$`).test(core)) return 'A transform origin stays physical. Add an rtl: variant with the opposite side.'
   if (new RegExp(`^(?:bg|object)-${CORNERS}$`).test(core)) return 'A background or object position stays physical. Add an rtl: variant with the opposite side.'
-  if (/^rotate-/.test(core) && !/^rotate-0$/.test(core)) return 'A rotation turns the same way in Arabic. If it points an arrow or chevron, add an rtl: variant such as rtl:-rotate-45, or use rtl:scale-x-[-1] to mirror it.'
+  if (/^rotate-(?!x-|y-)/.test(core) && !/^rotate-(?:z-)?0$/.test(core)) return 'A rotation turns the same way in Arabic. If it points an arrow or chevron, add an rtl: variant such as rtl:-rotate-45, or use rtl:scale-x-[-1] to mirror it.'
   if (/^skew-x-/.test(core)) return 'A horizontal skew leans the same way in Arabic. Add an rtl: variant with the opposite sign if it should mirror.'
   return shadowAdvice(core)
 }
