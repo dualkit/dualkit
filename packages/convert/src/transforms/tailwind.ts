@@ -118,12 +118,42 @@ function* classAttributes(node: unknown): Generator<Walked> {
   else for (const [key, child] of Object.entries(n)) if (!SKIP.has(key)) yield* classAttributes(child)
 }
 
-/** One flag per className template literal that holds a `${`. */
+/** The names bound to a next/font loader call, such as `geistSans` in `const geistSans = Geist({...})`. */
+function fontNames(program: unknown): Set<string> {
+  const body = ((program as { body?: Walked[] }).body ?? [])
+  const loaders = new Set(body.filter((s) => s.type === 'ImportDeclaration' && /^next\/font\//.test(String((s.source as Walked).value)))
+    .flatMap((s) => (s.specifiers as Walked[]).map((spec) => String((spec.local as Walked).name))))
+  const names = new Set<string>()
+  for (const s of body) {
+    const declaration = s.type === 'ExportNamedDeclaration' ? (s.declaration as Walked | null) : s
+    if (declaration?.type !== 'VariableDeclaration') continue
+    for (const d of declaration.declarations as Walked[]) {
+      const init = d.init as Walked | null
+      const callee = init?.type === 'CallExpression' ? (init.callee as Walked) : null
+      if (callee?.type === 'Identifier' && loaders.has(String(callee.name)) && (d.id as Walked).type === 'Identifier') names.add(String((d.id as Walked).name))
+    }
+  }
+  return names
+}
+
+/** Whether an expression is a next/font `.variable` or `.className`, which never holds a physical class. */
+const isFontClass = (fonts: Set<string>, e: Walked): boolean => {
+  const object = e.object as Walked | undefined
+  const property = e.property as Walked | undefined
+  return e.type === 'MemberExpression' && !e.computed && object?.type === 'Identifier' && fonts.has(String(object.name))
+    && (property?.name === 'variable' || property?.name === 'className')
+}
+
+/** One flag per className template literal that holds a `${`, unless every `${}` is a next/font class. Static parts are converted anyway. */
 function computedFlags(file: SourceFile): Flag[] {
   const starts = new Set<number>()
   for (const block of file.js) {
+    const fonts = fontNames(block.ast.program)
     for (const attr of classAttributes(block.ast.program)) {
-      for (const template of templatesIn(attr.value)) if (template.start !== undefined) starts.add(block.offset + template.start)
+      for (const template of templatesIn(attr.value)) {
+        if ((template.expressions as Walked[]).every((e) => isFontClass(fonts, e))) continue
+        if (template.start !== undefined) starts.add(block.offset + template.start)
+      }
     }
   }
   return [...starts].sort((a, b) => a - b).map((at) => ({

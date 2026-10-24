@@ -85,6 +85,20 @@ describe('tailwindEdits', () => {
     expect(flags.filter((f) => f.kind === 'computed-class')).toHaveLength(1)
   })
 
+  it('does not flag a template that only adds next/font variables and class names', () => {
+    const src = [
+      "import { Geist } from 'next/font/google'",
+      "import localFont from 'next/font/local'",
+      "const sans = Geist({ variable: '--font-sans' })",
+      "const brand = localFont({ src: './brand.woff2' })",
+      'export const A = ({ extra }) => <><html className={`${sans.variable} ${brand.className} h-full`} /><p className={`${sans.variable} ${extra}`} /></>',
+      '',
+    ].join('\n')
+    expect(run(src, '4.1.0').flags.filter((f) => f.kind === 'computed-class').map((f) => f.line)).toEqual([5])
+    const one = run(src.replace('<p className={`${sans.variable} ${extra}`} />', ''), '4.1.0')
+    expect(one.flags.filter((f) => f.kind === 'computed-class')).toEqual([])
+  })
+
   it('reports 1-based lines', () => {
     const src = `export const A = () => (\n  <div\n    className="translate-x-2"\n  />\n)\n`
     expect(run(src, '4.1.0').flags[0]!.line).toBe(3)
