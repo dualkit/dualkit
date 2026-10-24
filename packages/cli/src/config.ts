@@ -31,7 +31,7 @@ export function parseConvert(raw: unknown): ConvertConfig {
     out.routes = routes
   }
   if (params !== undefined) {
-    if (!isRecord(params) || !Object.values(params).every((v) => typeof v === 'string')) throw new UserError('convert.params must map a route parameter to a value, for example {"id": "42"}.')
+    if (!isRecord(params) || !Object.values(params).every((v) => typeof v === 'string')) throw new UserError('convert.params must map a dynamic route to a sample path, for example {"/orders/[id]": "/orders/42"}.')
     out.params = params as Record<string, string>
   }
   if (storageState !== undefined) {

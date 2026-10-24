@@ -54,6 +54,12 @@ describe('dualkit convert', () => {
     }
   })
 
+  it('shows params as a dynamic route mapped to a sample path, the shape finish reads', () => {
+    const cwd = mkdtempSync(join(tmpdir(), 'dualkit-'))
+    writeFileSync(join(cwd, 'dualkit.config.json'), JSON.stringify({ convert: { params: { '/orders/[id]': 42 } } }))
+    expect(() => loadConfig(undefined, cwd)).toThrow('convert.params must map a dynamic route to a sample path, for example {"/orders/[id]": "/orders/42"}.')
+  })
+
   it('accepts a full convert block', () => {
     const block = { start: 'npm run dev', port: 3000, test: 'npm test', routes: ['/'], params: { id: '1' }, storageState: 'auth.json' }
     const cwd = mkdtempSync(join(tmpdir(), 'dualkit-'))
