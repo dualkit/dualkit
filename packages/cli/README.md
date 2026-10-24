@@ -69,3 +69,37 @@ physical.css:2:3  · source/physical-css  `margin-left: 8px` is tied to one side
 Exit codes: 0 clean, 1 a finding at or above `--fail-on`, 2 a problem with the input. The lint rules live in [@dualkit/lint](https://github.com/dualkit/dualkit/blob/main/packages/lint/LINT.md), which is published before the CLI.
 
 In CI, `uses: dualkit/dualkit/action@main` with `mode: lint` runs it on every pull request: [action/README.md](https://github.com/dualkit/dualkit/blob/main/action/README.md).
+
+## Convert an app
+
+```sh
+npx dualkit@beta convert --mode bilingual --start "npm run dev" --port 3000
+```
+
+`dualkit convert` turns an English Next.js App Router or Vite React app into an Arabic one on a new git branch, `dualkit/bilingual` or `dualkit/arabic`. It needs a clean working tree, never pushes and makes no model calls. `bilingual` keeps English exactly as it is and adds Arabic with a switch. `arabic` makes the whole app Arabic and right to left, in place.
+
+```
+Branch: dualkit/bilingual
+22 files changed, 52 edits, 10 strings to translate, 3 places left for you.
+```
+
+Fill the Arabic in `dualkit-strings.json`, or ask your agent to use the dualkit-convert skill. Then run:
+
+```sh
+npx dualkit@beta convert --finish
+```
+
+Finish compares each English page with its screenshot from before the conversion, runs the check rules on each Arabic page and writes `dualkit-convert.md`.
+
+| Option | Default | |
+| --- | --- | --- |
+| `--mode <mode>` | | `bilingual` or `arabic`. Asked for on a terminal when left out |
+| `--finish` | | Run phase 2 and write the report |
+| `--force` | | With `--finish`, use English for strings with no Arabic yet |
+| `--start <cmd>` | | The command that starts your app, saved under `convert` in the config file |
+| `--port <n>` | | The port it listens on, saved with the start command |
+| `--no-install` | | Do not install next-intl or react-i18next |
+| `--no-baseline` | | Skip the English screenshots, so English is not proven unchanged |
+| `--config <file>` | `dualkit.config.json` | The `convert` block also takes `test`, `routes`, `params` and `storageState` |
+
+Exit codes: 0 phase 1 done or finish passed, 1 finish failed, 2 refused or a problem with the input, 130 interrupted. What it converts, what it flags and the config block in full: [@dualkit/convert](https://github.com/dualkit/dualkit/blob/main/packages/convert/README.md).

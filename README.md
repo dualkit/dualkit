@@ -30,11 +30,12 @@ Dualkit fixes them at the source, in the agent and in the code, and checks any p
 
 | | What it is | Install |
 | --- | --- | --- |
-| **[Skills](plugin/skills/)** | Four agent skills for Claude Code and Cursor, listed in the Claude plugin directory: RTL layout, Arabic and Latin type pairing, Gulf formats, bilingual copy | `/plugin marketplace add dualkit/dualkit` |
+| **[Skills](plugin/skills/)** | Five agent skills for Claude Code and Cursor, listed in the Claude plugin directory: RTL layout, Arabic and Latin type pairing, Gulf formats, bilingual copy, converting an app | `/plugin marketplace add dualkit/dualkit` |
 | **[Format](packages/format/)** | Six Gulf currencies, Umm al-Qura dates, Arabic numerals, GCC phones and IBANs for all six countries, Emirates ID, Saudi VAT number, Gulf weekends. No dependencies | `npm i @dualkit/format` |
 | **[Starter](packages/starter/)** | A bilingual design system to fork: one token file feeds CSS, Tailwind and Figma, plus eight React components | [From the release](#starter) |
 | **[Check](packages/cli/)** | Audit any page for Arabic and RTL bugs, with a shareable Gulf-ready report | `npx dualkit check <url>` |
 | **[Lint](packages/lint/)** | 8 source rules on by default that catch Arabic and RTL bugs in your CSS, HTML, JavaScript and TypeScript, with no browser | `npx dualkit@beta lint .` |
+| **[Convert](packages/convert/)** | Turns an English Next.js or Vite React app into an Arabic one on a new git branch, and proves English did not change | `npx dualkit@beta convert` |
 
 ## Proof
 
@@ -139,6 +140,18 @@ physical.css:2:3  · source/physical-css  `margin-left: 8px` is tied to one side
 
 It exits 1 when a finding reaches `--fail-on` (default `error`). Turn a rule off for one line with a `dualkit-disable-next-line <rule-id> -- reason` comment. In CI, set `mode: lint` on the same Action. Every rule and its known limits are in [LINT.md](packages/lint/LINT.md).
 
+## Convert
+
+Convert takes an existing English app and makes it Arabic on a new git branch. It works on Next.js App Router and Vite React apps styled with Tailwind v3, Tailwind v4, plain CSS or CSS modules.
+
+```
+npx dualkit@beta convert --mode bilingual --start "npm run dev" --port 3000
+```
+
+`bilingual` adds Arabic with a language switch and leaves English exactly as it is. `arabic` makes the whole app Arabic and right to left, with no switch. Phase 1 rewrites the code and writes `dualkit-strings.json`, every English string with its Arabic left empty. Your agent fills the Arabic with the dualkit-convert skill. Phase 2, `dualkit convert --finish`, compares each English page with a screenshot from before, runs the check rules on each Arabic page and writes a report.
+
+Dualkit makes no model calls in convert, and every drafted Arabic string is marked for a native speaker to check. What it converts and what it leaves to you: [the convert README](packages/convert/README.md).
+
 ## Contributing
 
 The most useful help right now:
@@ -154,10 +167,11 @@ The most useful help right now:
 | `packages/format` | The format library, with its tests |
 | `packages/rules` | The 34 check rules and the page reader, with their tests |
 | `packages/lint` | The source rules behind `dualkit lint`, with their tests |
+| `packages/convert` | The engine behind `dualkit convert`, with its tests |
 | `packages/cli` | The `dualkit` CLI and its report |
 | `action` | The GitHub Action that runs check or lint on pull requests |
-| `skills` | The four skills (`SKILL.md` each) |
-| `cursor/rules` | Cursor rules generated from `skills` |
+| `plugin/skills` | The five skills (`SKILL.md` each) |
+| `cursor/rules` | Cursor rules generated from `plugin/skills` |
 | `packages/skills` | The generator and the tests that keep skills, rules and the plugin manifest in step |
 | `apps/site` | dualkit.dev (Next.js) |
 | `design` | Figma specs, tokens and the motion prototype the site was built from |
