@@ -39,6 +39,8 @@ describe('dualkitCss', () => {
       `font-size: ${MIN_ARABIC_SIZE}px`,
       '[dir="rtl"] [data-dk-mirror] {',
       'scale: -1 1',
+      '[dir="rtl"] input[dir="ltr"]:placeholder-shown, [dir="rtl"] textarea[dir="ltr"]:placeholder-shown {',
+      'direction: rtl',
     ]
     let at = -1
     for (const part of parts) {

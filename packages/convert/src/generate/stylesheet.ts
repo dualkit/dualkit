@@ -23,6 +23,8 @@ export function dualkitCss(project: Project): string {
     blocks.push(`${selectors} {\n  font-size: ${MIN_ARABIC_SIZE}px;\n}`)
   }
   blocks.push('[dir="rtl"] [data-dk-mirror] {\n  scale: -1 1;\n}')
+  // A field convert set to dir="ltr" shows its Arabic hint at the right, with the page's padding and corners, until someone types.
+  blocks.push('[dir="rtl"] input[dir="ltr"]:placeholder-shown, [dir="rtl"] textarea[dir="ltr"]:placeholder-shown {\n  direction: rtl;\n}')
   return blocks.join('\n\n') + '\n'
 }
 
