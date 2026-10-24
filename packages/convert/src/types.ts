@@ -47,8 +47,11 @@ export type Plan = {
 /** What phase 1 is asked to do. `root` is the app folder, inside a git repo. */
 export type ConvertOptions = { root: string; mode: Mode; install: boolean; baseline: boolean }
 
+/** Per-request browser settings. `cookies` are set before the page loads. */
+export type PageOptions = { cookies?: Record<string, string> }
+
 /** Takes a screenshot of url at a viewport width and returns the PNG. Injected by the CLI. */
-export type Shooter = (url: string, width: number) => Promise<Buffer>
+export type Shooter = (url: string, width: number, options?: PageOptions) => Promise<Buffer>
 
 /** What convert needs from outside: a logger, a command runner, the app's config and, for the baseline, a shooter. */
 export type ConvertIo = {

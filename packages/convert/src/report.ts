@@ -10,6 +10,8 @@ export type ReportData = {
   summary: ConvertSummary
   ledger: LedgerEntry[]
   english: { route: string; width: number; ratio: number; diffPath?: string }[]
+  /** English pages with no baseline screenshot to compare against. They are listed, and they do not fail the run. */
+  noBaseline?: { route: string; width: number }[]
   arabic: { route: string; score: number; errors: number; warnings: number }[]
   unreachable: { route: string; reason: string }[]
   remainingLint: number
@@ -110,7 +112,8 @@ function english(data: ReportData): string {
     const diff = !pass && p.diffPath ? `. Diff at ${esc(p.diffPath)}` : ''
     return `- ${esc(p.route)} at ${p.width}px: ${pass ? 'pass' : 'fail'}: ${share}${diff}`
   })
-  return section('English pages', lines, 'No English pages were checked.')
+  const missing = (data.noBaseline ?? []).map((p) => `- ${esc(p.route)} at ${p.width}px: no English baseline was taken`)
+  return section('English pages', [...lines, ...missing], 'No English pages were checked.')
 }
 
 function arabic(data: ReportData): string {
