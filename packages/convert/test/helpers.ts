@@ -5,14 +5,15 @@ import { join, relative, sep } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const FIXTURES = fileURLToPath(new URL('./fixtures', import.meta.url))
-const GIT_ID = ['-c', 'user.email=test@dualkit.dev', '-c', 'user.name=dualkit test', '-c', 'commit.gpgsign=false']
+const GIT_ID: ReadonlyArray<readonly [string, string]> = [['user.email', 'test@example.com'], ['user.name', 'dualkit test'], ['commit.gpgsign', 'false']]
 
-/** Copies a fixture to a temp dir, makes it a git repo with one commit, and returns the path. */
+/** Copies a fixture to a temp dir, makes it a git repo with a local test identity and one commit, and returns the path. */
 export function fixtureRepo(name: 'next-app' | 'vite-app', root: string = FIXTURES): string {
   const dir = mkdtempSync(join(tmpdir(), `dualkit-${name}-`))
   cpSync(join(root, name), dir, { recursive: true })
-  const git = (...args: string[]): void => void execFileSync('git', [...GIT_ID, ...args], { cwd: dir, stdio: 'ignore' })
-  git('init', '-q')
+  const git = (...args: string[]): void => void execFileSync('git', args, { cwd: dir, stdio: 'ignore' })
+  git('init', '-q', '-b', 'main')
+  for (const [key, value] of GIT_ID) git('config', key, value)
   git('add', '.')
   git('commit', '-q', '-m', 'fixture')
   return dir

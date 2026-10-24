@@ -77,6 +77,12 @@ describe('extractStrings keys for route files', () => {
   it('keeps the file stem for other files', () => {
     expect(key('app/pricing/PlanCard.tsx')).toBe('plan-card.plans-and-prices')
   })
+
+  it('drops the [locale] segment, so a converted route keeps its keys', () => {
+    expect(key('app/[locale]/page.tsx')).toBe('home.plans-and-prices')
+    expect(key('app/[locale]/pricing/page.tsx')).toBe('pricing.plans-and-prices')
+    expect(key('src/app/[locale]/orders/[id]/page.tsx')).toBe('orders-id.plans-and-prices')
+  })
 })
 
 describe('extractStrings attributes', () => {

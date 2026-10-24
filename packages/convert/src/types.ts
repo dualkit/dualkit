@@ -43,3 +43,37 @@ export type Plan = {
   deps: Record<string, string>
   flags: Flag[]
 }
+
+/** What phase 1 is asked to do. `root` is the app folder, inside a git repo. */
+export type ConvertOptions = { root: string; mode: Mode; install: boolean; baseline: boolean }
+
+/** Takes a screenshot of url at a viewport width and returns the PNG. Injected by the CLI. */
+export type Shooter = (url: string, width: number) => Promise<Buffer>
+
+/** What convert needs from outside: a logger, a command runner, the app's config and, for the baseline, a shooter. */
+export type ConvertIo = {
+  log: (s: string) => void
+  shoot?: Shooter
+  run: (cmd: string, cwd: string) => Promise<{ code: number; out: string }>
+  config: ConvertConfig
+}
+
+/** What a phase 1 run changed and left to finish. */
+export type ConvertSummary = {
+  branch: string
+  filesChanged: number
+  edits: number
+  flags: Flag[]
+  strings: number
+  skipped: { file: string; reason: string }[]
+}
+
+/** Saved to `.dualkit/convert.json`. `generated` lists the files convert wrote, which later runs leave alone. */
+export type ConvertState = {
+  mode: Mode
+  base: string
+  branch: string
+  framework: Project['framework']
+  phase: 'converted' | 'finished'
+  generated: string[]
+}

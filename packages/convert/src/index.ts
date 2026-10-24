@@ -1,3 +1,5 @@
-export type { ConvertConfig, Edit, FileResult, Flag, FlagKind, Mode, Project } from './types'
+export type { ConvertConfig, ConvertIo, ConvertOptions, ConvertState, ConvertSummary, Edit, FileResult, Flag, FlagKind, Mode, Project, Shooter } from './types'
 export { OverlapError, applyEdits } from './edits'
 export { UnsupportedError, detectProject } from './project'
+export { branchFor, convert, problems } from './convert'
+export { RefusedError } from './git'

@@ -16,3 +16,5 @@ export { PHYSICAL_PROPS, liveDeclarations, physicalDeclarations } from './rules/
 export type { LiveDeclaration, PhysicalDeclaration } from './rules/css'
 export { createTailwindVersion } from './tailwind-version'
 export { parseSourceOutcome } from './parse'
+export { POSTCSS_FLIPPERS, STYLIS_FLIPPERS, createFlipperLookup, quietReason } from './scope'
+export { isMinified, repoTop } from './walk'

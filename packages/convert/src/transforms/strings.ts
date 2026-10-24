@@ -32,11 +32,11 @@ const kebab = (text: string): string =>
   ascii(text).replace(/([a-z0-9])([A-Z])/g, '$1-$2').replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
     .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 
-/** The route directories of a route file: after the app dir, else the parent; groups skipped, `[id]` read as `id`. */
+/** The route directories of a route file: after the app dir, else the parent; groups and convert's `[locale]` skipped, `[id]` read as `id`. */
 function routeDirs(dirs: string[]): string[] {
   const app = dirs.lastIndexOf('app')
   const route = app === -1 ? dirs.slice(-1) : dirs.slice(app + 1)
-  return route.filter((d) => !/^\(.*\)$/.test(d)).map((d) => d.replace(/^\[+(\.\.\.)?|\]+$/g, ''))
+  return route.filter((d) => !/^\(.*\)$/.test(d) && d !== '[locale]').map((d) => d.replace(/^\[+(\.\.\.)?|\]+$/g, ''))
 }
 
 /** The key prefix for a file: its stem in kebab case, or for page, layout and other route files its route, `home` at the root. */
