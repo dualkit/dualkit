@@ -85,6 +85,8 @@ describe('formatEdits suggestions', () => {
       message: 'This formats in the browser\'s own locale, so an Arabic page can show an English date or number, such as 11/1/2026 for 1 November.',
       suggestion: 'Pass dkIntlLocale(locale) from lib/dualkit-locale as the locale, so the format follows the page language.',
     })
+    const vite = run("import { useTranslation } from 'react-i18next'\nexport function A({ d }) {\n  const { t } = useTranslation()\n  return <p>{d.toLocaleDateString()}</p>\n}\n", 'react-i18next', 'src/A.tsx', 'src/lib/dualkit-locale.ts')
+    expect(vite.flags[0]!.suggestion).toBe('Pass dkIntlLocale(i18n.language) from src/lib/dualkit-locale as the locale, so the format follows the page language.')
   })
 
   it('flags currency USD with the AED and VAT suggestion', () => {

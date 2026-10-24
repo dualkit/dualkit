@@ -148,7 +148,7 @@ function walk(node: unknown, ctx: Context, ancestors: Node[]): void {
     if (arg) visitLocale(arg, ctx, ancestors)
     else if (usesBrowserLocale(n)) {
       flag(ctx, ctx.base + n.start!, 'This formats in the browser\'s own locale, so an Arabic page can show an English date or number, such as 11/1/2026 for 1 November.',
-        `Pass dkIntlLocale(locale) from ${helperName(ctx.helper)} as the locale, so the format follows the page language.`)
+        `Pass dkIntlLocale(${localeExpression(ctx.lib)}) from ${helperName(ctx.helper)} as the locale, so the format follows the page language.`)
     }
   }
   if (n.type === 'ObjectProperty') visitCurrency(n, ctx)
