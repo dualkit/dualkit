@@ -65,7 +65,7 @@ describe('startServer', () => {
   })
 
   it('kills grandchildren in the group', async () => {
-    const cmd = `sh -c 'node -e "require(\\"http\\").createServer((q,s)=>s.end(1)).listen(4522)" & wait'`
+    const cmd = `sh -c 'node -e "require(\\"http\\").createServer((q,s)=>s.end()).listen(4522)" & wait'`
     const server = await startServer(cmd, 4522, dir(), 20_000)
     stops.push(server.stop)
     expect(await inUse(4522)).toBe(true)
