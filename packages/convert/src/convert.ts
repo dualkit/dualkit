@@ -110,6 +110,14 @@ async function baseline(project: Project, options: ConvertOptions, io: ConvertIo
   for (const page of unreachable) io.log(`No baseline for ${page.route}: ${page.reason}.`)
 }
 
+/** The line that says how many changed files phase 1 committed. */
+export const committedLine = (files: number, branch: string): string =>
+  `Committed ${files} changed ${files === 1 ? 'file' : 'files'} on ${branch}.`
+
+/** The line that says how many places are left and how many files were skipped. */
+export const leftLine = (open: number, skipped: number): string =>
+  `${open} ${open === 1 ? 'thing is' : 'things are'} left to finish. ${skipped} ${skipped === 1 ? 'file was' : 'files were'} skipped.`
+
 /**
  * Phase 1: converts the app at `options.root` on the branch `dualkit/<mode>` and commits it with the
  * person's own git identity. Transforms run in memory first, so a refusal changes nothing. A re-run on
@@ -141,12 +149,12 @@ export async function convert(options: ConvertOptions, ioIn: ConvertIo): Promise
   const step = { name: 'writing the converted files' }
   const written = await writeAll({ disk, project, options, io, texts: done.texts, plan, ledger, step })
     .catch((error: unknown) => rollBack({ root, base: rerun ? branch : base, branch, madeBranch: !rerun, created: disk.created }, step.name, error))
-  io.log(written.changed.length ? `Committed ${written.changed.length} changed files on ${branch}.` : 'Nothing changed, so there is nothing to commit.')
+  io.log(written.changed.length ? committedLine(written.changed.length, branch) : 'Nothing changed, so there is nothing to commit.')
 
   const ours = [...Object.keys(plan.writes), ...Object.keys(ownFiles(project, ledger)), LEDGER_FILE]
   saveState(root, { mode, base: state?.base ?? base, branch, framework: project.framework, phase: 'converted', generated: [...new Set([...generated, ...ours])].sort() })
   const flags = finalFlags([...done.flags, ...plan.flags, ...written.flags], moved)
-  io.log(`${problems(flags).length} things are left to finish. ${done.skipped.length} files were skipped.`)
+  io.log(leftLine(problems(flags).length, done.skipped.length))
   const byKind = { ...done.byKind, wiring: written.edits + Object.keys(plan.writes).length }
   const changed = changedFiles(done.perFile, moved, plan.edits)
   const summary: ConvertSummary = { branch, filesChanged: written.changed.length, edits: done.edits + written.edits, byKind, changed, flags, strings: ledger.length - existing.length, skipped: done.skipped }

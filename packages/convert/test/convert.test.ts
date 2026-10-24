@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { convert, problems, type ConvertIo } from '../src/convert'
+import { committedLine, convert, leftLine, problems, type ConvertIo } from '../src/convert'
 import { LEDGER_FILE, type LedgerEntry } from '../src/ledger'
 import { fixtureRepo, projectFiles } from './helpers'
 
@@ -166,6 +166,15 @@ describe('convert io', () => {
     await convert({ ...options(dir), baseline: true }, fakeIo({ log: (l) => lines.push(l) }))
     expect(lines).toContain('No start command is set, so no English baseline was taken.')
     expect(existsSync(join(dir, '.dualkit/baseline'))).toBe(false)
+  })
+})
+
+describe('convert progress lines', () => {
+  it('uses the singular for one', () => {
+    expect(leftLine(1, 1)).toBe('1 thing is left to finish. 1 file was skipped.')
+    expect(leftLine(2, 0)).toBe('2 things are left to finish. 0 files were skipped.')
+    expect(committedLine(1, 'dualkit/arabic')).toBe('Committed 1 changed file on dualkit/arabic.')
+    expect(committedLine(3, 'dualkit/arabic')).toBe('Committed 3 changed files on dualkit/arabic.')
   })
 })
 
