@@ -4,6 +4,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { committedLine, convert, leftLine, problems, type ConvertIo } from '../src/convert'
 import { LEDGER_FILE, type LedgerEntry } from '../src/ledger'
+import { readState, saveState } from '../src/state'
 import { fixtureRepo, projectFiles } from './helpers'
 
 const git = (dir: string, ...args: string[]): string => execFileSync('git', args, { cwd: dir, encoding: 'utf8' }).trim()
@@ -166,6 +167,18 @@ describe('convert io', () => {
     await convert({ ...options(dir), baseline: true }, fakeIo({ log: (l) => lines.push(l) }))
     expect(lines).toContain('No start command is set, so no English baseline was taken.')
     expect(existsSync(join(dir, '.dualkit/baseline'))).toBe(false)
+  })
+})
+
+describe('convert after finish', () => {
+  it('runs again on its own branch after finish, and changes nothing', async () => {
+    const dir = fixtureRepo('next-app')
+    await convert(options(dir), fakeIo())
+    saveState(dir, { ...readState(dir)!, phase: 'finished' })
+    const before = commits(dir)
+    await convert(options(dir), fakeIo())
+    expect(commits(dir)).toBe(before)
+    expect(git(dir, 'status', '--porcelain')).toBe('')
   })
 })
 

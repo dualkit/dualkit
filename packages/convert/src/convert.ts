@@ -91,7 +91,8 @@ async function start(options: ConvertOptions): Promise<{ state: ConvertState | n
   const branch = branchFor(options.mode)
   const base = await currentBranch(options.root)
   const state = base === branch ? readState(options.root) : null
-  const rerun = base === branch && state?.phase === 'converted' && state.mode === options.mode
+  // A finished conversion can run again too, for example after new pages are added on the branch.
+  const rerun = base === branch && (state?.phase === 'converted' || state?.phase === 'finished') && state.mode === options.mode
   if (!rerun && (await branchExists(options.root, branch))) {
     throw new RefusedError(`The branch ${branch} already exists. Delete it, or switch to it if convert made it, then run convert again.`)
   }
