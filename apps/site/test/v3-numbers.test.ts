@@ -65,6 +65,6 @@ describe('numbersStats', () => {
   })
 
   it('counts the plugin skill directories', () => {
-    expect(skillCount()).toBe(4)
+    expect(skillCount()).toBe(5)
   })
 })
