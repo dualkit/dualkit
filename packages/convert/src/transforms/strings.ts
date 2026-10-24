@@ -21,15 +21,30 @@ type Context = {
 type Piece =
   | { kind: 'text'; value: string; start: number; end: number }
   | { kind: 'value'; name: string; source: string; start: number; end: number }
-  | { kind: 'space' | 'comment' | 'element' | 'other'; start: number; end: number }
+  | { kind: 'element'; texty: boolean; start: number; end: number }
+  | { kind: 'space' | 'comment' | 'other'; start: number; end: number }
 
 const ascii = (text: string): string => text.normalize('NFKD').replace(/[̀-ͯ]/g, '')
 
-/** The file name without its extensions, in kebab case. */
+const ROUTE_STEMS = new Set(['page', 'layout', 'index', 'route', 'default'])
+
+const kebab = (text: string): string =>
+  ascii(text).replace(/([a-z0-9])([A-Z])/g, '$1-$2').replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+
+/** The route directories of a route file: after the app dir, else the parent; groups skipped, `[id]` read as `id`. */
+function routeDirs(dirs: string[]): string[] {
+  const app = dirs.lastIndexOf('app')
+  const route = app === -1 ? dirs.slice(-1) : dirs.slice(app + 1)
+  return route.filter((d) => !/^\(.*\)$/.test(d)).map((d) => d.replace(/^\[+(\.\.\.)?|\]+$/g, ''))
+}
+
+/** The key prefix for a file: its stem in kebab case, or for page, layout and other route files its route, `home` at the root. */
 function stemOf(path: string): string {
-  const name = path.split(/[\\/]/).pop()!.split('.')[0]!
-  const kebab = ascii(name).replace(/([a-z0-9])([A-Z])/g, '$1-$2').replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
-  return kebab.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'file'
+  const parts = path.split(/[\\/]/).filter(Boolean)
+  const stem = parts.pop()!.split('.')[0]!
+  if (!ROUTE_STEMS.has(stem)) return kebab(stem) || 'file'
+  return kebab(routeDirs(parts).join('-')) || 'home'
 }
 
 /** The first four ASCII words of a message, placeholders left out, in kebab case. */
@@ -96,6 +111,14 @@ function placeholderName(expression: Node): string | null {
   return null
 }
 
+/** Whether an element holds text or an expression anywhere inside it. Attributes do not count. */
+function hasText(element: Node): boolean {
+  return ((element.children as Node[]) ?? []).some((c) =>
+    c.type === 'JSXText' ? /\S/.test(String(c.value))
+      : c.type === 'JSXExpressionContainer' ? (c.expression as Node).type !== 'JSXEmptyExpression'
+        : c.type === 'JSXSpreadChild' || hasText(c))
+}
+
 function pieceOf(child: Node, ctx: Context): Piece {
   const start = ctx.base + child.start!
   const end = ctx.base + child.end!
@@ -106,7 +129,8 @@ function pieceOf(child: Node, ctx: Context): Piece {
     const trail = raw.length - raw.trimEnd().length
     return { kind: 'text', value: String(child.value), start: start + lead, end: end - trail }
   }
-  if (child.type !== 'JSXExpressionContainer') return { kind: child.type === 'JSXSpreadChild' ? 'other' : 'element', start, end }
+  if (child.type === 'JSXSpreadChild') return { kind: 'other', start, end }
+  if (child.type !== 'JSXExpressionContainer') return { kind: 'element', texty: hasText(child), start, end }
   const expression = child.expression as Node
   if (expression.type === 'JSXEmptyExpression') return { kind: 'comment', start, end }
   if (expression.type === 'StringLiteral') {
@@ -134,21 +158,50 @@ function valuesOf(pieces: Piece[]): string | null {
   return [...seen].map(([name, source]) => (name === source ? name : `${name}: ${source}`)).join(', ')
 }
 
-/** Extracts the text children of an element as one message, or flags them as mixed text. */
-function visitChildren(element: Node, ctx: Context, ancestors: Node[]): void {
-  const pieces = ((element.children as Node[]) ?? []).map((c) => pieceOf(c, ctx))
-  const lettered = pieces.find((p) => p.kind === 'text' && LETTER.test(p.value))
-  if (!lettered) return
-  if (pieces.some((p) => p.kind === 'element' || p.kind === 'other')) return mixed(ctx, lettered.start)
+/** Splits children into runs of text and expressions, with the elements on either side of each run. */
+function unitsOf(pieces: Piece[]): { run: Piece[]; touchesText: boolean }[] {
+  const units: { run: Piece[]; touchesText: boolean }[] = []
+  let run: Piece[] = []
+  let before: Piece | undefined
+  for (const piece of [...pieces, undefined]) {
+    if (piece && piece.kind !== 'element') { run.push(piece); continue }
+    const texty = (p: Piece | undefined): boolean => p?.kind === 'element' && p.texty
+    if (run.length) units.push({ run, touchesText: texty(before) || texty(piece) })
+    run = []
+    before = piece
+  }
+  return units
+}
+
+/** Extracts one run of text as a message. Returns false when the run is mixed text. */
+function extractRun(pieces: Piece[], ctx: Context, ancestors: Node[]): boolean {
+  if (pieces.some((p) => p.kind === 'other')) return false
   const edge = (p: Piece): boolean => p.kind !== 'space' && p.kind !== 'comment'
   const first = pieces.findIndex(edge)
   const last = pieces.length - 1 - [...pieces].reverse().findIndex(edge)
   const run = pieces.slice(first, last + 1)
   const values = valuesOf(run)
-  if (values === null || run.some((p) => p.kind === 'comment')) return mixed(ctx, lettered.start)
+  if (values === null || run.some((p) => p.kind === 'comment')) return false
   const en = run.map((p) => (p.kind === 'text' ? p.value : p.kind === 'value' ? `{${p.name}}` : ' '))
     .join('').replace(/\s+/g, ' ').trim()
   place(ctx, ancestors, run[0]!.start, run[run.length - 1]!.end, en, values)
+  return true
+}
+
+/**
+ * Extracts each run of text between elements that hold no text (icons, line breaks) as its own message.
+ * A run next to an element with text, or holding a non-simple expression, is flagged once per element as mixed text.
+ */
+function visitChildren(element: Node, ctx: Context, ancestors: Node[]): void {
+  const pieces = ((element.children as Node[]) ?? []).map((c) => pieceOf(c, ctx))
+  let flagged = false
+  for (const { run, touchesText } of unitsOf(pieces)) {
+    const lettered = run.find((p) => p.kind === 'text' && LETTER.test(p.value))
+    if (!lettered) continue
+    if (!touchesText && extractRun(run, ctx, ancestors)) continue
+    if (!flagged) mixed(ctx, lettered.start)
+    flagged = true
+  }
 }
 
 function visitAttribute(attribute: Node, ctx: Context, ancestors: Node[]): void {

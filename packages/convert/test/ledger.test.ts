@@ -50,13 +50,13 @@ describe('ledger files', () => {
     const edited = first.out.replace('</h1>', '</h1><p>Your orders</p>')
     const ledger = readLedger(root)
     const second = extract(edited, new Set(ledger.map((e) => e.key)))
-    expect(second.entries.map((e) => e.key)).toEqual(['page.your-orders'])
-    writeLedger(root, mergeLedger(ledger, [...second.entries, { ...entry('page.welcome-back'), en: 'Changed' }]))
+    expect(second.entries.map((e) => e.key)).toEqual(['home.your-orders'])
+    writeLedger(root, mergeLedger(ledger, [...second.entries, { ...entry('home.welcome-back'), en: 'Changed' }]))
 
     const final = readLedger(root)
     expect(final.map((e) => [e.key, e.ar, e.status])).toEqual([
-      ['page.welcome-back', 'مرحبا بعودتك', 'reviewed'],
-      ['page.your-orders', '', 'pending'],
+      ['home.welcome-back', 'مرحبا بعودتك', 'reviewed'],
+      ['home.your-orders', '', 'pending'],
     ])
     expect(final[0]!.en).toBe('Welcome back')
   })
@@ -64,21 +64,21 @@ describe('ledger files', () => {
 
 describe('messagesFor', () => {
   const entries = [
-    entry('page.welcome-back', { en: 'Welcome back', ar: 'مرحبا بعودتك', status: 'reviewed' }),
-    entry('page.your-orders', { en: 'Your orders' }),
+    entry('home.welcome-back', { en: 'Welcome back', ar: 'مرحبا بعودتك', status: 'reviewed' }),
+    entry('home.your-orders', { en: 'Your orders' }),
     entry('nav.home', { en: 'Home', ar: 'الرئيسية', status: 'drafted' }),
   ]
 
   it('nests English by dotted key', () => {
     expect(messagesFor(entries, 'en')).toEqual({
-      page: { 'welcome-back': 'Welcome back', 'your-orders': 'Your orders' },
+      home: { 'welcome-back': 'Welcome back', 'your-orders': 'Your orders' },
       nav: { home: 'Home' },
     })
   })
 
   it('uses English for a pending Arabic entry', () => {
     expect(messagesFor(entries, 'ar')).toEqual({
-      page: { 'welcome-back': 'مرحبا بعودتك', 'your-orders': 'Your orders' },
+      home: { 'welcome-back': 'مرحبا بعودتك', 'your-orders': 'Your orders' },
       nav: { home: 'الرئيسية' },
     })
   })
