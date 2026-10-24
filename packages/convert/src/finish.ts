@@ -145,7 +145,6 @@ export async function finish(options: { root: string; force?: boolean; configAns
   const project = detectProject(root)
   const { routes, unreachable } = listRoutes(project, config)
   writeMessages(root, ledger)
-  if (options.configAnswers) writeConfigAnswers({ root, created: [] }, options.configAnswers)
   const checks = await runChecks(project, state, routes, io)
   const tests = config.test ? await io.run(config.test, root) : undefined
   const earlier = readSummary(root)
@@ -156,7 +155,9 @@ export async function finish(options: { root: string; force?: boolean; configAns
   }
   writeFileSync(join(root, REPORT_FILE), renderConvertReport(data))
   saveState(root, { ...state, phase: 'finished' })
-  await stage(root, OWN_FILES.filter((p) => existsSync(join(root, p))))
+  // The config is written and staged only now, after the checks, and only when the person gave answers.
+  if (options.configAnswers) writeConfigAnswers({ root, created: [] }, options.configAnswers)
+  await stage(root, OWN_FILES.filter((p) => (p !== CONFIG_FILE || options.configAnswers) && existsSync(join(root, p))))
   if ((await stagedFiles(root)).length) await commit(root, `dualkit: finish ${state.mode} conversion`)
   const checked = checks.arabic.length > 0
   const passed = checked && checks.english.every((p) => p.ratio < MAX_DIFF_RATIO) && checks.arabic.every((p) => p.errors === 0) && (tests?.code ?? 0) === 0

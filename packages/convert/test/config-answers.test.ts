@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { chmodSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { createServer } from 'node:net'
 import { PNG } from 'pngjs'
@@ -90,6 +90,22 @@ describe('finish configAnswers', () => {
     expect(git(dir, 'status', '--porcelain')).toBe('')
     expect(JSON.parse(git(dir, 'show', `HEAD:${CONFIG}`))).toEqual({ convert: { start, port } })
     expect(git(dir, 'show', '--name-only', '--format=', 'HEAD')).toContain(CONFIG)
-    rmSync(join(dir, CONFIG))
+  }, 30_000)
+
+  it('leaves an unrelated uncommitted config edit alone when there are no answers', async () => {
+    const port = await freePort()
+    const dir = fixtureRepo('next-app')
+    writeFileSync(join(dir, CONFIG), JSON.stringify({ ignore: [] }))
+    commitAll(dir)
+    await convert(options(dir), io)
+    writeLedger(dir, readLedger(dir).map((e) => ({ ...e, status: 'drafted' as const, ar: `ar:${e.en}` })))
+    const start = `node -e "require('http').createServer((q,s)=>s.end('ok')).listen(${port})"`
+    const edited = JSON.stringify({ ignore: ['type/arabic-size'] })
+    writeFileSync(join(dir, CONFIG), edited)
+    const finishIo: FinishIo = { ...io, config: { start, port }, shoot: async () => png(), audit: async () => ({ score: 100, errors: 0, warnings: 0 }), lint: async () => 0 }
+    await finish({ root: dir }, finishIo)
+    expect(git(dir, 'show', '--name-only', '--format=', 'HEAD')).not.toContain(CONFIG)
+    expect(readFileSync(join(dir, CONFIG), 'utf8')).toBe(edited)
+    expect(git(dir, 'status', '--porcelain')).toContain(CONFIG)
   }, 30_000)
 })
