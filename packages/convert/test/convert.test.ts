@@ -119,6 +119,8 @@ describe('convert bilingual on Next.js', () => {
     expect(again.edits).toBe(0)
     expect(again.filesChanged).toBe(0)
     expect(again.strings).toBe(0)
+    expect(again.byKind.wiring).toBe(0)
+    expect(again.changed).toEqual([])
     expect(git(dir, 'status', '--porcelain')).toBe('')
     expect(again.flags.some((f) => f.kind === 'info')).toBe(true)
     expect(problems(again.flags).some((f) => f.kind === 'info')).toBe(false)

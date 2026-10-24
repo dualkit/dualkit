@@ -11,7 +11,8 @@ const LOCKFILES: Record<Project['packageManager'], readonly string[]> = {
 }
 
 /** What the disk phase applied: the staged files, wiring edits and any install flag. */
-export type Written = { changed: string[]; edits: number; flags: Flag[] }
+/** What the disk phase applied: changed paths, edits and new files it actually wrote, wiring edits per file, and install flags. */
+export type Written = { changed: string[]; edits: number; writes: number; wired: Record<string, number>; flags: Flag[] }
 
 /** Everything the disk phase needs. `step.name` is kept current so a failure can say where it happened. */
 export type WriteInput = {
@@ -80,12 +81,12 @@ export async function writeAll(input: WriteInput): Promise<Written> {
   const edits = wired.edits + own.edits
   if (changed.length) {
     step.name = 'saving the state'
-    const { state, summary } = input.record({ changed, edits, flags })
+    const { state, summary } = input.record({ changed, edits, writes: wired.writes, wired: wired.perFile, flags })
     writeText(disk, STATE_FILE, stateText(state))
     writeText(disk, SUMMARY_FILE, summaryText(summary))
     await stage(disk.root, [STATE_FILE, SUMMARY_FILE])
     step.name = 'committing'
     await commit(disk.root, `dualkit: convert to ${options.mode}`)
   }
-  return { changed, edits, flags }
+  return { changed, edits, writes: wired.writes, wired: wired.perFile, flags }
 }

@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { addDependencies, ignoreStateDir } from '../src/apply'
+import { addDependencies, applyPlan, ignoreStateDir } from '../src/apply'
 import { readState, saveState, STATE_FILE } from '../src/state'
 
 const dir = (files: Record<string, string> = {}): string => {
@@ -64,5 +64,22 @@ describe('state', () => {
     expect(() => readState(root)).toThrow(/not valid JSON/)
     writeFileSync(join(root, STATE_FILE), '{"mode":"arabic"}')
     expect(() => readState(root)).toThrow(/missing/)
+  })
+})
+
+describe('applyPlan', () => {
+  it('counts only the writes and edits that changed a file', async () => {
+    const root = dir({ 'same.ts': 'same\n', 'kept.ts': 'abc\n', 'grown.ts': 'abc\n' })
+    const applied = await applyPlan(disk(root), {
+      writes: { 'same.ts': 'same\n', 'new.ts': 'new\n' },
+      edits: { 'kept.ts': [{ start: 0, end: 1, text: 'a' }], 'grown.ts': [{ start: 0, end: 1, text: 'x' }, { start: 2, end: 3, text: 'z' }] },
+      moves: [],
+      deps: {},
+      flags: [],
+    })
+    expect(applied.writes).toBe(1)
+    expect(applied.edits).toBe(2)
+    expect(applied.perFile).toEqual({ 'grown.ts': 2 })
+    expect(read(root, 'grown.ts')).toBe('xbz\n')
   })
 })

@@ -61,11 +61,11 @@ function transformAll(project: Project, generated: ReadonlySet<string>, taken: R
 }
 
 /** Applied edits per file at post-move paths, sorted by file. */
-function changedFiles(perFile: ReadonlyMap<string, number>, moved: ReadonlyMap<string, string>, wiring: Plan['edits']): ConvertSummary['changed'] {
+function changedFiles(perFile: ReadonlyMap<string, number>, moved: ReadonlyMap<string, string>, wiring: Readonly<Record<string, number>>): ConvertSummary['changed'] {
   const total = new Map<string, number>()
   const add = (file: string, n: number): void => { if (n > 0) total.set(file, (total.get(file) ?? 0) + n) }
   for (const [path, n] of perFile) add(moved.get(path) ?? path, n)
-  for (const [path, list] of Object.entries(wiring)) add(path, list.length)
+  for (const [path, n] of Object.entries(wiring)) add(path, n)
   return [...total].map(([file, edits]) => ({ file, edits })).sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0))
 }
 
@@ -89,9 +89,9 @@ type Run = { branch: string; done: Transformed; plan: Plan; moved: ReadonlyMap<s
 
 /** What this run changed and left to finish, from the in-memory passes and what the disk phase applied. */
 function summarise({ branch, done, plan, moved, strings }: Run, written: Written): ConvertSummary {
-  const byKind = { ...done.byKind, wiring: written.edits + Object.keys(plan.writes).length }
+  const byKind = { ...done.byKind, wiring: written.edits + written.writes }
   const flags = finalFlags([...done.flags, ...plan.flags, ...written.flags], moved)
-  return { branch, filesChanged: written.changed.length, edits: done.edits + written.edits, byKind, changed: changedFiles(done.perFile, moved, plan.edits), flags, strings, skipped: done.skipped }
+  return { branch, filesChanged: written.changed.length, edits: done.edits + written.edits, byKind, changed: changedFiles(done.perFile, moved, written.wired), flags, strings, skipped: done.skipped }
 }
 
 /** Refuses unless the tree is clean and the branch is free, or this is a re-run on a branch convert already converted. */

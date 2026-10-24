@@ -11,6 +11,8 @@ import type { Plan, Project } from './types'
 
 /** What a step changed on disk: root-relative paths to stage, and how many edits it applied. */
 export type Applied = { touched: string[]; edits: number }
+/** What applyPlan changed: paths, plus counts of only the writes and edits that changed a file. */
+export type AppliedPlan = Applied & { writes: number; perFile: Record<string, number> }
 
 export const MESSAGES_DIR = 'messages'
 export const messagesPath = (locale: 'en' | 'ar'): string => `${MESSAGES_DIR}/${locale}.json`
@@ -38,7 +40,7 @@ export function writeText(disk: Disk, rel: string, text: string): boolean {
 }
 
 /** Applies a wiring plan: moves with git mv, then writes, then edits keyed by post-move paths. */
-export async function applyPlan(disk: Disk, plan: Plan): Promise<Applied> {
+export async function applyPlan(disk: Disk, plan: Plan): Promise<AppliedPlan> {
   const touched: string[] = []
   for (const [from, to] of plan.moves) {
     ensureDir(disk, dirname(to))
@@ -46,17 +48,23 @@ export async function applyPlan(disk: Disk, plan: Plan): Promise<Applied> {
     disk.created.push(to)
     touched.push(to)
   }
+  let writes = 0
   for (const [path, text] of Object.entries(plan.writes)) {
-    if (writeText(disk, path, text)) touched.push(path)
+    if (!writeText(disk, path, text)) continue
+    touched.push(path)
+    writes += 1
   }
   let edits = 0
+  const perFile: Record<string, number> = {}
   for (const [path, list] of Object.entries(plan.edits)) {
     const text = readText(disk.root, path)
     if (text === null) throw new Error(`Convert planned edits to ${path}, but the file is not there.`)
-    if (writeText(disk, path, applyEdits(text, list))) touched.push(path)
+    if (!writeText(disk, path, applyEdits(text, list))) continue
+    touched.push(path)
     edits += list.length
+    perFile[path] = list.length
   }
-  return { touched, edits }
+  return { touched, edits, writes, perFile }
 }
 
 const json = (value: unknown): string => JSON.stringify(value, null, 2) + '\n'
@@ -80,8 +88,7 @@ export function addOwnFiles(disk: Disk, project: Project, ledger: LedgerEntry[],
   const outcome = parseSourceOutcome(entry, text, join(disk.root, entry))
   if ('error' in outcome) throw new Error(`The entry file ${entry} does not parse after wiring: ${outcome.error}`)
   const edit = importEdit(outcome.file, stylesheetPath(project))
-  if (!edit) return { touched, edits: 0 }
-  writeText(disk, entry, applyEdits(outcome.file.text, [edit]))
+  if (!edit || !writeText(disk, entry, applyEdits(outcome.file.text, [edit]))) return { touched, edits: 0 }
   return { touched: [...touched, entry], edits: 1 }
 }
 
