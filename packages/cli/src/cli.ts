@@ -5,6 +5,7 @@ import { parseArgs } from 'node:util'
 import { lint } from '@dualkit/lint'
 import type { audit } from './audit'
 import { UserError, loadConfig } from './config'
+import { runConvert, type ConvertEnv } from './convert'
 import { formatLint, formatSkipped, isFailOn, shouldFail } from './lint'
 import { renderReport } from './report'
 import { review, type ReviewResult, type Vision } from './review'
@@ -12,10 +13,11 @@ import { DEFAULT_REVIEW_MODEL, makeVision, type VisionModel } from './review/mod
 import { formatReview, formatSummary } from './summary'
 import { toUrl } from './target'
 
-export type Io = { out: (s: string) => void; err: (s: string) => void; write: (path: string, data: string) => void; audit: typeof audit; lint?: typeof lint; vision?: Vision; cwd: string }
+export type Io = { out: (s: string) => void; err: (s: string) => void; write: (path: string, data: string) => void; audit: typeof audit; lint?: typeof lint; vision?: Vision; cwd: string; convert?: ConvertEnv }
 
 const HELP = `Usage: dualkit check <url or file> [options]
        dualkit lint [paths...] [options]
+       dualkit convert [options]
 
   --out <file>        Report path (default dualkit-report.html)
   --json              Print the result as JSON instead of the summary
@@ -33,9 +35,23 @@ dualkit lint scans source files (CSS, SCSS, HTML, Vue, Svelte, JS, TS, JSX, TSX)
   --fail-on <level>   Exit 1 on findings at or above error, warning or note (default error)
   --config <file>     Config file (default dualkit.config.json)
 
+dualkit convert turns an English React or Next.js app into an Arabic one on a new git branch. It needs a clean git repo:
+
+  --mode <mode>       bilingual (English and Arabic with a switch) or arabic (Arabic only, in place)
+  --finish            Run phase 2: check English against the baseline, audit the Arabic pages and write dualkit-convert.md
+  --force             With --finish, continue although some Arabic strings are still empty
+  --no-install        Do not install the new dependencies
+  --no-baseline       Do not take English screenshots before converting
+  --start <cmd>       Command that starts your app (saved under "convert" in the config file)
+  --port <n>          Port the app listens on
+  --config <file>     Config file (default dualkit.config.json)
+
 Check rules: https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md
 Lint rules: https://github.com/dualkit/dualkit/blob/main/packages/lint/LINT.md
 `
+
+/** Flags only dualkit convert reads. The other commands reject them rather than ignore them. */
+const CONVERT_ONLY = ['mode', 'finish', 'force', 'no-install', 'no-baseline', 'start', 'port'] as const
 
 const defaultIo: Io = {
   out: (s) => process.stdout.write(s), err: (s) => process.stderr.write(s),
@@ -119,11 +135,19 @@ export async function run(argv: string[], io: Io = defaultIo): Promise<number> {
       args: argv, allowPositionals: true,
       options: {
         out: { type: 'string' }, json: { type: 'boolean' }, width: { type: 'string' }, height: { type: 'string' },
-        'min-score': { type: 'string' }, review: { type: 'boolean' }, 'review-model': { type: 'string' }, 'fail-on': { type: 'string' }, config: { type: 'string' }, help: { type: 'boolean', short: 'h' },
+        'min-score': { type: 'string' }, review: { type: 'boolean' }, 'review-model': { type: 'string' }, 'fail-on': { type: 'string' }, config: { type: 'string' },
+        mode: { type: 'string' }, finish: { type: 'boolean' }, force: { type: 'boolean' }, 'no-install': { type: 'boolean' }, 'no-baseline': { type: 'boolean' }, start: { type: 'string' }, port: { type: 'string' },
+        help: { type: 'boolean', short: 'h' },
       },
     })
     if (values.help) { io.out(HELP); return 0 }
     const [command, target] = positionals
+    if (command === 'convert') {
+      if (positionals.length > 1) throw new UserError(`dualkit convert takes no arguments, got "${positionals[1]}".`)
+      return await runConvert(values, io, io.convert)
+    }
+    const convertOnly = CONVERT_ONLY.find((name) => values[name] !== undefined)
+    if (convertOnly) throw new UserError(`--${convertOnly} is a dualkit convert option. dualkit ${command ?? 'check'} does not take it.`)
     if (command === 'lint') return await runLint(positionals.slice(1), values, io)
     if (command !== 'check' || !target) throw new UserError(`${command ? `Unknown command "${command}".` : 'Missing command.'}\n\n${HELP}`)
     // Validate every flag before the audit, so a typo fails in milliseconds, not after a browser run.
