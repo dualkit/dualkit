@@ -114,6 +114,10 @@ describe('renderConvertReport', () => {
     expect(notConverted).not.toContain('Added a locale helper')
   })
 
+  it('says why the tests were not run and how to run them', () => {
+    expect(renderConvertReport(base)).toContain('The app\'s tests were not run, because dualkit.config.json has no test command. Add one under "convert", such as "test": "npm test".')
+  })
+
   it('lists skipped files and the failing test run', () => {
     const out = renderConvertReport({
       ...base,

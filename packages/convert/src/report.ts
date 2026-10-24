@@ -135,7 +135,7 @@ function notConverted(data: ReportData): string {
 }
 
 function tests(data: ReportData): string {
-  if (!data.tests) return section("The app's tests", [], "The app's tests were not run.")
+  if (!data.tests) return section("The app's tests", [], 'The app\'s tests were not run, because dualkit.config.json has no test command. Add one under "convert", such as "test": "npm test".')
   const runs = Math.max(2, ...(data.tests.tail.match(/`+/g) ?? []).map((m) => m.length + 1))
   const fence = '`'.repeat(Math.max(3, runs))
   const result = data.tests.code === 0 ? 'The tests passed.' : `The tests failed with exit code ${data.tests.code}.`
