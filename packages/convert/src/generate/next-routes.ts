@@ -108,12 +108,36 @@ function aliasSpec(scope: Scope, spec: string): string | null {
   return resolved.respell(localePath(scope.appDir, resolved.path))
 }
 
-/** The edits that keep one file's specifiers pointing at the same files after the moves. */
+/** Next's typed route helpers, whose first type argument is the route of the file. */
+const ROUTE_TYPES = new Set(['PageProps', 'LayoutProps', 'RouteContext'])
+
+/** The route literals in `PageProps<'/x'>` and its kin, which name the route the file had before it moved. */
+function routeTypeLiterals(program: Node): Node[] {
+  const found: Node[] = []
+  eachNode(program, (n) => {
+    if (n.type !== 'TSTypeReference') return
+    const name = n.typeName as Node
+    const args = ((n.typeParameters ?? n.typeArguments) as Node | undefined)?.params as Node[] | undefined
+    const literal = (args?.[0]?.type === 'TSLiteralType' ? args[0].literal : undefined) as Node | undefined
+    if (name.type === 'Identifier' && ROUTE_TYPES.has(name.name as string) && literal?.type === 'StringLiteral' && String(literal.value).startsWith('/')) found.push(literal)
+  })
+  return found
+}
+
+/** The edits that put a moved file's typed route under `/[locale]`. */
+function routeTypeEdits(program: Node, offset: number): Edit[] {
+  return routeTypeLiterals(program).map((node) => {
+    const route = String(node.value)
+    return { start: offset + node.start! + 1, end: offset + node.end! - 1, text: route === '/' ? '/[locale]' : `/[locale]${route}` }
+  })
+}
+
+/** The edits that keep one file's specifiers pointing at the same files after the moves, and its typed routes right. */
 function fileRewrites(scope: Scope, from: string, to: string, text: string): Edit[] {
   const outcome = parseSourceOutcome(from, text)
   const block = 'file' in outcome ? outcome.file.js[0] : undefined
   if (!block) return []
-  const edits: Edit[] = []
+  const edits: Edit[] = from === to ? [] : routeTypeEdits(block.ast.program as unknown as Node, block.offset)
   for (const node of specifierLiterals(block.ast.program as unknown as Node)) {
     const spec = String(node.value)
     const next = RELATIVE.test(spec) ? relativeSpec(scope, from, to, spec) : aliasSpec(scope, spec)

@@ -135,6 +135,19 @@ describe('wireNextIntl bilingual', () => {
     expect(after(p, m.files, 'app/api/route.ts')).toContain("from '../[locale]/util'")
   })
 
+  it('moves the route in typed LayoutProps and PageProps under [locale]', () => {
+    const layoutText = 'export default function RootLayout({ children }: LayoutProps<"/">) {\n  return <html><body>{children}</body></html>\n}\n'
+    const m = memory({
+      'package.json': pkg('16.0.0'), 'app/layout.tsx': layoutText,
+      'app/pricing/page.tsx': "export default function P(props: PageProps<'/pricing'>) { return null }\n",
+    })
+    const p = wireNextIntl(project, 'bilingual', m.files, m.paths)
+    const layout = after(p, m.files, 'app/[locale]/layout.tsx')
+    expect(layout).toContain('LayoutProps<"/[locale]">')
+    parses('app/[locale]/layout.tsx', layout)
+    expect(after(p, m.files, 'app/[locale]/pricing/page.tsx')).toContain("PageProps<'/[locale]/pricing'>")
+  })
+
   it('takes a plain params type on Next 14', () => {
     const m = memory({ 'package.json': pkg('14.2.3'), 'app/layout.tsx': fixture.files('app/layout.tsx')! })
     const layout = after(wireNextIntl(project, 'bilingual', m.files, m.paths), m.files, 'app/[locale]/layout.tsx')
