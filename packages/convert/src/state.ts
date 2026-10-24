@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { isRecord } from './guards'
 import type { ConvertState } from './types'
 
 /** The folder convert keeps its own files in. Only the state and summary files in it are tracked. */
@@ -7,10 +8,8 @@ export const STATE_DIR = '.dualkit'
 export const STATE_FILE = `${STATE_DIR}/convert.json`
 
 function isState(value: unknown): value is ConvertState {
-  if (!value || typeof value !== 'object') return false
-  const s = value as Record<string, unknown>
-  return ['mode', 'base', 'branch', 'framework'].every((k) => typeof s[k] === 'string')
-    && typeof s.phase === 'string' && Array.isArray(s.generated) && s.generated.every((p) => typeof p === 'string')
+  return isRecord(value) && ['mode', 'base', 'branch', 'framework'].every((k) => typeof value[k] === 'string')
+    && typeof value.phase === 'string' && Array.isArray(value.generated) && value.generated.every((p) => typeof p === 'string')
 }
 
 /** The saved state, or null when there is none. Throws when the file is there but malformed. */

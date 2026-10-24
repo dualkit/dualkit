@@ -1,10 +1,10 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { messagesPath, writeText, type Disk } from './apply'
+import { messagesFiles, messagesPath, writeText, type Disk } from './apply'
 import { DEFAULT_PORTS, WIDTHS, baselinePath, routeSlug } from './baseline'
 import { CONFIG_FILE, checkConfigAnswers, writeConfigAnswers } from './config-answers'
 import { RefusedError, commit, currentBranch, stage, stagedFiles } from './git'
-import { LEDGER_FILE, messagesFor, readLedger, type LedgerEntry } from './ledger'
+import { LEDGER_FILE, readLedger, type LedgerEntry } from './ledger'
 import { MAX_DIFF_RATIO, compare } from './match'
 import { failFinish, snapshot } from './finish-undo'
 import { detectProject } from './project'
@@ -53,8 +53,8 @@ async function guard(root: string): Promise<ConvertState> {
     throw new RefusedError('This conversion has not finished converting yet. Run dualkit convert until it completes, then run this again.')
   }
   const branch = await currentBranch(root)
-  if (branch !== `dualkit/${state.mode}`) {
-    throw new RefusedError(`You are on ${branch}, but this conversion lives on dualkit/${state.mode}. Switch to that branch, then run dualkit convert --finish again.`)
+  if (branch !== state.branch) {
+    throw new RefusedError(`You are on ${branch}, but this conversion lives on ${state.branch}. Switch to that branch, then run dualkit convert --finish again.`)
   }
   return state
 }
@@ -69,8 +69,7 @@ function pendingCheck(ledger: LedgerEntry[], force: boolean | undefined): void {
 /** Writes both messages files from the ledger. */
 function writeMessages(root: string, ledger: LedgerEntry[]): void {
   const disk: Disk = { root, created: [] }
-  const json = (locale: 'en' | 'ar'): string => JSON.stringify(messagesFor(ledger, locale), null, 2) + '\n'
-  for (const locale of ['en', 'ar'] as const) writeText(disk, messagesPath(locale), json(locale))
+  for (const [path, text] of Object.entries(messagesFiles(ledger))) writeText(disk, path, text)
 }
 
 /** Shoots English at each width and compares it with the baseline. A page with no baseline is listed instead. */

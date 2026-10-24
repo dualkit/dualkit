@@ -111,9 +111,9 @@ async function start(options: ConvertOptions): Promise<{ state: ConvertState | n
   return { state, rerun, base }
 }
 
-/** Takes the English baseline when asked and a start command and shooter are there. */
+/** Takes the English baseline when asked and a start command and shooter are there. Arabic mode never compares English, so it takes none. */
 async function baseline(project: Project, options: ConvertOptions, io: ConvertIo): Promise<void> {
-  if (!options.baseline) return
+  if (!options.baseline || options.mode === 'arabic') return
   const { start: cmd } = io.config
   if (!cmd || !io.shoot) {
     io.log('No start command is set, so no English baseline was taken.')

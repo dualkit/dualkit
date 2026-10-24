@@ -1,10 +1,9 @@
 import { writeText, readText, type Disk } from './apply'
 import { RefusedError } from './git'
+import { isRecord } from './guards'
 import type { ConfigAnswers } from './types'
 
 export const CONFIG_FILE = 'dualkit.config.json'
-
-const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v)
 
 /** The config file after the answers are merged into its `convert` block. Every other key is kept. Throws RefusedError when the file is not an object. */
 export function mergedConfigText(before: string | null, answers: ConfigAnswers, file: string = CONFIG_FILE): string {
@@ -12,10 +11,10 @@ export function mergedConfigText(before: string | null, answers: ConfigAnswers, 
   if (before !== null) {
     let parsed: unknown
     try { parsed = JSON.parse(before) } catch { throw new RefusedError(`${file} is not valid JSON, so convert did not save your answers.`) }
-    if (!isObject(parsed)) throw new RefusedError(`${file} must hold a JSON object, so convert did not save your answers.`)
+    if (!isRecord(parsed)) throw new RefusedError(`${file} must hold a JSON object, so convert did not save your answers.`)
     current = parsed
   }
-  const block = isObject(current.convert) ? current.convert : {}
+  const block = isRecord(current.convert) ? current.convert : {}
   return `${JSON.stringify({ ...current, convert: { ...block, ...answers } }, null, 2)}\n`
 }
 

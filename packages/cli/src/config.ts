@@ -11,9 +11,19 @@ export class UserError extends Error {}
 
 const isStringList = (v: unknown): v is string[] => Array.isArray(v) && v.every((x) => typeof x === 'string')
 
-const MAX_PORT = 65_535
+export const MAX_PORT = 65_535
 const isText = (v: unknown): v is string => typeof v === 'string' && v.trim() !== ''
-const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v)
+/** A plain JSON object: not null and not an array. */
+export const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v)
+/** A whole number from 1 to 65535. */
+export const isPort = (v: unknown): v is number => typeof v === 'number' && Number.isInteger(v) && v >= 1 && v <= MAX_PORT
+
+/** Reads a port typed as text. `label` names where it came from in the error. */
+export function parsePort(value: string, label: string): number {
+  const n = Number(value)
+  if (value.trim() === '' || !isPort(n)) throw new UserError(`${label} must be a whole number from 1 to ${MAX_PORT}, got "${value}".`)
+  return n
+}
 
 /** Reads the convert block. Each bad field gives a one-line error that names it. */
 export function parseConvert(raw: unknown): ConvertConfig {
@@ -22,7 +32,7 @@ export function parseConvert(raw: unknown): ConvertConfig {
   const out: ConvertConfig = {}
   if (start !== undefined) { if (!isText(start)) throw new UserError('convert.start must be a command, for example "npm run dev".'); out.start = start }
   if (port !== undefined) {
-    if (typeof port !== 'number' || !Number.isInteger(port) || port < 1 || port > MAX_PORT) throw new UserError(`convert.port must be a whole number from 1 to ${MAX_PORT}.`)
+    if (!isPort(port)) throw new UserError(`convert.port must be a whole number from 1 to ${MAX_PORT}.`)
     out.port = port
   }
   if (test !== undefined) { if (!isText(test)) throw new UserError('convert.test must be a command, for example "npm test".'); out.test = test }

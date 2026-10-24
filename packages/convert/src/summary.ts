@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { isRecord } from './guards'
 import { STATE_DIR } from './state'
 import type { ConvertSummary, Flag } from './types'
 
@@ -11,7 +12,7 @@ export function readSummary(root: string): ConvertSummary | null {
   if (!existsSync(path)) return null
   try {
     const parsed = JSON.parse(readFileSync(path, 'utf8')) as Partial<ConvertSummary>
-    return parsed && typeof parsed === 'object' && Array.isArray(parsed.flags) && Array.isArray(parsed.changed) && parsed.byKind ? (parsed as ConvertSummary) : null
+    return isRecord(parsed) && Array.isArray(parsed.flags) && Array.isArray(parsed.changed) && parsed.byKind ? (parsed as ConvertSummary) : null
   } catch {
     return null
   }

@@ -67,3 +67,13 @@ describe('tracked convert state', () => {
     await expect(convert(options(dir), quiet)).rejects.toThrow('You are on dualkit/bilingual, but it has no convert state in .dualkit/convert.json. Switch back to the branch you started from, delete dualkit/bilingual, then run convert again.')
   })
 })
+
+describe('arabic mode baseline', () => {
+  it('takes no English baseline, because finish never compares English in arabic mode', async () => {
+    const dir = fixtureRepo('next-app')
+    const shots: string[] = []
+    const port = await freePort()
+    await convert({ root: dir, mode: 'arabic', install: false, baseline: true }, { ...quiet, config: { start: serve(port), port, routes: ['/'] }, shoot: async (url) => { shots.push(url); return png() } })
+    expect(shots).toEqual([])
+  }, 30_000)
+})

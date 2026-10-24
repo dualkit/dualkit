@@ -1,6 +1,6 @@
 import { isAbsolute, relative, resolve, sep } from 'node:path'
 import type { ConfigAnswers, ConvertConfig, ConvertIo, ConvertOptions, ConvertSummary, FinishIo, FinishOptions, Mode } from '@dualkit/convert'
-import { UserError, loadConfig, type Config } from './config'
+import { UserError, loadConfig, parsePort, type Config } from './config'
 import { askOnTerminal, InterruptedError, makeBrowserKit, runCommand, withInterrupt } from './convert-env'
 
 /** The pieces of @dualkit/convert the command calls, so tests can stand in for them. */
@@ -31,17 +31,10 @@ const MODES: readonly Mode[] = ['bilingual', 'arabic']
 const MODE_QUESTION = 'One app that switches between English and Arabic, or a separate Arabic version? [bilingual/arabic]'
 const NEXT_STEP = 'Fill the Arabic in dualkit-strings.json, or ask your agent to use the dualkit-convert skill, then run dualkit convert --finish.'
 const NO_START = 'No start command, so the English baseline is skipped.'
-const MAX_PORT = 65_535
 
 const loadApi = async (): Promise<ConvertApi> => {
   const m = await import('@dualkit/convert')
   return { convert: m.convert, finish: m.finish, refusals: [m.RefusedError, m.UnsupportedError] }
-}
-
-const parsePort = (value: string, label: string): number => {
-  const n = Number(value)
-  if (value.trim() === '' || !Number.isInteger(n) || n < 1 || n > MAX_PORT) throw new UserError(`${label} must be a whole number from 1 to ${MAX_PORT}, got "${value}".`)
-  return n
 }
 
 type Ask = (question: string) => Promise<string>
@@ -102,8 +95,10 @@ export async function runConvert(flags: ConvertFlags, io: Out, env: ConvertEnv =
       const { settings, answers } = await settingsFor(flags, config, ask, interactive)
       const api = env.api ?? await loadApi()
       refusals = api.refusals
-      const baseline = !flags['no-baseline'] && Boolean(settings.start)
-      if (!finishing && !flags['no-baseline'] && !settings.start) io.out(`${NO_START}\n`)
+      // Arabic mode never compares English, so it takes no baseline.
+      const wantsBaseline = !finishing && mode === 'bilingual' && !flags['no-baseline']
+      const baseline = wantsBaseline && Boolean(settings.start)
+      if (wantsBaseline && !settings.start) io.out(`${NO_START}\n`)
       const kit = env.shoot || env.audit ? null : makeBrowserKit(settings, config, io.cwd, signal)
       const base: ConvertIo = {
         log: (s) => io.out(`${s}\n`), config: settings, run: env.run ?? ((cmd, cwd) => runCommand(cmd, cwd, signal)), signal,

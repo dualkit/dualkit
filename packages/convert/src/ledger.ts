@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { isRecord } from './guards'
 
 /** One user-facing string, its Arabic, and how far its review has come. */
 export type LedgerEntry = { key: string; en: string; ar: string; status: 'pending' | 'drafted' | 'reviewed'; file: string; line: number }
@@ -8,10 +9,8 @@ export const LEDGER_FILE = 'dualkit-strings.json'
 const STATUSES = new Set(['pending', 'drafted', 'reviewed'])
 
 function isEntry(value: unknown): value is LedgerEntry {
-  if (!value || typeof value !== 'object') return false
-  const e = value as Record<string, unknown>
-  return ['key', 'en', 'ar', 'file'].every((k) => typeof e[k] === 'string')
-    && typeof e.line === 'number' && STATUSES.has(e.status as string)
+  return isRecord(value) && ['key', 'en', 'ar', 'file'].every((k) => typeof value[k] === 'string')
+    && typeof value.line === 'number' && STATUSES.has(value.status as string)
 }
 
 const byKey = (a: LedgerEntry, b: LedgerEntry): number => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0)

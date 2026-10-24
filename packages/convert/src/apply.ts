@@ -61,13 +61,15 @@ export async function applyPlan(disk: Disk, plan: Plan): Promise<Applied> {
 
 const json = (value: unknown): string => JSON.stringify(value, null, 2) + '\n'
 
+/** Both messages files, by root-relative path, built from the ledger. */
+export const messagesFiles = (ledger: LedgerEntry[]): Record<string, string> => ({
+  [messagesPath('en')]: json(messagesFor(ledger, 'en')),
+  [messagesPath('ar')]: json(messagesFor(ledger, 'ar')),
+})
+
 /** The files convert writes from its own templates and the ledger: the stylesheet and both messages files. */
 export function ownFiles(project: Project, ledger: LedgerEntry[]): Record<string, string> {
-  return {
-    [stylesheetPath(project)]: dualkitCss(project),
-    [messagesPath('en')]: json(messagesFor(ledger, 'en')),
-    [messagesPath('ar')]: json(messagesFor(ledger, 'ar')),
-  }
+  return { [stylesheetPath(project)]: dualkitCss(project), ...messagesFiles(ledger) }
 }
 
 /** Writes the stylesheet and messages, and imports the stylesheet in the entry file at its post-move path. */

@@ -85,9 +85,18 @@ describe('dualkit convert', () => {
 
   it('skips the baseline with a note when there is no start command', async () => {
     const t = setup()
-    expect(await run(['convert', '--mode', 'arabic'], t.io)).toBe(0)
+    expect(await run(['convert', '--mode', 'bilingual'], t.io)).toBe(0)
     expect(t.out.join('')).toContain('English baseline is skipped')
     expect(t.calls[0]?.args[0]).toMatchObject({ baseline: false })
+  })
+
+  it('asks for no baseline and prints no baseline note in arabic mode', async () => {
+    const t = setup({}, { shoot: async () => Buffer.alloc(0) }, { convert: { start: 'npm run dev' } })
+    expect(await run(['convert', '--mode', 'arabic'], t.io)).toBe(0)
+    expect(t.calls[0]?.args[0]).toMatchObject({ baseline: false })
+    const bare = setup()
+    expect(await run(['convert', '--mode', 'arabic'], bare.io)).toBe(0)
+    expect(bare.out.join('')).not.toContain('baseline')
   })
 
   it('asks once for the start command and port and hands them to convert without writing the config', async () => {
@@ -153,7 +162,7 @@ describe('dualkit convert', () => {
   })
 
   it('treats an empty start answer as skipping the baseline and saves nothing', async () => {
-    const answers = ['arabic', '']
+    const answers = ['bilingual', '']
     const t = setup({}, { interactive: true, ask: async () => answers.shift() ?? '' })
     expect(await run(['convert'], t.io)).toBe(0)
     expect(t.out.join('')).toContain('English baseline is skipped')
