@@ -1,4 +1,5 @@
 import { addDependencies, addOwnFiles, applyPlan, ignoreStateDir, readText, saveLedger, writeText, type Disk } from './apply'
+import { writeConfigAnswers, CONFIG_FILE } from './config-answers'
 import { commit, stage, stagedFiles } from './git'
 import { LEDGER_FILE, type LedgerEntry } from './ledger'
 import type { ConvertIo, ConvertOptions, Flag, Plan, Project } from './types'
@@ -45,6 +46,8 @@ export async function writeAll(input: WriteInput): Promise<{ changed: string[]; 
   step.name = 'writing the strings ledger'
   if (saveLedger(disk, input.ledger)) touched.push(LEDGER_FILE)
   touched.push(...wired.touched, ...own.touched)
+  step.name = 'saving your answers'
+  if (options.configAnswers && writeConfigAnswers(disk, options.configAnswers)) touched.push(CONFIG_FILE)
   step.name = 'updating package.json'
   const added = addDependencies(disk, plan.deps)
   if (added) touched.push('package.json')

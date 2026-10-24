@@ -1,6 +1,7 @@
 import { isMinified, walk } from '@dualkit/lint'
 import { join } from 'node:path'
 import { ownFiles, readText, type Disk } from './apply'
+import { checkConfigAnswers } from './config-answers'
 import { shootBaseline } from './baseline'
 import { guardWrites, localeHelperPath } from './generate/locale'
 import { wireNextIntl } from './generate/next-intl'
@@ -114,9 +115,12 @@ async function baseline(project: Project, options: ConvertOptions, io: ConvertIo
  * person's own git identity. Transforms run in memory first, so a refusal changes nothing. A re-run on
  * a branch convert already converted runs again in place and commits only when something changed.
  */
-export async function convert(options: ConvertOptions, io: ConvertIo): Promise<ConvertSummary> {
+export async function convert(options: ConvertOptions, ioIn: ConvertIo): Promise<ConvertSummary> {
   const { root, mode } = options
   const { state, rerun, base } = await start(options)
+  if (options.configAnswers) checkConfigAnswers(root)
+  // Answers taken before the branch existed are part of the config this run uses, the baseline included.
+  const io: ConvertIo = options.configAnswers ? { ...ioIn, config: { ...ioIn.config, ...options.configAnswers } } : ioIn
   const project = detectProject(root)
   const branch = branchFor(mode)
   const generated = new Set(state?.generated ?? [])

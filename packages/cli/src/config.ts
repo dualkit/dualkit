@@ -53,7 +53,8 @@ export function loadConfig(path?: string, cwd = process.cwd()): Config {
   } catch {
     throw new UserError(`${file} is not valid JSON.`)
   }
-  const { ignore = [], exclude = [], convert } = (raw ?? {}) as Record<string, unknown>
+  if (!isRecord(raw)) throw new UserError(`${file} must hold a JSON object.`)
+  const { ignore = [], exclude = [], convert } = raw
   if (!isStringList(ignore)) throw new UserError('ignore must be a list of rule ids, for example ["type/arabic-size"].')
   if (!isStringList(exclude)) throw new UserError('exclude must be a list of CSS selectors, for example [".ads"].')
   // ignore names ids from both registries; each command skips the ids it does not run.

@@ -4,7 +4,7 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { loadConfig } from '../src/config'
 import { run } from '../src/cli'
-import { saveConvertAnswers, type ConvertApi, type ConvertEnv } from '../src/convert'
+import { type ConvertApi, type ConvertEnv } from '../src/convert'
 import { withInterrupt } from '../src/convert-env'
 
 class Refused extends Error {}
@@ -66,7 +66,7 @@ describe('dualkit convert', () => {
     expect(await run(['convert', '--mode', 'bilingual', '--no-install'], t.io)).toBe(0)
     const text = t.out.join('')
     expect(text).toContain('Branch: dualkit/bilingual')
-    expect(text).toContain('4 files changed, 12 edits, 9 strings to translate, 1 places left for you.')
+    expect(text).toContain('4 files changed, 12 edits, 9 strings to translate, 1 place left for you.')
     expect(text).toContain('Fill the Arabic in dualkit-strings.json, or ask your agent to use the dualkit-convert skill, then run dualkit convert --finish.')
     expect(t.calls[0]?.args[0]).toMatchObject({ mode: 'bilingual', install: false, baseline: true })
   })
@@ -78,15 +78,42 @@ describe('dualkit convert', () => {
     expect(t.calls[0]?.args[0]).toMatchObject({ baseline: false })
   })
 
-  it('asks once for the start command and port, then saves them next to the other keys', async () => {
+  it('asks once for the start command and port and hands them to convert without writing the config', async () => {
     const answers = ['bilingual', 'npm run dev', '5173']
     const asked: string[] = []
     const t = setup({}, { interactive: true, shoot: async () => Buffer.alloc(0), ask: async (q) => { asked.push(q); return answers.shift() ?? '' } }, { ignore: ['type/arabic-size'] })
+    const before = readFileSync(join(t.cwd, 'dualkit.config.json'), 'utf8')
     expect(await run(['convert'], t.io)).toBe(0)
     expect(asked[0]).toBe('One app that switches between English and Arabic, or a separate Arabic version? [bilingual/arabic]')
-    const saved = readFileSync(join(t.cwd, 'dualkit.config.json'), 'utf8')
-    expect(saved).toBe(`${JSON.stringify({ ignore: ['type/arabic-size'], convert: { start: 'npm run dev', port: 5173 } }, null, 2)}\n`)
-    expect(t.calls[0]?.args[0]).toMatchObject({ baseline: true })
+    expect(readFileSync(join(t.cwd, 'dualkit.config.json'), 'utf8')).toBe(before)
+    expect(t.calls[0]?.args[0]).toMatchObject({ baseline: true, configAnswers: { start: 'npm run dev', port: 5173 } })
+    expect(t.calls[0]?.args[1]).toMatchObject({ config: { start: 'npm run dev', port: 5173 } })
+  })
+
+  it('hands the answers to finish too', async () => {
+    const answers = ['npm run dev', '']
+    const t = setup({}, { interactive: true, shoot: async () => Buffer.alloc(0), audit: async () => ({ score: 1, errors: 0, warnings: 0 }), ask: async () => answers.shift() ?? '' })
+    expect(await run(['convert', '--finish'], t.io)).toBe(0)
+    expect(t.calls[0]?.args[0]).toMatchObject({ configAnswers: { start: 'npm run dev' } })
+  })
+
+  it('uses singular and plural in the counts', async () => {
+    const one = { ...summary, filesChanged: 1, edits: 1, strings: 1, flags: [] }
+    const t = setup({ convert: async () => one as never })
+    await run(['convert', '--mode', 'arabic'], t.io)
+    expect(t.out.join('')).toContain('1 file changed, 1 edit, 1 string to translate, 0 places left for you.')
+  })
+
+  it('exits 2 when the config holds something other than an object', async () => {
+    const t = setup({}, {}, [1])
+    expect(await run(['convert', '--mode', 'arabic'], t.io)).toBe(2)
+    expect(t.err.join('')).toContain('JSON object')
+  })
+
+  it('exits 130 on Ctrl-C at a prompt', async () => {
+    const t = setup({}, { interactive: true, ask: () => new Promise<string>(() => { process.emit('SIGINT') }) })
+    expect(await run(['convert'], t.io)).toBe(130)
+    expect(process.listenerCount('SIGINT')).toBe(0)
   })
 
   it('treats an empty start answer as skipping the baseline and saves nothing', async () => {
@@ -95,13 +122,6 @@ describe('dualkit convert', () => {
     expect(await run(['convert'], t.io)).toBe(0)
     expect(t.out.join('')).toContain('English baseline is skipped')
     expect(() => readFileSync(join(t.cwd, 'dualkit.config.json'))).toThrow()
-  })
-
-  it('merges saved answers into the convert block that exists', () => {
-    const file = join(mkdtempSync(join(tmpdir(), 'dualkit-')), 'dualkit.config.json')
-    writeFileSync(file, JSON.stringify({ exclude: ['.ads'], convert: { test: 'npm test' } }))
-    saveConvertAnswers(file, { start: 'npm start' })
-    expect(JSON.parse(readFileSync(file, 'utf8'))).toEqual({ exclude: ['.ads'], convert: { test: 'npm test', start: 'npm start' } })
   })
 
   it('prints the report path and exits 0 on a pass, 1 on a fail', async () => {
@@ -141,6 +161,15 @@ describe('dualkit convert', () => {
   it('gives up after the grace period if the run never settles', async () => {
     const pending = withInterrupt(() => new Promise<never>(() => process.emit('SIGTERM')), 20)
     await expect(pending).rejects.toMatchObject({ code: 130 })
+    expect(process.listenerCount('SIGINT')).toBe(0)
+    expect(process.listenerCount('SIGTERM')).toBe(0)
+  })
+
+  it('removes its handlers after a second signal', async () => {
+    const pending = withInterrupt(() => new Promise<never>(() => { process.emit('SIGINT'); process.emit('SIGINT') }), 60_000)
+    await expect(pending).rejects.toMatchObject({ code: 130 })
+    expect(process.listenerCount('SIGINT')).toBe(0)
+    expect(process.listenerCount('SIGTERM')).toBe(0)
   })
 
   it('rejects convert flags on other commands and extra arguments', async () => {

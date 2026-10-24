@@ -44,8 +44,11 @@ export type Plan = {
   flags: Flag[]
 }
 
+/** Answers the person gave at a prompt. They are merged into dualkit.config.json under `convert` and committed. */
+export type ConfigAnswers = { start?: string; port?: number }
+
 /** What phase 1 is asked to do. `root` is the app folder, inside a git repo. */
-export type ConvertOptions = { root: string; mode: Mode; install: boolean; baseline: boolean }
+export type ConvertOptions = { root: string; mode: Mode; install: boolean; baseline: boolean; configAnswers?: ConfigAnswers }
 
 /** Per-request browser settings. `cookies` are set before the page loads. */
 export type PageOptions = { cookies?: Record<string, string> }

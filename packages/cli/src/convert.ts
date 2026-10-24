@@ -1,6 +1,4 @@
-import { existsSync, readFileSync, writeFileSync } from 'node:fs'
-import { join } from 'node:path'
-import type { ConvertConfig, ConvertIo, ConvertOptions, ConvertSummary, Mode, FinishIo } from '@dualkit/convert'
+import type { ConfigAnswers, ConvertConfig, ConvertIo, ConvertOptions, ConvertSummary, Mode, FinishIo } from '@dualkit/convert'
 import { UserError, loadConfig, type Config } from './config'
 import { askOnTerminal, InterruptedError, makeBrowserKit, runCommand, withInterrupt } from './convert-env'
 
@@ -14,7 +12,7 @@ export type ConvertApi = {
 /** What the command needs from outside. Tests replace any of it. */
 export type ConvertEnv = {
   api?: ConvertApi
-  ask?: (question: string) => Promise<string>
+  ask?: (question: string, signal?: AbortSignal) => Promise<string>
   interactive?: boolean
   run?: ConvertIo['run']
   lint?: FinishIo['lint']
@@ -45,47 +43,34 @@ const parsePort = (value: string, label: string): number => {
   return n
 }
 
-async function chooseMode(flags: ConvertFlags, env: ConvertEnv, interactive: boolean): Promise<Mode> {
-  const given = flags.mode ?? (interactive ? await (env.ask ?? askOnTerminal)(MODE_QUESTION) : undefined)
+type Ask = (question: string) => Promise<string>
+
+async function chooseMode(flags: ConvertFlags, ask: Ask, interactive: boolean): Promise<Mode> {
+  const given = flags.mode ?? (interactive ? await ask(MODE_QUESTION) : undefined)
   if (given === undefined) throw new UserError('Pass --mode bilingual or --mode arabic.')
   const mode = MODES.find((m) => m === given.trim().toLowerCase())
   if (!mode) throw new UserError(`${flags.mode === undefined ? 'The answer' : '--mode'} must be bilingual or arabic, got "${given}".`)
   return mode
 }
 
-/** Reads the config file, adds the convert answers and writes it back with 2-space indentation. Other keys stay as they are. */
-export function saveConvertAnswers(file: string, answers: ConvertConfig): void {
-  let existing: Record<string, unknown> = {}
-  if (existsSync(file)) {
-    try {
-      const parsed: unknown = JSON.parse(readFileSync(file, 'utf8'))
-      if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) existing = parsed as Record<string, unknown>
-    } catch {
-      throw new UserError(`${file} is not valid JSON.`)
-    }
-  }
-  const block = typeof existing.convert === 'object' && existing.convert !== null && !Array.isArray(existing.convert) ? existing.convert : {}
-  writeFileSync(file, `${JSON.stringify({ ...existing, convert: { ...block, ...answers } }, null, 2)}\n`)
-}
-
-/** The convert settings after flags, asking once for a missing start command and port and saving the answers. */
-async function settingsFor(flags: ConvertFlags, config: Config, env: ConvertEnv, interactive: boolean, io: Out): Promise<ConvertConfig> {
+/** The convert settings after flags, and the answers to save when a missing start command and port were asked for. */
+async function settingsFor(flags: ConvertFlags, config: Config, ask: Ask, interactive: boolean): Promise<{ settings: ConvertConfig; answers?: ConfigAnswers }> {
   const fromFlags: ConvertConfig = { ...(flags.start !== undefined ? { start: flags.start } : {}), ...(flags.port !== undefined ? { port: parsePort(flags.port, '--port') } : {}) }
   const merged: ConvertConfig = { ...config.convert, ...fromFlags }
-  if (merged.start || !interactive || flags['no-baseline']) return merged
-  const ask = env.ask ?? askOnTerminal
+  if (merged.start || !interactive || flags['no-baseline']) return { settings: merged }
   const start = await ask('Command that starts your app, for example "npm run dev" (leave empty to skip the English baseline):')
-  if (start === '') return merged
+  if (start === '') return { settings: merged }
   const portAnswer = merged.port === undefined ? await ask('Port it listens on (leave empty for the default):') : ''
-  const answers: ConvertConfig = { start, ...(portAnswer === '' ? {} : { port: parsePort(portAnswer, 'The port') }) }
-  saveConvertAnswers(flags.config ?? join(io.cwd, 'dualkit.config.json'), answers)
-  return { ...merged, ...answers }
+  const answers: ConfigAnswers = { start, ...(portAnswer === '' ? {} : { port: parsePort(portAnswer, 'The port') }) }
+  return { settings: { ...merged, ...answers }, answers }
 }
+
+const plural = (n: number, one: string, many: string): string => `${n} ${n === 1 ? one : many}`
 
 function printSummary(summary: ConvertSummary, io: Out): void {
   const open = summary.flags.filter((f) => f.kind !== 'info').length
   io.out(`Branch: ${summary.branch}\n`)
-  io.out(`${summary.filesChanged} files changed, ${summary.edits} edits, ${summary.strings} strings to translate, ${open} places left for you.\n\n${NEXT_STEP}\n`)
+  io.out(`${plural(summary.filesChanged, 'file', 'files')} changed, ${plural(summary.edits, 'edit', 'edits')}, ${plural(summary.strings, 'string', 'strings')} to translate, ${plural(open, 'place', 'places')} left for you.\n\n${NEXT_STEP}\n`)
 }
 
 /** Runs dualkit convert and returns the exit code: 0 pass or phase 1 done, 1 finish failed, 2 refused, 130 interrupted. */
@@ -93,30 +78,35 @@ export async function runConvert(flags: ConvertFlags, io: Out, env: ConvertEnv =
   const interactive = env.interactive ?? Boolean(process.stdin.isTTY && process.stdout.isTTY)
   let refusals: ConvertApi['refusals'] = []
   try {
-    // Every flag and config field is checked before anything touches the repo or a browser.
-    const finishing = Boolean(flags.finish)
-    const mode = finishing ? undefined : await chooseMode(flags, env, interactive)
-    if (finishing && flags.mode !== undefined && !MODES.some((m) => m === flags.mode)) throw new UserError(`--mode must be bilingual or arabic, got "${flags.mode}".`)
-    const config = loadConfig(flags.config, io.cwd)
-    const settings = await settingsFor(flags, config, env, interactive, io)
-    const api = env.api ?? await loadApi()
-    refusals = api.refusals
-    const baseline = !flags['no-baseline'] && Boolean(settings.start)
-    if (!finishing && !flags['no-baseline'] && !settings.start) io.out(`${NO_START}\n`)
+    // Prompts, flag checks and the run all sit inside the interrupt scope, so Ctrl-C at a prompt exits 130 too.
     return await withInterrupt(async (signal) => {
+      const aborted = new Promise<never>((_, reject) => signal.addEventListener('abort', () => reject(new InterruptedError('Interrupted.')), { once: true }))
+      aborted.catch(() => {})
+      const ask: Ask = (q) => Promise.race([(env.ask ?? askOnTerminal)(q, signal), aborted])
+      const finishing = Boolean(flags.finish)
+      if (finishing && flags.mode !== undefined && !MODES.some((m) => m === flags.mode)) throw new UserError(`--mode must be bilingual or arabic, got "${flags.mode}".`)
+      const mode = finishing ? undefined : await chooseMode(flags, ask, interactive)
+      const config = loadConfig(flags.config, io.cwd)
+      const { settings, answers } = await settingsFor(flags, config, ask, interactive)
+      const api = env.api ?? await loadApi()
+      refusals = api.refusals
+      const baseline = !flags['no-baseline'] && Boolean(settings.start)
+      if (!finishing && !flags['no-baseline'] && !settings.start) io.out(`${NO_START}\n`)
       const kit = env.shoot || env.audit ? null : makeBrowserKit(settings, config, io.cwd, signal)
       const base: ConvertIo = {
         log: (s) => io.out(`${s}\n`), config: settings, run: env.run ?? ((cmd, cwd) => runCommand(cmd, cwd, signal)),
         ...((finishing || baseline) && (env.shoot ?? kit?.shoot) ? { shoot: (env.shoot ?? kit?.shoot) as NonNullable<ConvertIo['shoot']> } : {}),
       }
+      // The answers go to convert and finish, which commit them. The CLI never writes the config file itself.
+      const configAnswers = answers ? { configAnswers: answers } : {}
       try {
         if (!finishing) {
-          printSummary(await api.convert({ root: io.cwd, mode: mode as Mode, install: !flags['no-install'], baseline }, base), io)
+          printSummary(await api.convert({ root: io.cwd, mode: mode as Mode, install: !flags['no-install'], baseline, ...configAnswers }, base), io)
           return 0
         }
         const audit = env.audit ?? kit?.audit as FinishIo['audit']
         const lint = env.lint ?? (async (root: string) => (await (await import('@dualkit/lint')).lint(['.'], { cwd: root, ignore: config.ignore })).findings.length)
-        const { reportPath, passed } = await api.finish({ root: io.cwd, ...(flags.force ? { force: true } : {}) }, { ...base, audit, lint })
+        const { reportPath, passed } = await api.finish({ root: io.cwd, ...(flags.force ? { force: true } : {}), ...configAnswers }, { ...base, audit, lint })
         io.out(`Report: ${reportPath}\n${passed ? 'Passed.' : 'Failed. The report lists what to fix.'}\n`)
         return passed ? 0 : 1
       } finally {

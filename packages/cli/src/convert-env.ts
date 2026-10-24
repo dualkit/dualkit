@@ -92,10 +92,12 @@ export function runCommand(cmd: string, cwd: string, signal?: AbortSignal): Prom
 }
 
 /** Asks one question on the terminal and returns the trimmed answer. */
-export async function askOnTerminal(question: string): Promise<string> {
+export async function askOnTerminal(question: string, signal?: AbortSignal): Promise<string> {
   const rl = createInterface({ input: process.stdin, output: process.stdout })
+  // Readline swallows Ctrl-C, so raise it as the real signal for withInterrupt to handle.
+  rl.once('SIGINT', () => { process.kill(process.pid, 'SIGINT') })
   try {
-    return (await rl.question(`${question} `)).trim()
+    return (await rl.question(`${question} `, signal ? { signal } : {})).trim()
   } finally {
     rl.close()
   }
@@ -111,19 +113,19 @@ export function withInterrupt<T>(work: (signal: AbortSignal) => Promise<T>, grac
   const controller = new AbortController()
   return new Promise<T>((resolveRun, rejectRun) => {
     let timer: ReturnType<typeof setTimeout> | undefined
-    const give = (): void => rejectRun(new InterruptedError('Interrupted.'))
+    const give = (): void => { settle(); rejectRun(new InterruptedError('Interrupted.')) }
     const onSignal = (): void => {
       if (controller.signal.aborted) return give()
       controller.abort()
       timer = setTimeout(give, grace)
     }
-    process.on('SIGINT', onSignal)
-    process.on('SIGTERM', onSignal)
     const settle = (): void => {
       clearTimeout(timer)
       process.off('SIGINT', onSignal)
       process.off('SIGTERM', onSignal)
     }
+    process.on('SIGINT', onSignal)
+    process.on('SIGTERM', onSignal)
     work(controller.signal).then(
       (v) => { settle(); controller.signal.aborted ? give() : resolveRun(v) },
       (e: unknown) => { settle(); controller.signal.aborted ? give() : rejectRun(e) },

@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { messagesPath, writeText, type Disk } from './apply'
 import { DEFAULT_PORTS, WIDTHS, baselinePath, routeSlug } from './baseline'
+import { CONFIG_FILE, checkConfigAnswers, writeConfigAnswers } from './config-answers'
 import { RefusedError, commit, currentBranch, stage, stagedFiles } from './git'
 import { LEDGER_FILE, messagesFor, readLedger, type LedgerEntry } from './ledger'
 import { MAX_DIFF_RATIO, compare } from './match'
@@ -11,7 +12,7 @@ import { listRoutes } from './routes'
 import { startServer } from './server'
 import { STATE_DIR, readState, saveState } from './state'
 import { readSummary } from './summary'
-import type { ConvertIo, ConvertState, ConvertSummary, PageOptions, Project, Shooter } from './types'
+import type { ConfigAnswers, ConvertIo, ConvertState, ConvertSummary, PageOptions, Project, Shooter } from './types'
 
 export const REPORT_FILE = 'dualkit-convert.md'
 export const DIFF_DIR = `${STATE_DIR}/diff`
@@ -34,7 +35,7 @@ export function arabicTarget(project: Project, state: ConvertState, route: strin
   return { path: route, options: { cookies: { [LOCALE_COOKIE]: 'ar' } } }
 }
 
-const OWN_FILES = [messagesPath('en'), messagesPath('ar'), REPORT_FILE, LEDGER_FILE]
+const OWN_FILES = [messagesPath('en'), messagesPath('ar'), REPORT_FILE, LEDGER_FILE, CONFIG_FILE]
 
 /** Refuses when the index already holds staged files finish would otherwise commit along with its own. */
 async function assertNothingElseStaged(root: string): Promise<void> {
@@ -131,9 +132,11 @@ const tail = (out: string): string => out.trimEnd().split('\n').slice(-TEST_TAIL
  * Phase 2: writes the messages from the ledger, serves the app, checks English against the baseline and
  * audits the Arabic pages, writes dualkit-convert.md and commits it with the messages and the ledger.
  */
-export async function finish(options: { root: string; force?: boolean }, io: FinishIo): Promise<{ reportPath: string; passed: boolean }> {
+export async function finish(options: { root: string; force?: boolean; configAnswers?: ConfigAnswers }, ioIn: FinishIo): Promise<{ reportPath: string; passed: boolean }> {
   const { root } = options
+  const io: FinishIo = options.configAnswers ? { ...ioIn, config: { ...ioIn.config, ...options.configAnswers } } : ioIn
   const { config, log } = io
+  if (options.configAnswers) checkConfigAnswers(root)
   const state = await guard(root)
   const ledger = readLedger(root)
   pendingCheck(ledger, options.force)
@@ -142,6 +145,7 @@ export async function finish(options: { root: string; force?: boolean }, io: Fin
   const project = detectProject(root)
   const { routes, unreachable } = listRoutes(project, config)
   writeMessages(root, ledger)
+  if (options.configAnswers) writeConfigAnswers({ root, created: [] }, options.configAnswers)
   const checks = await runChecks(project, state, routes, io)
   const tests = config.test ? await io.run(config.test, root) : undefined
   const earlier = readSummary(root)
