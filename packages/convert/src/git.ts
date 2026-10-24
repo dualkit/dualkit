@@ -19,7 +19,8 @@ export const NO_GIT = 'git is not installed or not on PATH'
 function git(cwd: string, args: string[]): Promise<Result> {
   return new Promise((resolve, reject) => {
     execFile('git', ['--literal-pathspecs', ...args], { cwd, maxBuffer: 64 * 1024 * 1024 }, (error, stdout, stderr) => {
-      if (error && error.code === 'ENOENT') return reject(new Error(NO_GIT))
+      // ENOENT also fires when cwd is missing, so only blame git when the folder is there.
+      if (error && error.code === 'ENOENT') return reject(new Error(existsSync(cwd) ? NO_GIT : `The folder ${cwd} does not exist.`))
       const code = error ? (typeof error.code === 'number' ? error.code : 1) : 0
       resolve({ code, out: `${stdout}${stderr}`.trim(), stdout })
     })
