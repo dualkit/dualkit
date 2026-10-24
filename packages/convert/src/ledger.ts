@@ -55,13 +55,13 @@ export function messagesFor(entries: LedgerEntry[], locale: 'en' | 'ar'): Record
     const parts = entry.key.split('.')
     let node = root
     for (const part of parts.slice(0, -1)) {
-      const next = node[part] ?? {}
+      const next = Object.hasOwn(node, part) ? node[part] : {}
       if (typeof next !== 'object') throw new Error(`Key ${entry.key} sits under a key that is already a message.`)
       node[part] = next
       node = next as Record<string, unknown>
     }
     const leaf = parts[parts.length - 1]!
-    if (leaf in node) throw new Error(`Key ${entry.key} is used twice or is also a group.`)
+    if (Object.hasOwn(node, leaf)) throw new Error(`Key ${entry.key} is used twice or is also a group.`)
     node[leaf] = textFor(entry, locale)
   }
   return root

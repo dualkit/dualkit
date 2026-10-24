@@ -83,6 +83,15 @@ describe('messagesFor', () => {
     })
   })
 
+  it('handles keys that match object prototype names', () => {
+    const outcome = parseSourceOutcome('app/page.tsx', 'export function A() {\n  return <main><p>Constructor</p><p>To string</p></main>\n}\n')
+    if (!('file' in outcome)) throw new Error(outcome.error)
+    const { entries: found } = extractStrings(outcome.file, 'next-intl', new Set())
+    expect(found.map((e) => e.key)).toEqual(['home.constructor', 'home.to-string'])
+    expect(messagesFor([...found, entry('constructor.name', { en: 'Name' })], 'en'))
+      .toEqual({ home: { constructor: 'Constructor', 'to-string': 'To string' }, constructor: { name: 'Name' } })
+  })
+
   it('refuses a key that is both a message and a group', () => {
     expect(() => messagesFor([entry('a'), entry('a.b')], 'en')).toThrow(/a\.b/)
   })

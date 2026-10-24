@@ -140,7 +140,14 @@ describe('extractStrings interpolation and mixed text', () => {
 
   it('still flags a run next to an element with text, even after an icon', () => {
     const { edits, flags } = run('export function A() {\n  return <p><Icon />Saved <b>today</b></p>\n}\n')
-    expect(edits.filter((e) => e.text.includes('saved'))).toEqual([])
+    expect(edits).toEqual([])
+    expect(flags.map((f) => f.kind)).toEqual(['mixed-text'])
+  })
+
+  it('leaves the whole mixed element alone, its other runs and its descendants included', () => {
+    expect(run('export function A() {\n  return <p>Saved <b>today</b></p>\n}\n').edits).toEqual([])
+    const { edits, flags } = run('export function A() {\n  return <p>Intro <Icon /> more <b>bold</b></p>\n}\n')
+    expect(edits).toEqual([])
     expect(flags.map((f) => f.kind)).toEqual(['mixed-text'])
   })
 
@@ -188,6 +195,14 @@ describe('extractStrings hooks', () => {
     expect(run(plain).out).toContain(`<span>{t('home.next')}</span>`)
   })
 
+  it('treats only memo and forwardRef wrappers as components', () => {
+    expect(run('const Row = React.memo(() => <p>Hi</p>)\n').out).toContain('const Row = React.memo(() => {\n  const t = useTranslations()')
+    expect(run('const Row = forwardRef((props, ref) => <p ref={ref}>Hi</p>)\n').edits.length).toBeGreaterThan(0)
+    const { edits, flags } = run('function useRow() {\n  const Row = useCallback(() => <p>Hi</p>, [])\n  return Row\n}\n')
+    expect(edits).toEqual([])
+    expect(flags.map((f) => f.kind)).toEqual(['outside-component'])
+  })
+
   it('puts the hook in the nearest PascalCase function, not a callback', () => {
     const { out } = run(`export function List({ items }) {\n  return <ul>{items.map((i) => <li key={i}>Item</li>)}</ul>\n}\n`)
     expect(out).toContain('export function List({ items }) {\n  const t = useTranslations()\n  return')
@@ -206,6 +221,38 @@ describe('extractStrings hooks', () => {
     const { out } = run('function A() {\n  return <b>One</b>\n}\nfunction B() {\n  return <b>Two</b>\n}\n')
     expect(out.match(/import \{ useTranslations \}/g)).toHaveLength(1)
     expect(out.match(/const t = useTranslations\(\)/g)).toHaveLength(2)
+  })
+})
+
+describe('extractStrings with t already in scope', () => {
+  const clash = (text: string) => {
+    const result = run(text)
+    expect(result.edits).toEqual([])
+    expect(result.entries).toEqual([])
+    expect(result.flags).toMatchObject([{ kind: 'unsupported', message: expect.stringContaining('a variable named t is already in scope') }])
+  }
+
+  it('leaves a component whose param is named t', () => {
+    clash('export function A({ t }) {\n  return <p>Buy</p>\n}\n')
+    clash('export function A(t) {\n  return <p>Buy</p>\n}\n')
+  })
+
+  it('leaves text inside a callback that binds t', () => {
+    clash('export function A({ items }) {\n  return <ul>{items.map((t) => <li key={t}>Buy</li>)}</ul>\n}\n')
+  })
+
+  it('leaves a component that already declares its own t', () => {
+    clash('export function A({ theme }) {\n  const t = theme\n  return <p>Buy</p>\n}\n')
+    clash(`import t from './theme'\nexport function A() {\n  return <p style={t}>Buy</p>\n}\n`)
+  })
+
+  it('reuses a hook convert added before', () => {
+    const { out, edits } = run(`import { useTranslations } from 'next-intl'\nexport function A() {\n  const t = useTranslations()\n  return <p>{t('home.buy')}<b>Sell</b></p>\n}\n`)
+    expect(edits).toHaveLength(1)
+    expect(out).toContain(`<b>{t('home.sell')}</b>`)
+    const i18n = run(`export function A() {\n  const { t } = useTranslation()\n  return <b>Sell</b>\n}\n`, 'app/page.tsx', 'react-i18next')
+    expect(i18n.edits).toHaveLength(2)
+    expect(i18n.out).not.toContain('const { t } = useTranslation()\n  const { t }')
   })
 })
 

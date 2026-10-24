@@ -54,10 +54,20 @@ const keyWords = (en: string): string =>
 const isPascal = (name: unknown): boolean => typeof name === 'string' && /^[A-Z]/.test(name)
 const idName = (node: Node | undefined): unknown => (node?.type === 'Identifier' ? node.name : undefined)
 
-/** Whether a function is a component: PascalCase by its own or its variable's name, or the default export. */
+const WRAPPERS = new Set(['memo', 'forwardRef'])
+
+/** Whether a call is `memo(...)`, `forwardRef(...)`, or the same on `React`. */
+function isWrapper(call: Node | undefined): boolean {
+  const callee = call?.type === 'CallExpression' ? (call.callee as Node) : undefined
+  if (callee?.type === 'Identifier') return WRAPPERS.has(callee.name as string)
+  return callee?.type === 'MemberExpression' && idName(callee.object as Node) === 'React'
+    && WRAPPERS.has(idName(callee.property as Node) as string)
+}
+
+/** Whether a function is a component: PascalCase by its own or its variable's name, or the default export, optionally through memo or forwardRef. */
 function isComponent(fn: Node, parent: Node | undefined, grand: Node | undefined): boolean {
   if (isPascal(idName(fn.id as Node))) return true
-  const holder = parent?.type === 'CallExpression' ? grand : parent
+  const holder = isWrapper(parent) ? grand : parent
   if (holder?.type === 'VariableDeclarator' && isPascal(idName(holder.id as Node))) return true
   return holder?.type === 'ExportDefaultDeclaration'
 }
@@ -70,6 +80,57 @@ function componentOf(ancestors: Node[]): Node | null {
   }
   return null
 }
+
+/** The names a binding pattern declares. */
+function patternNames(pattern: Node | null | undefined): string[] {
+  if (!pattern) return []
+  switch (pattern.type) {
+    case 'Identifier': return [pattern.name as string]
+    case 'AssignmentPattern': return patternNames(pattern.left as Node)
+    case 'RestElement': return patternNames(pattern.argument as Node)
+    case 'TSParameterProperty': return patternNames(pattern.parameter as Node)
+    case 'ArrayPattern': return ((pattern.elements as Node[]) ?? []).flatMap(patternNames)
+    case 'ObjectPattern': return ((pattern.properties as Node[]) ?? []).flatMap((p) => patternNames((p.type === 'RestElement' ? p : p.value) as Node))
+    default: return []
+  }
+}
+
+/** Whether a statement is a translation hook convert adds: `const t = useTranslations()`, `const { t } = useTranslation()` or `const t = await getTranslations()`. */
+function isOwnHook(statement: Node): boolean {
+  const [d, extra] = (statement.declarations as Node[] | undefined) ?? []
+  if (statement.type !== 'VariableDeclaration' || !d || extra) return false
+  const init = (d.init as Node | null)?.type === 'AwaitExpression' ? ((d.init as Node).argument as Node) : (d.init as Node | null)
+  if (init?.type !== 'CallExpression' || ((init.arguments as Node[]) ?? []).length) return false
+  const callee = idName(init.callee as Node)
+  const id = d.id as Node
+  if (id.type === 'Identifier') return id.name === 't' && (callee === 'useTranslations' || callee === 'getTranslations')
+  return callee === 'useTranslation' && patternNames(id).join() === 't'
+}
+
+/** The names a statement declares in its block. */
+function statementNames(statement: Node): string[] {
+  const s = statement.type === 'ExportNamedDeclaration' || statement.type === 'ExportDefaultDeclaration' ? (statement.declaration as Node | null) : statement
+  if (!s) return []
+  if (s.type === 'VariableDeclaration') return isOwnHook(s) ? [] : ((s.declarations as Node[]) ?? []).flatMap((d) => patternNames(d.id as Node))
+  if (s.type === 'FunctionDeclaration' || s.type === 'ClassDeclaration') return patternNames(s.id as Node)
+  if (s.type === 'ImportDeclaration') return ((s.specifiers as Node[]) ?? []).map((spec) => (spec.local as Node).name as string)
+  return []
+}
+
+/** The names a scope-making node binds, other than a hook convert added. */
+function scopeNames(node: Node): string[] {
+  if (FUNCTIONS.has(node.type!)) return [...((node.params as Node[]) ?? []).flatMap(patternNames), ...(node.type === 'FunctionExpression' ? patternNames(node.id as Node) : [])]
+  if (node.type === 'BlockStatement' || node.type === 'Program') return ((node.body as Node[]) ?? []).flatMap(statementNames)
+  if (node.type === 'CatchClause') return patternNames(node.param as Node)
+  if (/^For(In|Of)?Statement$/.test(node.type!)) {
+    const head = (node.init ?? node.left) as Node | null
+    return head?.type === 'VariableDeclaration' ? statementNames(head) : []
+  }
+  return []
+}
+
+/** Whether a binding named `t` other than convert's own hook is visible where a string sits. */
+const tInScope = (ancestors: Node[]): boolean => ancestors.some((node) => scopeNames(node).includes('t'))
 
 function flag(ctx: Context, offset: number, kind: FlagKind, message: string, suggestion: string): void {
   ctx.flags.push({ file: ctx.file.path, line: lineOf(ctx.file.text, offset), kind, message, suggestion })
@@ -92,6 +153,11 @@ function place(ctx: Context, ancestors: Node[], start: number, end: number, en: 
   if (!component) {
     flag(ctx, start, 'outside-component', `"${en}" sits outside a component, so convert cannot give it a translation hook.`,
       'Move the text into a component, or translate it where it is used.')
+    return
+  }
+  if (tInScope(ancestors)) {
+    flag(ctx, start, 'unsupported', `"${en}" was left as it is: a variable named t is already in scope, so a translation hook would clash with it.`,
+      'Rename that variable, then run convert again, or translate this text by hand.')
     return
   }
   const isNew = !ctx.byText.has(en)
@@ -173,35 +239,42 @@ function unitsOf(pieces: Piece[]): { run: Piece[]; touchesText: boolean }[] {
   return units
 }
 
-/** Extracts one run of text as a message. Returns false when the run is mixed text. */
-function extractRun(pieces: Piece[], ctx: Context, ancestors: Node[]): boolean {
-  if (pieces.some((p) => p.kind === 'other')) return false
+type Message = { start: number; end: number; en: string; values: string }
+
+/** One run of text as a message, or null when the run is mixed text. */
+function messageOf(pieces: Piece[]): Message | null {
+  if (pieces.some((p) => p.kind === 'other')) return null
   const edge = (p: Piece): boolean => p.kind !== 'space' && p.kind !== 'comment'
   const first = pieces.findIndex(edge)
   const last = pieces.length - 1 - [...pieces].reverse().findIndex(edge)
   const run = pieces.slice(first, last + 1)
   const values = valuesOf(run)
-  if (values === null || run.some((p) => p.kind === 'comment')) return false
+  if (values === null || run.some((p) => p.kind === 'comment')) return null
   const en = run.map((p) => (p.kind === 'text' ? p.value : p.kind === 'value' ? `{${p.name}}` : ' '))
     .join('').replace(/\s+/g, ' ').trim()
-  place(ctx, ancestors, run[0]!.start, run[run.length - 1]!.end, en, values)
-  return true
+  return { start: run[0]!.start, end: run[run.length - 1]!.end, en, values }
 }
 
 /**
  * Extracts each run of text between elements that hold no text (icons, line breaks) as its own message.
- * A run next to an element with text, or holding a non-simple expression, is flagged once per element as mixed text.
+ * When any run sits next to an element with text, or holds a non-simple expression, the element is flagged
+ * once as mixed text and nothing in it is changed. Returns false in that case.
  */
-function visitChildren(element: Node, ctx: Context, ancestors: Node[]): void {
+function visitChildren(element: Node, ctx: Context, ancestors: Node[]): boolean {
   const pieces = ((element.children as Node[]) ?? []).map((c) => pieceOf(c, ctx))
-  let flagged = false
+  const messages: Message[] = []
   for (const { run, touchesText } of unitsOf(pieces)) {
     const lettered = run.find((p) => p.kind === 'text' && LETTER.test(p.value))
     if (!lettered) continue
-    if (!touchesText && extractRun(run, ctx, ancestors)) continue
-    if (!flagged) mixed(ctx, lettered.start)
-    flagged = true
+    const message = touchesText ? null : messageOf(run)
+    if (!message) {
+      mixed(ctx, lettered.start)
+      return false
+    }
+    messages.push(message)
   }
+  for (const m of messages) place(ctx, ancestors, m.start, m.end, m.en, m.values)
+  return true
 }
 
 function visitAttribute(attribute: Node, ctx: Context, ancestors: Node[]): void {
@@ -220,7 +293,7 @@ function walk(node: unknown, ctx: Context, ancestors: Node[]): void {
   const n = node as Node
   if (n.type === 'JSXElement' || n.type === 'JSXFragment') {
     ctx.sawJsx = true
-    visitChildren(n, ctx, ancestors)
+    if (!visitChildren(n, ctx, ancestors)) return
   }
   if (n.type === 'JSXAttribute') visitAttribute(n, ctx, ancestors)
   const next = typeof n.type === 'string' ? [...ancestors, n] : ancestors
@@ -277,16 +350,6 @@ const hookFor = (lib: Lib, async: boolean): { statement: string; import: Import 
       ? { statement: 'const t = await getTranslations()', import: { name: 'getTranslations', source: 'next-intl/server' } }
       : { statement: 'const t = useTranslations()', import: { name: 'useTranslations', source: 'next-intl' } }
 
-/** Whether a statement already declares `t`, as `const t` or `const { t }`. */
-function declaresT(statement: Node): boolean {
-  if (statement.type !== 'VariableDeclaration') return false
-  return ((statement.declarations as Node[]) ?? []).some((d) => {
-    const id = d.id as Node
-    if (id.type === 'Identifier') return id.name === 't'
-    return id.type === 'ObjectPattern' && ((id.properties as Node[]) ?? []).some((p) => idName(p.value as Node) === 't')
-  })
-}
-
 /** The leading whitespace of the line an offset sits on. */
 const indentAt = (text: string, offset: number): string =>
   /^[ \t]*/.exec(text.slice(text.lastIndexOf('\n', offset - 1) + 1, offset))![0]
@@ -298,7 +361,7 @@ function hookEdits(fn: Node, lib: Lib, text: string, base: number, style: Style)
   const statement = hook.statement + style.semi
   if (body.type === 'BlockStatement') {
     const statements = (body.body as Node[]) ?? []
-    if (statements.some(declaresT)) return { edits: [], imports: [] }
+    if (statements.some(isOwnHook)) return { edits: [], imports: [hook.import] }
     const at = base + (statements[0]?.start ?? body.start! + 1)
     const prefix = text.slice(text.lastIndexOf('\n', at - 1) + 1, at)
     const insert = /^\s*$/.test(prefix) ? `${statement}\n${prefix}` : `${hook.statement}; `
