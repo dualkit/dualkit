@@ -8,7 +8,7 @@ alwaysApply: false
 
 ## Overview
 
-`dualkit convert` works in two phases. Phase 1 rewrites the app's code on a new branch and writes `dualkit-strings.json`, every English string with its Arabic left to fill. You fill the Arabic. Phase 2, `dualkit convert --finish`, checks the result and writes a report. Dualkit makes no model calls, so the judgement work is yours. Every Arabic string you write is a draft for a native speaker to check.
+Phase 1 of `dualkit convert` rewrites the app's code on a new branch and writes `dualkit-strings.json`, every English string with its Arabic left to fill. You fill the Arabic. Phase 2, `dualkit convert --finish`, checks the result and writes a report. Dualkit makes no model calls. Every Arabic string you write is a draft for a native speaker.
 
 ## 1. Ask which mode, then run phase 1
 
@@ -44,9 +44,9 @@ Each entry looks like this:
 Fill every entry whose `status` is `pending`.
 
 - Edit only `ar` and `status`. Never change `key`, `en`, `file` or `line`.
-- Open `file` at `line` and read the code around it before you translate. A label, a button and an error need different Arabic.
+- Read the code at `file` and `line` before you translate. A label and an error need different Arabic.
 - Keep every placeholder, such as `{name}` or `{count}`, exactly as written and untranslated. It can sit wherever Arabic word order needs it.
-- Set `status` to `drafted`, never `reviewed`. Only a native speaker marks a string reviewed.
+- Set `status` to `drafted` only once `ar` is filled. Empty entries stay `pending`. Never set `reviewed`.
 
 Write natural Arabic, not word-for-word English. Follow dualkit-bilingual-copy for register, gender-neutral buttons and plurals. The rules that matter most:
 
@@ -60,6 +60,8 @@ Write natural Arabic, not word-for-word English. Follow dualkit-bilingual-copy f
 ```bash
 npx dualkit convert --finish
 ```
+
+Stay on `dualkit/<mode>`, because finish refuses on any other branch. Before each finish run, commit your fixes there with a plain message. Never leave them staged, because finish then refuses.
 
 Finish refuses while any string is still `pending`. Never pass `--force` unless the person tells you to ship with English placeholders for the missing Arabic.
 
@@ -75,9 +77,9 @@ It writes `dualkit-convert.md` and exits 1 when something failed. The report has
 
 Fix what failed:
 
-- English pages: a fail means the conversion changed how English looks. Open the diff image it names, find the cause in the code and fix it there. Never loosen the check, delete a baseline or skip the English pages to make it pass.
+- English pages: a fail means the conversion changed how English looks. Open the diff image it names, find the cause in the code and fix it there. Never loosen the check, delete a baseline or skip the English pages to make it pass. If the report says no English baseline was taken, or that no English pages were compared, tell the person English was not proven unchanged.
 - Arabic pages: errors come from the dualkit check rules. Fix each one using dualkit-rtl-layout and dualkit-type-pairing.
-- What Dualkit could not convert: work through each place it names. It also lists pages finish could not reach. Tell the person, because nothing checked them.
+- What Dualkit could not convert: work through each place it names. Tell the person about pages finish could not reach.
 - The app's tests: fix any failure the conversion caused.
 
 Run finish again after each round of fixes. Stop after three runs that still fail. Show the person the report and say what is left.
@@ -90,7 +92,7 @@ The Regional suggestions section covers currency, week start and Hijri dates. Ea
 
 Bilingual mode only. Convert writes the switch to `components/dualkit-language-switch.tsx`, or `src/components/` when the app keeps its code in `src`. It exports `DualkitLanguageSwitch`. Convert does not place it, because it would change the English look.
 
-Ask the person where it should go, usually the header or main navigation. Add it once finish passes, and tell them the English pages now differ from the baseline by that one change.
+Ask the person where it should go, usually the header or main navigation. Add it once finish passes. Any later finish run shows an English difference caused by the switch. Tell the person so.
 
 ## 6. Hand over
 
@@ -106,4 +108,3 @@ At the end, tell the person:
 - Editing `en` or `key` so a string reads better.
 - Translating `{name}` into Arabic.
 - Passing `--force` to get past pending strings.
-- Fixing an English mismatch by changing the check.
