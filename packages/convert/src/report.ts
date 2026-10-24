@@ -23,12 +23,19 @@ function esc(text: string): string {
   return text.replace(/\s*\r?\n\s*/g, ' ').replace(/([\\`*_[\]<>|#])/g, '\\$1').trim()
 }
 
-/** A relative Markdown link to a line in a file. */
-function link(file: string, line: number): string {
+/** A relative Markdown link to a file, or to a line in it when `line` is given. */
+function link(file: string, line?: number): string {
   const path = file.replace(/\\/g, '/').replace(/^\.\//, '')
-  const target = encodeURI(path).replace(/[()]/g, (c) => (c === '(' ? '%28' : '%29'))
-  return `[${esc(`${path}:${line}`)}](${target}#L${line})`
+  const target = encodeURI(path).replace(/[()#]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)
+  return line === undefined ? `[${esc(path)}](${target})` : `[${esc(`${path}:${line}`)}](${target}#L${line})`
 }
+
+const KIND_LABELS: Record<keyof ConvertSummary['byKind'], string> = {
+  tailwind: 'Tailwind classes', css: 'CSS rules', markup: 'Markup', strings: 'Strings', formats: 'Formats', wiring: 'Wiring'
+}
+
+/** Most changed files listed before the rest are counted. */
+const MAX_LISTED_FILES = 30
 
 const plural = (n: number, one: string, many: string): string => `${n} ${n === 1 ? one : many}`
 
@@ -37,8 +44,27 @@ const section = (title: string, lines: string[], empty: string): string =>
 
 function flagLine(flag: Flag): string {
   const where = link(flag.file, flag.line)
-  const tail = flag.suggestion ? ` ${esc(flag.suggestion)}` : ''
-  return `- ${where}: ${esc(flag.message)}${tail}`
+  const message = esc(flag.message)
+  if (!flag.suggestion.trim()) return `- ${where}: ${message}`
+  return `- ${where}: ${message.replace(/\.+$/, '')}. ${esc(flag.suggestion)}`
+}
+
+function kindLines(summary: ConvertSummary): string[] {
+  const kinds = Object.keys(KIND_LABELS) as (keyof typeof KIND_LABELS)[]
+  return kinds.filter((k) => summary.byKind[k] > 0).map((k) => `- ${KIND_LABELS[k]}: ${plural(summary.byKind[k], 'edit', 'edits')}`)
+}
+
+function fileLines(summary: ConvertSummary): string[] {
+  if (summary.changed.length === 0) return []
+  const shown = summary.changed.slice(0, MAX_LISTED_FILES)
+  const more = summary.changed.length - shown.length
+  return [
+    '',
+    'Changed files:',
+    '',
+    ...shown.map((c) => `- ${link(c.file)} (${plural(c.edits, 'edit', 'edits')})`),
+    ...(more > 0 ? [`- and ${more} more`] : [])
+  ]
 }
 
 function changed(data: ReportData): string {
@@ -50,6 +76,8 @@ function changed(data: ReportData): string {
     `- ${plural(summary.filesChanged, 'file', 'files')} changed with ${plural(summary.edits, 'edit', 'edits')}.`,
     `- ${plural(summary.strings, 'string', 'strings')} moved into translation files.`,
     `- ${plural(data.remainingLint, 'lint issue', 'lint issues')} left after conversion.`,
+    ...kindLines(summary),
+    ...fileLines(summary),
     ...notes.map(flagLine)
   ]
   return section('What changed', lines, '')
@@ -78,9 +106,9 @@ function suggestions(data: ReportData): string {
 function english(data: ReportData): string {
   const lines = data.english.map((p) => {
     const pass = p.ratio < MAX_DIFF_RATIO
-    const share = `${(p.ratio * 100).toFixed(2)}% of pixels differ`
-    const diff = !pass && p.diffPath ? `, diff at ${esc(p.diffPath)}` : ''
-    return `- ${esc(p.route)} at ${p.width}px: ${pass ? 'pass' : 'fail'} (${share}${diff})`
+    const share = `${(p.ratio * 100).toFixed(3)}% of pixels differ, limit ${(MAX_DIFF_RATIO * 100).toFixed(3)}%`
+    const diff = !pass && p.diffPath ? `. Diff at ${esc(p.diffPath)}` : ''
+    return `- ${esc(p.route)} at ${p.width}px: ${pass ? 'pass' : 'fail'}: ${share}${diff}`
   })
   return section('English pages', lines, 'No English pages were checked.')
 }

@@ -9,6 +9,8 @@ const base: ReportData = {
     branch: 'dualkit/bilingual',
     filesChanged: 3,
     edits: 9,
+    byKind: { tailwind: 0, css: 0, markup: 0, strings: 0, formats: 0, wiring: 0 },
+    changed: [],
     strings: 2,
     skipped: [],
     flags: []
@@ -135,6 +137,56 @@ describe('renderConvertReport', () => {
     const unescaped = row.replace(/\\\|/g, '').match(/\|/g)!.length
     const header = out.split('\n').find((l) => l.startsWith('| Key'))!.match(/\|/g)!.length
     expect(unescaped).toBe(header)
+  })
+
+  it('joins message and suggestion like a sentence', () => {
+    const flag = (message: string, suggestion: string) => ({ file: 'a.tsx', line: 1, kind: 'computed-class' as const, message, suggestion })
+    const out = renderConvertReport({
+      ...base,
+      summary: { ...base.summary, flags: [flag('Class is built at runtime.', 'Use logical classes.'), flag('Odd spacing', ''), flag('No dot', 'Fix it.')] }
+    })
+    expect(out).toContain('Class is built at runtime. Use logical classes.')
+    expect(out).not.toContain('runtime.. ')
+    expect(out).toMatch(/Odd spacing\n/)
+    expect(out).toContain('No dot. Fix it.')
+  })
+
+  it('prints a line per non-zero kind and the changed files as links', () => {
+    const out = renderConvertReport({
+      ...base,
+      summary: {
+        ...base.summary,
+        byKind: { tailwind: 12, css: 0, markup: 1, strings: 0, formats: 0, wiring: 3 },
+        changed: [{ file: 'app/[locale]/page.tsx', edits: 5 }]
+      }
+    })
+    const changed = out.slice(out.indexOf('## What changed'), out.indexOf('## Arabic copy'))
+    expect(changed).toContain('Tailwind classes: 12 edits')
+    expect(changed).toContain('Markup: 1 edit\n')
+    expect(changed).toContain('Wiring: 3 edits')
+    expect(changed).not.toContain('CSS')
+    expect(changed).toContain('(app/%5Blocale%5D/page.tsx)')
+  })
+
+  it('shows the first 30 changed files and then how many more', () => {
+    const changed = Array.from({ length: 35 }, (_, i) => ({ file: `f${String(i).padStart(2, '0')}.ts`, edits: 1 }))
+    const out = renderConvertReport({ ...base, summary: { ...base.summary, changed } })
+    expect(out).toContain('f29.ts')
+    expect(out).not.toContain('f30.ts')
+    expect(out).toContain('and 5 more')
+  })
+
+  it('shows the ratio with three decimals and the limit', () => {
+    const out = renderConvertReport({ ...base, english: [{ route: '/', width: 390, ratio: 0.0012, diffPath: 'd.png' }] })
+    expect(out).toContain('fail: 0.120% of pixels differ, limit 0.100%')
+  })
+
+  it('encodes a hash in a linked path', () => {
+    const out = renderConvertReport({
+      ...base,
+      ledger: [{ key: 'k', en: 'a', ar: '', status: 'pending', file: 'app/a#b.tsx', line: 2 }]
+    })
+    expect(out).toContain('(app/a%23b.tsx#L2)')
   })
 
   it('has no em dash and no exclamation mark', () => {

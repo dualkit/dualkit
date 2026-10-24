@@ -109,6 +109,8 @@ describe('convert bilingual on Next.js', () => {
     expect(JSON.parse(read(dir, '.dualkit/convert.json'))).toMatchObject({ mode: 'bilingual', branch: 'dualkit/bilingual', base: 'main', framework: 'next-app', phase: 'converted' })
     expect(JSON.parse(read(dir, 'package.json')).dependencies['next-intl']).toMatch(/^\d+\.\d+\.\d+$/)
     expect(summary.edits).toBeGreaterThan(0)
+    expect(summary.byKind.tailwind).toBeGreaterThan(0)
+    expect(summary.changed.map((c) => c.file)).toContain('app/[locale]/page.tsx')
     expect(summary.filesChanged).toBeGreaterThan(0)
 
     const again = await convert(options(dir), fakeIo())

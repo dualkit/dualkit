@@ -58,11 +58,18 @@ export type ConvertIo = {
   config: ConvertConfig
 }
 
+/** The passes that make edits, plus wiring. */
+export type EditKind = 'tailwind' | 'css' | 'markup' | 'strings' | 'formats' | 'wiring'
+
 /** What a phase 1 run changed and left to finish. */
 export type ConvertSummary = {
   branch: string
   filesChanged: number
   edits: number
+  /** Applied edits per pass. Wiring counts its edits plus the files it wrote. */
+  byKind: Record<EditKind, number>
+  /** Files with applied edits, at post-move paths, sorted by file. */
+  changed: { file: string; edits: number }[]
   flags: Flag[]
   strings: number
   skipped: { file: string; reason: string }[]

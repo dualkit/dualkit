@@ -6,7 +6,7 @@ import { formatEdits } from './transforms/formats'
 import { markupEdits } from './transforms/markup'
 import { extractStrings, type Lib } from './transforms/strings'
 import { tailwindEdits } from './transforms/tailwind'
-import type { FileResult, Flag } from './types'
+import type { EditKind, FileResult, Flag } from './types'
 
 /** What every pass needs to know about the app. `taken` holds the ledger keys already in use; it is read, never changed. */
 export type PassContext = {
@@ -19,10 +19,13 @@ export type PassContext = {
 
 /** One file after every pass, or the reason it was left as it was. */
 export type FileOutcome =
-  | { kind: 'done'; text: string; edits: number; flags: Flag[]; entries: LedgerEntry[] }
+  | { kind: 'done'; text: string; edits: number; byKind: Record<PassKind, number>; flags: Flag[]; entries: LedgerEntry[] }
   | { kind: 'skipped'; reason: string }
 
-type Pass = { name: string; run: (file: SourceFile, ctx: PassContext) => FileResult & { entries?: LedgerEntry[] } }
+/** The names of the passes. */
+export type PassKind = Exclude<EditKind, 'wiring'>
+
+type Pass = { name: PassKind; run: (file: SourceFile, ctx: PassContext) => FileResult & { entries?: LedgerEntry[] } }
 
 /** The passes in the order they run. Each sees the file as the one before left it. */
 const PASSES: readonly Pass[] = [
@@ -47,6 +50,7 @@ export function runPasses(path: string, text: string, abs: string, ctx: PassCont
   if (typeof first === 'string') return { kind: 'skipped', reason: `parse error: ${first}` }
   let file = first
   let edits = 0
+  const byKind: Record<PassKind, number> = { tailwind: 0, css: 0, markup: 0, strings: 0, formats: 0 }
   const flags: Flag[] = []
   const entries: LedgerEntry[] = []
   const taken = new Set(ctx.taken)
@@ -69,6 +73,7 @@ export function runPasses(path: string, text: string, abs: string, ctx: PassCont
     if (typeof reparsed === 'string') return { kind: 'skipped', reason: `the ${pass.name} pass made code that does not parse, so convert left the file as it was` }
     file = reparsed
     edits += result.edits.length
+    byKind[pass.name] += result.edits.length
   }
-  return { kind: 'done', text: file.text, edits, flags, entries }
+  return { kind: 'done', text: file.text, edits, byKind, flags, entries }
 }

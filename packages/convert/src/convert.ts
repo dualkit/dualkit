@@ -8,7 +8,7 @@ import { wireReactI18next } from './generate/react-i18next'
 import { RefusedError, assertCleanRepo, branchExists, createBranch, currentBranch, trackedFiles } from './git'
 import { LEDGER_FILE, mergeLedger, readLedger, type LedgerEntry } from './ledger'
 import { physicalContext } from './lint-context'
-import { runPasses, type PassContext } from './passes'
+import { runPasses, type PassContext, type PassKind } from './passes'
 import { detectProject } from './project'
 import { rollBack } from './rollback'
 import { readState, saveState } from './state'
@@ -25,7 +25,7 @@ export const branchFor = (mode: Mode): string => `dualkit/${mode}`
 /** The flags a person or agent still has to act on. Info flags are kept in the summary but are never problems. */
 export const problems = (flags: readonly Flag[]): Flag[] => flags.filter((f) => f.kind !== 'info')
 
-type Transformed = { texts: Map<string, string>; edits: number; flags: Flag[]; entries: LedgerEntry[]; skipped: ConvertSummary['skipped'] }
+type Transformed = { texts: Map<string, string>; edits: number; byKind: Record<PassKind, number>; perFile: Map<string, number>; flags: Flag[]; entries: LedgerEntry[]; skipped: ConvertSummary['skipped'] }
 
 /** Runs every pass over every walked file in memory, on pre-move paths. Files convert generated are left out. */
 function transformAll(project: Project, generated: ReadonlySet<string>, taken: ReadonlySet<string>): Transformed {
@@ -38,7 +38,7 @@ function transformAll(project: Project, generated: ReadonlySet<string>, taken: R
     helper: localeHelperPath(project),
     css: physicalContext(root),
   }
-  const out: Transformed = { texts: new Map(), edits: 0, flags: [], entries: [], skipped: [...walked.skipped] }
+  const out: Transformed = { texts: new Map(), edits: 0, byKind: { tailwind: 0, css: 0, markup: 0, strings: 0, formats: 0 }, perFile: new Map(), flags: [], entries: [], skipped: [...walked.skipped] }
   for (const path of walked.files) {
     if (generated.has(path)) continue
     const raw = readText(root, path)
@@ -51,9 +51,20 @@ function transformAll(project: Project, generated: ReadonlySet<string>, taken: R
     for (const entry of result.entries) used.add(entry.key)
     if (result.edits === 0) continue
     out.edits += result.edits
+    for (const kind of Object.keys(out.byKind) as PassKind[]) out.byKind[kind] += result.byKind[kind]
+    out.perFile.set(path, result.edits)
     out.texts.set(path, raw.startsWith(BOM) ? BOM + result.text : result.text)
   }
   return out
+}
+
+/** Applied edits per file at post-move paths, sorted by file. */
+function changedFiles(perFile: ReadonlyMap<string, number>, moved: ReadonlyMap<string, string>, wiring: Plan['edits']): ConvertSummary['changed'] {
+  const total = new Map<string, number>()
+  const add = (file: string, n: number): void => { if (n > 0) total.set(file, (total.get(file) ?? 0) + n) }
+  for (const [path, n] of perFile) add(moved.get(path) ?? path, n)
+  for (const [path, list] of Object.entries(wiring)) add(path, list.length)
+  return [...total].map(([file, edits]) => ({ file, edits })).sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0))
 }
 
 /** The wiring plan, read from the post-transform contents of each pre-move path. */
@@ -131,5 +142,7 @@ export async function convert(options: ConvertOptions, io: ConvertIo): Promise<C
   saveState(root, { mode, base: state?.base ?? base, branch, framework: project.framework, phase: 'converted', generated: [...new Set([...generated, ...ours])].sort() })
   const flags = finalFlags([...done.flags, ...plan.flags, ...written.flags], moved)
   io.log(`${problems(flags).length} things are left to finish. ${done.skipped.length} files were skipped.`)
-  return { branch, filesChanged: written.changed.length, edits: done.edits + written.edits, flags, strings: ledger.length - existing.length, skipped: done.skipped }
+  const byKind = { ...done.byKind, wiring: written.edits + Object.keys(plan.writes).length }
+  const changed = changedFiles(done.perFile, moved, plan.edits)
+  return { branch, filesChanged: written.changed.length, edits: done.edits + written.edits, byKind, changed, flags, strings: ledger.length - existing.length, skipped: done.skipped }
 }
