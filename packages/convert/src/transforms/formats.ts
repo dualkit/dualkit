@@ -58,17 +58,29 @@ function isOwnLocale(statement: Node, lib: Lib): boolean {
 const bindingName = (lib: Lib): string => (lib === 'react-i18next' ? 'i18n' : 'locale')
 const localeExpression = (lib: Lib): string => (lib === 'react-i18next' ? 'i18n.language' : 'locale')
 
-/** The literal locale argument of an Intl formatter or toLocale*String call, or null. */
-function localeArgument(call: Node): Node | null {
+/** Whether a call is an Intl formatter or a toLocale*String call. */
+function isFormatCall(call: Node): boolean {
   const callee = call.callee as Node
-  if (callee.type !== 'MemberExpression' && callee.type !== 'OptionalMemberExpression') return null
-  if (callee.computed) return null
+  if (callee.type !== 'MemberExpression' && callee.type !== 'OptionalMemberExpression') return false
+  if (callee.computed) return false
   const property = idName(callee.property as Node) as string | undefined
   const isIntl = idName(callee.object as Node) === 'Intl' && INTL.has(property ?? '')
   const isToLocale = call.type !== 'NewExpression' && TO_LOCALE.has(property ?? '')
-  if (!isIntl && !isToLocale) return null
+  return isIntl || isToLocale
+}
+
+/** The literal locale argument of an Intl formatter or toLocale*String call, or null. */
+function localeArgument(call: Node): Node | null {
+  if (!isFormatCall(call)) return null
   const arg = ((call.arguments as Node[]) ?? [])[0]
   return arg?.type === 'StringLiteral' && ENGLISH.test(String(arg.value)) ? arg : null
+}
+
+/** Whether a formatter call takes the browser's locale: no locale, or undefined. */
+function usesBrowserLocale(call: Node): boolean {
+  if (!isFormatCall(call)) return false
+  const arg = ((call.arguments as Node[]) ?? [])[0]
+  return !arg || idName(arg) === 'undefined'
 }
 
 function flag(ctx: Context, offset: number, message: string, suggestion: string): void {
@@ -134,6 +146,10 @@ function walk(node: unknown, ctx: Context, ancestors: Node[]): void {
   if (n.type === 'CallExpression' || n.type === 'OptionalCallExpression' || n.type === 'NewExpression') {
     const arg = localeArgument(n)
     if (arg) visitLocale(arg, ctx, ancestors)
+    else if (usesBrowserLocale(n)) {
+      flag(ctx, ctx.base + n.start!, 'This formats in the browser\'s own locale, so an Arabic page can show an English date or number, such as 11/1/2026 for 1 November.',
+        `Pass dkIntlLocale(locale) from ${helperName(ctx.helper)} as the locale, so the format follows the page language.`)
+    }
   }
   if (n.type === 'ObjectProperty') visitCurrency(n, ctx)
   if (n.type === 'ImportDeclaration') visitImport(n, ctx)

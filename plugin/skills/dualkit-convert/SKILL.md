@@ -85,7 +85,7 @@ Run finish again after each round of fixes. Stop after three runs that still fai
 
 ## 4. Regional suggestions
 
-The Regional suggestions section covers currency, week start and Hijri dates. Each one is only a proposal. Explain each to the person in one line and apply it only when they say yes to that one. Run finish again after applying any.
+The Regional suggestions section covers currency, week start, Hijri dates and browser locale formats. Each is only a proposal. Explain each to the person in one line and apply it only when they say yes to that one. Run finish again after applying any.
 
 ## 5. Place the language switch
 

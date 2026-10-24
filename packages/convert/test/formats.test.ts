@@ -77,6 +77,16 @@ describe('formatEdits locale literals', () => {
 })
 
 describe('formatEdits suggestions', () => {
+  it('flags a call that formats in the browser locale, and leaves it', () => {
+    const { edits, flags } = run(hooked('  const n = new Intl.NumberFormat()\n  return <p>{placed.toLocaleDateString()} {placed.toLocaleString(undefined, { month: \'long\' })} {n.format(1)}</p>'))
+    expect(edits).toEqual([])
+    expect(flags.map((f) => [f.kind, f.line])).toEqual([['format', 5], ['format', 6], ['format', 6]])
+    expect(flags[1]).toMatchObject({
+      message: 'This formats in the browser\'s own locale, so an Arabic page can show an English date or number, such as 11/1/2026 for 1 November.',
+      suggestion: 'Pass dkIntlLocale(locale) from lib/dualkit-locale as the locale, so the format follows the page language.',
+    })
+  })
+
   it('flags currency USD with the AED and VAT suggestion', () => {
     const { flags, edits } = run(hooked("  return <p>{new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'USD' }).format(4)}</p>"))
     expect(edits).toEqual([])
