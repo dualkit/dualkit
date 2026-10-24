@@ -3,6 +3,7 @@ export const FORMAT_COMMAND = 'npm i @dualkit/format'
 export const STARTER_COMMAND = 'npm i @dualkit/starter'
 export const CHECK_COMMAND = 'npx dualkit check https://your-site.com/ar'
 export const LINT_COMMAND = 'npx dualkit@beta lint .'
+export const CONVERT_COMMAND = 'npx dualkit@beta convert --mode bilingual'
 export const ACTION_URL = 'https://github.com/dualkit/dualkit/blob/main/action/README.md'
 export const SKILLS_COMMAND = '/plugin marketplace add dualkit/dualkit'
 export const REPO_URL = 'https://github.com/dualkit/dualkit'
@@ -23,7 +24,7 @@ export const COPY = {
   },
   skills: {
     heading: ['Your agent writes React.', 'Dualkit teaches it Arabic.'],
-    lede: 'Four skills for Claude Code and Cursor. They load on their own when a task touches Arabic, and fix the bugs every model ships.',
+    lede: 'Skills for Claude Code and Cursor. They load on their own when a task touches Arabic, and fix the bugs every model ships.',
     cells: [
       { name: 'dualkit-rtl-layout', line: 'Mirroring, logical properties and bidi isolation.', without: 0 },
       { name: 'dualkit-type-pairing', line: 'Arabic and Latin pairs, leading and tracking.', without: 1 },

@@ -18,6 +18,7 @@ jobs:
       - run: npm run build -w @dualkit/format
       - run: npm run build -w @dualkit/rules
       - run: npm run build -w @dualkit/lint
+      - run: npm run build -w @dualkit/convert
       - run: npx playwright@1.55.0 install --with-deps chromium
       - run: npm run typecheck
       - run: npm test

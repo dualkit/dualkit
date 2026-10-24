@@ -31,9 +31,10 @@ describe('renderCursorRule', () => {
 })
 
 describe('the skills', () => {
-  it('ships four skills', () => {
+  it('ships five skills', () => {
     expect(names.sort()).toEqual([
       'dualkit-bilingual-copy',
+      'dualkit-convert',
       'dualkit-gulf-formats',
       'dualkit-rtl-layout',
       'dualkit-type-pairing',

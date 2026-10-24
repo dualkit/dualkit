@@ -1,0 +1,85 @@
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { describe, expect, it } from 'vitest'
+import { addDependencies, applyPlan, ignoreStateDir } from '../src/apply'
+import { readState, saveState, STATE_FILE } from '../src/state'
+
+const dir = (files: Record<string, string> = {}): string => {
+  const root = mkdtempSync(join(tmpdir(), 'dualkit-apply-'))
+  for (const [rel, text] of Object.entries(files)) writeFileSync(join(root, rel), text)
+  return root
+}
+const disk = (root: string) => ({ root, created: [] as string[] })
+const read = (root: string, rel: string): string => readFileSync(join(root, rel), 'utf8')
+
+describe('addDependencies', () => {
+  it('adds missing deps sorted, keeps the indent, and leaves declared ones alone', () => {
+    const root = dir({ 'package.json': '{\n    "dependencies": { "react": "19.0.0" },\n    "devDependencies": { "i18next": "^25.0.0" }\n}\n' })
+    expect(addDependencies(disk(root), { 'react-i18next': '17.1.6', i18next: '26.5.8' })).toBe(true)
+    const pkg = JSON.parse(read(root, 'package.json'))
+    expect(Object.keys(pkg.dependencies)).toEqual(['react', 'react-i18next'])
+    expect(pkg.devDependencies.i18next).toBe('^25.0.0')
+    expect(read(root, 'package.json')).toContain('\n    "dependencies"')
+    expect(addDependencies(disk(root), { 'react-i18next': '17.1.6' })).toBe(false)
+  })
+
+  it('throws when there is no package.json', () => {
+    expect(() => addDependencies(disk(dir()), { a: '1.0.0' })).toThrow(/package.json/)
+  })
+})
+
+describe('ignoreStateDir', () => {
+  const LINES = '.dualkit/*\n!.dualkit/convert.json\n!.dualkit/summary.json\n'
+
+  it('ignores the state folder but keeps the state and summary files, once', () => {
+    const root = dir({ '.gitignore': 'node_modules' })
+    expect(ignoreStateDir(disk(root))).toBe(true)
+    expect(read(root, '.gitignore')).toBe(`node_modules\n${LINES}`)
+    expect(ignoreStateDir(disk(root))).toBe(false)
+  })
+
+  it('replaces an old entry that ignores the whole folder', () => {
+    for (const old of ['.dualkit', '.dualkit/', '/.dualkit/']) {
+      const root = dir({ '.gitignore': `dist\n${old}\nout\n` })
+      expect(ignoreStateDir(disk(root))).toBe(true)
+      expect(read(root, '.gitignore')).toBe(`dist\nout\n${LINES}`)
+    }
+  })
+})
+
+describe('state', () => {
+  it('round-trips and is null when missing', () => {
+    const root = dir()
+    expect(readState(root)).toBeNull()
+    const state = { mode: 'arabic', base: 'main', branch: 'dualkit/arabic', framework: 'vite-react', phase: 'converted', generated: ['src/i18n.ts'] } as const
+    saveState(root, { ...state, generated: [...state.generated] })
+    expect(readState(root)).toEqual(state)
+  })
+
+  it('throws on bad JSON and on a missing field', () => {
+    const root = dir()
+    mkdirSync(join(root, '.dualkit'))
+    writeFileSync(join(root, STATE_FILE), '{')
+    expect(() => readState(root)).toThrow(/not valid JSON/)
+    writeFileSync(join(root, STATE_FILE), '{"mode":"arabic"}')
+    expect(() => readState(root)).toThrow(/missing/)
+  })
+})
+
+describe('applyPlan', () => {
+  it('counts only the writes and edits that changed a file', async () => {
+    const root = dir({ 'same.ts': 'same\n', 'kept.ts': 'abc\n', 'grown.ts': 'abc\n' })
+    const applied = await applyPlan(disk(root), {
+      writes: { 'same.ts': 'same\n', 'new.ts': 'new\n' },
+      edits: { 'kept.ts': [{ start: 0, end: 1, text: 'a' }], 'grown.ts': [{ start: 0, end: 1, text: 'x' }, { start: 2, end: 3, text: 'z' }] },
+      moves: [],
+      deps: {},
+      flags: [],
+    })
+    expect(applied.writes).toBe(1)
+    expect(applied.edits).toBe(2)
+    expect(applied.perFile).toEqual({ 'grown.ts': 2 })
+    expect(read(root, 'grown.ts')).toBe('xbz\n')
+  })
+})

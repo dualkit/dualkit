@@ -4,7 +4,8 @@ import { chromium, type Browser, type Page } from 'playwright'
 import { UserError, type Config } from './config'
 import { markDroppedDigits, probeArabicDigits } from './probe'
 
-export type AuditOptions = { url: string; width: number; height: number; config: Config }
+/** `cookies` are set for the page's host before it loads. `storageState` is a Playwright storage state file for signed-in pages. */
+export type AuditOptions = { url: string; width: number; height: number; config: Config; cookies?: Record<string, string>; storageState?: string }
 export type AuditResult = {
   url: string; date: string; width: number; height: number
   score: number; findings: Finding[]; screenshot: string; pageHeight: number; unreadableStylesheets: number
@@ -99,7 +100,8 @@ export async function audit(options: AuditOptions, launch: () => Promise<Browser
   const browser = await open(launch)
   try {
     // bypassCSP: a strict script-src would otherwise block the injected reader.
-    const context = await browser.newContext({ viewport: { width: options.width, height: options.height }, bypassCSP: true })
+    const context = await browser.newContext({ viewport: { width: options.width, height: options.height }, bypassCSP: true, ...(options.storageState ? { storageState: options.storageState } : {}) })
+    if (options.cookies) await context.addCookies(Object.entries(options.cookies).map(([name, value]) => ({ name, value, url: options.url })))
     const page = await context.newPage()
     let status = 0
     try {

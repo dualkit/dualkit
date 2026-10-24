@@ -6,6 +6,28 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'convert-0-1-0',
+    date: '2026-10-24',
+    version: 'dualkit 0.6.0-beta.0',
+    tags: ['Convert', 'Skills'],
+    title: 'Dualkit convert turns an English app into an Arabic one',
+    body: [
+      'Run npx dualkit@beta convert in a React or Next.js app and it makes a new git branch with the app converted. You choose the result. --mode bilingual gives English and Arabic in one app with a language switch, and English stays exactly as it was. --mode arabic makes the whole app Arabic and right to left, in place.',
+      'Convert rewrites what it can rewrite safely. Physical Tailwind classes and CSS become logical ones. Phone, email and url fields get dir="ltr". Prices and other numbers inside text get <bdi>. Arrow icons from known icon packages are mirrored. Every English string moves into messages/en.json behind a translation hook, and convert wires in next-intl for Next.js or react-i18next for Vite. It makes no model calls.',
+      'Each English string is listed in dualkit-strings.json with its Arabic left empty, for you or your agent to fill. The new dualkit-convert skill walks an agent through it, and marks every Arabic string a model drafts for a native speaker to check. It also flags what convert will not change on its own, such as a date formatted in the browser\'s locale or an English page title.',
+      'Then run npx dualkit@beta convert --finish. It writes messages/ar.json, compares each English page with a screenshot taken before the conversion, runs the 34 check rules on each Arabic page, runs your tests and writes dualkit-convert.md. It exits 1 when an English page changed, an Arabic page has errors or the tests fail. If you stop convert or a step fails, it puts your repo back as it was.',
+      'We ran it end to end on a fresh Next.js 16 app in bilingual mode and a fresh Vite 8 app in arabic mode. Both pass. Every English page of the Next.js app matched its screenshot to the pixel, and the Arabic pages scored 96 to 98 with no errors or warnings. Running convert again on a finished branch changes nothing. The run and the 13 defects it found and fixed are in docs/research/2026-10-24-convert-smoke.md in the repo.',
+      'This is a first beta. It reads React and Next.js apps. Rich text with tags inside a translation, metadata titles and dates are flagged for you to handle, not converted. Converting a Figma file is next.',
+    ],
+    shipped: [
+      { name: '@dualkit/convert 0.1.0-beta.0', line: 'The convert engine: transforms, string ledger, wiring and the finish checks' },
+      { name: 'dualkit 0.6.0-beta.0', line: 'convert and convert --finish, uses convert 0.1, lint 0.4 and rules 0.5' },
+      { name: '@dualkit/lint 0.4.0-beta.0', line: 'Exports the Tailwind and CSS helpers convert rewrites with' },
+      { name: '@dualkit/rules 0.5.0-beta.0', line: 'Exports the Arabic size and leading floors convert uses' },
+      { name: 'dualkit-convert skill', line: 'Walks an agent through filling the Arabic and running finish' },
+    ],
+  },
+  {
     slug: 'v2-step-2',
     date: '2026-10-22',
     version: 'dualkit 0.5.0-beta.0',
@@ -200,6 +222,8 @@ export type RoadmapItem = { title: string; line: string; state: RoadmapState; st
 
 // Progress is counted from real milestones, never typed in. Tick a step only when it is true on main.
 export const UP_NEXT: readonly RoadmapItem[] = [
+  { title: 'Dualkit convert', line: 'Turn an English app into an Arabic one.', state: 'In progress',
+    steps: [['Design', true], ['Convert code', true], ['Proof app', false], ['Convert Figma', false]] },
   { title: 'Dualkit check', line: 'Point it at any screen. See what breaks in Arabic.', state: 'Released',
     steps: [['Design', true], ['First 20 rules', true], ['CLI and report', true], ['GitHub Action', true], ['Released', true]] },
   { title: 'Dualkit lint', line: 'Catch Arabic and right-to-left bugs in your source.', state: 'Released',

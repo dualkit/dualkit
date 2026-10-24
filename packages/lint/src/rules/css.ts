@@ -1,6 +1,6 @@
 import type { Container, Declaration, Rule } from 'postcss'
 import { directionScoped, fullSelectors, targetsArabic, withoutDirection } from '../selectors'
-import type { CssBlock, LintHit, LintRule, SourceFile } from '../types'
+import type { CssBlock, LintContext, LintHit, LintRule, SourceFile } from '../types'
 
 const CSS_LANGS = ['css', 'scss', 'html', 'vue', 'svelte', 'js', 'jsx', 'ts', 'tsx'] as const
 
@@ -55,7 +55,7 @@ const ZERO_WITH_UNIT = /(^|[\s(,])[+-]?0*\.?0+[a-z%]*(?=$|[\s),])/g
 const normalise = (value: string): string =>
   value.replace(/!\s*important/i, '').trim().replace(/\s+/g, ' ').toLowerCase().replace(ZERO_WITH_UNIT, '$10')
 
-const PHYSICAL_PROPS: Readonly<Record<string, string>> = {
+export const PHYSICAL_PROPS: Readonly<Record<string, string>> = {
   'margin-left': 'margin-inline-start', 'margin-right': 'margin-inline-end',
   'padding-left': 'padding-inline-start', 'padding-right': 'padding-inline-end',
   'border-left': 'border-inline-start', 'border-right': 'border-inline-end',
@@ -160,6 +160,41 @@ function physicalFix(prop: string, value: string): string | null {
   return word ? `${prop}: ${word}` : null
 }
 
+/** A declaration that can be wrong in right-to-left: not generated, not in a flipped block, not in a direction-scoped rule. */
+export type LiveDeclaration = { decl: Declaration; rule: Rule | null; block: CssBlock; offset: number; prop: string; value: string; shown: string }
+
+/** Every declaration lint's physical rule looks at, with the quiet files, flipped blocks, direction-scoped rules and non-CSS properties left out. */
+export function liveDeclarations(file: SourceFile, ctx: Partial<LintContext> = {}): LiveDeclaration[] {
+  const quiet = ctx.physicalQuiet?.(file)
+  if (quiet && quiet !== 'flipped') return []
+  const flipped = (block: CssBlock): boolean => ctx.blockFlipper?.(file, block) != null
+  const live: LiveDeclaration[] = []
+  eachDeclaration(file, (decl, offset, rule, shown, block) => {
+    const prop = decl.prop.toLowerCase()
+    if (prop.startsWith('-') || prop.includes('#{') || prop.includes('$') || prop.includes('@')) return
+    if (rule && fullSelectors(rule).every(directionScoped)) return
+    live.push({ decl, rule, block, offset, prop, value: normalise(decl.value), shown })
+  }, flipped)
+  return live
+}
+
+/** A physical declaration that has a logical form. `property` is the logical property name, `word` the logical keyword for float, clear and text-align. */
+export type PhysicalDeclaration = LiveDeclaration & { logical: string; property: string | null; word: string | null }
+
+/** The declarations lint's physical rule reports: physical, and not symmetric, off screen, centring or reset by a direction-scoped twin. */
+export function physicalDeclarations(file: SourceFile, ctx: Partial<LintContext> = {}): PhysicalDeclaration[] {
+  const overrides = directionOverrides(file)
+  return liveDeclarations(file, ctx).flatMap((live) => {
+    const { decl, rule, block, prop, value } = live
+    const logical = physicalFix(prop, value)
+    if (!logical) return []
+    const sourceOf = (d: Declaration): string | null => templateValue(file, block, d)
+    if (PHYSICAL_PROPS[prop] ? hasSymmetricSibling(decl, prop, value, sourceOf) || isOffscreen(prop, value) || isCentring(decl, prop, value) : false) return []
+    if (overridden(rule, prop, overrides)) return []
+    return [{ ...live, logical, property: PHYSICAL_PROPS[prop] ?? null, word: KEYWORD_PROPS[prop]?.[value] ?? null }]
+  })
+}
+
 const physicalCss: LintRule = {
   id: 'source/physical-css',
   severity: 'note',
@@ -167,27 +202,8 @@ const physicalCss: LintRule = {
   why: 'A physical left or right property stays on the same side in Arabic, so the margin, padding, border, offset or alignment is on the wrong edge and the layout looks unbalanced.',
   fix: 'Use the logical property, such as margin-inline-start, padding-inline-end, inset-inline-start or text-align: start, so the side follows the reading direction.',
   langs: CSS_LANGS,
-  check: (file, ctx) => {
-    const quiet = ctx.physicalQuiet?.(file)
-    if (quiet && quiet !== 'flipped') return []
-    const hits: LintHit[] = []
-    const overrides = directionOverrides(file)
-    // A flipper only mirrors the CSS it processes, which differs by block: see blockFlipper in run.ts.
-    const flipped = (block: CssBlock): boolean => ctx.blockFlipper?.(file, block) != null
-    eachDeclaration(file, (decl, offset, rule, shown, block) => {
-      const prop = decl.prop.toLowerCase()
-      if (prop.startsWith('-') || prop.includes('#{') || prop.includes('$') || prop.includes('@')) return
-      const value = normalise(decl.value)
-      const logical = physicalFix(prop, value)
-      if (!logical) return
-      const sourceOf = (d: Declaration): string | null => templateValue(file, block, d)
-      if (PHYSICAL_PROPS[prop] ? hasSymmetricSibling(decl, prop, value, sourceOf) || isOffscreen(prop, value) || isCentring(decl, prop, value) : false) return
-      if (rule && fullSelectors(rule).every(directionScoped)) return
-      if (overridden(rule, prop, overrides)) return
-      hits.push({ offset, message: `\`${prop}: ${shown}\` is tied to one side. Use \`${logical}\`.` })
-    }, flipped)
-    return hits
-  },
+  check: (file, ctx) =>
+    physicalDeclarations(file, ctx).map((d) => ({ offset: d.offset, message: `\`${d.prop}: ${d.shown}\` is tied to one side. Use \`${d.logical}\`.` })),
 }
 
 const NEUTRAL_SPACING = /^(?:[+-]?(?:0+\.?0*|\.0+)[a-z%]*|normal|initial|inherit|unset|revert|revert-layer)$/

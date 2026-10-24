@@ -45,7 +45,7 @@ export const TAILWIND_MAP: readonly TailwindEntry[] = [
 /** The first release with any of the margin, padding, inset, rounded, border and scroll logical classes. Below it the rule is quiet. */
 const FLOOR = '3.3.0'
 
-type ParsedClass = { variants: string[]; important: [string, string]; negative: string; core: string }
+export type ParsedClass = { variants: string[]; important: [string, string]; negative: string; core: string }
 
 /** Splits at every : outside brackets and parentheses, so [&:dir(rtl)]:ml-2 keeps its arbitrary variant whole. */
 function splitVariants(token: string): string[] {
@@ -67,7 +67,7 @@ function splitVariants(token: string): string[] {
 
 const UTILITY = /^(!?)(-?)(.*?)(!?)$/
 
-function parseClass(token: string): ParsedClass {
+export function parseClass(token: string): ParsedClass {
   const parts = splitVariants(token)
   const utility = parts.pop() ?? ''
   const [, pre = '', negative = '', core = '', post = ''] = UTILITY.exec(utility) ?? []
@@ -79,7 +79,7 @@ function parseClass(token: string): ParsedClass {
  * [&:dir(rtl)]:, data-[side=left]:. Under such a variant the side is chosen on purpose.
  */
 const SIDED_VARIANT = /(^|[^a-z0-9])(rtl|ltr|left|right)(?![a-z0-9])/i
-const sideScoped = (variants: readonly string[]): boolean => variants.some((v) => SIDED_VARIANT.test(v))
+export const sideScoped = (variants: readonly string[]): boolean => variants.some((v) => SIDED_VARIANT.test(v))
 
 /** rtl or ltr as a whole word in a variant: an explicit direction override. */
 const DIRECTION_VARIANT = /(^|[^a-z0-9])(rtl|ltr)(?![a-z0-9])/i
@@ -167,15 +167,21 @@ const index = (entries: readonly [string, Placed][]): Map<string, Placed[]> => {
   return map
 }
 
-/** Checks one class source. Pairs and centring are judged across its fragments; hits stay per token. */
-function checkSource(fragments: readonly ClassFragment[], version: SemVer, bothNames: boolean): LintHit[] {
+/** A class that has a logical form but uses the physical one, and is not a deliberate choice. */
+export type PhysicalToken = { token: string; at: number; parsed: ParsedClass; matches: TailwindEntry[] }
+
+/**
+ * The physical classes in one class source. Pairs and centring are judged across its fragments;
+ * tokens under a side variant, a direction override, a sided or deliberate fragment are left out.
+ */
+export function physicalTokens(fragments: readonly ClassFragment[]): PhysicalToken[] {
   const tokens = fragments.flatMap((f, fragment) =>
     [...f.text.matchAll(/\S+/g)].map((m) => ({ token: m[0], at: f.offset + m.index, parsed: parseClass(m[0]), placed: { fragment, conditional: f.conditional }, sided: f.sided === true, deliberate: f.deliberate === true, overlay: f.overlay === true })))
   const keys = index(tokens.map(({ parsed: p, placed }) => [key(p.variants, p.negative, p.core), placed]))
   const cores = index(tokens.map(({ parsed: p, placed }) => [p.core, placed]))
   // A base is overridden only when an rtl: or ltr: class resets the same physical property, such as rtl:ml-0 for ml-4.
   const overridden = new Set(tokens.filter(({ parsed: p }) => p.variants.some((v) => DIRECTION_VARIANT.test(v))).map(({ parsed: p }) => propertyOf(p.core)))
-  const hits: LintHit[] = []
+  const found: PhysicalToken[] = []
   for (const { token, at, parsed, placed, sided, deliberate, overlay } of tokens) {
     const matches = TAILWIND_MAP.filter((e) => e.pattern.test(parsed.core))
     if (matches.length === 0 || sided || deliberate || (overlay && /^-?(?:left|right)-/.test(parsed.core)) || sideScoped(parsed.variants) || isOffscreen(parsed.negative, parsed.core)) continue
@@ -184,9 +190,14 @@ function checkSource(fragments: readonly ClassFragment[], version: SemVer, bothN
     const near = (map: Map<string, Placed[]>, k: string): boolean => (map.get(k) ?? []).some((p) => together(placed, p))
     const paired = near(keys, key(parsed.variants, parsed.negative, mirror(parsed.core)))
     if (paired || isCentring(parsed.core, (t) => near(cores, t))) continue
-    hits.push({ offset: at, message: messageFor(token, parsed, matches, version, bothNames) })
+    found.push({ token, at, parsed, matches })
   }
-  return hits
+  return found
+}
+
+/** Checks one class source. Hits stay per token. */
+function checkSource(fragments: readonly ClassFragment[], version: SemVer, bothNames: boolean): LintHit[] {
+  return physicalTokens(fragments).map(({ token, at, parsed, matches }) => ({ offset: at, message: messageFor(token, parsed, matches, version, bothNames) }))
 }
 
 const physicalTailwind: LintRule = {

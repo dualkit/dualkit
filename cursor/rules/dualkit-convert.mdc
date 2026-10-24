@@ -1,0 +1,110 @@
+---
+description: Use when converting an existing English React or Next.js app to Arabic or to English and Arabic with dualkit convert, including filling dualkit-strings.json, placing the language switch, regional suggestions, and fixing what dualkit convert --finish reports
+globs:
+alwaysApply: false
+---
+
+# Converting an app
+
+## Overview
+
+Phase 1 of `dualkit convert` rewrites the app's code on a new branch and writes `dualkit-strings.json`, every English string with its Arabic left to fill. You fill the Arabic. Phase 2, `dualkit convert --finish`, checks the result and writes a report. Dualkit makes no model calls. Every Arabic string you write is a draft for a native speaker.
+
+## 1. Ask which mode, then run phase 1
+
+Never pick the mode yourself. Ask the person:
+
+> One app that switches between English and Arabic, or a separate Arabic version?
+
+- One app with a switch is `bilingual`. English stays exactly as it is.
+- A separate Arabic version is `arabic`. The whole app becomes Arabic and right to left, with no switch.
+
+Then run it with their answer:
+
+```bash
+npx dualkit convert --mode bilingual
+```
+
+Convert needs a clean git working tree. It makes the branch `dualkit/bilingual` or `dualkit/arabic` and never pushes. Other flags:
+
+- `--start "npm run dev"` and `--port 3000` tell it how to start the app. Ask the person if `dualkit.config.json` has no start command. Without one there is no English baseline, and finish cannot run.
+- `--no-install` skips installing the translation library.
+- `--no-baseline` skips the English screenshots. Pass it only if the person asks, because the English match then proves nothing.
+
+If convert refuses, it gives a one-line reason. Tell the person and stop.
+
+## 2. Fill the Arabic in dualkit-strings.json
+
+Each entry looks like this:
+
+```json
+{ "key": "checkout.pay", "en": "Pay {amount}", "ar": "", "status": "pending", "file": "app/checkout/page.tsx", "line": 42 }
+```
+
+Fill every entry whose `status` is `pending`.
+
+- Edit only `ar` and `status`. Never change `key`, `en`, `file` or `line`.
+- Read the code at `file` and `line` before you translate. A label and an error need different Arabic.
+- Keep every placeholder, such as `{name}` or `{count}`, exactly as written and untranslated. It can sit wherever Arabic word order needs it.
+- Set `status` to `drafted` only once `ar` is filled. Empty entries stay `pending`. Never set `reviewed`.
+
+Write natural Arabic, not word-for-word English. Follow dualkit-bilingual-copy for register, gender-neutral buttons and plurals. The rules that matter most:
+
+- Modern Standard Arabic for interface text. Gulf dialect only in marketing copy, and only if the person wants it.
+- Western digits unless the person asks for Arabic-Indic digits.
+- Arabic punctuation: `،` `؛` `؟`. The full stop stays the same.
+- Brand and product names stay in Latin script.
+
+## 3. Run finish and fix what it reports
+
+```bash
+npx dualkit convert --finish
+```
+
+Stay on `dualkit/<mode>`, because finish refuses on any other branch. Before each finish run, commit your fixes there with a plain message. Never leave them staged, because finish then refuses.
+
+Finish refuses while any string is still `pending`. Never pass `--force` unless the person tells you to ship with English placeholders for the missing Arabic.
+
+It writes `dualkit-convert.md` and exits 1 when something failed. The report has these sections:
+
+- What changed
+- Arabic copy to check
+- Regional suggestions
+- English pages (bilingual only)
+- Arabic pages
+- What Dualkit could not convert
+- The app's tests
+
+Fix what failed:
+
+- English pages: a fail means the conversion changed how English looks. Open the diff image it names, find the cause in the code and fix it there. Never loosen the check, delete a baseline or skip the English pages to make it pass. If the report says no English baseline was taken, or that no English pages were compared, tell the person English was not proven unchanged.
+- Arabic pages: errors come from the dualkit check rules. Fix each one using dualkit-rtl-layout and dualkit-type-pairing.
+- What Dualkit could not convert: work through each place it names. Tell the person about pages finish could not reach.
+- The app's tests: fix any failure the conversion caused.
+
+Run finish again after each round of fixes. Stop after three runs that still fail. Show the person the report and say what is left.
+
+## 4. Regional suggestions
+
+The Regional suggestions section covers currency, week start, Hijri dates and browser locale formats. Each is only a proposal. Explain each to the person in one line and apply it only when they say yes to that one. Run finish again after applying any.
+
+## 5. Place the language switch
+
+Bilingual mode only. Convert writes the switch to `components/dualkit-language-switch.tsx`, or `src/components/` when the app keeps its code in `src`. It exports `DualkitLanguageSwitch`. Convert does not place it, because it would change the English look.
+
+Ask the person where it should go, usually the header or main navigation. Add it once finish passes. Any later finish run shows an English difference caused by the switch. Tell the person so.
+
+## 6. Hand over
+
+At the end, tell the person:
+
+- Every Arabic string is a draft. The Arabic copy to check section lists them all for a native speaker.
+- Which drafted strings matter most. Name the ones that carry tone, legal or brand weight, such as headlines, terms, consent text and prices.
+- The regional suggestions they turned down, so they can come back to them.
+
+## Common mistakes
+
+- Choosing the mode for the person.
+- Editing `en` or `key` so a string reads better.
+- Translating `{name}` into Arabic.
+- Passing `--force` to get past pending strings.

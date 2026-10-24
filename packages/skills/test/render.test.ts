@@ -24,7 +24,7 @@ const shell = (css: string, body: string) =>
 
 const cssOf = (e: Example) => [e.cssFromQuote ? e.quote : '', e.css ?? ''].filter(Boolean).join('\n')
 
-// Fonts are type-pairing's job, and all four skills load together, so only its page is held to the font rule.
+// Fonts are type-pairing's job, and all the skills load together, so only its page is held to the font rule.
 const OWNED_BY: Record<string, string> = { 'type/arabic-font': 'dualkit-type-pairing' }
 const ignoredFor = (skill: string): string[] => Object.entries(OWNED_BY).filter(([, owner]) => owner !== skill).map(([rule]) => rule)
 

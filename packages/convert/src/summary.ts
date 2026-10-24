@@ -1,0 +1,32 @@
+import { existsSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { isRecord } from './guards'
+import { STATE_DIR } from './state'
+import type { ConvertSummary, Flag } from './types'
+
+export const SUMMARY_FILE = `${STATE_DIR}/summary.json`
+
+/** The saved phase 1 summary, or null when it is missing or unreadable. */
+export function readSummary(root: string): ConvertSummary | null {
+  const path = join(root, SUMMARY_FILE)
+  if (!existsSync(path)) return null
+  try {
+    const parsed = JSON.parse(readFileSync(path, 'utf8')) as Partial<ConvertSummary>
+    return isRecord(parsed) && Array.isArray(parsed.flags) && Array.isArray(parsed.changed) && parsed.byKind ? (parsed as ConvertSummary) : null
+  } catch {
+    return null
+  }
+}
+
+const flagKey = (f: Flag): string => `${f.file}\0${f.line}\0${f.kind}\0${f.message}`
+
+/** The new summary with the earlier flags kept, deduped, so a re-run does not lose what the first run found. */
+export function mergeSummary(earlier: ConvertSummary | null, next: ConvertSummary): ConvertSummary {
+  if (!earlier) return next
+  const seen = new Set<string>()
+  const flags = [...next.flags, ...earlier.flags].filter((f) => !seen.has(flagKey(f)) && Boolean(seen.add(flagKey(f))))
+  return { ...next, flags }
+}
+
+/** The summary as 2-space JSON with a trailing newline. */
+export const summaryText = (summary: ConvertSummary): string => JSON.stringify(summary, null, 2) + '\n'

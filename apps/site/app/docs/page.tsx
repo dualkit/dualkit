@@ -2,10 +2,10 @@ import type { Metadata } from 'next'
 import { CopyCommand } from '@/components/CopyCommand'
 import { Footer } from '@/components/v3/Footer'
 import { Nav } from '@/components/v3/Nav'
-import { ACTION_URL, CHECK_COMMAND, FORMAT_COMMAND, LINT_COMMAND, SKILLS_COMMAND } from '@/lib/copy'
+import { ACTION_URL, CHECK_COMMAND, CONVERT_COMMAND, FORMAT_COMMAND, LINT_COMMAND, SKILLS_COMMAND } from '@/lib/copy'
 import { liveData } from '@/lib/live'
 
-export const metadata: Metadata = { title: 'Docs', description: 'Install the Dualkit skills, @dualkit/format, the Starter components, dualkit check and dualkit lint.' }
+export const metadata: Metadata = { title: 'Docs', description: 'Install the Dualkit skills, @dualkit/format, the Starter components, dualkit check, dualkit lint and dualkit convert.' }
 export const revalidate = 300
 
 const API: [string, string, string][] = [
@@ -37,7 +37,7 @@ export default async function Docs() {
           <CopyCommand command="/plugin install dualkit@dualkit" />
           <p className="small soft">Any other agent that reads skills, such as Codex or Cursor:</p>
           <CopyCommand command="npx skills add dualkit/dualkit" />
-          <p className="small soft">Four skills load on their own when the task calls for them: RTL layout, type pairing, Gulf formats and bilingual copy.</p>
+          <p className="small soft">Four skills load on their own when the task calls for them: RTL layout, type pairing, Gulf formats and bilingual copy. A fifth, dualkit-convert, walks your agent through converting an English app.</p>
         </section>
         <section className="doc-block" id="format">
           <h2 className="h2">@dualkit/format</h2>
@@ -71,6 +71,12 @@ export default async function Docs() {
           <CopyCommand command={LINT_COMMAND} />
           <p className="small soft">Add <code>--json</code> for the findings as JSON, <code>--fail-on warning</code> or <code>--fail-on note</code> to fail on more than errors (warnings and notes are listed but do not fail the run by default), and <code>--config</code> to point at a <code>dualkit.config.json</code>. To turn a rule off for one line, put <code>dualkit-disable-next-line source/physical-css -- reason</code> in a comment above it.</p>
           <p className="small soft">In CI, use the same Action with <code>mode: lint</code> under <code>with:</code>. It needs no browser, fails the job on errors, and comments the findings on the pull request; <code>paths</code> and <code>fail-on</code> are in the <a href={ACTION_URL}>Action README</a>. Every rule and its known limits are in <a href="https://github.com/dualkit/dualkit/blob/main/packages/lint/LINT.md">LINT.md</a>.</p>
+        </section>
+        <section className="doc-block" id="convert">
+          <h2 className="h2">Convert an English app</h2>
+          <p className="soft">Run it in a React or Next.js app with a clean git tree. It makes a new branch, rewrites the layout to logical properties, moves every English string into a translation file and lists each one for you or your agent to put into Arabic. It makes no model calls.</p>
+          <CopyCommand command={CONVERT_COMMAND} />
+          <p className="small soft">Use <code>--mode bilingual</code> for English and Arabic with a language switch, or <code>--mode arabic</code> for an Arabic-only app. Fill the Arabic in <code>dualkit-strings.json</code>, then run <code>npx dualkit@beta convert --finish</code>. It checks that every English page still looks the same, runs the 34 check rules on each Arabic page, runs your tests and writes <code>dualkit-convert.md</code>. Add <code>--start</code> and <code>--port</code> so it can open the app. Details are in the <a href="https://github.com/dualkit/dualkit/blob/main/packages/convert/README.md">convert README</a>.</p>
         </section>
         <section className="doc-block">
           <h2 className="h2">Source</h2>
