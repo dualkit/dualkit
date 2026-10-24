@@ -27,6 +27,13 @@ function git(cwd: string, args: string[]): Promise<Result> {
   })
 }
 
+/** Runs git and returns only its trimmed stdout, so a warning on stderr never leaks into a path. */
+async function mustOut(cwd: string, args: string[]): Promise<string> {
+  const result = await git(cwd, args)
+  if (result.code !== 0) throw new Error(`git ${args[0]} failed${result.out ? `: ${result.out}` : ''}`)
+  return result.stdout.trim()
+}
+
 /** Runs git and throws with its output when it fails. */
 async function must(cwd: string, args: string[]): Promise<string> {
   const result = await git(cwd, args)
@@ -41,7 +48,7 @@ const isStatePath = (entry: string, prefix: string): boolean => entry.slice(3).s
 export async function assertCleanRepo(root: string): Promise<void> {
   const inside = await git(root, ['rev-parse', '--is-inside-work-tree'])
   if (inside.code !== 0 || inside.out !== 'true') throw new RefusedError(`${root} is not inside a git repo. Convert works on a new branch, so run git init and commit first.`)
-  const prefix = await must(root, ['rev-parse', '--show-prefix'])
+  const prefix = await mustOut(root, ['rev-parse', '--show-prefix'])
   const status = await git(root, ['status', '--porcelain', '-z'])
   if (status.code !== 0) throw new Error(`git status failed: ${status.out}`)
   const entries = status.stdout.split('\0').filter(Boolean)
@@ -127,8 +134,8 @@ export async function unstage(root: string, paths: readonly string[]): Promise<v
  * the state and summary files, and wins over this file.
  */
 export async function excludeStateDir(root: string): Promise<void> {
-  const file = resolve(root, await must(root, ['rev-parse', '--git-path', 'info/exclude']))
-  const line = `/${await must(root, ['rev-parse', '--show-prefix'])}${STATE_DIR}/*`
+  const file = resolve(root, await mustOut(root, ['rev-parse', '--git-path', 'info/exclude']))
+  const line = `/${await mustOut(root, ['rev-parse', '--show-prefix'])}${STATE_DIR}/*`
   const text = existsSync(file) ? readFileSync(file, 'utf8') : ''
   if (text.split(/\r?\n/).some((l) => l.trim() === line)) return
   mkdirSync(dirname(file), { recursive: true })

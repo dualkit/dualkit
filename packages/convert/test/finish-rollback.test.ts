@@ -39,6 +39,7 @@ describe('finish rollback', () => {
     const state = read(dir, STATE_FILE)
     const error = (await finish({ root: dir }, io('echo nope; exit 3', await freePort())).catch((e: unknown) => e)) as Error
     expect(error.message).toMatch(/^finish failed at starting the app: Could not start the app with "echo nope; exit 3"\..*\. Nothing was committed\.$/s)
+    expect(error.message).not.toMatch(/also failed/)
     expect(error.message.split('\n')).toHaveLength(1)
     expect(git(dir, 'rev-parse', 'HEAD')).toBe(head)
     expect(git(dir, 'diff', 'HEAD', '--name-only')).toBe('dualkit-strings.json')
@@ -63,6 +64,7 @@ describe('finish rollback', () => {
     const port2 = await freePort()
     const error = (await finish({ root: dir, configAnswers: { start: serve(port2), port: port2 } }, io(serve(port2), port2)).catch((e: unknown) => e)) as Error
     expect(error.message).toMatch(/^finish failed at committing: .*Nothing was committed\.$/s)
+    expect(error.message).not.toMatch(/also failed/)
     expect(git(dir, 'rev-parse', 'HEAD')).toBe(head)
     expect(git(dir, 'diff', '--cached', '--name-only')).toBe('')
     expect(read(dir, 'dualkit-convert.md')).toBe(report)

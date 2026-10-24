@@ -18,7 +18,7 @@ import type { ConvertIo, ConvertState, ConvertSummary, FinishOptions, PageOption
 export const REPORT_FILE = 'dualkit-convert.md'
 export const DIFF_DIR = `${STATE_DIR}/diff`
 const TEST_TAIL_LINES = 40
-const NEEDS_BROWSER = 'Finish needs a start command in dualkit.config.json and a browser to take screenshots with.'
+const NEEDS_BROWSER = 'Finish needs a start command in your Dualkit config file and a browser to take screenshots with.'
 const LOCALE_COOKIE = 'dk-locale'
 
 /** What phase 2 needs from outside: phase 1's io plus an accessibility audit and a lint count. */

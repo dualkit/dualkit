@@ -43,7 +43,7 @@ type Ask = (question: string) => Promise<string>
 function configFileFor(flag: string | undefined, cwd: string): { configFile?: string } {
   if (flag === undefined) return {}
   const rel = relative(cwd, resolve(cwd, flag))
-  if (rel === '' || rel.startsWith('..') || isAbsolute(rel)) throw new UserError(`The config file ${flag} must be inside the app folder, because convert commits your answers to it.`)
+  if (rel === '' || rel === '..' || rel.startsWith(`..${sep}`) || isAbsolute(rel)) throw new UserError(`The config file ${flag} must be inside the app folder, because convert commits your answers to it.`)
   return { configFile: rel.split(sep).join('/') }
 }
 

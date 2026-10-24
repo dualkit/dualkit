@@ -10,7 +10,6 @@ const LOCKFILES: Record<Project['packageManager'], readonly string[]> = {
   npm: ['package-lock.json'], pnpm: ['pnpm-lock.yaml'], yarn: ['yarn.lock'], bun: ['bun.lock', 'bun.lockb'],
 }
 
-/** What the disk phase applied: the staged files, wiring edits and any install flag. */
 /** What the disk phase applied: changed paths, edits and new files it actually wrote, wiring edits per file, and install flags. */
 export type Written = { changed: string[]; edits: number; writes: number; wired: Record<string, number>; flags: Flag[] }
 

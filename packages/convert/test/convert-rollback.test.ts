@@ -52,6 +52,7 @@ describe('convert rollback', () => {
     failingHook(dir)
     const error = (await convert(options(dir), io).catch((e: unknown) => e)) as Error
     expect(error.message).toMatch(/^convert failed at committing: .*Your repo is back on main as it was\.$/s)
+    expect(error.message).not.toMatch(/also failed/)
     expectBackOn(dir, 'main')
     expect(git(dir, 'branch', '--list', 'dualkit/*')).toBe('')
     expect(existsSync(join(dir, 'app/page.tsx'))).toBe(true)
