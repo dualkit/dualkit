@@ -11,7 +11,7 @@ import { Frame } from './primitives'
 const SCROLL_CLOSE_PX = 24
 const COPIED_MS = 1500
 const DRAWER_ID = 'v3-products'
-const NAV_LINKS = [['Docs', '/docs'], ['Bench', '/bench'], ['Updates', '/updates']] as const
+const NAV_LINKS = [['Docs', '/docs'], ['Bench', '/bench'], ['Updates', '/updates'], ['Careers', '/careers']] as const
 
 /** Where each part's row and docs link go, and the command its install line copies (Bench has none). */
 export type MenuPart = { href: string; command: string | null; docs: string; note: string | null }
@@ -267,5 +267,5 @@ export function ProductsMenu({ parts, previews, latest, benchDays, end }: {
   )
 }
 
-const START_HREFS: Record<string, string> = { 'Quick start': '/docs#skills', Docs: '/docs', Updates: '/updates', Status: '/status' }
+const START_HREFS: Record<string, string> = { 'Quick start': '/docs#skills', Docs: '/docs', Updates: '/updates', Status: '/status', Careers: '/careers' }
 const START_LINKS = V3.menu.start.map((label) => [label, START_HREFS[label] ?? '/docs'] as const)

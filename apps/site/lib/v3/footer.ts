@@ -18,6 +18,7 @@ export const FOOTER_LINKS: Record<string, string | null> = {
   Docs: '/docs',
   Updates: '/updates',
   Status: '/status',
+  Careers: '/careers',
   Registry: '/r/registry.json',
   GitHub: REPO_URL,
   Discussions: `${REPO_URL}/discussions`,
