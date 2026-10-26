@@ -1,15 +1,8 @@
 import { parseFeedback, sendFeedback } from '../../../lib/feedback'
+import { rateLimiter } from '../../../lib/rate-limit'
 
-const WINDOW_MS = 10 * 60 * 1000
-const MAX_PER_WINDOW = 5
-// Best effort: each serverless instance keeps its own count, which is enough to stop a loop of repeat sends.
-const recent = new Map<string, number[]>()
-
-function limited(ip: string, now: number): boolean {
-  const hits = (recent.get(ip) ?? []).filter((t) => now - t < WINDOW_MS)
-  recent.set(ip, [...hits, now])
-  return hits.length >= MAX_PER_WINDOW
-}
+// Five sends per ten minutes per ip.
+const limited = rateLimiter(10 * 60 * 1000, 5)
 
 const reply = (status: number, body: { ok: boolean; error?: string }) => Response.json(body, { status })
 

@@ -1,0 +1,225 @@
+/* /careers in the v3 language: ruled frames, hard edges, 1px lines, no shadows. Motion comes from transitions.dev
+   (text swap, error shake, success check) with the site's own tokens where they overlap. */
+
+:root {
+  --cr-error: #b91c1c;
+  --text-swap-dur: 150ms;
+  --text-swap-translate-y: 4px;
+  --text-swap-blur: 2px;
+  --text-swap-ease: ease-in-out;
+  --shake-distance: 6px;
+  --shake-overshoot: 4px;
+  --shake-dur-a: 80ms;
+  --shake-dur-b: 60ms;
+  --shake-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --check-opacity-dur: 500ms;
+  --check-rotate-dur: 500ms;
+  --check-rotate-from: 80deg;
+  --check-bob-dur: 500ms;
+  --check-y-amount: 40px;
+  --check-blur-dur: 500ms;
+  --check-blur-from: 10px;
+  --check-path-dur: 500ms;
+  --check-path-delay: 80ms;
+  --check-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --check-ease-opacity: cubic-bezier(0.22, 1, 0.36, 1);
+  --check-ease-rotate: cubic-bezier(0.22, 1, 0.36, 1);
+  --check-ease-bob: cubic-bezier(0.34, 1.35, 0.64, 1);
+  --check-ease-path: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cr-last { padding-bottom: 200px; }
+@media (max-width: 600px) { .cr-last { padding-bottom: 120px; } }
+
+/* Back link above the title */
+.cr-crumb { padding-top: 48px; }
+.cr-crumb + .v3-hero-head { padding-top: 96px; }
+.cr-back { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--v3-soft); transition: color 150ms ease; }
+.cr-back svg { width: 14px; height: 14px; transition: transform 200ms var(--ease-out); }
+.cr-back:focus-visible { outline: 2px solid var(--v3-ink); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .cr-back:hover { color: var(--v3-ink); }
+  .cr-back:hover svg { transform: translateX(-2px); }
+}
+
+.cr-title-ar { display: inline-block; margin: -16px 0 0; font-family: var(--font-plex-arabic), sans-serif; font-size: 32px; line-height: 1.4; color: var(--v3-soft); }
+.cr-chip { display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px; font-size: 13px; font-weight: 500; line-height: 1; box-shadow: inset 0 0 0 1px var(--v3-line); }
+.cr-role-meta { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* Role list: one ruled row per role, the whole row is the link */
+.cr-role-list { margin: 0; padding: 0; list-style: none; }
+.cr-role-list li + li { border-top: 1px solid var(--v3-line); }
+.cr-role { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 40px; padding: 40px; transition: background-color 150ms ease; }
+.cr-role-main { display: flex; flex-direction: column; gap: 8px; max-width: 560px; }
+.cr-role-title { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 16px; }
+.cr-role-ar { font-family: var(--font-plex-arabic), sans-serif; font-size: 18px; color: var(--v3-faint); }
+.cr-role-summary { color: var(--v3-soft); }
+.cr-role-go { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; white-space: nowrap; }
+.cr-role-go svg { width: 14px; height: 14px; transition: transform 200ms var(--ease-out); }
+.cr-role:focus-visible { outline: 2px solid var(--v3-ink); outline-offset: -2px; }
+@media (hover: hover) and (pointer: fine) {
+  .cr-role:hover { background: rgba(0, 0, 0, 0.025); }
+  .cr-role:hover .cr-role-go svg { transform: translateX(2px); }
+}
+@media (max-width: 899px) {
+  .cr-role { grid-template-columns: 1fr; gap: 20px; padding: 24px; }
+}
+
+/* Role detail: a ruled document, heading on the left and the text on the right */
+.cr-detail { margin-top: 80px; }
+.cr-doc-row { display: grid; grid-template-columns: 320px 1fr; gap: 40px; padding: 40px; }
+.cr-doc-row + .cr-doc-row { border-top: 1px solid var(--v3-line); }
+.cr-doc-body { display: flex; flex-direction: column; gap: 16px; max-width: 640px; }
+.cr-doc-list { display: flex; flex-direction: column; gap: 12px; max-width: 640px; margin: 0; padding: 0; list-style: none; }
+.cr-doc-list li { position: relative; padding-inline-start: 20px; }
+.cr-doc-list li::before { content: ''; position: absolute; inset-inline-start: 0; top: 0.6em; width: 5px; height: 5px; background: var(--v3-ink); }
+@media (max-width: 899px) {
+  .cr-detail { margin-top: 40px; }
+  .cr-doc-row { grid-template-columns: 1fr; gap: 16px; padding: 24px; }
+}
+
+/* Apply page */
+.cr-apply { display: grid; grid-template-columns: 1fr minmax(0, 640px); gap: 80px; align-items: start; padding-top: 96px; }
+.cr-apply-head { display: flex; flex-direction: column; gap: 24px; position: sticky; top: calc(var(--v3-nav-h) + 40px); }
+.cr-apply .v3-display { font-size: 48px; line-height: 1.08; letter-spacing: -0.028em; }
+.cr-form-frame { padding: 40px; }
+@media (max-width: 899px) {
+  .cr-apply { grid-template-columns: 1fr; gap: 40px; padding-top: 64px; }
+  .cr-apply-head { position: static; }
+  .cr-form-frame { padding: 24px; }
+}
+@media (max-width: 600px) { .cr-apply .v3-display { font-size: 32px; } }
+
+.cr-form { display: flex; flex-direction: column; gap: 24px; }
+.cr-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+@media (max-width: 600px) { .cr-row { grid-template-columns: 1fr; } }
+.cr-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.cr-label { font-size: 14px; font-weight: 500; line-height: 1.4; }
+.cr-opt { font-weight: 400; color: var(--v3-faint); }
+.cr-hint { margin: 0; color: var(--v3-faint); }
+
+/* The bordered box owns the border so the shake moves border and field together */
+.cr-box, .cr-drop { border: 1px solid var(--v3-line); background: rgba(255, 255, 255, 0.55); }
+.cr-box:focus-within { border-color: var(--v3-ink); }
+.cr-input { display: block; width: 100%; min-height: 44px; padding: 10px 12px; border: 0; background: none; color: var(--v3-ink); font: inherit; font-size: 16px; line-height: 1.5; border-radius: 0; }
+.cr-input:focus { outline: none; }
+.cr-input::placeholder { color: var(--v3-faint); }
+.cr-textarea { min-height: 112px; resize: vertical; }
+.cr-box[data-error], .cr-drop[data-error] { border-color: var(--cr-error); }
+
+/* CV drop zone: the real file input covers it, so click, keyboard and drag and drop are all native */
+.cr-drop { position: relative; display: flex; align-items: center; gap: 16px; padding: 20px; border-style: dashed; transition: border-color 150ms ease-out, background-color 150ms ease; }
+.cr-drop[data-filled] { border-style: solid; }
+.cr-drop[data-drag] { border-color: var(--v3-ink); background: rgba(255, 255, 255, 0.85); }
+.cr-drop:has(.cr-drop-input:focus-visible) { outline: 2px solid var(--v3-ink); outline-offset: 2px; }
+.cr-drop-input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.cr-drop-icon { flex: none; color: var(--v3-soft); }
+.cr-drop-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cr-drop-name { font-size: 15px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cr-drop-name .t-text-swap { max-width: 100%; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
+.cr-drop-hint { color: var(--v3-faint); }
+@media (hover: hover) and (pointer: fine) { .cr-drop:hover { border-color: rgba(0, 0, 0, 0.3); } }
+
+/* Error message: stays until the field is edited, so nobody misses it. Fades in as it appears. */
+.cr-error-msg { margin: 0; font-size: 13px; line-height: 1.5; color: var(--cr-error); transition: opacity 150ms ease-out; }
+.cr-error-msg:not([data-shown]) { display: none; }
+@starting-style { .cr-error-msg[data-shown] { opacity: 0; } }
+
+.cr-submit { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding-top: 8px; }
+.cr-send { min-width: 180px; transition: background-color 150ms ease, scale 160ms var(--ease-out); }
+.cr-send:active:not(:disabled) { scale: 0.97; }
+.cr-send:disabled { cursor: progress; }
+.cr-hp { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Sent */
+.cr-sent { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding-block: 24px; }
+.cr-sent-check { color: var(--v3-ink); }
+.cr-sent-title:focus { outline: none; }
+.cr-sent-body { max-width: 440px; color: var(--v3-soft); }
+
+/* transitions.dev: text states swap */
+.t-text-swap {
+  display: inline-block;
+  transform: translateY(0);
+  filter: blur(0);
+  opacity: 1;
+  transition:
+    transform var(--text-swap-dur) var(--text-swap-ease),
+    filter    var(--text-swap-dur) var(--text-swap-ease),
+    opacity   var(--text-swap-dur) var(--text-swap-ease);
+  will-change: transform, filter, opacity;
+}
+.t-text-swap.is-exit {
+  transform: translateY(calc(var(--text-swap-translate-y) * -1));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+}
+.t-text-swap.is-enter-start {
+  transform: translateY(var(--text-swap-translate-y));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+  transition: none;
+}
+
+/* transitions.dev: error state shake (the hold-and-revert is left out: form errors stay until the field changes) */
+.t-input {
+  transition: border-color 150ms ease-out;
+  will-change: transform;
+}
+.t-input.is-shaking {
+  animation: t-input-shake calc(
+      var(--shake-dur-a) * 2 + var(--shake-dur-b) * 2
+    ) linear;
+}
+@keyframes t-input-shake {
+  0%      { transform: translateX(0);                                 animation-timing-function: var(--shake-ease); }
+  28.57%  { transform: translateX(var(--shake-distance));             animation-timing-function: var(--shake-ease); }
+  57.14%  { transform: translateX(calc(var(--shake-distance) * -1)); animation-timing-function: var(--shake-ease); }
+  78.57%  { transform: translateX(var(--shake-overshoot));            animation-timing-function: var(--shake-ease); }
+  100%    { transform: translateX(0); }
+}
+
+/* transitions.dev: success check. The path is 29.75 long (getTotalLength), rounded up to 31. */
+.t-success-check {
+  display: inline-block;
+  transform-origin: center;
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+.t-success-check svg { display: block; overflow: visible; }
+.t-success-check svg path {
+  stroke-dasharray: 31;
+  stroke-dashoffset: 31;
+}
+.t-success-check[data-state="in"] {
+  animation:
+    t-check-fade   var(--check-opacity-dur) var(--check-ease-opacity) forwards,
+    t-check-rotate var(--check-rotate-dur)  var(--check-ease-rotate)  forwards,
+    t-check-blur   var(--check-blur-dur)    var(--check-ease-out)     forwards,
+    t-check-bob    var(--check-bob-dur)     var(--check-ease-bob)     forwards;
+}
+.t-success-check[data-state="in"] svg path {
+  animation: t-check-draw var(--check-path-dur) var(--check-ease-path) var(--check-path-delay, 0ms) forwards;
+}
+@keyframes t-check-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes t-check-rotate {
+  from { transform: rotate(var(--check-rotate-from)); }
+  to   { transform: rotate(0deg); }
+}
+@keyframes t-check-blur {
+  from { filter: blur(var(--check-blur-from)); }
+  to   { filter: blur(0); }
+}
+@keyframes t-check-bob {
+  from { translate: 0 var(--check-y-amount); }
+  to   { translate: 0 0; }
+}
+@keyframes t-check-draw { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .t-text-swap { transition: none !important; }
+  .t-input { animation: none !important; transform: none !important; }
+  .t-success-check { animation: none !important; opacity: 1; }
+  .t-success-check svg path { animation: none !important; stroke-dashoffset: 0 !important; }
+  .cr-send:active:not(:disabled) { scale: 1; }
+}

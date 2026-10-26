@@ -1,7 +1,7 @@
 // dualkit.dev v3 copy. Source of truth: design/figma/gen/v3/{copy,sections,menu,kit-previews,mobile}.mjs and the
 // approved hero prototype. Every Arabic string sits under a key named `ar` or ending in `Ar`.
 export const V3 = {
-  nav: { links: ['Products', 'Docs', 'Bench', 'Updates'], github: 'GitHub', cta: 'Get started' },
+  nav: { links: ['Products', 'Docs', 'Bench', 'Updates', 'Careers'], github: 'GitHub', cta: 'Get started' },
   menu: {
     parts: [
       ['01', 'Skills', 'Teach Claude Code and Cursor to build right to left', '5 skills'],
@@ -15,7 +15,7 @@ export const V3 = {
     installLabel: 'Install the skills',
     copied: 'Copied',
     startLabel: 'Start here',
-    start: ['Quick start', 'Docs', 'Updates', 'Status'],
+    start: ['Quick start', 'Docs', 'Updates', 'Status', 'Careers'],
     latest: ['Latest', 'dualkit check, beta', '18 Oct'],
     bench: ['The Bench', 'Next run in 12 days'],
     keys: [['↑ ↓', 'move'], ['Enter', 'open'], ['Esc', 'close']],
@@ -162,7 +162,7 @@ export const V3 = {
     line: 'Arabic and English, built right the first time.',
     columns: [
       ['Product', ['Skills', 'Format', 'Starter', 'Check', 'Lint', 'Convert', 'Bench']],
-      ['Resources', ['Docs', 'Updates', 'Status', 'Registry']],
+      ['Resources', ['Docs', 'Updates', 'Status', 'Registry', 'Careers']],
       ['Community', ['GitHub', 'Discussions', 'npm', 'Plugin directory']],
       ['Legal', ['MIT licence']],
     ],
