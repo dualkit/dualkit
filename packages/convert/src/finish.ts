@@ -4,7 +4,7 @@ import { keepHandAdded, messagesFiles, messagesPath, writeText, type Disk } from
 import { DEFAULT_PORTS, WIDTHS, baselinePath, routeSlug } from './baseline'
 import { CONFIG_FILE, checkConfigAnswers, writeConfigAnswers } from './config-answers'
 import { RefusedError, commit, currentBranch, stage, stagedFiles } from './git'
-import { LEDGER_FILE, readLedger, type LedgerEntry } from './ledger'
+import { LEDGER_FILE, readLedger, type LedgerEntry, brokenMarks } from './ledger'
 import { MAX_DIFF_RATIO, compare } from './match'
 import { failFinish, snapshot } from './finish-undo'
 import { detectProject } from './project'
@@ -60,6 +60,10 @@ async function guard(root: string): Promise<ConvertState> {
 }
 
 function pendingCheck(ledger: LedgerEntry[], force: boolean | undefined): void {
+  const broken = brokenMarks(ledger)
+  if (broken.length > 0) {
+    throw new RefusedError(`${broken.length} Arabic ${broken.length === 1 ? 'string has' : 'strings have'} different placeholders or tags from the English, starting with ${broken[0]!.key}. Keep each one exactly as written.`)
+  }
   const pending = ledger.filter((e) => e.status === 'pending').length
   if (pending > 0 && !force) {
     throw new RefusedError(`${pending} ${pending === 1 ? 'string is' : 'strings are'} still pending in ${LEDGER_FILE}. Fill in the Arabic and set each status to drafted, or run with --force to use English for those strings.`)

@@ -84,7 +84,8 @@ Convert reads a `convert` block from `dualkit.config.json`, or from the file `--
 
 Convert flags these in the report instead of guessing:
 
-- Text that shares an element with other elements, such as `Hello <b>{name}</b>`, or a plural built in code. These need rich text or a plural message, by hand. Rich text is not converted in this version.
+- A word built by a ternary, such as `item{n === 1 ? '' : 's'}`. This needs a plural message, by hand.
+- A sentence with a block element or a custom component inside it. Convert splits the text at that element, so each part is its own message.
 - Text outside any component, such as a module-level constant or a Next.js `metadata` title, and the `<title>` in a Vite app's `index.html`.
 - A `className` built at run time, which it cannot read in full.
 - Classes with no logical form, inline SVG icons and files it cannot parse.
@@ -99,6 +100,7 @@ It refuses, with a one-line reason, when:
 
 ## Known gaps
 
+- next-intl needs TypeScript 5. An app on an older version will fail its type check after converting.
 - If the app has its own middleware or proxy file, convert moves it to `app-middleware` and runs it first, on the path without its locale. We tested this with a hand-written login check on Next.js 15. Clerk and other auth libraries are untested, so check your login after converting.
 - Convert does not place the language switch, because that would change the English look. It writes `components/dualkit-language-switch.tsx` and tells you to add it.
 - Next.js sends a visitor whose browser asks for Arabic from an English URL to the Arabic page. That is next-intl's locale detection, and convert leaves it on.

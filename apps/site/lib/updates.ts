@@ -6,6 +6,23 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'convert-0-3-0',
+    date: '2026-11-01',
+    version: 'dualkit 0.8.0-beta.0',
+    tags: ['Convert'],
+    title: 'Convert keeps sentences whole and catches 76% of strings',
+    body: [
+      'One line of mixed text used to make Convert skip everything inside that element, so a whole card could stay in English. Now it splits the text at block elements and carries on. On the 10 proof apps, coverage went from 66% to 76%.',
+      'A sentence with a link or bold word stays one message, so a translator can move the link to where Arabic needs it. Convert writes t.rich for next-intl and Trans for react-i18next, and we rendered both with the real libraries. Ternaries in JSX, more text props and values from function calls are now extracted too.',
+      'The proof run now type-checks each app before and after. That found problems the tests had missed, and we fixed them: the blur value on images was being translated, icons were passed as message values, and the i18n setup file could shadow an app\'s own i18n folder. It now lives at src/dualkit-i18n.ts.',
+      'Finish now refuses Arabic that drops or changes a placeholder or tag. Nine of the 10 apps show no new type errors. The tenth, taxonomy, uses a TypeScript version too old to read next-intl\'s types, so it needs TypeScript 5. We still do not measure a production build.',
+    ],
+    shipped: [
+      { name: '@dualkit/convert 0.3.0-beta.0', line: 'Rich text, sentence splitting, ternaries, more props' },
+      { name: 'dualkit 0.8.0-beta.0', line: 'Uses convert 0.3' },
+    ],
+  },
+  {
     slug: 'convert-0-2-0',
     date: '2026-11-01',
     version: 'dualkit 0.7.0-beta.0',

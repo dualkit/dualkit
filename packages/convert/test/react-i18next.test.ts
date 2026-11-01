@@ -19,7 +19,7 @@ describe('wireReactI18next bilingual', () => {
   const plan = wireReactI18next(project, 'bilingual', files)
 
   it('writes the i18n init with both locales from the cookie and brace placeholders', () => {
-    const init = plan.writes['src/i18n.ts']!
+    const init = plan.writes['src/dualkit-i18n.ts']!
     expect(init).toContain("import { initReactI18next } from 'react-i18next'")
     expect(init).toContain("import en from '../messages/en.json'")
     expect(init).toContain("import ar from '../messages/ar.json'")
@@ -27,7 +27,7 @@ describe('wireReactI18next bilingual', () => {
     expect(init).toContain("interpolation: { prefix: '{', suffix: '}', escapeValue: false }")
     expect(init).toContain('initAsync: false')
     expect(init).toContain("fallbackLng: 'en'")
-    parses('src/i18n.ts', init)
+    parses('src/dualkit-i18n.ts', init)
   })
 
   it('adds an inline script that reads dk-locale and sets lang and dir before first paint', () => {
@@ -41,7 +41,7 @@ describe('wireReactI18next bilingual', () => {
   })
 
   it('imports the i18n init in the entry', () => {
-    expect(edited(plan, 'src/main.tsx')).toContain("import './i18n'\n")
+    expect(edited(plan, 'src/main.tsx')).toContain("import './dualkit-i18n'\n")
     parses('src/main.tsx', edited(plan, 'src/main.tsx'))
   })
 
@@ -75,7 +75,7 @@ describe('wireReactI18next arabic', () => {
   const plan = wireReactI18next(project, 'arabic', files)
 
   it('fixes the locale to ar with only Arabic resources and no switch', () => {
-    const init = plan.writes['src/i18n.ts']!
+    const init = plan.writes['src/dualkit-i18n.ts']!
     expect(init).toContain("lng: 'ar'")
     expect(init).not.toContain('en.json')
     expect(init).not.toContain('document.cookie')

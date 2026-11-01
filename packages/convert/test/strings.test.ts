@@ -126,24 +126,57 @@ describe('extractStrings interpolation and mixed text', () => {
     expect(run('export function A({ user }) {\n  return <p>Hi {user.name.trim()}</p>\n}\n').entries[0]!.en).toBe('Hi {name}')
   })
 
-  it('still flags a plain function call, which has no value to name the placeholder after', () => {
-    const { edits, flags } = run('export function A({ d }) {\n  return <p>Due {format(d)}</p>\n}\n')
-    expect(edits).toEqual([])
-    expect(flags.map((f) => f.kind)).toEqual(['mixed-text'])
+  it('prints a plain function call as a value named after the function', () => {
+    const { out, entries } = run('export function A({ d }) {\n  return <p>Due {format(d)}</p>\n}\n')
+    expect(out).toContain(`<p>{t('home.due', { format: format(d) ?? '' })}</p>`)
+    expect(entries[0]!.en).toBe('Due {format}')
   })
 
-  it('flags text whose element also holds a child element and leaves it', () => {
-    const text = 'export function Home({ name }) {\n  return <p>Hello <b>{name}</b></p>\n}\n'
-    const { edits, flags, entries } = run(text)
-    expect(edits).toEqual([])
-    expect(entries).toEqual([])
-    expect(flags).toMatchObject([{ kind: 'mixed-text', line: 2, file: 'app/page.tsx' }])
+  it('keeps a sentence with an inline element whole, as rich text', () => {
+    const { out, entries, flags } = run(`export function Home({ name }) {\n  return <p>Hello <b className="x">{name}</b>, welcome</p>\n}\n`)
+    expect(out).toContain(`<p>{t.rich('home.hello-welcome', { name, b: (chunks) => <b className="x">{chunks}</b> })}</p>`)
+    expect(entries[0]!.en).toBe('Hello <b>{name}</b>, welcome')
+    expect(flags).toEqual([])
   })
 
-  it('treats a bdi wrapper from the markup pass as mixed text', () => {
-    const { edits, flags } = run('export function Home({ price }) {\n  return <p>Total <bdi>{price}</bdi></p>\n}\n')
-    expect(edits).toEqual([])
-    expect(flags.map((f) => f.kind)).toEqual(['mixed-text'])
+  it('gives repeated inline tags their own names', () => {
+    const { out, entries } = run(`export function A() {\n  return <p>Read <a href="/x">terms</a> and <a href="/y">privacy</a></p>\n}\n`)
+    expect(entries[0]!.en).toBe('Read <a>terms</a> and <a2>privacy</a2>')
+    expect(out).toContain(`a2: (chunks) => <a href="/y">{chunks}</a>`)
+  })
+
+  it('reads whitespace as JSX prints it, so a line break before a tag adds no space', () => {
+    const { entries } = run(`export function A() {\n  return (\n    <p>\n      Read{' '}\n      <Link href="/x">terms</Link>\n      now\n    </p>\n  )\n}\n`)
+    expect(entries[0]!.en).toBe('Read <navlink>terms</navlink>now')
+  })
+
+  it('writes Trans for rich text under react-i18next and imports it', () => {
+    const { out } = run(`export function A({ name }) {\n  return <p>Hello <a href="/x">{name}</a></p>\n}\n`, 'src/a.tsx', 'react-i18next')
+    expect(out).toContain(`<p><Trans i18nKey="a.hello" values={{ name }} components={{ a: <a href="/x" /> }} /></p>`)
+    expect(out).toContain(`import { Trans } from 'react-i18next'`)
+  })
+
+  it('never passes children as a message value, because a React node cannot be one', () => {
+    const { out } = run('export function A({ children }) {\n  return <p>Sign in with {children}</p>\n}\n')
+    expect(out).toContain(`<p>{t('home.sign-in-with')} {children}</p>`)
+  })
+
+  it('keeps an icon out of a message and guards a value that can be empty', () => {
+    expect(run('export function A({ p }) {\n  return <p>With {p.icon} {p.name}</p>\n}\n').entries.map((e) => e.en)).toEqual(['With'])
+    expect(run('export function A({ o }) {\n  return <p>Hi {o?.name}</p>\n}\n').out).toContain(`{ name: o?.name ?? '' }`)
+  })
+
+  it('gives a component that only uses Trans no unused hook', () => {
+    expect(run(`export function A() {\n  return <p>Read <a href="/x">terms</a></p>\n}\n`, 'src/a.tsx', 'react-i18next').out).not.toContain('useTranslation')
+  })
+
+  it('leaves the image placeholder values alone', () => {
+    expect(run(`export function A() {\n  return <Image placeholder="blur" />\n}\n`).edits).toEqual([])
+  })
+
+  it('wraps a bdi from the markup pass into the sentence', () => {
+    const { entries } = run('export function Home({ price }) {\n  return <p>Total <bdi>{price}</bdi></p>\n}\n')
+    expect(entries[0]!.en).toBe('Total <bdi>{price}</bdi>')
   })
 
   it('extracts text next to an element with no text, like an icon', () => {
@@ -157,17 +190,29 @@ describe('extractStrings interpolation and mixed text', () => {
     expect(out).toContain(`<p>{t('home.first-line')}<br />{t('home.second-line')} <Icon size={4} /></p>`)
   })
 
-  it('still flags a run next to an element with text, even after an icon', () => {
-    const { edits, flags } = run('export function A() {\n  return <p><Icon />Saved <b>today</b></p>\n}\n')
-    expect(edits).toEqual([])
-    expect(flags.map((f) => f.kind)).toEqual(['mixed-text'])
+  it('splits at a block element and carries on inside it', () => {
+    const { entries, flags } = run('export function A() {\n  return <div>Intro <Card><h2>Title</h2></Card> outro</div>\n}\n')
+    expect(entries.map((e) => e.en)).toEqual(['Intro', 'outro', 'Title'])
+    expect(flags).toEqual([])
   })
 
-  it('leaves the whole mixed element alone, its other runs and its descendants included', () => {
-    expect(run('export function A() {\n  return <p>Saved <b>today</b></p>\n}\n').edits).toEqual([])
-    const { edits, flags } = run('export function A() {\n  return <p>Intro <Icon /> more <b>bold</b></p>\n}\n')
-    expect(edits).toEqual([])
-    expect(flags.map((f) => f.kind)).toEqual(['mixed-text'])
+  it('carries on past a mapped list next to text', () => {
+    const { entries } = run(`export function A({ xs }) {\n  return <div>Items {xs.map((x) => <p key={x}>One item</p>)}</div>\n}\n`)
+    expect(entries.map((e) => e.en)).toEqual(['Items', 'One item'])
+  })
+
+  it('replaces both branches of a ternary but not its test', () => {
+    const { out } = run(`export function A({ s }) {\n  return <button title={s === 'Busy' ? 'Saving' : 'Save'}>{s === 'Busy' ? 'Saving' : 'Save'}</button>\n}\n`)
+    expect(out).toContain(`title={s === 'Busy' ? t('home.saving') : t('home.save')}`)
+    expect(out).toContain(`>{s === 'Busy' ? t('home.saving') : t('home.save')}<`)
+  })
+
+  it('replaces the fallback of a logical expression', () => {
+    expect(run(`export function A({ n }) {\n  return <p>{n ?? 'Unknown'}</p>\n}\n`).out).toContain(`{n ?? t('home.unknown')}`)
+  })
+
+  it('leaves ternaries in attributes that are not text', () => {
+    expect(run(`export function A({ s }) {\n  return <p className={s ? 'Big' : 'Small'} />\n}\n`).edits).toEqual([])
   })
 
   it('flags a plural-looking expression and leaves it', () => {

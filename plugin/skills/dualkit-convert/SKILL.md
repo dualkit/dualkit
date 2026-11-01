@@ -44,7 +44,7 @@ Fill every entry whose `status` is `pending`.
 
 - Edit only `ar` and `status`. Never change `key`, `en`, `file` or `line`.
 - Read the code at `file` and `line` before you translate. A label and an error need different Arabic.
-- Keep every placeholder, such as `{name}` or `{count}`, exactly as written and untranslated. It can sit wherever Arabic word order needs it.
+- Keep every placeholder and tag, such as `{name}` or `<b>`, exactly as written. Finish refuses a changed one.
 - Set `status` to `drafted` only once `ar` is filled. Empty entries stay `pending`. Never set `reviewed`.
 
 Write natural Arabic, not word-for-word English. Follow dualkit-bilingual-copy for register, gender-neutral buttons and plurals. The rules that matter most:

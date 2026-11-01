@@ -200,7 +200,7 @@ describe('convert arabic on Vite', () => {
     const summary = await convert(options(dir, 'arabic'), fakeIo())
     expect(summary.branch).toBe('dualkit/arabic')
     expect(git(dir, 'branch', '--show-current')).toBe('dualkit/arabic')
-    expect(read(dir, 'src/i18n.ts')).toContain("lng: 'ar'")
+    expect(read(dir, 'src/dualkit-i18n.ts')).toContain("lng: 'ar'")
     expect(existsSync(join(dir, 'src/dualkit.css'))).toBe(true)
     expect(read(dir, 'src/main.tsx')).toContain("import './dualkit.css'")
     expect(existsSync(join(dir, 'messages/ar.json'))).toBe(true)
