@@ -1,0 +1,193 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "payment-summary",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-11-01T11:17:49.106Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>ملخص الدفع</title>\n    <!-- Tailwind CSS -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Fonts - Tajawal -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap\" rel=\"stylesheet\">\n    <script>\n        tailwind.config = {\n            theme: {\n                extend: {\n                    fontFamily: {\n                        tajawal: ['Tajawal', 'sans-serif'],\n                    },\n                    colors: {\n                        fintech: {\n                            primary: '#0F172A',\n                            accent: '#059669',\n                            light: '#F8FAFC',\n                            border: '#E2E8F0'\n                        }\n                    }\n                }\n            }\n        }\n    </script>\n</head>\n<body class=\"bg-slate-900 font-tajawal flex items-center justify-center min-h-screen p-0 sm:p-4\">\n\n    <!-- Phone Container -->\n    <div class=\"w-full sm:max-w-[390px] h-screen sm:h-[844px] bg-fintech-light sm:rounded-[40px] shadow-2xl flex flex-col justify-between overflow-hidden relative border-0 sm:border-8 sm:border-slate-800\">\n        \n        <!-- Top Notch / Status Bar Area (Visual only) -->\n        <div class=\"bg-white px-6 pt-4 pb-3 flex justify-between items-center text-xs text-slate-400 border-b border-fintech-border/50\">\n            <span class=\"font-bold text-slate-700\">9:41</span>\n            <div class=\"flex items-center gap-1.5\">\n                <span class=\"text-[10px]\">5G</span>\n                <svg class=\"w-4 h-4\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h15.3l-.62-1.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9zm0 2c3.87 0 7 3.13 7 7 0 1.66-.58 3.18-1.56 4.41L16.5 15h-9l-.94 1.41C5.58 15.18 5 13.66 5 12c0-3.87 3.13-7 7-7z\"/></svg>\n            </div>\n        </div>\n\n        <!-- Header -->\n        <div class=\"bg-white px-6 py-4 flex items-center justify-between shadow-sm\">\n            <h1 class=\"text-lg font-bold text-fintech-primary\">ملخص الدفع</h1>\n            <button class=\"w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors focus:outline-none\">\n                <svg class=\"w-5 h-5 transform rotate-180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" viewBox=\"0 0 24 24\">\n                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 5l7 7-7 7\"></path>\n                </svg>\n            </button>\n        </div>\n\n        <!-- Main Content Area -->\n        <div class=\"flex-1 px-6 py-6 overflow-y-auto space-y-6\">\n            \n            <!-- Amount Card -->\n            <div class=\"bg-white p-6 rounded-2xl shadow-sm border border-fintech-border text-center space-y-2\">\n                <span class=\"text-xs font-medium text-slate-500 uppercase tracking-wider\">المبلغ المستحق</span>\n                <div class=\"flex items-baseline justify-center gap-1.5 text-fintech-primary\">\n                    <span class=\"text-4xl font-extrabold tracking-tight\">1,234.50</span>\n                    <span class=\"text-sm font-bold text-slate-500\">درهم إماراتي</span>\n                </div>\n                \n                <div class=\"pt-3 border-t border-slate-100 flex items-center justify-center gap-2 text-xs text-slate-500\">\n                    <svg class=\"w-4 h-4 text-fintech-accent\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\">\n                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"></path>\n                    </svg>\n                    <span>تاريخ الاستحقاق: 3 نوفمبر 2026 / 22 جمادى الآخرة 1448 هـ</span>\n                </div>\n            </div>\n\n            <!-- Order Details -->\n            <div class=\"bg-white p-4 rounded-xl border border-fintech-border flex items-center justify-between\">\n                <div class=\"flex items-center gap-3\">\n                    <div class=\"w-10 h-10 rounded-lg bg-emerald-50 text-fintech-accent flex items-center justify-center font-bold\">\n                        3\n                    </div>\n                    <div>\n                        <p class=\"text-sm font-bold text-slate-800\">تفاصيل الطلب</p>\n                        <p class=\"text-xs text-slate-500\">لديك 3 عناصر في هذا الطلب</p>\n                    </div>\n                </div>\n                <span class=\"text-xs font-bold text-fintech-accent cursor-pointer hover:underline\">عرض الكل</span>\n            </div>\n\n            <!-- SMS Receipt Section -->\n            <div class=\"space-y-2\">\n                <label class=\"block text-xs font-bold text-slate-700\">\n                    رقم الهاتف لاستلام الإيصال عبر الرسائل النصية (SMS)\n                </label>\n                <div class=\"relative flex items-center\">\n                    <!-- UAE Flag / Code Prefix -->\n                    <div class=\"absolute right-3 flex items-center gap-1.5 pl-2 border-l border-slate-200 text-slate-600 text-sm font-medium\">\n                        <span>+971</span>\n                        <span class=\"text-base\">🇦🇪</span>\n                    </div>\n                    <input \n                        type=\"tel\" \n                        placeholder=\"050 123 4567\" \n                        class=\"w-full bg-white pr-24 pl-4 py-3.5 rounded-xl border border-fintech-border text-sm text-slate-800 placeholder-slate-300 focus:outline-none focus:border-fintech-accent focus:ring-1 focus:ring-fintech-accent transition-all text-left\"\n                        dir=\"ltr\"\n                    >\n                </div>\n                <p class=\"text-[11px] text-slate-400\">سنرسل لك رابط الإيصال ورقم مرجعي فور إتمام الدفع.</p>\n            </div>\n\n        </div>\n\n        <!-- Footer / Action Button -->\n        <div class=\"bg-white px-6 py-5 border-t border-fintech-border shadow-lg\">\n            <button class=\"w-full bg-fintech-accent hover:bg-emerald-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-emerald-600/20 transition-all transform active:scale-[0.98] flex items-center justify-center gap-2\">\n                <span>ادفع الآن</span>\n                <svg class=\"w-5 h-5 transform rotate-180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" viewBox=\"0 0 24 24\">\n                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M14 5l7 7m0 0l-7 7m7-7H3\"></path>\n                </svg>\n            </button>\n            \n            <!-- Secure Badge -->\n            <div class=\"mt-3 flex items-center justify-center gap-1.5 text-[10px] text-slate-400\">\n                <svg class=\"w-3.5 h-3.5 text-emerald-600\" fill=\"currentColor\" viewBox=\"0 0 24 24\">\n                    <path d=\"M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z\"/>\n                </svg>\n                <span>مدفوعات آمنة ومشفرة بالكامل بمعايير المصرف المركزي</span>\n            </div>\n        </div>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 188,
+    "output": 2389
+  },
+  "ms": 20302,
+  "finish": "STOP",
+  "reasoningTokens": 806,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 30,
+  "score": 62,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 329,
+        "y": 480,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"+971\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span>+971</span>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 153.5,
+        "y": 172,
+        "width": 83,
+        "height": 12
+      },
+      "message": "0.6px letter-spacing on \"المبلغ المستحق\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<span class=\"text-xs font-medium text-slate-500 uppercase tracking-wider\">المبلغ المستحق</span>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 60.921875,
+        "y": 261,
+        "width": 245,
+        "height": 28
+      },
+      "message": "Line height is 1.33 on \"تاريخ الاستحقاق: 3 نوفمبر 2026 / 22 جماد…\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<span>تاريخ الاستحقاق: 3 نوفمبر 2026 / 22 جمادى الآخرة 1448 هـ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 153.5,
+        "y": 172,
+        "width": 83,
+        "height": 12
+      },
+      "message": "\"المبلغ المستحق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs font-medium text-slate-500 uppercase tracking-wider\">المبلغ المستحق</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 60.921875,
+        "y": 261,
+        "width": 245,
+        "height": 28
+      },
+      "message": "\"تاريخ الاستحقاق: 3 نوفمبر 2026 / 22 جماد…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>تاريخ الاستحقاق: 3 نوفمبر 2026 / 22 جمادى الآخرة 1448 هـ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 160,
+        "y": 381,
+        "width": 137,
+        "height": 12
+      },
+      "message": "\"لديك 3 عناصر في هذا الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-slate-500\">لديك 3 عناصر في هذا الطلب</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 41,
+        "y": 371,
+        "width": 55,
+        "height": 12
+      },
+      "message": "\"عرض الكل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs font-bold text-fintech-accent cursor-pointer hover:underline\">عرض الكل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 79,
+        "y": 440,
+        "width": 287,
+        "height": 12
+      },
+      "message": "\"رقم الهاتف لاستلام الإيصال عبر الرسائل ا…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label class=\"block text-xs font-bold text-slate-700\">\n                    رقم الهاتف لاستلام الإيصال عبر الرسائل النصية (SMS)\n                </label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 120,
+        "y": 522,
+        "width": 246,
+        "height": 11
+      },
+      "message": "\"سنرسل لك رابط الإيصال ورقم مرجعي فور إتم…\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-[11px] text-slate-400\">سنرسل لك رابط الإيصال ورقم مرجعي فور إتمام الدفع.</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 71,
+        "y": 811,
+        "width": 228,
+        "height": 10
+      },
+      "message": "\"مدفوعات آمنة ومشفرة بالكامل بمعايير المص…\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>مدفوعات آمنة ومشفرة بالكامل بمعايير المصرف المركزي</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 294,
+        "y": 475,
+        "width": 60,
+        "height": 24
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"absolute right-3 flex items-center gap-1.5 pl-2 border-l border-slate-200 text-slate-600 text-sm font-medium\">\n                        <span>+971</s"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 294,
+        "y": 475,
+        "width": 60,
+        "height": 24
+      },
+      "message": "padding-left: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"absolute right-3 flex items-center gap-1.5 pl-2 border-l border-slate-200 text-slate-600 text-sm font-medium\">\n                        <span>+971</s"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

@@ -1,0 +1,39 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "profile",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-11-01T11:48:53.120Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الملف شخصي</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --color-bg: #f5f5f5;\n      --color-surface: #ffffff;\n      --color-primary: #0066cc;\n      --color-text: #333333;\n      --color-text-secondary: #666666;\n      --spacing-xs: 4px;\n      --spacing-sm: 8px;\n      --spacing-md: 16px;\n      --spacing-lg: 24px;\n      --radius: 8px;\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n    }\n\n    * {\n      box-sizing: border-box;\n    }\n\n    body {\n      margin: 0;\n      font-family: 'Noto Sans Arabic', sans-serif;\n      background-color: var(--color-bg);\n      color: var(--color-text);\n      font-size: var(--type-body-size);\n      line-height: 1.7;\n      -webkit-font-smoothing: antialiased;\n    }\n\n    /* Arabic typography rules */\n    :lang(ar) {\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n    }\n\n    .phone-frame {\n      max-width: 375px;\n      margin: 0 auto;\n      background-color: var(--color-surface);\n      min-height: 100vh;\n      padding-inline: var(--spacing-lg);\n      padding-block: var(--spacing-lg);\n    }\n\n    h1 {\n      font-size: 1.5rem;\n      font-weight: 700;\n      margin-block-end: var(--spacing-lg);\n      text-align: start;\n    }\n\n    .profile-item {\n      display: flex;\n      flex-direction: row;\n      align-items: center;\n      justify-content: space-between;\n      gap: var(--spacing-md);\n      padding: var(--spacing-md);\n      border: 1px solid #e0e0e0;\n      border-radius: var(--radius);\n      margin-block-end: var(--spacing-md);\n      background-color: var(--color-surface);\n    }\n\n    .content {\n      display: flex;\n      flex-direction: column;\n      align-items: flex-start;\n      gap: var(--spacing-sm);\n    }\n\n    .label {\n      font-size: var(--type-label-size);\n      color: var(--color-text-secondary);\n    }\n\n    .value {\n      font-size: 1rem;\n      display: flex;\n      flex-direction: column;\n      gap: var(--spacing-xs);\n    }\n\n    .value .name,\n    .value .email {\n      display: block;\n    }\n\n    .edit-btn {\n      background: none;\n      border: none;\n      color: var(--color-primary);\n      font-size: 1rem;\n      cursor: pointer;\n      padding: var(--spacing-sm);\n      white-space: nowrap;\n    }\n\n    .edit-btn:hover {\n      text-decoration: underline;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"phone-frame\">\n    <h1>الملف شخصي</h1>\n\n    <!-- Item 1: Name and Email -->\n    <div class=\"profile-item\">\n      <div class=\"content\">\n        <div class=\"label\">المعلومات الأساسية</div>\n        <div class=\"value\">\n          <bdi dir=\"ltr\"><span class=\"name\">Layla Al Mansouri</span></bdi>\n          <bdi dir=\"ltr\"><span class=\"email\">layla@example.com</span></bdi>\n        </div>\n      </div>\n      <button class=\"edit-btn\">تعديل</button>\n    </div>\n\n    <!-- Item 2: Phone -->\n    <div class=\"profile-item\">\n      <div class=\"content\">\n        <div class=\"label\">رقم الهاتف</div>\n        <div class=\"value\">\n          <bdi dir=\"ltr\">+971 50 123 4567</bdi>\n        </div>\n      </div>\n      <button class=\"edit-btn\">تعديل</button>\n    </div>\n\n    <!-- Item 3: IBAN -->\n    <div class=\"profile-item\">\n      <div class=\"content\">\n        <div class=\"label\">الآيبان</div>\n        <div class=\"value\">\n          <bdi dir=\"ltr\">AE07 0331 2345 6789 0123 456</bdi>\n        </div>\n      </div>\n      <button class=\"edit-btn\">تعديل</button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6319,
+    "output": 8165
+  },
+  "ms": 95969,
+  "finish": "stop",
+  "reasoningTokens": 7019,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 96,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 56.5,
+        "y": 158.453125,
+        "width": 36,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"edit-btn\">تعديل</button>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

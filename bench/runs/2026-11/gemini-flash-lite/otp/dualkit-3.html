@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التحقق من الرمز - تطبيق البنك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f1f5f9;
+      --card-bg: #ffffff;
+      --primary: #046c4e;
+      --primary-hover: #03543f;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #cbd5e1;
+      --focus-ring: #046c4e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      direction: rtl;
+      text-align: start;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    :lang(ar) {
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    .phone-frame {
+      width: 100%;
+      max-width: 414px;
+      background-color: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 700px;
+    }
+
+    .app-bar {
+      display: flex;
+      align-items: center;
+      padding: 20px 24px;
+      gap: 16px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+
+    .back-btn:hover {
+      background-color: var(--bg-color);
+    }
+
+    .content {
+      padding: 12px 24px 32px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .icon-container {
+      width: 64px;
+      height: 64px;
+      background-color: #ecfdf5;
+      color: var(--primary);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-block-end: 24px;
+    }
+
+    .icon-container svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-block-end: 8px;
+    }
+
+    p.subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-block-end: 32px;
+      line-height: 1.6;
+    }
+
+    .otp-container {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      margin-block-end: 32px;
+      direction: ltr; /* Keeps the sequence intuitive for 6-digit codes */
+    }
+
+    .otp-input {
+      width: 48px;
+      height: 56px;
+      font-size: 24px;
+      font-weight: 600;
+      text-align: center;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      background-color: #fff;
+      color: var(--text-main);
+      transition: all 0.2s ease;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .otp-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(4, 108, 78, 0.15);
+    }
+
+    .timer-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-block-end: 32px;
+      font-size: 14px;
+    }
+
+    .timer-text {
+      color: var(--text-muted);
+    }
+
+    .resend-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      padding: 0;
+    }
+
+    .resend-btn:disabled {
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+
+    .verify-btn {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-block-start: auto;
+      font-family: inherit;
+    }
+
+    .verify-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .verify-btn:active {
+      transform: scale(0.99);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-frame">
+    <!-- Top Bar -->
+    <div class="app-bar">
+      <button class="back-btn" aria-label="رجوع">
+        <svg class="icon-directional" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <div class="icon-container">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+
+      <h1>أدخل الرمز</h1>
+      <p class="subtitle">
+        أرسلنا رمز التحقق المكون من 6 أرقام إلى <bdi dir="ltr">+966 55 123 4567</bdi>
+      </p>
+
+      <!-- OTP Input Boxes -->
+      <div class="otp-container">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-input" autocomplete="one-time-code" autofocus>
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-input">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-input">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-input">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-input">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-input">
+      </div>
+
+      <!-- Timer & Resend -->
+      <div class="timer-section">
+        <span class="timer-text">إعادة الإرسال خلال <bdi dir="ltr">٠:٤٥</bdi></span>
+        <button class="resend-btn" disabled>إعادة إرسال الرمز</button>
+      </div>
+
+      <!-- Action Button -->
+      <button class="verify-btn">التحقق</button>
+    </div>
+  </div>
+
+  <script>
+    // Simple auto-advance and backspace logic for OTP inputs
+    const inputs = document.querySelectorAll('.otp-input');
+
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        const value = e.target.value;
+        // Normalize Arabic-Indic digits if typed
+        const normalized = value.replace(/[٠-٩]/g, d => '٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+        e.target.value = normalized.replace(/\D/g, '').slice(-1);
+
+        if (e.target.value && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

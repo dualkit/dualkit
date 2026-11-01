@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عنوان التوصيل - بقالة دبي</title>
+  <!-- Google Fonts: IBM Plex Sans Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS v4 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    :lang(ar) {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      letter-spacing: 0;
+      text-transform: none;
+      line-height: 1.7;
+    }
+    /* Ensure no font size drops below 14px floor for Arabic UI */
+    .ar-text-floor {
+      font-size: 0.875rem; /* 14px */
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen flex justify-center items-start p-0 sm:py-8">
+
+  <!-- Mobile Phone Frame Container -->
+  <div class="w-full max-w-md bg-white min-h-screen sm:min-h-0 sm:rounded-3xl sm:shadow-xl overflow-hidden flex flex-col justify-between border border-gray-100">
+    
+    <!-- Top Header -->
+    <header class="bg-white px-5 py-4 border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
+      <button type="button" class="w-10 h-10 rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors" aria-label="رجوع">
+        <svg class="w-6 h-6 rtl:-scale-x-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      <h1 class="text-base font-semibold text-gray-800">إضافة عنوان التوصيل</h1>
+      <div class="w-10"></div> <!-- Spacer for balance -->
+    </header>
+
+    <!-- Form Body -->
+    <main class="p-5 flex-1 space-y-5">
+      
+      <!-- Notice / Banner -->
+      <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex items-start gap-3">
+        <svg class="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+        <p class="text-xs text-emerald-800 ar-text-floor">
+          حدد موقعك بدقة لضمان توصيل طلب البقالة طازجاً وبسرعة إلى باب منزلك.
+        </p>
+      </div>
+
+      <form id="addressForm" class="space-y-4">
+        
+        <!-- Emirate Picker -->
+        <div class="space-y-1.5">
+          <label for="emirate" class="block text-sm font-medium text-gray-700 ar-text-floor">الإمارة</label>
+          <div class="relative">
+            <select id="emirate" name="emirate" class="w-full appearance-none bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 pe-10 text-sm ar-text-floor focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all">
+              <option value="DXB" selected>دبي (Dubai)</option>
+              <option value="AUH">أبوظبي (Abu Dhabi)</option>
+              <option value="SHJ">الشارقة (Sharjah)</option>
+              <option value="AJM">عجمان (Ajman)</option>
+              <option value="UAQ">أم القيوين (Umm Al Quwain)</option>
+              <option value="RAK">رأس الخيمة (Ras Al Khaimah)</option>
+              <option value="FUJ">الفجيرة (Fujairah)</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 start-0 flex items-center px-4 text-gray-500">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Area (المنطقة) -->
+        <div class="space-y-1.5">
+          <label for="area" class="block text-sm font-medium text-gray-700 ar-text-floor">المنطقة / الحي</label>
+          <input type="text" id="area" name="area" dir="auto" placeholder="مثال: البرشاء 1، دبي مارينا، مردف" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm ar-text-floor focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all">
+        </div>
+
+        <!-- Street (الشارع) -->
+        <div class="space-y-1.5">
+          <label for="street" class="block text-sm font-medium text-gray-700 ar-text-floor">الشارع</label>
+          <input type="text" id="street" name="street" dir="auto" placeholder="مثال: شارع المروج، شارع الشيخ زايد" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm ar-text-floor focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all">
+        </div>
+
+        <!-- Building or Villa (المبنى أو الفيلا) -->
+        <div class="space-y-1.5">
+          <label for="building" class="block text-sm font-medium text-gray-700 ar-text-floor">المبنى أو الفيلا ورقم الشقة</label>
+          <input type="text" id="building" name="building" dir="auto" placeholder="مثال: برج الروضة، شقة رقم 402 أو فيلا 12" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm ar-text-floor focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all">
+        </div>
+
+        <!-- Makani Number (رقم مكاني) -->
+        <div class="space-y-1.5">
+          <div class="flex justify-between items-center">
+            <label for="makani" class="block text-sm font-medium text-gray-700 ar-text-floor">رقم مكاني (اختياري)</label>
+            <span class="text-xs text-gray-400">10 أرقام</span>
+          </div>
+          <input type="text" id="makani" name="makani" dir="ltr" inputmode="numeric" maxlength="10" placeholder="30491 89201" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-sm ar-text-floor text-start focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 transition-all font-mono tracking-wider">
+          <p class="text-xs text-gray-500">تجده على اللوحة الزرقاء عند مدخل المبنى في دبي.</p>
+        </div>
+
+        <!-- Phone Number -->
+        <div class="space-y-1.5">
+          <label for="phone" class="block text-sm font-medium text-gray-700 ar-text-floor">رقم الهاتف المحمول</label>
+          <div class="flex items-center bg-gray-50 border border-gray-200 rounded-xl overflow-hidden focus-within:border-emerald-600 focus-within:ring-1 focus-within:ring-emerald-600 transition-all">
+            <div class="bg-gray-100 px-3.5 py-3.5 text-gray-600 text-sm font-medium border-e border-gray-200 flex items-center gap-1.5">
+              <span>🇦🇪</span>
+              <bdi dir="ltr">+971</bdi>
+            </div>
+            <input type="tel" id="phone" name="phone" dir="ltr" inputmode="tel" placeholder="050 123 4567" class="w-full bg-transparent px-4 py-3.5 text-sm ar-text-floor text-start focus:outline-none">
+          </div>
+          <p class="text-xs text-gray-500">مثال: <bdi dir="ltr">050 123 4567</bdi> للتواصل عند التوصيل.</p>
+        </div>
+
+      </form>
+    </main>
+
+    <!-- Bottom Action CTA -->
+    <footer class="p-5 bg-white border-t border-gray-100 sticky bottom-0">
+      <button type="submit" form="addressForm" class="w-full bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-medium py-4 rounded-2xl shadow-lg shadow-emerald-600/20 transition-all text-base ar-text-floor flex items-center justify-center gap-2">
+        <span>حفظ العنوان</span>
+      </button>
+    </footer>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إعدادات الحساب - بنك البحرين</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        bankPrimary: '#0A2540',
+                        bankAccent: '#00D4B2',
+                        bankBg: '#F4F6F8',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Toggle Switch Styles */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #0A2540;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #0A2540;
+        }
+    </style>
+</head>
+<body class="bg-gray-200 font-cairo flex items-center justify-center min-h-screen p-4">
+
+    <!-- Phone Frame -->
+    <div class="w-full max-w-[380px] bg-bankBg rounded-[45px] shadow-2xl overflow-hidden border-[10px] border-gray-900 relative flex flex-col h-[780px]">
+        
+        <!-- iPhone Dynamic Island / Notch Area -->
+        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 h-5 w-32 bg-gray-900 rounded-b-2xl z-50"></div>
+
+        <!-- Status Bar -->
+        <div class="bg-bankPrimary text-white px-6 pt-3 pb-2 flex justify-between items-center text-xs select-none">
+            <span>9:41</span>
+            <div class="flex items-center space-x-1 space-x-reverse">
+                <!-- Signal, Wifi, Battery Icons -->
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h3.6c1.19.62 2.55 1 4.05 1 4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7z"/></svg>
+                <span class="font-bold">5G</span>
+            </div>
+        </div>
+
+        <!-- App Header -->
+        <div class="bg-bankPrimary text-white px-6 py-4 flex items-center justify-between shadow-md">
+            <button class="text-white focus:outline-none">
+                <svg class="w-6 h-6 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+            <h1 class="text-lg font-bold">الإعدادات</h1>
+            <div class="w-6"></div> <!-- Spacer for balance -->
+        </div>
+
+        <!-- Scrollable Settings Content -->
+        <div class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+
+            <!-- Group 1: Account -->
+            <div>
+                <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">الحساب</h2>
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden divide-y divide-gray-100">
+                    
+                    <!-- Name Row -->
+                    <div class="flex items-center justify-between p-4 hover:bg-gray-50 transition cursor-pointer">
+                        <span class="text-gray-800 font-medium text-sm">الاسم</span>
+                        <div class="flex items-center space-x-2 space-x-reverse text-gray-500 text-sm">
+                            <span>محمد أحمد آل خليفة</span>
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </div>
+                    </div>
+
+                    <!-- Phone Row -->
+                    <div class="flex items-center justify-between p-4 hover:bg-gray-50 transition cursor-pointer">
+                        <span class="text-gray-800 font-medium text-sm">رقم الهاتف</span>
+                        <div class="flex items-center space-x-2 space-x-reverse text-gray-500 text-sm" dir="ltr">
+                            <span class="text-gray-400 text-xs">🇧🇭</span>
+                            <span class="text-gray-700 font-semibold">+973 3600 1234</span>
+                            <svg class="w-4 h-4 text-gray-400 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </div>
+                    </div>
+
+                    <!-- Language Row -->
+                    <div class="flex items-center justify-between p-4 hover:bg-gray-50 transition cursor-pointer">
+                        <span class="text-gray-800 font-medium text-sm">لغة التطبيق</span>
+                        <div class="flex items-center space-x-2 space-x-reverse text-sm">
+                            <span class="text-bankPrimary font-semibold">العربية</span>
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Group 2: Security -->
+            <div>
+                <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">الأمان</h2>
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden divide-y divide-gray-100">
+                    
+                    <!-- Face ID Toggle -->
+                    <div class="flex items-center justify-between p-4">
+                        <span class="text-gray-800 font-medium text-sm">معرف الوجه (Face ID)</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bankPrimary"></div>
+                        </label>
+                    </div>
+
+                    <!-- Two-Step Login Toggle -->
+                    <div class="flex items-center justify-between p-4">
+                        <div>
+                            <span class="text-gray-800 font-medium text-sm block">تسجيل الدخول بخطوتين</span>
+                            <span class="text-gray-400 text-xs">رسالة نصية أمان إضافية</span>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bankPrimary"></div>
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Group 3: Notifications -->
+            <div>
+                <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">الإشعارات</h2>
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden divide-y divide-gray-100">
+                    
+                    <!-- Transfers Toggle -->
+                    <div class="flex items-center justify-between p-4">
+                        <span class="text-gray-800 font-medium text-sm">التحويلات</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bankPrimary"></div>
+                        </label>
+                    </div>
+
+                    <!-- Offers Toggle -->
+                    <div class="flex items-center justify-between p-4">
+                        <span class="text-gray-800 font-medium text-sm">العروض</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bankPrimary"></div>
+                        </label>
+                    </div>
+
+                    <!-- Statements Toggle -->
+                    <div class="flex items-center justify-between p-4">
+                        <span class="text-gray-800 font-medium text-sm">كشوفات الحساب</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-bankPrimary"></div>
+                        </label>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- App Version Footer -->
+            <div class="text-center pt-2 pb-6">
+                <span class="text-xs text-gray-400">إصدار التطبيق 3.8.1 (البحرين)</span>
+            </div>
+
+        </div>
+
+        <!-- Phone Home Indicator Bar -->
+        <div class="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gray-400 rounded-full"></div>
+    </div>
+
+</body>
+</html>

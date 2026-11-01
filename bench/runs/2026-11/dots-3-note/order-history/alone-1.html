@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تاريخ الطلب</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 16px;
+    direction: rtl;
+  }
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  h1 {
+    font-size: 20px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .order {
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+  }
+  .order:last-child {
+    border-bottom: none;
+  }
+  .order-number {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+  }
+  .date {
+    font-size: 14px;
+    color: #555;
+    margin-top: 4px;
+  }
+  .total {
+    font-size: 14px;
+    color: #2a7f2a;
+    margin-top: 4px;
+  }
+  .status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+  .delivered { background: #e6f7e6; color: #2e7d32; }
+  .onway { background: #fff3cd; color: #856404; }
+  .cancelled { background: #f8d7da; color: #721c24; }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>تاريخ الطلب</h1>
+    <div class="order">
+      <div class="order-number">#A-10293</div>
+      <div class="date">التاريخ: 2023-10-05 (ميلادي) / 1445-02-20 (هجري)</div>
+      <div class="total">الإجمالي: 150 ريال</div>
+      <div class="status delivered">تم التسليم</div>
+    </div>
+    <div class="order">
+      <div class="order-number">#A-10294</div>
+      <div class="date">التاريخ: 2023-10-06 (ميلادي) / 1445-02-21 (هجري)</div>
+      <div class="total">الإجمالي: 250 ريال</div>
+      <div class="status onway">في طريق التسليم</div>
+    </div>
+    <div class="order">
+      <div class="order-number">#A-10295</div>
+      <div class="date">التاريخ: 2023-10-07 (ميلادي) / 1445-02-22 (هجري)</div>
+      <div class="total">الإجمالي: 300 ريال</div>
+      <div class="status cancelled">ملغى</div>
+    </div>
+    <div class="order">
+      <div class="order-number">#A-10296</div>
+      <div class="date">التاريخ: 2023-10-08 (ميلادي) / 1445-02-23 (هجري)</div>
+      <div class="total">الإجمالي: 120 ريال</div>
+      <div class="status delivered">تم التسليم</div>
+    </div>
+  </div>
+</body>
+</html>

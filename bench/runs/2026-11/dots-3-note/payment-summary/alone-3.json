@@ -1,0 +1,53 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "payment-summary",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-11-01T11:20:29.096Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Payment Summary</title>\n  <style>\n    body {\n      margin: 0;\n      padding: 0;\n      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n      background-color: #f5f5f5;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      min-height: 100vh;\n    }\n    .app {\n      width: 100%;\n      max-width: 375px;\n      background-color: #ffffff;\n      border-radius: 16px;\n      box-shadow: 0 4px 12px rgba(0,0,0,0.1);\n      overflow: hidden;\n    }\n    header {\n      display: flex;\n      align-items: center;\n      padding: 16px;\n      background-color: #0057b8;\n      color: #ffffff;\n    }\n    .back-btn {\n      background: none;\n      border: none;\n      color: #ffffff;\n      font-size: 28px;\n      cursor: pointer;\n      padding: 0 8px;\n    }\n    .title {\n      flex: 1;\n      text-align: center;\n      font-size: 18px;\n      font-weight: 600;\n    }\n    main {\n      padding: 24px;\n    }\n    .section {\n      margin-bottom: 24px;\n    }\n    .label {\n      display: block;\n      font-size: 14px;\n      color: #555;\n      margin-bottom: 6px;\n    }\n    .value {\n      font-size: 24px;\n      font-weight: bold;\n      color: #000;\n    }\n    .date .dates {\n      display: flex;\n      flex-direction: column;\n      gap: 4px;\n    }\n    .date .dates div {\n      font-size: 16px;\n      color: #333;\n    }\n    .items p {\n      font-size: 16px;\n      color: #333;\n      margin: 0;\n    }\n    .phone label {\n      display: block;\n      font-size: 14px;\n      color: #555;\n      margin-bottom: 6px;\n    }\n    .phone input {\n      width: 100%;\n      padding: 12px;\n      border: 1px solid #ccc;\n      border-radius: 8px;\n      font-size: 16px;\n      direction: ltr;\n      text-align: left;\n    }\n    .pay-now {\n      width: 100%;\n      padding: 16px;\n      background-color: #0057b8;\n      color: #ffffff;\n      border: none;\n      border-radius: 8px;\n      font-size: 18px;\n      font-weight: bold;\n      cursor: pointer;\n      margin-top: 8px;\n    }\n    .pay-now:hover {\n      background-color: #004494;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"app\">\n    <header>\n      <button class=\"back-btn\">‹</button>\n      <h1 class=\"title\">ملخص الدفع</h1>\n    </header>\n    <main>\n      <div class=\"section amount\">\n        <span class=\"label\">المبلغ المستحق</span>\n        <span class=\"value\">1,234.50 AED</span>\n      </div>\n      <div class=\"section date\">\n        <span class=\"label\">التاريخ المستحق</span>\n        <div class=\"dates\">\n          <div>3 نوفمبر 2026 (ميلادي)</div>\n          <div>12 جمادى الأولى 1448 (هجري)</div>\n        </div>\n      </div>\n      <div class=\"section items\">\n        <p>لديك 3 عناصر في هذا الطلب</p>\n      </div>\n      <div class=\"section phone\">\n        <label for=\"phone\">رقم الهاتف</label>\n        <input type=\"tel\" id=\"phone\" placeholder=\"050 123 4567\" dir=\"ltr\">\n      </div>\n      <button class=\"pay-now\">ادفع الآن</button>\n    </main>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 190,
+    "output": 4388
+  },
+  "ms": 51009,
+  "finish": "stop",
+  "reasoningTokens": 3454,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 135.828125,
+        "y": 209.5,
+        "width": 93.015625,
+        "height": 20
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1 class=\"title\">ملخص الدفع</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 162.484375,
+        "y": 602.546875,
+        "width": 65.015625,
+        "height": 20
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"pay-now\">ادفع الآن</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

@@ -1,0 +1,81 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "profile",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-11-01T11:22:37.596Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الملف الشخصي</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --bg-color: #f3f4f6;\n      --card-bg: #ffffff;\n      --text-primary: #111827;\n      --text-secondary: #4b5563;\n      --primary: #059669;\n      --primary-hover: #047857;\n      --border-color: #e5e7eb;\n    }\n    \n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      background-color: var(--bg-color);\n      color: var(--text-primary);\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      min-height: 100vh;\n      padding: 16px;\n    }\n\n    :lang(ar) {\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.6;\n    }\n\n    .phone-frame {\n      width: 100%;\n      max-width: 390px;\n      background-color: var(--card-bg);\n      border-radius: 36px;\n      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);\n      overflow: hidden;\n      display: flex;\n      flex-direction: column;\n      border: 8px solid #1f2937;\n    }\n\n    .status-bar {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 12px 24px;\n      font-size: 14px;\n      font-weight: 600;\n      background-color: #ffffff;\n    }\n\n    .header {\n      padding: 16px 20px;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      border-bottom: 1px solid var(--border-color);\n      background-color: #ffffff;\n    }\n\n    .header h1 {\n      font-size: 18px;\n      font-weight: 700;\n    }\n\n    .content {\n      padding: 20px;\n      display: flex;\n      flex-direction: column;\n      gap: 20px;\n      overflow-y: auto;\n      flex: 1;\n    }\n\n    .profile-card {\n      display: flex;\n      align-items: center;\n      gap: 16px;\n      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);\n      padding: 16px;\n      border-radius: 16px;\n      border: 1px solid #a7f3d0;\n    }\n\n    .avatar {\n      width: 56px;\n      height: 56px;\n      border-radius: 50%;\n      background-color: var(--primary);\n      color: white;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-size: 18px;\n      font-weight: 700;\n      flex-shrink: 0;\n    }\n\n    .profile-info {\n      flex: 1;\n      min-width: 0;\n    }\n\n    .profile-info h2 {\n      font-size: 16px;\n      font-weight: 700;\n      margin-bottom: 2px;\n      white-space: nowrap;\n      overflow: hidden;\n      text-overflow: ellipsis;\n    }\n\n    .profile-info p {\n      font-size: 14px;\n      color: var(--text-secondary);\n      white-space: nowrap;\n      overflow: hidden;\n      text-overflow: ellipsis;\n    }\n\n    .section-title {\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--text-secondary);\n      margin-bottom: 8px;\n      margin-inline-start: 4px;\n    }\n\n    .card-group {\n      background-color: #ffffff;\n      border-radius: 16px;\n      border: 1px solid var(--border-color);\n      overflow: hidden;\n    }\n\n    .info-row {\n      display: flex;\n      flex-direction: column;\n      gap: 6px;\n      padding: 14px 16px;\n      border-bottom: 1px solid var(--border-color);\n    }\n\n    .info-row:last-child {\n      border-bottom: none;\n    }\n\n    .info-row-top {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n    }\n\n    .info-label {\n      font-size: 14px;\n      color: var(--text-secondary);\n    }\n\n    .info-value {\n      font-size: 15px;\n      font-weight: 600;\n      color: var(--text-primary);\n      direction: ltr;\n      unicode-bidi: isolate;\n      text-align: start;\n    }\n\n    .btn-edit {\n      background: none;\n      border: 1px solid var(--border-color);\n      padding: 6px 14px;\n      border-radius: 8px;\n      font-family: inherit;\n      font-size: 14px;\n      font-weight: 500;\n      color: var(--primary);\n      cursor: pointer;\n      transition: all 0.2s;\n    }\n\n    .btn-edit:hover {\n      background-color: #f0fdf4;\n      border-color: #a7f3d0;\n    }\n\n    .nav-bar {\n      display: flex;\n      justify-content: space-around;\n      padding: 12px;\n      background-color: #ffffff;\n      border-top: 1px solid var(--border-color);\n    }\n\n    .nav-item {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      font-size: 12px;\n      color: var(--text-secondary);\n      text-decoration: none;\n      gap: 4px;\n    }\n\n    .nav-item.active {\n      color: var(--primary);\n    }\n  </style>\n</head>\n<body>\n  <div class=\"phone-frame\">\n    <!-- Mobile Status Bar -->\n    <div class=\"status-bar\">\n      <span>09:41</span>\n      <span>5G</span>\n    </div>\n\n    <!-- App Header -->\n    <div class=\"header\">\n      <h1>الملف الشخصي</h1>\n      <button style=\"background:none; border:none; cursor:pointer; color:var(--text-secondary);\" aria-label=\"إغلاق\">\n        <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M18 6L6 18M6 6l12 12\"/></svg>\n      </button>\n    </div>\n\n    <!-- Main Content -->\n    <div class=\"content\">\n      <!-- Name & Email Profile Card -->\n      <div class=\"profile-card\">\n        <div class=\"avatar\" aria-hidden=\"true\">ل م</div>\n        <div class=\"profile-info\">\n          <h2><bdi>ليلى المنصوري</bdi></h2>\n          <p><bdi dir=\"ltr\">layla@example.com</bdi></p>\n        </div>\n        <button class=\"btn-edit\" aria-label=\"تعديل الملف الشخصي\">تعديل</button>\n      </div>\n\n      <!-- Account Details Group -->\n      <div>\n        <div class=\"section-title\">معلومات الحساب والاتصال</div>\n        <div class=\"card-group\">\n          <!-- Phone Number Row -->\n          <div class=\"info-row\">\n            <span class=\"info-label\">رقم الهاتف المتحرك</span>\n            <div class=\"info-row-top\">\n              <span class=\"info-value\"><bdi dir=\"ltr\">+971 50 123 4567</bdi></span>\n              <button class=\"btn-edit\" aria-label=\"تعديل رقم الهاتف\">تعديل</button>\n            </div>\n          </div>\n\n          <!-- IBAN Row -->\n          <div class=\"info-row\">\n            <span class=\"info-label\">رقم الحساب المصرفي الدولي (IBAN)</span>\n            <div class=\"info-row-top\">\n              <span class=\"info-value\"><bdi dir=\"ltr\">AE07 0331 2345 6789 0123 456</bdi></span>\n              <button class=\"btn-edit\" aria-label=\"تعديل رقم الآيبان\">تعديل</button>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <!-- Bottom Navigation Bar -->\n    <div class=\"nav-bar\">\n      <a href=\"#\" class=\"nav-item\">\n        <svg width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path d=\"M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6\"/></svg>\n        <span>الرئيسية</span>\n      </a>\n      <a href=\"#\" class=\"nav-item\">\n        <svg width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path d=\"M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2\"/></svg>\n        <span>المعاملات</span>\n      </a>\n      <a href=\"#\" class=\"nav-item active\">\n        <svg width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path d=\"M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z\"/></svg>\n        <span>حسابي</span>\n      </a>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6520,
+    "output": 2990
+  },
+  "ms": 15950,
+  "finish": "STOP",
+  "reasoningTokens": 4353,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 87,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 282.5,
+        "y": 669.28125,
+        "width": 37,
+        "height": 18
+      },
+      "message": "\"الرئيسية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>الرئيسية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 169.5,
+        "y": 669.28125,
+        "width": 44,
+        "height": 18
+      },
+      "message": "\"المعاملات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المعاملات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 70.5,
+        "y": 669.28125,
+        "width": 30,
+        "height": 18
+      },
+      "message": "\"حسابي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>حسابي</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 44,
+        "y": 381.71875,
+        "width": 298,
+        "height": 22.390625
+      },
+      "message": "margin-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"section-title\">معلومات الحساب والاتصال</div>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

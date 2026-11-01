@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>البروفايل</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+      direction: rtl;
+      text-align: right;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 1.5rem;
+    }
+    .profile-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .profile-item:last-child {
+      border-bottom: none;
+    }
+    .label {
+      font-weight: bold;
+      color: #555;
+      margin-left: 10px;
+      white-space: nowrap;
+    }
+    .value {
+      flex: 1;
+      margin: 0 10px;
+      color: #333;
+      word-break: break-word;
+    }
+    .edit {
+      background: none;
+      border: none;
+      color: #007AFF;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 5px;
+    }
+    .edit:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>البروفايل</h1>
+
+    <div class="profile-item">
+      <span class="label">الاسم:</span>
+      <span class="value">Layla Al Mansouri</span>
+      <button class="edit">تعديل</button>
+    </div>
+
+    <div class="profile-item">
+      <span class="label">البريد الإلكتروني:</span>
+      <span class="value">layla@example.com</span>
+      <button class="edit">تعديل</button>
+    </div>
+
+    <div class="profile-item">
+      <span class="label">رقم الهاتف:</span>
+      <span class="value">+971 50 123 4567</span>
+      <button class="edit">تعديل</button>
+    </div>
+
+    <div class="profile-item">
+      <span class="label">IBAN:</span>
+      <span class="value">AE07 0331 2345 6789 0123 456</span>
+    </div>
+  </div>
+</body>
+</html>

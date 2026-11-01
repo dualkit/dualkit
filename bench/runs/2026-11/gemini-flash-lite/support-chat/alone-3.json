@@ -1,0 +1,319 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "support-chat",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-11-01T11:26:38.592Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>خدمة العملاء - الدردشة</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap\" rel=\"stylesheet\">\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">\n    <style>\n        * {\n            box-sizing: border-box;\n            margin: 0;\n            padding: 0;\n            font-family: 'Tajawal', sans-serif;\n        }\n\n        body {\n            background-color: #e4e9f0;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            min-height: 100vh;\n        }\n\n        /* Phone Container Frame */\n        .phone-frame {\n            width: 100%;\n            max-width: 390px;\n            height: 100vh;\n            max-height: 844px;\n            background-color: #f8f9fa;\n            display: flex;\n            flex-direction: column;\n            position: relative;\n            box-shadow: 0 10px 25px rgba(0,0,0,0.15);\n            overflow: hidden;\n        }\n\n        @media (min-width: 400px) {\n            .phone-frame {\n                border-radius: 40px;\n                border: 10px solid #1a1a1a;\n                height: 844px;\n            }\n        }\n\n        /* Top Notch / Status Bar Simulation */\n        .status-bar {\n            background-color: #004d40;\n            color: white;\n            padding: 10px 20px 5px 20px;\n            display: flex;\n            justify-content: space-between;\n            font-size: 12px;\n            font-weight: 500;\n        }\n\n        /* Chat Header */\n        .chat-header {\n            background-color: #004d40;\n            color: white;\n            padding: 15px 20px;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            box-shadow: 0 2px 5px rgba(0,0,0,0.1);\n        }\n\n        .agent-info {\n            display: flex;\n            align-items: center;\n            gap: 12px;\n        }\n\n        .agent-avatar {\n            width: 42px;\n            height: 42px;\n            border-radius: 50%;\n            background-color: #00796b;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            font-weight: 700;\n            font-size: 18px;\n            border: 2px solid rgba(255,255,255,0.3);\n            position: relative;\n        }\n\n        .status-dot {\n            width: 10px;\n            height: 100px;\n            background-color: #4caf50;\n            border-radius: 50%;\n            position: absolute;\n            bottom: 0;\n            left: 0;\n            border: 2px solid #004d40;\n        }\n\n        .agent-details h3 {\n            font-size: 16px;\n            font-weight: 700;\n        }\n\n        .agent-details span {\n            font-size: 12px;\n            color: #b2dfdb;\n        }\n\n        .header-icons {\n            display: flex;\n            gap: 15px;\n            font-size: 18px;\n            color: #b2dfdb;\n        }\n\n        /* Chat Body */\n        .chat-body {\n            flex: 1;\n            padding: 20px;\n            overflow-y: auto;\n            display: flex;\n            flex-direction: column;\n            gap: 16px;\n            background-color: #f4f6f8;\n        }\n\n        .date-divider {\n            text-align: center;\n            font-size: 11px;\n            color: #888;\n            margin: 5px 0;\n            position: relative;\n        }\n\n        .message {\n            max-width: 80%;\n            padding: 12px 16px;\n            border-radius: 16px;\n            position: relative;\n            font-size: 14px;\n            line-height: 1.5;\n            box-shadow: 0 1px 2px rgba(0,0,0,0.05);\n        }\n\n        .message.customer {\n            background-color: #004d40;\n            color: white;\n            align-self: flex-start;\n            border-bottom-left-radius: 4px;\n        }\n\n        .message.agent {\n            background-color: #ffffff;\n            color: #333;\n            align-self: flex-end;\n            border-bottom-right-radius: 4px;\n            border: 1px solid #e0e0e0;\n        }\n\n        .message-text {\n            margin-bottom: 4px;\n            word-break: break-word;\n        }\n\n        .message-time {\n            font-size: 10px;\n            text-align: left;\n            opacity: 0.8;\n            margin-top: 4px;\n        }\n\n        .message.customer .message-time {\n            color: #b2dfdb;\n        }\n\n        .message.agent .message-time {\n            color: #888;\n        }\n\n        /* Chat Footer */\n        .chat-footer {\n            padding: 12px 16px;\n            background-color: #ffffff;\n            display: flex;\n            align-items: center;\n            gap: 10px;\n            border-top: 1px solid #e0e0e0;\n        }\n\n        .input-wrapper {\n            flex: 1;\n            background-color: #f0f2f5;\n            border-radius: 25px;\n            display: flex;\n            align-items: center;\n            padding: 0 15px;\n            border: 1px solid #ddd;\n        }\n\n        .input-wrapper input {\n            flex: 1;\n            border: none;\n            background: transparent;\n            padding: 10px 5px;\n            font-size: 14px;\n            outline: none;\n            direction: rtl;\n        }\n\n        .input-wrapper input::placeholder {\n            color: #999;\n        }\n\n        .attachment-btn {\n            background: none;\n            border: none;\n            color: #666;\n            font-size: 18px;\n            cursor: pointer;\n            padding: 0 5px;\n        }\n\n        .send-btn {\n            background-color: #004d40;\n            color: white;\n            border: none;\n            width: 42px;\n            height: 42px;\n            border-radius: 50%;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            cursor: pointer;\n            transition: background 0.2s;\n            box-shadow: 0 2px 5px rgba(0,77,64,0.3);\n        }\n\n        .send-btn:hover {\n            background-color: #00332c;\n        }\n\n        .send-btn i {\n            font-size: 16px;\n            transform: rotate(180deg); /* Adjust arrow for RTL */\n        }\n    </style>\n</head>\n<body>\n\n    <div class=\"phone-frame\">\n        <!-- Status Bar -->\n        <div class=\"status-bar\">\n            <span>10:40</span>\n            <div>\n                <i class=\"fa-solid fa-signal\"></i>\n                <i class=\"fa-solid fa-wifi\" style=\"margin: 0 5px;\"></i>\n                <i class=\"fa-solid fa-battery-full\"></i>\n            </div>\n        </div>\n\n        <!-- Chat Header -->\n        <div class=\"chat-header\">\n            <div class=\"agent-info\">\n                <div class=\"agent-avatar\">\n                    س\n                    <div class=\"status-dot\"></div>\n                </div>\n                <div class=\"agent-details\">\n                    <h3>سارة (الدعم الفني)</h3>\n                    <span>متواجد الآن</span>\n                </div>\n            </div>\n            <div class=\"header-icons\">\n                <i class=\"fa-solid fa-phone\"></i>\n                <i class=\"fa-solid fa-ellipsis-vertical\"></i>\n            </div>\n        </div>\n\n        <!-- Chat Body (Messages) -->\n        <div class=\"chat-body\">\n            <div class=\"date-divider\">اليوم</div>\n\n            <!-- Message 1 -->\n            <div class=\"message customer\">\n                <div class=\"message-text\">السلام عليكم، أبي أفعّل الـ eSIM الجديدة حق خطي لو سمحتوا.</div>\n                <div class=\"message-time\">10:30 ص</div>\n            </div>\n\n            <!-- Message 2 -->\n            <div class=\"message agent\">\n                <div class=\"message-text\">وعليكم السلام أهلاً بك! معك سارة من خدمة العملاء. ممكن تزويدي برقم الطلب TX-48213 لو سمحت؟</div>\n                <div class=\"message-time\">10:31 ص</div>\n            </div>\n\n            <!-- Message 3 -->\n            <div class=\"message customer\">\n                <div class=\"message-text\">تفضلـي، هذا هو رقم الطلب TX-48213. والمشكلة إن سرعة الـ 5G مو واصلة زين عندي بالبيت.</div>\n                <div class=\"message-time\">10:33 ص</div>\n            </div>\n\n            <!-- Message 4 -->\n            <div class=\"message agent\">\n                <div class=\"message-text\">شكراً لك. بالنسبة للـ eSIM، تم إرسال الـ QR code على إيميلك المسجل. وبخصوص الـ 5G، جرب تسوي restart للراوتر أو التليفون.</div>\n                <div class=\"message-time\">10:35 ص</div>\n            </div>\n\n            <!-- Message 5 -->\n            <div class=\"message customer\">\n                <div class=\"message-text\">تمام، جربت وطريقتج زبطت! يعطيج العافية سارة ما قصرتي والله.</div>\n                <div class=\"message-time\">10:38 ص</div>\n            </div>\n\n            <!-- Message 6 -->\n            <div class=\"message agent\">\n                <div class=\"message-text\">الله يعافيك! عساك ع القوة، وإذا احتجت أي شي ثاني إحنا بالخدمة دائماً. يوم سعيد!</div>\n                <div class=\"message-time\">10:39 ص</div>\n            </div>\n        </div>\n\n        <!-- Chat Footer -->\n        <div class=\"chat-footer\">\n            <button class=\"attachment-btn\"><i class=\"fa-solid fa-paperclip\"></i></button>\n            <div class=\"input-wrapper\">\n                <input type=\"text\" placeholder=\"اكتب رسالتك هنا...\">\n            </div>\n            <button class=\"send-btn\"><i class=\"fa-solid fa-paper-plane\"></i></button>\n        </div>\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 146,
+    "output": 2854
+  },
+  "ms": 10119,
+  "finish": "STOP",
+  "reasoningTokens": 1148,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 55,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 106,
+        "y": 219,
+        "width": 248,
+        "height": 15
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"message-time\">10:30 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 37,
+        "y": 342,
+        "width": 246,
+        "height": 15
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"message-time\">10:31 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 106,
+        "y": 465,
+        "width": 248,
+        "height": 15
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"message-time\">10:33 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 37,
+        "y": 588,
+        "width": 246,
+        "height": 15
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"message-time\">10:35 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 106,
+        "y": 690,
+        "width": 248,
+        "height": 15
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"message-time\">10:38 ص</div>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 37,
+        "y": 792,
+        "width": 246,
+        "height": 15
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<div class=\"message-time\">10:39 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 262,
+        "y": 69,
+        "width": 54,
+        "height": 12
+      },
+      "message": "\"متواجد الآن\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>متواجد الآن</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 184,
+        "y": 128,
+        "width": 22,
+        "height": 11
+      },
+      "message": "\"اليوم\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"date-divider\">اليوم</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 106,
+        "y": 221,
+        "width": 38,
+        "height": 10
+      },
+      "message": "\"10:30 ص\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"message-time\">10:30 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 37,
+        "y": 344,
+        "width": 36,
+        "height": 10
+      },
+      "message": "\"10:31 ص\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"message-time\">10:31 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 106,
+        "y": 467,
+        "width": 37,
+        "height": 10
+      },
+      "message": "\"10:33 ص\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"message-time\">10:33 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 37,
+        "y": 590,
+        "width": 37,
+        "height": 10
+      },
+      "message": "\"10:35 ص\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"message-time\">10:35 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 106,
+        "y": 692,
+        "width": 37,
+        "height": 10
+      },
+      "message": "\"10:38 ص\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"message-time\">10:38 ص</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 37,
+        "y": 794,
+        "width": 37,
+        "height": 10
+      },
+      "message": "\"10:39 ص\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"message-time\">10:39 ص</div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 330,
+        "y": -15,
+        "width": 10,
+        "height": 100
+      },
+      "message": "left: 0px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"status-dot\"></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 90,
+        "y": 161,
+        "width": 280,
+        "height": 85
+      },
+      "message": "border-bottom-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">\n                <div class=\"message-text\">السلام عليكم، أبي أفعّل الـ eSIM الجديدة حق خطي لو سمحتوا.</div>\n                <div c"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 262,
+        "width": 280,
+        "height": 108
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">\n                <div class=\"message-text\">وعليكم السلام أهلاً بك! معك سارة من خدمة العملاء. ممكن تزويدي برقم الطلب TX-48213 لو سمحت؟"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 90,
+        "y": 386,
+        "width": 280,
+        "height": 106
+      },
+      "message": "border-bottom-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">\n                <div class=\"message-text\">تفضلـي، هذا هو رقم الطلب TX-48213. والمشكلة إن سرعة الـ 5G مو واصلة زين عندي بالبيت.</d"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 508,
+        "width": 280,
+        "height": 108
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">\n                <div class=\"message-text\">شكراً لك. بالنسبة للـ eSIM، تم إرسال الـ QR code على إيميلك المسجل. وبخصوص الـ 5G، جرب تسو"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 90,
+        "y": 632,
+        "width": 280,
+        "height": 85
+      },
+      "message": "border-bottom-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">\n                <div class=\"message-text\">تمام، جربت وطريقتج زبطت! يعطيج العافية سارة ما قصرتي والله.</div>\n                <div "
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 733,
+        "width": 280,
+        "height": 87
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">\n                <div class=\"message-text\">الله يعافيك! عساك ع القوة، وإذا احتجت أي شي ثاني إحنا بالخدمة دائماً. يوم سعيد!</div>\n    "
+    }
+  ],
+  "unreadableStylesheets": 2,
+  "pageHeight": 844
+}

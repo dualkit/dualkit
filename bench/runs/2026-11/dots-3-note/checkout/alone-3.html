@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الطلب</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+    direction: rtl;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+  #back {
+    background: none;
+    border: none;
+    font-size: 24px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 20px;
+  }
+  main {
+    padding: 10px;
+  }
+  .item {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  .photo {
+    width: 60px;
+    height: 60px;
+    background-color: #ddd;
+    border-radius: 8px;
+    margin-left: 10px;
+  }
+  .details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .name {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .stepper {
+    display: flex;
+    align-items: center;
+  }
+  .stepper button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: #eee;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .qty {
+    margin: 0 10px;
+    font-size: 16px;
+  }
+  .price {
+    font-weight: bold;
+    color: #2a7f2a;
+  }
+  .promo {
+    margin: 15px 0;
+  }
+  .promo input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  .summary {
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+  }
+  .total {
+    font-weight: bold;
+    font-size: 18px;
+    border-top: 1px solid #eee;
+    padding-top: 5px;
+  }
+  .place-order {
+    width: 100%;
+    padding: 15px;
+    background-color: #2a7f2a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <button id="back">←</button>
+    <h1>الطلب</h1>
+  </header>
+  <main>
+    <section class="items">
+      <!-- Item 1 -->
+      <div class="item" data-price="10">
+        <div class="photo"></div>
+        <div class="details">
+          <div class="name">تفاح</div>
+          <div class="stepper">
+            <button class="dec">-</button>
+            <span class="qty">1</span>
+            <button class="inc">+</button>
+          </div>
+        </div>
+        <div class="price"><span class="item-total">10.00</span> AED</div>
+      </div>
+      <!-- Item 2 -->
+      <div class="item" data-price="5">
+        <div class="photo"></div>
+        <div class="details">
+          <div class="name">برتقال</div>
+          <div class="stepper">
+            <button class="dec">-</button>
+            <span class="qty">1</span>
+            <button class="inc">+</button>
+          </div>
+        </div>
+        <div class="price"><span class="item-total">5.00</span> AED</div>
+      </div>
+      <!-- Item 3 -->
+      <div class="item" data-price="3">
+        <div class="photo"></div>
+        <div class="details">
+          <div class="name">حليب</div>
+          <div class="stepper">
+            <button class="dec">-</button>
+            <span class="qty">1</span>
+            <button class="inc">+</button>
+          </div>
+        </div>
+        <div class="price"><span class="item-total">3.00</span> AED</div>
+      </div>
+    </section>
+
+    <section class="promo">
+      <input type="text" placeholder="كود الخصم">
+    </section>
+
+    <section class="summary">
+      <div class="row">
+        <span>الإجمالي الفرعي</span>
+        <span id="subtotal">18.00 AED</span>
+      </div>
+      <div class="row">
+        <span>التكاليف</span>
+        <span id="delivery">5.00 AED</span>
+      </div>
+      <div class="row">
+        <span>ضريبة القيمة المضافة 5%</span>
+        <span id="vat">1.15 AED</span>
+      </div>
+      <div class="row total">
+        <span>الإجمالي</span>
+        <span id="total">24.15 AED</span>
+      </div>
+    </section>
+
+    <button class="place-order">إتمام الطلب</button>
+  </main>
+
+<script>
+  // Simple stepper logic
+  document.querySelectorAll('.stepper').forEach(stepper => {
+    const decBtn = stepper.querySelector('.dec');
+    const incBtn = stepper.querySelector('.inc');
+    const qtySpan = stepper.querySelector('.qty');
+    const item = stepper.closest('.item');
+    const price = parseFloat(item.dataset.price);
+    const totalSpan = item.querySelector('.item-total');
+
+    function update() {
+      let qty = parseInt(qtySpan.textContent);
+      if (qty < 1) qty = 1;
+      qtySpan.textContent = qty;
+      totalSpan.textContent = (price * qty).toFixed(2);
+      updateSummary();
+    }
+
+    decBtn.addEventListener('click', () => {
+      let qty = parseInt(qtySpan.textContent);
+      if (qty > 1) {
+        qtySpan.textContent = qty - 1;
+        update();
+      }
+    });
+
+    incBtn.addEventListener('click', () => {
+      let qty = parseInt(qtySpan.textContent);
+      qtySpan.textContent = qty + 1;
+      update();
+    });
+  });
+
+  function updateSummary() {
+    let subtotal = 0;
+    document.querySelectorAll('.item').forEach(item => {
+      subtotal += parseFloat(item.querySelector('.item-total').textContent);
+    });
+    const delivery = 5;
+    const vat = subtotal * 0.05;
+    const total = subtotal + delivery + vat;
+    document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' AED';
+    document.getElementById('vat').textContent = vat.toFixed(2) + ' AED';
+    document.getElementById('total').textContent = total.toFixed(2) + ' AED';
+  }
+
+  // back button
+  document.getElementById('back').addEventListener('click', () => {
+    history.back();
+  });
+</script>
+</body>
+</html>

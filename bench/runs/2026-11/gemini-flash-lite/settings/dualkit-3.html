@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الإعدادات - تطبيق البنك</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #64748b;
+      --border-color: #f1f5f9;
+      --accent-color: #0d9488;
+      --toggle-bg: #cbd5e1;
+    }
+
+    :lang(ar) {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    body {
+      background-color: #090d16;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .phone-frame {
+      width: 100%;
+      max-width: 412px;
+      height: 844px;
+      background-color: var(--bg-color);
+      border-radius: 44px;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      border: 10px solid #1e293b;
+      position: relative;
+    }
+
+    /* Scrollbar styling for phone */
+    .phone-frame::-webkit-scrollbar {
+      width: 4px;
+    }
+    .phone-frame::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    /* Header */
+    .header {
+      background-color: var(--card-bg);
+      padding: 20px 20px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+      color: var(--text-primary);
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+    }
+
+    /* Content Area */
+    .content {
+      padding: 20px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .section-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding-inline-start: 4px;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02), 0 1px 2px rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border-color);
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      text-decoration: none;
+      color: var(--text-primary);
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s;
+      background: none;
+      border-top: none;
+      border-inline: none;
+      width: 100%;
+      text-align: start;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .row:hover {
+      background-color: #f8fafc;
+    }
+
+    .row-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .row-value {
+      font-size: 14px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: var(--toggle-bg);
+      transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 28px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+
+    /* Chevron */
+    .chevron {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: var(--text-secondary);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    
+    .chevron:dir(rtl) {
+      transform: scaleX(-1);
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <!-- Header -->
+    <header class="header">
+      <button class="back-btn" aria-label="الرجوع">
+        <svg class="chevron" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <h1>الإعدادات</h1>
+      <div style="width: 24px;"></div>
+    </header>
+
+    <div class="content">
+      <!-- Account Group -->
+      <div class="section-group">
+        <div class="section-title">الحساب</div>
+        <div class="card">
+          <button class="row">
+            <span class="row-label">الاسم الشخصي</span>
+            <span class="row-value">
+              <span>علي أحمد</span>
+              <svg class="chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </button>
+          <button class="row">
+            <span class="row-label">رقم الهاتف</span>
+            <span class="row-value">
+              <bdi dir="ltr">+973 3600 1234</bdi>
+              <svg class="chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </button>
+          <button class="row">
+            <span class="row-label">لغة التطبيق</span>
+            <span class="row-value">
+              <span>العربية</span>
+              <svg class="chevron" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Security Group -->
+      <div class="section-group">
+        <div class="section-title">الأمان</div>
+        <div class="card">
+          <div class="row">
+            <span class="row-label">معرف الوجه (Face ID)</span>
+            <div dir="ltr">
+              <label class="switch">
+                <input type="checkbox" checked aria-label="معرف الوجه">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <span class="row-label">تسجيل الدخول بخطوتين</span>
+            <div dir="ltr">
+              <label class="switch">
+                <input type="checkbox" checked aria-label="تسجيل الدخول بخطوتين">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications Group -->
+      <div class="section-group">
+        <div class="section-title">الإشعارات</div>
+        <div class="card">
+          <div class="row">
+            <span class="row-label">إشعارات التحويلات</span>
+            <div dir="ltr">
+              <label class="switch">
+                <input type="checkbox" checked aria-label="إشعارات التحويلات">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <span class="row-label">العروض والخصومات</span>
+            <div dir="ltr">
+              <label class="switch">
+                <input type="checkbox" aria-label="العروض والخصومات">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <span class="row-label">كشوفات الحساب الشهرية</span>
+            <div dir="ltr">
+              <label class="switch">
+                <input type="checkbox" checked aria-label="كشوفات الحساب الشهرية">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

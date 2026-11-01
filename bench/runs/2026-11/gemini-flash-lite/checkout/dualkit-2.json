@@ -1,0 +1,137 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "checkout",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-11-01T11:25:23.608Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>إتمام الشراء - سلة المشتريات</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <script src=\"https://cdn.tailwindcss.com\"></script>\n  <style>\n    :lang(ar) {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      letter-spacing: 0 !important;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.6;\n    }\n    body {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      background-color: #0f172a;\n    }\n  </style>\n</head>\n<body class=\"bg-slate-900 flex justify-center items-center min-h-screen p-0 sm:py-6\">\n  <!-- Mobile Container Wrapper -->\n  <div class=\"w-full max-w-md bg-slate-50 min-h-screen sm:min-h-[844px] sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border border-slate-800\">\n    \n    <!-- Top Header -->\n    <header class=\"flex items-center justify-between px-5 py-4 border-b border-slate-200/60 bg-white sticky top-0 z-20\">\n      <button class=\"w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-100 text-slate-700 transition\" aria-label=\"الرجوع\">\n        <svg class=\"w-6 h-6 rtl:-scale-x-100\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\">\n          <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 19l-7-7 7-7\"/>\n        </svg>\n      </button>\n      <h1 class=\"font-bold text-base text-slate-900\">إتمام الشراء</h1>\n      <div class=\"w-10\"></div>\n    </header>\n\n    <!-- Scrollable Body Content -->\n    <main class=\"flex-1 overflow-y-auto p-5 space-y-5 pb-32\">\n      \n      <!-- Delivery Location Banner -->\n      <div class=\"bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex items-start gap-3.5 shadow-xs\">\n        <div class=\"w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm\">\n          <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\">\n            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z\"/>\n            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 11a3 3 0 11-6 0 3 3 0 016 0z\"/>\n          </svg>\n        </div>\n        <div class=\"flex-1 min-w-0\">\n          <div class=\"flex justify-between items-center\">\n            <h2 class=\"font-semibold text-slate-900 text-sm\">التوصيل إلى المنزل</h2>\n            <button class=\"text-emerald-700 text-xs font-semibold hover:underline\">تغيير</button>\n          </div>\n          <p class=\"text-slate-600 text-xs mt-1 truncate\">شارع الشيخ زايد، برج الحبتور، شقة <bdi>402</bdi>، دبي</p>\n        </div>\n      </div>\n\n      <!-- Cart Items Section -->\n      <section class=\"space-y-3\">\n        <div class=\"flex justify-between items-center\">\n          <h2 class=\"font-bold text-slate-900 text-sm\">عناصر السلة</h2>\n          <span class=\"text-xs text-slate-500 font-medium\"><bdi>3</bdi> أصناف</span>\n        </div>\n        <div class=\"space-y-3\">\n          \n          <!-- Item 1 -->\n          <div class=\"flex items-center gap-3.5 bg-white border border-slate-200/70 p-3.5 rounded-2xl shadow-xs\">\n            <div class=\"w-16 h-16 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 shrink-0 font-medium text-xs border border-slate-200/50\">صورة</div>\n            <div class=\"flex-1 min-w-0\">\n              <h3 class=\"font-medium text-slate-900 text-sm truncate\">حليب المراعي طازج <bdi>2</bdi> لتر</h3>\n              <div class=\"text-emerald-700 font-semibold text-sm mt-1\"><bdi>12.00</bdi> د.إ</div>\n            </div>\n            <div class=\"flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl p-1 shrink-0\">\n              <button class=\"w-7 h-7 bg-white rounded-lg shadow-xs flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold transition\" aria-label=\"زيادة الكمية\">+</button>\n              <span class=\"text-sm font-semibold w-5 text-center text-slate-900\"><bdi>2</bdi></span>\n              <button class=\"w-7 h-7 bg-white rounded-lg shadow-xs flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold transition\" aria-label=\"إنقاص الكمية\">-</button>\n            </div>\n          </div>\n\n          <!-- Item 2 -->\n          <div class=\"flex items-center gap-3.5 bg-white border border-slate-200/70 p-3.5 rounded-2xl shadow-xs\">\n            <div class=\"w-16 h-16 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 shrink-0 font-medium text-xs border border-slate-200/50\">صورة</div>\n            <div class=\"flex-1 min-w-0\">\n              <h3 class=\"font-medium text-slate-900 text-sm truncate\">طماطم محلي عضوي (<bdi>1</bdi> كغ)</h3>\n              <div class=\"text-emerald-700 font-semibold text-sm mt-1\"><bdi>8.50</bdi> د.إ</div>\n            </div>\n            <div class=\"flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl p-1 shrink-0\">\n              <button class=\"w-7 h-7 bg-white rounded-lg shadow-xs flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold transition\" aria-label=\"زيادة الكمية\">+</button>\n              <span class=\"text-sm font-semibold w-5 text-center text-slate-900\"><bdi>1</bdi></span>\n              <button class=\"w-7 h-7 bg-white rounded-lg shadow-xs flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold transition\" aria-label=\"إنقاص الكمية\">-</button>\n            </div>\n          </div>\n\n          <!-- Item 3 -->\n          <div class=\"flex items-center gap-3.5 bg-white border border-slate-200/70 p-3.5 rounded-2xl shadow-xs\">\n            <div class=\"w-16 h-16 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 shrink-0 font-medium text-xs border border-slate-200/50\">صورة</div>\n            <div class=\"flex-1 min-w-0\">\n              <h3 class=\"font-medium text-slate-900 text-sm truncate\">أرز بسمتي المها (<bdi>5</bdi> كغ)</h3>\n              <div class=\"text-emerald-700 font-semibold text-sm mt-1\"><bdi>32.00</bdi> د.إ</div>\n            </div>\n            <div class=\"flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl p-1 shrink-0\">\n              <button class=\"w-7 h-7 bg-white rounded-lg shadow-xs flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold transition\" aria-label=\"زيادة الكمية\">+</button>\n              <span class=\"text-sm font-semibold w-5 text-center text-slate-900\"><bdi>1</bdi></span>\n              <button class=\"w-7 h-7 bg-white rounded-lg shadow-xs flex items-center justify-center text-slate-700 hover:bg-slate-100 font-bold transition\" aria-label=\"إنقاص الكمية\">-</button>\n            </div>\n          </div>\n\n        </div>\n      </section>\n\n      <!-- Promo Code Section -->\n      <div class=\"bg-white border border-slate-200/70 rounded-2xl p-4 space-y-3 shadow-xs\">\n        <h2 class=\"font-bold text-slate-900 text-sm\">رمز القسيمة أو الخصم</h2>\n        <div class=\"flex gap-2\">\n          <input type=\"text\" dir=\"auto\" placeholder=\"أدخل رمز الخصم\" class=\"flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-emerald-600 transition\">\n          <button class=\"bg-slate-900 text-white font-medium px-5 py-2.5 rounded-xl text-sm hover:bg-slate-800 transition\">تطبيق</button>\n        </div>\n      </div>\n\n      <!-- Order Summary Card -->\n      <div class=\"bg-white border border-slate-200/70 rounded-2xl p-4 space-y-3.5 shadow-xs\">\n        <h2 class=\"font-bold text-slate-900 text-sm\">ملخص الطلب</h2>\n        <div class=\"space-y-2.5 text-sm text-slate-600\">\n          <div class=\"flex justify-between\">\n            <span>المجموع الفرعي</span>\n            <span class=\"font-medium text-slate-900\"><bdi>52.50</bdi> د.إ</span>\n          </div>\n          <div class=\"flex justify-between\">\n            <span>رسوم التوصيل</span>\n            <span class=\"font-medium text-emerald-700\">مجاني</span>\n          </div>\n          <div class=\"flex justify-between\">\n            <span>ضريبة القيمة المضافة (<bdi>5%</bdi>)</span>\n            <span class=\"font-medium text-slate-900\"><bdi>2.63</bdi> د.إ</span>\n          </div>\n          <div class=\"border-t border-slate-100 pt-2.5 mt-1 flex justify-between text-base font-bold text-slate-900\">\n            <span>المجموع الكلي</span>\n            <span class=\"text-emerald-700\"><bdi>55.13</bdi> د.إ</span>\n          </div>\n        </div>\n      </div>\n\n    </main>\n\n    <!-- Sticky Bottom CTA -->\n    <footer class=\"absolute bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200/70 p-4 z-20 shadow-lg\">\n      <button class=\"w-full bg-emerald-600 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-emerald-600/25 hover:bg-emerald-700 transition flex items-center justify-between text-base\">\n        <span>إتمام الطلب</span>\n        <span class=\"font-bold\"><bdi>55.13</bdi> د.إ</span>\n      </button>\n    </footer>\n\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6498,
+    "output": 3197
+  },
+  "ms": 21483,
+  "finish": "STOP",
+  "reasoningTokens": 4126,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 84,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-placeholder",
+      "title": "An Arabic hint on the wrong side of the field",
+      "severity": "warning",
+      "box": {
+        "x": 38,
+        "y": 598.1875,
+        "width": 314,
+        "height": 42
+      },
+      "message": "The placeholder \"أدخل رمز الخصم\" is Arabic in a left-to-right field.",
+      "fix": "Keep dir=\"ltr\" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.",
+      "snippet": "<input type=\"text\" dir=\"auto\" placeholder=\"أدخل رمز الخصم\" class=\"flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 38,
+        "y": 112,
+        "width": 20,
+        "height": 18
+      },
+      "message": "\"تغيير\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"text-emerald-700 text-xs font-semibold hover:underline\">تغيير</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 144,
+        "y": 135,
+        "width": 154,
+        "height": 18
+      },
+      "message": "\"شارع الشيخ زايد، برج الحبتور، شقة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-slate-600 text-xs mt-1 truncate\">شارع الشيخ زايد، برج الحبتور، شقة <bdi>402</bdi>، دبي</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 102,
+        "y": 135,
+        "width": 21,
+        "height": 18
+      },
+      "message": "\"، دبي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-slate-600 text-xs mt-1 truncate\">شارع الشيخ زايد، برج الحبتور، شقة <bdi>402</bdi>، دبي</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 21,
+        "y": 191.59375,
+        "width": 34,
+        "height": 18
+      },
+      "message": "\"أصناف\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-500 font-medium\"><bdi>3</bdi> أصناف</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 310,
+        "y": 261.1875,
+        "width": 24,
+        "height": 18
+      },
+      "message": "\"صورة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"w-16 h-16 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 shrink-0 font-medium text-xs border border-slate-200/50\">صورة</div"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 310,
+        "y": 367.1875,
+        "width": 24,
+        "height": 18
+      },
+      "message": "\"صورة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"w-16 h-16 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 shrink-0 font-medium text-xs border border-slate-200/50\">صورة</div"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 310,
+        "y": 473.1875,
+        "width": 24,
+        "height": 18
+      },
+      "message": "\"صورة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"w-16 h-16 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 shrink-0 font-medium text-xs border border-slate-200/50\">صورة</div"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 1008
+}

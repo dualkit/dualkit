@@ -1,0 +1,459 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "support-chat",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-11-01T11:26:21.378Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>تطبيق الاتصالات - الدعم الفني</title>\n    <!-- Tailwind CSS CDN -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Fonts - Tajawal for Arabic -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap\" rel=\"stylesheet\">\n    <style>\n        body {\n            font-family: 'Tajawal', sans-serif;\n        }\n        /* Custom scrollbar for chat */\n        ::-webkit-scrollbar {\n            width: 4px;\n        }\n        ::-webkit-scrollbar-track {\n            background: #f1f1f1;\n        }\n        ::-webkit-scrollbar-thumb {\n            background: #cbd5e1;\n            border-radius: 4px;\n        }\n    </style>\n</head>\n<body class=\"bg-slate-900 flex items-center justify-center min-h-screen p-4\">\n\n    <!-- Phone Mockup Container -->\n    <div class=\"w-[380px] h-[760px] bg-slate-100 rounded-[45px] shadow-2xl overflow-hidden flex flex-col relative border-[10px] border-slate-800\">\n        \n        <!-- Phone Speaker & Camera Notch -->\n        <div class=\"absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-slate-800 rounded-b-2xl z-50 flex items-center justify-center\">\n            <div class=\"w-12 h-1 bg-slate-700 rounded-full\"></div>\n            <div class=\"w-2 h-2 bg-slate-900 rounded-full ml-2\"></div>\n        </div>\n\n        <!-- Status Bar -->\n        <div class=\"bg-indigo-900 text-white pt-3 px-6 pb-2 flex justify-between items-center text-xs z-40\">\n            <span>١٠:٣٧ ص</span>\n            <div class=\"flex items-center space-x-2 space-x-reverse\">\n                <!-- Signal Icon -->\n                <svg class=\"w-3.5 h-3.5 fill-current\" viewBox=\"0 0 24 24\"><path d=\"M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19H8v2h8v-2h3.65l-1.62-1.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z\"/></svg>\n                <!-- Wifi Icon -->\n                <svg class=\"w-3.5 h-3.5 fill-current\" viewBox=\"0 0 24 24\"><path d=\"M12 3C6.95 3 3.15 4.85 0 7.23L12 22 24 7.23C20.85 4.85 17.05 3 12 3z\"/></svg>\n                <!-- Battery -->\n                <span class=\"font-bold\">٩٤٪</span>\n            </div>\n        </div>\n\n        <!-- App Header / Chat Header -->\n        <div class=\"bg-indigo-900 text-white px-4 py-3 flex items-center justify-between shadow-md z-40\">\n            <div class=\"flex items-center space-x-3 space-x-reverse\">\n                <div class=\"relative\">\n                    <div class=\"w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-pink-500 flex items-center justify-center font-bold text-white text-lg shadow\">\n                        س\n                    </div>\n                    <!-- Online Status Dot -->\n                    <span class=\"absolute bottom-0 left-0 w-3 h-3 bg-emerald-400 border-2 border-indigo-900 rounded-full\"></span>\n                </div>\n                <div>\n                    <h2 class=\"font-bold text-sm\">ساره</h2>\n                    <p class=\"text-[11px] text-indigo-200\">الدعم الفني • متواجد الآن</p>\n                </div>\n            </div>\n            <div class=\"flex items-center space-x-3 space-x-reverse text-indigo-200\">\n                <button class=\"hover:text-white transition\">\n                    <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z\"/></svg>\n                </button>\n                <button class=\"hover:text-white transition\">\n                    <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z\"/></svg>\n                </button>\n            </div>\n        </div>\n\n        <!-- Chat Messages Area -->\n        <div class=\"flex-1 overflow-y-auto p-4 space-y-4 bg-slate-100 flex flex-col\">\n            \n            <!-- Date Separator -->\n            <div class=\"text-center my-1\">\n                <span class=\"bg-slate-200 text-slate-600 text-[10px] px-3 py-1 rounded-full font-medium\">اليوم</span>\n            </div>\n\n            <!-- Message 1 (Customer) -->\n            <div class=\"flex flex-col items-end max-w-[80%] self-end\">\n                <div class=\"bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed\">\n                    السلام عليكم، عندي مشكلة في تفعيل خط الـ eSIM الجديد.\n                </div>\n                <span class=\"text-[10px] text-slate-400 mt-1 px-1\">١٠:٣٠ ص</span>\n            </div>\n\n            <!-- Message 2 (Agent Sara) -->\n            <div class=\"flex flex-col items-start max-w-[80%] self-start\">\n                <div class=\"bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60\">\n                    وعليكم السلام أهلاً بك! معك ساره من خدمة العملاء. ممكن تزويدي برقم الطلب لو سمحت؟\n                </div>\n                <span class=\"text-[10px] text-slate-400 mt-1 px-1\">١٠:٣١ ص</span>\n            </div>\n\n            <!-- Message 3 (Customer) -->\n            <div class=\"flex flex-col items-end max-w-[80%] self-end\">\n                <div class=\"bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed\">\n                    تفضل، هذا هو رقم الطلب TX-48213.\n                </div>\n                <span class=\"text-[10px] text-slate-400 mt-1 px-1\">١٠:٣٢ ص</span>\n            </div>\n\n            <!-- Message 4 (Agent Sara) -->\n            <div class=\"flex flex-col items-start max-w-[80%] self-start\">\n                <div class=\"bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60\">\n                    شكراً لك. لقد قمنا بالتحقق من النظام، الشريحة جاهزة للعمل على شبكة الـ 5G الآن.\n                </div>\n                <span class=\"text-[10px] text-slate-400 mt-1 px-1\">١٠:٣٣ ص</span>\n            </div>\n\n            <!-- Message 5 (Customer) -->\n            <div class=\"flex flex-col items-end max-w-[80%] self-end\">\n                <div class=\"bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed\">\n                    ممتاز، جربت أعيد تشغيل الجهاز والحين اشتغلت تمام! يعطيكم العافية.\n                </div>\n                <span class=\"text-[10px] text-slate-400 mt-1 px-1\">١٠:٣٥ ص</span>\n            </div>\n\n            <!-- Message 6 (Agent Sara) -->\n            <div class=\"flex flex-col items-start max-w-[80%] self-start\">\n                <div class=\"bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60\">\n                    العفو، سعدنا بخدمتك! هل تحتاج أي مساعدة أخرى بخصوص خدماتنا؟\n                </div>\n                <span class=\"text-[10px] text-slate-400 mt-1 px-1\">١٠:٣٦ ص</span>\n            </div>\n\n        </div>\n\n        <!-- Chat Input Bar -->\n        <div class=\"bg-white p-3 border-t border-slate-200 flex items-center space-x-2 space-x-reverse z-40\">\n            <button class=\"text-slate-400 hover:text-indigo-600 transition p-1.5\">\n                <!-- Attachment Icon -->\n                <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13\"/></svg>\n            </button>\n            \n            <input type=\"text\" placeholder=\"اكتب رسالتك هنا...\" class=\"flex-1 bg-slate-100 text-xs rounded-full px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-slate-700 placeholder-slate-400\">\n            \n            <button class=\"bg-indigo-600 text-white p-2.5 rounded-full hover:bg-indigo-700 transition shadow-sm flex items-center justify-center\">\n                <!-- Send Icon (Mirrored for RTL) -->\n                <svg class=\"w-4 h-4 transform rotate-180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 19l9 2-9-18-9 18 9-2zm0 0v-8\"/></svg>\n            </button>\n        </div>\n\n        <!-- Home Indicator Bar -->\n        <div class=\"w-full bg-white pb-2 flex justify-center\">\n            <div class=\"w-32 h-1 bg-slate-300 rounded-full\"></div>\n        </div>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 146,
+    "output": 3181
+  },
+  "ms": 14688,
+  "finish": "STOP",
+  "reasoningTokens": 1258,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 74,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 58,
+        "y": 438.5,
+        "width": 178,
+        "height": 12
+      },
+      "message": "\"تفضل، هذا هو رقم الطلب TX-48213.\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<div class=\"bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed\">\n                    تفضل، هذا هو رقم الطلب TX-4"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 121,
+        "y": 514,
+        "width": 210,
+        "height": 31.5
+      },
+      "message": "\"شكراً لك. لقد قمنا بالتحقق من النظام، ال…\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<div class=\"bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60\">\n                    ش"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 300,
+        "y": 66,
+        "width": 40,
+        "height": 12
+      },
+      "message": "\"١٠:٣٧ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>١٠:٣٧ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 66,
+        "width": 19,
+        "height": 12
+      },
+      "message": "\"٩٤٪\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"font-bold\">٩٤٪</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 185,
+        "y": 123.75,
+        "width": 111,
+        "height": 11
+      },
+      "message": "\"الدعم الفني • متواجد الآن\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-[11px] text-indigo-200\">الدعم الفني • متواجد الآن</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 184.5,
+        "y": 180,
+        "width": 21,
+        "height": 10
+      },
+      "message": "\"اليوم\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"bg-slate-200 text-slate-600 text-[10px] px-3 py-1 rounded-full font-medium\">اليوم</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 62.796875,
+        "y": 229,
+        "width": 208,
+        "height": 31.5
+      },
+      "message": "\"السلام عليكم، عندي مشكلة في تفعيل خط الـ…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed\">\n                    السلام عليكم، عندي مشكلة في"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 46,
+        "y": 281,
+        "width": 29,
+        "height": 10
+      },
+      "message": "\"١٠:٣٠ ص\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-slate-400 mt-1 px-1\">١٠:٣٠ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 121,
+        "y": 324,
+        "width": 210,
+        "height": 51
+      },
+      "message": "\"وعليكم السلام أهلاً بك! معك ساره من خدمة…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60\">\n                    و"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 315,
+        "y": 396.5,
+        "width": 29,
+        "height": 10
+      },
+      "message": "\"١٠:٣١ ص\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-slate-400 mt-1 px-1\">١٠:٣١ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 58,
+        "y": 438.5,
+        "width": 178,
+        "height": 12
+      },
+      "message": "\"تفضل، هذا هو رقم الطلب TX-48213.\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed\">\n                    تفضل، هذا هو رقم الطلب TX-4"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 46,
+        "y": 471,
+        "width": 31,
+        "height": 10
+      },
+      "message": "\"١٠:٣٢ ص\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-slate-400 mt-1 px-1\">١٠:٣٢ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 121,
+        "y": 514,
+        "width": 210,
+        "height": 31.5
+      },
+      "message": "\"شكراً لك. لقد قمنا بالتحقق من النظام، ال…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60\">\n                    ش"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 311,
+        "y": 567,
+        "width": 33,
+        "height": 10
+      },
+      "message": "\"١٠:٣٣ ص\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-slate-400 mt-1 px-1\">١٠:٣٣ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 78.796875,
+        "y": 609,
+        "width": 192,
+        "height": 31.5
+      },
+      "message": "\"ممتاز، جربت أعيد تشغيل الجهاز والحين اشت…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed\">\n                    ممتاز، جربت أعيد تشغيل الجه"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 46,
+        "y": 661,
+        "width": 31,
+        "height": 10
+      },
+      "message": "\"١٠:٣٥ ص\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-slate-400 mt-1 px-1\">١٠:٣٥ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 154,
+        "y": 704,
+        "width": 177,
+        "height": 31.5
+      },
+      "message": "\"العفو، سعدنا بخدمتك! هل تحتاج أي مساعدة …\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60\">\n                    ا"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 313,
+        "y": 757,
+        "width": 31,
+        "height": 10
+      },
+      "message": "\"١٠:٣٦ ص\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-slate-400 mt-1 px-1\">١٠:٣٦ ص</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 308,
+        "y": 128,
+        "width": 12,
+        "height": 12
+      },
+      "message": "left: 0px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<span class=\"absolute bottom-0 left-0 w-3 h-3 bg-emerald-400 border-2 border-indigo-900 rounded-full\"></span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 42,
+        "y": 216,
+        "width": 244.796875,
+        "height": 59
+      },
+      "message": "border-top-left-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed\">\n                    السلام عليكم، عندي مشكلة في"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 103.203125,
+        "y": 310,
+        "width": 244.796875,
+        "height": 80.5
+      },
+      "message": "border-top-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60\">\n                    و"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 42,
+        "y": 425.5,
+        "width": 210,
+        "height": 39.5
+      },
+      "message": "border-top-left-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed\">\n                    تفضل، هذا هو رقم الطلب TX-4"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 103.203125,
+        "y": 500,
+        "width": 244.796875,
+        "height": 61
+      },
+      "message": "border-top-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60\">\n                    ش"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 42,
+        "y": 596,
+        "width": 244.796875,
+        "height": 59
+      },
+      "message": "border-top-left-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed\">\n                    ممتاز، جربت أعيد تشغيل الجه"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 103.203125,
+        "y": 690,
+        "width": 244.796875,
+        "height": 61
+      },
+      "message": "border-top-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60\">\n                    ا"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 171,
+        "y": 60,
+        "width": 8,
+        "height": 8
+      },
+      "message": "margin-left: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"w-2 h-2 bg-slate-900 rounded-full ml-2\"></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 50,
+        "y": 64,
+        "width": 19,
+        "height": 16
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"font-bold\">٩٤٪</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 185,
+        "y": 101.75,
+        "width": 111,
+        "height": 36.5
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                    <h2 class=\"font-bold text-sm\">ساره</h2>\n                    <p class=\"text-[11px] text-indigo-200\">الدعم الفني • متواجد الآن</p>\n     "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 42,
+        "y": 110,
+        "width": 20,
+        "height": 20
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button class=\"hover:text-white transition\">\n                    <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\"><pa"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 82,
+        "y": 732,
+        "width": 230,
+        "height": 36
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<input type=\"text\" placeholder=\"اكتب رسالتك هنا...\" class=\"flex-1 bg-slate-100 text-xs rounded-full px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-indig"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 38,
+        "y": 732,
+        "width": 36,
+        "height": 36
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button class=\"bg-indigo-600 text-white p-2.5 rounded-full hover:bg-indigo-700 transition shadow-sm flex items-center justify-center\">\n                <!-- Send"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

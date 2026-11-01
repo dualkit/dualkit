@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>حجز موعد</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#0d9488;
+    --teal-dark:#0f766e;
+    --bg:#f4f6f7;
+    --card:#ffffff;
+    --text:#0f172a;
+    --muted:#64748b;
+    --line:#e2e8f0;
+    --today:#0d9488;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:'IBM Plex Sans Arabic','Noto Sans Arabic',system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    font-size:16px;
+  }
+  .app{
+    max-width:480px;
+    margin:0 auto;
+    background:var(--bg);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  /* Top bar */
+  .topbar{
+    background:var(--card);
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border-bottom:1px solid var(--line);
+  }
+  .icon-btn{
+    width:40px;height:40px;
+    border:none;
+    background:transparent;
+    border-radius:50%;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text);
+    flex-shrink:0;
+  }
+  .icon-btn:active{background:#f1f5f9}
+  .topbar .title{font-size:18px;font-weight:700}
+  .topbar .sub{font-size:14px;color:var(--muted)}
+
+  /* Month */
+  .month-row{
+    background:var(--card);
+    padding:18px 16px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .month-name{font-size:17px;font-weight:700}
+  .month-nav{display:flex;gap:6px}
+  .month-nav button{
+    width:36px;height:36px;border:none;background:transparent;
+    border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text);
+  }
+  .month-nav button:active{background:#f1f5f9}
+
+  /* Calendar */
+  .cal{
+    background:var(--card);
+    padding:8px 12px 16px;
+  }
+  .weekdays{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    margin-bottom:8px;
+  }
+  .weekdays div{
+    text-align:center;
+    font-size:14px;
+    font-weight:600;
+    color:var(--muted);
+    padding:6px 0;
+  }
+  .days{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:2px;
+  }
+  .day{
+    aspect-ratio:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    font-weight:500;
+    border-radius:50%;
+    cursor:pointer;
+    color:var(--text);
+  }
+  .day.out{color:#cbd5e1;cursor:default}
+  .day:hover:not(.out):not(.today){background:#f1f5f9}
+  .day.today{
+    background:var(--today);
+    color:#fff;
+    font-weight:700;
+  }
+  .day.sel:not(.today){
+    border:2px solid var(--teal);
+    color:var(--teal);
+    font-weight:700;
+  }
+
+  /* Sections */
+  .section{padding:14px 16px 6px}
+  .section-label{
+    font-size:14px;font-weight:700;color:var(--muted);
+    margin-bottom:10px;
+  }
+  .doctor-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .avatar{
+    width:48px;height:48px;border-radius:50%;
+    background:linear-gradient(135deg,#0d9488,#0f766e);
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;font-weight:700;
+    flex-shrink:0;
+  }
+  .doctor-info{flex:1;min-width:0}
+  .doctor-name{font-size:15px;font-weight:700}
+  .doctor-spec{font-size:14px;color:var(--muted)}
+  .doctor-fee{font-size:14px;font-weight:700;color:var(--teal-dark)}
+
+  /* Times */
+  .times{
+    background:var(--card);
+    padding:8px 16px 16px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+  }
+  .time{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:12px 14px;
+    text-align:center;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    background:#fff;
+    transition:.15s;
+  }
+  .time:hover{border-color:var(--teal)}
+  .time.active{
+    background:var(--teal);
+    border-color:var(--teal);
+    color:#fff;
+  }
+
+  /* Summary */
+  .summary{
+    background:var(--card);
+    padding:10px 16px;
+    font-size:13px;color:var(--teal-dark);
+    font-weight:600;
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    display:none;
+  }
+  .summary.show{display:block}
+
+  /* Bottom */
+  .bottom{
+    margin-top:auto;
+    background:var(--card);
+    border-top:1px solid var(--line);
+    padding:12px 16px 18px;
+    display:flex;
+    gap:10px;
+  }
+  .btn{
+    border:none;
+    border-radius:12px;
+    padding:14px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .btn-secondary{
+    background:#f1f5f9;
+    color:var(--text);
+    max-width:120px;
+  }
+  .btn-primary{
+    flex:1;
+    background:var(--teal);
+    color:#fff;
+  }
+  .btn-primary:disabled{
+    background:#cbd5e1;
+    color:#fff;
+    cursor:not-allowed;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <button class="icon-btn" aria-label="رجوع">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+    <div>
+      <div class="title">حجز موعد</div>
+      <div class="sub">اختر اليوم والوقت المفضل</div>
+    </div>
+  </div>
+
+  <!-- Month selector -->
+  <div class="month-row">
+    <button class="month-nav" aria-label="الشهر التالي">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="month-name">سبتمبر 2025</div>
+    <button class="month-nav" aria-label="الشهر السابقة">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+
+  <!-- Calendar -->
+  <div class="cal">
+    <div class="weekdays">
+      <div>سبت</div><div>أخ</div><div>ثلا</div><div>أرب</div><div>خمي</div><div>جمع</div><div>ح</div>
+    </div>
+    <div class="days">
+      <!-- row 1 -->
+      <div class="day out">30</div><div class="day out">31</div>
+      <div class="day">1</div><div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day">5</div>
+      <!-- row 2 -->
+      <div class="day">6</div><div class="day">7</div><div class="day">8</div>
+      <div class="day">9</div><div class="day">10</div><div class="day">11</div><div class="day">12</div>
+      <!-- row 3 -->
+      <div class="day">13</div><div class="day">14</div>
+      <div class="day today sel" data-day="15">15</div>
+      <div class="day">16</div><div class="day">17</div><div class="day">18</div><div class="day">19</div>
+      <!-- row 4 -->
+      <div class="day">20</div><div class="day">21</div><div class="day">22</div>
+      <div class="day">23</div><div class="day">24</div><div class="day">25</div><div class="day">26</div>
+      <!-- row 5 -->
+      <div class="day">27</div><div class="day">28</div><div class="day">29</div>
+      <div class="day">30</div><div class="day">31</div>
+      <div class="day out">1</div><div class="day out">2</div>
+    </div>
+  </div>
+
+  <!-- Doctor -->
+  <div class="section">
+    <div class="section-label">الطبيب</div>
+    <div class="doctor-card">
+      <div class="avatar">د.م</div>
+      <div class="doctor-info">
+        <div class="doctor-name">د. محمد الحمد</div>
+        <div class="doctor-spec">طبيب عام • عيادة الأسرة</div>
+      </div>
+      <div class="doctor-fee">150 ر.ق</div>
+    </div>
+  </div>
+
+  <!-- Time slots -->
+  <div class="section">
+    <div class="section-label">اختر الوقت</div>
+    <div class="times">
+      <div class="time" data-time="9:00 ص">9:00 ص</div>
+      <div class="time" data-time="9:30 ص">9:30 ص</div>
+      <div class="time" data-time="10:00 ص">10:00 ص</div>
+      <div class="time" data-time="10:30 ص">10:30 ص</div>
+      <div class="time" data-time="11:00 ص">11:00 ص</div>
+      <div class="time" data-time="11:30 ص">11:30 ص</div>
+      <div class="time" data-time="12:00 ظ">12:00 ظ</div>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary" id="summary"></div>
+
+  <!-- Bottom actions -->
+  <div class="bottom">
+    <button class="btn btn-secondary" id="cancel">إلغاء</button>
+    <button class="btn btn-primary" id="confirm" disabled>/(?!\s)thon تأكيد الحجز</button>
+  </div>
+
+</div>
+
+<script>
+  (function(){
+    var selectedDay = 15;
+    var selectedTime = null;
+    var days = document.querySelectorAll('.day');
+    var times = document.querySelectorAll('.time');
+    var summary = document.getElementById('summary');
+    var confirm = document.getElementById('confirm');
+
+    days.forEach(function(d){
+      if(d.classList.contains('out')) return;
+      d.addEventListener('click', function(){
+        days.forEach(function(x){ x.classList.remove('sel'); });
+        d.classList.add('sel');
+        selectedDay = parseInt(d.textContent, 10);
+        updateSummary();
+      });
+    });
+
+    times.forEach(function(t){
+      t.addEventListener('click', function(){
+        times.forEach(function(x){ x.classList.remove('active'); });
+        t.classList.add('active');
+        selectedTime = t.getAttribute('data-time');
+        updateSummary();
+      });
+    });
+
+    function updateSummary(){
+      if(selectedTime){
+        summary.textContent = 'الموعد: ' + selectedDay + ' سبتمبر 2025 الساعة ' + selectedTime;
+        summary.classList.add('show');
+        confirm.disabled = false;
+      } else {
+        summary.classList.remove('show');
+        confirm.disabled = true;
+      }
+    }
+
+    document.getElementById('cancel').addEventListener('click', function(){
+      times.forEach(function(x){ x.classList.remove('active'); });
+      selectedTime = null;
+      updateSummary();
+    });
+
+    confirm.addEventListener('click', function(){
+      if(!selectedTime) return;
+      alert('تم تأكيد الحجز:\n' + selectedDay + ' سبتمبر 2025 - ' + selectedTime + '\nد. محمد الحمد');
+    });
+  })();
+</script>
+</body>
+</html>

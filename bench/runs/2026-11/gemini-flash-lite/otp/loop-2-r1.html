@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التحقق من الرمز - تطبيق البنك</title>
+  <!-- Google Fonts: IBM Plex Sans Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+    }
+    :lang(ar) {
+      letter-spacing: 0;
+      text-transform: none;
+      line-height: 1.7;
+    }
+    /* Enforce 14px font size floor for UI elements */
+    .text-floor {
+      font-size: 0.875rem; /* 14px */
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-4">
+
+  <!-- Mobile Screen Container -->
+  <div class="w-full max-w-sm bg-slate-800 rounded-3xl shadow-2xl overflow-hidden border border-slate-700 flex flex-col justify-between p-6 sm:p-8 min-h-[600px]">
+
+    <!-- Top Section -->
+    <div class="space-y-6">
+      
+      <!-- Back / Header Nav -->
+      <div class="flex items-center justify-between">
+        <button type="button" class="w-10 h-10 rounded-full bg-slate-700/50 flex items-center justify-center hover:bg-slate-700 transition-colors" aria-label="الرجوع">
+          <svg class="w-5 h-5 rtl:-scale-x-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <span class="text-sm font-medium text-slate-400">التحقق الأمني</span>
+        <div class="w-10"></div> <!-- Spacer for centering -->
+      </div>
+
+      <!-- Title & Subtitle -->
+      <div class="space-y-2 text-start">
+        <h1 class="text-2xl font-bold tracking-normal text-white">أدخل رمز التحقق</h1>
+        <p class="text-slate-300 text-floor">
+          أرسلنا رمزاً مكوناً من 6 أرقام إلى 
+          <bdi dir="ltr" class="inline-block font-semibold text-white">+966 55 123 4567</bdi>
+        </p>
+      </div>
+
+      <!-- OTP Input Boxes (6 boxes) -->
+      <div class="pt-4">
+        <div class="grid grid-cols-6 gap-2 sm:gap-3" dir="ltr">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-input w-full h-14 text-center text-xl font-bold bg-slate-900 border border-slate-700 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-white" autocomplete="one-time-code" autofocus>
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-input w-full h-14 text-center text-xl font-bold bg-slate-900 border border-slate-700 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-white">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-input w-full h-14 text-center text-xl font-bold bg-slate-900 border border-slate-700 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-white">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-input w-full h-14 text-center text-xl font-bold bg-slate-900 border border-slate-700 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-white">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-input w-full h-14 text-center text-xl font-bold bg-slate-900 border border-slate-700 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-white">
+          <input type="text" inputmode="numeric" maxlength="1" class="otp-input w-full h-14 text-center text-xl font-bold bg-slate-900 border border-slate-700 rounded-xl focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all text-white">
+        </div>
+      </div>
+
+      <!-- Countdown / Resend -->
+      <div class="flex items-center justify-between text-floor text-slate-400 pt-2">
+        <span>لم يصلك الرمز؟</span>
+        <span class="tabular-nums">إعادة الإرسال خلال <bdi dir="ltr">0:45</bdi></span>
+      </div>
+
+    </div>
+
+    <!-- Bottom Action Section -->
+    <div class="pt-6">
+      <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-4 px-6 rounded-2xl transition-colors shadow-lg shadow-emerald-900/30 text-base">
+        التحقق
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Basic OTP interaction script -->
+  <script>
+    const inputs = document.querySelectorAll('.otp-input');
+    
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        const value = e.target.value;
+        if (value && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

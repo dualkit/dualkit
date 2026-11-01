@@ -1,0 +1,207 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "payment-summary",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-11-01T11:18:12.007Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>ملخص الدفع - تطبيق المدفوعات</title>\n    <!-- Tailwind CSS CDN -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Fonts: Tajawal for clean Arabic typography -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap\" rel=\"stylesheet\">\n    <style>\n        body {\n            font-family: 'Tajawal', sans-serif;\n        }\n    </style>\n</head>\n<body class=\"bg-gray-100 flex justify-center items-center min-h-screen p-0 sm:p-4\">\n\n    <!-- Mobile Device Container -->\n    <div class=\"w-full sm:max-w-[390px] bg-white sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col justify-between min-h-screen sm:min-h-[800px] border border-gray-200\">\n        \n        <!-- Top Section -->\n        <div>\n            <!-- Header -->\n            <header class=\"flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100\">\n                <button class=\"w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-700 hover:bg-gray-100 transition\">\n                    <!-- Right arrow for RTL back -->\n                    <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"></path>\n                    </svg>\n                </button>\n                <h1 class=\"text-lg font-bold text-gray-900\">ملخص الدفع</h1>\n                <div class=\"w-10\"></div> <!-- Spacer for centering title -->\n            </header>\n\n            <!-- Main Content Area -->\n            <main class=\"px-6 pt-6\">\n                \n                <!-- Amount Due Card -->\n                <div class=\"bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white shadow-lg mb-6 relative overflow-hidden\">\n                    <div class=\"absolute -left-6 -bottom-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-xl\"></div>\n                    <p class=\"text-slate-400 text-sm font-medium mb-1\">المبلغ الإجمالي المستحق</p>\n                    <div class=\"flex items-baseline gap-2\">\n                        <span class=\"text-4xl font-black tracking-tight\">1,234.50</span>\n                        <span class=\"text-emerald-400 font-bold text-lg\">درهم إماراتي</span>\n                    </div>\n                    \n                    <div class=\"mt-4 pt-4 border-t border-slate-700/60 flex justify-between items-center text-xs text-slate-300\">\n                        <span>رقم الفاتورة: #UAE-8942</span>\n                        <span class=\"bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-full font-medium\">مستحق الدفع</span>\n                    </div>\n                </div>\n\n                <!-- Due Date & Order Info -->\n                <div class=\"bg-gray-50 rounded-2xl p-4 mb-6 border border-gray-100 space-y-4\">\n                    <!-- Due Date -->\n                    <div class=\"flex items-start justify-between\">\n                        <div class=\"flex items-center gap-3\">\n                            <div class=\"w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0\">\n                                <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z\"></path>\n                                </svg>\n                            </div>\n                            <div>\n                                <p class=\"text-xs text-gray-500 font-medium\">تاريخ الاستحقاق</p>\n                                <p class=\"text-sm font-bold text-gray-800\">3 نوفمبر 2026</p>\n                                <p class=\"text-xs text-gray-400 mt-0.5\">22 جمادى الأولى 1448 هـ</p>\n                            </div>\n                        </div>\n                    </div>\n\n                    <div class=\"border-t border-gray-200/60 pt-3\"></div>\n\n                    <!-- Items Count -->\n                    <div class=\"flex items-center justify-between\">\n                        <div class=\"flex items-center gap-3\">\n                            <div class=\"w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0\">\n                                <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z\"></path>\n                                </svg>\n                            </div>\n                            <div>\n                                <p class=\"text-sm font-bold text-gray-800\">تفاصيل الطلب</p>\n                                <p class=\"text-xs text-gray-500 mt-0.5\">لديك 3 عناصر في هذا الطلب</p>\n                            </div>\n                        </div>\n                        <button class=\"text-xs font-bold text-blue-600 hover:underline\">عرض الكل</button>\n                    </div>\n                </div>\n\n                <!-- Phone Number Field for SMS Receipt -->\n                <div class=\"mb-6\">\n                    <label class=\"block text-xs font-bold text-gray-700 mb-2\">إرسال الإيصال عبر الرسائل النصية (SMS)</label>\n                    <div class=\"flex rounded-xl border border-gray-300 overflow-hidden focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100 transition bg-white\">\n                        <!-- UAE Country Code Prefix -->\n                        <div class=\"bg-gray-50 px-3 py-3 flex items-center gap-1.5 border-l border-gray-200 text-gray-600 text-sm font-semibold select-none\">\n                            <span>🇦🇪</span>\n                            <span>+971</span>\n                        </div>\n                        <input type=\"tel\" \n                               value=\"050 123 4567\" \n                               class=\"w-full px-4 py-3 text-gray-800 placeholder-gray-400 text-sm focus:outline-none bg-transparent\"\n                               placeholder=\"050 123 4567\">\n                    </div>\n                    <p class=\"text-[11px] text-gray-400 mt-1.5\">سنقوم بإرسال تأكيد الدفع ورقم الإيصال إلى هذا الرقم.</p>\n                </div>\n\n            </main>\n        </div>\n\n        <!-- Bottom Footer Action -->\n        <footer class=\"p-6 bg-white border-t border-gray-100\">\n            <button class=\"w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.98] transition text-white font-bold py-4 rounded-2xl shadow-lg shadow-slate-900/20 flex items-center justify-center gap-2 text-base\">\n                <span>ادفع الآن</span>\n                <svg class=\"w-5 h-5 transform rotate-180\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M14 5l7 7m0 0l-7 7m7-7H3\"></path>\n                </svg>\n            </button>\n            <p class=\"text-center text-[10px] text-gray-400 mt-3\">معاملة آمنة ومشفرة بالكامل طبقاً لمعايير مصرف الإمارات العربية المتحدة المركزي</p>\n        </footer>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 188,
+    "output": 2177
+  },
+  "ms": 16009,
+  "finish": "STOP",
+  "reasoningTokens": 1192,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 31,
+  "score": 66,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 222,
+        "y": 233,
+        "width": 119,
+        "height": 12
+      },
+      "message": "\"#UAE-8942\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span>رقم الفاتورة: #UAE-8942</span>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 304,
+        "y": 536,
+        "width": 25,
+        "height": 14
+      },
+      "message": "\"+971\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span>+971</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 222,
+        "y": 233,
+        "width": 119,
+        "height": 12
+      },
+      "message": "\"رقم الفاتورة: #UAE-8942\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>رقم الفاتورة: #UAE-8942</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 59,
+        "y": 233,
+        "width": 72,
+        "height": 12
+      },
+      "message": "\"مستحق الدفع\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-full font-medium\">مستحق الدفع</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 212,
+        "y": 318,
+        "width": 84,
+        "height": 12
+      },
+      "message": "\"تاريخ الاستحقاق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-gray-500 font-medium\">تاريخ الاستحقاق</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 179,
+        "y": 356,
+        "width": 117,
+        "height": 12
+      },
+      "message": "\"22 جمادى الأولى 1448 هـ\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-gray-400 mt-0.5\">22 جمادى الأولى 1448 هـ</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 159,
+        "y": 440,
+        "width": 137,
+        "height": 12
+      },
+      "message": "\"لديك 3 عناصر في هذا الطلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-gray-500 mt-0.5\">لديك 3 عناصر في هذا الطلب</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 42,
+        "y": 429,
+        "width": 55,
+        "height": 12
+      },
+      "message": "\"عرض الكل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"text-xs font-bold text-blue-600 hover:underline\">عرض الكل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 148,
+        "y": 498,
+        "width": 217,
+        "height": 12
+      },
+      "message": "\"إرسال الإيصال عبر الرسائل النصية (SMS)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label class=\"block text-xs font-bold text-gray-700 mb-2\">إرسال الإيصال عبر الرسائل النصية (SMS)</label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 122,
+        "y": 574,
+        "width": 243,
+        "height": 11
+      },
+      "message": "\"سنقوم بإرسال تأكيد الدفع ورقم الإيصال إل…\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-[11px] text-gray-400 mt-1.5\">سنقوم بإرسال تأكيد الدفع ورقم الإيصال إلى هذا الرقم.</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 29,
+        "y": 806,
+        "width": 332,
+        "height": 10
+      },
+      "message": "\"معاملة آمنة ومشفرة بالكامل طبقاً لمعايير…\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-center text-[10px] text-gray-400 mt-3\">معاملة آمنة ومشفرة بالكامل طبقاً لمعايير مصرف الإمارات العربية المتحدة المركزي</p>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 1,
+        "y": 171,
+        "width": 128,
+        "height": 128
+      },
+      "message": "left: -24px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"absolute -left-6 -bottom-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-xl\"></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 291,
+        "y": 521,
+        "width": 73,
+        "height": 44
+      },
+      "message": "border-left-width: 1px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bg-gray-50 px-3 py-3 flex items-center gap-1.5 border-l border-gray-200 text-gray-600 text-sm font-semibold select-none\">\n                          "
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

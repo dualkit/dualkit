@@ -1,0 +1,193 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash",
+  "screen": "payment-summary",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-11-01T11:27:16.332Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n    <title>ملخص الدفع</title>\n    <!-- Google Fonts: Cairo -->\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap\" rel=\"stylesheet\">\n    <style>\n        :root {\n            --primary: #00875a;\n            --primary-dark: #006644;\n            --primary-light: #e3fcef;\n            --accent-gold: #c59b27;\n            --bg-page: #f4f6f8;\n            --bg-card: #ffffff;\n            --text-main: #172b4d;\n            --text-muted: #6b778c;\n            --border-color: #ebecf0;\n            --shadow-subtle: 0 4px 12px rgba(9, 30, 66, 0.05);\n            --shadow-card: 0 8px 24px rgba(9, 30, 66, 0.08);\n            --radius-md: 14px;\n            --radius-lg: 20px;\n        }\n\n        * {\n            box-sizing: border-box;\n            margin: 0;\n            padding: 0;\n            -webkit-tap-highlight-color: transparent;\n            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;\n        }\n\n        body {\n            background-color: #0b192c;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            min-height: 100vh;\n            color: var(--text-main);\n            padding: 16px;\n        }\n\n        /* Mobile Container Mockup */\n        .phone-frame {\n            width: 100%;\n            max-width: 412px;\n            height: 870px;\n            max-height: 94vh;\n            background-color: var(--bg-page);\n            border-radius: 40px;\n            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4), inset 0 0 0 2px rgba(255, 255, 255, 0.1);\n            overflow: hidden;\n            display: flex;\n            flex-direction: column;\n            position: relative;\n        }\n\n        /* Status Bar */\n        .status-bar {\n            height: 44px;\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n            padding: 0 24px;\n            font-size: 13px;\n            font-weight: 600;\n            color: var(--text-main);\n            background: transparent;\n            z-index: 10;\n        }\n\n        .status-icons {\n            display: flex;\n            gap: 6px;\n            align-items: center;\n        }\n\n        /* App Header */\n        .app-header {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            padding: 8px 20px 16px;\n            background: var(--bg-page);\n        }\n\n        .back-btn {\n            width: 40px;\n            height: 40px;\n            border-radius: 12px;\n            background: var(--bg-card);\n            border: 1px solid var(--border-color);\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            color: var(--text-main);\n            cursor: pointer;\n            transition: all 0.2s ease;\n        }\n\n        .back-btn:active {\n            transform: scale(0.94);\n            background-color: #f1f2f4;\n        }\n\n        .header-title {\n            font-size: 18px;\n            font-weight: 700;\n            color: var(--text-main);\n        }\n\n        .header-spacer {\n            width: 40px;\n        }\n\n        /* Main Content Scroll Area */\n        .content-scroll {\n            flex: 1;\n            overflow-y: auto;\n            padding: 4px 20px 24px;\n            display: flex;\n            flex-direction: column;\n            gap: 16px;\n        }\n\n        .content-scroll::-webkit-scrollbar {\n            display: none;\n        }\n\n        /* Fintech Badge */\n        .trust-badge {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 6px;\n            background: rgba(0, 135, 90, 0.08);\n            border: 1px solid rgba(0, 135, 90, 0.2);\n            padding: 6px 14px;\n            border-radius: 20px;\n            align-self: center;\n            font-size: 12px;\n            font-weight: 600;\n            color: var(--primary);\n        }\n\n        /* Amount Card */\n        .amount-card {\n            background: linear-gradient(145deg, #0f2b23, #051a14);\n            color: #ffffff;\n            border-radius: var(--radius-lg);\n            padding: 24px;\n            text-align: center;\n            position: relative;\n            box-shadow: 0 12px 28px rgba(0, 46, 30, 0.25);\n            border: 1px solid rgba(255, 255, 255, 0.08);\n            overflow: hidden;\n        }\n\n        .amount-card::before {\n            content: '';\n            position: absolute;\n            top: -40px;\n            left: -40px;\n            width: 140px;\n            height: 140px;\n            background: radial-gradient(circle, rgba(197, 155, 39, 0.3), transparent 70%);\n            border-radius: 50%;\n        }\n\n        .amount-card::after {\n            content: '';\n            position: absolute;\n            bottom: -50px;\n            right: -30px;\n            width: 160px;\n            height: 160px;\n            background: radial-gradient(circle, rgba(0, 135, 90, 0.35), transparent 70%);\n            border-radius: 50%;\n        }\n\n        .amount-label {\n            font-size: 13px;\n            font-weight: 500;\n            color: rgba(255, 255, 255, 0.75);\n            margin-bottom: 8px;\n            position: relative;\n            z-index: 1;\n        }\n\n        .amount-display {\n            display: flex;\n            align-items: baseline;\n            justify-content: center;\n            gap: 8px;\n            direction: ltr;\n            margin-bottom: 12px;\n            position: relative;\n            z-index: 1;\n        }\n\n        .currency-symbol {\n            font-size: 20px;\n            font-weight: 600;\n            color: #d1fae5;\n        }\n\n        .amount-value {\n            font-size: 40px;\n            font-weight: 800;\n            letter-spacing: -0.5px;\n            color: #ffffff;\n        }\n\n        .order-badge-pill {\n            display: inline-flex;\n            align-items: center;\n            gap: 6px;\n            background: rgba(255, 255, 255, 0.12);\n            backdrop-filter: blur(8px);\n            padding: 6px 14px;\n            border-radius: 20px;\n            font-size: 13px;\n            font-weight: 600;\n            color: #ffffff;\n            border: 1px solid rgba(255, 255, 255, 0.15);\n            position: relative;\n            z-index: 1;\n        }\n\n        /* Detail Cards (White) */\n        .info-card {\n            background: var(--bg-card);\n            border-radius: var(--radius-md);\n            padding: 16px 18px;\n            box-shadow: var(--shadow-subtle);\n            border: 1px solid var(--border-color);\n        }\n\n        /* Due Date Section */\n        .date-box {\n            display: flex;\n            align-items: flex-start;\n            gap: 14px;\n        }\n\n        .date-icon-container {\n            width: 44px;\n            height: 44px;\n            background: var(--primary-light);\n            border-radius: 12px;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            color: var(--primary);\n            flex-shrink: 0;\n            margin-top: 2px;\n        }\n\n        .date-details {\n            flex: 1;\n        }\n\n        .date-header {\n            font-size: 12px;\n            font-weight: 600;\n            color: var(--text-muted);\n            margin-bottom: 4px;\n            text-transform: uppercase;\n        }\n\n        .gregorian-date {\n            font-size: 16px;\n            font-weight: 700;\n            color: var(--text-main);\n            margin-bottom: 2px;\n        }\n\n        .hijri-date {\n            font-size: 13px;\n            font-weight: 600;\n            color: var(--accent-gold);\n            display: flex;\n            align-items: center;\n            gap: 5px;\n        }\n\n        /* Phone Input Section */\n        .input-card {\n            display: flex;\n            flex-direction: column;\n            gap: 10px;\n        }\n\n        .input-label-row {\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n        }\n\n        .input-title {\n            font-size: 14px;\n            font-weight: 700;\n            color: var(--text-main);\n        }\n\n        .sms-badge {\n            font-size: 11px;\n            background: #f0f4f8;\n            color: var(--text-muted);\n            padding: 2px 8px;\n            border-radius: 6px;\n            font-weight: 600;\n        }\n\n        .input-subtitle {\n            font-size: 12px;\n            color: var(--text-muted);\n            line-height: 1.4;\n        }\n\n        .phone-input-wrapper {\n            display: flex;\n            align-items: center;\n            direction: ltr;\n            background: #f9fafb;\n            border: 1.5px solid #dfe1e6;\n            border-radius: 12px;\n            overflow: hidden;\n            transition: all 0.2s ease;\n        }\n\n        .phone-input-wrapper:focus-within {\n            border-color: var(--primary);\n            background: #ffffff;\n            box-shadow: 0 0 0 3px rgba(0, 135, 90, 0.15);\n        }\n\n        .country-select {\n            display: flex;\n            align-items: center;\n            gap: 6px;\n            padding: 12px 14px;\n            background: #f1f2f4;\n            border-right: 1px solid #dfe1e6;\n            font-size: 14px;\n            font-weight: 600;\n            color: var(--text-main);\n            user-select: none;\n        }\n\n        .uae-flag {\n            width: 22px;\n            height: 14px;\n            border-radius: 2px;\n            object-fit: cover;\n            box-shadow: 0 0 1px rgba(0,0,0,0.4);\n        }\n\n        .phone-input {\n            flex: 1;\n            border: none;\n            outline: none;\n            padding: 12px 14px;\n            font-size: 15px;\n            font-weight: 600;\n            color: var(--text-main);\n            background: transparent;\n            font-family: inherit;\n        }\n\n        .phone-input::placeholder {\n            color: #a5adba;\n            font-weight: 400;\n        }\n\n        /* Order Breakdown Preview */\n        .order-preview {\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            padding: 12px 16px;\n            background: #ffffff;\n            border-radius: 12px;\n            border: 1px dashed var(--border-color);\n            font-size: 13px;\n        }\n\n        .order-preview-left {\n            display: flex;\n            align-items: center;\n            gap: 8px;\n            color: var(--text-main);\n            font-weight: 600;\n        }\n\n        .order-preview-tag {\n            color: var(--primary);\n            font-weight: 700;\n            cursor: pointer;\n        }\n\n        /* Footer & Pay Button */\n        .action-footer {\n            padding: 16px 20px 24px;\n            background: var(--bg-card);\n            border-top: 1px solid var(--border-color);\n            display: flex;\n            flex-direction: column;\n            gap: 12px;\n            box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.03);\n        }\n\n        .btn-pay {\n            width: 100%;\n            background: linear-gradient(135deg, #00875a, #006644);\n            color: #ffffff;\n            border: none;\n            border-radius: 16px;\n            padding: 16px;\n            font-size: 16px;\n            font-weight: 700;\n            cursor: pointer;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 10px;\n            box-shadow: 0 8px 18px rgba(0, 135, 90, 0.35);\n            transition: all 0.2s ease;\n        }\n\n        .btn-pay:hover {\n            opacity: 0.96;\n            transform: translateY(-1px);\n        }\n\n        .btn-pay:active {\n            transform: translateY(1px);\n            box-shadow: 0 4px 10px rgba(0, 135, 90, 0.25);\n        }\n\n        .security-note {\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 6px;\n            font-size: 11px;\n            color: var(--text-muted);\n            font-weight: 500;\n        }\n\n        /* SVG Icons Inline */\n        .icon {\n            display: inline-block;\n            width: 20px;\n            height: 20px;\n            stroke-width: 2;\n            stroke: currentColor;\n            fill: none;\n            stroke-linecap: round;\n            stroke-linejoin: round;\n            vertical-align: middle;\n        }\n    </style>\n</head>\n<body>\n\n<div class=\"phone-frame\">\n    <!-- Top Status Bar -->\n    <div class=\"status-bar\">\n        <span>9:41</span>\n        <div class=\"status-icons\">\n            <svg class=\"icon\" style=\"width:15px;height:15px;\" viewBox=\"0 0 24 24\"><path d=\"M5 12.55a11 11 0 0 1 14.08 0\"></path><path d=\"M1.42 9a16 16 0 0 1 21.16 0\"></path><path d=\"M8.53 16.11a6 6 0 0 1 6.95 0\"></path><line x1=\"12\" y1=\"20\" x2=\"12.01\" y2=\"20\"></line></svg>\n            <svg class=\"icon\" style=\"width:15px;height:15px;\" viewBox=\"0 0 24 24\"><rect x=\"2\" y=\"7\" width=\"16\" height=\"10\" rx=\"2\" ry=\"2\"></rect><line x1=\"22\" y1=\"11\" x2=\"22\" y2=\"13\"></line></svg>\n        </div>\n    </div>\n\n    <!-- App Header -->\n    <header class=\"app-header\">\n        <button class=\"back-btn\" aria-label=\"رجوع\" onclick=\"history.back()\">\n            <!-- RTL Back Arrow (points to the right) -->\n            <svg class=\"icon\" viewBox=\"0 0 24 24\">\n                <polyline points=\"9 18 15 12 9 6\"></polyline>\n            </svg>\n        </button>\n        <h1 class=\"header-title\">ملخص الدفع</h1>\n        <div class=\"header-spacer\"></div>\n    </header>\n\n    <!-- Scrollable Body -->\n    <main class=\"content-scroll\">\n        <!-- Fintech Regulatory Badge -->\n        <div class=\"trust-badge\">\n            <svg class=\"icon\" style=\"width: 14px; height: 14px;\" viewBox=\"0 0 24 24\">\n                <path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"></path>\n            </svg>\n            <span>بوابة دفع آمنة ومعتمدة في الإمارات</span>\n        </div>\n\n        <!-- Hero Card: Total Amount & Order Summary -->\n        <section class=\"amount-card\">\n            <p class=\"amount-label\">المبلغ الإجمالي المستحق</p>\n            <div class=\"amount-display\">\n                <span class=\"amount-value\">1,234.50</span>\n                <span class=\"currency-symbol\">AED</span>\n            </div>\n            <div class=\"order-badge-pill\">\n                <svg class=\"icon\" style=\"width: 16px; height: 16px;\" viewBox=\"0 0 24 24\">\n                    <circle cx=\"9\" cy=\"21\" r=\"1\"></circle>\n                    <circle cx=\"20\" cy=\"21\" r=\"1\"></circle>\n                    <path d=\"M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6\"></path>\n                </svg>\n                <span>لديك 3 عناصر في هذا الطلب</span>\n            </div>\n        </section>\n\n        <!-- Due Date Info Card -->\n        <section class=\"info-card\">\n            <div class=\"date-box\">\n                <div class=\"date-icon-container\">\n                    <svg class=\"icon\" viewBox=\"0 0 24 24\">\n                        <rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\" ry=\"2\"></rect>\n                        <line x1=\"16\" y1=\"2\" x2=\"16\" y2=\"6\"></line>\n                        <line x1=\"8\" y1=\"2\" x2=\"8\" y2=\"6\"></line>\n                        <line x1=\"3\" y1=\"10\" x2=\"21\" y2=\"10\"></line>\n                    </svg>\n                </div>\n                <div class=\"date-details\">\n                    <p class=\"date-header\">تاريخ الاستحقاق النهائي</p>\n                    <p class=\"gregorian-date\">3 نوفمبر 2026 م</p>\n                    <p class=\"hijri-date\">\n                        <svg class=\"icon\" style=\"width: 13px; height: 13px;\" viewBox=\"0 0 24 24\">\n                            <path d=\"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z\"></path>\n                        </svg>\n                        <span>الموافق 23 جمادى الأولى 1448 هـ</span>\n                    </p>\n                </div>\n            </div>\n        </section>\n\n        <!-- Phone Input for SMS Receipt -->\n        <section class=\"info-card input-card\">\n            <div class=\"input-label-row\">\n                <label for=\"phoneNumber\" class=\"input-title\">رقم الهاتف المتحرك</label>\n                <span class=\"sms-badge\">إشعار فوري</span>\n            </div>\n            <p class=\"input-subtitle\">سيتم إرسال إيصال الدفع الإلكتروني وتفاصيل العملية عبر رسالة نصية (SMS)</p>\n\n            <div class=\"phone-input-wrapper\">\n                <div class=\"country-select\">\n                    <!-- UAE Flag SVG -->\n                    <svg class=\"uae-flag\" viewBox=\"0 0 600 300\">\n                        <rect width=\"600\" height=\"100\" fill=\"#00732f\"/>\n                        <rect y=\"100\" width=\"600\" height=\"100\" fill=\"#ffffff\"/>\n                        <rect y=\"200\" width=\"600\" height=\"100\" fill=\"#000000\"/>\n                        <rect width=\"150\" height=\"300\" fill=\"#ff0000\"/>\n                    </svg>\n                    <span>+971</span>\n                </div>\n                <input\n                    type=\"tel\"\n                    id=\"phoneNumber\"\n                    class=\"phone-input\"\n                    placeholder=\"050 123 4567\"\n                    inputmode=\"numeric\"\n                    autocomplete=\"tel-national\"\n                />\n            </div>\n        </section>\n\n        <!-- Quick Items Overview Pill -->\n        <div class=\"order-preview\">\n            <div class=\"order-preview-left\">\n                <svg class=\"icon\" style=\"width: 17px; height: 17px; color: var(--text-muted);\" viewBox=\"0 0 24 24\">\n                    <path d=\"M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z\"></path>\n                    <polyline points=\"14 2 14 8 20 8\"></polyline>\n                </svg>\n                <span>تفاصيل المنتجات (3 عناصر)</span>\n            </div>\n            <span class=\"order-preview-tag\">عرض الكل</span>\n        </div>\n    </main>\n\n    <!-- Footer Action -->\n    <footer class=\"action-footer\">\n        <button class=\"btn-pay\" type=\"button\">\n            <span>ادفع الآن</span>\n            <span>•</span>\n            <span dir=\"ltr\">1,234.50 AED</span>\n            <svg class=\"icon\" style=\"width: 18px; height: 18px; margin-right: 4px;\" viewBox=\"0 0 24 24\">\n                <line x1=\"5\" y1=\"12\" x2=\"19\" y2=\"12\"></line>\n                <polyline points=\"12 5 19 12 12 19\"></polyline>\n            </svg>\n        </button>\n\n        <div class=\"security-note\">\n            <svg class=\"icon\" style=\"width: 14px; height: 14px; color: var(--primary);\" viewBox=\"0 0 24 24\">\n                <rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\" ry=\"2\"></rect>\n                <path d=\"M7 11V7a5 5 0 0 1 10 0v4\"></path>\n            </svg>\n            <span>جميع المعاملات مشفرة وآمنة وفق معايير PCI-DSS</span>\n        </div>\n    </footer>\n</div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 188,
+    "output": 6161
+  },
+  "ms": 158200,
+  "finish": "STOP",
+  "reasoningTokens": 1304,
+  "servedModel": "gemini-3.8-flash",
+  "ok": true,
+  "rulesPassed": 31,
+  "score": 80,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "layout/clipped-text",
+      "title": "Arabic text cut off by its box",
+      "severity": "warning",
+      "box": {
+        "x": 36,
+        "y": 190.3125,
+        "width": 318,
+        "height": 85.765625
+      },
+      "message": "47px of this text is cut off at the bottom.",
+      "fix": "Let the box grow with min-width or min-height. If shortening is intended, add text-overflow: ellipsis and leave room for most of the text.",
+      "snippet": "<section class=\"amount-card\">\n            <p class=\"amount-label\">المبلغ الإجمالي المستحق</p>\n            <div class=\"amount-display\">\n                <span cla"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 60,
+        "y": 474.078125,
+        "width": 275,
+        "height": 39.796875
+      },
+      "message": "Line height is 1.40 on \"سيتم إرسال إيصال الدفع الإلكتروني وتفاصي…\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<p class=\"input-subtitle\">سيتم إرسال إيصال الدفع الإلكتروني وتفاصيل العملية عبر رسالة نصية (SMS)</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 93,
+        "y": 144.3125,
+        "width": 184,
+        "height": 23
+      },
+      "message": "\"بوابة دفع آمنة ومعتمدة في الإمارات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>بوابة دفع آمنة ومعتمدة في الإمارات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 127,
+        "y": 215.3125,
+        "width": 136,
+        "height": 24
+      },
+      "message": "\"المبلغ الإجمالي المستحق\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"amount-label\">المبلغ الإجمالي المستحق</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 109.5,
+        "y": 341.3125,
+        "width": 149,
+        "height": 24
+      },
+      "message": "\"لديك 3 عناصر في هذا الطلب\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>لديك 3 عناصر في هذا الطلب</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 156,
+        "y": 309.078125,
+        "width": 121,
+        "height": 23
+      },
+      "message": "\"تاريخ الاستحقاق النهائي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"date-header\">تاريخ الاستحقاق النهائي</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 68,
+        "y": 368.078125,
+        "width": 191,
+        "height": 24
+      },
+      "message": "\"الموافق 23 جمادى الأولى 1448 هـ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>الموافق 23 جمادى الأولى 1448 هـ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 63,
+        "y": 445.078125,
+        "width": 53,
+        "height": 20
+      },
+      "message": "\"إشعار فوري\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"sms-badge\">إشعار فوري</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 60,
+        "y": 474.078125,
+        "width": 275,
+        "height": 39.796875
+      },
+      "message": "\"سيتم إرسال إيصال الدفع الإلكتروني وتفاصي…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"input-subtitle\">سيتم إرسال إيصال الدفع الإلكتروني وتفاصيل العملية عبر رسالة نصية (SMS)</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 171,
+        "y": 622.671875,
+        "width": 141,
+        "height": 24
+      },
+      "message": "\"تفاصيل المنتجات (3 عناصر)\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>تفاصيل المنتجات (3 عناصر)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 53,
+        "y": 622.671875,
+        "width": 59,
+        "height": 24
+      },
+      "message": "\"عرض الكل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"order-preview-tag\">عرض الكل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 70.5,
+        "y": 774.671875,
+        "width": 229,
+        "height": 20
+      },
+      "message": "\"جميع المعاملات مشفرة وآمنة وفق معايير PC…\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>جميع المعاملات مشفرة وآمنة وفق معايير PCI-DSS</span>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

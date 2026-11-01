@@ -1,0 +1,123 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "checkout",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-11-01T12:06:55.589Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>الطلب</title>\n<style>\n  body {\n    font-family: 'Arial', sans-serif;\n    margin: 0;\n    padding: 0;\n    background-color: #f5f5f5;\n    color: #333;\n    direction: rtl;\n  }\n  header {\n    display: flex;\n    align-items: center;\n    padding: 10px;\n    background-color: #fff;\n    border-bottom: 1px solid #ddd;\n  }\n  #back {\n    background: none;\n    border: none;\n    font-size: 24px;\n    margin-left: 10px;\n    cursor: pointer;\n  }\n  header h1 {\n    margin: 0;\n    font-size: 20px;\n  }\n  main {\n    padding: 10px;\n  }\n  .item {\n    display: flex;\n    align-items: center;\n    background: #fff;\n    margin-bottom: 10px;\n    padding: 10px;\n    border-radius: 8px;\n  }\n  .photo {\n    width: 60px;\n    height: 60px;\n    background-color: #ddd;\n    border-radius: 8px;\n    margin-left: 10px;\n  }\n  .details {\n    flex: 1;\n    display: flex;\n    flex-direction: column;\n  }\n  .name {\n    font-weight: bold;\n    margin-bottom: 5px;\n  }\n  .stepper {\n    display: flex;\n    align-items: center;\n  }\n  .stepper button {\n    width: 30px;\n    height: 30px;\n    border: none;\n    background: #eee;\n    border-radius: 50%;\n    font-size: 18px;\n    cursor: pointer;\n  }\n  .qty {\n    margin: 0 10px;\n    font-size: 16px;\n  }\n  .price {\n    font-weight: bold;\n    color: #2a7f2a;\n  }\n  .promo {\n    margin: 15px 0;\n  }\n  .promo input {\n    width: 100%;\n    padding: 10px;\n    border: 1px solid #ccc;\n    border-radius: 5px;\n    font-size: 16px;\n  }\n  .summary {\n    background: #fff;\n    padding: 10px;\n    border-radius: 8px;\n    margin-bottom: 15px;\n  }\n  .row {\n    display: flex;\n    justify-content: space-between;\n    margin-bottom: 5px;\n  }\n  .total {\n    font-weight: bold;\n    font-size: 18px;\n    border-top: 1px solid #eee;\n    padding-top: 5px;\n  }\n  .place-order {\n    width: 100%;\n    padding: 15px;\n    background-color: #2a7f2a;\n    color: white;\n    border: none;\n    border-radius: 8px;\n    font-size: 18px;\n    cursor: pointer;\n  }\n</style>\n</head>\n<body>\n  <header>\n    <button id=\"back\">←</button>\n    <h1>الطلب</h1>\n  </header>\n  <main>\n    <section class=\"items\">\n      <!-- Item 1 -->\n      <div class=\"item\" data-price=\"10\">\n        <div class=\"photo\"></div>\n        <div class=\"details\">\n          <div class=\"name\">تفاح</div>\n          <div class=\"stepper\">\n            <button class=\"dec\">-</button>\n            <span class=\"qty\">1</span>\n            <button class=\"inc\">+</button>\n          </div>\n        </div>\n        <div class=\"price\"><span class=\"item-total\">10.00</span> AED</div>\n      </div>\n      <!-- Item 2 -->\n      <div class=\"item\" data-price=\"5\">\n        <div class=\"photo\"></div>\n        <div class=\"details\">\n          <div class=\"name\">برتقال</div>\n          <div class=\"stepper\">\n            <button class=\"dec\">-</button>\n            <span class=\"qty\">1</span>\n            <button class=\"inc\">+</button>\n          </div>\n        </div>\n        <div class=\"price\"><span class=\"item-total\">5.00</span> AED</div>\n      </div>\n      <!-- Item 3 -->\n      <div class=\"item\" data-price=\"3\">\n        <div class=\"photo\"></div>\n        <div class=\"details\">\n          <div class=\"name\">حليب</div>\n          <div class=\"stepper\">\n            <button class=\"dec\">-</button>\n            <span class=\"qty\">1</span>\n            <button class=\"inc\">+</button>\n          </div>\n        </div>\n        <div class=\"price\"><span class=\"item-total\">3.00</span> AED</div>\n      </div>\n    </section>\n\n    <section class=\"promo\">\n      <input type=\"text\" placeholder=\"كود الخصم\">\n    </section>\n\n    <section class=\"summary\">\n      <div class=\"row\">\n        <span>الإجمالي الفرعي</span>\n        <span id=\"subtotal\">18.00 AED</span>\n      </div>\n      <div class=\"row\">\n        <span>التكاليف</span>\n        <span id=\"delivery\">5.00 AED</span>\n      </div>\n      <div class=\"row\">\n        <span>ضريبة القيمة المضافة 5%</span>\n        <span id=\"vat\">1.15 AED</span>\n      </div>\n      <div class=\"row total\">\n        <span>الإجمالي</span>\n        <span id=\"total\">24.15 AED</span>\n      </div>\n    </section>\n\n    <button class=\"place-order\">إتمام الطلب</button>\n  </main>\n\n<script>\n  // Simple stepper logic\n  document.querySelectorAll('.stepper').forEach(stepper => {\n    const decBtn = stepper.querySelector('.dec');\n    const incBtn = stepper.querySelector('.inc');\n    const qtySpan = stepper.querySelector('.qty');\n    const item = stepper.closest('.item');\n    const price = parseFloat(item.dataset.price);\n    const totalSpan = item.querySelector('.item-total');\n\n    function update() {\n      let qty = parseInt(qtySpan.textContent);\n      if (qty < 1) qty = 1;\n      qtySpan.textContent = qty;\n      totalSpan.textContent = (price * qty).toFixed(2);\n      updateSummary();\n    }\n\n    decBtn.addEventListener('click', () => {\n      let qty = parseInt(qtySpan.textContent);\n      if (qty > 1) {\n        qtySpan.textContent = qty - 1;\n        update();\n      }\n    });\n\n    incBtn.addEventListener('click', () => {\n      let qty = parseInt(qtySpan.textContent);\n      qtySpan.textContent = qty + 1;\n      update();\n    });\n  });\n\n  function updateSummary() {\n    let subtotal = 0;\n    document.querySelectorAll('.item').forEach(item => {\n      subtotal += parseFloat(item.querySelector('.item-total').textContent);\n    });\n    const delivery = 5;\n    const vat = subtotal * 0.05;\n    const total = subtotal + delivery + vat;\n    document.getElementById('subtotal').textContent = subtotal.toFixed(2) + ' AED';\n    document.getElementById('vat').textContent = vat.toFixed(2) + ' AED';\n    document.getElementById('total').textContent = total.toFixed(2) + ' AED';\n  }\n\n  // back button\n  document.getElementById('back').addEventListener('click', () => {\n    history.back();\n  });\n</script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 148,
+    "output": 5338
+  },
+  "ms": 55555,
+  "finish": "stop",
+  "reasoningTokens": 3750,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 85,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "icons/arrow-points-forward",
+      "title": "A back or next arrow drawn pointing the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 344,
+        "y": 10,
+        "width": 36,
+        "height": 30
+      },
+      "message": "This back arrow points left in right-to-left. It should point right.",
+      "fix": "In right to left, draw the arrow the other way, mirror it with a :dir(rtl) { transform: scaleX(-1) } rule, or swap the glyph, such as ← for →.",
+      "snippet": "<button id=\"back\">←</button>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 279,
+        "y": 14,
+        "width": 55,
+        "height": 22
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الطلب</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 149.984375,
+        "y": 547,
+        "width": 90.015625,
+        "height": 20
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"place-order\">إتمام الطلب</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 344,
+        "y": 10,
+        "width": 36,
+        "height": 30
+      },
+      "message": "margin-left: 10px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button id=\"back\">←</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 310,
+        "y": 71,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 10px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo\"></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 310,
+        "y": 161,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 10px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo\"></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 310,
+        "y": 251,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 10px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo\"></div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الملف شخصي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #f5f5f5;
+      --color-surface: #ffffff;
+      --color-primary: #0066cc;
+      --color-text: #333333;
+      --color-text-secondary: #666666;
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --radius: 8px;
+      --type-body-size: 16px;
+      --type-label-size: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Noto Sans Arabic', sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-size: var(--type-body-size);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Arabic typography rules */
+    :lang(ar) {
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+    }
+
+    .phone-frame {
+      max-width: 375px;
+      margin: 0 auto;
+      background-color: var(--color-surface);
+      min-height: 100vh;
+      padding-inline: var(--spacing-lg);
+      padding-block: var(--spacing-lg);
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-block-end: var(--spacing-lg);
+      text-align: start;
+    }
+
+    .profile-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--spacing-md);
+      padding: var(--spacing-md);
+      border: 1px solid #e0e0e0;
+      border-radius: var(--radius);
+      margin-block-end: var(--spacing-md);
+      background-color: var(--color-surface);
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--spacing-sm);
+    }
+
+    .label {
+      font-size: var(--type-label-size);
+      color: var(--color-text-secondary);
+    }
+
+    .value {
+      font-size: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xs);
+    }
+
+    .value .name,
+    .value .email {
+      display: block;
+    }
+
+    .edit-btn {
+      background: none;
+      border: none;
+      color: var(--color-primary);
+      font-size: 1rem;
+      cursor: pointer;
+      padding: var(--spacing-sm);
+      white-space: nowrap;
+    }
+
+    .edit-btn:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <h1>الملف شخصي</h1>
+
+    <!-- Item 1: Name and Email -->
+    <div class="profile-item">
+      <div class="content">
+        <div class="label">المعلومات الأساسية</div>
+        <div class="value">
+          <bdi dir="ltr"><span class="name">Layla Al Mansouri</span></bdi>
+          <bdi dir="ltr"><span class="email">layla@example.com</span></bdi>
+        </div>
+      </div>
+      <button class="edit-btn">تعديل</button>
+    </div>
+
+    <!-- Item 2: Phone -->
+    <div class="profile-item">
+      <div class="content">
+        <div class="label">رقم الهاتف</div>
+        <div class="value">
+          <bdi dir="ltr">+971 50 123 4567</bdi>
+        </div>
+      </div>
+      <button class="edit-btn">تعديل</button>
+    </div>
+
+    <!-- Item 3: IBAN -->
+    <div class="profile-item">
+      <div class="content">
+        <div class="label">الآيبان</div>
+        <div class="value">
+          <bdi dir="ltr">AE07 0331 2345 6789 0123 456</bdi>
+        </div>
+      </div>
+      <button class="edit-btn">تعديل</button>
+    </div>
+  </div>
+</body>
+</html>

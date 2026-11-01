@@ -1,0 +1,305 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "booking",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-11-01T11:29:44.016Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>حجز موعد - عيادات الدوحة</title>\n  <!-- Google Fonts: IBM Plex Sans Arabic -->\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <!-- Tailwind CSS -->\n  <script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4\"></script>\n  <style>\n    :root {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n    }\n    :lang(ar) {\n      letter-spacing: 0;\n      line-height: 1.7;\n    }\n    /* Ensure Arabic font size floor */\n    body {\n      font-size: 16px;\n      background-color: #f1f5f9;\n    }\n    .ui-text {\n      font-size: 14px;\n    }\n  </style>\n</head>\n<body class=\"flex items-center justify-center min-h-screen p-0 sm:p-4\">\n\n  <!-- Phone Frame Container -->\n  <div class=\"w-full max-w-sm bg-white min-h-screen sm:min-h-[844px] sm:max-h-[844px] sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border border-slate-200\">\n    \n    <!-- Status Bar / Top Header -->\n    <header class=\"px-5 pt-4 pb-3 bg-white border-b border-slate-100 flex items-center justify-between sticky top-0 z-20\">\n      <div class=\"flex items-center gap-2\">\n        <button class=\"w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition\" aria-label=\"رجوع\">\n          <svg class=\"w-5 h-5 rtl:-scale-x-100\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n            <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 19l-7-7 7-7\"/>\n          </svg>\n        </button>\n        <h1 class=\"font-bold text-slate-900 text-base\">حجز موعد</h1>\n      </div>\n      <!-- Language Switcher (Dualkit Best Practice) -->\n      <button id=\"langToggle\" class=\"text-xs font-semibold text-teal-700 bg-teal-50 px-2.5 py-1.5 rounded-lg hover:bg-teal-100 transition\">\n        English\n      </button>\n    </header>\n\n    <!-- Main Scrollable Content -->\n    <main class=\"flex-1 overflow-y-auto px-5 py-4 space-y-6 pb-24\">\n      \n      <!-- Doctor Card -->\n      <section class=\"flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100\">\n        <div class=\"relative\">\n          <div class=\"w-16 h-16 rounded-2xl bg-teal-800 text-white font-bold text-xl flex items-center justify-center shadow-inner\">\n            د.ط\n          </div>\n          <span class=\"absolute bottom-0 end-0 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full\"></span>\n        </div>\n        <div>\n          <div class=\"text-xs text-teal-700 font-semibold mb-0.5\">استشاري أمراض الباطنية</div>\n          <h2 class=\"font-bold text-slate-900 text-base\">د. طلال آل ثاني</h2>\n          <p class=\"text-slate-500 ui-text flex items-center gap-1 mt-0.5\">\n            <svg class=\"w-3.5 h-3.5 text-slate-400\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n              <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z\"/>\n              <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 11a3 3 0 11-6 0 3 3 0 016 0z\"/>\n            </svg>\n            <span>عيادة الوجبة، الدوحة</span>\n          </p>\n        </div>\n      </section>\n\n      <!-- Calendar Section -->\n      <section class=\"bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm\">\n        <!-- Month Navigation -->\n        <div class=\"flex items-center justify-between mb-4\">\n          <h3 class=\"font-bold text-slate-800 text-base\" id=\"monthName\">مارس ٢٠٢٥ / March 2025</h3>\n          <div class=\"flex items-center gap-1\">\n            <button id=\"prevMonth\" class=\"w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 transition\" aria-label=\"الشهر السابق\">\n              <svg class=\"w-4 h-4 rtl:-scale-x-100\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"/>\n              </svg>\n            </button>\n            <button id=\"nextMonth\" class=\"w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 transition\" aria-label=\"الشهر التالي\">\n              <svg class=\"w-4 h-4 rtl:-scale-x-100\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                <path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 19l-7-7 7-7\"/>\n              </svg>\n            </button>\n          </div>\n        </div>\n\n        <!-- Weekdays Header (Starting Saturday per Qatari/GCC standard) -->\n        <div class=\"grid grid-cols-7 text-center text-xs font-semibold text-slate-400 mb-2\">\n          <span>سبت</span>\n          <span>أحد</span>\n          <span>إثنين</span>\n          <span>ثلاثاء</span>\n          <span>أربعاء</span>\n          <span>خميس</span>\n          <span>جمعة</span>\n        </div>\n\n        <!-- Days Grid (March 2025 example starting Saturday) -->\n        <div class=\"grid grid-cols-7 gap-1 text-center text-sm\" id=\"calendarDays\">\n          <!-- Padding for days before March 1 if needed, but March 1, 2025 is Saturday -->\n          <button class=\"aspect-square rounded-xl flex items-center justify-center text-slate-300 cursor-not-allowed\" disabled><bdi>28</bdi></kbutton>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center text-slate-300 cursor-not-allowed\" disabled><bdi>29</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center text-slate-300 cursor-not-allowed\" disabled><bdi>30</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center text-slate-300 cursor-not-allowed\" disabled><bdi>31</bdi></button>\n          <!-- March Days -->\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>1</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>2</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>3</bdi></button>\n          \n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>4</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>5</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>6</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>7</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>8</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>9</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>10</bdi></button>\n          \n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>11</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>12</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>13</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>14</bdi></button>\n          <!-- Today Marked -->\n          <button class=\"aspect-square rounded-xl flex items-center justify-center bg-teal-800 text-white font-bold shadow-md shadow-teal-800/20 ring-2 ring-teal-800/20\" aria-current=\"date\"><bdi>15</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>16</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>17</bdi></button>\n\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>18</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>19</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>20</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>21</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>22</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>23</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>24</bdi></button>\n\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>25</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>26</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>27</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>28</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>29</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>30</bdi></button>\n          <button class=\"aspect-square rounded-xl flex items-center justify-center hover:bg-slate-100 text-slate-700 transition font-medium\"><bdi>31</bdi></button>\n        </div>\n      </section>\n\n      <!-- Time Slots Section (9:00 to 12:00 every 30 minutes) -->\n      <section class=\"space-y-3\">\n        <h3 class=\"font-bold text-slate-800 text-sm\">اختر وقت الموعد</h3>\n        <div class=\"grid grid-cols-3 gap-2.5\" id=\"timeSlots\">\n          <button class=\"py-3 px-2 rounded-xl border border-slate-200 text-slate-700 text-sm font-medium hover:border-teal-700 hover:text-teal-800 transition text-center time-slot\" data-time=\"09:00\">\n            <bdi dir=\"ltr\">09:00 ص</bdi>\n          </button>\n          <button class=\"py-3 px-2 rounded-xl border border-slate-200 text-slate-700 text-sm font-medium hover:border-teal-700 hover:text-teal-800 transition text-center time-slot\" data-time=\"09:30\">\n            <bdi dir=\"ltr\">09:30 ص</bdi>\n          </button>\n          <button class=\"py-3 px-2 rounded-xl border border-slate-200 text-slate-700 text-sm font-medium hover:border-teal-700 hover:text-teal-800 transition text-center time-slot\" data-time=\"10:00\">\n            <bdi dir=\"ltr\">10:00 ص</bdi>\n          </button>\n          <button class=\"py-3 px-2 rounded-xl border border-slate-200 text-slate-700 text-sm font-medium hover:border-teal-700 hover:text-teal-800 transition text-center time-slot\" data-time=\"10:30\">\n            <bdi dir=\"ltr\">10:30 ص</bdi>\n          </button>\n          <!-- Selected Slot Example -->\n          <button class=\"py-3 px-2 rounded-xl border-2 border-teal-800 bg-teal-50/50 text-teal-900 text-sm font-bold transition text-center time-slot shadow-sm\" data-time=\"11:00\">\n            <bdi dir=\"ltr\">11:00 ص</bdi>\n          </button>\n          <button class=\"py-3 px-2 rounded-xl border border-slate-200 text-slate-700 text-sm font-medium hover:border-teal-700 hover:text-teal-800 transition text-center time-slot\" data-time=\"11:30\">\n            <bdi dir=\"ltr\">11:30 ص</bdi>\n          </button>\n          <button class=\"py-3 px-2 rounded-xl border border-slate-200 text-slate-700 text-sm font-medium hover:border-teal-700 hover:text-teal-800 transition text-center time-slot\" data-time=\"12:00\">\n            <bdi dir=\"ltr\">12:00 م</bdi>\n          </button>\n        </div>\n      </section>\n\n    </main>\n\n    <!-- Sticky Bottom Action Footer -->\n    <footer class=\"absolute bottom-0 inset-x-0 bg-white/95 backdrop-blur border-t border-slate-100 p-4 shadow-lg\">\n      <div class=\"flex items-center justify-between mb-2 px-1\">\n        <span class=\"text-xs text-slate-500\">الموعد المختار:</span>\n        <span class=\"text-xs font-bold text-slate-800\"><bdi>السبت، 15 مارس - 11:00 ص</bdi></span>\n      </div>\n      <button class=\"w-full bg-teal-800 hover:bg-teal-900 active:scale-[0.99] text-white font-bold py-3.5 px-4 rounded-2xl shadow-lg shadow-teal-800/25 transition flex items-center justify-center gap-2\">\n        <span>تأكيد الموعد</span>\n      </button>\n    </footer>\n\n  </div>\n\n  <script>\n    // Simple interactivity for demonstration of time slot selection and language toggle\n    const slots = document.querySelectorAll('.time-slot');\n    slots.forEach(slot => {\n      slot.addEventListener('click', () => {\n        slots.forEach(s => {\n          s.classList.remove('border-teal-800', 'bg-teal-50/50', 'text-teal-900', 'font-bold', 'shadow-sm');\n          s.classList.add('border-slate-200', 'text-slate-700', 'font-medium');\n        });\n        slot.classList.remove('border-slate-200', 'text-slate-700', 'font-medium');\n        slot.classList.add('border-teal-800', 'bg-teal-50/50', 'text-teal-900', 'font-bold', 'shadow-sm');\n      });\n    });\n\n    // Language Toggle simulation\n    const langToggle = document.getElementById('langToggle');\n    let isAr = true;\n    langToggle.addEventListener('click', () => {\n      isAr = !isAr;\n      document.documentElement.lang = isAr ? 'ar' : 'en';\n      document.documentElement.dir = isAr ? 'rtl' : 'ltr';\n      langToggle.textContent = isAr ? 'English' : 'عربي';\n    });\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6498,
+    "output": 5023
+  },
+  "ms": 23778,
+  "finish": "STOP",
+  "reasoningTokens": 2055,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 30,
+  "score": 46,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/date-order",
+      "title": "A date that will show in the wrong order",
+      "severity": "error",
+      "box": {
+        "x": 283.828125,
+        "y": 618.453125,
+        "width": 57,
+        "height": 21
+      },
+      "message": "\"09:00 ص\": it is forced left to right, so its Arabic and its numbers show in reverse order.",
+      "fix": "Join the parts with / instead of -, or wrap a Western-digit date in <bdi dir=\"ltr\">. Leave a worded Arabic date right to left.",
+      "snippet": "<bdi dir=\"ltr\">09:00 ص</bdi>"
+    },
+    {
+      "rule": "bidi/date-order",
+      "title": "A date that will show in the wrong order",
+      "severity": "error",
+      "box": {
+        "x": 166.5,
+        "y": 618.453125,
+        "width": 57,
+        "height": 21
+      },
+      "message": "\"09:30 ص\": it is forced left to right, so its Arabic and its numbers show in reverse order.",
+      "fix": "Join the parts with / instead of -, or wrap a Western-digit date in <bdi dir=\"ltr\">. Leave a worded Arabic date right to left.",
+      "snippet": "<bdi dir=\"ltr\">09:30 ص</bdi>"
+    },
+    {
+      "rule": "bidi/date-order",
+      "title": "A date that will show in the wrong order",
+      "severity": "error",
+      "box": {
+        "x": 49.171875,
+        "y": 618.453125,
+        "width": 57,
+        "height": 21
+      },
+      "message": "\"10:00 ص\": it is forced left to right, so its Arabic and its numbers show in reverse order.",
+      "fix": "Join the parts with / instead of -, or wrap a Western-digit date in <bdi dir=\"ltr\">. Leave a worded Arabic date right to left.",
+      "snippet": "<bdi dir=\"ltr\">10:00 ص</bdi>"
+    },
+    {
+      "rule": "bidi/date-order",
+      "title": "A date that will show in the wrong order",
+      "severity": "error",
+      "box": {
+        "x": 283.828125,
+        "y": 679.25,
+        "width": 57,
+        "height": 21
+      },
+      "message": "\"10:30 ص\": it is forced left to right, so its Arabic and its numbers show in reverse order.",
+      "fix": "Join the parts with / instead of -, or wrap a Western-digit date in <bdi dir=\"ltr\">. Leave a worded Arabic date right to left.",
+      "snippet": "<bdi dir=\"ltr\">10:30 ص</bdi>"
+    },
+    {
+      "rule": "bidi/date-order",
+      "title": "A date that will show in the wrong order",
+      "severity": "error",
+      "box": {
+        "x": 166,
+        "y": 679.25,
+        "width": 58,
+        "height": 21
+      },
+      "message": "\"11:00 ص\": it is forced left to right, so its Arabic and its numbers show in reverse order.",
+      "fix": "Join the parts with / instead of -, or wrap a Western-digit date in <bdi dir=\"ltr\">. Leave a worded Arabic date right to left.",
+      "snippet": "<bdi dir=\"ltr\">11:00 ص</bdi>"
+    },
+    {
+      "rule": "bidi/date-order",
+      "title": "A date that will show in the wrong order",
+      "severity": "error",
+      "box": {
+        "x": 49.171875,
+        "y": 679.25,
+        "width": 57,
+        "height": 21
+      },
+      "message": "\"11:30 ص\": it is forced left to right, so its Arabic and its numbers show in reverse order.",
+      "fix": "Join the parts with / instead of -, or wrap a Western-digit date in <bdi dir=\"ltr\">. Leave a worded Arabic date right to left.",
+      "snippet": "<bdi dir=\"ltr\">11:30 ص</bdi>"
+    },
+    {
+      "rule": "bidi/date-order",
+      "title": "A date that will show in the wrong order",
+      "severity": "error",
+      "box": {
+        "x": 288.828125,
+        "y": 740.046875,
+        "width": 47,
+        "height": 21
+      },
+      "message": "\"12:00 م\": it is forced left to right, so its Arabic and its numbers show in reverse order.",
+      "fix": "Join the parts with / instead of -, or wrap a Western-digit date in <bdi dir=\"ltr\">. Leave a worded Arabic date right to left.",
+      "snippet": "<bdi dir=\"ltr\">12:00 م</bdi>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 174,
+        "y": 235.78125,
+        "width": 175,
+        "height": 24
+      },
+      "message": "\"مارس ٢٠٢٥ / March 2025\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<h3 class=\"font-bold text-slate-800 text-base\" id=\"monthName\">مارس ٢٠٢٥ / March 2025</h3>"
+    },
+    {
+      "rule": "icons/arrow-points-forward",
+      "title": "A back or next arrow drawn pointing the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 85,
+        "y": 240.375,
+        "width": 16,
+        "height": 16
+      },
+      "message": "This back arrow points left in right-to-left. It should point right.",
+      "fix": "In right to left, draw the arrow the other way, mirror it with a :dir(rtl) { transform: scaleX(-1) } rule, or swap the glyph, such as ← for →.",
+      "snippet": "<svg class=\"w-4 h-4 rtl:-scale-x-100\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                <path stroke-linecap=\"round\" stroke-linejoin=\"round"
+    },
+    {
+      "rule": "icons/arrow-points-forward",
+      "title": "A back or next arrow drawn pointing the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 49,
+        "y": 240.375,
+        "width": 16,
+        "height": 16
+      },
+      "message": "This next arrow points right in right-to-left. It should point left.",
+      "fix": "In right to left, draw the arrow the other way, mirror it with a :dir(rtl) { transform: scaleX(-1) } rule, or swap the glyph, such as ← for →.",
+      "snippet": "<svg class=\"w-4 h-4 rtl:-scale-x-100\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\">\n                <path stroke-linecap=\"round\" stroke-linejoin=\"round"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 156,
+        "y": 100,
+        "width": 113,
+        "height": 18
+      },
+      "message": "\"استشاري أمراض الباطنية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"text-xs text-teal-700 font-semibold mb-0.5\">استشاري أمراض الباطنية</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 315,
+        "y": 281.375,
+        "width": 24,
+        "height": 18
+      },
+      "message": "\"سبت\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>سبت</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 274,
+        "y": 281.375,
+        "width": 18,
+        "height": 18
+      },
+      "message": "\"أحد\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>أحد</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 228,
+        "y": 281.375,
+        "width": 22,
+        "height": 18
+      },
+      "message": "\"إثنين\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>إثنين</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 184.5,
+        "y": 281.375,
+        "width": 21,
+        "height": 18
+      },
+      "message": "\"ثلاثاء\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>ثلاثاء</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 139.5,
+        "y": 281.375,
+        "width": 23,
+        "height": 18
+      },
+      "message": "\"أربعاء\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>أربعاء</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 90,
+        "y": 281.375,
+        "width": 34,
+        "height": 18
+      },
+      "message": "\"خميس\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>خميس</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 49.5,
+        "y": 281.375,
+        "width": 27,
+        "height": 18
+      },
+      "message": "\"جمعة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>جمعة</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 300,
+        "y": 773.265625,
+        "width": 66,
+        "height": 18
+      },
+      "message": "\"الموعد المختار:\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-500\">الموعد المختار:</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 24,
+        "y": 773.265625,
+        "width": 145,
+        "height": 18
+      },
+      "message": "\"السبت، 15 مارس - 11:00 ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<bdi>السبت، 15 مارس - 11:00 ص</bdi>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 873
+}

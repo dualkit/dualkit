@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>طلباتي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :lang(ar) {
+    --type-label-size: 14px;
+    --type-caption-size: 14px;
+    --type-body-size: 16px;
+    letter-spacing: 0;
+    text-transform: none;
+    font-style: normal;
+    line-height: 1.7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans Arabic', sans-serif;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    font-size: var(--type-body-size);
+    line-height: 1.7;
+    direction: rtl;
+    text-align: right;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px;
+    min-height: 100vh;
+    background: #fff;
+  }
+
+  /* Header */
+  .header {
+    padding: 20px 0 24px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+  }
+
+  .header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+  }
+
+  .header p {
+    font-size: 14px;
+    color: #888;
+  }
+
+  /* Order card */
+  .order-card {
+    background: #fff;
+    border: 1px solid #e8e8e8;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    transition: box-shadow 0.2s ease;
+    cursor: pointer;
+  }
+
+  .order-card:active {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  }
+
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  .order-number {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+
+  .status {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .status-delivered {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  .status-shipping {
+    background: #e3f2fd;
+    color: #1565c0;
+  }
+
+  .status-cancelled {
+    background: #ffebee;
+    color: #c62828;
+  }
+
+  .order-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 14px;
+  }
+
+  .detail-label {
+    color: #999;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .detail-value {
+    color: #1a1a1a;
+    font-weight: 500;
+    text-align: left;
+    flex: 1;
+  }
+
+  .date-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  .date-gregorian {
+    font-size: 14px;
+    color: #1a1a1a;
+    font-weight: 500;
+  }
+
+  .date-hijri {
+    font-size: 14px;
+    color: #999;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 24px 20px;
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .container {
+      padding: 12px;
+    }
+
+    .order-card {
+      padding: 16px;
+    }
+
+    .header {
+      padding: 16px 0 20px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1>طلباتي</h1>
+    <p>عرض جميع طلباتك السابقة</p>
+  </header>
+
+  <!-- Order 1: Delivered -->
+  <div class="order-card">
+    <div class="order-header">
+      <div class="order-number">
+        <bdi dir="ltr">#A-10293</bdi>
+      </div>
+      <span class="status status-delivered">تم التسليم</span>
+    </div>
+    <div class="order-details">
+      <div class="detail-row">
+        <span class="detail-label">التاريخ</span>
+        <div class="date-block">
+          <span class="date-gregorian">١٠ يناير ٢٠٢٥</span>
+          <span class="date-hijri">١٠ جمادى الأولى ١٤٤٦ هـ</span>
+        </div>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">الإجمالي</span>
+        <div class="detail-value">
+          <bdi>١٥٫٠٠ ر.س</bdi>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order 2: On the way -->
+  <div class="order-card">
+    <div class="order-header">
+      <div class="order-number">
+        <bdi dir="ltr">#A-10294</bdi>
+      </div>
+      <span class="status status-shipping">في التوصيل</span>
+    </div>
+    <div class="order-details">
+      <div class="detail-row">
+        <span class="detail-label">التاريخ</span>
+        <div class="date-block">
+          <span class="date-gregorian">١٢ يناير ٢٠٢٥</span>
+          <span class="date-hijri">١٢ جمادى الأولى ١٤٤٦ هـ</span>
+        </div>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">الإجمالي</span>
+        <div class="detail-value">
+          <bdi>٢٧٫٥٠ ر.س</bdi>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order 3: Delivered -->
+  <div class="order-card">
+    <div class="order-header">
+      <div class="order-number">
+        <bdi dir="ltr">#A-10295</bdi>
+      </div>
+      <span class="status status-delivered">تم التسليم</span>
+    </div>
+    <div class="order-details">
+      <div class="detail-row">
+        <span class="detail-label">التاريخ</span>
+        <div class="date-block">
+          <span class="date-gregorian">٨ يناير ٢٠٢٥</span>
+          <span class="date-hijri">٨ جمادى الأولى ١٤٤٦ هـ</span>
+        </div>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">الإجمالي</span>
+        <div class="detail-value">
+          <bdi>٨٩٫٠٠ ر.س</bdi>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order 4: Cancelled -->
+  <div class="order-card">
+    <div class="order-header">
+      <div class="order-number">
+        <bdi dir="ltr">#A-10296</bdi>
+      </div>
+      <span class="status status-cancelled">ملغي</span>
+    </div>
+    <div class="order-details">
+      <div class="detail-row">
+        <span class="detail-label">التاريخ</span>
+        <div class="date-block">
+          <span class="date-gregorian">٥ يناير ٢٠٢٥</span>
+          <span class="date-hijri">٥ جمادى الأولى ١٤٤٦ هـ</span>
+        </div>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">الإجمالي</span>
+        <div class="detail-value">
+          <bdi>١٢٫٠٠ ر.س</bdi>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    جميع الحقوق محفوظة لـ <bdi dir="ltr">Dualkit</bdi>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الملف الشخصي</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+  }
+  .container {
+    max-width: 375px;
+    margin: 0 auto;
+    background-color: #fff;
+    min-height: 100vh;
+    padding: 16px;
+  }
+  .profile-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .info {
+    text-align: right;
+  }
+  .name, .email, .phone, .iban {
+    font-size: 16px;
+    color: #333;
+  }
+  .name {
+    font-weight: bold;
+  }
+  .email {
+    font-size: 14px;
+    color: #666;
+  }
+  .phone, .iban {
+    font-size: 16px;
+    color: #333;
+  }
+  .edit {
+    background: none;
+    border: none;
+    color: #007AFF;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="profile-item">
+    <div class="info">
+      <div class="name">Layla Al Mansouri</div>
+      <div class="email">layla@example.com</div>
+    </div>
+    <button class="edit">تعديل</button>
+  </div>
+  <div class="profile-item">
+    <div class="info">
+      <div class="phone">+971 50 123 4567</div>
+    </div>
+    <button class="edit">تعديل</button>
+  </div>
+  <div class="profile-item">
+    <div class="info">
+      <div class="iban">AE07 0331 2345 6789 0123 456</div>
+    </div>
+    <button class="edit">تعديل</button>
+  </div>
+</div>
+</body>
+</html>

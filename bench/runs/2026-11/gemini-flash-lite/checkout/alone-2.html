@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إتمام الطلب - بقالة الإمارات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Phone Container */
+        .phone-frame {
+            width: 100%;
+            max-width: 410px;
+            height: 100vh;
+            max-height: 844px;
+            background-color: #f8f9fa;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 411px) {
+            .phone-frame {
+                border-radius: 40px;
+                border: 10px solid #2d3748;
+                height: 844px;
+            }
+        }
+
+        /* Top Header */
+        .header {
+            background-color: #ffffff;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #edf2f7;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        .header-spacer {
+            width: 24px;
+        }
+
+        /* Scrollable Content */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 20px;
+            padding-bottom: 120px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #4a5568;
+            margin-bottom: 12px;
+        }
+
+        /* Cart Items */
+        .cart-items {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f7fafc;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-img {
+            width: 60px;
+            height: 60px;
+            background-color: #edf2f7;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            font-size: 10px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-details {
+            flex: 1;
+            padding-right: 12px;
+        }
+
+        .item-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 4px;
+        }
+
+        .item-price {
+            font-size: 13px;
+            font-weight: 700;
+            color: #0d9488;
+        }
+
+        .stepper {
+            display: flex;
+            align-items: center;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .stepper button {
+            background: none;
+            border: none;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #0d9488;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stepper span {
+            width: 24px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Promo Code Section */
+        .promo-section {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .promo-input {
+            flex: 1;
+            border: 1px solid #e2e8f0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .promo-input:focus {
+            border-color: #0d9488;
+        }
+
+        .promo-btn {
+            background: #2d3748;
+            color: white;
+            border: none;
+            padding: 0 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .promo-btn:hover {
+            background: #1a202c;
+        }
+
+        /* Summary Card */
+        .summary-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: #4a5568;
+        }
+
+        .summary-row.total {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #e2e8f0;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        .summary-row.total .price {
+            color: #0d9488;
+        }
+
+        /* Bottom Fixed Checkout Bar */
+        .checkout-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            padding: 16px 20px;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+            border-top: 1px solid #edf2f7;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: #0d9488;
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+        }
+
+        .checkout-btn:active {
+            transform: scale(0.98);
+        }
+
+        .checkout-btn:hover {
+            background: #0f766e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame">
+        <!-- Top Header -->
+        <div class="header">
+            <button class="back-btn" aria-label="رجوع">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <div class="header-title">إتمام الطلب</div>
+            <div class="header-spacer"></div>
+        </div>
+
+        <!-- Scrollable Body -->
+        <div class="content">
+            <!-- Cart Items Section -->
+            <div class="section-title">محتويات السلة (3 منتجات)</div>
+            <div class="cart-items">
+                <!-- Item 1 -->
+                <div class="cart-item">
+                    <div class="item-img">
+                        <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=150&q=80" alt="حليب طازج">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-name">حليب المراعي طازج 2 لتر</div>
+                        <div class="item-price">14.50 د.إ</div>
+                    </div>
+                    <div class="stepper">
+                        <button onclick="updateQty(this, -1)">-</button>
+                        <span>1</span>
+                        <button onclick="updateQty(this, 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="cart-item">
+                    <div class="item-img">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=150&q=80" alt="خبز عربي">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-name">خبز عربي أبيض مطاحن البر البر</div>
+                        <div class="item-price">5.00 د.إ</div>
+                    </div>
+                    <div class="stepper">
+                        <button onclick="updateQty(this, -1)">-</button>
+                        <span>2</span>
+                        <button onclick="updateQty(this, 1)">+</button>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="cart-item">
+                    <div class="item-img">
+                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=150&q=80" alt="قهوة عربية">
+                    </div>
+                    <div class="item-details">
+                        <div class="item-name">قهوة عربية فاخرة بالهيل 250جم</div>
+                        <div class="item-price">28.00 د.إ</div>
+                    </div>
+                    <div class="stepper">
+                        <button onclick="updateQty(this, -1)">-</button>
+                        <span>1</span>
+                        <button onclick="updateQty(this, 1)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Promo Code Section -->
+            <div class="section-title">الخصم والعروض</div>
+            <div class="promo-section">
+                <input type="text" class="promo-input" placeholder="أدخل رمز القسيمة (مثال: UAE20)">
+                <button class="promo-btn">تطبيق</button>
+            </div>
+
+            <!-- Price Breakdown Summary -->
+            <div class="section-title">ملخص الدفع</div>
+            <div class="summary-card">
+                <div class="summary-row">
+                    <span>المجموع الفرعي</span>
+                    <span>47.50 د.إ</span>
+                </div>
+                <div class="summary-row">
+                    <span>رسوم التوصيل السريع</span>
+                    <span>10.00 د.إ</span>
+                </div>
+                <div class="summary-row">
+                    <span>ضريبة القيمة المضافة (5% المدعومة)</span>
+                    <span>2.88 د.إ</span>
+                </div>
+                <div class="summary-row total">
+                    <span>المجموع الكلي</span>
+                    <span class="price">60.38 د.إ</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="checkout-footer">
+            <button class="checkout-btn">
+                <span>تأكيد الطلب والدفع</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(180deg);"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function updateQty(btn, change) {
+            const span = btn.parentElement.querySelector('span');
+            let qty = parseInt(span.textContent) + change;
+            if (qty < 1) qty = 1;
+            span.textContent = qty;
+        }
+    </script>
+</body>
+</html>

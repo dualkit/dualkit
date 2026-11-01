@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أدخل الرمز</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;700&display=swap');
+
+  :root {
+    --color-bg: #f5f5f5;
+    --color-surface: #ffffff;
+    --color-primary: #005c4b;
+    --color-primary-dark: #004436;
+    --color-text: #1a1a1a;
+    --color-text-secondary: #6b6b6b;
+    --color-border: #e0e0e0;
+    --color-error: #d32f2f;
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+    direction: rtl;
+    text-align: right;
+  }
+
+  .container {
+    background-color: var(--color-surface);
+    border-radius: 16px;
+    padding: var(--spacing-xl);
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+
+  .title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: 0;
+    text-transform: none;
+    font-style: normal;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.6;
+    letter-spacing: 0;
+  }
+
+  .subtitle bdi {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .otp-container {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .otp-input {
+    width: 48px;
+    height: 56px;
+    border: 1.5px solid var(--color-border);
+    border-radius: 10px;
+    font-size: 24px;
+    font-weight: 600;
+    font-family: 'Noto Sans Arabic', sans-serif;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    -webkit-text-security: disc;
+    letter-spacing: 0;
+    direction: ltr;
+  }
+
+  .otp-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(0, 92, 75, 0.15);
+  }
+
+  .otp-input.error {
+    border-color: var(--color-error);
+    animation: shake 0.3s ease;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  .countdown {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-lg);
+    letter-spacing: 0;
+    min-height: 20px;
+  }
+
+  .countdown .time {
+    font-weight: 700;
+    color: var(--color-primary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .btn {
+    width: 100%;
+    padding: var(--spacing-md);
+    background-color: var(--color-primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Noto Sans Arabic', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    letter-spacing: 0;
+    text-transform: none;
+    font-style: normal;
+  }
+
+  .btn:hover {
+    background-color: var(--color-primary-dark);
+  }
+
+  .btn:active {
+    background-color: var(--color-primary-dark);
+  }
+
+  .btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  .resend-link {
+    margin-top: var(--spacing-md);
+    font-size: 14px;
+    color: var(--color-text-secondary);
+  }
+
+  .resend-link a {
+    color: var(--color-primary);
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .resend-link a:hover {
+    text-decoration: underline;
+  }
+
+  .resend-link a.disabled {
+    color: var(--color-text-secondary);
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .error-message {
+    color: var(--color-error);
+    font-size: 13px;
+    margin-top: var(--spacing-sm);
+    min-height: 18px;
+    letter-spacing: 0;
+  }
+
+  /* Ensure Arabic text stays above 14px floor */
+  label, .badge, small, .caption {
+    font-size: 14px;
+  }
+
+  /* Tabular numerals for numbers */
+  .otp-input, .countdown, .subtitle {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Isolate Latin runs inside Arabic */
+  bdi {
+    unicode-bidi: isolate;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">أدخل الرمز</h1>
+    <p class="subtitle">
+      أرسلنا رمزًا مكونًا من 6 أرقام إلى <bdi dir="ltr">+966 55 123 4567</bdi>
+    </p>
+
+    <form class="otp-form" onsubmit="return verifyCode()">
+      <div class="otp-container">
+        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="one-time-code" data-index="0" dir="ltr">
+        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="one-time-code" data-index="1" dir="ltr">
+        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="one-time-code" data-index="2" dir="ltr">
+        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="one-time-code" data-index="3" dir="ltr">
+        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="one-time-code" data-index="4" dir="ltr">
+        <input type="text" class="otp-input" maxlength="1" inputmode="numeric" autocomplete="one-time-code" data-index="5" dir="ltr">
+      </div>
+
+      <div class="error-message" id="error-msg"></div>
+
+      <button type="submit" class="btn" id="verify-btn">تحقق</button>
+    </form>
+
+    <div class="countdown" id="countdown">
+      <span>إعادة الإرسال بعد </span><span class="time" id="time">0:45</span>
+    </div>
+
+    <div class="resend-link">
+      <a id="resend-link" class="disabled">لم تصل الرمز؟</a>
+    </div>
+  </div>
+
+<script>
+  const inputs = document.querySelectorAll('.otp-input');
+  const verifyBtn = document.getElementById('verify-btn');
+  const countdownEl = document.getElementById('countdown');
+  const timeEl = document.getElementById('time');
+  const resendLink = document.getElementById('resend-link');
+  const errorMsg = document.getElementById('error-msg');
+  const form = document.querySelector('.otp-form');
+
+  let countdown = 45;
+  let countdownTimer = null;
+
+  // Auto-focus first input
+  inputs[0].focus();
+
+  // Handle input movement between boxes
+  inputs.forEach((input, index) => {
+    input.addEventListener('input', () => {
+      errorMsg.textContent = '';
+      input.classList.remove('error');
+      if (input.value.length === 1) {
+        if (index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      }
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && input.value === '' && index > 0) {
+        inputs[index - 1].focus();
+      }
+    });
+
+    input.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+      pasted.split('').forEach((char, i) => {
+        if (inputs[i]) {
+          inputs[i].value = char;
+        }
+      });
+      const next = Math.min(pasted.length, 5);
+      inputs[next]?.focus();
+    });
+  });
+
+  // Start countdown
+  function startCountdown() {
+    countdown = 45;
+    resendLink.classList.add('disabled');
+    resendLink.textContent = 'لم تصل الرمز؟';
+    countdownEl.style.display = 'block';
+    timeEl.textContent = formatTime(countdown);
+
+    if (countdownTimer) clearInterval(countdownTimer);
+    countdownTimer = setInterval(() => {
+      countdown--;
+      timeEl.textContent = formatTime(countdown);
+      if (countdown <= 0) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+        resendLink.classList.remove('disabled');
+        resendLink.textContent = 'أعد الإرسال';
+      }
+    }, 1000);
+  }
+
+  function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return mins + ':' + (secs < 10 ? '0' + secs : secs);
+  }
+
+  // Verify code
+  function verifyCode() {
+    const code = Array.from(inputs).map(i => i.value).join('');
+    if (code.length < 6) {
+      showError('الرجاء إ Entered الرمز الكامل المكون من 6 أرقام');
+      return false;
+    }
+    // Simulate verification
+    verifyBtn.disabled = true;
+    verifyBtn.textContent = 'جاري التحقق...';
+    setTimeout(() => {
+      verifyBtn.disabled = false;
+      verifyBtn.textContent = 'تحقق';
+      showError('الرمز غير صحيح، يرجاء المحاولة مرة أخرى');
+      inputs.forEach(i => i.value = '');
+      inputs[0].focus();
+    }, 1500);
+    return false;
+  }
+
+  function showError(msg) {
+    errorMsg.textContent = msg;
+    inputs.forEach(i => i.classList.add('error'));
+  }
+
+  // Resend
+  resendLink.addEventListener('click', (e) => {
+    if (resendLink.classList.contains('disabled')) {
+      e.preventDefault();
+      return;
+    }
+    e.preventDefault();
+    startCountdown();
+    inputs.forEach(i => i.value = '');
+    inputs[0].focus();
+  });
+
+  // Start countdown on load
+  startCountdown();
+</script>
+</body>
+</html>

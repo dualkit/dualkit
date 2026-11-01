@@ -1,0 +1,305 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "booking",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-11-01T11:27:56.802Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>حجز موعد - عيادات قطر</title>\n    <!-- Tailwind CSS -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Font: Cairo -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap\" rel=\"stylesheet\">\n    <script>\n        tailwind.config = {\n            theme: {\n                extend: {\n                    fontFamily: {\n                        cairo: ['Cairo', 'sans-serif'],\n                    },\n                    colors: {\n                        primary: '#0D9488', // Teal\n                        primaryDark: '#0F766E',\n                        accent: '#F3F4F6',\n                    }\n                }\n            }\n        }\n    </script>\n</head>\n<body class=\"bg-gray-900 font-cairo flex items-center justify-center min-h-screen p-0 sm:p-4\">\n\n    <!-- Phone Screen Container -->\n    <div class=\"w-full max-w-sm bg-white sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col h-screen sm:h-[844px] relative\">\n\n        <!-- Top Status Bar (Simulated) -->\n        <div class=\"bg-primary text-white px-6 pt-4 pb-2 flex justify-between items-center text-sm\">\n            <span>٩:٤١</span>\n            <div class=\"flex items-center space-x-2 space-x-reverse\">\n                <span>٥G</span>\n                <svg class=\"w-4 h-4\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h15.3l-.62-1.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z\"/></svg>\n            </div>\n        </div>\n\n        <!-- Header -->\n        <div class=\"bg-primary text-white px-6 pb-6 pt-2 rounded-b-[30px] shadow-md\">\n            <div class=\"flex items-center justify-between mb-4\">\n                <button class=\"w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition\">\n                    <svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"/></svg>\n                </button>\n                <h1 class=\"text-lg font-bold\">حجز موعد جديد</h1>\n                <div class=\"w-10\"></div>\n            </div>\n\n            <!-- Doctor Info Card -->\n            <div class=\"flex items-center bg-white/10 p-3 rounded-2xl backdrop-blur-sm\">\n                <div class=\"w-14 h-14 bg-white rounded-full overflow-hidden flex-shrink-0 ml-3 border-2 border-white/30\">\n                    <img src=\"https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=200\" alt=\"د. أحمد المري\" class=\"w-full h-full object-cover\">\n                </div>\n                <div>\n                    <h2 class=\"font-bold text-base\">د. أحمد المري</h2>\n                    <p class=\"text-xs text-teal-100\">استشاري أمراض الباطنة والقلب</p>\n                    <div class=\"flex items-center mt-1 text-xs text-teal-200\">\n                        <svg class=\"w-3.5 h-3.5 ml-1 text-yellow-300\" fill=\"currentColor\" viewBox=\"0 0 20 20\"><path d=\"M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z\"/></svg>\n                        <span>٤.٩ (١٢٠ تقييم)</span>\n                    </div>\n                </div>\n            </div>\n        </div>\n\n        <!-- Scrollable Body Content -->\n        <div class=\"flex-1 overflow-y-auto px-6 py-4 space-y-6\">\n\n            <!-- Calendar Section -->\n            <div class=\"bg-gray-50 p-4 rounded-2xl border border-gray-100\">\n                <!-- Month Navigator -->\n                <div class=\"flex justify-between items-center mb-4\">\n                    <button class=\"p-1.5 rounded-lg hover:bg-gray-200 text-gray-600 transition\">\n                        <!-- Next Month (RTL flipped logic visually) -->\n                        <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M9 5l7 7-7 7\"/></svg>\n                    </button>\n                    <h2 class=\"font-bold text-gray-800 text-base\">أكتوبر ٢٠٢٣</h2>\n                    <button class=\"p-1.5 rounded-lg hover:bg-gray-200 text-gray-600 transition\">\n                        <!-- Prev Month -->\n                        <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 19l-7-7 7-7\"/></svg>\n                    </button>\n                </div>\n\n                <!-- Week Days Header (Starts on Saturday) -->\n                <div class=\"grid grid-cols-7 gap-1 text-center mb-2\">\n                    <span class=\"text-xs font-semibold text-gray-400\">سَبْت</span>\n                    <span class=\"text-xs font-semibold text-gray-400\">أَحَد</span>\n                    <span class=\"text-xs font-semibold text-gray-400\">إِثْنَيْن</span>\n                    <span class=\"text-xs font-semibold text-gray-400\">ثُلَاثَاء</span>\n                    <span class=\"text-xs font-semibold text-gray-400\">أَرْبِعَاء</span>\n                    <span class=\"text-xs font-semibold text-gray-400\">خَمِيس</span>\n                    <span class=\"text-xs font-semibold text-gray-400\">جُمُعَة</span>\n                </div>\n\n                <!-- Days Grid (Starting Saturday) -->\n                <div class=\"grid grid-cols-7 gap-1 text-center text-sm\">\n                    <!-- Previous month trailing days -->\n                    <span class=\"py-2 text-gray-300\">٣٠</span>\n                    <!-- October 2023 starts on Sunday (1 Oct = Sunday, so Saturday 30 Sept is prev, 1 Oct is Sunday) -->\n                    <!-- Wait, let's map accurately or simply represent the grid mock -->\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">١</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٢</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٣</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٤</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٥</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٦</span>\n\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٧</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٨</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٩</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">١٠</span>\n                    <!-- TODAY MARKED -->\n                    <span class=\"py-2 bg-primary text-white font-bold rounded-xl shadow-md shadow-teal-200 cursor-pointer\">١١</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">١٢</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">١٣</span>\n\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">١٤</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">١٥</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">١٦</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">١٧</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">١٨</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">١٩</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٢٠</span>\n\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٢١</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٢٢</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٢٣</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٢٤</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٢٥</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٢٦</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٢٧</span>\n\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٢٨</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٢٩</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٣٠</span>\n                    <span class=\"py-2 text-gray-700 hover:bg-teal-50 rounded-xl cursor-pointer\">٣١</span>\n                    <span class=\"py-2 text-gray-300\">١</span>\n                    <span class=\"py-2 text-gray-300\">٢</span>\n                    <span class=\"py-2 text-gray-300\">٣</span>\n                </div>\n            </div>\n\n            <!-- Time Slots Section -->\n            <div>\n                <h3 class=\"font-bold text-gray-800 text-sm mb-3 flex items-center justify-between\">\n                    <span>الأوقات المتاحة</span>\n                    <span class=\"text-xs text-primary font-normal\">الأربعاء، ١١ أكتوبر</span>\n                </h3>\n\n                <!-- 9:00 to 12:00 every 30 minutes -->\n                <div class=\"grid grid-cols-3 gap-2.5\">\n                    <button class=\"py-2.5 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary transition text-center\">\n                        ٠٩:٠٠ ص\n                    </button>\n                    <button class=\"py-2.5 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary transition text-center\">\n                        ٠٩:٣٠ ص\n                    </button>\n                    <button class=\"py-2.5 px-3 bg-primary text-white rounded-xl text-xs font-semibold shadow-md shadow-teal-100 transition text-center ring-2 ring-primary ring-offset-1\">\n                        ١٠:٠٠ ص\n                    </button>\n                    <button class=\"py-2.5 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary transition text-center\">\n                        ١٠:٣٠ ص\n                    </button>\n                    <button class=\"py-2.5 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary transition text-center\">\n                        ١١:٠٠ ص\n                    </button>\n                    <button class=\"py-2.5 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary transition text-center\">\n                        ١١:٣٠ ص\n                    </button>\n                    <button class=\"py-2.5 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary transition text-center\">\n                        ١٢:٠٠ م\n                    </button>\n                </div>\n            </div>\n\n            <!-- Clinic Note -->\n            <div class=\"bg-teal-50 border border-teal-100 p-3.5 rounded-2xl flex items-start space-x-3 space-x-reverse\">\n                <svg class=\"w-5 h-5 text-primary flex-shrink-0 mt-0.5\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>\n                <p class=\"text-xs text-teal-900 leading-relaxed\">\n                    يرجى الحضور قبل الموعد بـ ١٥ دقيقة وإحضار البطاقة الشخصية القطرية وبطاقة التأمين الصحي.\n                </p>\n            </div>\n\n        </div>\n\n        <!-- Bottom Action Bar -->\n        <div class=\"p-4 bg-white border-t border-gray-100 shadow-lg\">\n            <button class=\"w-full bg-primary hover:bg-primaryDark text-white font-bold py-3.5 px-4 rounded-2xl shadow-lg shadow-teal-200 transition duration-200 flex items-center justify-center space-x-2 space-x-reverse text-sm\">\n                <span>تأكيد الحجز</span>\n                <svg class=\"w-5 h-5 rotate-180\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M14 5l7 7m0 0l-7 7m7-7H3\"/></svg>\n            </button>\n        </div>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 145,
+    "output": 4288
+  },
+  "ms": 18496,
+  "finish": "STOP",
+  "reasoningTokens": 618,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 86,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 128,
+        "y": 140,
+        "width": 155,
+        "height": 23
+      },
+      "message": "\"استشاري أمراض الباطنة والقلب\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-teal-100\">استشاري أمراض الباطنة والقلب</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 198,
+        "y": 160,
+        "width": 67,
+        "height": 23
+      },
+      "message": "\"٤.٩ (١٢٠ تقييم)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>٤.٩ (١٢٠ تقييم)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 314.140625,
+        "y": 293,
+        "width": 24,
+        "height": 23
+      },
+      "message": "\"سَبْت\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs font-semibold text-gray-400\">سَبْت</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 274.4375,
+        "y": 293,
+        "width": 16,
+        "height": 23
+      },
+      "message": "\"أَحَد\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs font-semibold text-gray-400\">أَحَد</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 227.21875,
+        "y": 293,
+        "width": 23,
+        "height": 23
+      },
+      "message": "\"إِثْنَيْن\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs font-semibold text-gray-400\">إِثْنَيْن</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 181.5,
+        "y": 293,
+        "width": 27,
+        "height": 23
+      },
+      "message": "\"ثُلَاثَاء\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs font-semibold text-gray-400\">ثُلَاثَاء</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 137.296875,
+        "y": 293,
+        "width": 28,
+        "height": 23
+      },
+      "message": "\"أَرْبِعَاء\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs font-semibold text-gray-400\">أَرْبِعَاء</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 90.578125,
+        "y": 293,
+        "width": 34,
+        "height": 23
+      },
+      "message": "\"خَمِيس\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs font-semibold text-gray-400\">خَمِيس</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 48.859375,
+        "y": 293,
+        "width": 30,
+        "height": 23
+      },
+      "message": "\"جُمُعَة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs font-semibold text-gray-400\">جُمُعَة</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 27,
+        "y": 556,
+        "width": 82,
+        "height": 23
+      },
+      "message": "\"الأربعاء، ١١ أكتوبر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-primary font-normal\">الأربعاء، ١١ أكتوبر</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 292.828125,
+        "y": 597,
+        "width": 35,
+        "height": 23
+      },
+      "message": "\"٠٩:٠٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"py-2.5 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary transition text-center\""
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 175,
+        "y": 597,
+        "width": 40,
+        "height": 23
+      },
+      "message": "\"٠٩:٣٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"py-2.5 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary transition text-center\""
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 63.171875,
+        "y": 597,
+        "width": 33,
+        "height": 23
+      },
+      "message": "\"١٠:٠٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"py-2.5 px-3 bg-primary text-white rounded-xl text-xs font-semibold shadow-md shadow-teal-100 transition text-center ring-2 ring-primary ring-offs"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 291.328125,
+        "y": 645,
+        "width": 38,
+        "height": 23
+      },
+      "message": "\"١٠:٣٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"py-2.5 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary transition text-center\""
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 178,
+        "y": 645,
+        "width": 34,
+        "height": 23
+      },
+      "message": "\"١١:٠٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"py-2.5 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary transition text-center\""
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 60.171875,
+        "y": 645,
+        "width": 39,
+        "height": 23
+      },
+      "message": "\"١١:٣٠ ص\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"py-2.5 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary transition text-center\""
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 295.328125,
+        "y": 693,
+        "width": 30,
+        "height": 23
+      },
+      "message": "\"١٢:٠٠ م\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"py-2.5 px-3 border border-gray-200 rounded-xl text-xs font-semibold text-gray-700 hover:border-primary hover:text-primary transition text-center\""
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 60,
+        "y": 761,
+        "width": 256,
+        "height": 42.5
+      },
+      "message": "\"يرجى الحضور قبل الموعد بـ ١٥ دقيقة وإحضا…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-teal-900 leading-relaxed\">\n                    يرجى الحضور قبل الموعد بـ ١٥ دقيقة وإحضار البطاقة الشخصية القطرية وبطاقة التأمين الصحي.\n  "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 295,
+        "y": 122,
+        "width": 56,
+        "height": 56
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"w-14 h-14 bg-white rounded-full overflow-hidden flex-shrink-0 ml-3 border-2 border-white/30\">\n                    <img src=\"https://images.unsplash."
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 42,
+        "y": 763,
+        "width": 274,
+        "height": 39
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<p class=\"text-xs text-teal-900 leading-relaxed\">\n                    يرجى الحضور قبل الموعد بـ ١٥ دقيقة وإحضار البطاقة الشخصية القطرية وبطاقة التأمين الصحي.\n  "
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

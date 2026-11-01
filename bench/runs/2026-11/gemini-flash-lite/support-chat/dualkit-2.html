@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الدعم الفني - زين الكويت</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #002d62;
+      --primary-light: #e6f0fa;
+      --bg: #f3f4f6;
+      --surface: #ffffff;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --agent-bubble: #ffffff;
+      --customer-bubble: #002d62;
+      --customer-text: #ffffff;
+      --border: #e5e7eb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background-color: #d1d5db;
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    :lang(ar) {
+      letter-spacing: 0;
+      text-transform: none;
+      line-height: 1.6;
+    }
+
+    .phone-frame {
+      width: 100%;
+      max-width: 412px;
+      height: 100vh;
+      max-height: 844px;
+      background-color: var(--bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    @media (min-width: 480px) {
+      .phone-frame {
+        height: 844px;
+        border-radius: 40px;
+        border: 10px solid #111827;
+      }
+    }
+
+    /* Header */
+    .chat-header {
+      background-color: var(--surface);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      z-index: 10;
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .agent-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      position: relative;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      background-color: #10b981;
+      border: 2px solid var(--surface);
+      border-radius: 50%;
+      position: absolute;
+      bottom: 0;
+      inset-inline-start: 0;
+    }
+
+    .agent-details h1 {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .agent-details p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 16px;
+      color: var(--primary);
+    }
+
+    .header-actions svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    /* Chat Body */
+    .chat-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+    }
+
+    .date-divider {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: 8px 0;
+      position: relative;
+    }
+
+    .message {
+      max-width: 80%;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .message.agent {
+      align-self: flex-start;
+    }
+
+    .message.customer {
+      align-self: flex-end;
+    }
+
+    .bubble {
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 15px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .agent .bubble {
+      background-color: var(--agent-bubble);
+      color: var(--text-main);
+      border-start-start-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    .customer .bubble {
+      background-color: var(--customer-bubble);
+      color: var(--customer-text);
+      border-start-end-radius: 4px;
+    }
+
+    .time {
+      font-size: 11px;
+      color: var(--text-muted);
+      padding-inline: 4px;
+    }
+
+    .agent .time {
+      text-align: start;
+    }
+
+    .customer .time {
+      text-align: end;
+    }
+
+    /* Input Footer */
+    .chat-footer {
+      background-color: var(--surface);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .input-wrapper {
+      flex: 1;
+      background-color: var(--bg);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      padding-inline-start: 16px;
+      padding-inline-end: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .chat-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 10px 0;
+      font-size: 15px;
+      color: var(--text-main);
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      outline: none;
+    }
+
+    .chat-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .attach-btn, .send-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .attach-btn {
+      color: var(--text-muted);
+      padding: 8px;
+    }
+
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      color: white;
+      transition: background-color 0.2s;
+    }
+
+    .send-btn:hover {
+      background-color: #001f42;
+    }
+
+    .send-btn svg {
+      width: 18px;
+      height: 18px;
+      transform: scaleX(-1); /* Orient arrow correctly for RTL send */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-frame">
+    <!-- Header -->
+    <header class="chat-header">
+      <div class="header-info">
+        <div class="agent-avatar">
+          س
+          <div class="status-dot"></div>
+        </div>
+        <div class="agent-details">
+          <h1>سارة (Sara)</h1>
+          <p>خدمة العملاء - زين الكويت</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+        </svg>
+      </div>
+    </header>
+
+    <!-- Chat Conversation -->
+    <div class="chat-body">
+      <div class="date-divider">اليوم</div>
+
+      <!-- Message 1 -->
+      <div class="message agent">
+        <div class="bubble">
+          مرحبًا بك في دعم زين الكويت. أنا سارة، كيف يمكنني مساعدتك اليوم؟
+        </div>
+        <span class="time">١٠:٤٠ ص</span>
+      </div>
+
+      <!-- Message 2 -->
+      <div class="message customer">
+        <div class="bubble">
+          أهلاً سارة، لدي استفسار بخصوص طلب باقة <bdi>5G</bdi> المنزلية، رقم الطلب هو <bdi>TX-48213</bdi>. متى يتم التوصيل؟
+        </div>
+        <span class="time">١٠:٤١ ص</span>
+      </div>
+
+      <!-- Message 3 -->
+      <div class="message agent">
+        <div class="bubble">
+          أهلاً بك! لقد راجعت طلبك ورقم <bdi>TX-48213</bdi>. الشحنة جاهزة وسيتم التواصل معك اليوم لتأكيد موعد استلام راوتر الـ <bdi>5G</bdi>.
+        </div>
+        <span class="time">١٠:٤٢ ص</span>
+      </div>
+
+      <!-- Message 4 -->
+      <div class="message customer">
+        <div class="bubble">
+          ممتاز، وهل يمكنني تحويل خطي الحالي إلى <bdi>eSIM</bdi> عبر التطبيق مباشرة؟
+        </div>
+        <span class="time">١٠:٤٣ ص</span>
+      </div>
+
+      <!-- Message 5 -->
+      <div class="message agent">
+        <div class="bubble">
+          نعم بكل تأكيد! يمكنك الانتقال إلى قسم إدارة الخطوط واختيار استبدال بـ <bdi>eSIM</bdi> بخطوات معدودة وسرعة تفعيل فورية.
+        </div>
+        <span class="time">١٠:٤٤ ص</span>
+      </div>
+
+      <!-- Message 6 -->
+      <div class="message customer">
+        <div class="bubble">
+          شكراً جزيلاً لكِ يا سارة على المساعدة السريعة!
+        </div>
+        <span class="time">١٠:٤٥ ص</span>
+      </div>
+    </div>
+
+    <!-- Bottom Input -->
+    <footer class="chat-footer">
+      <button class="attach-btn" aria-label="إرفاق ملف">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width: 22px; height: 22px;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
+        </svg>
+      </button>
+      <div class="input-wrapper">
+        <input type="text" class="chat-input" placeholder="اكتب رسالتك هنا..." dir="auto" />
+      </div>
+      <button class="send-btn" aria-label="إرسال الرسالة">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+        </svg>
+      </button>
+    </footer>
+  </div>
+
+</body>
+</html>

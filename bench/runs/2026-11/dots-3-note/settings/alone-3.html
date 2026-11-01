@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإعدادات</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 0; }
+  .container { max-width: 500px; margin: 0 auto; background: #fff; }
+  .group { margin-bottom: 20px; }
+  .group-title { font-size: 16px; color: #888; padding: 10px 15px; border-bottom: 1px solid #eee; }
+  .item { display: flex; align-items: center; justify-content: space-between; padding: 12px 15px; border-bottom: 1px solid #eee; }
+  .item-label { flex: 1; }
+  .item-value { color: #555; margin-right: 8px; }
+  .chevron { color: #ccc; }
+  .toggle { position: relative; width: 50px; height: 24px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; border-radius: 24px; transition: .4s; }
+  .slider:before { content: ""; position: absolute; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; border-radius: 50%; transition: .4s; }
+  input:checked + .slider { background-color: #007AFF; }
+  input:checked + .slider:before { transform: translateX(26px); }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="group">
+    <div class="group-title">الحساب</div>
+    <div class="item">
+      <div class="item-label">الاسم</div>
+      <div class="item-value">أحمد محمد</div>
+      <span class="chevron">›</span>
+    </div>
+    <div class="item">
+      <div class="item-label">رقم الهاتف</div>
+      <div class="item-value">+973 3600 1234</div>
+      <span class="chevron">›</span>
+    </div>
+    <div class="item">
+      <div class="item-label">اللغة</div>
+      <div class="item-value">العربية</div>
+      <span class="chevron">›</span>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-title">الأمان</div>
+    <div class="item">
+      <div class="item-label">Face ID</div>
+      <label class="toggle">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="item">
+      <div class="item-label"> تسجيل الدخول ثنائي</div>
+      <label class="toggle">
+        <input type="checkbox">
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="group-title">الإخطارات</div>
+    <div class="item">
+      <div class="item-label">الحوالت</div>
+      <label class="toggle">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="item">
+      <div class="item-label">العرض</div>
+      <label class="toggle">
+        <input type="checkbox">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="item">
+      <div class="item-label">ال statements</div>
+      <label class="toggle">
+        <input type="checkbox" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+  </div>
+</div>
+</body>
+</html>

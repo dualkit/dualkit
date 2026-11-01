@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الإعدادات - بنك البحرين</title>
+  <!-- Google Fonts: IBM Plex Sans Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            arabic: ['"IBM Plex Sans Arabic"', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background-color: #0f172a;
+    }
+    :lang(ar) {
+      letter-spacing: 0;
+      line-height: 1.7;
+    }
+    /* Custom toggle styling */
+    .toggle-checkbox:checked {
+      right: 0;
+      border-color: #0d9488;
+    }
+    .toggle-checkbox:checked + .toggle-label {
+      background-color: #0d9488;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-0 sm:p-4 text-slate-800">
+
+  <!-- Mobile Screen Container -->
+  <div class="w-full max-w-sm bg-slate-50 min-h-screen sm:min-h-[844px] sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden relative border border-slate-800/10">
+
+    <!-- Status Bar Mockup -->
+    <div class="bg-slate-900 text-white px-6 pt-3 pb-2 flex justify-between items-center text-xs">
+      <span class="font-medium"><bdi dir="ltr">9:41</bdi></span>
+      <div class="flex items-center gap-1.5 text-slate-300">
+        <!-- Signal / Wifi / Battery icons representation -->
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h3.18c1.35.61 2.87 1 4.47 1 4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/></svg>
+        <span class="text-[10px] font-semibold">5G</span>
+      </div>
+    </div>
+
+    <!-- App Header -->
+    <header class="bg-slate-900 text-white px-5 py-4 flex items-center justify-between shadow-sm">
+      <button class="p-1 rounded-full hover:bg-slate-800 transition text-slate-300 hover:text-white" aria-label="رجوع">
+        <!-- Directional chevron pointing back (right in RTL) -->
+        <svg class="w-6 h-6 rtl:scale-x-[-1]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      <h1 class="text-lg font-semibold text-white">الإعدادات</h1>
+      <div class="w-8"></div> <!-- Spacer for alignment -->
+    </header>
+
+    <!-- Scrollable Content Area -->
+    <main class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+
+      <!-- Group 1: Account -->
+      <section>
+        <h2 class="text-sm font-semibold text-slate-400 mb-2 px-1">الحساب</h2>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden divide-y divide-slate-100">
+          
+          <!-- Name Row -->
+          <button class="w-full px-4 py-3.5 flex items-center justify-between hover:bg-slate-50 transition text-start">
+            <div>
+              <span class="block text-sm text-slate-500">الاسم الكامل</span>
+              <span class="block font-medium text-slate-900 text-base">عبد الله أحمد</span>
+            </div>
+            <!-- Chevron pointing to sub-screen -->
+            <svg class="w-5 h-5 text-slate-400 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+
+          <!-- Phone Row -->
+          <button class="w-full px-4 py-3.5 flex items-center justify-between hover:bg-slate-50 transition text-start">
+            <div>
+              <span class="block text-sm text-slate-500">رقم الجوال</span>
+              <span class="block font-medium text-slate-900 text-base"><bdi dir="ltr">+973 3600 1234</bdi></span>
+            </div>
+            <svg class="w-5 h-5 text-slate-400 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+
+          <!-- Language Row -->
+          <button class="w-full px-4 py-3.5 flex items-center justify-between hover:bg-slate-50 transition text-start">
+            <div>
+              <span class="block text-sm text-slate-500">لغة التطبيق</span>
+              <span class="block font-medium text-slate-900 text-base">العربية</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-slate-400" lang="en" dir="ltr">English</span>
+              <svg class="w-5 h-5 text-slate-400 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </div>
+          </button>
+
+        </div>
+      </section>
+
+      <!-- Group 2: Security -->
+      <section>
+        <h2 class="text-sm font-semibold text-slate-400 mb-2 px-1">الأمان</h2>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden divide-y divide-slate-100">
+          
+          <!-- Face ID Toggle -->
+          <div class="px-4 py-3.5 flex items-center justify-between">
+            <div>
+              <span class="block font-medium text-slate-900 text-base">معرف الوجه</span>
+              <span class="block text-sm text-slate-500">تسجيل الدخول بسرعة وأمان</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+            </label>
+          </div>
+
+          <!-- Two-step Login Toggle -->
+          <div class="px-4 py-3.5 flex items-center justify-between">
+            <div>
+              <span class="block font-medium text-slate-900 text-base">تسجيل الدخول بخطوتين</span>
+              <span class="block text-sm text-slate-500">رمز تحقق إضافي عند الدخول</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+            </label>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Group 3: Notifications -->
+      <section>
+        <h2 class="text-sm font-semibold text-slate-400 mb-2 px-1">الإشعارات</h2>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden divide-y divide-slate-100">
+          
+          <!-- Transfers Toggle -->
+          <div class="px-4 py-3.5 flex items-center justify-between">
+            <div>
+              <span class="block font-medium text-slate-900 text-base">التحويلات</span>
+              <span class="block text-sm text-slate-500">إشعارات الحوالات الواردة والصادرة</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+            </label>
+          </div>
+
+          <!-- Offers Toggle -->
+          <div class="px-4 py-3.5 flex items-center justify-between">
+            <div>
+              <span class="block font-medium text-slate-900 text-base">العروض</span>
+              <span class="block text-sm text-slate-500">العروض والمنتجات المصرفية الجديدة</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+            </label>
+          </div>
+
+          <!-- Statements Toggle -->
+          <div class="px-4 py-3.5 flex items-center justify-between">
+            <div>
+              <span class="block font-medium text-slate-900 text-base">الكشوفات</span>
+              <span class="block text-sm text-slate-500">تنبيهات صدور كشف الحساب الشهري</span>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" checked class="sr-only peer">
+              <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-600"></div>
+            </label>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- App Version Footer Note -->
+      <div class="text-center pt-2 pb-6">
+        <span class="text-sm text-slate-400 font-medium">إصدار التطبيق <bdi dir="ltr">4.8.2 (1094)</bdi></span>
+      </div>
+
+    </main>
+
+  </div>
+
+</body>
+</html>

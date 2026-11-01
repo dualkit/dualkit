@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>إتمام الطلب - بقالة الإمارات</title>
+  <!-- Google Fonts: IBM Plex Sans Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS v4 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    :lang(ar) {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+    /* Enforce 14px floor for UI text per dualkit type pairing */
+    .ui-text {
+      font-size: 14px;
+    }
+    .body-text {
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-0 sm:p-4">
+
+  <!-- Mobile Phone Frame -->
+  <div class="w-full sm:max-w-[412px] h-screen sm:h-[844px] bg-white sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border border-slate-200">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-100 sticky top-0 z-20">
+      <button class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-700 hover:bg-slate-100 transition-colors" aria-label="العودة">
+        <!-- Directional arrow: points left in RTL context -->
+        <svg class="w-5 h-5 icon-directional" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
+      <h1 class="font-bold text-lg text-slate-900">إتمام الطلب</h1>
+      <div class="w-10"></div> <!-- Spacer for symmetry -->
+    </header>
+
+    <!-- Scrollable Content Area -->
+    <main class="flex-1 overflow-y-auto px-6 py-5 space-y-6 pb-32">
+
+      <!-- Delivery Address Banner -->
+      <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex items-start gap-3">
+        <div class="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 mt-0.5">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-slate-900 text-sm">التوصيل إلى المنزل</span>
+            <button class="text-emerald-600 font-medium text-xs hover:underline">تغيير</button>
+          </div>
+          <p class="text-slate-600 text-xs mt-0.5">برج خليفة، وسط مدينة دبي، دبي</p>
+        </div>
+      </div>
+
+      <!-- Cart Items Section -->
+      <section>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="font-bold text-slate-900 text-sm">عربة التسوق (<bdi dir="ltr">3</bdi> عناصر)</h2>
+          <span class="text-slate-500 text-xs">تعديل</span>
+        </div>
+
+        <div class="space-y-3">
+          <!-- Item 1 -->
+          <div class="flex items-center gap-3 p-3 bg-slate-50/80 rounded-2xl border border-slate-100">
+            <div class="w-16 h-16 rounded-xl bg-slate-200 flex items-center justify-center text-slate-400 shrink-0 font-medium text-xs">
+              صورة
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-slate-900 text-sm truncate">حليب طازج المراعي <bdi dir="ltr">2</bdi> لتر</h3>
+              <p class="text-slate-500 text-xs mt-0.5">كامل الدسم</p>
+              <div class="mt-1 font-bold text-emerald-600 text-sm">
+                <bdi>15.00 د.إ</bdi>
+              </div>
+            </div>
+            <!-- Quantity Stepper -->
+            <div class="flex items-center bg-white border border-slate-200 rounded-xl overflow-hidden shrink-0">
+              <button class="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors" aria-label="زيادة الكمية">+</button>
+              <span class="w-7 text-center font-semibold text-xs tabular-nums">1</span>
+              <button class="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors" aria-label="تقليل الكمية">−</button>
+            </div>
+          </div>
+
+          <!-- Item 2 -->
+          <div class="flex items-center gap-3 p-3 bg-slate-50/80 rounded-2xl border border-slate-100">
+            <div class="w-16 h-16 rounded-xl bg-slate-200 flex items-center justify-center text-slate-400 shrink-0 font-medium text-xs">
+              صورة
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-slate-900 text-sm truncate">خبز توست أبيض الصفا</h3>
+              <p class="text-slate-500 text-xs mt-0.5">600 جرام</p>
+              <div class="mt-1 font-bold text-emerald-600 text-sm">
+                <bdi>10.00 د.إ</bdi>
+              </div>
+            </div>
+            <!-- Quantity Stepper -->
+            <div class="flex items-center bg-white border border-slate-200 rounded-xl overflow-hidden shrink-0">
+              <button class="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors" aria-label="زيادة الكمية">+</button>
+              <span class="w-7 text-center font-semibold text-xs tabular-nums">2</span>
+              <button class="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors" aria-label="تقليل الكمية">−</button>
+            </div>
+          </div>
+
+          <!-- Item 3 -->
+          <div class="flex items-center gap-3 p-3 bg-slate-50/80 rounded-2xl border border-slate-100">
+            <div class="w-16 h-16 rounded-xl bg-slate-200 flex items-center justify-center text-slate-400 shrink-0 font-medium text-xs">
+              صورة
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-slate-900 text-sm truncate">لبنة تركية بريزيدنت</h3>
+              <p class="text-slate-500 text-xs mt-0.5">500 جرام</p>
+              <div class="mt-1 font-bold text-emerald-600 text-sm">
+                <bdi>15.00 د.إ</bdi>
+              </div>
+            </div>
+            <!-- Quantity Stepper -->
+            <div class="flex items-center bg-white border border-slate-200 rounded-xl overflow-hidden shrink-0">
+              <button class="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors" aria-label="زيادة الكمية">+</button>
+              <span class="w-7 text-center font-semibold text-xs tabular-nums">1</span>
+              <button class="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors" aria-label="تقليل الكمية">−</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Promo Code Section -->
+      <section>
+        <label class="block font-bold text-slate-900 text-sm mb-2">قسيمة التخفيض</label>
+        <div class="flex gap-2">
+          <input type="text" dir="auto" placeholder="أدخل رمز القسيمة (مثال: ⁦SAVE50⁩)" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500 transition-colors">
+          <button class="bg-slate-900 text-white px-5 rounded-xl font-semibold text-sm hover:bg-slate-800 transition-colors">تطبيق</button>
+        </div>
+      </section>
+
+      <!-- Order Summary Section -->
+      <section class="bg-slate-50 border border-slate-100 rounded-2xl p-4 space-y-3">
+        <h2 class="font-bold text-slate-900 text-sm mb-1">ملخص الطلب</h2>
+        
+        <div class="flex justify-between text-slate-600 text-sm">
+          <span>المجموع الفرعي</span>
+          <span class="tabular-nums font-medium"><bdi>40.00 د.إ</bdi></span>
+        </div>
+
+        <div class="flex justify-between text-slate-600 text-sm">
+          <span>رسوم التوصيل</span>
+          <span class="tabular-nums font-medium"><bdi>10.00 د.إ</bdi></span>
+        </div>
+
+        <div class="flex justify-between text-slate-600 text-sm">
+          <span>ضريبة القيمة المضافة (<bdi dir="ltr">5%</bdi>)</span>
+          <span class="tabular-nums font-medium"><bdi>2.50 د.إ</bdi></span>
+        </div>
+
+        <div class="border-t border-slate-200 pt-3 flex justify-between items-center">
+          <span class="font-bold text-slate-900 text-base">المجموع الكلي</span>
+          <span class="font-bold text-emerald-600 text-lg tabular-nums"><bdi>52.50 د.إ</bdi></span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Sticky Bottom CTA -->
+    <footer class="absolute bottom-0 inset-x-0 bg-white border-t border-slate-100 p-4 shadow-lg z-20">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-slate-500 text-xs">الإجمالي شامل الضريبة</span>
+        <span class="font-bold text-slate-900 text-base tabular-nums"><bdi>52.50 د.إ</bdi></span>
+      </div>
+      <button class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-emerald-600/20 transition-all flex items-center justify-center gap-2 text-base">
+        <span>إتمام الطلب والدفع</span>
+        <svg class="w-5 h-5 icon-directional" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+        </svg>
+      </button>
+    </footer>
+
+  </div>
+
+</body>
+</html>

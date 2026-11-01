@@ -1,0 +1,529 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "transactions",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-11-01T11:32:07.153Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>محفظتي - المعاملات</title>\n    <!-- Tailwind CSS CDN -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Fonts - Cairo -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap\" rel=\"stylesheet\">\n    <!-- FontAwesome for icons -->\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">\n    <script>\n        tailwind.config = {\n            theme: {\n                extend: {\n                    fontFamily: {\n                        cairo: ['Cairo', 'sans-serif'],\n                    },\n                    colors: {\n                        primary: '#0F766E', // Deep Teal\n                        secondary: '#F0FDFA',\n                    }\n                }\n            }\n        }\n    </script>\n</head>\n<body class=\"bg-gray-900 font-cairo flex justify-center items-center min-h-screen p-0 sm:p-4\">\n\n    <!-- Phone Screen Container -->\n    <div class=\"w-full max-w-sm bg-gray-50 h-[844px] rounded-none sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border-0 sm:border-8 sm:border-gray-800\">\n        \n        <!-- Status Bar -->\n        <div class=\"bg-primary text-white px-6 pt-3 pb-2 flex justify-between items-center text-xs\">\n            <span>9:41</span>\n            <div class=\"flex items-center space-x-2 space-x-reverse\">\n                <i class=\"fa-solid fa-signal\"></i>\n                <i class=\"fa-solid fa-wifi\"></i>\n                <i class=\"fa-solid fa-battery-full\"></i>\n            </div>\n        </div>\n\n        <!-- App Header -->\n        <div class=\"bg-primary text-white px-6 pb-6 pt-2 rounded-b-3xl shadow-md\">\n            <div class=\"flex justify-between items-center mb-4\">\n                <button class=\"w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition\">\n                    <i class=\"fa-solid fa-arrow-right\"></i>\n                </button>\n                <h1 class=\"text-lg font-bold\">سجل المعاملات</h1>\n                <button class=\"w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition\">\n                    <i class=\"fa-solid fa-search\"></i>\n                </button>\n            </div>\n\n            <!-- Balance Card -->\n            <div class=\"bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10\">\n                <span class=\"text-xs text-teal-100 block mb-1\">الرصيد الإجمالي</span>\n                <div class=\"flex items-baseline justify-between\">\n                    <h2 class=\"text-2xl font-bold tracking-tight\">١,٤٥٠.٧٥٠</h2>\n                    <span class=\"text-sm font-semibold text-teal-200\">ر.ع.</span>\n                </div>\n            </div>\n        </div>\n\n        <!-- Main Content Area -->\n        <div class=\"flex-1 overflow-y-auto px-4 py-4 space-y-4\">\n            \n            <!-- Filter Section -->\n            <div class=\"flex items-center justify-between\">\n                <h3 class=\"font-bold text-gray-800 text-sm\">المعاملات الأخيرة</h3>\n                \n                <!-- Filter Dropdown/Pill -->\n                <div class=\"flex items-center space-x-1 space-x-reverse bg-white border border-gray-200 px-3 py-1.5 rounded-full shadow-sm text-xs font-semibold text-gray-700 cursor-pointer hover:bg-gray-50\">\n                    <i class=\"fa-solid fa-filter text-primary ml-1\"></i>\n                    <span>هذا الشهر</span>\n                    <i class=\"fa-solid fa-chevron-down text-[10px] text-gray-400 mr-1\"></i>\n                </div>\n            </div>\n\n            <!-- Transactions List -->\n            <div class=\"bg-white rounded-2xl shadow-sm border border-gray-100 divide-y divide-gray-100\">\n                \n                <!-- Transaction 1 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50 transition\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center flex-shrink-0\">\n                            <i class=\"fa-solid fa-shopping-cart\"></i>\n                        </div>\n                        <div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">Lulu Hypermarket</h4>\n                            <span class=\"text-[11px] text-gray-400\">اليوم، ١٤:٣٠</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"text-sm font-bold text-red-600 block\">- ٢٤.٥٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">مشتريات</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 2 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50 transition\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0\">\n                            <i class=\"fa-solid fa-tv\"></i>\n                        </div>\n                        <div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">Netflix</h4>\n                            <span class=\"text-[11px] text-gray-400\">أمس، ٠٩:١٥</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"text-sm font-bold text-red-600 block\">- ٤.٢٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">ترفيه</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 3 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50 transition\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-xl bg-teal-50 text-primary flex items-center justify-center flex-shrink-0\">\n                            <i class=\"fa-solid fa-building-columns\"></i>\n                        </div>\n                        <div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">راتب الشركة</h4>\n                            <span class=\"text-[11px] text-gray-400\">٢٨ مايو، ٠٨:٠٠</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"text-sm font-bold text-emerald-600 block\">+ ٨٥٠.٠٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">إيداع</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 4 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50 transition\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-xl bg-yellow-50 text-yellow-600 flex items-center justify-center flex-shrink-0\">\n                            <i class=\"fa-solid fa-gas-pump\"></i>\n                        </div>\n                        <div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">Shell Oman</h4>\n                            <span class=\"text-[11px] text-gray-400\">٢٥ مايو، ١٦:٤٥</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"text-sm font-bold text-red-600 block\">- ١٥.٠٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">وقود</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 5 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50 transition\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0\">\n                            <i class=\"fa-solid fa-mug-hot\"></i>\n                        </div>\n                        <div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">Starbucks</h4>\n                            <span class=\"text-[11px] text-gray-400\">٢٤ مايو، ١٠:١٠</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"text-sm font-bold text-red-600 block\">- ٢.٣٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">مغذيات</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 6 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50 transition\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0\">\n                            <i class=\"fa-solid fa-arrow-down-left\"></i>\n                        </div>\n                        <div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">تحويل من أحمد</h4>\n                            <span class=\"text-[11px] text-gray-400\">٢٠ مايو، ١٩:٢٠</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"text-sm font-bold text-emerald-600 block\">+ ٥٠.٠٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">تحويل وارد</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 7 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50 transition\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0\">\n                            <i class=\"fa-solid fa-credit-card\"></i>\n                        </div>\n                        <div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">Oman Arab Bank</h4>\n                            <span class=\"text-[11px] text-gray-400\">١٨ مايو، ١٢:٠٠</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"text-sm font-bold text-red-600 block\">- ١٢٠.٠٠٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">قرض / سداد</span>\n                    </div>\n                </div>\n\n                <!-- Transaction 8 -->\n                <div class=\"p-3.5 flex items-center justify-between hover:bg-gray-50 transition\">\n                    <div class=\"flex items-center space-x-3 space-x-reverse\">\n                        <div class=\"w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0\">\n                            <i class=\"fa-solid fa-basket-shopping\"></i>\n                        </div>\n                        <div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">Grand Hyper</h4>\n                            <span class=\"text-[11px] text-gray-400\">١٥ مايو، ١٧:١٥</span>\n                        </div>\n                    </div>\n                    <div class=\"text-left\">\n                        <span class=\"text-sm font-bold text-red-600 block\">- ١٨.٧٥٠ ر.ع.</span>\n                        <span class=\"text-[10px] text-gray-400\">مشتريات</span>\n                    </div>\n                </div>\n\n            </div>\n\n        </div>\n\n        <!-- Bottom Navigation Bar -->\n        <div class=\"bg-white border-t border-gray-200 px-6 py-2.5 flex justify-between items-center text-gray-400 text-xs\">\n            <button class=\"flex flex-col items-center hover:text-primary transition\">\n                <i class=\"fa-solid fa-house text-lg mb-1\"></i>\n                <span>الرئيسية</span>\n            </button>\n            <button class=\"flex flex-col items-center text-primary font-semibold\">\n                <i class=\"fa-solid fa-wallet text-lg mb-1\"></i>\n                <span>المعاملات</span>\n            </button>\n            <button class=\"flex flex-col items-center hover:text-primary transition\">\n                <i class=\"fa-solid fa-credit-card text-lg mb-1\"></i>\n                <span>البطاقات</span>\n            </button>\n            <button class=\"flex flex-col items-center hover:text-primary transition\">\n                <i class=\"fa-solid fa-user text-lg mb-1\"></i>\n                <span>حسابي</span>\n            </button>\n        </div>\n\n        <!-- Home Indicator Bar -->\n        <div class=\"bg-white pb-2 pt-1 flex justify-center\">\n            <div class=\"w-32 h-1 bg-gray-300 rounded-full\"></div>\n        </div>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 143,
+    "output": 3494
+  },
+  "ms": 10364,
+  "finish": "STOP",
+  "reasoningTokens": 1003,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 81,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 338,
+        "y": 54,
+        "width": 14,
+        "height": 16
+      },
+      "message": "\"arrow-right\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-arrow-right\"></i>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 271,
+        "y": 109,
+        "width": 75,
+        "height": 23
+      },
+      "message": "\"الرصيد الإجمالي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-teal-100 block mb-1\">الرصيد الإجمالي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 46,
+        "y": 225,
+        "width": 51,
+        "height": 23
+      },
+      "message": "\"هذا الشهر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>هذا الشهر</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 258,
+        "y": 307,
+        "width": 46,
+        "height": 20
+      },
+      "message": "\"اليوم، ١٤:٣٠\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">اليوم، ١٤:٣٠</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 308,
+        "width": 36,
+        "height": 19
+      },
+      "message": "\"مشتريات\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">مشتريات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 255,
+        "y": 380,
+        "width": 49,
+        "height": 20
+      },
+      "message": "\"أمس، ٠٩:١٥\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">أمس، ٠٩:١٥</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 381,
+        "width": 21,
+        "height": 19
+      },
+      "message": "\"ترفيه\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">ترفيه</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 248,
+        "y": 453,
+        "width": 56,
+        "height": 20
+      },
+      "message": "\"٢٨ مايو، ٠٨:٠٠\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">٢٨ مايو، ٠٨:٠٠</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 454,
+        "width": 20,
+        "height": 19
+      },
+      "message": "\"إيداع\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">إيداع</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 244,
+        "y": 526,
+        "width": 60,
+        "height": 20
+      },
+      "message": "\"٢٥ مايو، ١٦:٤٥\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">٢٥ مايو، ١٦:٤٥</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 527,
+        "width": 22,
+        "height": 19
+      },
+      "message": "\"وقود\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">وقود</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 254,
+        "y": 599,
+        "width": 50,
+        "height": 20
+      },
+      "message": "\"٢٤ مايو، ١٠:١٠\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">٢٤ مايو، ١٠:١٠</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 600,
+        "width": 31,
+        "height": 19
+      },
+      "message": "\"مغذيات\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">مغذيات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 250,
+        "y": 672,
+        "width": 54,
+        "height": 20
+      },
+      "message": "\"٢٠ مايو، ١٩:٢٠\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">٢٠ مايو، ١٩:٢٠</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 673,
+        "width": 43,
+        "height": 19
+      },
+      "message": "\"تحويل وارد\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">تحويل وارد</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 252,
+        "y": 745,
+        "width": 52,
+        "height": 20
+      },
+      "message": "\"١٨ مايو، ١٢:٠٠\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">١٨ مايو، ١٢:٠٠</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 746,
+        "width": 50,
+        "height": 19
+      },
+      "message": "\"قرض / سداد\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">قرض / سداد</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 247,
+        "y": 818,
+        "width": 57,
+        "height": 20
+      },
+      "message": "\"١٥ مايو، ١٧:١٥\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[11px] text-gray-400\">١٥ مايو، ١٧:١٥</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 34,
+        "y": 819,
+        "width": 36,
+        "height": 19
+      },
+      "message": "\"مشتريات\" is 10px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-[10px] text-gray-400\">مشتريات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 325,
+        "y": 798,
+        "width": 38,
+        "height": 23
+      },
+      "message": "\"الرئيسية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>الرئيسية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 217,
+        "y": 798,
+        "width": 52,
+        "height": 23
+      },
+      "message": "\"المعاملات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المعاملات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 118,
+        "y": 798,
+        "width": 43,
+        "height": 23
+      },
+      "message": "\"البطاقات\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>البطاقات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 27,
+        "y": 798,
+        "width": 35,
+        "height": 23
+      },
+      "message": "\"حسابي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>حسابي</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 49,
+        "y": 14,
+        "width": 15,
+        "height": 12
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<i class=\"fa-solid fa-wifi\"></i>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 27,
+        "y": 14,
+        "width": 14,
+        "height": 12
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<i class=\"fa-solid fa-battery-full\"></i>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 105,
+        "y": 231,
+        "width": 12,
+        "height": 12
+      },
+      "message": "margin-left: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<i class=\"fa-solid fa-filter text-primary ml-1\"></i>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 46,
+        "y": 229,
+        "width": 51,
+        "height": 16
+      },
+      "message": "margin-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span>هذا الشهر</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 32,
+        "y": 232,
+        "width": 10,
+        "height": 10
+      },
+      "message": "margin-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<i class=\"fa-solid fa-chevron-down text-[10px] text-gray-400 mr-1\"></i>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 195,
+        "y": 283,
+        "width": 109,
+        "height": 44
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">Lulu Hypermarket</h4>\n                            <span class=\"text-[11px] text-gr"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 255,
+        "y": 356,
+        "width": 49,
+        "height": 44
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">Netflix</h4>\n                            <span class=\"text-[11px] text-gray-400\">أ"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 231,
+        "y": 429,
+        "width": 73,
+        "height": 44
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">راتب الشركة</h4>\n                            <span class=\"text-[11px] text-gray-40"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 234,
+        "y": 502,
+        "width": 70,
+        "height": 44
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">Shell Oman</h4>\n                            <span class=\"text-[11px] text-gray-400"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 243,
+        "y": 575,
+        "width": 61,
+        "height": 44
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">Starbucks</h4>\n                            <span class=\"text-[11px] text-gray-400\""
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 211,
+        "y": 648,
+        "width": 93,
+        "height": 44
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">تحويل من أحمد</h4>\n                            <span class=\"text-[11px] text-gray-"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 202,
+        "y": 721,
+        "width": 102,
+        "height": 44
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">Oman Arab Bank</h4>\n                            <span class=\"text-[11px] text-gray"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 228,
+        "y": 794,
+        "width": 76,
+        "height": 44
+      },
+      "message": "margin-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div>\n                            <h4 class=\"font-bold text-gray-800 text-sm\">Grand Hyper</h4>\n                            <span class=\"text-[11px] text-gray-40"
+    }
+  ],
+  "unreadableStylesheets": 2,
+  "pageHeight": 844
+}

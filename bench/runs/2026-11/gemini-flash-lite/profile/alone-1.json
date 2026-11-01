@@ -1,0 +1,319 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "profile",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-11-01T11:21:32.957Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>الملف الشخصي - تطبيق الدفع</title>\n    <!-- Tailwind CSS -->\n    <script src=\"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4\"></script>\n    <!-- Google Font: Cairo -->\n    <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n    <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap\" rel=\"stylesheet\">\n    <!-- FontAwesome for Icons -->\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css\">\n    <style>\n        body {\n            font-family: 'Cairo', sans-serif;\n        }\n    </style>\n</head>\n<body class=\"bg-slate-900 flex items-center justify-center min-h-screen p-4\">\n\n    <!-- Phone Container -->\n    <div class=\"w-[380px] h-[812px] bg-slate-50 rounded-[48px] shadow-2xl overflow-hidden flex flex-col relative border-[10px] border-slate-800\">\n        \n        <!-- Dynamic Island / Status Bar -->\n        <div class=\"bg-emerald-800 text-white px-6 pt-3 pb-2 flex justify-between items-center text-xs\">\n            <span class=\"font-semibold\">٠٩:٤١</span>\n            <div class=\"w-20 h-4 bg-slate-900 rounded-full absolute top-3 left-1/2 -translate-x-1/2\"></div>\n            <div class=\"flex items-center gap-1.5\">\n                <i class=\"fa-solid fa-signal text-[10px]\"></i>\n                <i class=\"fa-solid fa-wifi text-[10px]\"></i>\n                <i class=\"fa-solid fa-battery-full text-sm\"></i>\n            </div>\n        </div>\n\n        <!-- App Header -->\n        <div class=\"bg-emerald-800 text-white px-6 pb-6 pt-2 rounded-b-[30px] shadow-md\">\n            <div class=\"flex justify-between items-center mb-6\">\n                <button class=\"w-9 h-9 rounded-full bg-emerald-700/60 flex items-center justify-center text-white hover:bg-emerald-700 transition\">\n                    <i class=\"fa-solid fa-arrow-right\"></i>\n                </button>\n                <h1 class=\"text-lg font-bold\">الملف الشخصي</h1>\n                <button class=\"w-9 h-9 rounded-full bg-emerald-700/60 flex items-center justify-center text-white hover:bg-emerald-700 transition\">\n                    <i class=\"fa-solid fa-gear\"></i>\n                </button>\n            </div>\n\n            <!-- Profile Avatar & Name -->\n            <div class=\"flex items-center gap-4\">\n                <div class=\"relative\">\n                    <div class=\"w-16 h-16 rounded-full bg-gradient-to-tr from-amber-400 to-amber-200 text-emerald-950 font-bold text-2xl flex items-center justify-center shadow-inner border-2 border-white/20\">\n                        ل.م\n                    </div>\n                    <span class=\"absolute bottom-0 left-0 bg-blue-500 text-white p-1 rounded-full text-[10px] shadow\" title=\"موثق عبر الهوية الإماراتية\">\n                        <i class=\"fa-solid fa-check\"></i>\n                    </span>\n                </div>\n                <div>\n                    <h2 class=\"text-xl font-bold\">ليلى المنصوري</h2>\n                    <p class=\"text-emerald-200 text-xs mt-0.5\">حساب شخصي • الإمارات العربية المتحدة</p>\n                </div>\n            </div>\n        </div>\n\n        <!-- Scrollable Content -->\n        <div class=\"flex-1 overflow-y-auto px-5 py-6 space-y-4\">\n            \n            <!-- Section Title -->\n            <div class=\"text-xs font-semibold text-slate-400 px-1\">معلومات الحساب الشخصي</div>\n\n            <!-- 1. Email Card -->\n            <div class=\"bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between transition hover:border-emerald-200\">\n                <div class=\"flex items-center gap-3.5\">\n                    <div class=\"w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center\">\n                        <i class=\"fa-regular fa-envelope\"></i>\n                    </div>\n                    <div>\n                        <span class=\"text-xs text-slate-400 block\">البريد الإلكتروني</span>\n                        <span class=\"text-slate-800 font-medium text-sm dir-ltr text-right inline-block\">layla@example.com</span>\n                    </div>\n                </div>\n                <button class=\"text-emerald-600 text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition flex items-center gap-1\">\n                    <span>تعديل</span>\n                    <i class=\"fa-solid fa-pen text-[10px]\"></i>\n                </button>\n            </div>\n\n            <!-- 2. Phone Number Card -->\n            <div class=\"bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between transition hover:border-emerald-200\">\n                <div class=\"flex items-center gap-3.5\">\n                    <div class=\"w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center\">\n                        <i class=\"fa-solid fa-phone\"></i>\n                    </div>\n                    <div>\n                        <span class=\"text-xs text-slate-400 block\">رقم الهاتف المتحرك</span>\n                        <span class=\"text-slate-800 font-medium text-sm dir-ltr text-right inline-block\">+971 50 123 4567</span>\n                    </div>\n                </div>\n                <button class=\"text-emerald-600 text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition flex items-center gap-1\">\n                    <span>تعديل</span>\n                    <i class=\"fa-solid fa-pen text-[10px]\"></i>\n                </button>\n            </div>\n\n            <!-- 3. IBAN Card -->\n            <div class=\"bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between transition hover:border-emerald-200\">\n                <div class=\"flex items-center gap-3.5\">\n                    <div class=\"w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center\">\n                        <i class=\"fa-solid fa-building-columns\"></i>\n                    </div>\n                    <div>\n                        <span class=\"text-xs text-slate-400 block\">رقم الحساب المصرفي الدولي (IBAN)</span>\n                        <span class=\"text-slate-800 font-mono font-medium text-xs dir-ltr text-right inline-block\">AE07 0331 2345 6789 0123 456</span>\n                    </div>\n                </div>\n                <button class=\"text-emerald-600 text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition flex items-center gap-1\">\n                    <span>تعديل</span>\n                    <i class=\"fa-solid fa-pen text-[10px]\"></i>\n                </button>\n            </div>\n\n            <!-- Additional Security Option -->\n            <div class=\"pt-2\">\n                <div class=\"text-xs font-semibold text-slate-400 px-1 mb-3\">الأمان والتوثيق</div>\n                <div class=\"bg-white p-4 rounded-2xl shadow-sm border border-slate-100 flex items-center justify-between\">\n                    <div class=\"flex items-center gap-3.5\">\n                        <div class=\"w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center\">\n                            <i class=\"fa-solid fa-id-card\"></i>\n                        </div>\n                        <div>\n                            <span class=\"text-slate-800 font-medium text-sm block\">الهوية الإماراتية</span>\n                            <span class=\"text-emerald-600 text-xs\">تم التحقق بنجاح</span>\n                        </div>\n                    </div>\n                    <i class=\"fa-solid fa-chevron-left text-slate-300 text-xs\"></i>\n                </div>\n            </div>\n\n        </div>\n\n        <!-- Bottom Navigation Bar -->\n        <div class=\"bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center text-xs text-slate-400\">\n            <button class=\"flex flex-col items-center gap-1 hover:text-emerald-700 transition\">\n                <i class=\"fa-solid fa-house text-base\"></i>\n                <span>الرئيسية</span>\n            </button>\n            <button class=\"flex flex-col items-center gap-1 hover:text-emerald-700 transition\">\n                <i class=\"fa-solid fa-clock-rotate-left text-base\"></i>\n                <span>السجل</span>\n            </button>\n            <button class=\"flex flex-col items-center gap-1 hover:text-emerald-700 transition\">\n                <i class=\"fa-solid fa-qrcode text-base\"></i>\n                <span>الدفع السريع</span>\n            </button>\n            <button class=\"flex flex-col items-center gap-1 text-emerald-700 font-semibold\">\n                <i class=\"fa-solid fa-user text-base\"></i>\n                <span>حسابي</span>\n            </button>\n        </div>\n\n        <!-- Home Indicator / Bottom Safe Area -->\n        <div class=\"bg-white pb-2 pt-1 flex justify-center\">\n            <div class=\"w-32 h-1 bg-slate-300 rounded-full\"></div>\n        </div>\n\n    </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 167,
+    "output": 2576
+  },
+  "ms": 9053,
+  "finish": "STOP",
+  "reasoningTokens": 1105,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 29,
+  "score": 45,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 146.203125,
+        "y": 504,
+        "width": 136.828125,
+        "height": 30
+      },
+      "message": "\"AE07\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"text-slate-800 font-mono font-medium text-xs dir-ltr text-right inline-block\">AE07 0331 2345 6789 0123 456</span>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 160,
+        "y": 397,
+        "width": 113,
+        "height": 26
+      },
+      "message": "\"+971 50 123 4567\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"text-slate-800 font-medium text-sm dir-ltr text-right inline-block\">+971 50 123 4567</span>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 146.203125,
+        "y": 504,
+        "width": 136.828125,
+        "height": 30
+      },
+      "message": "\"AE07 0331 2345 6789 0123 456\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"text-slate-800 font-mono font-medium text-xs dir-ltr text-right inline-block\">AE07 0331 2345 6789 0123 456</span>"
+    },
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 315,
+        "y": 80,
+        "width": 14,
+        "height": 16
+      },
+      "message": "\"arrow-right\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-arrow-right\"></i>"
+    },
+    {
+      "rule": "icons/not-mirrored",
+      "title": "A direction icon that points the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 63,
+        "y": 638,
+        "width": 8,
+        "height": 12
+      },
+      "message": "\"chevron-left\" is not mirrored in right-to-left. Check it points the way the reader moves.",
+      "fix": "Mirror it in RTL with a :dir(rtl) { transform: scaleX(-1) } rule, or swap to the opposite icon.",
+      "snippet": "<i class=\"fa-solid fa-chevron-left text-slate-300 text-xs\"></i>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 146.03125,
+        "y": 467,
+        "width": 137,
+        "height": 39
+      },
+      "message": "Line height is 1.33 on \"رقم الحساب المصرفي الدولي (IBAN)\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<span class=\"text-xs text-slate-400 block\">رقم الحساب المصرفي الدولي (IBAN)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 65,
+        "y": 165,
+        "width": 195,
+        "height": 23
+      },
+      "message": "\"حساب شخصي • الإمارات العربية المتحدة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-emerald-200 text-xs mt-0.5\">حساب شخصي • الإمارات العربية المتحدة</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 203,
+        "y": 238,
+        "width": 137,
+        "height": 23
+      },
+      "message": "\"معلومات الحساب الشخصي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"text-xs font-semibold text-slate-400 px-1\">معلومات الحساب الشخصي</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 197,
+        "y": 287,
+        "width": 76,
+        "height": 23
+      },
+      "message": "\"البريد الإلكتروني\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block\">البريد الإلكتروني</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 89,
+        "y": 299,
+        "width": 31,
+        "height": 23
+      },
+      "message": "\"تعديل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>تعديل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 177,
+        "y": 377,
+        "width": 96,
+        "height": 23
+      },
+      "message": "\"رقم الهاتف المتحرك\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block\">رقم الهاتف المتحرك</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 89,
+        "y": 389,
+        "width": 31,
+        "height": 23
+      },
+      "message": "\"تعديل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>تعديل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 146.03125,
+        "y": 467,
+        "width": 137,
+        "height": 39
+      },
+      "message": "\"رقم الحساب المصرفي الدولي (IBAN)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-xs text-slate-400 block\">رقم الحساب المصرفي الدولي (IBAN)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 89,
+        "y": 491.5,
+        "width": 31,
+        "height": 23
+      },
+      "message": "\"تعديل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>تعديل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 263,
+        "y": 573,
+        "width": 77,
+        "height": 23
+      },
+      "message": "\"الأمان والتوثيق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"text-xs font-semibold text-slate-400 px-1 mb-3\">الأمان والتوثيق</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 195,
+        "y": 644,
+        "width": 78,
+        "height": 23
+      },
+      "message": "\"تم التحقق بنجاح\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"text-emerald-600 text-xs\">تم التحقق بنجاح</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 302,
+        "y": 770,
+        "width": 38,
+        "height": 23
+      },
+      "message": "\"الرئيسية\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>الرئيسية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 230,
+        "y": 770,
+        "width": 31,
+        "height": 23
+      },
+      "message": "\"السجل\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>السجل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 127,
+        "y": 770,
+        "width": 62,
+        "height": 23
+      },
+      "message": "\"الدفع السريع\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>الدفع السريع</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 770,
+        "width": 36,
+        "height": 23
+      },
+      "message": "\"حسابي\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>حسابي</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 276,
+        "y": 171,
+        "width": 17,
+        "height": 23
+      },
+      "message": "left: 0px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<span class=\"absolute bottom-0 left-0 bg-blue-500 text-white p-1 rounded-full text-[10px] shadow\" title=\"موثق عبر الهوية الإماراتية\">\n                        <i"
+    }
+  ],
+  "unreadableStylesheets": 2,
+  "pageHeight": 844
+}

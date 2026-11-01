@@ -1,0 +1,165 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "support-chat",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-11-01T12:17:14.740Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>الدعم</title>\n<style>\n  body {\n    font-family: Arial, sans-serif;\n    background-color: #f0f0f0;\n    margin: 0;\n    padding: 0;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    height: 100vh;\n  }\n  .chat-container {\n    width: 100%;\n    max-width: 375px;\n    height: 667px;\n    background-color: #fff;\n    display: flex;\n    flex-direction: column;\n    border: 1px solid #ccc;\n  }\n  .messages {\n    flex: 1;\n    overflow-y: auto;\n    padding: 10px;\n  }\n  .message {\n    margin-bottom: 10px;\n    padding: 8px 12px;\n    border-radius: 10px;\n    max-width: 80%;\n    position: relative;\n  }\n  .customer {\n    background-color: #e0f7e0;\n    align-self: flex-end;\n    margin-left: auto;\n  }\n  .agent {\n    background-color: #e3f2fd;\n    align-self: flex-start;\n    margin-right: auto;\n  }\n  .sender {\n    font-weight: bold;\n    margin-bottom: 4px;\n  }\n  .time {\n    font-size: 0.7em;\n    color: #888;\n    margin-top: 4px;\n  }\n  .input-area {\n    display: flex;\n    padding: 10px;\n    border-top: 1px solid #ccc;\n  }\n  .input-area input {\n    flex: 1;\n    padding: 10px;\n    border: 1px solid #ccc;\n    border-radius: 20px;\n    outline: none;\n  }\n  .input-area button {\n    margin-left: 10px;\n    padding: 10px 15px;\n    border: none;\n    background-color: #007bff;\n    color: white;\n    border-radius: 20px;\n    cursor: pointer;\n  }\n</style>\n</head>\n<body>\n  <div class=\"chat-container\">\n    <div class=\"messages\">\n      <div class=\"message customer\">\n        <div class=\"sender\">أنت</div>\n        <div>مرحباً، أود معرفة عن خطة 5G</div>\n        <div class=\"time\">10:15</div>\n      </div>\n      <div class=\"message agent\">\n        <div class=\"sender\">Sara</div>\n        <div>أهلاً بك، نعم خطة 5G تقدم سرعة عالية</div>\n        <div class=\"time\">10:16</div>\n      </div>\n      <div class=\"message customer\">\n        <div class=\"sender\">أنت</div>\n        <div>هل يمكن نقل اشتراكي إلى eSIM؟</div>\n        <div class=\"time\">10:17</div>\n      </div>\n      <div class=\"message agent\">\n        <div class=\"sender\">Sara</div>\n        <div>بالطبع، يمكن نقل اشتراكي إلى eSIM بسهولة</div>\n        <div class=\"time\">10:18</div>\n      </div>\n      <div class=\"message customer\">\n        <div class=\"sender\">أنت</div>\n        <div>طلب TX-48213 لا يظهر في حسابي</div>\n        <div class=\"time\">10:19</div>\n      </div>\n      <div class=\"message agent\">\n        <div class=\"sender\">Sara</div>\n        <div>سأقوم بتحليل طلب TX-48213 وسأعود لك قريباً</div>\n        <div class=\"time\">10:20</div>\n      </div>\n    </div>\n    <div class=\"input-area\">\n      <input type=\"text\" placeholder=\"اكتب رسالتك...\">\n      <button>أرسل</button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 147,
+    "output": 5524
+  },
+  "ms": 63166,
+  "finish": "stop",
+  "reasoningTokens": 4604,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 85,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 336.5,
+        "y": 107.5,
+        "width": 24,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"sender\">أنت</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 42.5,
+        "y": 719.5,
+        "width": 31,
+        "height": 15
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button>أرسل</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 42.5,
+        "y": 719.5,
+        "width": 31,
+        "height": 15
+      },
+      "message": "\"أرسل\" is 13.3333px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button>أرسل</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 64.5,
+        "y": 98.5,
+        "width": 308,
+        "height": 74
+      },
+      "message": "margin-left: 47px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"message customer\">\n        <div class=\"sender\">أنت</div>\n        <div>مرحباً، أود معرفة عن خطة 5G</div>\n        <div class=\"time\">10:15</div>\n      "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 17.5,
+        "y": 182.5,
+        "width": 308,
+        "height": 73
+      },
+      "message": "margin-right: 47px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"message agent\">\n        <div class=\"sender\">Sara</div>\n        <div>أهلاً بك، نعم خطة 5G تقدم سرعة عالية</div>\n        <div class=\"time\">10:16</div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 64.5,
+        "y": 265.5,
+        "width": 308,
+        "height": 74
+      },
+      "message": "margin-left: 47px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"message customer\">\n        <div class=\"sender\">أنت</div>\n        <div>هل يمكن نقل اشتراكي إلى eSIM؟</div>\n        <div class=\"time\">10:17</div>\n    "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 17.5,
+        "y": 349.5,
+        "width": 308,
+        "height": 92
+      },
+      "message": "margin-right: 47px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"message agent\">\n        <div class=\"sender\">Sara</div>\n        <div>بالطبع، يمكن نقل اشتراكي إلى eSIM بسهولة</div>\n        <div class=\"time\">10:18</"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 64.5,
+        "y": 451.5,
+        "width": 308,
+        "height": 74
+      },
+      "message": "margin-left: 47px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"message customer\">\n        <div class=\"sender\">أنت</div>\n        <div>طلب TX-48213 لا يظهر في حسابي</div>\n        <div class=\"time\">10:19</div>\n    "
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 17.5,
+        "y": 535.5,
+        "width": 308,
+        "height": 92
+      },
+      "message": "margin-right: 47px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"message agent\">\n        <div class=\"sender\">Sara</div>\n        <div>سأقوم بتحليل طلب TX-48213 وسأعود لك قريباً</div>\n        <div class=\"time\">10:20"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 27.5,
+        "y": 708.5,
+        "width": 61,
+        "height": 37
+      },
+      "message": "margin-left: 10px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button>أرسل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

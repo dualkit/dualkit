@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خدمة العملاء - الدردشة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: #e4e9f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Phone Container Frame */
+        .phone-frame {
+            width: 100%;
+            max-width: 390px;
+            height: 100vh;
+            max-height: 844px;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        @media (min-width: 400px) {
+            .phone-frame {
+                border-radius: 40px;
+                border: 10px solid #1a1a1a;
+                height: 844px;
+            }
+        }
+
+        /* Top Notch / Status Bar Simulation */
+        .status-bar {
+            background-color: #004d40;
+            color: white;
+            padding: 10px 20px 5px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background-color: #004d40;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .agent-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .agent-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background-color: #00796b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            position: relative;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 100px;
+            background-color: #4caf50;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            border: 2px solid #004d40;
+        }
+
+        .agent-details h3 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .agent-details span {
+            font-size: 12px;
+            color: #b2dfdb;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 15px;
+            font-size: 18px;
+            color: #b2dfdb;
+        }
+
+        /* Chat Body */
+        .chat-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            background-color: #f4f6f8;
+        }
+
+        .date-divider {
+            text-align: center;
+            font-size: 11px;
+            color: #888;
+            margin: 5px 0;
+            position: relative;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            position: relative;
+            font-size: 14px;
+            line-height: 1.5;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .message.customer {
+            background-color: #004d40;
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.agent {
+            background-color: #ffffff;
+            color: #333;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .message-text {
+            margin-bottom: 4px;
+            word-break: break-word;
+        }
+
+        .message-time {
+            font-size: 10px;
+            text-align: left;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+
+        .message.customer .message-time {
+            color: #b2dfdb;
+        }
+
+        .message.agent .message-time {
+            color: #888;
+        }
+
+        /* Chat Footer */
+        .chat-footer {
+            padding: 12px 16px;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            background-color: #f0f2f5;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            border: 1px solid #ddd;
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 10px 5px;
+            font-size: 14px;
+            outline: none;
+            direction: rtl;
+        }
+
+        .input-wrapper input::placeholder {
+            color: #999;
+        }
+
+        .attachment-btn {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0 5px;
+        }
+
+        .send-btn {
+            background-color: #004d40;
+            color: white;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+            box-shadow: 0 2px 5px rgba(0,77,64,0.3);
+        }
+
+        .send-btn:hover {
+            background-color: #00332c;
+        }
+
+        .send-btn i {
+            font-size: 16px;
+            transform: rotate(180deg); /* Adjust arrow for RTL */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>10:40</span>
+            <div>
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi" style="margin: 0 5px;"></i>
+                <i class="fa-solid fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <div class="agent-info">
+                <div class="agent-avatar">
+                    س
+                    <div class="status-dot"></div>
+                </div>
+                <div class="agent-details">
+                    <h3>سارة (الدعم الفني)</h3>
+                    <span>متواجد الآن</span>
+                </div>
+            </div>
+            <div class="header-icons">
+                <i class="fa-solid fa-phone"></i>
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </div>
+        </div>
+
+        <!-- Chat Body (Messages) -->
+        <div class="chat-body">
+            <div class="date-divider">اليوم</div>
+
+            <!-- Message 1 -->
+            <div class="message customer">
+                <div class="message-text">السلام عليكم، أبي أفعّل الـ eSIM الجديدة حق خطي لو سمحتوا.</div>
+                <div class="message-time">10:30 ص</div>
+            </div>
+
+            <!-- Message 2 -->
+            <div class="message agent">
+                <div class="message-text">وعليكم السلام أهلاً بك! معك سارة من خدمة العملاء. ممكن تزويدي برقم الطلب TX-48213 لو سمحت؟</div>
+                <div class="message-time">10:31 ص</div>
+            </div>
+
+            <!-- Message 3 -->
+            <div class="message customer">
+                <div class="message-text">تفضلـي، هذا هو رقم الطلب TX-48213. والمشكلة إن سرعة الـ 5G مو واصلة زين عندي بالبيت.</div>
+                <div class="message-time">10:33 ص</div>
+            </div>
+
+            <!-- Message 4 -->
+            <div class="message agent">
+                <div class="message-text">شكراً لك. بالنسبة للـ eSIM، تم إرسال الـ QR code على إيميلك المسجل. وبخصوص الـ 5G، جرب تسوي restart للراوتر أو التليفون.</div>
+                <div class="message-time">10:35 ص</div>
+            </div>
+
+            <!-- Message 5 -->
+            <div class="message customer">
+                <div class="message-text">تمام، جربت وطريقتج زبطت! يعطيج العافية سارة ما قصرتي والله.</div>
+                <div class="message-time">10:38 ص</div>
+            </div>
+
+            <!-- Message 6 -->
+            <div class="message agent">
+                <div class="message-text">الله يعافيك! عساك ع القوة، وإذا احتجت أي شي ثاني إحنا بالخدمة دائماً. يوم سعيد!</div>
+                <div class="message-time">10:39 ص</div>
+            </div>
+        </div>
+
+        <!-- Chat Footer -->
+        <div class="chat-footer">
+            <button class="attachment-btn"><i class="fa-solid fa-paperclip"></i></button>
+            <div class="input-wrapper">
+                <input type="text" placeholder="اكتب رسالتك هنا...">
+            </div>
+            <button class="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+</body>
+</html>

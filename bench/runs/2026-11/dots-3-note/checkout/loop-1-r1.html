@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إتمام الطلب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-bg: #f4f6f3;
+    --color-surface: #ffffff;
+    --color-primary: #1b7a3d;
+    --color-primary-dark: #145d2a;
+    --color-text: #1a1a1a;
+    --color-text-secondary: #6b7280;
+    --color-border: #e6e8e4;
+    --color-error: #dc2626;
+    --radius: 14px;
+  }
+
+  :lang(ar) {
+    --type-label-size: 14px;
+    --type-caption-size: 14px;
+    --type-body-size: 16px;
+    letter-spacing: 0;
+    text-transform: none;
+    font-style: normal;
+    line-height: 1.7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--color-bg);
+    display: flex;
+    justify-content: center;
+    align-items: min-height: 100vh;
+    padding: 24px 12px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .phone {
+    width: 100%;
+    max-width: 390px;
+    background: var(--color-surface);
+    border-radius: 28px;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    min-height: 840px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Status bar ── */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 28px 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+    background: var(--color-surface);
+  }
+
+  .status-bar .right { display: flex; align-items: center; gap: 4px; }
+
+  /* ── App bar ── */
+  .app-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px 10px;
+    background: var(--color-surface);
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    margin-inline-end: 2px;
+    color: var(--color-text);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .back-btn:active { background: var(--color-bg); }
+
+  .back-btn svg { transform: scaleX(-1); }
+
+  .app-bar h1 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .app-bar .count {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    font-weight: 400;
+  }
+
+  /* ── Cart items ── */
+  .cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 16px 4px;
+  }
+
+  .cart-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    margin-bottom: 8px;
+  }
+
+  .item-photo {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #e8f5e9, #c8e6c9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .item-photo svg {
+    width: 30px;
+    height: 30px;
+    color: var(--color-primary);
+  }
+
+  .item-details {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .item-name {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-text);
+    margin-bottom: 3px;
+  }
+
+  .item-price {
+    font-size: 14px;
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .stepper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .stepper button {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-border);
+    background: var(--color-surface);
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+
+  .stepper button:active { background: var(--color-bg); }
+
+  .stepper span {
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 18px;
+    text-align: center;
+    color: var(--color-text);
+  }
+
+  /* ── Promo section ── */
+  .promo-section {
+    padding: 12px 16px 4px;
+    background: var(--color-surface);
+  }
+
+  .promo-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .promo-input {
+    flex: 1;
+    padding: 11px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    font-size: 14px;
+    background: var(--color-bg);
+    color: var(--color-text);
+    font-family: inherit;
+    text-align: start;
+    direction: ltr;
+  }
+
+  .promo-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .promo-input::placeholder {
+    text-align: right;
+  }
+
+  .apply-btn {
+    padding: 11px 18px;
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+
+  .apply-btn:active { background: var(--color-primary-dark); }
+
+  .promo-hint {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-top: 6px;
+    padding-inline-start: 4px;
+  }
+
+  /* ── Summary ── */
+  .summary {
+    padding: 14px 16px 4px;
+    background: var(--color-surface);
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    font-size: 14px;
+  }
+
+  .summary-row .label { color: var(--color-text-secondary); }
+
+  .summary-row .value { color: var(--color-text); font-weight: 500; }
+
+  .summary-row.total {
+    font-size: 16px;
+    font-weight: 700;
+    padding-top: 10px;
+    margin-top: 4px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .summary-row.total .label,
+  .summary-row.total .value { color: var(--color-text); }
+
+  .free-tag {
+    color: var(--color-primary);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  /* ── Button ── */
+  .checkout-btn {
+    margin: 16px 16px 20px;
+    padding: 15px;
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    width: calc(100% - 32px);
+  }
+
+  .checkout-btn:active { background: var(--color-primary-dark); }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <!-- Status bar -->
+    <div class="status-bar">
+      <span>12:43 ص</span>
+      <div class="right">
+        <span>5G</span>
+        <span>🔋80%</span>
+      </div>
+    </div>
+
+    <!-- App bar -->
+    <div class="app-bar">
+      <button class="back-btn" aria-label="الرجوع">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+      <h1>إتمام الطلب</h1>
+      <span class="count">3 عناصر</span>
+    </div>
+
+    <!-- Cart items -->
+    <div class="cart-items">
+
+      <!-- Item 1 -->
+      <div class="cart-item">
+        <div class="item-photo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 2h8v20H8z"/>
+            <path d="M12 2v20"/>
+            <circle cx="12" cy="8" r="1.5" fill="currentColor"/>
+            <path d="M8 22h8"/>
+          </svg>
+        </div>
+        <div class="item-details">
+          <div class="item-name">حليب طازج 250 مل</div>
+          <div class="item-price"><bdi>4.50 د.إ</bdi></div>
+        </div>
+        <div class="stepper">
+          <button aria-label="تقليل الكمية">−</button>
+          <span>2</span>
+          <button aria-label="زيادة الكمية">+</button>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="cart-item">
+        <div class="item-photo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z"/>
+            <path d="M9 21h6"/>
+            <circle cx="9" cy="11" r="1" fill="currentColor"/>
+            <circle cx="12" cy="9" r="1" fill="currentColor"/>
+            <circle cx="15" cy="11" r="1" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="item-details">
+          <div class="item-name">عنب أرجواني</div>
+          <div class="item-price"><bdi>12.00 د.إ</bdi></div>
+        </div>
+        <div class="stepper">
+          <button aria-label="تقليل الكمية">−</button>
+          <span>1</span>
+          <button aria-label="زيادة الكمية">+</button>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="cart-item">
+        <div class="item-photo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/>
+            <circle cx="8" cy="9" r="1.2" fill="currentColor"/>
+            <circle cx="16" cy="9" r="1.2" fill="currentColor"/>
+            <path d="M9 16c1 1 2 1 3 0s2-1 3 0"/>
+          </svg>
+        </div>
+        <div class="item-details">
+          <div class="item-name">تفاح Riديل</div>
+          <div class="item-price"><bdi>6.75 د.إ</bdi></div>
+        </div>
+        <div class="stepper">
+          <button aria-label="تقليل الكمية">−</button>
+          <span>3</span>
+          <button aria-label="زيادة الكمية">+</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Promo code -->
+    <div class="promo-section">
+      <div class="promo-row">
+        <input type="text" class="promo-input" placeholder="رمز العرض" dir="ltr" autocomplete="off">
+        <button class="apply-btn">تطبيق</button>
+      </div>
+      <p class="promo-hint">لديك رمز عرض FIXIT10؟ أدخله هنا</p>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+      <div class="summary-row">
+        <span class="label">المجموع الفرعي</span>
+        <span class="value"><bdi>41.25 د.إ</bdi></span>
+      </div>
+      <div class="summary-row">
+        <span class="label">التوصيل</span>
+        <span class="value free-tag">مجاني</span>
+      </div>
+      <div class="summary-row">
+        <span class="label">ضريبة القيمة المضافة 5%</span>
+        <span class="value"><bdi>2.06 د.إ</bdi></span>
+      </div>
+      <div class="summary-row total">
+        <span class="label">الإجمالي</span>
+        <span class="value"><bdi>43.31 د.إ</bdi></span>
+      </div>
+    </div>
+
+    <!-- Place order -->
+    <button class="checkout-btn">إتمام الطلب</button>
+  </div>
+</body>
+</html>

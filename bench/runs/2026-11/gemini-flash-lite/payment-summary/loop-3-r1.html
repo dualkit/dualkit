@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ملخص الدفع - Payment Summary</title>
+  <!-- Google Fonts: IBM Plex Sans Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            arabic: ['"IBM Plex Sans Arabic"', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    :lang(ar) {
+      letter-spacing: 0;
+      text-transform: none;
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+    }
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+    }
+    /* Arabic typography adjustments */
+    .arabic-text {
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+    .arabic-label {
+      font-size: 0.875rem; /* 14px floor */
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 h-full flex items-center justify-center p-0 sm:p-4">
+
+  <!-- Phone Screen Container -->
+  <div class="w-full max-w-md bg-white h-full sm:h-[844px] sm:rounded-3xl shadow-2xl flex flex-col justify-between overflow-hidden border border-slate-200">
+
+    <!-- Header -->
+    <header class="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white sticky top-0 z-10">
+      <button aria-label="رجوع" class="p-2 -mx-2 text-slate-700 hover:text-slate-900 transition-colors">
+        <!-- Directional Back Arrow -->
+        <svg class="w-6 h-6 rtl:-scale-x-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      <h1 class="text-lg font-semibold text-slate-900">ملخص الدفع</h1>
+      <div class="w-6"></div> <!-- Spacer for balance -->
+    </header>
+
+    <!-- Main Scrollable Body -->
+    <main class="flex-1 overflow-y-auto p-6 space-y-6">
+
+      <!-- Amount Card -->
+      <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-5 text-center">
+        <span class="arabic-label text-indigo-700 font-medium block mb-1">المبلغ المستحق</span>
+        <div class="text-3xl font-bold text-indigo-950 tabular-nums tracking-normal" dir="ltr">
+          1,234.50 <span class="text-lg font-semibold">د.إ</span>
+        </div>
+      </div>
+
+      <!-- Details Card -->
+      <div class="bg-slate-50 rounded-2xl p-5 space-y-4 border border-slate-100">
+        <!-- Due Date -->
+        <div class="flex justify-between items-start pb-3 border-b border-slate-200/60">
+          <span class="arabic-label text-slate-500">تاريخ الاستحقاق</span>
+          <div class="text-start">
+            <p id="gregorian-date" class="text-slate-900 font-medium arabic-label">3 نوفمبر 2026</p>
+            <p id="hijri-date" class="text-slate-500 text-sm mt-0.5">21 جمادى الآخرة 1448 هـ</p>
+          </div>
+        </div>
+
+        <!-- Items Count (Plural Form 'few' for 3) -->
+        <div class="flex justify-between items-center">
+          <span class="arabic-label text-slate-500">تفاصيل الطلب</span>
+          <span class="text-slate-900 font-medium arabic-label">لديك 3 عناصر في هذا الطلب</span>
+        </div>
+      </div>
+
+      <!-- SMS Receipt Section -->
+      <div class="space-y-2">
+        <label for="phone-input" class="arabic-label font-medium text-slate-800 block">
+          إرسال الإيصال عبر الرسائل النصية
+        </label>
+        
+        <!-- Phone Input Group -->
+        <div class="flex items-center rounded-xl border border-slate-300 focus-within:border-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600/20 bg-white overflow-hidden transition-all">
+          <div class="bg-slate-50 px-3.5 py-3 border-s border-slate-200 text-slate-600 font-medium text-sm flex items-center gap-1.5" dir="ltr">
+            <span>🇦🇪</span>
+            <span>+971</span>
+          </div>
+          <input 
+            type="tel" 
+            id="phone-input" 
+            dir="ltr" 
+            inputmode="tel" 
+            autocomplete="tel"
+            placeholder="050 123 4567"
+            class="w-full px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:outline-none text-start tabular-nums"
+          >
+        </div>
+        <p class="text-sm text-slate-500">
+          مثال: <bdi dir="ltr">050 123 4567</bdi>
+        </p>
+      </div>
+
+    </main>
+
+    <!-- Footer Action -->
+    <footer class="p-6 border-t border-slate-100 bg-white">
+      <button class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium py-4 px-6 rounded-2xl transition-colors shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 text-base">
+        <span>الدفع الآن</span>
+      </button>
+    </footer>
+
+  </div>
+
+  <!-- Dynamic Date & Plural Validation Script -->
+  <script>
+    // Ensure accurate Umm al-Qura calendar formatting with Asia/Dubai timezone
+    try {
+      const dueDate = new Date('2026-11-03T00:00:00');
+      
+      const gregFormatter = new Intl.DateTimeFormat('ar-AE-u-nu-latn', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'Asia/Dubai'
+      });
+      
+      const hijriFormatter = new Intl.DateTimeFormat('ar-AE-u-nu-latn', {
+        calendar: 'islamic-umalqura',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'Asia/Dubai'
+      });
+
+      document.getElementById('gregorian-date').textContent = gregFormatter.format(dueDate);
+      document.getElementById('hijri-date').textContent = hijriFormatter.format(dueDate) + ' هـ';
+    } catch (e) {
+      // Fallback gracefully if Intl calendar options fail on older environments
+      console.log('Intl calendar fallback active');
+    }
+  </script>
+</body>
+</html>

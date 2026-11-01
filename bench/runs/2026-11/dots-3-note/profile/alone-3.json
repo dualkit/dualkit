@@ -1,0 +1,151 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "profile",
+  "condition": "alone",
+  "run": 3,
+  "at": "2026-11-01T11:47:22.425Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html dir=\"rtl\" lang=\"ar\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الملف الشخصي</title>\n  <style>\n    body {\n      font-family: 'Arial', sans-serif;\n      background-color: #f5f5f5;\n      margin: 0;\n      padding: 0;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      min-height: 100vh;\n    }\n    .container {\n      width: 100%;\n      max-width: 375px;\n      background: #fff;\n      padding: 16px;\n      box-sizing: border-box;\n    }\n    h1 {\n      text-align: center;\n      margin-bottom: 24px;\n      font-size: 20px;\n    }\n    .field {\n      position: relative;\n      padding: 12px 0;\n      border-bottom: 1px solid #eee;\n    }\n    .info {\n      display: flex;\n      flex-direction: column;\n    }\n    .line {\n      display: flex;\n      justify-content: space-between;\n      margin-bottom: 4px;\n    }\n    .label {\n      font-weight: bold;\n    }\n    .value {\n      text-align: left;\n    }\n    .edit {\n      position: absolute;\n      top: 12px;\n      left: 12px;\n      background: none;\n      border: none;\n      color: #007AFF;\n      font-size: 16px;\n      cursor: pointer;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>الملف الشخصي</h1>\n\n    <div class=\"field\">\n      <div class=\"info\">\n        <div class=\"line\">\n          <span class=\"label\">الاسم:</span>\n          <span class=\"value\">Layla Al Mansouri</span>\n        </div>\n        <div class=\"line\">\n          <span class=\"label\">البريد الإلكتروني:</span>\n          <span class=\"value\">layla@example.com</span>\n        </div>\n      </div>\n      <button class=\"edit\">تعديل</button>\n    </div>\n\n    <div class=\"field\">\n      <div class=\"line\">\n        <span class=\"label\">رقم الهاتف:</span>\n        <span class=\"value\">+971 50 123 4567</span>\n      </div>\n      <button class=\"edit\">تعديل</button>\n    </div>\n\n    <div class=\"field\">\n      <div class=\"line\">\n        <span class=\"label\">رقم IBAN:</span>\n        <span class=\"value\">AE07 0331 2345 6789 0123 456</span>\n      </div>\n      <button class=\"edit\">تعديل</button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 166,
+    "output": 7424
+  },
+  "ms": 88728,
+  "finish": "stop",
+  "reasoningTokens": 6961,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 30,
+  "score": 55,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 23.5,
+        "y": 500.1875,
+        "width": 230.4375,
+        "height": 17
+      },
+      "message": "\"AE07\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"value\">AE07 0331 2345 6789 0123 456</span>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 23.5,
+        "y": 452.1875,
+        "width": 129.5,
+        "height": 17
+      },
+      "message": "\"+971 50 123 4567\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"value\">+971 50 123 4567</span>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 23.5,
+        "y": 500.1875,
+        "width": 230.4375,
+        "height": 17
+      },
+      "message": "\"AE07 0331 2345 6789 0123 456\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"value\">AE07 0331 2345 6789 0123 456</span>"
+    },
+    {
+      "rule": "bidi/punctuation-flip",
+      "title": "Punctuation at the wrong end",
+      "severity": "warning",
+      "box": {
+        "x": 290.609375,
+        "y": 501.1875,
+        "width": 75.890625,
+        "height": 17
+      },
+      "message": "\"رقم IBAN:\" runs right to left, so its last mark moves to the start.",
+      "fix": "Give the block the direction of its own text, with dir=\"ltr\", dir=\"rtl\" or dir=\"auto\".",
+      "snippet": "<span class=\"label\">رقم IBAN:</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 127.71875,
+        "y": 322.1875,
+        "width": 134.5625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الملف الشخصي</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 41.5,
+        "y": 383.1875,
+        "width": 36,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"edit\">تعديل</button>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 35.5,
+        "y": 381.1875,
+        "width": 48,
+        "height": 21
+      },
+      "message": "left: 12px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<button class=\"edit\">تعديل</button>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 35.5,
+        "y": 452.1875,
+        "width": 48,
+        "height": 21
+      },
+      "message": "left: 12px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<button class=\"edit\">تعديل</button>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 35.5,
+        "y": 500.1875,
+        "width": 48,
+        "height": 21
+      },
+      "message": "left: 12px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<button class=\"edit\">تعديل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

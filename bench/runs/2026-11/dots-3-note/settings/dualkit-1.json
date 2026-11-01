@@ -1,0 +1,39 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "settings",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-11-01T12:43:33.133Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الإعدادات</title>\n  <style>\n    * {\n      margin: 0;\n      padding: 0;\n      box-sizing: border-box;\n      -webkit-tap-highlight-color: transparent;\n    }\n\n    body {\n      font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, \"Noto Sans Arabic\", sans-serif;\n      background: #f2f2f7;\n      color: #000;\n      line-height: 1.5;\n      font-size: 16px;\n      direction: rtl;\n    }\n\n    .container {\n      max-width: 375px;\n      margin: 0 auto;\n      background: #fff;\n      min-height: 100vh;\n      padding-bottom: 16px;\n    }\n\n    header {\n      position: sticky;\n      top: 0;\n      background: #fff;\n      border-bottom: 1px solid #e5e5ea;\n      padding: 12px 16px;\n      text-align: center;\n      z-index: 10;\n    }\n\n    header h1 {\n      font-size: 18px;\n      font-weight: 600;\n    }\n\n    section {\n      padding: 16px 0;\n      border-bottom: 1px solid #e5e5ea;\n    }\n\n    section h2 {\n      font-size: 14px;\n      font-weight: 600;\n      color: #8e8e93;\n      padding: 0 16px;\n      margin-bottom: 8px;\n      letter-spacing: 0;\n      text-transform: none;\n    }\n\n    ul {\n      list-style: none;\n    }\n\n    li {\n      border-bottom: 1px solid #e5e5ea;\n    }\n\n    /* Rows with chevron */\n    .row {\n      display: flex;\n      flex-direction: row-reverse;\n      justify-content: space-between;\n      align-items: center;\n      gap: 16px;\n      padding: 12px 16px;\n      text-decoration: none;\n      color: inherit;\n      cursor: pointer;\n    }\n\n    .row:hover {\n      background: #f9f9f9;\n    }\n\n    .row:active {\n      background: #f0f0f0;\n    }\n\n    .row-text {\n      display: flex;\n      flex-direction: column;\n      align-items: flex-end;\n    }\n\n    .row-text .label {\n      font-size: 16px;\n      font-weight: 400;\n    }\n\n    .row-text .value {\n      font-size: 14px;\n      color: #8e8e93;\n      margin-top: 2px;\n    }\n\n    .chevron {\n      font-size: 20px;\n      color: #d1d1d6;\n    }\n\n    /* Toggle rows */\n    .toggle-row {\n      display: flex;\n      flex-direction: row-reverse;\n      justify-content: space-between;\n      align-items: center;\n      gap: 16px;\n      padding: 12px 16px;\n    }\n\n    .toggle-row .label {\n      font-size: 16px;\n      font-weight: 400;\n    }\n\n    /* Switch toggle */\n    .switch {\n      position: relative;\n      display: inline-block;\n      width: 50px;\n      height: 28px;\n    }\n\n    .switch input {\n      opacity: 0;\n      width: 0;\n      height: 0;\n    }\n\n    .slider {\n      position: absolute;\n      cursor: pointer;\n      top: 0;\n      right: 0;\n      bottom: 0;\n      left: auto;\n      background-color: #ccc;\n      transition: 0.4s;\n      border-radius: 28px;\n    }\n\n    .slider:before {\n      content: \"\";\n      position: absolute;\n      height: 20px;\n      width: 20px;\n      right: 4px;\n      bottom: 4px;\n      background-color: white;\n      transition: 0.4s;\n      border-radius: 50%;\n    }\n\n    input:checked + .slider {\n      background-color: #007aff;\n    }\n\n    input:checked + .slider:before {\n      transform: translateX(-22px);\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <header>\n      <h1>الإعدادات</h1>\n    </header>\n\n    <main>\n      <!-- Account group -->\n      <section>\n        <h2>الحساب</h2>\n        <ul>\n          <li>\n            <a class=\"row\" href=\"#\">\n              <span class=\"chevron\">‹</span>\n              <span class=\"row-text\">\n                <span class=\"label\">الاسم</span>\n                <span class=\"value\">أحمد محمد</span>\n              </span>\n            </a>\n          </li>\n          <li>\n            <a class=\"row\" href=\"#\">\n              <span class=\"chevron\">‹</span>\n              <span class=\"row-text\">\n                <span class=\"label\">رقم الهاتف</span>\n                <span class=\"value\"><bdi dir=\"ltr\">+973 3600 1234</bdi></span>\n              </span>\n            </a>\n          </li>\n          <li>\n            <a class=\"row\" href=\"#\">\n              <span class=\"chevron\">‹</span>\n              <span class=\"row-text\">\n                <span class=\"label\">اللغة</span>\n                <span class=\"value\">العربية</span>\n              </span>\n            </a>\n          </li>\n        </ul>\n      </section>\n\n      <!-- Security group -->\n      <section>\n        <h2>الأمان</h2>\n        <ul>\n          <li>\n            <div class=\"toggle-row\">\n              <label class=\"switch\">\n                <input type=\"checkbox\" checked>\n                <span class=\"slider\"></span>\n              </label>\n              <span class=\"label\">Face ID</span>\n            </div>\n          </li>\n          <li>\n            <div class=\"toggle-row\">\n              <label class=\"switch\">\n                <input type=\"checkbox\" checked>\n                <span class=\"slider\"></span>\n              </label>\n              <span class=\"label\">تسجيل الدخول بخطوتين</span>\n            </div>\n          </li>\n        </ul>\n      </section>\n\n      <!-- Notifications group -->\n      <section>\n        <h2>الإشعارات</h2>\n        <ul>\n          <li>\n            <div class=\"toggle-row\">\n              <label class=\"switch\">\n                <input type=\"checkbox\" checked>\n                <span class=\"slider\"></span>\n              </label>\n              <span class=\"label\">التحويلات</span>\n            </div>\n          </li>\n          <li>\n            <div class=\"toggle-row\">\n              <label class=\"switch\">\n                <input type=\"checkbox\" checked>\n                <span class=\"slider\"></span>\n              </label>\n              <span class=\"label\">الOffers</span>\n            </div>\n          </li>\n          <li>\n            <div class=\"toggle-row\">\n              <label class=\"switch\">\n                <input type=\"checkbox\" checked>\n                <span class=\"slider\"></span>\n              </label>\n              <span class=\"label\">الكشوفات</span>\n            </div>\n          </li>\n        </ul>\n      </section>\n    </main>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6301,
+    "output": 11131
+  },
+  "ms": 120155,
+  "finish": "stop",
+  "reasoningTokens": 9521,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 96,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 154.03125,
+        "y": 15,
+        "width": 81.9375,
+        "height": 21
+      },
+      "message": "\"Noto Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>الإعدادات</h1>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

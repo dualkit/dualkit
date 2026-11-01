@@ -1,0 +1,53 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "payment-summary",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-11-01T11:18:53.669Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\" class=\"h-full\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>ملخص الدفع - Payment Summary</title>\n  <!-- Google Fonts: IBM Plex Sans Arabic -->\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <!-- Tailwind CSS CDN -->\n  <script src=\"https://cdn.tailwindcss.com\"></script>\n  <script>\n    tailwind.config = {\n      theme: {\n        extend: {\n          fontFamily: {\n            arabic: ['\"IBM Plex Sans Arabic\"', 'sans-serif'],\n          },\n        },\n      },\n    }\n  </script>\n  <style>\n    :lang(ar) {\n      letter-spacing: 0;\n      text-transform: none;\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n    }\n    body {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n    }\n    /* Arabic typography adjustments */\n    .arabic-text {\n      font-size: 1rem;\n      line-height: 1.7;\n    }\n    .arabic-label {\n      font-size: 0.8755rem; /* 14px floor */\n      line-height: 1.5;\n    }\n  </style>\n</head>\n<body class=\"bg-slate-100 h-full flex items-center justify-center p-0 sm:p-4\">\n\n  <!-- Phone Screen Container -->\n  <div class=\"w-full max-w-md bg-white h-full sm:h-[844px] sm:rounded-3xl shadow-2xl flex flex-col justify-between overflow-hidden border border-slate-200\">\n\n    <!-- Header -->\n    <header class=\"flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white sticky top-0 z-10\">\n      <button aria-label=\"رجوع\" class=\"p-2 -mx-2 text-slate-700 hover:text-slate-900 transition-colors\">\n        <!-- Directional Back Arrow -->\n        <svg class=\"w-6 h-6 rtl:-scale-x-100\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\">\n          <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 19l-7-7 7-7\"></path>\n        </svg>\n      </button>\n      <h1 class=\"text-lg font-semibold text-slate-900\">ملخص الدفع</h1>\n      <div class=\"w-6\"></div> <!-- Spacer for balance -->\n    </header>\n\n    <!-- Main Scrollable Body -->\n    <main class=\"flex-1 overflow-y-auto p-6 space-y-6\">\n\n      <!-- Amount Card -->\n      <div class=\"bg-indigo-50 border border-indigo-100 rounded-2xl p-5 text-center\">\n        <span class=\"arabic-label text-indigo-700 font-medium block mb-1\">المبلغ المستحق</span>\n        <div class=\"text-3xl font-bold text-indigo-950 tabular-nums tracking-normal\" dir=\"ltr\">\n          1,234.50 <span class=\"text-lg font-semibold\">د.إ</span>\n        </div>\n      </div>\n\n      <!-- Details Card -->\n      <div class=\"bg-slate-50 rounded-2xl p-5 space-y-4 border border-slate-100\">\n        <!-- Due Date -->\n        <div class=\"flex justify-between items-start pb-3 border-b border-slate-200/60\">\n          <span class=\"arabic-label text-slate-500\">تاريخ الاستحقاق</span>\n          <div class=\"text-start\">\n            <p id=\"gregorian-date\" class=\"text-slate-900 font-medium arabic-label\">3 نوفمبر 2026</p>\n            <p id=\"hijri-date\" class=\"text-slate-500 text-xs mt-0.5\">21 جمادى الآخرة 1448 هـ</p>\n          </div>\n        </div>\n\n        <!-- Items Count (Plural Form 'few' for 3) -->\n        <div class=\"flex justify-between items-center\">\n          <span class=\"arabic-label text-slate-500\">تفاصيل الطلب</span>\n          <span class=\"text-slate-900 font-medium arabic-label\">لديك 3 عناصر في هذا الطلب</span>\n        </div>\n      </div>\n\n      <!-- SMS Receipt Section -->\n      <div class=\"space-y-2\">\n        <label for=\"phone-input\" class=\"arabic-label font-medium text-slate-800 block\">\n          إرسال الإيصال عبر الرسائل النصية\n        </label>\n        \n        <!-- Phone Input Group -->\n        <div class=\"flex items-center rounded-xl border border-slate-300 focus-within:border-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600/20 bg-white overflow-hidden transition-all\">\n          <div class=\"bg-slate-50 px-3.5 py-3 border-s border-slate-200 text-slate-600 font-medium text-sm flex items-center gap-1.5\" dir=\"ltr\">\n            <span>🇦🇪</span>\n            <span>+971</span>\n          </div>\n          <input \n            type=\"tel\" \n            id=\"phone-input\" \n            dir=\"ltr\" \n            inputmode=\"tel\" \n            autocomplete=\"tel\"\n            placeholder=\"050 123 4567\"\n            class=\"w-full px-4 py-3 text-slate-900 placeholder:text-slate-400 focus:outline-none text-start tabular-nums\"\n          >\n        </div>\n        <p class=\"text-xs text-slate-500\">\n          مثال: <bdi dir=\"ltr\">050 123 4567</bdi>\n        </p>\n      </div>\n\n    </main>\n\n    <!-- Footer Action -->\n    <footer class=\"p-6 border-t border-slate-100 bg-white\">\n      <button class=\"w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium py-4 px-6 rounded-2xl transition-colors shadow-lg shadow-indigo-600/20 flex items-center justify-center gap-2 text-base\">\n        <span>الدفع الآن</span>\n      </button>\n    </footer>\n\n  </div>\n\n  <!-- Dynamic Date & Plural Validation Script -->\n  <script>\n    // Ensure accurate Umm al-Qura calendar formatting with Asia/Dubai timezone\n    try {\n      const dueDate = new Date('2026-11-03T00:00:00');\n      \n      const gregFormatter = new Intl.DateTimeFormat('ar-AE-u-nu-latn', {\n        day: 'numeric',\n        month: 'long',\n        year: 'numeric',\n        timeZone: 'Asia/Dubai'\n      });\n      \n      const hijriFormatter = new Intl.DateTimeFormat('ar-AE-u-nu-latn', {\n        calendar: 'islamic-umalqura',\n        day: 'numeric',\n        month: 'long',\n        year: 'numeric',\n        timeZone: 'Asia/Dubai'\n      });\n\n      document.getElementById('gregorian-date').textContent = gregFormatter.format(dueDate);\n      document.getElementById('hijri-date').textContent = hijriFormatter.format(dueDate) + ' هـ';\n    } catch (e) {\n      // Fallback gracefully if Intl calendar options fail on older environments\n      console.log('Intl calendar fallback active');\n    }\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6541,
+    "output": 2014
+  },
+  "ms": 11462,
+  "finish": "STOP",
+  "reasoningTokens": 2131,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 46,
+        "y": 268.03125,
+        "width": 130,
+        "height": 18
+      },
+      "message": "\"23 جمادى الأولى 1448 هـ هـ\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p id=\"hijri-date\" class=\"text-slate-500 text-xs mt-0.5\">23 جمادى الأولى 1448 هـ هـ</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 337,
+        "y": 466.0625,
+        "width": 28,
+        "height": 18
+      },
+      "message": "\"مثال:\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-slate-500\">\n          مثال: <bdi dir=\"ltr\">050 123 4567</bdi>\n        </p>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

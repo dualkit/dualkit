@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عنوان التسليم</title>
+<style>
+body { font-family: 'Arial', sans-serif; background-color: #f5f5f5; padding: 20px; }
+.form-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; }
+input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+button { background-color: #007bff; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
+button:hover { background-color: #0056b3; }
+</style>
+</head>
+<body>
+<form>
+<div class="form-group">
+<label for="emirate">الإمارة</label>
+<select id="emirate">
+<option value="dubai" selected>دبي</option>
+<option value="abudhabi">أبوظبي</option>
+<option value="sharjah">الشارقة</option>
+<option value="ajman">عجمان</option>
+<option value="rasalkhaimah">الخيمة</option>
+<option value="fujairah">الفجيرة</option>
+<option value="ummalkhuwaima">أم القيوين</option>
+</select>
+</div>
+<div class="form-group">
+<label for="building">مبنى أو فيلا</label>
+<input type="text" id="building" placeholder="رقم المبنى أو فيلا">
+</div>
+<div class="form-group">
+<label for="street">شارع</label>
+<input type="text" id="street" placeholder="اسم الشارع">
+</div>
+<div class="form-group">
+<label for="area">منطقة</label>
+<input type="text" id="area" placeholder="المنطقة">
+</div>
+<div class="form-group">
+<label for="makani">رقم مكاني</label>
+<input type="text" id="makani" placeholder="رقم المكاني">
+</div>
+<div class="form-group">
+<label for="phone">رقم الهاتف</label>
+<input type="tel" id="phone" placeholder="050 123 4567">
+</div>
+<button type="submit">حفظ عنوان</button>
+</form>
+</body>
+</html>

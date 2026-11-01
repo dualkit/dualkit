@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة عنوان التوصيل - تطبيق البقالة</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts (Cairo for Arabic) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen p-0 sm:p-4">
+
+    <!-- Mobile Frame Container -->
+    <div class="w-full max-w-md bg-white min-h-screen sm:min-h-[800px] sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden relative">
+
+        <!-- Top Header -->
+        <div class="bg-emerald-600 text-white px-4 py-4 flex items-center justify-between shadow-md">
+            <button class="text-white text-lg focus:outline-none">
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <h1 class="text-lg font-bold">عنوان التوصيل</h1>
+            <div class="w-6"></div> <!-- Spacer for alignment -->
+        </div>
+
+        <!-- Scrollable Form Content -->
+        <div class="flex-1 overflow-y-auto p-5 pb-24 space-y-4">
+            
+            <!-- Quick Location Banner -->
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3 flex items-center gap-3 text-emerald-800">
+                <div class="bg-emerald-600 text-white p-2.5 rounded-xl">
+                    <i class="fa-solid fa-location-crosshairs text-lg"></i>
+                </div>
+                <div>
+                    <h2 class="font-bold text-sm">استخدام موقعي الحالي</h2>
+                    <p class="text-xs text-emerald-600">تحديد العنوان تلقائياً عبر نظام الجي بي إس</p>
+                </div>
+            </div>
+
+            <form id="addressForm" class="space-y-4">
+                
+                <!-- Emirate Picker -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-1.5" for="emirate">الإمارة</label>
+                    <div class="relative">
+                        <select id="emirate" class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 appearance-none focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600">
+                            <option value="Dubai" selected>دبي (Dubai)</option>
+                            <option value="Abu Dhabi">أبوظبي (Abu Dhabi)</option>
+                            <option value="Sharjah">الشارقة (Sharjah)</option>
+                            <option value="Ajman">عجمان (Ajman)</option>
+                            <option value="Umm Al Quwain">أم القيوين (Umm Al Quwain)</option>
+                            <option value="Ras Al Khaimah">رأس الخيمة (Ras Al Khaimah)</option>
+                            <option value="Fujairah">الفجيرة (Fujairah)</option>
+                        </select>
+                        <div class="absolute inset-y-0 left-0 flex items-center px-4 pointer-events-none text-gray-500">
+                            <i class="fa-solid fa-chevron-down text-sm"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Area -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-1.5" for="area">المنطقة / الحي</label>
+                    <input type="text" id="area" placeholder="مثال: دبي مارينا، داون تاون دبي" 
+                        class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600">
+                </div>
+
+                <!-- Street -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-1.5" for="street">الشارع</label>
+                    <input type="text" id="street" placeholder="مثال: شارع الشيخ زايد، شارع المرقبات" 
+                        class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600">
+                </div>
+
+                <!-- Building or Villa -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-1.5" for="building">المبنى أو الفيلا ورقم الشقة</label>
+                    <input type="text" id="building" placeholder="مثال: برج الروضة، شقة رقم 402، أو فيلا 12" 
+                        class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600">
+                </div>
+
+                <!-- Makani Number -->
+                <div>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <label class="block text-gray-700 text-sm font-semibold" for="makani">رقم مكاني (اختياري)</label>
+                        <span class="text-xs text-gray-400">10 أرقام</span>
+                    </div>
+                    <input type="text" id="makani" maxlength="10" placeholder="مثال: 3004998822" 
+                        class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 tracking-wider">
+                    <p class="text-[11px] text-gray-500 mt-1">يساعد رقم مكاني السائق في الوصول إليك بدقة شديدة.</p>
+                </div>
+
+                <!-- Phone Number -->
+                <div>
+                    <label class="block text-gray-700 text-sm font-semibold mb-1.5" for="phone">رقم الهاتف المتحرك</label>
+                    <div class="relative flex items-center">
+                        <span class="absolute right-4 text-gray-500 font-medium text-sm">+971</span>
+                        <input type="tel" id="phone" placeholder="050 123 4567" 
+                            class="w-full bg-gray-50 border border-gray-300 rounded-xl pr-16 pl-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 text-left" dir="ltr">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Fixed Bottom Button Footer -->
+        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg">
+            <button type="button" onclick="alert('تم حفظ العنوان بنجاح!')" 
+                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-md transition duration-200 text-center text-base">
+                حفظ العنوان
+            </button>
+        </div>
+
+    </div>
+
+</body>
+</html>

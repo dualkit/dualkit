@@ -1,0 +1,53 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "transactions",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-11-01T12:50:17.273Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>المعاملات</title>\n  <style>\n    body {\n      font-family: 'Arial', sans-serif;\n      background-color: #f5f5f5;\n      margin: 0;\n      padding: 16px;\n      direction: rtl;\n    }\n    .container {\n      max-width: 375px;\n      margin: 0 auto;\n      background: #fff;\n      border-radius: 8px;\n      padding: 16px;\n      box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n    }\n    h1 {\n      text-align: center;\n      margin-bottom: 16px;\n      color: #333;\n    }\n    .balance {\n      text-align: center;\n      margin-bottom: 16px;\n    }\n    .balance-label {\n      font-size: 16px;\n      color: #555;\n    }\n    .balance-amount {\n      font-size: 24px;\n      font-weight: bold;\n      color: #007bff;\n      margin-top: 4px;\n    }\n    .filter {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      margin-bottom: 16px;\n    }\n    .filter label {\n      margin-left: 8px;\n      font-size: 16px;\n    }\n    .filter select {\n      padding: 8px;\n      border-radius: 4px;\n      border: 1px solid #ccc;\n      font-size: 16px;\n    }\n    table {\n      width: 100%;\n      border-collapse: collapse;\n    }\n    th, td {\n      border: 1px solid #ddd;\n      padding: 8px;\n      text-align: center;\n    }\n    th {\n      background-color: #f2f2f2;\n    }\n    tr.incoming td:nth-child(4) {\n      color: green;\n    }\n    tr.outgoing td:nth-child(4) {\n      color: red;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>المعاملات</h1>\n\n    <div class=\"balance\">\n      <div class=\"balance-label\">الرقم</div>\n      <div class=\"balance-amount\">1234.567 OMR</div>\n    </div>\n\n    <div class=\"filter\">\n      <label for=\"filter\">تصفية:</label>\n      <select id=\"filter\">\n        <option value=\"all\">الكل</option>\n        <option value=\"month\">هذا الشهر</option>\n      </select>\n    </div>\n\n    <table>\n      <thead>\n        <tr>\n          <th>التاريخ</th>\n          <th>التاجر</th>\n          <th>المبلغ</th>\n          <th>الاتجاه</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr class=\"outgoing\">\n          <td>01/04/2025</td>\n          <td>Lulu Hypermarket</td>\n          <td>12.345 OMR</td>\n          <td>صادر</td>\n        </tr>\n        <tr class=\"outgoing\">\n          <td>02/04/2025</td>\n          <td>Netflix</td>\n          <td>5.000 OMR</td>\n          <td>صادر</td>\n        </tr>\n        <tr class=\"outgoing\">\n          <td>03/04/2025</td>\n          <td>Starbucks</td>\n          <td>2.500 OMR</td>\n          <td>صادر</td>\n        </tr>\n        <tr class=\"outgoing\">\n          <td>04/04/2025</td>\n          <td>Amazon</td>\n          <td>3.200 OMR</td>\n          <td>صادر</td>\n        </tr>\n        <tr class=\"incoming\">\n          <td>05/04/2025</td>\n          <td>Salary</td>\n          <td>1000.000 OMR</td>\n          <td>وارد</td>\n        </tr>\n        <tr class=\"incoming\">\n          <td>06/04/2025</td>\n          <td>Transfer from John</td>\n          <td>50.000 OMR</td>\n          <td>وارد</td>\n        </tr>\n        <tr class=\"outgoing\">\n          <td>07/04/2025</td>\n          <td>Uber</td>\n          <td>4.750 OMR</td>\n          <td>صادر</td>\n        </tr>\n        <tr class=\"incoming\">\n          <td>08/04/2025</td>\n          <td>Gift</td>\n          <td>20.000 OMR</td>\n          <td>وارد</td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 144,
+    "output": 5418
+  },
+  "ms": 63952,
+  "finish": "stop",
+  "reasoningTokens": 4271,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 95,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 130.5,
+        "y": 54.4375,
+        "width": 129,
+        "height": 36
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>المعاملات</h1>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 313.546875,
+        "y": 183.4375,
+        "width": 44.453125,
+        "height": 19
+      },
+      "message": "margin-left: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<label for=\"filter\">تصفية:</label>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

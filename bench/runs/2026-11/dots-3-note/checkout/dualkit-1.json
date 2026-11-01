@@ -1,0 +1,193 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "checkout",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-11-01T12:07:53.140Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>إتمام الطلب</title>\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n<style>\n  :root {\n    --color-bg: #f4f6f3;\n    --color-surface: #ffffff;\n    --color-primary: #1b7a3d;\n    --color-primary-dark: #145d2a;\n    --color-text: #1a1a1a;\n    --color-text-secondary: #6b7280;\n    --color-border: #e6e8e4;\n    --color-error: #dc2626;\n    --radius: 14px;\n  }\n\n  :lang(ar) {\n    --type-label-size: 14px;\n    --type-caption-size: 14px;\n    --type-body-size: 16px;\n    letter-spacing: 0;\n    text-transform: none;\n    font-style: normal;\n    line-height: 1.7;\n  }\n\n  * { box-sizing: border-box; margin: 0; padding: 0; }\n\n  body {\n    font-family: 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;\n    background: var(--color-bg);\n    display: flex;\n    justify-content: center;\n    align-items: min-height: 100vh;\n    padding: 24px 12px;\n    -webkit-font-smoothing: antialiased;\n  }\n\n  .phone {\n    width: 100%;\n    max-width: 390px;\n    background: var(--color-surface);\n    border-radius: 28px;\n    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.18);\n    overflow: hidden;\n    min-height: 840px;\n    display: flex;\n    flex-direction: column;\n  }\n\n  /* ── Status bar ── */\n  .status-bar {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding: 10px 28px 4px;\n    font-size: 13px;\n    font-weight: 600;\n    color: var(--color-text);\n    background: var(--color-surface);\n  }\n\n  .status-bar .right { display: flex; align-items: center; gap: 4px; }\n\n  /* ── App bar ── */\n  .app-bar {\n    display: flex;\n    align-items: center;\n    gap: 6px;\n    padding: 6px 16px 10px;\n    background: var(--color-surface);\n  }\n\n  .back-btn {\n    background: none;\n    border: none;\n    cursor: pointer;\n    padding: 6px;\n    margin-inline-end: 2px;\n    color: var(--color-text);\n    border-radius: 50%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n  }\n\n  .back-btn:active { background: var(--color-bg); }\n\n  .app-bar h1 {\n    font-size: 17px;\n    font-weight: 600;\n    color: var(--color-text);\n  }\n\n  .app-bar .count {\n    font-size: 13px;\n    color: var(--color-text-secondary);\n    font-weight: 400;\n  }\n\n  /* ── Cart items ── */\n  .cart-items {\n    flex: 1;\n    overflow-y: auto;\n    padding: 8px 16px 4px;\n  }\n\n  .cart-item {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    padding: 12px;\n    background: var(--color-surface);\n    border: 1px solid var(--color-border);\n    border-radius: var(--radius);\n    margin-bottom: 8px;\n  }\n\n  .item-photo {\n    width: 60px;\n    height: 60px;\n    border-radius: 10px;\n    background: linear-gradient(145deg, #e8f5e9, #c8e6c9);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    flex-shrink: 0;\n  }\n\n  .item-photo svg {\n    width: 30px;\n    height: 30px;\n    color: var(--color-primary);\n  }\n\n  .item-details {\n    flex: 1;\n    min-width: 0;\n  }\n\n  .item-name {\n    font-size: 15px;\n    font-weight: 500;\n    color: var(--color-text);\n    margin-bottom: 3px;\n  }\n\n  .item-price {\n    font-size: 14px;\n    color: var(--color-primary);\n    font-weight: 600;\n  }\n\n  .stepper {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    flex-shrink: 0;\n  }\n\n  .stepper button {\n    width: 26px;\n    height: 26px;\n    border-radius: 50%;\n    border: 1.5px solid var(--color-border);\n    background: var(--color-surface);\n    font-size: 18px;\n    cursor: pointer;\n    color: var(--color-text);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    line-height: 1;\n  }\n\n  .stepper button:active { background: var(--color-bg); }\n\n  .stepper span {\n    font-size: 14px;\n    font-weight: 600;\n    min-width: 18px;\n    text-align: center;\n    color: var(--color-text);\n  }\n\n  /* ── Promo section ── */\n  .promo-section {\n    padding: 12px 16px 4px;\n    background: var(--color-surface);\n  }\n\n  .promo-row {\n    display: flex;\n    gap: 8px;\n  }\n\n  .promo-input {\n    flex: 1;\n    padding: 11px 14px;\n    border: 1px solid var(--color-border);\n    border-radius: 10px;\n    font-size: 14px;\n    background: var(--color-bg);\n    color: var(--color-text);\n    font-family: inherit;\n    text-align: start;\n  }\n\n  .promo-input:focus {\n    outline: none;\n    border-color: var(--color-primary);\n  }\n\n  .apply-btn {\n    padding: 11px 18px;\n    background: var(--color-primary);\n    color: #fff;\n    border: none;\n    border-radius: 10px;\n    font-size: 14px;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n    white-space: nowrap;\n  }\n\n  .apply-btn:active { background: var(--color-primary-dark); }\n\n  .promo-hint {\n    font-size: 12px;\n    color: var(--color-text-secondary);\n    margin-top: 6px;\n    padding-inline-start: 4px;\n  }\n\n  /* ── Summary ── */\n  .summary {\n    padding: 14px 16px 4px;\n    background: var(--color-surface);\n  }\n\n  .summary-row {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding: 5px 0;\n    font-size: 14px;\n  }\n\n  .summary-row .label { color: var(--color-text-secondary); }\n\n  .summary-row .value { color: var(--color-text); font-weight: 500; }\n\n  .summary-row.total {\n    font-size: 16px;\n    font-weight: 700;\n    padding-top: 10px;\n    margin-top: 4px;\n    border-top: 1px solid var(--color-border);\n  }\n\n  .summary-row.total .label,\n  .summary-row.total .value { color: var(--color-text); }\n\n  .free-tag {\n    color: var(--color-primary);\n    font-size: 12px;\n    font-weight: 600;\n  }\n\n  /* ── Button ── */\n  .checkout-btn {\n    margin: 16px 16px 20px;\n    padding: 15px;\n    background: var(--color-primary);\n    color: #fff;\n    border: none;\n    border-radius: 14px;\n    font-size: 16px;\n    font-weight: 600;\n    cursor: pointer;\n    font-family: inherit;\n    width: calc(100% - 32px);\n  }\n\n  .checkout-btn:active { background: var(--color-primary-dark); }\n</style>\n</head>\n<body>\n  <div class=\"phone\">\n    <!-- Status bar -->\n    <div class=\"status-bar\">\n      <span>١٢:٤٣ ص</span>\n      <div class=\"right\">\n        <span>٥G</span>\n        <span>🔋٨٠٪</span>\n      </div>\n    </div>\n\n    <!-- App bar -->\n    <div class=\"app-bar\">\n      <button class=\"back-btn\" aria-label=\"الرجوع\">\n        <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <path d=\"M9 18l6-6-6-6\"/>\n        </svg>\n      </button>\n      <h1>إتمام الطلب</h1>\n      <span class=\"count\">٣ عناصر</span>\n    </div>\n\n    <!-- Cart items -->\n    <div class=\"cart-items\">\n\n      <!-- Item 1 -->\n      <div class=\"cart-item\">\n        <div class=\"item-photo\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <path d=\"M8 2h8v20H8z\"/>\n            <path d=\"M12 2v20\"/>\n            <circle cx=\"12\" cy=\"8\" r=\"1.5\" fill=\"currentColor\"/>\n            <path d=\"M8 22h8\"/>\n          </svg>\n        </div>\n        <div class=\"item-details\">\n          <div class=\"item-name\">حليب طازج 250 مل</div>\n          <div class=\"item-price\"><bdi>4.50 د.إ</bdi></div>\n        </div>\n        <div class=\"stepper\">\n          <button aria-label=\"تقليل الكمية\">−</button>\n          <span>٢</span>\n          <button aria-label=\"زيادة الكمية\">+</button>\n        </div>\n      </div>\n\n      <!-- Item 2 -->\n      <div class=\"cart-item\">\n        <div class=\"item-photo\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <path d=\"M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z\"/>\n            <path d=\"M9 21h6\"/>\n            <circle cx=\"9\" cy=\"11\" r=\"1\" fill=\"currentColor\"/>\n            <circle cx=\"12\" cy=\"9\" r=\"1\" fill=\"currentColor\"/>\n            <circle cx=\"15\" cy=\"11\" r=\"1\" fill=\"currentColor\"/>\n          </svg>\n        </div>\n        <div class=\"item-details\">\n          <div class=\"item-name\">عنب أرجواني</div>\n          <div class=\"item-price\"><bdi>12.00 د.إ</bdi></div>\n        </div>\n        <div class=\"stepper\">\n          <button aria-label=\"تقليل الكمية\">−</button>\n          <span>١</span>\n          <button aria-label=\"زيادة الكمية\">+</button>\n        </div>\n      </div>\n\n      <!-- Item 3 -->\n      <div class=\"cart-item\">\n        <div class=\"item-photo\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <circle cx=\"12\" cy=\"12\" r=\"9\"/>\n            <path d=\"M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18\"/>\n            <circle cx=\"8\" cy=\"9\" r=\"1.2\" fill=\"currentColor\"/>\n            <circle cx=\"16\" cy=\"9\" r=\"1.2\" fill=\"currentColor\"/>\n            <path d=\"M9 16c1 1 2 1 3 0s2-1 3 0\"/>\n          </svg>\n        </div>\n        <div class=\"item-details\">\n          <div class=\"item-name\">تفاح ريديل</div>\n          <div class=\"item-price\"><bdi>6.75 د.إ</bdi></div>\n        </div>\n        <div class=\"stepper\">\n          <button aria-label=\"تقليل الكمية\">−</button>\n          <span>٣</span>\n          <button aria-label=\"زيادة الكمية\">+</button>\n        </div>\n      </div>\n\n    </div>\n\n    <!-- Promo code -->\n    <div class=\"promo-section\">\n      <div class=\"promo-row\">\n        <input type=\"text\" class=\"promo-input\" placeholder=\"رمز العرض\" dir=\"auto\" autocomplete=\"off\">\n        <button class=\"apply-btn\">تطبيق</button>\n      </div>\n      <p class=\"promo-hint\">لديك رمز عرض FIXIT10؟ أدخله هنا</p>\n    </div>\n\n    <!-- Summary -->\n    <div class=\"summary\">\n      <div class=\"summary-row\">\n        <span class=\"label\">المجموع الفرعي</span>\n        <span class=\"value\"><bdi>41.25 د.إ</bdi></span>\n      </div>\n      <div class=\"summary-row\">\n        <span class=\"label\">التوصيل</span>\n        <span class=\"value free-tag\">مجاني</span>\n      </div>\n      <div class=\"summary-row\">\n        <span class=\"label\">ضريبة القيمة المضافة ٥٪</span>\n        <span class=\"value\"><bdi>2.06 د.إ</bdi></span>\n      </div>\n      <div class=\"summary-row total\">\n        <span class=\"label\">الإجمالي</span>\n        <span class=\"value\"><bdi>43.31 د.إ</bdi></span>\n      </div>\n    </div>\n\n    <!-- Place order -->\n    <button class=\"checkout-btn\">إتمام الطلب</button>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6301,
+    "output": 9877
+  },
+  "ms": 102685,
+  "finish": "stop",
+  "reasoningTokens": 5527,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 31,
+  "score": 70,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-placeholder",
+      "title": "An Arabic hint on the wrong side of the field",
+      "severity": "warning",
+      "box": {
+        "x": 110,
+        "y": 526.046875,
+        "width": 252,
+        "height": 47.796875
+      },
+      "message": "The placeholder \"رمز العرض\" is Arabic in a left-to-right field.",
+      "fix": "Keep dir=\"ltr\" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.",
+      "snippet": "<input type=\"text\" class=\"promo-input\" placeholder=\"رمز العرض\" dir=\"auto\" autocomplete=\"off\">"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 297,
+        "y": 31,
+        "width": 53,
+        "height": 28
+      },
+      "message": "\"١٢:٤٣ ص\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span>١٢:٤٣ ص</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 40,
+        "y": 31,
+        "width": 37,
+        "height": 28
+      },
+      "message": "\"🔋٨٠٪\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span>🔋٨٠٪</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 187,
+        "y": 69.046875,
+        "width": 42,
+        "height": 28
+      },
+      "message": "\"٣ عناصر\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"count\">٣ عناصر</span>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 221,
+        "y": 687.828125,
+        "width": 141,
+        "height": 29
+      },
+      "message": "\"ضريبة القيمة المضافة ٥٪\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<span class=\"label\">ضريبة القيمة المضافة ٥٪</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 297,
+        "y": 31,
+        "width": 53,
+        "height": 28
+      },
+      "message": "\"١٢:٤٣ ص\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>١٢:٤٣ ص</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 40,
+        "y": 31,
+        "width": 37,
+        "height": 28
+      },
+      "message": "\"🔋٨٠٪\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>🔋٨٠٪</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 187,
+        "y": 69.046875,
+        "width": 42,
+        "height": 28
+      },
+      "message": "\"٣ عناصر\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"count\">٣ عناصر</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 190,
+        "y": 576.84375,
+        "width": 168,
+        "height": 25
+      },
+      "message": "\"لديك رمز عرض FIXIT10؟ أدخله هنا\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"promo-hint\">لديك رمز عرض FIXIT10؟ أدخله هنا</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 28,
+        "y": 655.734375,
+        "width": 31,
+        "height": 25
+      },
+      "message": "\"مجاني\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"value free-tag\">مجاني</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 328,
+        "y": 66.09375,
+        "width": 34,
+        "height": 34
+      },
+      "message": "margin-left: 2px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button class=\"back-btn\" aria-label=\"الرجوع\">\n        <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 28,
+        "y": 579.84375,
+        "width": 334,
+        "height": 20.390625
+      },
+      "message": "padding-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<p class=\"promo-hint\">لديك رمز عرض FIXIT10؟ أدخله هنا</p>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 888
+}

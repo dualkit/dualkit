@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حجز موعد - عيادة الدوحة التخصصية</title>
+  <!-- Google Fonts: IBM Plex Sans Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS v4 / standard CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            arabic: ['"IBM Plex Sans Arabic"', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    :lang(ar) {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.6;
+    }
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background-color: #f3f4f6;
+      color: #1f2937;
+    }
+    /* Ensure no font size falls below the 14px floor for UI text */
+    .text-floor {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen flex items-center justify-center p-0 sm:p-4">
+
+  <!-- Mobile Phone Container -->
+  <div class="w-full sm:max-w-md bg-white sm:rounded-3xl shadow-xl overflow-hidden flex flex-col min-h-screen sm:min-h-[844px]">
+    
+    <!-- App Bar / Header -->
+    <header class="px-5 pt-6 pb-4 border-b border-slate-100 flex items-center justify-between bg-white sticky top-0 z-10">
+      <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-100 transition text-slate-700" aria-label="رجوع">
+        <svg class="w-5 h-5 rtl:-scale-x-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      <h1 class="font-bold text-lg text-slate-900">حجز موعد جديد</h1>
+      <div class="w-10"></div> <!-- Spacer for balance -->
+    </header>
+
+    <!-- Scrollable Content -->
+    <main class="flex-1 overflow-y-auto px-5 py-6 space-y-6">
+
+      <!-- Doctor Profile Card -->
+      <div class="flex items-center gap-4 p-4 rounded-2xl bg-teal-50/60 border border-teal-100/80">
+        <div class="relative">
+          <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=256&auto=format&fit=crop" alt="د. أحمد المهندي" class="w-16 h-16 rounded-2xl object-cover shadow-sm">
+          <span class="absolute -bottom-1 -start-1 w-4 h-4 bg-emerald-500 border-2 border-white rounded-full"></span>
+        </div>
+        <div>
+          <h2 class="font-bold text-slate-900 text-base">د. أحمد المهندي</h2>
+          <p class="text-teal-800 text-sm font-medium">استشاري أمراض الباطنية والقلب</p>
+          <div class="flex items-center gap-1.5 mt-1 text-slate-500 text-floor">
+            <svg class="w-4 h-4 text-amber-500 fill-amber-500" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+            </svg>
+            <span>4.9 (124 تقييم)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calendar Section -->
+      <section class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs">
+        <!-- Month Navigation Header -->
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-bold text-slate-900 text-base"><bdi>أكتوبر 2024</bdi></h3>
+          <div class="flex items-center gap-1">
+            <button class="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center hover:bg-slate-50 text-slate-600 transition" aria-label="الشهر السابق">
+              <svg class="w-4 h-4 rtl:-scale-x-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+            <button class="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center hover:bg-slate-50 text-slate-600 transition" aria-label="الشهر القادم">
+              <svg class="w-4 h-4 rtl:-scale-x-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Weekdays Header (Starting on Saturday per Gulf/Qatari standard) -->
+        <div class="grid grid-cols-7 text-center text-floor font-semibold text-slate-400 mb-2">
+          <span>سبت</span>
+          <span>أحد</span>
+          <span>إثنين</span>
+          <span>ثلاثاء</span>
+          <span>أربعاء</span>
+          <span>خميس</span>
+          <span>جمعة</span>
+        </div>
+
+        <!-- Days Grid -->
+        <div class="grid grid-cols-7 gap-y-2 text-center text-floor">
+          <!-- Previous month padding -->
+          <span class="py-2 text-slate-300">28</span>
+          <span class="py-2 text-slate-300">29</span>
+          <span class="py-2 text-slate-300">30</span>
+          
+          <!-- Current Month Days -->
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>1</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>2</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>3</bdi></span>
+          <span class="py-2 text-slate-400">4</span>
+
+          <span class="py-2 text-slate-400">5</span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>6</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>7</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>8</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>9</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>10</bdi></span>
+          <span class="py-2 text-slate-400">11</span>
+
+          <span class="py-2 text-slate-400">12</span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>13</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>14</bdi></span>
+          <!-- Today Marked -->
+          <div class="py-2 flex items-center justify-center">
+            <span class="w-8 h-8 bg-teal-600 text-white rounded-xl flex items-center justify-center font-bold shadow-sm shadow-teal-600/30"><bdi>15</bdi></span>
+          </div>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>16</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>17</bdi></span>
+          <span class="py-2 text-slate-400">18</span>
+
+          <span class="py-2 text-slate-400">19</span>
+          <!-- Selected Day -->
+          <div class="py-2 flex items-center justify-center">
+            <span class="w-8 h-8 border-2 border-teal-600 text-teal-700 rounded-xl flex items-center justify-center font-bold bg-teal-50"><bdi>20</bdi></span>
+          </div>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>21</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>22</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>23</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>24</bdi></span>
+          <span class="py-2 text-slate-400">25</span>
+
+          <span class="py-2 text-slate-400">26</span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>27</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>28</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>29</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>30</bdi></span>
+          <span class="py-2 text-slate-700 hover:bg-slate-100 rounded-xl cursor-pointer"><bdi>31</bdi></span>
+          <span class="py-2 text-slate-300">1</span>
+        </div>
+      </section>
+
+      <!-- Time Slots Section (9:00 to 12:00 every 30 minutes) -->
+      <section class="space-y-3">
+        <h3 class="font-bold text-slate-900 text-base">اختر وقت الموعد المتاح</h3>
+        
+        <div class="grid grid-cols-3 gap-2.5">
+          <!-- 09:00 -->
+          <button class="py-3 px-2 rounded-xl border border-slate-200 text-slate-700 hover:border-teal-600 hover:bg-teal-50/50 transition font-medium text-center text-floor">
+            <bdi>09:00 ص</bdi>
+          </button>
+          <!-- 09:30 (Selected) -->
+          <button class="py-3 px-2 rounded-xl border-2 border-teal-600 bg-teal-600 text-white shadow-sm shadow-teal-600/20 font-semibold text-center text-floor">
+            <bdi>09:30 ص</bdi>
+          </button>
+          <!-- 10:00 -->
+          <button class="py-3 px-2 rounded-xl border border-slate-200 text-slate-700 hover:border-teal-600 hover:bg-teal-50/50 transition font-medium text-center text-floor">
+            <bdi>10:00 ص</bdi>
+          </button>
+          <!-- 10:30 (Booked/Disabled) -->
+          <button disabled class="py-3 px-2 rounded-xl border border-slate-100 bg-slate-100 text-slate-400 cursor-not-allowed font-medium text-center text-floor">
+            <bdi>10:30 ص</bdi>
+          </button>
+          <!-- 11:00 -->
+          <button class="py-3 px-2 rounded-xl border border-slate-200 text-slate-700 hover:border-teal-600 hover:bg-teal-50/50 transition font-medium text-center text-floor">
+            <bdi>11:00 ص</bdi>
+          </button>
+          <!-- 11:30 -->
+          <button class="py-3 px-2 rounded-xl border border-slate-200 text-slate-700 hover:border-teal-600 hover:bg-teal-50/50 transition font-medium text-center text-floor">
+            <bdi>11:30 ص</bdi>
+          </button>
+          <!-- 12:00 -->
+          <button class="py-3 px-2 rounded-xl border border-slate-200 text-slate-700 hover:border-teal-600 hover:bg-teal-50/50 transition font-medium text-center text-floor">
+            <bdi>12:00 م</bdi>
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Bottom Action Footer -->
+    <footer class="p-5 bg-white border-t border-slate-100 flex items-center justify-between gap-4">
+      <div>
+        <span class="text-slate-400 text-floor block">قيمة الكشف</span>
+        <span class="font-bold text-slate-900 text-lg"><bdi>350 ر.ق</bdi></span>
+      </div>
+      <button class="flex-1 bg-teal-600 hover:bg-teal-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-teal-600/30 transition text-center text-floor">
+        تأكيد الحجز
+      </button>
+    </footer>
+
+  </div>
+
+</body>
+</html>

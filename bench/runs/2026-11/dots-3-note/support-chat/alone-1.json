@@ -1,0 +1,249 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "support-chat",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-11-01T12:14:50.048Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>الدعم - اتصال</title>\n<style>\n  * { box-sizing: border-box; }\n  body {\n    margin: 0;\n    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    background-color: #f5f5f5;\n    direction: rtl;\n    text-align: right;\n  }\n  .chat-container {\n    max-width: 480px;\n    margin: 0 auto;\n    height: 100vh;\n    display: flex;\n    flex-direction: column;\n    background-color: #fff;\n  }\n  .messages {\n    flex: 1;\n    overflow-y: auto;\n    padding: 16px;\n    display: flex;\n    flex-direction: column;\n    gap: 12px;\n  }\n  .message {\n    max-width: 80%;\n    padding: 10px 14px;\n    border-radius: 18px;\n    font-size: 16px;\n    line-height: 1.4;\n    word-wrap: break-word;\n    position: relative;\n  }\n  .customer {\n    align-self: flex-end;\n    background-color: #007AFF;\n    color: #fff;\n    border-bottom-right-radius: 0;\n  }\n  .agent {\n    align-self: flex-start;\n    background-color: #e9e9eb;\n    color: #000;\n    border-bottom-left-radius: 0;\n  }\n  .time {\n    display: block;\n    font-size: 12px;\n    color: rgba(255,255,255,0.7);\n    margin-top: 4px;\n  }\n  .agent .time {\n    color: #888;\n  }\n  .input-area {\n    display: flex;\n    padding: 8px;\n    border-top: 1px solid #ddd;\n    background-color: #fff;\n  }\n  .input-area input {\n    flex: 1;\n    padding: 10px;\n    border: 1px solid #ccc;\n    border-radius: 20px;\n    font-size: 16px;\n    outline: none;\n  }\n  .input-area button {\n    margin-right: 8px;\n    padding: 10px 16px;\n    border: none;\n    background-color: #007AFF;\n    color: #fff;\n    border-radius: 20px;\n    font-size: 16px;\n    cursor: pointer;\n  }\n</style>\n</head>\n<body>\n<div class=\"chat-container\">\n  <div class=\"messages\">\n    <div class=\"message customer\">أود تفعيل خدمة 5G على بطاقة eSIM الخاصة بي.<span class=\"time\">10:23</span></div>\n    <div class=\"message agent\">Sara: مرحباً بك، سأساعدك. يرجى تزويدي برقم الطلب TX-48213.<span class=\"time\">10:24</span></div>\n    <div class=\"message customer\">رقم الطلب هو TX-48213، وسأقوم بتفعيلها.<span class=\"time\">10:25</span></div>\n    <div class=\"message agent\">Sara: شكرًا، قد تمت تفعيل خدمة 5G بنجاح.<span class=\"time\">10:26</span></div>\n    <div class=\"message customer\">شكراً لك، لكن أ encounters مشكلة في الاتصال.<span class=\"time\">10:27</span></div>\n    <div class=\"message agent\">Sara: نعتذر عن الإحراج، سأقوم بتحليل(Line)...<span class=\"time\">10:28</span></div>\n  </div>\n  <div class=\"input-area\">\n    <input type=\"text\" placeholder=\"اكتب رسالتك...\">\n    <button>ارسل</button>\n  </div>\n</div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 147,
+    "output": 8311
+  },
+  "ms": 89714,
+  "finish": "stop",
+  "reasoningTokens": 7743,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 31,
+  "score": 66,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 136.53125,
+        "y": 125.578125,
+        "width": 223.46875,
+        "height": 39.390625
+      },
+      "message": "\"TX-48213\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"message agent\">Sara: مرحباً بك، سأساعدك. يرجى تزويدي برقم الطلب TX-48213.<span class=\"time\">10:24</span></div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 44.015625,
+        "y": 28,
+        "width": 244.375,
+        "height": 39.390625
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"message customer\">أود تفعيل خدمة 5G على بطاقة eSIM الخاصة بي.<span class=\"time\">10:23</span></div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 24,
+        "y": 807.5,
+        "width": 37,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button>ارسل</button>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 44.015625,
+        "y": 28,
+        "width": 244.375,
+        "height": 39.390625
+      },
+      "message": "Line height is 1.40 on \"أود تفعيل خدمة 5G على بطاقة eSIM الخاصة …\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<div class=\"message customer\">أود تفعيل خدمة 5G على بطاقة eSIM الخاصة بي.<span class=\"time\">10:23</span></div>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 136.53125,
+        "y": 125.578125,
+        "width": 223.46875,
+        "height": 39.390625
+      },
+      "message": "Line height is 1.40 on \"Sara: مرحباً بك، سأساعدك. يرجى تزويدي بر…\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<div class=\"message agent\">Sara: مرحباً بك، سأساعدك. يرجى تزويدي برقم الطلب TX-48213.<span class=\"time\">10:24</span></div>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 57.328125,
+        "y": 223.15625,
+        "width": 231.0625,
+        "height": 39.390625
+      },
+      "message": "Line height is 1.40 on \"رقم الطلب هو TX-48213، وسأقوم بتفعيلها.\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<div class=\"message customer\">رقم الطلب هو TX-48213، وسأقوم بتفعيلها.<span class=\"time\">10:25</span></div>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 115.734375,
+        "y": 320.734375,
+        "width": 244.265625,
+        "height": 39.390625
+      },
+      "message": "Line height is 1.40 on \"Sara: شكرًا، قد تمت تفعيل خدمة 5G بنجاح.\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<div class=\"message agent\">Sara: شكرًا، قد تمت تفعيل خدمة 5G بنجاح.<span class=\"time\">10:26</span></div>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 52.984375,
+        "y": 418.3125,
+        "width": 235.40625,
+        "height": 39.390625
+      },
+      "message": "Line height is 1.40 on \"شكراً لك، لكن أ encounters مشكلة في الات…\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<div class=\"message customer\">شكراً لك، لكن أ encounters مشكلة في الاتصال.<span class=\"time\">10:27</span></div>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 153.96875,
+        "y": 515.890625,
+        "width": 206.03125,
+        "height": 39.390625
+      },
+      "message": "Line height is 1.40 on \"Sara: نعتذر عن الإحراج، سأقوم بتحليل(Lin…\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<div class=\"message agent\">Sara: نعتذر عن الإحراج، سأقوم بتحليل(Line)...<span class=\"time\">10:28</span></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 16,
+        "width": 286.390625,
+        "height": 85.578125
+      },
+      "message": "border-bottom-left-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">أود تفعيل خدمة 5G على بطاقة eSIM الخاصة بي.<span class=\"time\">10:23</span></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 113.578125,
+        "width": 286.390625,
+        "height": 85.578125
+      },
+      "message": "border-bottom-right-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">Sara: مرحباً بك، سأساعدك. يرجى تزويدي برقم الطلب TX-48213.<span class=\"time\">10:24</span></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 211.15625,
+        "width": 286.390625,
+        "height": 85.578125
+      },
+      "message": "border-bottom-left-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">رقم الطلب هو TX-48213، وسأقوم بتفعيلها.<span class=\"time\">10:25</span></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 308.734375,
+        "width": 286.390625,
+        "height": 85.578125
+      },
+      "message": "border-bottom-right-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">Sara: شكرًا، قد تمت تفعيل خدمة 5G بنجاح.<span class=\"time\">10:26</span></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 406.3125,
+        "width": 286.390625,
+        "height": 85.578125
+      },
+      "message": "border-bottom-left-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">شكراً لك، لكن أ encounters مشكلة في الاتصال.<span class=\"time\">10:27</span></div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 87.609375,
+        "y": 503.890625,
+        "width": 286.390625,
+        "height": 85.578125
+      },
+      "message": "border-bottom-right-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">Sara: نعتذر عن الإحراج، سأقوم بتحليل(Line)...<span class=\"time\">10:28</span></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 8,
+        "y": 796,
+        "width": 69,
+        "height": 40
+      },
+      "message": "margin-right: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button>ارسل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ملخص الدفع</title>
+  
+  <!-- IBM Plex Sans Arabic & Latin pairing -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --font-arabic: 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-latin: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      /* Color Palette - Premium Gulf Fintech */
+      --color-bg-app: #f4f6f8;
+      --color-surface: #ffffff;
+      --color-surface-subtle: #f8fafc;
+      --color-border: #e2e8f0;
+      --color-border-focus: #0f766e;
+      --color-text-primary: #0f172a;
+      --color-text-secondary: #475569;
+      --color-text-muted: #64748b;
+      --color-primary: #0f766e;
+      --color-primary-hover: #115e59;
+      --color-primary-surface: #f0fdfa;
+      --color-accent: #0284c7;
+
+      /* Type scale tokens with 14px floor for Arabic UI */
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      --type-hero-size: 34px;
+    }
+
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.65;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #cbd5e1;
+      font-family: var(--font-arabic);
+      font-size: var(--type-body-size);
+      color: var(--color-text-primary);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .tabular-numbers {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Mobile Container viewport wrapper */
+    .phone-frame {
+      width: 100%;
+      max-width: 412px;
+      min-height: 840px;
+      background-color: var(--color-bg-app);
+      border-radius: 36px;
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Native-style status bar */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-block-start: 14px;
+      padding-block-end: 8px;
+      padding-inline: 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .status-bar .icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* App Header */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-inline: 20px;
+      padding-block: 12px;
+      background-color: var(--color-bg-app);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .header-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      color: var(--color-text-primary);
+      cursor: pointer;
+      transition: background-color 0.15s ease, transform 0.1s ease;
+    }
+
+    .header-action-btn:active {
+      transform: scale(0.96);
+      background-color: var(--color-surface-subtle);
+    }
+
+    /* Directional icon mirroring for RTL */
+    .icon-directional:dir(rtl) {
+      transform: scaleX(-1);
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      text-align: center;
+      flex: 1;
+    }
+
+    .header-placeholder {
+      width: 42px;
+    }
+
+    /* Main Content */
+    .screen-content {
+      flex: 1;
+      padding-inline: 20px;
+      padding-block: 10px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Main Amount Card */
+    .amount-card {
+      background-color: var(--color-surface);
+      border-radius: 24px;
+      padding: 24px 20px;
+      text-align: center;
+      border: 1px solid var(--color-border);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+    }
+
+    .amount-label {
+      font-size: var(--type-label-size);
+      color: var(--color-text-muted);
+      margin-block-end: 6px;
+      font-weight: 500;
+    }
+
+    .amount-hero {
+      font-size: var(--type-hero-size);
+      font-weight: 700;
+      color: var(--color-text-primary);
+      line-height: 1.25;
+      margin-block-end: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .amount-currency {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--color-primary);
+    }
+
+    .items-badge-container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: var(--color-primary-surface);
+      color: var(--color-primary);
+      padding-inline: 14px;
+      padding-block: 6px;
+      border-radius: 9999px;
+      font-size: var(--type-label-size);
+      font-weight: 600;
+    }
+
+    .items-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--color-primary);
+    }
+
+    /* Detail Card */
+    .info-card {
+      background-color: var(--color-surface);
+      border-radius: 20px;
+      padding: 18px 20px;
+      border: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .info-row:not(:last-child) {
+      padding-block-end: 14px;
+      border-block-end: 1px dashed var(--color-border);
+    }
+
+    .info-label-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      text-align: start;
+    }
+
+    .info-title {
+      font-size: var(--type-label-size);
+      color: var(--color-text-muted);
+      font-weight: 500;
+    }
+
+    .info-value-group {
+      text-align: end;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .date-primary {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+
+    .date-secondary {
+      font-size: var(--type-caption-size);
+      color: var(--color-text-secondary);
+      font-weight: 400;
+    }
+
+    /* Phone Field Container */
+    .field-card {
+      background-color: var(--color-surface);
+      border-radius: 20px;
+      padding: 20px;
+      border: 1px solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .field-label {
+      font-size: var(--type-label-size);
+      font-weight: 600;
+      color: var(--color-text-primary);
+      text-align: start;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Phone input wrapper strictly pinned LTR */
+    .phone-input-wrapper {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--color-border);
+      border-radius: 14px;
+      background-color: var(--color-surface-subtle);
+      transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+      overflow: hidden;
+    }
+
+    .phone-input-wrapper:focus-within {
+      border-color: var(--color-border-focus);
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+    }
+
+    .country-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding-inline: 14px;
+      padding-block: 12px;
+      background-color: #f1f5f9;
+      border-inline-end: 1.5px solid var(--color-border);
+      font-family: var(--font-latin);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .country-flag-icon {
+      width: 22px;
+      height: 15px;
+      border-radius: 2px;
+      object-fit: cover;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+    }
+
+    .phone-input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding-inline: 14px;
+      padding-block: 12px;
+      font-family: var(--font-latin);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      outline: none;
+      width: 100%;
+    }
+
+    .phone-input::placeholder {
+      color: #94a3b8;
+    }
+
+    .field-hint {
+      font-size: var(--type-caption-size);
+      color: var(--color-text-muted);
+      text-align: start;
+      line-height: 1.6;
+    }
+
+    /* Pay CTA Section */
+    .footer-action {
+      margin-block-start: auto;
+      padding-block-start: 16px;
+    }
+
+    .btn-pay {
+      width: 100%;
+      height: 54px;
+      border: none;
+      border-radius: 16px;
+      background-color: var(--color-primary);
+      color: #ffffff;
+      font-family: var(--font-arabic);
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 10px 15px -3px rgba(15, 118, 110, 0.3);
+      transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+    }
+
+    .btn-pay:hover {
+      background-color: var(--color-primary-hover);
+    }
+
+    .btn-pay:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 6px -2px rgba(15, 118, 110, 0.2);
+    }
+
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-block-start: 12px;
+      font-size: var(--type-caption-size);
+      color: var(--color-text-muted);
+    }
+
+    /* Toast notification for mock payment */
+    .toast {
+      position: absolute;
+      inset-inline-start: 20px;
+      inset-inline-end: 20px;
+      bottom: 24px;
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-size: var(--type-label-size);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      transform: translateY(120%);
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+      z-index: 50;
+      pointer-events: none;
+    }
+
+    .toast.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="phone-frame">
+    <!-- Top simulated phone status bar -->
+    <header class="status-bar" aria-hidden="true">
+      <span class="tabular-numbers">9:41</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor">
+          <path d="M1 8.5C1 8.5 3 5 8.5 5C14 5 16 8.5 16 8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <path d="M3.5 10C3.5 10 5 7.5 8.5 7.5C12 7.5 13.5 10 13.5 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          <circle cx="8.5" cy="11" r="1.2" fill="currentColor"/>
+        </svg>
+        <svg width="24" height="12" viewBox="0 0 24 12" fill="currentColor">
+          <rect x="0.5" y="0.5" width="20" height="11" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.2"/>
+          <rect x="2.5" y="2.5" width="14" height="7" rx="2" fill="currentColor"/>
+          <path d="M22 4.5V7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </header>
+
+    <!-- App Navigation Header -->
+    <nav class="app-header" aria-label="شريط التنقل العلوي">
+      <button type="button" class="header-action-btn" aria-label="الرجوع إلى الصفحة السابقة">
+        <!-- Directional chevron arrow mirrored via CSS :dir(rtl) -->
+        <svg class="icon-directional" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <h1 class="header-title">ملخص الدفع</h1>
+      <div class="header-placeholder" aria-hidden="true"></div>
+    </nav>
+
+    <div class="screen-content">
+      <!-- Amount Card -->
+      <section class="amount-card" aria-labelledby="label-amount-due">
+        <p id="label-amount-due" class="amount-label">المبلغ المستحق</p>
+        
+        <div class="amount-hero tabular-numbers">
+          <!-- Formatted amount in Western digits with د.إ inside plain <bdi> (not dir="ltr" as it contains Arabic letters) -->
+          <bdi><span id="amount-number">1,234.50</span> <span class="amount-currency">د.إ</span></bdi>
+        </div>
+
+        <!-- Dynamic 6-form Arabic plural string -->
+        <div class="items-badge-container">
+          <span class="items-badge-dot" aria-hidden="true"></span>
+          <span id="items-count-text">لديك 3 عناصر في هذا الطلب</span>
+        </div>
+      </section>
+
+      <!-- Details Card with Gregorian & Hijri Dates -->
+      <section class="info-card" aria-label="تفاصيل موعد الاستحقاق">
+        <div class="info-row">
+          <div class="info-label-group">
+            <span class="info-title">تاريخ الاستحقاق</span>
+            <span class="date-secondary">التقويم الميلادي والتقويم الهجري</span>
+          </div>
+
+          <div class="info-value-group">
+            <!-- Gregorian Date: 3 November 2026 -->
+            <time id="gregorian-date" class="date-primary tabular-numbers" datetime="2026-11-03">
+              3 نوفمبر 2026
+            </time>
+            <!-- Hijri Date computed for Asia/Dubai timezone using Umm al-Qura calendar -->
+            <span id="hijri-date" class="date-secondary tabular-numbers">
+              23 جمادى الأولى 1448 هـ
+            </span>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label-group">
+            <span class="info-title">وجهة الدفع</span>
+          </div>
+          <div class="info-value-group">
+            <span class="date-primary"><bdi>Etisalat by e&amp;</bdi></span>
+            <span class="date-secondary">دولة الإمارات العربية المتحدة</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Phone Number Field for SMS Receipt -->
+      <section class="field-card" aria-labelledby="phone-field-label">
+        <label id="phone-field-label" for="phone-input" class="field-label">
+          <span>رقم الهاتف المتحرك للإيصال</span>
+        </label>
+
+        <!-- LTR Container keeps prefix on the left side cleanly -->
+        <div class="phone-input-wrapper" dir="ltr">
+          <div class="country-chip" aria-hidden="true">
+            <!-- UAE Flag SVG -->
+            <svg class="country-flag-icon" viewBox="0 0 600 300" aria-hidden="true">
+              <rect width="600" height="100" fill="#00732f"/>
+              <rect y="100" width="600" height="100" fill="#ffffff"/>
+              <rect y="200" width="600" height="100" fill="#000000"/>
+              <rect width="150" height="300" fill="#ff0000"/>
+            </svg>
+            <span>+971</span>
+          </div>
+
+          <input
+            id="phone-input"
+            type="tel"
+            dir="ltr"
+            inputmode="tel"
+            autocomplete="tel-national"
+            placeholder="50 123 4567"
+            class="phone-input tabular-numbers"
+            aria-describedby="phone-hint"
+            maxlength="12"
+          >
+        </div>
+
+        <!-- Phone example isolated with <bdi dir="ltr"> to prevent bidi number scrambling -->
+        <p id="phone-hint" class="field-hint">
+          سيتم إرسال إيصال السداد عبر رسالة نصية (<bdi>SMS</bdi>) إلى هذا الرقم. مثال: <bdi dir="ltr">050 123 4567</bdi>
+        </p>
+      </section>
+
+      <!-- Payment CTA Action -->
+      <div class="footer-action">
+        <!-- Verbal noun neutral imperative: الدفع الآن -->
+        <button id="btn-pay" type="button" class="btn-pay">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+            <line x1="2" y1="10" x2="22" y2="10"></line>
+          </svg>
+          <span>الدفع الآن</span>
+        </button>
+
+        <div class="secure-badge">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>دفع إلكتروني آمن ومعتمد في دولة الإمارات</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feedback Toast -->
+    <div id="toast" class="toast" role="status" aria-live="polite">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+      <span id="toast-text">جاري معالجة عملية الدفع...</span>
+    </div>
+  </main>
+
+  <script>
+    /**
+     * Gulf Formats & Arabic Plurals Implementation
+     */
+
+    // 1. Arabic Plurals for "You have 3 items in this order" using all 6 forms
+    const count = 3;
+    const itemStrings = {
+      zero: 'لا توجد عناصر في هذا الطلب',
+      one: 'لديك عنصر واحد في هذا الطلب',
+      two: 'لديك عنصران في هذا الطلب',
+      few: 'لديك {count} عناصر في هذا الطلب',
+      many: 'لديك {count} عنصرًا في هذا الطلب',
+      other: 'لديك {count} عنصر في هذا الطلب',
+    };
+
+    // UAE standard digit format: Western numerals
+    const digitsFormatter = new Intl.NumberFormat('ar-AE-u-nu-latn');
+    const pluralCategory = new Intl.PluralRules('ar').select(count);
+    const formattedItemText = itemStrings[pluralCategory].replace(
+      '{count}',
+      digitsFormatter.format(count)
+    );
+    
+    document.getElementById('items-count-text').textContent = formattedItemText;
+
+    // 2. Exact Dates computation: 3 November 2026 (Gregorian & Hijri Umm al-Qura)
+    // Dubai Timezone is UTC+4 ('Asia/Dubai')
+    const dueDate = new Date('2026-11-03T00:00:00+04:00');
+
+    // Gregorian in Arabic with Western digits
+    const gregorianFmt = new Intl.DateTimeFormat('ar-AE-u-nu-latn', {
+      timeZone: 'Asia/Dubai',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    document.getElementById('gregorian-date').textContent = gregorianFmt.format(dueDate);
+
+    // Hijri Umm al-Qura calendar for UAE/Gulf
+    try {
+      const hijriFmt = new Intl.DateTimeFormat('ar-AE-u-ca-islamic-umalqura-nu-latn', {
+        timeZone: 'Asia/Dubai',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+      document.getElementById('hijri-date').textContent = hijriFmt.format(dueDate) + ' هـ';
+    } catch (e) {
+      // Fallback if islamic-umalqura isn't supported in environment
+      document.getElementById('hijri-date').textContent = '23 جمادى الأولى 1448 هـ';
+    }
+
+    // 3. Normalise typed numbers (convert Arabic/Persian numerals to Western digits)
+    function toWesternDigits(str) {
+      return str
+        .replace(/[٠-٩]/g, d => d.charCodeAt(0) - 1632)
+        .replace(/[۰-۹]/g, d => d.charCodeAt(0) - 1776);
+    }
+
+    const phoneInput = document.getElementById('phone-input');
+
+    phoneInput.addEventListener('input', (e) => {
+      // Normalise Arabic keyboards on the fly
+      let raw = toWesternDigits(e.target.value);
+      // Strip non-digits and leading zero if typed after prefix
+      let cleaned = raw.replace(/\D/g, '');
+      if (cleaned.startsWith('0')) {
+        cleaned = cleaned.substring(1);
+      }
+      
+      // Format as UAE local pattern: 50 123 4567
+      let formatted = '';
+      if (cleaned.length > 0) formatted += cleaned.substring(0, 2);
+      if (cleaned.length > 2) formatted += ' ' + cleaned.substring(2, 5);
+      if (cleaned.length > 5) formatted += ' ' + cleaned.substring(5, 9);
+
+      e.target.value = formatted;
+    });
+
+    // 4. Pay Button Feedback
+    const payBtn = document.getElementById('btn-pay');
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toast-text');
+
+    payBtn.addEventListener('click', () => {
+      const enteredPhone = phoneInput.value.replace(/\s+/g, '');
+      
+      if (enteredPhone.length < 9) {
+        toastText.textContent = 'يرجى إدخال رقم هاتف متحرك صحيح لتلقي الإيصال';
+      } else {
+        toastText.textContent = 'جاري إتمام الدفع بمبلغ 1,234.50 د.إ...';
+      }
+
+      toast.classList.add('visible');
+      setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 3500);
+    });
+  </script>
+</body>
+</html>

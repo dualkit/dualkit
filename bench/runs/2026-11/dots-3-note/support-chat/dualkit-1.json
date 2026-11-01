@@ -1,0 +1,123 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "support-chat",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-11-01T12:18:19.918Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>الدعم - اتصالات الكويت</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --type-body-size: 16px;\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n    }\n    :lang(ar) {\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      --type-body-size: 16px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n    * {\n      box-sizing: border-box;\n    }\n    html, body {\n      height: 100%;\n      margin: 0;\n      padding: 0;\n    }\n    body {\n      font-family: 'IBM Plex Sans', 'IBM Plex Arabic', sans-serif;\n      font-size: var(--type-body-size);\n      background-color: #f5f5f5;\n      color: #333;\n      direction: rtl;\n      -webkit-text-size-adjust: 100%;\n    }\n    .chat-container {\n      max-width: 480px;\n      height: 100vh;\n      margin: 0 auto;\n      background-color: #fff;\n      display: flex;\n      flex-direction: column;\n      position: relative;\n    }\n    .messages {\n      flex: 1;\n      overflow-y: auto;\n      padding: 1rem;\n      display: flex;\n      flex-direction: column;\n      gap: 0.5rem;\n    }\n    .message {\n      max-width: 80%;\n      padding: 0.5rem 0.75rem;\n      border-radius: 1rem;\n      position: relative;\n      font-size: var(--type-body-size);\n      line-height: 1.6;\n      word-wrap: break-word;\n    }\n    :lang(ar) .message {\n      line-height: 1.7;\n    }\n    .message.customer {\n      align-self: flex-start;\n      background-color: #007AFF;\n      color: #fff;\n      border-end-start-radius: 0.25rem;\n    }\n    .message.agent {\n      align-self: flex-end;\n      background-color: #e5e5ea;\n      color: #000;\n      border-end-end-radius: 0.25rem;\n    }\n    .time {\n      font-size: var(--type-caption-size);\n      margin-top: 0.25rem;\n    }\n    .message.customer .time {\n      color: rgba(255,255,255,0.7);\n      text-align: start;\n    }\n    .message.agent .time {\n      color: #8e8e93;\n      text-align: end;\n    }\n    .input-area {\n      display: flex;\n      align-items: center;\n      padding: 0.5rem;\n      border-top: 1px solid #e5e5ea;\n      background-color: #fff;\n      gap: 0.5rem;\n    }\n    .input-area input {\n      flex: 1;\n      padding: 0.5rem 0.75rem;\n      border: 1px solid #ccc;\n      border-radius: 1rem;\n      font-size: var(--type-body-size);\n      direction: rtl;\n      text-align: start;\n      background-color: #fff;\n    }\n    .input-area input:focus {\n      outline: none;\n      border-color: #007AFF;\n    }\n    .send-button {\n      background-color: #007AFF;\n      color: white;\n      border: none;\n      border-radius: 50%;\n      width: 2.5rem;\n      height: 2.5rem;\n      font-size: 1.2rem;\n      cursor: pointer;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      flex-shrink: 0;\n    }\n    .send-icon {\n      display: inline-block;\n    }\n    :dir(rtl) .send-icon {\n      transform: scaleX(-1);\n    }\n    bdi[dir=\"ltr\"] {\n      direction: ltr;\n      unicode-bidi: isolate;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"chat-container\">\n    <div class=\"messages\">\n      <div class=\"message customer\">\n        مرحبا، أريد تفعيل <bdi dir=\"ltr\">5G</bdi> على خطّي\n        <div class=\"time\"><bdi dir=\"ltr\">10:30</bdi></div>\n      </div>\n      <div class=\"message agent\">\n        مرحباً بك، <bdi dir=\"ltr\">Sara</bdi> هنا. يرجى تقديم رقم الطلب، مثال: <bdi dir=\"ltr\">TX-48213</bdi>\n        <div class=\"time\"><bdi dir=\"ltr\">10:31</bdi></div>\n      </div>\n      <div class=\"message customer\">\n        رقم طلبي هو <bdi dir=\"ltr\">TX-48213</bdi>\n        <div class=\"time\"><bdi dir=\"ltr\">10:32</bdi></div>\n      </div>\n      <div class=\"message agent\">\n        شكرًا. رأيت طلبك لـ <bdi dir=\"ltr\">eSIM</bdi>. سيتم المعالجة قريباً.\n        <div class=\"time\"><bdi dir=\"ltr\">10:33</bdi></div>\n      </div>\n      <div class=\"message customer\">\n        ما هي المدة المتوقعة؟\n        <div class=\"time\"><bdi dir=\"ltr\">10:34</bdi></div>\n      </div>\n      <div class=\"message agent\">\n        سيكون <bdi dir=\"ltr\">eSIM</bdi> جاهزًا خلال <bdi dir=\"ltr\">24</bdi> ساعة. ستحصل على إخطار.\n        <div class=\"time\"><bdi dir=\"ltr\">10:35</bdi></div>\n      </div>\n    </div>\n    <div class=\"input-area\">\n      <input type=\"text\" placeholder=\"اكتب رسالتك...\" dir=\"rtl\" autocomplete=\"off\">\n      <button class=\"send-button\" aria-label=\"أرسل\"><span class=\"send-icon\">➤</span></button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6300,
+    "output": 15585
+  },
+  "ms": 170695,
+  "finish": "stop",
+  "reasoningTokens": 13931,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 93,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 246,
+        "y": 27,
+        "width": 116,
+        "height": 20
+      },
+      "message": "\"IBM Plex Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"message customer\">\n        مرحبا، أريد تفعيل <bdi dir=\"ltr\">5G</bdi> على خطّي\n        <div class=\"time\"><bdi dir=\"ltr\">10:30</bdi></div>\n      </div"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 141,
+        "y": 16,
+        "width": 233,
+        "height": 70.984375
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">\n        مرحبا، أريد تفعيل <bdi dir=\"ltr\">5G</bdi> على خطّي\n        <div class=\"time\"><bdi dir=\"ltr\">10:30</bdi></div>\n      </div"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 94.984375,
+        "width": 286.390625,
+        "height": 98.171875
+      },
+      "message": "border-bottom-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">\n        مرحباً بك، <bdi dir=\"ltr\">Sara</bdi> هنا. يرجى تقديم رقم الطلب، مثال: <bdi dir=\"ltr\">TX-48213</bdi>\n        <div class=\"time"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 185,
+        "y": 201.15625,
+        "width": 189,
+        "height": 70.984375
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">\n        رقم طلبي هو <bdi dir=\"ltr\">TX-48213</bdi>\n        <div class=\"time\"><bdi dir=\"ltr\">10:32</bdi></div>\n      </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 280.140625,
+        "width": 286.390625,
+        "height": 98.171875
+      },
+      "message": "border-bottom-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">\n        شكرًا. رأيت طلبك لـ <bdi dir=\"ltr\">eSIM</bdi>. سيتم المعالجة قريباً.\n        <div class=\"time\"><bdi dir=\"ltr\">10:33</bdi></d"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 204,
+        "y": 386.3125,
+        "width": 170,
+        "height": 70.984375
+      },
+      "message": "border-bottom-right-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message customer\">\n        ما هي المدة المتوقعة؟\n        <div class=\"time\"><bdi dir=\"ltr\">10:34</bdi></div>\n      </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 16,
+        "y": 465.296875,
+        "width": 286.390625,
+        "height": 98.171875
+      },
+      "message": "border-bottom-right-radius: 16px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"message agent\">\n        سيكون <bdi dir=\"ltr\">eSIM</bdi> جاهزًا خلال <bdi dir=\"ltr\">24</bdi> ساعة. ستحصل على إخطار.\n        <div class=\"time\"><bdi di"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

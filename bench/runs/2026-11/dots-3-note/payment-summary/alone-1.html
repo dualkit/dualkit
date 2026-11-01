@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Summary</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .container {
+    width: 100%;
+    max-width: 480px;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background-color: #0066cc;
+    color: #fff;
+  }
+  .back-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 8px;
+  }
+  .title {
+    flex: 1;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .content {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .amount {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+  }
+  .amount span {
+    font-size: 16px;
+    color: #666;
+    margin-right: 4px;
+  }
+  .due-date {
+    text-align: center;
+    color: #555;
+    font-size: 16px;
+  }
+  .items {
+    text-align: center;
+    color: #333;
+    font-size: 16px;
+  }
+  .phone-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .phone-field label {
+    font-size: 14px;
+    color: #555;
+    text-align: right;
+  }
+  .phone-field input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: left;
+    direction: ltr;
+  }
+  .pay-btn {
+    margin-top: auto;
+    padding: 16px;
+    background-color: #0066cc;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+  }
+  .pay-btn:active {
+    background-color: #0055a5;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <button class="back-btn" aria-label="Back">←</button>
+      <div class="title">ملخص الدفع</div>
+    </header>
+    <div class="content">
+      <div class="amount">
+        1,234.50 <span>AED</span>
+      </div>
+      <div class="due-date">
+        3 نوفمبر 2026 (20 ربيع الثاني 1448)
+      </div>
+      <div class="items">
+        LGBTQ+? Actually correct phrase.
+      </div>
+      <div class="phone-field">
+        <label for="phone">رقم الهاتف</label>
+        <input type="tel" id="phone" placeholder="050 123 4567" dir="ltr">
+      </div>
+      <button class="pay-btn">ادفع الآن</button>
+    </div>
+  </div>
+</body>
+</html>

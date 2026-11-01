@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رمز التحقق - التطبيق البنكي</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo for professional Saudi banking feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bankGreen: '#004B36',
+                        bankGold: '#C5A059',
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-900 flex items-center justify-center min-h-screen font-cairo p-0 sm:p-4">
+
+    <!-- Phone Frame Container -->
+    <div class="w-full max-w-[400px] h-screen sm:h-[844px] bg-white sm:rounded-[40px] shadow-2xl flex flex-col justify-between relative overflow-hidden">
+        
+        <!-- Top Status Bar / Header -->
+        <div>
+            <!-- Notch / Status Bar Area -->
+            <div class="w-full px-6 pt-6 pb-2 flex justify-between items-center text-slate-800 text-sm font-semibold">
+                <span>9:41</span>
+                <div class="flex items-center space-x-2 space-x-reverse">
+                    <!-- Signal / Wifi / Battery Icons -->
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h15.3l-.62-1.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"/></svg>
+                </div>
+            </div>
+
+            <!-- App Bar with Back Button & Logo -->
+            <div class="px-6 py-4 flex items-center justify-between">
+                <button class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+                <div class="font-bold text-bankGreen text-lg tracking-wide">مصرف الراجحي</div>
+                <div class="w-10"></div> <!-- Spacer for alignment -->
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="px-6 flex-1 flex flex-col justify-center -mt-12">
+            
+            <!-- Icon Illustration -->
+            <div class="w-16 h-16 bg-bankGreen/10 rounded-2xl flex items-center justify-center mb-6 text-bankGreen mx-auto">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+            </div>
+
+            <!-- Title & Subtitle -->
+            <h1 class="text-2xl font-bold text-slate-900 text-center mb-2">أدخل رمز التحقق</h1>
+            <p class="text-slate-500 text-sm text-center mb-8 leading-relaxed">
+                تم إرسال رمز مكون من 6 أرقام إلى الرقم<br>
+                <span dir="ltr" class="font-semibold text-slate-800 inline-block mt-1">+966 55 123 4567</span>
+            </p>
+
+            <!-- 6 Code Input Boxes -->
+            <div class="flex justify-between gap-2 mb-8" dir="ltr">
+                <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-2xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:bg-white focus:outline-none transition shadow-sm" autofocus />
+                <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-2xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:bg-white focus:outline-none transition shadow-sm" />
+                <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-2xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:bg-white focus:outline-none transition shadow-sm" />
+                <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-2xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:bg-white focus:outline-none transition shadow-sm" />
+                <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-2xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:bg-white focus:outline-none transition shadow-sm" />
+                <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-2xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:bg-white focus:outline-none transition shadow-sm" />
+            </div>
+
+            <!-- Countdown Timer & Resend -->
+            <div class="text-center mb-6">
+                <p class="text-sm text-slate-500">
+                    إعادة الإرسال خلال 
+                    <span id="countdown" class="font-bold text-bankGreen" dir="ltr">0:45</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Bottom Action Area -->
+        <div class="px-6 pb-8 pt-4 bg-white border-t border-slate-100">
+            <button class="w-full bg-bankGreen hover:bg-bankGreen/90 active:scale-[0.98] transition text-white font-bold py-4 rounded-2xl shadow-lg shadow-bankGreen/20 text-base">
+                تحقق
+            </button>
+            
+            <!-- Home Indicator Bar -->
+            <div class="w-32 h-1 bg-slate-200 rounded-full mx-auto mt-6"></div>
+        </div>
+
+    </div>
+
+    <!-- OTP Auto-advance script -->
+    <script>
+        const inputs = document.querySelectorAll('.otp-input');
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                const value = e.target.value;
+                if (value && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

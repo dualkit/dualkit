@@ -1,0 +1,39 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "payment-summary",
+  "condition": "dualkit",
+  "run": 3,
+  "at": "2026-11-01T11:26:48.648Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Payment Summary</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --color-primary: #007AFF;\n      --color-text: #000;\n      --color-text-secondary: #666;\n      --color-border: #e0e0e0;\n      --color-background: #f5f5f5;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    html {\n      direction: rtl;\n      font-size: 16px;\n    }\n\n    body {\n      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;\n      background: var(--color-background);\n      color: var(--color-text);\n      line-height: 1.6;\n      -webkit-font-smoothing: antialiased;\n    }\n\n    /* Arabic type tokens */\n    :lang(ar) {\n      --type-label-size: 14px;\n      --type-caption-size: 14px;\n      --type-body-size: 16px;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n\n    .phone {\n      width: 100%;\n      max-width: 375px;\n      min-height: 667px;\n      margin: 0 auto;\n      background: #fff;\n      display: flex;\n      flex-direction: column;\n      box-shadow: 0 0 20px rgba(0,0,0,0.1);\n    }\n\n    /* Header */\n    header {\n      position: relative;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      padding: 1rem;\n      border-bottom: 1px solid var(--color-border);\n      background: #fff;\n    }\n\n    .back-btn {\n      position: absolute;\n      inset-inline-start: 0;\n      background: none;\n      border: none;\n      color: var(--color-text);\n      cursor: pointer;\n      padding: 0.5rem;\n      display: flex;\n      align-items: center;\n    }\n\n    .back-btn svg {\n      width: 24px;\n      height: 24px;\n    }\n\n    .icon-directional:dir(rtl) {\n      transform: scaleX(-1);\n    }\n\n    header h1 {\n      font-size: 1.25rem;\n      font-weight: 600;\n      color: var(--color-text);\n    }\n\n    /* Main content */\n    main {\n      flex: 1;\n      padding: 1.5rem;\n      display: flex;\n      flex-direction: column;\n      gap: 1.5rem;\n    }\n\n    /* Amount section */\n    .amount-section {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      gap: 0.5rem;\n      text-align: center;\n    }\n\n    .amount-label {\n      font-size: var(--type-label-size);\n      color: var(--color-text-secondary);\n    }\n\n    .amount-value {\n      font-size: 2rem;\n      font-weight: 700;\n      color: var(--color-text);\n    }\n\n    /* Dates */\n    .date-section {\n      display: flex;\n      flex-direction: column;\n      gap: 0.25rem;\n      font-size: var(--type-body-size);\n    }\n\n    /* Items line */\n    .items-line {\n      font-size: var(--type-body-size);\n      text-align: center;\n    }\n\n    /* Phone form */\n    .phone-form {\n      display: flex;\n      flex-direction: column;\n      gap: 0.5rem;\n    }\n\n    .phone-form label {\n      font-size: var(--type-label-size);\n      color: var(--color-text);\n    }\n\n    .phone-form input {\n      padding: 0.75rem;\n      border: 1px solid var(--color-border);\n      border-radius: 8px;\n      font-size: var(--type-body-size);\n      font-family: inherit;\n      direction: ltr;\n      text-align: start;\n      background: #fff;\n    }\n\n    .phone-form input:focus {\n      outline: none;\n      border-color: var(--color-primary);\n    }\n\n    .hint {\n      font-size: var(--type-caption-size);\n      color: var(--color-text-secondary);\n    }\n\n    /* Pay button */\n    .pay-btn {\n      margin-top: auto;\n      padding: 1rem;\n      background: var(--color-primary);\n      color: #fff;\n      border: none;\n      border-radius: 8px;\n      font-size: var(--type-body-size);\n      font-weight: 600;\n      cursor: pointer;\n      text-align: center;\n      font-family: inherit;\n      transition: background 0.2s;\n    }\n\n    .pay-btn:hover {\n      background: #0066cc;\n    }\n\n    .pay-btn:active {\n      background: #0055aa;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"phone\">\n    <header>\n      <button class=\"back-btn\" aria-label=\"رجوع\">\n        <svg class=\"icon-directional\" viewBox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n          <path d=\"M15 6L9 12L15 18\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\n        </svg>\n      </button>\n      <h1>ملخص الدفع</h1>\n    </header>\n\n    <main>\n      <section class=\"amount-section\">\n        <span class=\"amount-label\">المبلغ المستحق</span>\n        <span class=\"amount-value\"><bdi>1,234.50 د.إ</bdi></span>\n      </section>\n\n      <section class=\"date-section\">\n        <div>التاريخ: 3 نوفمبر 2026</div>\n        <div>التاريخ الهجري: 23 جمادى الأولى 1448 هـ</div>\n      </section>\n\n      <p class=\"items-line\">لديك 3 عناصر في هذا الطلب</p>\n\n      <form class=\"phone-form\">\n        <label for=\"phone\">رقم الجوال</label>\n        <input type=\"tel\" id=\"phone\" dir=\"ltr\" inputmode=\"tel\" autocomplete=\"tel\" placeholder=\"050 123 4567\">\n        <small class=\"hint\">سيتم إرسال الإيصال إلى الرقم الذي تدخله، مثل: <bdi dir=\"ltr\">050 123 4567</bdi></small>\n      </form>\n\n      <button class=\"pay-btn\">إتمام الدفع</button>\n    </main>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6343,
+    "output": 11892
+  },
+  "ms": 135497,
+  "finish": "stop",
+  "reasoningTokens": 8632,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 96,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 142.5,
+        "y": 19,
+        "width": 105,
+        "height": 27
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>ملخص الدفع</h1>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

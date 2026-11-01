@@ -1,0 +1,53 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "booking",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-11-01T12:28:30.107Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>مواعيد العيادة</title>\n<style>\n  body { font-family: Arial, sans-serif; direction: rtl; margin: 0; padding: 0; background-color: #f5f5f5; }\n  .container { max-width: 480px; margin: 0 auto; padding: 16px; background-color: #fff; height: 100vh; box-sizing: border-box; }\n  .month-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 16px; }\n  .nav-btn { background: none; border: none; font-size: 24px; cursor: pointer; }\n  .month-name { font-size: 20px; font-weight: bold; }\n  .calendar { width: 100%; border-collapse: collapse; margin-bottom: 16px; }\n  .calendar th, .calendar td { text-align: center; padding: 8px; border: 1px solid #ddd; }\n  .calendar th { background-color: #e0e0e0; }\n  .calendar td { cursor: pointer; }\n  .calendar td.empty { border: none; }\n  .calendar td.today { background-color: #ffeb3b; }\n  .calendar td.selected { background-color: #007bff; color: white; }\n  .time-slots { display: flex; overflow-x: auto; gap: 8px; margin-bottom: 16px; padding: 4px 0; }\n  .time-slot { padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; white-space: nowrap; }\n  .time-slot.selected { background-color: #007bff; color: white; }\n  .doctor { margin-bottom: 16px; font-size: 18px; text-align: center; }\n  .confirm-btn { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }\n  .confirm-btn:disabled { background-color: #6c757d; cursor: not-allowed; }\n</style>\n</head>\n<body>\n<div class=\"container\">\n  <div class=\"month-nav\">\n    <button class=\"nav-btn\" id=\"prev-month\">◀</button>\n    <span class=\"month-name\" id=\"month-name\"></span>\n    <button class=\"nav-btn\" id=\"next-month\">▶</button>\n  </div>\n  <table class=\"calendar\" id=\"calendar\">\n    <thead id=\"calendar-head\"></thead>\n    <tbody id=\"calendar-body\"></tbody>\n  </table>\n  <div class=\"time-slots\" id=\"time-slots\"></div>\n  <div class=\"doctor\">د. محمد علي</div>\n  <button class=\"confirm-btn\" id=\"confirm-btn\" disabled>تأكيد الحجز</button>\n</div>\n\n<script>\n  const monthNames = [\"يناير\", \"فبراير\", \"مارس\", \"أبريل\", \"مايو\", \"يونيو\", \"يوليو\", \"أغسطس\", \"سبتمبر\", \"أكتوبر\", \"نوفمبر\", \"ديسمبر\"];\n  const dayNames = [\"السبت\", \"الأحد\", \"الاثنين\", \"الثلاثاء\", \"الأربعاء\", \"الخميس\", \"الجمعة\"];\n  const timeSlots = [\"9:00\", \"9:30\", \"10:00\", \"10:30\", \"11:00\", \"11:30\", \"12:00\"];\n\n  let currentDate = new Date();\n  let selectedDate = null;\n  let selectedTime = null;\n\n  const calendarHead = document.getElementById('calendar-head');\n  const calendarBody = document.getElementById('calendar-body');\n  const monthNameEl = document.getElementById('month-name');\n  const timeSlotsEl = document.getElementById('time-slots');\n  const confirmBtn = document.getElementById('confirm-btn');\n\n  function renderCalendar() {\n    calendarHead.innerHTML = '';\n    calendarBody.innerHTML = '';\n\n    monthNameEl.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;\n\n    const headRow = document.createElement('tr');\n    dayNames.forEach(day => {\n      const th = document.createElement('th');\n      th.textContent = day;\n      headRow.appendChild(th);\n    });\n    calendarHead.appendChild(headRow);\n\n    const year = currentDate.getFullYear();\n    const month = currentDate.getMonth();\n    const firstDay = new Date(year, month, 1);\n    const startDay = (firstDay.getDay() + 1) % 7; // Saturday = 0\n    const daysInMonth = new Date(year, month + 1, 0).getDate();\n\n    let row = document.createElement('tr');\n    for (let i = 0; i < startDay; i++) {\n      const td = document.createElement('td');\n      td.classList.add('empty');\n      row.appendChild(td);\n    }\n\n    const today = new Date();\n    for (let d = 1; d <= daysInMonth; d++) {\n      const td = document.createElement('td');\n      td.textContent = d;\n      if (today.getFullYear() === year && today.getMonth() === month && today.getDate() === d) {\n        td.classList.add('today');\n      }\n      if (selectedDate && selectedDate.getFullYear() === year && selectedDate.getMonth() === month && selectedDate.getDate() === d) {\n        td.classList.add('selected');\n      }\n      td.addEventListener('click', () => selectDate(new Date(year, month, d)));\n      row.appendChild(td);\n      if ((startDay + d) % 7 === 0) {\n        calendarBody.appendChild(row);\n        row = document.createElement('tr');\n      }\n    }\n    if (row.children.length > 0) {\n      calendarBody.appendChild(row);\n    }\n  }\n\n  function selectDate(date) {\n    selectedDate = date;\n    renderCalendar();\n  }\n\n  function renderTimeSlots() {\n    timeSlotsEl.innerHTML = '';\n    timeSlots.forEach(time => {\n      const div = document.createElement('div');\n      div.className = 'time-slot';\n      div.textContent = time;\n      if (selectedTime === time) {\n        div.classList.add('selected');\n      }\n      div.addEventListener('click', () => {\n        selectedTime = time;\n        renderTimeSlots();\n        updateConfirmBtn();\n      });\n      timeSlotsEl.appendChild(div);\n    });\n  }\n\n  function updateConfirmBtn() {\n    confirmBtn.disabled = !(selectedDate && selectedTime);\n  }\n\n  document.getElementById('prev-month').addEventListener('click', () => {\n    currentDate.setMonth(currentDate.getMonth() - 1);\n    renderCalendar();\n  });\n  document.getElementById('next-month').addEventListener('click', () => {\n    currentDate.setMonth(currentDate.getMonth() + 1);\n    renderCalendar();\n  });\n\n  confirmBtn.addEventListener('click', () => {\n    if (selectedDate && selectedTime) {\n      alert(`تم حجز موعد في ${selectedDate.toDateString()} الساعة ${selectedTime}`);\n    }\n  });\n\n  renderCalendar();\n  renderTimeSlots();\n  updateConfirmBtn();\n</script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 146,
+    "output": 8410
+  },
+  "ms": 92640,
+  "finish": "stop",
+  "reasoningTokens": 7142,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 142.46875,
+        "y": 20,
+        "width": 105.0625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<span class=\"month-name\" id=\"month-name\">نوفمبر 2026</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 158.765625,
+        "y": 401,
+        "width": 72.453125,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"confirm-btn\" id=\"confirm-btn\" disabled=\"\">تأكيد الحجز</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

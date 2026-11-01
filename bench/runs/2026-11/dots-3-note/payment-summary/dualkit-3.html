@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Summary</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-primary: #007AFF;
+      --color-text: #000;
+      --color-text-secondary: #666;
+      --color-border: #e0e0e0;
+      --color-background: #f5f5f5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      direction: rtl;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
+      background: var(--color-background);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Arabic type tokens */
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    .phone {
+      width: 100%;
+      max-width: 375px;
+      min-height: 667px;
+      margin: 0 auto;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+
+    /* Header */
+    header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      border-bottom: 1px solid var(--color-border);
+      background: #fff;
+    }
+
+    .back-btn {
+      position: absolute;
+      inset-inline-start: 0;
+      background: none;
+      border: none;
+      color: var(--color-text);
+      cursor: pointer;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .back-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .icon-directional:dir(rtl) {
+      transform: scaleX(-1);
+    }
+
+    header h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    /* Main content */
+    main {
+      flex: 1;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Amount section */
+    .amount-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      text-align: center;
+    }
+
+    .amount-label {
+      font-size: var(--type-label-size);
+      color: var(--color-text-secondary);
+    }
+
+    .amount-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    /* Dates */
+    .date-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: var(--type-body-size);
+    }
+
+    /* Items line */
+    .items-line {
+      font-size: var(--type-body-size);
+      text-align: center;
+    }
+
+    /* Phone form */
+    .phone-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .phone-form label {
+      font-size: var(--type-label-size);
+      color: var(--color-text);
+    }
+
+    .phone-form input {
+      padding: 0.75rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      font-size: var(--type-body-size);
+      font-family: inherit;
+      direction: ltr;
+      text-align: start;
+      background: #fff;
+    }
+
+    .phone-form input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+
+    .hint {
+      font-size: var(--type-caption-size);
+      color: var(--color-text-secondary);
+    }
+
+    /* Pay button */
+    .pay-btn {
+      margin-top: auto;
+      padding: 1rem;
+      background: var(--color-primary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: var(--type-body-size);
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .pay-btn:hover {
+      background: #0066cc;
+    }
+
+    .pay-btn:active {
+      background: #0055aa;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <header>
+      <button class="back-btn" aria-label="رجوع">
+        <svg class="icon-directional" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 6L9 12L15 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <h1>ملخص الدفع</h1>
+    </header>
+
+    <main>
+      <section class="amount-section">
+        <span class="amount-label">المبلغ المستحق</span>
+        <span class="amount-value"><bdi>1,234.50 د.إ</bdi></span>
+      </section>
+
+      <section class="date-section">
+        <div>التاريخ: 3 نوفمبر 2026</div>
+        <div>التاريخ الهجري: 23 جمادى الأولى 1448 هـ</div>
+      </section>
+
+      <p class="items-line">لديك 3 عناصر في هذا الطلب</p>
+
+      <form class="phone-form">
+        <label for="phone">رقم الجوال</label>
+        <input type="tel" id="phone" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="050 123 4567">
+        <small class="hint">سيتم إرسال الإيصال إلى الرقم الذي تدخله، مثل: <bdi dir="ltr">050 123 4567</bdi></small>
+      </form>
+
+      <button class="pay-btn">إتمام الدفع</button>
+    </main>
+  </div>
+</body>
+</html>

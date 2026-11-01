@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>حجز موعد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#0f9b8e;
+    --brand-2:#0b7d6e;
+    --brand-soft:#e3f4f1;
+    --ink:#1c2733;
+    --muted:#6b7785;
+    --line:#e6e9ef;
+    --bg:#f4f6fa;
+    --today:#0f9b8e;
+    --radius:18px;
+  }
+  *{box-sizing:border-box}
+  :lang(ar){
+    --type-label-size:14px;
+    --type-caption-size:14px;
+    --type-body-size:16px;
+    letter-spacing:0;
+    text-transform:none;
+    font-style:normal;
+    line-height:1.7;
+  }
+  body{
+    margin:0;
+    font-family:'Noto Arabic',system-ui,-apple-system,sans-serif;
+    background:#e3e8f0;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    min-height:100vh;
+    padding:28px 0;
+    color:var(--ink);
+  }
+  .phone{
+    width:390px;
+    height:844px;
+    background:var(--bg);
+    border-radius:46px;
+    border:11px solid #1c2330;
+    box-shadow:0 34px 70px rgba(15,25,40,.32), inset 0 0 0 2px #2a3340;
+    overflow:hidden;
+    position:relative;
+  }
+  .screen{
+    height:100%;
+    overflow-y:auto;
+    padding:22px 18px 26px;
+    scrollbar-width:none;
+  }
+  .screen::-webkit-scrollbar{display:none}
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .icon-btn{
+    width:38px;height:38px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;color:var(--ink);
+    flex:none;
+  }
+  .title-block{flex:1;text-align:center;}
+  .title-block h1{
+    font-size:18px;margin:0;font-weight:700;
+  }
+  .title-block p{
+    font-size:var(--type-caption-size);margin:2px 0 0;color:var(--muted);font-weight:500;
+  }
+
+  /* month picker */
+  .month-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    margin:6px 0 18px;
+  }
+  .month-name{
+    font-size:17px;font-weight:700;white-space:nowrap;
+  }
+  .month-arrow{
+    width:34px;height:34px;border-radius:50%;
+    border:1px solid var(--line);background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;color:var(--ink);flex:none;
+  }
+  .month-arrows{display:flex;align-items:center;gap:8px;}
+  :dir(rtl) .month-arrows{transform:scaleX(-1);}
+
+  /* week headers */
+  .weekdays{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:6px;
+    margin-bottom:8px;
+  }
+  .weekdays span{
+    font-size:var(--type-caption-size);
+    color:var(--muted);
+    text-align:center;
+    font-weight:600;
+    padding-bottom:6px;
+  }
+
+  /* calendar grid */
+  .cal-grid{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:6px;
+    margin-bottom:22px;
+  }
+  .cal-day{
+    aspect-ratio:1/1;
+    border-radius:12px;
+    border:1px solid transparent;
+    background:#fff;
+    font-size:15px;font-weight:600;
+    color:var(--ink);
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-family:inherit;
+    transition:transform .08s ease, background .15s ease, border-color .15s ease;
+  }
+  .cal-day:active{transform:scale(.94)}
+  .cal-day.empty{background:transparent;cursor:default}
+  .cal-day:hover:not(.empty):not(.today){background:var(--brand-soft)}
+  .cal-day.today{
+    background:var(--brand);
+    color:#fff;
+    border-color:var(--brand);
+  }
+  .cal-day.selected{
+    background:var(--brand-2);
+    color:#fff;
+    border-color:var(--brand-2);
+  }
+
+  /* slots */
+  .section-label{
+    font-size:14px;font-weight:700;margin:0 0 10px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .section-label .count{
+    font-size:var(--type-caption-size);color:var(--muted);font-weight:500;
+  }
+  .slots{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-bottom:22px;
+  }
+  .slot{
+    padding:12px 6px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-size:15px;font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+    transition:background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .slot bdi{font-weight:700}
+  .slot:hover{border-color:var(--brand);background:var(--brand-soft)}
+  .slot.selected{
+    background:var(--brand);
+    border-color:var(--brand);
+    color:#fff;
+  }
+
+  /* doctor card */
+  .doc-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:12px 14px;
+    margin-bottom:18px;
+  }
+  .doc-avatar{
+    width:44px;height:44px;border-radius:50%;
+    background:var(--brand-soft);
+    color:var(--brand-2);
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;font-weight:700;flex:none;
+  }
+  .doc-text{flex:1;min-width:0}
+  .doc-text .name{font-size:15px;font-weight:700;margin:0}
+  .doc-text .spec{font-size:var(--type-caption-size);color:var(--muted);margin:2px 0 0;font-weight:500}
+  .doc-text .avail{font-size:var(--type-caption-size);color:var(--brand);font-weight:600;margin:2px 0 0}
+
+  /* summary */
+  .summary{
+    background:var(--brand-soft);
+    border-radius:12px;
+    padding:10px 14px;
+    font-size:14px;font-weight:600;
+    margin-bottom:14px;
+    color:var(--brand-2);
+    display:none;
+  }
+  .summary.show{display:block}
+
+  /* confirm button */
+  .confirm{
+    width:100%;
+    padding:15px;
+    border-radius:14px;
+    border:none;
+    background:var(--brand);
+    color:#fff;
+    font-size:16px;font-weight:700;
+    font-family:inherit;
+    cursor:pointer;
+    transition:background .15s ease, opacity .15s ease;
+  }
+  .confirm:disabled{background:#c9ced6;cursor:not-allowed}
+  .confirm:not(:disabled):active{transform:scale(.99)}
+  .hint{
+    text-align:center;
+    font-size:var(--type-caption-size);
+    color:var(--muted);
+    margin:10px 0 0;
+    font-weight:500;
+  }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="screen">
+
+      <div class="topbar">
+        <button class="icon-btn" aria-label="الPrevious" id="backBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="title-block">
+          <h1>حجز موعد</h1>
+          <p>اختر اليوم والوقت المفضلين</p>
+        </div>
+        <span style="width:38px"></span>
+      </div>
+
+      <div class="month-row">
+        <button class="month-arrow" id="prevMonth" aria-label="الشهر_previous">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <div class="month-name" id="month-label"></div>
+        <div class="month-arrows">
+          <button class="month-arrow" id="nextMonth" aria-label="الشهرnext">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="weekdays">
+        <span>السبت</span><span>الأحد</span><span>الإثنين</span><span>الثلاثاء</span><span>الأربعاء</span><span>الخميس</span><span>جمعة</span>
+      </div>
+
+      <div class="cal-grid" id="cal-grid"></div>
+
+      <p class="section-label">الوقت المتاح <span class="count" id="slot-count">7 أوقات</span></p>
+      <div class="slots" id="slots"></div>
+
+      <div class="doc-card">
+        <div class="doc-avatar">خ</div>
+        <div class="doc-text">
+          <p class="name">د. خالد العطية</p>
+          <p class="spec">القلب والأوعية الدموية</p>
+          <p class="avail">مavailable every selected day</p>
+        </div>
+      </div>
+
+      <div class="summary" id="summary"></div>
+
+      <button class="confirm" id="confirmBtn" disabled>]</button>
+      <p class="hint" id="hint">اختر اليوم والوقت للمتابعة</p>
+
+    </div>
+  </div>
+
+<script>
+(function(){
+  const monthNames=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  const weekdayNames=['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','جمعة'];
+
+  let state = { year:new Date().getFullYear(), month:new Date().getMonth(), day:null, time:null };
+
+  const grid = document.getElementById('cal-grid');
+  const monthLabel = document.getElementById('month-label');
+  const summary = document.getElementById('summary');
+  const confirmBtn = document.getElementById('confirmBtn');
+  const hint = document.getElementById('hint');
+
+  function renderMonth(){
+    const {year,month} = state;
+    monthLabel.textContent = monthNames[month]+' '+year;
+
+    const first = new Date(year,month,1);
+    const startOffset = (first.getDay()+1)%7; // Saturday first
+    const daysInMonth = new Date(year,month+1,0).getDate();
+    const today = new Date();
+    const isTodayMonth = today.getFullYear()===year && today.getMonth()===month;
+
+    grid.innerHTML='';
+    const cells=[];
+    for(let i=0;i<startOffset;i++) cells.push('');
+    for(let d=1;d<=daysInMonth;d++) cells.push(d);
+    while(cells.length%7) cells.push('');
+
+    cells.forEach((d,idx)=>{
+      const cell=document.createElement('div');
+      if(d===''){
+        cell.className='cal-day empty';
+        grid.appendChild(cell);
+        return;
+      }
+      const btn=document.createElement('button');
+      btn.className='cal-day';
+      btn.textContent=d;
+      btn.setAttribute('data-day',d);
+      if(isTodayMonth && d===today.getDate()) btn.classList.add('today');
+      if(state.day===d) btn.classList.add('selected');
+      btn.addEventListener('click',()=>{
+        state.day=d;
+        renderMonth();
+        updateSummary();
+      });
+      grid.appendChild(btn);
+    });
+  }
+
+  function updateSummary(){
+    if(state.day && state.time){
+      const m = monthNames[state.month];
+      summary.innerHTML = '<bdi dir="ltr">'+state.time+'</bdi> · '+state.day+' '+m;
+      summary.classList.add('show');
+      confirmBtn.textContent=' تأكيد الحجز — '+state.day+' '+monthNames[state.month]+'، '+state.time;
+      confirmBtn.disabled=false;
+      hint.textContent='سيتم تأكيد الحجز مع د. خالد العطية';
+    } else {
+      summary.classList.remove('show');
+      confirmBtn.textContent=' تأكيد الحجز';
+      confirmBtn.disabled=true;
+      hint.textContent = state.day ? 'اختر الوقت المفضل' : 'اختر اليوم والوقت للمتابعة';
+    }
+  }
+
+  // time slots
+  const slots=['9:00','9:30','10:00','10:30','11:00','11:30','12:00'];
+  const slotWrap = document.getElementById('slots');
+  slots.forEach(s=>{
+    const b=document.createElement('button');
+    b.className='slot';
+    b.innerHTML='<bdi dir="ltr">'+s+'</bdi>';
+    b.addEventListener('click',()=>{
+      state.time=s;
+      slotWrap.querySelectorAll('.slot').forEach(x=>x.classList.remove('selected'));
+      b.classList.add('selected');
+      updateSummary();
+    });
+    slotWrap.appendChild(b);
+  });
+
+  document.getElementById('prevMonth').addEventListener('click',()=>{
+    state.month--;
+    if(state.month<0){state.month=11;state.year--;}
+    state.day=null;
+    renderMonth();updateSummary();
+  });
+  document.getElementById('nextMonth').addEventListener('click',()=>{
+    state.month++;
+    if(state.month>11){state.month=0;state.year++;}
+    state.day=null;
+    renderMonth();updateSummary();
+  });
+
+  confirmBtn.addEventListener('click',()=>{
+    confirmBtn.textContent='...تم الحجز بنجاح';
+    confirmBtn.disabled=true;
+  });
+
+  renderMonth();
+  updateSummary();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الإعدادات</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "IBM Plex Sans Arabic", sans-serif;
+      background: #f2f2f7;
+      color: #000;
+      line-height: 1.5;
+      font-size: 16px;
+      direction: rtl;
+    }
+
+    :lang(ar) {
+      font-family: "IBM Plex Sans Arabic", sans-serif;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+    }
+
+    .container {
+      max-width: 375px;
+      margin: 0 auto;
+      background: #fff;
+      min-height: 100vh;
+      padding-bottom: 16px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      border-bottom: 1px solid #e5e5ea;
+      padding: 12px 16px;
+      text-align: center;
+      z-index: 10;
+    }
+
+    header h1 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    section {
+      padding: 16px 0;
+      border-bottom: 1px solid #e5e5ea;
+    }
+
+    section h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #8e8e93;
+      padding: 0 16px;
+      margin-bottom: 8px;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    li {
+      border-bottom: 1px solid #e5e5ea;
+    }
+
+    /* Rows with chevron */
+    .row {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .row:hover {
+      background: #f9f9f9;
+    }
+
+    .row:active {
+      background: #f0f0f0;
+    }
+
+    .row-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .row-text .label {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .row-text .value {
+      font-size: 14px;
+      color: #8e8e93;
+      margin-top: 2px;
+    }
+
+    .chevron {
+      font-size: 20px;
+      color: #d1d1d6;
+    }
+
+    /* Toggle rows */
+    .toggle-row {
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 16px;
+    }
+
+    .toggle-row .label {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    /* Switch toggle */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: auto;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 28px;
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      height: 20px;
+      width: 20px;
+      right: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #007aff;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(-22px);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>الإعدادات</h1>
+    </header>
+
+    <main>
+      <!-- Account group -->
+      <section>
+        <h2>الحساب</h2>
+        <ul>
+          <li>
+            <a class="row" href="#">
+              <span class="chevron">‹</span>
+              <span class="row-text">
+                <span class="label">الاسم</span>
+                <span class="value">أحمد محمد</span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a class="row" href="#">
+              <span class="chevron">‹</span>
+              <span class="row-text">
+                <span class="label">رقم الهاتف</span>
+                <span class="value"><bdi dir="ltr">+973 3600 1234</bdi></span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a class="row" href="#">
+              <span class="chevron">‹</span>
+              <span class="row-text">
+                <span class="label">اللغة</span>
+                <span class="value">العربية</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Security group -->
+      <section>
+        <h2>الأمان</h2>
+        <ul>
+          <li>
+            <div class="toggle-row">
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+              <span class="label">Face ID</span>
+            </div>
+          </li>
+          <li>
+            <div class="toggle-row">
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+              <span class="label">تسجيل الدخول بخطوتين</span>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Notifications group -->
+      <section>
+        <h2>الإشعارات</h2>
+        <ul>
+          <li>
+            <div class="toggle-row">
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+              <span class="label">التحويلات</span>
+            </div>
+          </li>
+          <li>
+            <div class="toggle-row">
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+              <span class="label">الOffers</span>
+            </div>
+          </li>
+          <li>
+            <div class="toggle-row">
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+              <span class="label">الكشوفات</span>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

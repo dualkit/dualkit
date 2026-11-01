@@ -1,0 +1,67 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "payment-summary",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-11-01T11:18:30.989Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>ملخص الدفع - Payment Summary</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <script src=\"https://cdn.tailwindcss.com\"></script>\n  <style>\n    :lang(ar) {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      letter-spacing: 0;\n      text-transform: none;\n      line-height: 1.7;\n    }\n    body {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n    }\n  </style>\n</head>\n<body class=\"bg-slate-100 text-slate-900 min-h-screen flex items-center justify-center p-0 sm:p-4\">\n\n  <!-- Mobile Screen Container -->\n  <div class=\"w-full max-w-md bg-white min-h-screen sm:min-h-[auto] sm:rounded-3xl shadow-xl flex flex-col overflow-hidden\">\n    \n    <!-- Header -->\n    <header class=\"flex items-center justify-between px-6 py-4 border-b border-slate-100\">\n      <button class=\"w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors text-slate-700\" aria-label=\"رجوع\">\n        <svg class=\"w-6 h-6 icon-directional rtl:-scale-x-100\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\">\n          <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 19l-7-7 7-7\"></path>\n        </svg>\n      </button>\n      <h1 class=\"text-lg font-semibold text-slate-900\">ملخص الدفع</h1>\n      <div class=\"w-10\"></div> <!-- Spacer for balance -->\n    </header>\n\n    <!-- Main Content -->\n    <main class=\"flex-1 px-6 py-6 flex flex-col gap-6\">\n      \n      <!-- Amount Due Card -->\n      <div class=\"bg-blue-50 border border-blue-100 rounded-2xl p-6 flex flex-col items-center text-center\">\n        <span class=\"text-sm font-medium text-blue-700 mb-1\">المبلغ المستحق</span>\n        <div class=\"text-3xl font-bold text-blue-950 tracking-tight my-1\">\n          <bdi dir=\"ltr\">1,234.50 AED</bdi>\n        </div>\n        <div class=\"text-xs text-blue-600 mt-1\">شامل ضريبة القيمة المضافة</div>\n      </div>\n\n      <!-- Dates Section -->\n      <div class=\"bg-slate-50 rounded-2xl p-4 flex flex-col gap-3 border border-slate-100\">\n        <div class=\"flex justify-between items-center text-sm\">\n          <span class=\"text-slate-500\">تاريخ الاستحقاق (ميلادي)</span>\n          <span class=\"font-medium text-slate-800\">\n            <bdi dir=\"ltr\">3 November 2026</bdi>\n          </span>\n        </div>\n        <hr class=\"border-slate-200/60\">\n        <div class=\"flex justify-between items-center text-sm\">\n          <span class=\"text-slate-500\">تاريخ الاستحقاق (هجري)</span>\n          <span class=\"font-medium text-slate-800\">\n            <bdi>٢٢ جمادى الآخرة ١٤٤٨ هـ</bdi>\n          </span>\n        </div>\n      </div>\n\n      <!-- Order Summary & Items Count (Plural Form: Few for 3 items) -->\n      <div class=\"flex items-center justify-between px-2 py-1\">\n        <span class=\"text-sm font-medium text-slate-700\">تفاصيل الطلب</span>\n        <span class=\"text-sm text-slate-600 font-medium\">\n          لديك <bdi>3</bdi> عناصر في هذا الطلب\n        </span>\n      </div>\n\n      <!-- SMS Receipt Phone Input Section -->\n      <div class=\"flex flex-col gap-2 mt-2\">\n        <label for=\"phone-input\" class=\"text-sm font-medium text-slate-700\">إرسال الإيصال عبر الرسائل النصية</label>\n        <div class=\"relative flex items-center\">\n          <!-- Prefix badge on the start side -->\n          <span class=\"absolute inset-s-0 ps-3.5 text-sm font-medium text-slate-500 pointer-events-none flex items-center gap-1\">\n            <span>🇦🇪</span>\n            <bdi dir=\"ltr\">+971</bdi>\n          </span>\n          <input \n            type=\"tel\" \n            id=\"phone-input\" \n            dir=\"ltr\" \n            inputmode=\"tel\" \n            autocomplete=\"tel\" \n            placeholder=\"50 123 4567\"\n            class=\"w-full ps-20 pe-4 py-3.5 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder:text-slate-400 text-sm font-medium focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-all text-start\"\n          >\n        </div>\n        <p class=\"text-xs text-slate-500 mt-0.5\">\n          مثال: <bdi dir=\"ltr\">050 123 4567</bdi>\n        </p>\n      </div>\n\n    </main>\n\n    <!-- Footer Action -->\n    <footer class=\"p-6 border-t border-slate-100 bg-white\">\n      <button class=\"w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold py-4 rounded-xl transition-colors shadow-lg shadow-blue-600/20 text-base\">\n        إتمام الدفع\n      </button>\n    </footer>\n\n  </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6541,
+    "output": 1618
+  },
+  "ms": 8107,
+  "finish": "STOP",
+  "reasoningTokens": 1306,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 88,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 41,
+        "y": 340.796875,
+        "width": 132,
+        "height": 21
+      },
+      "message": "\"٢٢ جمادى الآخرة ١٤٤٨ هـ\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<bdi>٢٢ جمادى الآخرة ١٤٤٨ هـ</bdi>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 132.5,
+        "y": 208,
+        "width": 125,
+        "height": 18
+      },
+      "message": "\"شامل ضريبة القيمة المضافة\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"text-xs text-blue-600 mt-1\">شامل ضريبة القيمة المضافة</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 338,
+        "y": 557.390625,
+        "width": 28,
+        "height": 18
+      },
+      "message": "\"مثال:\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"text-xs text-slate-500 mt-0.5\">\n          مثال: <bdi dir=\"ltr\">050 123 4567</bdi>\n        </p>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

@@ -1,0 +1,207 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "checkout",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-11-01T11:24:42.067Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>إتمام الطلب - بقالة الإمارات</title>\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap\" rel=\"stylesheet\">\n    <style>\n        * {\n            box-sizing: border-box;\n            margin: 0;\n            padding: 0;\n            font-family: 'Cairo', sans-serif;\n        }\n\n        body {\n            background-color: #f0f2f5;\n            display: flex;\n            justify-content: center;\n            align-items: center;\n            min-height: 100vh;\n            color: #333;\n        }\n\n        /* Phone Container */\n        .phone-frame {\n            width: 100%;\n            max-width: 410px;\n            height: 100vh;\n            max-height: 844px;\n            background-color: #f8f9fa;\n            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);\n            display: flex;\n            flex-direction: column;\n            position: relative;\n            overflow: hidden;\n        }\n\n        @media (min-width: 411px) {\n            .phone-frame {\n                border-radius: 40px;\n                border: 10px solid #2d3748;\n                height: 844px;\n            }\n        }\n\n        /* Top Header */\n        .header {\n            background-color: #ffffff;\n            padding: 16px 20px;\n            display: flex;\n            align-items: center;\n            justify-content: space-between;\n            border-bottom: 1px solid #edf2f7;\n            position: sticky;\n            top: 0;\n            z-index: 10;\n        }\n\n        .back-btn {\n            background: none;\n            border: none;\n            cursor: pointer;\n            font-size: 20px;\n            color: #2d3748;\n            display: flex;\n            align-items: center;\n        }\n\n        .header-title {\n            font-size: 18px;\n            font-weight: 700;\n            color: #1a202c;\n        }\n\n        .header-spacer {\n            width: 24px;\n        }\n\n        /* Scrollable Content */\n        .content {\n            flex: 1;\n            overflow-y: auto;\n            padding: 16px 20px;\n            padding-bottom: 120px;\n        }\n\n        .section-title {\n            font-size: 15px;\n            font-weight: 700;\n            color: #4a5568;\n            margin-bottom: 12px;\n        }\n\n        /* Cart Items */\n        .cart-items {\n            background: #ffffff;\n            border-radius: 16px;\n            padding: 12px;\n            box-shadow: 0 2px 8px rgba(0,0,0,0.04);\n            margin-bottom: 20px;\n        }\n\n        .cart-item {\n            display: flex;\n            align-items: center;\n            padding: 10px 0;\n            border-bottom: 1px solid #f7fafc;\n        }\n\n        .cart-item:last-child {\n            border-bottom: none;\n        }\n\n        .item-img {\n            width: 60px;\n            height: 60px;\n            background-color: #edf2f7;\n            border-radius: 12px;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            color: #a0aec0;\n            font-size: 10px;\n            flex-shrink: 0;\n            overflow: hidden;\n        }\n\n        .item-img img {\n            width: 100%;\n            height: 100%;\n            object-fit: cover;\n        }\n\n        .item-details {\n            flex: 1;\n            padding-right: 12px;\n        }\n\n        .item-name {\n            font-size: 14px;\n            font-weight: 600;\n            color: #2d3748;\n            margin-bottom: 4px;\n        }\n\n        .item-price {\n            font-size: 13px;\n            font-weight: 700;\n            color: #0d9488;\n        }\n\n        .stepper {\n            display: flex;\n            align-items: center;\n            background: #f8f9fa;\n            border-radius: 8px;\n            border: 1px solid #e2e8f0;\n            overflow: hidden;\n        }\n\n        .stepper button {\n            background: none;\n            border: none;\n            width: 28px;\n            height: 28px;\n            cursor: pointer;\n            font-weight: bold;\n            color: #0d9488;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n        }\n\n        .stepper span {\n            width: 24px;\n            text-align: center;\n            font-size: 13px;\n            font-weight: 600;\n        }\n\n        /* Promo Code Section */\n        .promo-section {\n            background: #ffffff;\n            border-radius: 16px;\n            padding: 16px;\n            box-shadow: 0 2px 8px rgba(0,0,0,0.04);\n            margin-bottom: 20px;\n            display: flex;\n            gap: 10px;\n        }\n\n        .promo-input {\n            flex: 1;\n            border: 1px solid #e2e8f0;\n            background: #f8f9fa;\n            border-radius: 10px;\n            padding: 10px 14px;\n            font-size: 13px;\n            outline: none;\n            transition: border-color 0.2s;\n        }\n\n        .promo-input:focus {\n            border-color: #0d9488;\n        }\n\n        .promo-btn {\n            background: #2d3748;\n            color: white;\n            border: none;\n            padding: 0 16px;\n            border-radius: 10px;\n            font-size: 13px;\n            font-weight: 600;\n            cursor: pointer;\n            transition: background 0.2s;\n        }\n\n        .promo-btn:hover {\n            background: #1a202c;\n        }\n\n        /* Summary Card */\n        .summary-card {\n            background: #ffffff;\n            border-radius: 16px;\n            padding: 16px;\n            box-shadow: 0 2px 8px rgba(0,0,0,0.04);\n            margin-bottom: 20px;\n        }\n\n        .summary-row {\n            display: flex;\n            justify-content: space-between;\n            margin-bottom: 10px;\n            font-size: 13px;\n            color: #4a5568;\n        }\n\n        .summary-row.total {\n            margin-top: 12px;\n            padding-top: 12px;\n            border-top: 1px dashed #e2e8f0;\n            font-size: 16px;\n            font-weight: 700;\n            color: #1a202c;\n        }\n\n        .summary-row.total .price {\n            color: #0d9488;\n        }\n\n        /* Bottom Fixed Checkout Bar */\n        .checkout-footer {\n            position: absolute;\n            bottom: 0;\n            left: 0;\n            right: 0;\n            background: #ffffff;\n            padding: 16px 20px;\n            box-shadow: 0 -4px 12px rgba(0,0,0,0.05);\n            border-top: 1px solid #edf2f7;\n        }\n\n        .checkout-btn {\n            width: 100%;\n            background: #0d9488;\n            color: white;\n            border: none;\n            border-radius: 14px;\n            padding: 14px;\n            font-size: 16px;\n            font-weight: 700;\n            cursor: pointer;\n            display: flex;\n            align-items: center;\n            justify-content: center;\n            gap: 8px;\n            transition: background 0.2s, transform 0.1s;\n            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);\n        }\n\n        .checkout-btn:active {\n            transform: scale(0.98);\n        }\n\n        .checkout-btn:hover {\n            background: #0f766e;\n        }\n    </style>\n</head>\n<body>\n\n    <div class=\"phone-frame\">\n        <!-- Top Header -->\n        <div class=\"header\">\n            <button class=\"back-btn\" aria-label=\"رجوع\">\n                <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 18l6-6-6-6\"/></svg>\n            </button>\n            <div class=\"header-title\">إتمام الطلب</div>\n            <div class=\"header-spacer\"></div>\n        </div>\n\n        <!-- Scrollable Body -->\n        <div class=\"content\">\n            <!-- Cart Items Section -->\n            <div class=\"section-title\">محتويات السلة (3 منتجات)</div>\n            <div class=\"cart-items\">\n                <!-- Item 1 -->\n                <div class=\"cart-item\">\n                    <div class=\"item-img\">\n                        <img src=\"https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=150&q=80\" alt=\"حليب طازج\">\n                    </div>\n                    <div class=\"item-details\">\n                        <div class=\"item-name\">حليب المراعي طازج 2 لتر</div>\n                        <div class=\"item-price\">14.50 د.إ</div>\n                    </div>\n                    <div class=\"stepper\">\n                        <button onclick=\"updateQty(this, -1)\">-</button>\n                        <span>1</span>\n                        <button onclick=\"updateQty(this, 1)\">+</button>\n                    </div>\n                </div>\n\n                <!-- Item 2 -->\n                <div class=\"cart-item\">\n                    <div class=\"item-img\">\n                        <img src=\"https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=150&q=80\" alt=\"خبز عربي\">\n                    </div>\n                    <div class=\"item-details\">\n                        <div class=\"item-name\">خبز عربي أبيض مطاحن البر البر</div>\n                        <div class=\"item-price\">5.00 د.إ</div>\n                    </div>\n                    <div class=\"stepper\">\n                        <button onclick=\"updateQty(this, -1)\">-</button>\n                        <span>2</span>\n                        <button onclick=\"updateQty(this, 1)\">+</button>\n                    </div>\n                </div>\n\n                <!-- Item 3 -->\n                <div class=\"cart-item\">\n                    <div class=\"item-img\">\n                        <img src=\"https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=150&q=80\" alt=\"قهوة عربية\">\n                    </div>\n                    <div class=\"item-details\">\n                        <div class=\"item-name\">قهوة عربية فاخرة بالهيل 250جم</div>\n                        <div class=\"item-price\">28.00 د.إ</div>\n                    </div>\n                    <div class=\"stepper\">\n                        <button onclick=\"updateQty(this, -1)\">-</button>\n                        <span>1</span>\n                        <button onclick=\"updateQty(this, 1)\">+</button>\n                    </div>\n                </div>\n            </div>\n\n            <!-- Promo Code Section -->\n            <div class=\"section-title\">الخصم والعروض</div>\n            <div class=\"promo-section\">\n                <input type=\"text\" class=\"promo-input\" placeholder=\"أدخل رمز القسيمة (مثال: UAE20)\">\n                <button class=\"promo-btn\">تطبيق</button>\n            </div>\n\n            <!-- Price Breakdown Summary -->\n            <div class=\"section-title\">ملخص الدفع</div>\n            <div class=\"summary-card\">\n                <div class=\"summary-row\">\n                    <span>المجموع الفرعي</span>\n                    <span>47.50 د.إ</span>\n                </div>\n                <div class=\"summary-row\">\n                    <span>رسوم التوصيل السريع</span>\n                    <span>10.00 د.إ</span>\n                </div>\n                <div class=\"summary-row\">\n                    <span>ضريبة القيمة المضافة (5% المدعومة)</span>\n                    <span>2.88 د.إ</span>\n                </div>\n                <div class=\"summary-row total\">\n                    <span>المجموع الكلي</span>\n                    <span class=\"price\">60.38 د.إ</span>\n                </div>\n            </div>\n        </div>\n\n        <!-- Bottom Action Bar -->\n        <div class=\"checkout-footer\">\n            <button class=\"checkout-btn\">\n                <span>تأكيد الطلب والدفع</span>\n                <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"transform: rotate(180deg);\"><path d=\"M9 18l6-6-6-6\"/></svg>\n            </button>\n        </div>\n    </div>\n\n    <script>\n        function updateQty(btn, change) {\n            const span = btn.parentElement.querySelector('span');\n            let qty = parseInt(span.textContent) + change;\n            if (qty < 1) qty = 1;\n            span.textContent = qty;\n        }\n    </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 145,
+    "output": 3629
+  },
+  "ms": 10096,
+  "finish": "STOP",
+  "reasoningTokens": 705,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 85,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 239,
+        "y": 178,
+        "width": 47,
+        "height": 24
+      },
+      "message": "\"14.50 د.إ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"item-price\">14.50 د.إ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 246,
+        "y": 259,
+        "width": 40,
+        "height": 24
+      },
+      "message": "\"5.00 د.إ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"item-price\">5.00 د.إ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 239,
+        "y": 363,
+        "width": 47,
+        "height": 24
+      },
+      "message": "\"28.00 د.إ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"item-price\">28.00 د.إ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 52,
+        "y": 497,
+        "width": 34,
+        "height": 24
+      },
+      "message": "\"تطبيق\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<button class=\"promo-btn\">تطبيق</button>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 263,
+        "y": 625,
+        "width": 91,
+        "height": 24
+      },
+      "message": "\"المجموع الفرعي\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>المجموع الفرعي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 36,
+        "y": 625,
+        "width": 47,
+        "height": 24
+      },
+      "message": "\"47.50 د.إ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>47.50 د.إ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 239,
+        "y": 659,
+        "width": 115,
+        "height": 24
+      },
+      "message": "\"رسوم التوصيل السريع\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>رسوم التوصيل السريع</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 36,
+        "y": 659,
+        "width": 47,
+        "height": 24
+      },
+      "message": "\"10.00 د.إ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>10.00 د.إ</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 151,
+        "y": 693,
+        "width": 203,
+        "height": 24
+      },
+      "message": "\"ضريبة القيمة المضافة (5% المدعومة)\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>ضريبة القيمة المضافة (5% المدعومة)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 36,
+        "y": 693,
+        "width": 40,
+        "height": 24
+      },
+      "message": "\"2.88 د.إ\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>2.88 د.إ</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 114,
+        "y": 148,
+        "width": 184,
+        "height": 54
+      },
+      "message": "padding-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"item-details\">\n                        <div class=\"item-name\">حليب المراعي طازج 2 لتر</div>\n                        <div class=\"item-price\">14.50 د."
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 114,
+        "y": 229,
+        "width": 184,
+        "height": 54
+      },
+      "message": "padding-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"item-details\">\n                        <div class=\"item-name\">خبز عربي أبيض مطاحن البر البر</div>\n                        <div class=\"item-price\">5."
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 114,
+        "y": 307,
+        "width": 184,
+        "height": 80
+      },
+      "message": "padding-right: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"item-details\">\n                        <div class=\"item-name\">قهوة عربية فاخرة بالهيل 250جم</div>\n                        <div class=\"item-price\">28"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

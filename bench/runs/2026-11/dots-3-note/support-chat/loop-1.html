@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>الدعم - اتصالات الكويت</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --type-body-size: 16px;
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+    }
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'IBM Plex Sans', 'IBM Plex Sans Arabic', sans-serif;
+      font-size: var(--type-body-size);
+      background-color: #f5f5f5;
+      color: #333;
+      direction: rtl;
+      -webkit-text-size-adjust: 100%;
+    }
+    .chat-container {
+      max-width: 480px;
+      height: 100vh;
+      margin: 0 auto;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .message {
+      max-width: 80%;
+      padding: 0.5rem 0.75rem;
+      border-radius: 1rem;
+      position: relative;
+      font-size: var(--type-body-size);
+      line-height: 1.6;
+      word-wrap: break-word;
+    }
+    :lang(ar) .message {
+      line-height: 1.7;
+    }
+    .message.customer {
+      align-self: flex-start;
+      background-color: #007AFF;
+      color: #fff;
+      border-end-start-radius: 0.25rem;
+    }
+    .message.agent {
+      align-self: flex-end;
+      background-color: #e5e5ea;
+      color: #000;
+      border-end-end-radius: 0.25rem;
+    }
+    .time {
+      font-size: var(--type-caption-size);
+      margin-top: 0.25rem;
+    }
+    .message.customer .time {
+      color: rgba(255,255,255,0.7);
+      text-align: start;
+    }
+    .message.agent .time {
+      color: #8e8e93;
+      text-align: end;
+    }
+    .input-area {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      border-top: 1px solid #e5e5ea;
+      background-color: #fff;
+      gap: 0.5rem;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 1rem;
+      font-size: var(--type-body-size);
+      direction: rtl;
+      text-align: start;
+      background-color: #fff;
+    }
+    .input-area input:focus {
+      outline: none;
+      border-color: #007AFF;
+    }
+    .send-button {
+      background-color: #007AFF;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .send-icon {
+      display: inline-block;
+    }
+    :dir(rtl) .send-icon {
+      transform: scaleX(-1);
+    }
+    bdi[dir="ltr"] {
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="messages">
+      <div class="message customer">
+        مرحبا، أريد تفعيل <bdi dir="ltr">5G</bdi> على خطّي
+        <div class="time"><bdi dir="ltr">10:30</bdi></div>
+      </div>
+      <div class="message agent">
+        مرحباً بك، <bdi dir="ltr">Sara</bdi> هنا. يرجى تقديم رقم الطلب، مثال: <bdi dir="ltr">TX-48213</bdi>
+        <div class="time"><bdi dir="ltr">10:31</bdi></div>
+      </div>
+      <div class="message customer">
+        رقم طلبي هو <bdi dir="ltr">TX-48213</bdi>
+        <div class="time"><bdi dir="ltr">10:32</bdi></div>
+      </div>
+      <div class="message agent">
+        شكرًا. رأيت طلبك لـ <bdi dir="ltr">eSIM</bdi>. سيتم المعالجة قريباً.
+        <div class="time"><bdi dir="ltr">10:33</bdi></div>
+      </div>
+      <div class="message customer">
+        ما هي المدة المتوقعة؟
+        <div class="time"><bdi dir="ltr">10:34</bdi></div>
+      </div>
+      <div class="message agent">
+        سيكون <bdi dir="ltr">eSIM</bdi> جاهزًا خلال <bdi dir="ltr">24</bdi> ساعة. ستحصل على إخطار.
+        <div class="time"><bdi dir="ltr">10:35</bdi></div>
+      </div>
+    </div>
+    <div class="input-area">
+      <input type="text" placeholder="اكتب رسالتك..." dir="rtl" autocomplete="off">
+      <button class="send-button" aria-label="أرسل"><span class="send-icon">➤</span></button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,179 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash",
+  "screen": "payment-summary",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-11-01T11:17:35.836Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>ملخص الدفع - تطبيق الإمارات المالي</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --primary: #005A36;          /* UAE Deep Emerald */\n      --primary-light: #EBF7F2;    /* Soft mint tint */\n      --primary-hover: #00472A;\n      --accent-gold: #C5A059;      /* Subtle luxury fintech gold */\n      --bg-page: #0C1512;          /* Outer backdrop for desktop framing */\n      --bg-card: #FFFFFF;\n      --bg-subtle: #F8FAF9;\n      --text-main: #0F172A;\n      --text-muted: #64748B;\n      --border-color: #E2E8F0;\n      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);\n      --shadow-md: 0 10px 25px -5px rgba(0, 90, 54, 0.08);\n      --radius-lg: 20px;\n      --radius-md: 14px;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n      font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, sans-serif;\n      -webkit-tap-highlight-color: transparent;\n    }\n\n    body {\n      background-color: var(--bg-page);\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      min-height: 100vh;\n      color: var(--text-main);\n    }\n\n    /* Phone Shell Container */\n    .mobile-frame {\n      width: 100%;\n      max-width: 412px;\n      height: 100vh;\n      max-height: 890px;\n      background-color: #F8FAF9;\n      border-radius: 40px;\n      overflow: hidden;\n      display: flex;\n      flex-direction: column;\n      position: relative;\n      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 0 10px #1E2923;\n    }\n\n    @media (max-width: 440px) {\n      .mobile-frame {\n        max-height: 100vh;\n        border-radius: 0;\n        box-shadow: none;\n      }\n    }\n\n    /* iOS / Android Status Bar simulation */\n    .status-bar {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 14px 24px 6px;\n      font-size: 13px;\n      font-weight: 700;\n      color: #0F172A;\n      z-index: 10;\n    }\n\n    .status-icons {\n      display: flex;\n      gap: 6px;\n      align-items: center;\n    }\n\n    .status-icons svg {\n      width: 15px;\n      height: 15px;\n      fill: currentColor;\n    }\n\n    /* Navigation Header */\n    .header {\n      display: grid;\n      grid-template-columns: 44px 1fr 44px;\n      align-items: center;\n      padding: 8px 18px 14px;\n      background: #F8FAF9;\n    }\n\n    .back-btn {\n      width: 40px;\n      height: 40px;\n      border-radius: 50%;\n      background: #FFFFFF;\n      border: 1px solid var(--border-color);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      cursor: pointer;\n      box-shadow: var(--shadow-sm);\n      transition: all 0.2s ease;\n      color: var(--text-main);\n    }\n\n    .back-btn:active {\n      transform: scale(0.92);\n      background: #F1F5F9;\n    }\n\n    .header-title {\n      font-size: 18px;\n      font-weight: 700;\n      text-align: center;\n      color: var(--text-main);\n    }\n\n    /* Scrollable Content */\n    .content {\n      flex: 1;\n      overflow-y: auto;\n      padding: 10px 20px 110px;\n      scrollbar-width: none;\n    }\n\n    .content::-webkit-scrollbar {\n      display: none;\n    }\n\n    /* Total Due Hero Card */\n    .hero-card {\n      background: linear-gradient(135deg, #0A432A 0%, #005A36 100%);\n      color: #FFFFFF;\n      border-radius: var(--radius-lg);\n      padding: 24px 20px;\n      position: relative;\n      overflow: hidden;\n      box-shadow: var(--shadow-md);\n      margin-bottom: 16px;\n    }\n\n    .hero-pattern {\n      position: absolute;\n      top: -30px;\n      left: -30px;\n      width: 140px;\n      height: 140px;\n      border-radius: 50%;\n      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);\n      pointer-events: none;\n    }\n\n    .hero-card::after {\n      content: \"\";\n      position: absolute;\n      bottom: -40px;\n      right: -20px;\n      width: 120px;\n      height: 120px;\n      border-radius: 50%;\n      background: radial-gradient(circle, rgba(197, 160, 89, 0.25) 0%, rgba(197,160,89,0) 70%);\n      pointer-events: none;\n    }\n\n    .hero-header {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      margin-bottom: 12px;\n    }\n\n    .hero-label {\n      font-size: 13px;\n      font-weight: 500;\n      color: #A3D4C0;\n    }\n\n    .badge-secure {\n      background: rgba(255, 255, 255, 0.15);\n      backdrop-filter: blur(8px);\n      padding: 4px 10px;\n      border-radius: 20px;\n      font-size: 11px;\n      font-weight: 500;\n      color: #E2F5ED;\n      display: inline-flex;\n      align-items: center;\n      gap: 5px;\n    }\n\n    .badge-secure svg {\n      width: 12px;\n      height: 12px;\n      fill: currentColor;\n    }\n\n    .hero-amount {\n      display: flex;\n      align-items: baseline;\n      gap: 8px;\n    }\n\n    .amount-value {\n      font-size: 38px;\n      font-weight: 800;\n      letter-spacing: -0.5px;\n      font-feature-settings: \"tnum\";\n    }\n\n    .amount-currency {\n      font-size: 18px;\n      font-weight: 600;\n      color: #A3D4C0;\n    }\n\n    /* Info Cards Generic */\n    .info-card {\n      background: var(--bg-card);\n      border-radius: var(--radius-md);\n      border: 1px solid var(--border-color);\n      padding: 16px;\n      margin-bottom: 14px;\n      box-shadow: var(--shadow-sm);\n    }\n\n    /* Due Date Row */\n    .date-row {\n      display: flex;\n      align-items: center;\n      gap: 14px;\n    }\n\n    .icon-box {\n      width: 44px;\n      height: 44px;\n      border-radius: 12px;\n      background: var(--primary-light);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      color: var(--primary);\n      flex-shrink: 0;\n    }\n\n    .icon-box svg {\n      width: 22px;\n      height: 22px;\n    }\n\n    .date-details {\n      flex: 1;\n    }\n\n    .date-label {\n      font-size: 12px;\n      color: var(--text-muted);\n      margin-bottom: 3px;\n    }\n\n    .date-gregorian {\n      font-size: 15px;\n      font-weight: 700;\n      color: var(--text-main);\n      display: flex;\n      align-items: center;\n      gap: 6px;\n    }\n\n    .date-hijri {\n      font-size: 12.5px;\n      color: var(--accent-gold);\n      font-weight: 600;\n      margin-top: 2px;\n    }\n\n    /* Items Count Banner */\n    .items-card {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      background: #FFFFFF;\n      border: 1px solid #E2E8F0;\n      border-radius: var(--radius-md);\n      padding: 14px 16px;\n      margin-bottom: 14px;\n      box-shadow: var(--shadow-sm);\n    }\n\n    .items-info {\n      display: flex;\n      align-items: center;\n      gap: 12px;\n    }\n\n    .items-icon {\n      width: 38px;\n      height: 38px;\n      background: #F1F5F9;\n      border-radius: 10px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      color: var(--text-main);\n    }\n\n    .items-icon svg {\n      width: 20px;\n      height: 20px;\n    }\n\n    .items-text {\n      font-size: 14px;\n      font-weight: 700;\n      color: var(--text-main);\n    }\n\n    .items-subtext {\n      font-size: 12px;\n      color: var(--text-muted);\n    }\n\n    .badge-count {\n      background: var(--primary-light);\n      color: var(--primary);\n      font-size: 12px;\n      font-weight: 700;\n      padding: 4px 10px;\n      border-radius: 12px;\n    }\n\n    /* Phone Input Section */\n    .sms-section {\n      background: #FFFFFF;\n      border: 1px solid var(--border-color);\n      border-radius: var(--radius-md);\n      padding: 16px;\n      box-shadow: var(--shadow-sm);\n    }\n\n    .sms-title {\n      font-size: 13.5px;\n      font-weight: 700;\n      color: var(--text-main);\n      display: flex;\n      align-items: center;\n      gap: 8px;\n      margin-bottom: 4px;\n    }\n\n    .sms-title svg {\n      width: 17px;\n      height: 17px;\n      color: var(--primary);\n    }\n\n    .sms-desc {\n      font-size: 12px;\n      color: var(--text-muted);\n      margin-bottom: 12px;\n      line-height: 1.5;\n    }\n\n    .phone-input-wrapper {\n      position: relative;\n      display: flex;\n      align-items: center;\n      background: #F8FAF9;\n      border: 1.5px solid var(--border-color);\n      border-radius: 12px;\n      padding: 4px 12px;\n      direction: ltr; /* Keeps international number layout intuitive */\n      transition: all 0.2s ease;\n    }\n\n    .phone-input-wrapper:focus-within {\n      border-color: var(--primary);\n      background: #FFFFFF;\n      box-shadow: 0 0 0 3px rgba(0, 90, 54, 0.12);\n    }\n\n    .country-code {\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      padding-right: 10px;\n      margin-right: 10px;\n      border-right: 1.5px solid var(--border-color);\n      font-weight: 700;\n      font-size: 13.5px;\n      color: var(--text-main);\n      user-select: none;\n    }\n\n    .uae-flag {\n      width: 22px;\n      height: 15px;\n      border-radius: 2px;\n      object-fit: cover;\n      box-shadow: 0 0 2px rgba(0,0,0,0.2);\n    }\n\n    .phone-field {\n      border: none;\n      outline: none;\n      background: transparent;\n      width: 100%;\n      font-size: 15px;\n      font-weight: 600;\n      color: var(--text-main);\n      letter-spacing: 0.5px;\n    }\n\n    .phone-field::placeholder {\n      color: #94A3B8;\n      font-weight: 400;\n    }\n\n    /* Trust & Security footer badge */\n    .trust-footer {\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      gap: 6px;\n      font-size: 11.5px;\n      color: var(--text-muted);\n      margin-top: 18px;\n    }\n\n    .trust-footer svg {\n      width: 14px;\n      height: 14px;\n      color: var(--primary);\n    }\n\n    /* Fixed Bottom Action */\n    .bottom-bar {\n      position: absolute;\n      bottom: 0;\n      left: 0;\n      right: 0;\n      background: rgba(255, 255, 255, 0.95);\n      backdrop-filter: blur(14px);\n      padding: 14px 20px 22px;\n      border-top: 1px solid var(--border-color);\n      display: flex;\n      flex-direction: column;\n      gap: 10px;\n      box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.04);\n    }\n\n    .pay-btn {\n      width: 100%;\n      height: 54px;\n      background: var(--primary);\n      color: #FFFFFF;\n      border: none;\n      border-radius: 14px;\n      font-size: 16px;\n      font-weight: 700;\n      cursor: pointer;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      padding: 0 20px;\n      box-shadow: 0 6px 16px rgba(0, 90, 54, 0.28);\n      transition: all 0.2s ease;\n    }\n\n    .pay-btn:hover {\n      background: var(--primary-hover);\n    }\n\n    .pay-btn:active {\n      transform: scale(0.985);\n      box-shadow: 0 2px 8px rgba(0, 90, 54, 0.2);\n    }\n\n    .pay-btn-label {\n      display: flex;\n      align-items: center;\n      gap: 8px;\n    }\n\n    .pay-btn-amount {\n      background: rgba(255, 255, 255, 0.18);\n      padding: 5px 12px;\n      border-radius: 8px;\n      font-size: 14px;\n      font-weight: 700;\n      direction: ltr;\n    }\n  </style>\n</head>\n<body>\n\n  <main class=\"mobile-frame\" role=\"region\" aria-label=\"شاشة ملخص الدفع\">\n    <!-- System Status Bar -->\n    <div class=\"status-bar\">\n      <span>09:41</span>\n      <div class=\"status-icons\">\n        <!-- Cellular Signal Icon -->\n        <svg viewBox=\"0 0 24 24\"><path d=\"M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.28 19.58 10.6 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z\"/></svg>\n        <!-- Wifi Icon -->\n        <svg viewBox=\"0 0 24 24\"><path d=\"M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.5c3.5 0 6.74 1.34 9.2 3.54L12 19.24 2.8 11.04C5.26 8.84 8.5 7.5 12 7.5z\"/></svg>\n        <!-- Battery Icon -->\n        <svg viewBox=\"0 0 24 24\"><path d=\"M17 5v14h-10V5h10m1-2H6c-.55 0-1 .45-1 1v16c0 .55.45 1 1 1h12c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zm-4-2h-4c-.55 0-1 .45-1 1v1h6V2c0-.55-.45-1-1-1z\"/></svg>\n      </div>\n    </div>\n\n    <!-- Header -->\n    <header class=\"header\">\n      <button class=\"back-btn\" aria-label=\"الرجوع إلى الصفحة السابقة\" onclick=\"history.back()\">\n        <!-- Right Arrow for RTL back button -->\n        <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <polyline points=\"9 18 15 12 9 6\"></polyline>\n        </svg>\n      </button>\n      <h1 class=\"header-title\">ملخص الدفع</h1>\n      <div></div>\n    </header>\n\n    <!-- Main Content Area -->\n    <div class=\"content\">\n\n      <!-- Total Amount Hero Card -->\n      <section class=\"hero-card\">\n        <div class=\"hero-pattern\"></div>\n        <div class=\"hero-header\">\n          <span class=\"hero-label\">المبلغ الإجمالي المستحق</span>\n          <span class=\"badge-secure\">\n            <svg viewBox=\"0 0 24 24\"><path d=\"M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 16l-4-4 1.41-1.41L11 14.17l6.59-6.59L19 9l-8 8z\"/></svg>\n            دفع مؤمّن\n          </span>\n        </div>\n        <div class=\"hero-amount\">\n          <span class=\"amount-value\">1,234.50</span>\n          <span class=\"amount-currency\">درهم إماراتي</span>\n        </div>\n      </section>\n\n      <!-- Due Date Section (Gregorian & Hijri) -->\n      <section class=\"info-card\">\n        <div class=\"date-row\">\n          <div class=\"icon-box\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n              <rect x=\"3\" y=\"4\" width=\"18\" height=\"18\" rx=\"2\" ry=\"2\"></rect>\n              <line x1=\"16\" y1=\"2\" x2=\"16\" y2=\"6\"></line>\n              <line x1=\"8\" y1=\"2\" x2=\"8\" y2=\"6\"></line>\n              <line x1=\"3\" y1=\"10\" x2=\"21\" y2=\"10\"></line>\n            </svg>\n          </div>\n          <div class=\"date-details\">\n            <div class=\"date-label\">تاريخ الاستحقاق</div>\n            <div class=\"date-gregorian\">3 نوفمبر 2026 م</div>\n            <div class=\"date-hijri\">23 جمادى الأولى 1448 هـ</div>\n          </div>\n        </div>\n      </section>\n\n      <!-- Order Items Summary -->\n      <section class=\"items-card\">\n        <div class=\"items-info\">\n          <div class=\"items-icon\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n              <path d=\"M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z\"></path>\n              <line x1=\"3\" y1=\"6\" x2=\"21\" y2=\"6\"></line>\n              <path d=\"M16 10a4 4 0 0 1-8 0\"></path>\n            </svg>\n          </div>\n          <div>\n            <div class=\"items-text\">لديك 3 عناصر في هذا الطلب</div>\n            <div class=\"items-subtext\">طلب رقم #DXB-98421</div>\n          </div>\n        </div>\n        <span class=\"badge-count\">3 عناصر</span>\n      </section>\n\n      <!-- SMS Receipt Phone Input Field -->\n      <section class=\"sms-section\">\n        <div class=\"sms-title\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <path d=\"M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z\"></path>\n          </svg>\n          إرسال الإيصال عبر رسالة نصية (SMS)\n        </div>\n        <p class=\"sms-desc\">أدخل رقم الهاتف المتحرك الإماراتي لاستلام تأكيد المعاملة وفاتورة الدفع فوراً.</p>\n\n        <div class=\"phone-input-wrapper\">\n          <div class=\"country-code\" title=\"دولة الإمارات العربية المتحدة\">\n            <!-- UAE SVG Flag -->\n            <svg class=\"uae-flag\" viewBox=\"0 0 1200 600\">\n              <rect width=\"1200\" height=\"200\" fill=\"#00732F\"/>\n              <rect y=\"200\" width=\"1200\" height=\"200\" fill=\"#FFFFFF\"/>\n              <rect y=\"400\" width=\"1200\" height=\"200\" fill=\"#000000\"/>\n              <rect width=\"300\" height=\"600\" fill=\"#FF0000\"/>\n            </svg>\n            <span>+971</span>\n          </div>\n          <input\n            type=\"tel\"\n            class=\"phone-field\"\n            placeholder=\"050 123 4567\"\n            aria-label=\"رقم الهاتف المتحرك\"\n            maxlength=\"12\"\n            pattern=\"[0-9 ]*\"\n          >\n        </div>\n      </section>\n\n      <!-- Security Guarantee Footer Note -->\n      <div class=\"trust-footer\">\n        <svg viewBox=\"0 0 24 24\" fill=\"currentColor\">\n          <path d=\"M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z\"/>\n        </svg>\n        <span>معاملة مشفرة وآمنة وفق معايير مصرف الإمارات المركزي</span>\n      </div>\n\n    </div>\n\n    <!-- Bottom Sticky Pay CTA -->\n    <div class=\"bottom-bar\">\n      <button class=\"pay-btn\" type=\"button\" aria-label=\"ادفع الآن\">\n        <span class=\"pay-btn-label\">\n          <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <polyline points=\"20 6 9 17 4 12\"></polyline>\n          </svg>\n          ادفع الآن\n        </span>\n        <span class=\"pay-btn-amount\">1,234.50 AED</span>\n      </button>\n    </div>\n  </main>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 188,
+    "output": 6872
+  },
+  "ms": 157449,
+  "finish": "STOP",
+  "reasoningTokens": 1448,
+  "servedModel": "gemini-3.8-flash",
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 77,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 195,
+        "y": 387.5,
+        "width": 108,
+        "height": 12
+      },
+      "message": "\"#DXB-98421\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"items-subtext\">طلب رقم #DXB-98421</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 215,
+        "y": 135.5,
+        "width": 135,
+        "height": 13
+      },
+      "message": "\"المبلغ الإجمالي المستحق\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"hero-label\">المبلغ الإجمالي المستحق</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 137,
+        "width": 47,
+        "height": 11
+      },
+      "message": "\"دفع مؤمّن\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"badge-secure\">\n            <svg viewBox=\"0 0 24 24\"><path d=\"M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 16l-4-4 1.41-1.41L"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 213,
+        "y": 269,
+        "width": 82,
+        "height": 12
+      },
+      "message": "\"تاريخ الاستحقاق\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"date-label\">تاريخ الاستحقاق</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 170,
+        "y": 306,
+        "width": 125,
+        "height": 12
+      },
+      "message": "\"23 جمادى الأولى 1448 هـ\" is 12.5px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"date-hijri\">23 جمادى الأولى 1448 هـ</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 195,
+        "y": 387.5,
+        "width": 108,
+        "height": 12
+      },
+      "message": "\"طلب رقم #DXB-98421\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"items-subtext\">طلب رقم #DXB-98421</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 47,
+        "y": 379,
+        "width": 42,
+        "height": 12
+      },
+      "message": "\"3 عناصر\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"badge-count\">3 عناصر</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 110,
+        "y": 451,
+        "width": 218,
+        "height": 14
+      },
+      "message": "\"إرسال الإيصال عبر رسالة نصية (SMS)\" is 13.5px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"sms-title\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n  "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 71,
+        "y": 474,
+        "width": 282,
+        "height": 30
+      },
+      "message": "\"أدخل رقم الهاتف المتحرك الإماراتي لاستلا…\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"sms-desc\">أدخل رقم الهاتف المتحرك الإماراتي لاستلام تأكيد المعاملة وفاتورة الدفع فوراً.</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 51.5,
+        "y": 583.5,
+        "width": 267,
+        "height": 11
+      },
+      "message": "\"معاملة مشفرة وآمنة وفق معايير مصرف الإما…\" is 11.5px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>معاملة مشفرة وآمنة وفق معايير مصرف الإمارات المركزي</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": -10,
+        "y": 78,
+        "width": 140,
+        "height": 140
+      },
+      "message": "left: -30px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"hero-pattern\"></div>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>المعاملات</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap');
+
+    :root {
+      --color-bg: #f5f5f5;
+      --color-card: #ffffff;
+      --color-text: #1a1a1a;
+      --color-text-secondary: #666666;
+      --color-border: #eeeeee;
+      --color-in: #007a55;
+      --color-out: #d32f2f;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Noto Sans Arabic', 'Noto Sans', sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container {
+      max-width: 375px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding-inline: 16px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-block: 16px;
+    }
+    header h1 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .balance-card {
+      background-color: var(--color-card);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .balance-label {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      margin-bottom: 8px;
+    }
+    .balance-amount {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--color-text);
+    }
+    .filter {
+      margin-bottom: 16px;
+    }
+    .filter-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: 24px;
+      padding: 10px 16px;
+      font-size: 14px;
+      color: var(--color-text);
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      font-family: 'Noto Sans Arabic', sans-serif;
+    }
+    .filter-btn span {
+      font-size: 12px;
+    }
+    .table-wrapper {
+      overflow-x: auto;
+    }
+    .transactions-table {
+      background-color: var(--color-card);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .transactions-table th {
+      background-color: #f8f9fa;
+      padding: 12px 16px;
+      text-align: start;
+      font-weight: 600;
+      font-size: 14px;
+      color: #555;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .transactions-table td {
+      padding: 12px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .transactions-table tr:last-child td {
+      border-bottom: none;
+    }
+    .merchant {
+      font-weight: 500;
+    }
+    .amount {
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .status {
+      font-size: 14px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 12px;
+      text-align: center;
+      display: inline-block;
+      min-width: 60px;
+    }
+    .status.in {
+      background-color: rgba(0, 122, 85, 0.1);
+      color: var(--color-in);
+    }
+    .status.out {
+      background-color: rgba(211, 47, 47, 0.1);
+      color: var(--color-out);
+    }
+    bdi {
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>المعاملات</h1>
+    </header>
+    <section class="balance-card">
+      <div class="balance-label">رَصِيد</div>
+      <div class="balance-amount"><bdi>1,234.567 ر.ع</bdi></div>
+    </section>
+    <section class="filter">
+      <button class="filter-btn">
+        هذا الشهر
+        <span>▼</span>
+      </button>
+    </section>
+    <section class="transactions">
+      <div class="table-wrapper">
+        <table class="transactions-table">
+          <thead>
+            <tr>
+              <th>التاريخ</th>
+              <th>المتجر</th>
+              <th>المبلغ</th>
+              <th>الحالة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><bdi dir="ltr">15/03/2024</bdi></td>
+              <td class="merchant"><bdi dir="ltr">Lulu Hypermarket</bdi></td>
+              <td class="amount"><bdi>12.500 ر.ع</bdi></td>
+              <td><span class="status out">خرج</span></td>
+            </tr>
+            <tr>
+              <td><bdi dir="ltr">14/03/2024</bdi></td>
+              <td class="merchant"><bdi dir="ltr">Netflix</bdi></td>
+              <td class="amount"><bdi>4.500 ر.ع</bdi></td>
+              <td><span class="status out">خرج</span></td>
+            </tr>
+            <tr>
+              <td><bdi dir="ltr">13/03/2024</bdi></td>
+              <td class="merchant"><bdi dir="ltr">Bank Muscat</bdi></td>
+              <td class="amount"><bdi>50.000 ر.ع</bdi></td>
+              <td><span class="status in">دخل</span></td>
+            </tr>
+            <tr>
+              <td><bdi dir="ltr">12/03/2024</bdi></td>
+              <td class="merchant"><bdi dir="ltr">Omantel</bdi></td>
+              <td class="amount"><bdi>3.200 ر.ع</bdi></td>
+              <td><span class="status out">خرج</span></td>
+            </tr>
+            <tr>
+              <td><bdi dir="ltr">11/03/2024</bdi></td>
+              <td class="merchant"><bdi dir="ltr">Starbucks</bdi></td>
+              <td class="amount"><bdi>2.800 ر.ع</bdi></td>
+              <td><span class="status out">خرج</span></td>
+            </tr>
+            <tr>
+              <td><bdi dir="ltr">10/03/2024</bdi></td>
+              <td class="merchant"><bdi dir="ltr">Salary</bdi></td>
+              <td class="amount"><bdi>500.000 ر.ع</bdi></td>
+              <td><span class="status in">دخل</span></td>
+            </tr>
+            <tr>
+              <td><bdi dir="ltr">09/03/2024</bdi></td>
+              <td class="merchant"><bdi dir="ltr">Uber</bdi></td>
+              <td class="amount"><bdi>1.500 ر.ع</bdi></td>
+              <td><span class="status out">خرج</span></td>
+            </tr>
+            <tr>
+              <td><bdi dir="ltr">08/03/2024</bdi></td>
+              <td class="merchant"><bdi dir="ltr">Alizz Islamic Bank</bdi></td>
+              <td class="amount"><bdi>100.000 ر.ع</bdi></td>
+              <td><span class="status in">دخل</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

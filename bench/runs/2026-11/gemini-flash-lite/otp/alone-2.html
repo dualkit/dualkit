@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رمز التحقق - المصرفية السعودية</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#006C35', // Saudi Green
+                            dark: '#004d25',
+                            light: '#e6f4ed'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-900 flex items-center justify-center min-h-screen font-cairo">
+
+    <!-- Phone Container -->
+    <div class="w-[390px] h-[844px] bg-white rounded-[48px] shadow-2xl overflow-hidden flex flex-col justify-between relative border-[10px] border-slate-800">
+        
+        <!-- Top Dynamic Island / Notch Area -->
+        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-36 h-7 bg-slate-800 rounded-b-2xl z-50 flex items-center justify-center">
+            <div class="w-12 h-3 bg-slate-900 rounded-full"></div>
+        </div>
+
+        <!-- Header / Status Bar -->
+        <div class="px-8 pt-12 pb-4 flex items-center justify-between">
+            <button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-200 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-brand tracking-wider">البنك السعودي</span>
+                <div class="w-7 h-7 bg-brand rounded-lg flex items-center justify-center text-white font-bold text-xs">س</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="px-8 pt-6 flex-1 flex flex-col">
+            
+            <!-- Icon Illustration -->
+            <div class="w-16 h-16 bg-brand-light text-brand rounded-2xl flex items-center justify-center mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+            </div>
+
+            <!-- Titles -->
+            <h1 class="text-2xl font-bold text-slate-900 mb-2">أدخل الرمز</h1>
+            <p class="text-slate-500 text-sm leading-relaxed mb-8">
+                تم إرسال رمز مكون من 6 أرقام إلى الرقم<br>
+                <span dir="ltr" class="font-semibold text-slate-800 inline-block mt-1">+966 55 123 4567</span>
+            </p>
+
+            <!-- 6 Code Input Boxes -->
+            <div class="flex justify-between gap-2 mb-8" id="otp-container">
+                <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-brand focus:bg-white focus:outline-none transition" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code">
+                <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-brand focus:bg-white focus:outline-none transition" inputmode="numeric" pattern="[0-9]*">
+                <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-brand focus:bg-white focus:outline-none transition" inputmode="numeric" pattern="[0-9]*">
+                <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-brand focus:bg-white focus:outline-none transition" inputmode="numeric" pattern="[0-9]*">
+                <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-brand focus:bg-white focus:outline-none transition" inputmode="numeric" pattern="[0-9]*">
+                <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-brand focus:bg-white focus:outline-none transition" inputmode="numeric" pattern="[0-9]*">
+            </div>
+
+            <!-- Resend Timer -->
+            <div class="text-center">
+                <p class="text-sm text-slate-500">
+                    لم تستلم الرمز؟ 
+                    <span id="resend-text" class="text-brand font-semibold cursor-pointer hover:underline">إعادة الإرسال في 0:45</span>
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Bottom Action Button -->
+        <div class="p-8 pt-4 bg-white">
+            <button class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-4 rounded-2xl shadow-lg shadow-brand/30 transition duration-200 flex items-center justify-center gap-2 text-base">
+                <span>تحقق</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </button>
+            
+            <!-- Home Indicator Bar -->
+            <div class="w-32 h-1 bg-gray-300 rounded-full mx-auto mt-6"></div>
+        </div>
+
+    </div>
+
+    <!-- Script to handle OTP inputs auto-focus -->
+    <script>
+        const inputs = document.querySelectorAll('.otp-input');
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                const value = e.target.value;
+                if (value && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

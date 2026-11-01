@@ -1,0 +1,123 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "support-chat",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-11-01T11:26:50.932Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الدعم الفني - محادثة سارة</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --bg-app: #f4f6f8;\n      --bg-chat: #ffffff;\n      --primary: #0047ff;\n      --primary-light: #e6edff;\n      --text-main: #111827;\n      --text-muted: #6b7280;\n      --bubble-agent: #f3f4f6;\n      --bubble-client: #0047ff;\n      --bubble-client-text: #ffffff;\n      --border-color: #e5e7eb;\n    }\n\n    /* Arabic Type Pairing & Size Rules */\n    :lang(ar) {\n      font-family: 'IBM Plex Sans Arabic', sans-serif;\n      letter-spacing: 0;\n      text-transform: none;\n      font-style: normal;\n      line-height: 1.7;\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n    }\n\n    body {\n      background-color: var(--bg-app);\n      color: var(--text-main);\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      min-height: 100vh;\n      font-size: 16px;\n    }\n\n    /* Mobile Phone Container Frame */\n    .phone-frame {\n      width: 100%;\n      max-width: 390px;\n      height: 844px;\n      background-color: var(--bg-chat);\n      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);\n      display: flex;\n      flex-direction: column;\n      position: relative;\n      overflow: hidden;\n      border-radius: 40px;\n      border: 8px solid #1f2937;\n    }\n\n    @media (max-width: 390px) {\n      .phone-frame {\n        height: 100vh;\n        border: none;\n        border-radius: 0;\n      }\n    }\n\n    /* Header */\n    .chat-header {\n      padding: 16px 20px;\n      background-color: #ffffff;\n      border-bottom: 1px solid var(--border-color);\n      display: flex;\n      align-items: center;\n      gap: 14px;\n      z-index: 10;\n    }\n\n    .back-btn {\n      background: none;\n      border: none;\n      cursor: pointer;\n      font-size: 20px;\n      color: var(--text-main);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n    }\n\n    .back-icon:dir(rtl) {\n      transform: scaleX(-1);\n    }\n\n    .agent-avatar {\n      width: 44px;\n      height: 44px;\n      border-radius: 50%;\n      background-color: var(--primary-light);\n      color: var(--primary);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      font-weight: 600;\n      font-size: 18px;\n      position: relative;\n    }\n\n    .status-dot {\n      width: 12px;\n      height: 12px;\n      background-color: #10b981;\n      border: 2px solid #ffffff;\n      border-radius: 50%;\n      position: absolute;\n      bottom: 0;\n      inset-inline-end: 0;\n    }\n\n    .agent-info h1 {\n      font-size: 16px;\n      font-weight: 600;\n      color: var(--text-main);\n    }\n\n    .agent-info p {\n      font-size: 14px;\n      color: var(--text-muted);\n    }\n\n    /* Messages Area */\n    .chat-messages {\n      flex: 1;\n      padding: 20px;\n      overflow-y: auto;\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n      background-color: #fafbfc;\n    }\n\n    .message {\n      max-width: 82%;\n      display: flex;\n      flex-direction: column;\n      gap: 4px;\n    }\n\n    .message.agent {\n      align-self: flex-start;\n    }\n\n    .message.client {\n      align-self: flex-end;\n    }\n\n    .bubble {\n      padding: 12px 16px;\n      border-radius: 18px;\n      font-size: 15px;\n      line-height: 1.6;\n      word-break: break-word;\n    }\n\n    .message.agent .bubble {\n      background-color: var(--bubble-agent);\n      color: var(--text-main);\n      border-start-start-radius: 4px;\n    }\n\n    .message.client .bubble {\n      background-color: var(--bubble-client);\n      color: var(--bubble-client-text);\n      border-start-end-radius: 4px;\n    }\n\n    .time {\n      font-size: 14px;\n      color: var(--text-muted);\n      padding-inline: 4px;\n    }\n\n    .message.agent .time {\n      text-align: start;\n    }\n\n    .message.client .time {\n      text-align: end;\n    }\n\n    /* Footer Input */\n    .chat-footer {\n      padding: 16px 20px;\n      background-color: #ffffff;\n      border-top: 1px solid var(--border-color);\n      display: flex;\n      align-items: center;\n      gap: 10px;\n    }\n\n    .chat-input {\n      flex: 1;\n      padding: 12px 16px;\n      border: 1px solid var(--border-color);\n      border-radius: 24px;\n      outline: none;\n      font-size: 15px;\n      background-color: #f9fafb;\n      color: var(--text-main);\n      transition: border-color 0.2s;\n    }\n\n    .chat-input:focus {\n      border-color: var(--primary);\n      background-color: #ffffff;\n    }\n\n    .send-btn {\n      width: 44px;\n      height: 44px;\n      background-color: var(--primary);\n      color: #ffffff;\n      border: none;\n      border-radius: 50%;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      cursor: pointer;\n      transition: background-color 0.2s;\n      flex-shrink: 0;\n    }\n\n    .send-btn:hover {\n      background-color: #003be5;\n    }\n\n    .send-icon {\n      width: 20px;\n      height: 20px;\n      fill: currentColor;\n    }\n\n    .send-icon:dir(rtl) {\n      transform: scaleX(-1);\n    }\n  </style>\n</head>\n<body>\n\n  <div class=\"phone-frame\">\n    <!-- Header -->\n    <header class=\"chat-header\">\n      <button class=\"back-btn\" aria-label=\"الرجوع\">\n        <svg class=\"back-icon\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <polyline points=\"15 18 9 12 15 6\"></polyline>\n        </svg>\n      </button>\n      <div class=\"agent-avatar\">\n        س\n        <div class=\"status-dot\"></div>\n      </div>\n      <div class=\"agent-info\">\n        <h1>سارة</h1>\n        <p>خدمة العملاء</p>\n      </div>\n    </header>\n\n    <!-- Messages Container -->\n    <div class=\"chat-messages\">\n      \n      <!-- Message 1: Client -->\n      <div class=\"message client\">\n        <div class=\"bubble\">\n          السلام عليكم، أبي أسأل عن تفعيل شريحة الـ <bdi dir=\"ltr\">eSIM</bdi> الجديدة.\n        </div>\n        <span class=\"time\">10:40 ص</span>\n      </div>\n\n      <!-- Message 2: Agent -->\n      <div class=\"message agent\">\n        <div class=\"bubble\">\n          وعليكم السلام ورحمة الله. أهلاً بك! أنا سارة من خدمة العملاء. يسعدني مساعدتك في تفعيل شريحة الـ <bdi dir=\"ltr\">eSIM</bdi> الخاصة بباقات الـ <bdi dir=\"ltr\">5G</bdi>. هل رقم الطلب هو <bdi dir=\"ltr\">TX-48213</bdi>؟\n        </div>\n        <span class=\"time\">10:41 ص</span>\n      </div>\n\n      <!-- Message 3: Client -->\n      <div class=\"message client\">\n        <div class=\"bubble\">\n          نعم، هذا هو رقم الطلب <bdi dir=\"ltr\">TX-48213</bdi>. متى يوصلني الـ <bdi dir=\"ltr\">QR code</bdi>؟\n        </div>\n        <span class=\"time\">10:42 ص</span>\n      </div>\n\n      <!-- Message 4: Agent -->\n      <div class=\"message agent\">\n        <div class=\"bubble\">\n          تم إرسال رسالة نصية تحتوي على رابط الـ <bdi dir=\"ltr\">QR code</bdi> إلى رقم هاتفكم المسجل. يرجى التحقق من الرسائل الواردة.\n        </div>\n        <span class=\"time\">10:42 ص</span>\n      </div>\n\n      <!-- Message 5: Client -->\n      <div class=\"message client\">\n        <div class=\"bubble\">\n          شفتها، بس مو راضي يمسح الكود معي.\n        </div>\n        <span class=\"time\">10:44 ص</span>\n      </div>\n\n      <!-- Message 6: Agent -->\n      <div class=\"message agent\">\n        <div class=\"bubble\">\n          لا تقلق، تأكد من اتصالك بالإنترنت وحاول مرة أخرى، أو يمكنك إدخال بيانات التفعيل يدويًا في إعدادات جهازك. هل تحتاج أن أرسل لك تفاصيل الإعداد اليدوي؟\n        </div>\n        <span class=\"time\">10:45 ص</span>\n      </div>\n\n    </div>\n\n    <!-- Footer Input Area -->\n    <footer class=\"chat-footer\">\n      <input type=\"text\" class=\"chat-input\" placeholder=\"اكتب رسالتك هنا...\" dir=\"auto\" aria-label=\"اكتب رسالتك\">\n      <button class=\"send-btn\" aria-label=\"إرسال الرسالة\">\n        <svg class=\"send-icon\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <line x1=\"22\" y1=\"2\" x2=\"11\" y2=\"13\"></line>\n          <polygon points=\"22 2 15 22 11 13 2 9 22 2\"></polygon>\n        </svg>\n      </button>\n    </footer>\n  </div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6499,
+    "output": 2985
+  },
+  "ms": 17937,
+  "finish": "STOP",
+  "reasoningTokens": 1786,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 93,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-placeholder",
+      "title": "An Arabic hint on the wrong side of the field",
+      "severity": "warning",
+      "box": {
+        "x": 39,
+        "y": 776.5,
+        "width": 331,
+        "height": 51.5
+      },
+      "message": "The placeholder \"اكتب رسالتك هنا...\" is Arabic in a left-to-right field.",
+      "fix": "Keep dir=\"ltr\" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.",
+      "snippet": "<input type=\"text\" class=\"chat-input\" placeholder=\"اكتب رسالتك هنا...\" dir=\"auto\" aria-label=\"اكتب رسالتك\">"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 103.984375,
+        "width": 287,
+        "height": 73.5
+      },
+      "message": "border-top-left-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          السلام عليكم، أبي أسأل عن تفعيل شريحة الـ <bdi dir=\"ltr\">eSIM</bdi> الجديدة.\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 83,
+        "y": 221.28125,
+        "width": 287,
+        "height": 123
+      },
+      "message": "border-top-left-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          وعليكم السلام ورحمة الله. أهلاً بك! أنا سارة من خدمة العملاء. يسعدني مساعدتك في تفعيل شريحة الـ <bdi dir=\"ltr\">eSIM</bdi> الخاصة "
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 388.078125,
+        "width": 287,
+        "height": 75
+      },
+      "message": "border-top-left-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          نعم، هذا هو رقم الطلب <bdi dir=\"ltr\">TX-48213</bdi>. متى يوصلني الـ <bdi dir=\"ltr\">QR code</bdi>؟\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 83,
+        "y": 506.875,
+        "width": 287,
+        "height": 99
+      },
+      "message": "border-top-left-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          تم إرسال رسالة نصية تحتوي على رابط الـ <bdi dir=\"ltr\">QR code</bdi> إلى رقم هاتفكم المسجل. يرجى التحقق من الرسائل الواردة.\n      "
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 20,
+        "y": 649.671875,
+        "width": 248,
+        "height": 48
+      },
+      "message": "border-top-left-radius: 4px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          شفتها، بس مو راضي يمسح الكود معي.\n        </div>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 83,
+        "y": 741.46875,
+        "width": 287,
+        "height": 120
+      },
+      "message": "border-top-left-radius: 18px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"bubble\">\n          لا تقلق، تأكد من اتصالك بالإنترنت وحاول مرة أخرى، أو يمكنك إدخال بيانات التفعيل يدويًا في إعدادات جهازك. هل تحتاج أن أرسل لك تفاص"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

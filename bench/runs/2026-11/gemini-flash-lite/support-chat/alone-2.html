@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق الاتصالات - الدعم الفني</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Tajawal for Arabic -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+        /* Custom scrollbar for chat */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Phone Mockup Container -->
+    <div class="w-[380px] h-[760px] bg-slate-100 rounded-[45px] shadow-2xl overflow-hidden flex flex-col relative border-[10px] border-slate-800">
+        
+        <!-- Phone Speaker & Camera Notch -->
+        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-slate-800 rounded-b-2xl z-50 flex items-center justify-center">
+            <div class="w-12 h-1 bg-slate-700 rounded-full"></div>
+            <div class="w-2 h-2 bg-slate-900 rounded-full ml-2"></div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="bg-indigo-900 text-white pt-3 px-6 pb-2 flex justify-between items-center text-xs z-40">
+            <span>١٠:٣٧ ص</span>
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <!-- Signal Icon -->
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19H8v2h8v-2h3.65l-1.62-1.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"/></svg>
+                <!-- Wifi Icon -->
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 3C6.95 3 3.15 4.85 0 7.23L12 22 24 7.23C20.85 4.85 17.05 3 12 3z"/></svg>
+                <!-- Battery -->
+                <span class="font-bold">٩٤٪</span>
+            </div>
+        </div>
+
+        <!-- App Header / Chat Header -->
+        <div class="bg-indigo-900 text-white px-4 py-3 flex items-center justify-between shadow-md z-40">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="relative">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-pink-500 flex items-center justify-center font-bold text-white text-lg shadow">
+                        س
+                    </div>
+                    <!-- Online Status Dot -->
+                    <span class="absolute bottom-0 left-0 w-3 h-3 bg-emerald-400 border-2 border-indigo-900 rounded-full"></span>
+                </div>
+                <div>
+                    <h2 class="font-bold text-sm">ساره</h2>
+                    <p class="text-[11px] text-indigo-200">الدعم الفني • متواجد الآن</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3 space-x-reverse text-indigo-200">
+                <button class="hover:text-white transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                </button>
+                <button class="hover:text-white transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Messages Area -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-100 flex flex-col">
+            
+            <!-- Date Separator -->
+            <div class="text-center my-1">
+                <span class="bg-slate-200 text-slate-600 text-[10px] px-3 py-1 rounded-full font-medium">اليوم</span>
+            </div>
+
+            <!-- Message 1 (Customer) -->
+            <div class="flex flex-col items-end max-w-[80%] self-end">
+                <div class="bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed">
+                    السلام عليكم، عندي مشكلة في تفعيل خط الـ eSIM الجديد.
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">١٠:٣٠ ص</span>
+            </div>
+
+            <!-- Message 2 (Agent Sara) -->
+            <div class="flex flex-col items-start max-w-[80%] self-start">
+                <div class="bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60">
+                    وعليكم السلام أهلاً بك! معك ساره من خدمة العملاء. ممكن تزويدي برقم الطلب لو سمحت؟
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">١٠:٣١ ص</span>
+            </div>
+
+            <!-- Message 3 (Customer) -->
+            <div class="flex flex-col items-end max-w-[80%] self-end">
+                <div class="bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed">
+                    تفضل، هذا هو رقم الطلب TX-48213.
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">١٠:٣٢ ص</span>
+            </div>
+
+            <!-- Message 4 (Agent Sara) -->
+            <div class="flex flex-col items-start max-w-[80%] self-start">
+                <div class="bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60">
+                    شكراً لك. لقد قمنا بالتحقق من النظام، الشريحة جاهزة للعمل على شبكة الـ 5G الآن.
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">١٠:٣٣ ص</span>
+            </div>
+
+            <!-- Message 5 (Customer) -->
+            <div class="flex flex-col items-end max-w-[80%] self-end">
+                <div class="bg-indigo-600 text-white rounded-2xl rounded-tr-none px-4 py-2.5 text-xs shadow-sm leading-relaxed">
+                    ممتاز، جربت أعيد تشغيل الجهاز والحين اشتغلت تمام! يعطيكم العافية.
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">١٠:٣٥ ص</span>
+            </div>
+
+            <!-- Message 6 (Agent Sara) -->
+            <div class="flex flex-col items-start max-w-[80%] self-start">
+                <div class="bg-white text-slate-800 rounded-2xl rounded-tl-none px-4 py-2.5 text-xs shadow-sm leading-relaxed border border-slate-200/60">
+                    العفو، سعدنا بخدمتك! هل تحتاج أي مساعدة أخرى بخصوص خدماتنا؟
+                </div>
+                <span class="text-[10px] text-slate-400 mt-1 px-1">١٠:٣٦ ص</span>
+            </div>
+
+        </div>
+
+        <!-- Chat Input Bar -->
+        <div class="bg-white p-3 border-t border-slate-200 flex items-center space-x-2 space-x-reverse z-40">
+            <button class="text-slate-400 hover:text-indigo-600 transition p-1.5">
+                <!-- Attachment Icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+            </button>
+            
+            <input type="text" placeholder="اكتب رسالتك هنا..." class="flex-1 bg-slate-100 text-xs rounded-full px-4 py-2.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 text-slate-700 placeholder-slate-400">
+            
+            <button class="bg-indigo-600 text-white p-2.5 rounded-full hover:bg-indigo-700 transition shadow-sm flex items-center justify-center">
+                <!-- Send Icon (Mirrored for RTL) -->
+                <svg class="w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+            </button>
+        </div>
+
+        <!-- Home Indicator Bar -->
+        <div class="w-full bg-white pb-2 flex justify-center">
+            <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+        </div>
+
+    </div>
+
+</body>
+</html>

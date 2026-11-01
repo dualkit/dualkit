@@ -1,0 +1,151 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "checkout",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-11-01T12:05:24.404Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>إتمام الشراء</title>\n<style>\n  * { box-sizing: border-box; }\n  body {\n    margin: 0;\n    padding: 0;\n    font-family: 'Arial', sans-serif;\n    background-color: #f5f5f5;\n    direction: rtl;\n  }\n  .container {\n    max-width: 480px;\n    margin: 0 auto;\n    background: #fff;\n    padding: 16px;\n    min-height: 100vh;\n  }\n  .header {\n    display: flex;\n    align-items: center;\n    margin-bottom: 16px;\n  }\n  .back-arrow {\n    font-size: 24px;\n    cursor: pointer;\n    margin-left: 8px;\n  }\n  .title {\n    font-size: 20px;\n    font-weight: bold;\n  }\n  .item {\n    display: flex;\n    align-items: center;\n    padding: 12px 0;\n    border-bottom: 1px solid #eee;\n  }\n  .photo {\n    width: 60px;\n    height: 60px;\n    background-color: #ddd;\n    border-radius: 8px;\n    margin-left: 12px;\n  }\n  .item-details {\n    flex: 1;\n    display: flex;\n    flex-direction: column;\n  }\n  .item-name {\n    font-size: 16px;\n    margin-bottom: 8px;\n  }\n  .quantity {\n    display: flex;\n    align-items: center;\n  }\n  .qty-btn {\n    width: 30px;\n    height: 30px;\n    background: #f0f0f0;\n    border: none;\n    font-size: 18px;\n    cursor: pointer;\n  }\n  .qty-input {\n    width: 40px;\n    text-align: center;\n    margin: 0 8px;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n  }\n  .price {\n    font-size: 16px;\n    font-weight: bold;\n    margin-left: auto;\n  }\n  .promo {\n    margin: 16px 0;\n  }\n  .promo input {\n    width: 100%;\n    padding: 10px;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n  }\n  .summary {\n    margin-top: 16px;\n  }\n  .summary-row {\n    display: flex;\n    justify-content: space-between;\n    margin-bottom: 8px;\n    font-size: 16px;\n  }\n  .total {\n    font-weight: bold;\n    font-size: 18px;\n    margin-top: 8px;\n  }\n  .place-order {\n    width: 100%;\n    padding: 14px;\n    background: #007AFF;\n    color: white;\n    border: none;\n    border-radius: 8px;\n    font-size: 18px;\n    margin-top: 24px;\n    cursor: pointer;\n  }\n</style>\n</head>\n<body>\n<div class=\"container\">\n  <div class=\"header\">\n    <span class=\"back-arrow\" onclick=\"history.back()\">←</span>\n    <div class=\"title\">إتمام الشراء</div>\n  </div>\n\n  <!-- Items -->\n  <div class=\"item\">\n    <div class=\"photo\"></div>\n    <div class=\"item-details\">\n      <div class=\"item-name\">تفاح</div>\n      <div class=\"quantity\">\n        <button class=\"qty-btn\" onclick=\"changeQty(this, -1)\">-</button>\n        <input type=\"number\" class=\"qty-input\" value=\"1\" min=\"1\">\n        <button class=\"qty-btn\" onclick=\"changeQty(this, 1)\">+</button>\n      </div>\n    </div>\n    <div class=\"price\">10 AED</div>\n  </div>\n\n  <div class=\"item\">\n    <div class=\"photo\"></div>\n    <div class=\"item-details\">\n      <div class=\"item-name\">حليب</div>\n      <div class=\"quantity\">\n        <button class=\"qty-btn\" onclick=\"changeQty(this, -1)\">-</button>\n        <input type=\"number\" class=\"qty-input\" value=\"2\" min=\"1\">\n        <button class=\"qty-btn\" onclick=\"changeQty(this, 1)\">+</button>\n      </div>\n    </div>\n    <div class=\"price\">20 AED</div>\n  </div>\n\n  <div class=\"item\">\n    <div class=\"photo\"></div>\n    <div class=\"item-details\">\n      <div class=\"item-name\">برتقال</div>\n      <div class=\"quantity\">\n        <button class=\"qty-btn\" onclick=\"changeQty(this, -1)\">-</button>\n        <input type=\"number\" class=\"qty-input\" value=\"3\" min=\"1\">\n        <button class=\"qty-btn\" onclick=\"changeQty(this, 1)\">+</button>\n      </div>\n    </div>\n    <div class=\"price\">15 AED</div>\n  </div>\n\n  <!-- Promo code -->\n  <div class=\"promo\">\n    <input type=\"text\" placeholder=\"كود الخصم\">\n  </div>\n\n  <!-- Summary -->\n  <div class=\"summary\">\n    <div class=\"summary-row\">\n      <span>المجموع الفرعي</span>\n      <span>45 AED</span>\n    </div>\n    <div class=\"summary-row\">\n      <span>توصيل</span>\n      <span>5 AED</span>\n    </div>\n    <div class=\"summary-row\">\n      <span>ضريبة القيمة المضافة (5%)</span>\n      <span>2.25 AED</span>\n    </div>\n    <div class=\"summary-row total\">\n      <span>الإجمالي</span>\n      <span>52.25 AED</span>\n    </div>\n  </div>\n\n  <button class=\"place-order\">إتمام الطلب</button>\n</div>\n\n<script>\n  function changeQty(btn, delta) {\n    const qtyDiv = btn.parentElement;\n    const input = qtyDiv.querySelector('.qty-input');\n    let val = parseInt(input.value) + delta;\n    if (val < 1) val = 1;\n    input.value = val;\n  }\n</script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 148,
+    "output": 7818
+  },
+  "ms": 89117,
+  "finish": "stop",
+  "reasoningTokens": 6293,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 77,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 224,
+        "y": 106,
+        "width": 40,
+        "height": 19
+      },
+      "message": "This number field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"number\" class=\"qty-input\" value=\"1\" min=\"1\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 224,
+        "y": 191,
+        "width": 40,
+        "height": 19
+      },
+      "message": "This number field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"number\" class=\"qty-input\" value=\"2\" min=\"1\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 224,
+        "y": 276,
+        "width": 40,
+        "height": 19
+      },
+      "message": "This number field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"number\" class=\"qty-input\" value=\"3\" min=\"1\">"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 238.4375,
+        "y": 19,
+        "width": 103.5625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"title\">إتمام الشراء</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 149.984375,
+        "y": 534,
+        "width": 90.015625,
+        "height": 20
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"place-order\">إتمام الطلب</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 350,
+        "y": 16,
+        "width": 24,
+        "height": 28
+      },
+      "message": "margin-left: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"back-arrow\" onclick=\"history.back()\">←</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 314,
+        "y": 72,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo\"></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 314,
+        "y": 157,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo\"></div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 314,
+        "y": 242,
+        "width": 60,
+        "height": 60
+      },
+      "message": "margin-left: 12px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<div class=\"photo\"></div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

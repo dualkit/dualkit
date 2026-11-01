@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الدعم - سارة</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .phone {
+      width: 375px;
+      height: 667px;
+      background-color: #fff;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .header {
+      background-color: #0056b3;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .message {
+      max-width: 80%;
+      padding: 8px 12px;
+      border-radius: 15px;
+      position: relative;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .customer {
+      align-self: flex-end;
+      background-color: #0056b3;
+      color: #fff;
+      border-bottom-right-radius: 0;
+    }
+    .agent {
+      align-self: flex-start;
+      background-color: #e0e0e0;
+      color: #000;
+      border-bottom-left-radius: 0;
+    }
+    .time {
+      font-size: 10px;
+      color: #999;
+      margin-top: 4px;
+      text-align: left;
+    }
+    .input-area {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+      background-color: #fff;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      outline: none;
+      font-size: 14px;
+    }
+    .input-area button {
+      margin-left: 8px;
+      padding: 10px 15px;
+      border: none;
+      background-color: #0056b3;
+      color: #fff;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="header">Sara - دعم</div>
+    <div class="messages">
+      <!-- Message 1 -->
+      <div class="message customer">
+        أود تفعيل خدمة 5G على بطاقة eSIM الخاصة بي.
+        <div class="time">10:15</div>
+      </div>
+      <!-- Message 2 -->
+      <div class="message agent">
+        مرحباً، سأساعدك. يرجى تزويدي رقم الطلب TX-48213.
+        <div class="time">10:16</div>
+      </div>
+      <!-- Message 3 -->
+      <div class="message customer">
+        رقم الطلب هو TX-48213، ماذا تفعل؟
+        <div class="time">10:18</div>
+      </div>
+      <!-- Message 4 -->
+      <div class="message agent">
+        سأقوم بتفعيل الخدمة فوراً. يرجى الانتظار.
+        <div class="time">10:19</div>
+      </div>
+      <!-- Message 5 -->
+      <div class="message customer">
+        هل يمكنني استخدام 5G فور التفعيل؟
+        <div class="time">10:20</div>
+      </div>
+      <!-- Message 6 -->
+      <div class="message agent">
+        نعم، ستحصل على إشارة 5G فور تفعيل eSIM.
+        <div class="time">10:21</div>
+      </div>
+    </div>
+    <div class="input-area">
+      <input type="text" placeholder="اكتب رسالتك...">
+      <button>أرسل</button>
+    </div>
+  </div>
+</body>
+</html>

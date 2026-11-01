@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>عنوان التوصيل | طلبات البقالة السريعة</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-light: #ecfdf5;
+            --accent: #f59e0b;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --border-color: #e5e7eb;
+            --border-focus: #10b981;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .phone-container {
+            width: 100%;
+            max-width: 440px;
+            background-color: var(--bg-card);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+        }
+
+        /* Header */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .back-btn:active {
+            background-color: #f3f4f6;
+        }
+
+        /* Banner */
+        .delivery-banner {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+            margin: 16px 20px 8px;
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #a7f3d0;
+        }
+
+        .banner-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.15);
+        }
+
+        .banner-text h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 2px;
+        }
+
+        .banner-text p {
+            font-size: 0.8rem;
+            color: #065f46;
+        }
+
+        /* Form */
+        form {
+            padding: 16px 20px 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-label {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .required-star {
+            color: #ef4444;
+            font-size: 0.9rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 14px;
+            color: #9ca3af;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 13px 44px 13px 14px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            background-color: #fafafa;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        input:focus,
+        select:focus {
+            background-color: #fff;
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+        }
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 14px center;
+            background-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Property Type Switcher */
+        .property-toggle {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: #f3f4f6;
+            padding: 4px;
+            border-radius: var(--radius-md);
+            margin-bottom: 4px;
+        }
+
+        .property-toggle label {
+            text-align: center;
+            padding: 9px 12px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .property-toggle input[type="radio"] {
+            display: none;
+        }
+
+        .property-toggle input[type="radio"]:checked + label {
+            background: #fff;
+            color: var(--primary-dark);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+        }
+
+        /* Makani Badge */
+        .makani-hint {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+            padding: 0 4px;
+        }
+
+        .makani-tag {
+            background: #dcfce7;
+            color: #166534;
+            font-weight: 700;
+            font-size: 0.7rem;
+            padding: 2px 7px;
+            border-radius: 6px;
+            letter-spacing: 0.3px;
+        }
+
+        /* Phone Input Extra Styling */
+        .phone-wrapper {
+            direction: ltr;
+        }
+
+        .phone-wrapper input {
+            text-align: right;
+            padding-left: 70px;
+            padding-right: 44px;
+            direction: ltr;
+        }
+
+        .phone-country-code {
+            position: absolute;
+            left: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 600;
+            color: #4b5563;
+            font-size: 0.88rem;
+            border-right: 1.5px solid var(--border-color);
+            padding-right: 10px;
+            direction: ltr;
+        }
+
+        /* Bottom Fixed Action Bar */
+        .bottom-action-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 440px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 14px 20px 20px;
+            border-top: 1px solid var(--border-color);
+            box-sizing: border-box;
+            z-index: 30;
+        }
+
+        .btn-save {
+            width: 100%;
+            background-color: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 14px rgba(5, 150, 105, 0.35);
+            transition: all 0.2s ease;
+        }
+
+        .btn-save:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-save:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 6px rgba(5, 150, 105, 0.2);
+        }
+
+        /* Success Toast */
+        .toast {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: #111827;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            opacity: 0;
+            z-index: 100;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-container">
+        <!-- Top App Bar -->
+        <header class="app-header">
+            <button type="button" class="back-btn" aria-label="رجوع">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+            <h1 class="header-title">عنوان التوصيل</h1>
+            <div style="width: 38px;"></div>
+        </header>
+
+        <!-- Fresh Grocery Banner -->
+        <div class="delivery-banner">
+            <div class="banner-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+            </div>
+            <div class="banner-text">
+                <h4>توصيل سريع للبقالة الطازجة</h4>
+                <p>يرجى تحديد تفاصيل العنوان لضمان وصول طلبك بدقة وسرعة</p>
+            </div>
+        </div>
+
+        <!-- Form Body -->
+        <form id="addressForm">
+            
+            <!-- Emirate Picker (Defaulting to Dubai) -->
+            <div class="form-group">
+                <label class="form-label" for="emirate">
+                    الإمارة <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                    <span class="input-icon">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                            <line x1="8" y1="2" x2="8" y2="18"></line>
+                            <line x1="16" y1="6" x2="16" y2="22"></line>
+                        </svg>
+                    </span>
+                    <select id="emirate" name="emirate" required>
+                        <option value="دبي" selected>دبي (Dubai)</option>
+                        <option value="أبوظبي">أبوظبي</option>
+                        <option value="الشارقة">الشارقة</option>
+                        <option value="عجمان">عجمان</option>
+                        <option value="أم القيوين">أم القيوين</option>
+                        <option value="رأس الخيمة">رأس الخيمة</option>
+                        <option value="الفجيرة">الفجيرة</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Area -->
+            <div class="form-group">
+                <label class="form-label" for="area">
+                    المنطقة <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                    <span class="input-icon">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </span>
+                    <input type="text" id="area" name="area" placeholder="مثال: الخليج التجاري، ديرة، البرشاء..." required>
+                </div>
+            </div>
+
+            <!-- Street -->
+            <div class="form-group">
+                <label class="form-label" for="street">
+                    اسم أو رقم الشارع <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper">
+                    <span class="input-icon">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" y1="9" x2="20" y2="9"></line>
+                            <line x1="4" y1="15" x2="20" y2="15"></line>
+                            <line x1="10" y1="3" x2="8" y2="21"></line>
+                            <line x1="16" y1="3" x2="14" y2="21"></line>
+                        </svg>
+                    </span>
+                    <input type="text" id="street" name="street" placeholder="مثال: شارع السعادة، شارع 12B" required>
+                </div>
+            </div>
+
+            <!-- Building or Villa Selector & Field -->
+            <div class="form-group">
+                <label class="form-label">
+                    نوع ومقر السكن <span class="required-star">*</span>
+                </label>
+                
+                <div class="property-toggle">
+                    <input type="radio" id="typeBuilding" name="propertyType" value="building" checked>
+                    <label for="typeBuilding">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                            <line x1="9" y1="22" x2="9" y2="22.01"></line>
+                            <line x1="15" y1="22" x2="15" y2="22.01"></line>
+                            <line x1="9" y1="6" x2="9" y2="6.01"></line>
+                            <line x1="15" y1="6" x2="15" y2="6.01"></line>
+                            <line x1="9" y1="10" x2="9" y2="10.01"></line>
+                            <line x1="15" y1="10" x2="15" y2="10.01"></line>
+                            <line x1="9" y1="14" x2="9" y2="14.01"></line>
+                            <line x1="15" y1="14" x2="15" y2="14.01"></line>
+                        </svg>
+                        مبنى / شقة
+                    </label>
+
+                    <input type="radio" id="typeVilla" name="propertyType" value="villa">
+                    <label for="typeVilla">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        فيلا مستقلة
+                    </label>
+                </div>
+
+                <div class="input-wrapper">
+                    <span class="input-icon">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 21h18"></path>
+                            <path d="M5 21V7l8-4v18"></path>
+                            <path d="M19 21V11l-6-4"></path>
+                        </svg>
+                    </span>
+                    <input type="text" id="buildingVilla" name="buildingVilla" placeholder="اسم المبنى ورقم الشقة، أو رقم الفيلا" required>
+                </div>
+            </div>
+
+            <!-- Makani Number -->
+            <div class="form-group">
+                <label class="form-label" for="makani">
+                    رقم مكاني (Makani)
+                </label>
+                <div class="input-wrapper">
+                    <span class="input-icon">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                    </span>
+                    <input type="text" id="makani" name="makani" inputmode="numeric" maxlength="11" placeholder="مثال: 30032 95320">
+                </div>
+                <div class="makani-hint">
+                    <span>الرقم الذكي المكون من 10 أرقام على مدخل المبنى</span>
+                    <span class="makani-tag">حكومة دبي</span>
+                </div>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group">
+                <label class="form-label" for="phone">
+                    رقم الهاتف للتواصل <span class="required-star">*</span>
+                </label>
+                <div class="input-wrapper phone-wrapper">
+                    <div class="phone-country-code">
+                        <span>🇦🇪</span>
+                        <span>+971</span>
+                    </div>
+                    <input type="tel" id="phone" name="phone" placeholder="050 123 4567" required>
+                    <span class="input-icon">
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Bottom Sticky Container with Save Address Button -->
+            <div class="bottom-action-bar">
+                <button type="submit" class="btn-save">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    <span>حفظ العنوان</span>
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>تم حفظ عنوان التوصيل بنجاح!</span>
+    </div>
+
+    <script>
+        // Adjust placeholder dynamically according to property type
+        const typeBuilding = document.getElementById('typeBuilding');
+        const typeVilla = document.getElementById('typeVilla');
+        const buildingVillaInput = document.getElementById('buildingVilla');
+
+        typeBuilding.addEventListener('change', () => {
+            if (typeBuilding.checked) {
+                buildingVillaInput.placeholder = "اسم المبنى، الطابق، ورقم الشقة";
+            }
+        });
+
+        typeVilla.addEventListener('change', () => {
+            if (typeVilla.checked) {
+                buildingVillaInput.placeholder = "اسم المجمع ورقم الفيلا";
+            }
+        });
+
+        // Form Submit handler
+        const form = document.getElementById('addressForm');
+        const toast = document.getElementById('toast');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Display confirmation feedback
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        });
+
+        // Makani live space-formatter (e.g. 12345 67890)
+        const makaniInput = document.getElementById('makani');
+        makaniInput.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '').substring(0, 10);
+            if (val.length > 5) {
+                val = val.substring(0, 5) + ' ' + val.substring(5);
+            }
+            e.target.value = val;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المعاملات</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 16px;
+  }
+  .container {
+    max-width: 400px;
+    margin: auto;
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .balance {
+    background: #007AFF;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .balance span {
+    font-size: 18px;
+  }
+  .filter {
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  .filter button {
+    padding: 8px 16px;
+    background: #007AFF;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    padding: 8px;
+    text-align: right;
+    border-bottom: 1px solid #ddd;
+  }
+  th {
+    background: #f0f0f0;
+  }
+  tr.incoming td:last-child {
+    color: green;
+  }
+  tr.outgoing td:last-child {
+    color: red;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>المعاملات</h1>
+  <div class="balance">
+    <span>الرقم: 1234.567 OMR</span>
+  </div>
+  <div class="filter">
+    <button>هذا الشهر</button>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>التاريخ</th>
+        <th>التاجر</th>
+        <th>المبلغ</th>
+        <th>الاتجاه</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="incoming">
+        <td>2024-06-01</td>
+        <td>Lulu Hypermarket</td>
+        <td>12.345 OMR</td>
+        <td>وارد</td>
+      </tr>
+      <tr class="outgoing">
+        <td>2024-06-02</td>
+        <td>Netflix</td>
+        <td>9.990 OMR</td>
+        <td>صادر</td>
+      </tr>
+      <tr class="incoming">
+        <td>2024-06-03</td>
+        <td>Uber</td>
+        <td>5.000 OMR</td>
+        <td>وارد</td>
+      </tr>
+      <tr class="outgoing">
+        <td>2024-06-04</td>
+        <td>Starbucks</td>
+        <td>3.750 OMR</td>
+        <td>صادر</td>
+      </tr>
+      <tr class="incoming">
+        <td>2024-06-05</td>
+        <td>Amazon</td>
+        <td>25.000 OMR</td>
+        <td>وارد</td>
+      </tr>
+      <tr class="outgoing">
+        <td>2024-06-06</td>
+        <td>Ooredoo</td>
+        <td>15.500 OMR</td>
+        <td>صادر</td>
+      </tr>
+      <tr class="incoming">
+        <td>2024-06-07</td>
+        <td>Petrol</td>
+        <td>10.123 OMR</td>
+        <td>وارد</td>
+      </tr>
+      <tr class="outgoing">
+        <td>2024-06-08</td>
+        <td>Cairo</td>
+        <td>7.890 OMR</td>
+        <td>صادر</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

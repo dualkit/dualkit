@@ -1,0 +1,53 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "address-form",
+  "condition": "dualkit",
+  "run": 1,
+  "at": "2026-11-01T11:42:23.368Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>عنوان التسليم</title>\n  <link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --primary: #007a55;\n      --bg: #f5f5f5;\n      --card: #ffffff;\n      --text: #333;\n      --label: #666;\n      --border: #ddd;\n    }\n    body {\n      font-family: 'IBM Plex Sans', 'IBM Plex Arabic', sans-serif;\n      background-color: var(--bg);\n      display: flex;\n      justify-content: center;\n      align-items: flex-start;\n      min-height: 100vh;\n      margin: 0;\n      padding: 1rem;\n      direction: rtl;\n      text-align: right;\n    }\n    .container {\n      background-color: var(--card);\n      border-radius: 12px;\n      padding: 1.5rem;\n      width: 100%;\n      max-width: 480px;\n      box-shadow: 0 2px 10px rgba(0,0,0,0.05);\n    }\n    h1 {\n      font-size: 1.5rem;\n      margin-top: 0;\n      margin-bottom: 1.5rem;\n      color: var(--text);\n      text-align: center;\n    }\n    .form-group {\n      margin-bottom: 1rem;\n    }\n    label {\n      display: block;\n      font-size: 0.9rem;\n      color: var(--label);\n      margin-bottom: 0.3rem;\n    }\n    input, select {\n      width: 100%;\n      padding: 0.7rem;\n      border: 1px solid var(--border);\n      border-radius: 8px;\n      font-size: 1rem;\n      box-sizing: border-box;\n      font-family: inherit;\n    }\n    input:focus, select:focus {\n      outline: none;\n      border-color: var(--primary);\n    }\n    input[type=\"tel\"] {\n      direction: ltr;\n      text-align: left;\n    }\n    input::placeholder {\n      color: #aaa;\n    }\n    button {\n      width: 100%;\n      padding: 0.8rem;\n      background-color: var(--primary);\n      color: white;\n      border: none;\n      border-radius: 8px;\n      font-size: 1rem;\n      font-weight: 600;\n      cursor: pointer;\n      margin-top: 0.5rem;\n    }\n    button:hover {\n      background-color: #006b47;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>عنوان التسليم</h1>\n    <form id=\"addressForm\">\n      <div class=\"form-group\">\n        <label for=\"building\">مبنى أو فيلا</label>\n        <input type=\"text\" id=\"building\" name=\"building\" placeholder=\"مثلاً: مبنى 12، فيلا 5\">\n      </div>\n      <div class=\"form-group\">\n        <label for=\"street\">شارع</label>\n        <input type=\"text\" id=\"street\" name=\"street\" placeholder=\"اسم الشارع\">\n      </div>\n      <div class=\"form-group\">\n        <label for=\"area\">منطقة</label>\n        <input type=\"text\" id=\"area\" name=\"area\" placeholder=\"اسم المنطقة\">\n      </div>\n      <div class=\"form-group\">\n        <label for=\"makani\">رقم مكاني</label>\n        <input type=\"text\" id=\"makani\" name=\"makani\" placeholder=\"1234567890\" inputmode=\"numeric\">\n      </div>\n      <div class=\"form-group\">\n        <label for=\"emirate\">الإمارة</label>\n        <select id=\"emirate\" name=\"emirate\">\n          <option value=\"Dubai\" selected>دبي</option>\n          <option value=\"Abu Dhabi\">أبوظبي</option>\n          <option value=\"Sharjah\">الشارقة</option>\n          <option value=\"Ajman\">عجمان</option>\n          <option value=\"Ras Al Khaimah\">رأس الخيمة</option>\n          <option value=\"Fujairah\">الفجيرة</option>\n          <option value=\"Umm Al Quwain\">أم القيوين</option>\n        </select>\n      </div>\n      <div class=\"form-group\">\n        <label for=\"phone\">رقم الهاتف</label>\n        <input type=\"tel\" id=\"phone\" name=\"phone\" placeholder=\"050 123 4567\" dir=\"ltr\" inputmode=\"tel\" autocomplete=\"tel\">\n      </div>\n      <button type=\"submit\">حفظ عنوان</button>\n    </form>\n  </div>\n  <script>\n    document.getElementById('addressForm').addEventListener('submit', function(e) {\n      e.preventDefault();\n      alert('تم حفظ عنوانك بنجاح!');\n    });\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6297,
+    "output": 4965
+  },
+  "ms": 60691,
+  "finish": "stop",
+  "reasoningTokens": 3898,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 126.5,
+        "y": 40,
+        "width": 137,
+        "height": 32
+      },
+      "message": "\"IBM Plex Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>عنوان التسليم</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 156.765625,
+        "y": 624.828125,
+        "width": 76.453125,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button type=\"submit\">حفظ عنوان</button>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 876
+}

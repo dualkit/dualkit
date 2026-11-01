@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>حجز موعد</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --brand:#0b6e4f;
+    --brand-soft:#e7f3ec;
+    --ink:#1b2a3a;
+    --muted:#7a8696;
+    --line:#e6e9ee;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:'Noto Sans Arabic','Segoe UI',Tahoma,Arial,sans-serif;
+    background:linear-gradient(180deg,#e9edf2 0,#f4f6f8 100%);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    -webkit-font-smoothing:antialiased;
+  }
+  .phone{
+    width:375px;height:812px;
+    background:#fff;border-radius:42px;
+    box-shadow:0 30px 60px -15px rgba(20,30,40,.45),0 8px 20px -8px rgba(0,0,0,.25);
+    overflow:hidden;position:relative;
+    display:flex;flex-direction:column;
+    padding:48px 18px 22px;
+  }
+  .scroll{flex:1;overflow-y:auto;overflow-x:hidden}
+  .scroll::-webkit-scrollbar{display:none}
+
+  .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .top .title{font-size:18px;font-weight:700}
+  .top .sub{font-size:14px;color:var(--muted);margin-top:2px}
+  .icon-btn{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);flex-shrink:0}
+  .icon-btn.sm{width:30px;height:30px}
+
+  .month-row{display:flex;align-items:center;justify-content:space-between;margin:6px 0 16px}
+  .month-name{font-size:17px;font-weight:700}
+
+  .cal-head{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:8px}
+  .cal-head span{text-align:center;font-size:14px;color:var(--muted);font-weight:600}
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .cell{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:13px;border-radius:50%;cursor:pointer;position:relative}
+  .cell .d{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;transition:.12s}
+  .cell.other{color:#c4cad3}
+  .cell:not(.other):hover .d{background:var(--brand-soft)}
+  .cell.selected .d{background:var(--brand);color:#fff;font-weight:700}
+  .cell.today .d{box-shadow:0 0 0 1px var(--brand)}
+  .cell.today .dot{position:absolute;top:5px;right:5px;width:5px;height:5px;border-radius:50%;background:var(--brand)}
+
+  .sec-label{font-size:14px;color:var(--muted);font-weight:600;margin:20px 0 10px}
+  .doctor{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--line);border-radius:14px}
+  .avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#0b6e4f,#0f8b63);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
+  .doctor .name{font-size:15px;font-weight:700}
+  .doctor .meta{font-size:14px;color:var(--muted)}
+  .badge{margin-left:auto;font-size:14px;background:var(--brand-soft);color:var(--brand);padding:5px 10px;border-radius:20px;font-weight:600;white-space:nowrap}
+
+  .slots{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .slot{padding:13px 8px;border:1px solid var(--line);border-radius:12px;text-align:center;font-size:14px;font-weight:600;cursor:pointer;transition:.15s}
+  .slot:hover{border-color:var(--brand);background:var(--brand-soft)}
+  .slot.selected{background:var(--brand);border-color:var(--brand);color:#fff}
+  .slot .am{display:block;font-size:14px;font-weight:500;opacity:.7;margin-top:2px}
+
+  .confirm{margin-top:auto;margin-top:24px;width:100%;padding:15px;border:none;border-radius:14px;background:var(--brand);color:#fff;font-size:16px;font-weight:700;cursor:pointer}
+  .confirm:active{transform:scale(.99)}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="scroll">
+    <div class="top">
+      <div>
+        <div class="title">حجز موعد</div>
+        <div class="sub">اختر اليوم والوقت المناسب</div>
+      </div>
+      <button class="icon-btn" aria-label="الرجوع">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 19l7-7-7-7"/></svg>
+      </button>
+    </div>
+
+    <div class="month-row">
+      <button class="icon-btn sm" id="prev" aria-label="الشهر السابق">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19l7-7-7-7"/></svg>
+      </button>
+      <span class="month-name" id="monthName">يونيو 2026</span>
+      <button class="icon-btn sm" id="next" aria-label="الشهر التالي">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
+      </button>
+    </div>
+
+    <div class="cal-head">
+      <span>سبت</span><span>حد</span><span>اثني</span><span>ثلا</span><span>أر</span><span>خمي</span><span>جمع</span>
+    </div>
+    <div class="cal" id="cal"></div>
+
+    <div class="sec-label">الطبيب</div>
+    <div class="doctor">
+      <div class="avatar">س</div>
+      <div>
+        <div class="name">د. سعد المطيري</div>
+        <div class="meta">طبيب أسرة · متاح اليوم</div>
+      </div>
+      <span class="badge">متاح</span>
+    </div>
+
+    <div class="sec-label">الساعات المتاحة</div>
+    <div class="slots" id="slots">
+      <div class="slot" data-t="09:00"><span>9:00</span><span class="am">ص</span></div>
+      <div class="slot" data-t="09:30"><span>9:30</span><span class="am">ص</span></div>
+      <div class="slot" data-t="10:00"><span>10:00</span><span class="am">ص</span></div>
+      <div class="slot" data-t="10:30"><span>10:30</span><span class="am">ص</span></div>
+      <div class="slot" data-t="11:00"><span>11:00</span><span class="am">ص</span></div>
+      <div class="slot" data-t="11:30"><span>11:30</span><span class="am">ص</span></div>
+      <div class="slot" data-t="12:00"><span>12:00</span><span class="am">ص</span></div>
+    </div>
+  </div>
+
+  <button class="confirm" id="confirm">confirmation الحجز</button>
+</div>
+
+<script>
+(function(){
+  const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  let year=2026, month=5; // يونيو 2026
+  const today = new Date(2026,5,15); // اليوم المُشار إليه
+  let selectedDate = new Date(today);
+
+  const cal = document.getElementById('cal');
+  const monthName = document.getElementById('monthName');
+
+  function render(){
+    const first = new Date(year,month,1);
+    const daysInMonth = new Date(year,month+1,0).getDate();
+    const startWeekday = first.getDay(); // 0 الأحد .. 6 السبت
+    //]->{ week starts Saturday: Sat=0,Sun=1,Mon=2,Tue=3,Wed=4,Thu=5,Fri=6
+    const leading = (startWeekday+1)%7;
+    const total = leading + daysInMonth;
+    const trailing = (7 - (total%7))%7;
+
+    let html='';
+    for(let i=0;i<leading;i++){
+      const d = new Date(year,month,1-leading+i).getDate();
+      html += `<div class="cell other"><span class="d">${d}</span></div>`;
+    }
+    for(let d=1;d<=daysInMonth;d++){
+      const date = new Date(year,month,d);
+      let cls='cell';
+      const isToday = date.getFullYear()===today.getFullYear()&&date.getMonth()===today.getMonth()&&date.getDate()===today.getDate();
+      const isSel = date.getFullYear()===selectedDate.getFullYear()&&date.getMonth()===selectedDate.getMonth()&&date.getDate()===selectedDate.getDate();
+      if(isToday) cls+=' today';
+      if(isSel) cls+=' selected';
+      html += `<div class="${cls}" data-day="${d}"><span class="d">${d}</span>${isToday?'<span class="dot"></span>':''}</div>`;
+    }
+    for(let i=0;i<trailing;i++){
+      html += `<div class="cell other"><span class="d">${i+1}</span></div>`;
+    }
+    cal.innerHTML = html;
+    monthName.textContent = `${months[month]} ${year}`;
+
+    cal.querySelectorAll('.cell:not(.other)').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        cal.querySelectorAll('.cell').forEach(c=>c.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedDate = new Date(year,month,+el.dataset.day);
+      });
+    });
+  }
+
+  document.getElementById('prev').addEventListener('click', ()=>{
+    month--; if(month<0){month=11;year--;} render();
+  });
+  document.getElementById('next').addEventListener('click', ()=>{
+    month++; if(month>11){month=0;year++;} render();
+  });
+
+  let selectedSlot = null;
+  document.querySelectorAll('.slot').forEach(s=>{
+    s.addEventListener('click', ()=>{
+      document.querySelectorAll('.slot').forEach(x=>x.classList.remove('selected'));
+      s.classList.add('selected');
+      selectedSlot = s.dataset.t;
+    });
+  });
+
+  document.getElementById('confirm').addEventListener('click', ()=>{
+    if(!selectedSlot){ alert('اختر الوقت'); return; }
+    alert(`تم حجز الموعد في ${selectedDate.getDate()} ${months[month]} ${year} الساعة ${selectedSlot}`);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

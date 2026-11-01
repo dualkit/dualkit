@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الملف الشخصي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f3f4f6;
+      --card-bg: #ffffff;
+      --text-primary: #111827;
+      --text-secondary: #4b5563;
+      --primary: #059669;
+      --primary-hover: #047857;
+      --border-color: #e5e7eb;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    :lang(ar) {
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.6;
+    }
+
+    .phone-frame {
+      width: 100%;
+      max-width: 390px;
+      background-color: var(--card-bg);
+      border-radius: 36px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 8px solid #1f2937;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      background-color: #ffffff;
+    }
+
+    .header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      background-color: #ffffff;
+    }
+
+    .header h1 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .profile-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid #a7f3d0;
+    }
+
+    .avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .profile-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .profile-info h2 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .profile-info p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      margin-inline-start: 4px;
+    }
+
+    .card-group {
+      background-color: #ffffff;
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    .info-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .info-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .info-value {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-primary);
+      direction: ltr;
+      unicode-bidi: isolate;
+      text-align: start;
+    }
+
+    .btn-edit {
+      background: none;
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--primary);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-edit:hover {
+      background-color: #f0fdf4;
+      border-color: #a7f3d0;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-around;
+      padding: 12px;
+      background-color: #ffffff;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      gap: 4px;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <!-- Mobile Status Bar -->
+    <div class="status-bar">
+      <span>09:41</span>
+      <span>5G</span>
+    </div>
+
+    <!-- App Header -->
+    <div class="header">
+      <h1>الملف الشخصي</h1>
+      <button style="background:none; border:none; cursor:pointer; color:var(--text-secondary);" aria-label="إغلاق">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <!-- Name & Email Profile Card -->
+      <div class="profile-card">
+        <div class="avatar" aria-hidden="true">ل م</div>
+        <div class="profile-info">
+          <h2><bdi>ليلى المنصوري</bdi></h2>
+          <p><bdi dir="ltr">layla@example.com</bdi></p>
+        </div>
+        <button class="btn-edit" aria-label="تعديل الملف الشخصي">تعديل</button>
+      </div>
+
+      <!-- Account Details Group -->
+      <div>
+        <div class="section-title">معلومات الحساب والاتصال</div>
+        <div class="card-group">
+          <!-- Phone Number Row -->
+          <div class="info-row">
+            <span class="info-label">رقم الهاتف المتحرك</span>
+            <div class="info-row-top">
+              <span class="info-value"><bdi dir="ltr">+971 50 123 4567</bdi></span>
+              <button class="btn-edit" aria-label="تعديل رقم الهاتف">تعديل</button>
+            </div>
+          </div>
+
+          <!-- IBAN Row -->
+          <div class="info-row">
+            <span class="info-label">رقم الحساب المصرفي الدولي (IBAN)</span>
+            <div class="info-row-top">
+              <span class="info-value"><bdi dir="ltr">AE07 0331 2345 6789 0123 456</bdi></span>
+              <button class="btn-edit" aria-label="تعديل رقم الآيبان">تعديل</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="nav-bar">
+      <a href="#" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span>الرئيسية</span>
+      </a>
+      <a href="#" class="nav-item">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        <span>المعاملات</span>
+      </a>
+      <a href="#" class="nav-item active">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        <span>حسابي</span>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

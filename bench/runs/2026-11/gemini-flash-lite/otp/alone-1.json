@@ -1,0 +1,39 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash-lite",
+  "screen": "otp",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-11-01T11:19:07.748Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>رمز التحقق - التطبيق البنكي</title>\n    <!-- Tailwind CSS CDN -->\n    <script src=\"https://cdn.tailwindcss.com\"></script>\n    <!-- Google Fonts: Cairo for professional Saudi banking feel -->\n    <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap\" rel=\"stylesheet\">\n    <script>\n        tailwind.config = {\n            theme: {\n                extend: {\n                    colors: {\n                        bankGreen: '#004B36',\n                        bankGold: '#C5A059',\n                    },\n                    fontFamily: {\n                        cairo: ['Cairo', 'sans-serif'],\n                    }\n                }\n            }\n        }\n    </script>\n</head>\n<body class=\"bg-slate-900 flex items-center justify-center min-h-screen font-cairo p-0 sm:p-4\">\n\n    <!-- Phone Frame Container -->\n    <div class=\"w-full max-w-[400px] h-screen sm:h-[844px] bg-white sm:rounded-[40px] shadow-2xl flex flex-col justify-between relative overflow-hidden\">\n        \n        <!-- Top Status Bar / Header -->\n        <div>\n            <!-- Notch / Status Bar Area -->\n            <div class=\"w-full px-6 pt-6 pb-2 flex justify-between items-center text-slate-800 text-sm font-semibold\">\n                <span>9:41</span>\n                <div class=\"flex items-center space-x-2 space-x-reverse\">\n                    <!-- Signal / Wifi / Battery Icons -->\n                    <svg class=\"w-4 h-4\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19h15.3l-.62-1.39C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z\"/></svg>\n                </div>\n            </div>\n\n            <!-- App Bar with Back Button & Logo -->\n            <div class=\"px-6 py-4 flex items-center justify-between\">\n                <button class=\"w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200 transition\">\n                    <svg class=\"w-5 h-5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\">\n                        <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 5l7 7-7 7\"></path>\n                    </svg>\n                </button>\n                <div class=\"font-bold text-bankGreen text-lg tracking-wide\">مصرف الراجحي</div>\n                <div class=\"w-10\"></div> <!-- Spacer for alignment -->\n            </div>\n        </div>\n\n        <!-- Main Content Area -->\n        <div class=\"px-6 flex-1 flex flex-col justify-center -mt-12\">\n            \n            <!-- Icon Illustration -->\n            <div class=\"w-16 h-16 bg-bankGreen/10 rounded-2xl flex items-center justify-center mb-6 text-bankGreen mx-auto\">\n                <svg class=\"w-8 h-8\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" viewBox=\"0 0 24 24\">\n                    <path stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z\"></path>\n                </svg>\n            </div>\n\n            <!-- Title & Subtitle -->\n            <h1 class=\"text-2xl font-bold text-slate-900 text-center mb-2\">أدخل رمز التحقق</h1>\n            <p class=\"text-slate-500 text-sm text-center mb-8 leading-relaxed\">\n                تم إرسال رمز مكون من 6 أرقام إلى الرقم<br>\n                <span dir=\"ltr\" class=\"font-semibold text-slate-800 inline-block mt-1\">+966 55 123 4567</span>\n            </p>\n\n            <!-- 6 Code Input Boxes -->\n            <div class=\"flex justify-between gap-2 mb-8\" dir=\"ltr\">\n                <input type=\"text\" maxlength=\"1\" class=\"otp-input w-12 h-14 text-center text-2xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:bg-white focus:outline-none transition shadow-sm\" autofocus />\n                <input type=\"text\" maxlength=\"1\" class=\"otp-input w-12 h-14 text-center text-2xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:bg-white focus:outline-none transition shadow-sm\" />\n                <input type=\"text\" maxlength=\"1\" class=\"otp-input w-12 h-14 text-center text-2xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:bg-white focus:outline-none transition shadow-sm\" />\n                <input type=\"text\" maxlength=\"1\" class=\"otp-input w-12 h-14 text-center text-2xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:bg-white focus:outline-none transition shadow-sm\" />\n                <input type=\"text\" maxlength=\"1\" class=\"otp-input w-12 h-14 text-center text-2xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:bg-white focus:outline-none transition shadow-sm\" />\n                <input type=\"text\" maxlength=\"1\" class=\"otp-input w-12 h-14 text-center text-2xl font-bold bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-bankGreen focus:bg-white focus:outline-none transition shadow-sm\" />\n            </div>\n\n            <!-- Countdown Timer & Resend -->\n            <div class=\"text-center mb-6\">\n                <p class=\"text-sm text-slate-500\">\n                    إعادة الإرسال خلال \n                    <span id=\"countdown\" class=\"font-bold text-bankGreen\" dir=\"ltr\">0:45</span>\n                </p>\n            </div>\n        </div>\n\n        <!-- Bottom Action Area -->\n        <div class=\"px-6 pb-8 pt-4 bg-white border-t border-slate-100\">\n            <button class=\"w-full bg-bankGreen hover:bg-bankGreen/90 active:scale-[0.98] transition text-white font-bold py-4 rounded-2xl shadow-lg shadow-bankGreen/20 text-base\">\n                تحقق\n            </button>\n            \n            <!-- Home Indicator Bar -->\n            <div class=\"w-32 h-1 bg-slate-200 rounded-full mx-auto mt-6\"></div>\n        </div>\n\n    </div>\n\n    <!-- OTP Auto-advance script -->\n    <script>\n        const inputs = document.querySelectorAll('.otp-input');\n\n        inputs.forEach((input, index) => {\n            input.addEventListener('input', (e) => {\n                const value = e.target.value;\n                if (value && index < inputs.length - 1) {\n                    inputs[index + 1].focus();\n                }\n            });\n\n            input.addEventListener('keydown', (e) => {\n                if (e.key === 'Backspace' && !input.value && index > 0) {\n                    inputs[index - 1].focus();\n                }\n            });\n        });\n    </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 154,
+    "output": 2093
+  },
+  "ms": 8053,
+  "finish": "STOP",
+  "reasoningTokens": 688,
+  "servedModel": "gemini-3.5-flash-lite",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 90,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 135,
+        "y": 71,
+        "width": 120,
+        "height": 33
+      },
+      "message": "0.45px letter-spacing on \"مصرف الراجحي\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<div class=\"font-bold text-bankGreen text-lg tracking-wide\">مصرف الراجحي</div>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
+}

@@ -1,0 +1,207 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "order-history",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-11-01T11:54:35.300Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>تاريخ الطلب</title>\n<style>\n  body {\n    font-family: Arial, sans-serif;\n    background-color: #f5f5f5;\n    margin: 0;\n    padding: 16px;\n    direction: rtl;\n  }\n  .container {\n    max-width: 480px;\n    margin: 0 auto;\n    background: #fff;\n    border-radius: 8px;\n    padding: 16px;\n    box-shadow: 0 2px 8px rgba(0,0,0,0.1);\n  }\n  h1 {\n    font-size: 20px;\n    margin-bottom: 16px;\n    text-align: center;\n  }\n  .order {\n    border-bottom: 1px solid #eee;\n    padding: 12px 0;\n  }\n  .order:last-child {\n    border-bottom: none;\n  }\n  .order-number {\n    font-size: 16px;\n    font-weight: bold;\n    color: #333;\n  }\n  .date {\n    font-size: 14px;\n    color: #555;\n    margin-top: 4px;\n  }\n  .total {\n    font-size: 14px;\n    color: #2a7f2a;\n    margin-top: 4px;\n  }\n  .status {\n    display: inline-block;\n    padding: 4px 8px;\n    border-radius: 4px;\n    font-size: 12px;\n    margin-top: 8px;\n  }\n  .delivered { background: #e6f7e6; color: #2e7d32; }\n  .onway { background: #fff3cd; color: #856404; }\n  .cancelled { background: #f8d7da; color: #721c24; }\n</style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1>تاريخ الطلب</h1>\n    <div class=\"order\">\n      <div class=\"order-number\">#A-10293</div>\n      <div class=\"date\">التاريخ: 2023-10-05 (ميلادي) / 1445-02-20 (هجري)</div>\n      <div class=\"total\">الإجمالي: 150 ريال</div>\n      <div class=\"status delivered\">تم التسليم</div>\n    </div>\n    <div class=\"order\">\n      <div class=\"order-number\">#A-10294</div>\n      <div class=\"date\">التاريخ: 2023-10-06 (ميلادي) / 1445-02-21 (هجري)</div>\n      <div class=\"total\">الإجمالي: 250 ريال</div>\n      <div class=\"status onway\">في طريق التسليم</div>\n    </div>\n    <div class=\"order\">\n      <div class=\"order-number\">#A-10295</div>\n      <div class=\"date\">التاريخ: 2023-10-07 (ميلادي) / 1445-02-22 (هجري)</div>\n      <div class=\"total\">الإجمالي: 300 ريال</div>\n      <div class=\"status cancelled\">ملغى</div>\n    </div>\n    <div class=\"order\">\n      <div class=\"order-number\">#A-10296</div>\n      <div class=\"date\">التاريخ: 2023-10-08 (ميلادي) / 1445-02-23 (هجري)</div>\n      <div class=\"total\">الإجمالي: 120 ريال</div>\n      <div class=\"status delivered\">تم التسليم</div>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 129,
+    "output": 3962
+  },
+  "ms": 41301,
+  "finish": "stop",
+  "reasoningTokens": 2790,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 30,
+  "score": 24,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/date-order",
+      "title": "A date that will show in the wrong order",
+      "severity": "error",
+      "box": {
+        "x": 60.796875,
+        "y": 119.390625,
+        "width": 297.203125,
+        "height": 16
+      },
+      "message": "\"2023-10-05\": its dashes do not hold Arabic numbers together, so the parts show in reverse order.",
+      "fix": "Join the parts with / instead of -, or wrap a Western-digit date in <bdi dir=\"ltr\">. Leave a worded Arabic date right to left.",
+      "snippet": "<div class=\"date\">التاريخ: 2023-10-05 (ميلادي) / 1445-02-20 (هجري)</div>"
+    },
+    {
+      "rule": "bidi/date-order",
+      "title": "A date that will show in the wrong order",
+      "severity": "error",
+      "box": {
+        "x": 60.796875,
+        "y": 232.390625,
+        "width": 297.203125,
+        "height": 16
+      },
+      "message": "\"2023-10-06\": its dashes do not hold Arabic numbers together, so the parts show in reverse order.",
+      "fix": "Join the parts with / instead of -, or wrap a Western-digit date in <bdi dir=\"ltr\">. Leave a worded Arabic date right to left.",
+      "snippet": "<div class=\"date\">التاريخ: 2023-10-06 (ميلادي) / 1445-02-21 (هجري)</div>"
+    },
+    {
+      "rule": "bidi/date-order",
+      "title": "A date that will show in the wrong order",
+      "severity": "error",
+      "box": {
+        "x": 60.796875,
+        "y": 345.390625,
+        "width": 297.203125,
+        "height": 16
+      },
+      "message": "\"2023-10-07\": its dashes do not hold Arabic numbers together, so the parts show in reverse order.",
+      "fix": "Join the parts with / instead of -, or wrap a Western-digit date in <bdi dir=\"ltr\">. Leave a worded Arabic date right to left.",
+      "snippet": "<div class=\"date\">التاريخ: 2023-10-07 (ميلادي) / 1445-02-22 (هجري)</div>"
+    },
+    {
+      "rule": "bidi/date-order",
+      "title": "A date that will show in the wrong order",
+      "severity": "error",
+      "box": {
+        "x": 60.796875,
+        "y": 458.390625,
+        "width": 297.203125,
+        "height": 16
+      },
+      "message": "\"2023-10-08\": its dashes do not hold Arabic numbers together, so the parts show in reverse order.",
+      "fix": "Join the parts with / instead of -, or wrap a Western-digit date in <bdi dir=\"ltr\">. Leave a worded Arabic date right to left.",
+      "snippet": "<div class=\"date\">التاريخ: 2023-10-08 (ميلادي) / 1445-02-23 (هجري)</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 287.71875,
+        "y": 97.390625,
+        "width": 70.28125,
+        "height": 17
+      },
+      "message": "\"#A-10293\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">#A-10293</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 287.71875,
+        "y": 210.390625,
+        "width": 70.28125,
+        "height": 17
+      },
+      "message": "\"#A-10294\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">#A-10294</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 287.71875,
+        "y": 323.390625,
+        "width": 70.28125,
+        "height": 17
+      },
+      "message": "\"#A-10295\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">#A-10295</div>"
+    },
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 287.71875,
+        "y": 436.390625,
+        "width": 70.28125,
+        "height": 17
+      },
+      "message": "\"#A-10296\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"order-number\">#A-10296</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 144.21875,
+        "y": 46.390625,
+        "width": 101.5625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>تاريخ الطلب</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 297.65625,
+        "y": 167.390625,
+        "width": 52.34375,
+        "height": 14
+      },
+      "message": "\"تم التسليم\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"status delivered\">تم التسليم</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 259.328125,
+        "y": 280.390625,
+        "width": 90.671875,
+        "height": 14
+      },
+      "message": "\"في طريق التسليم\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"status onway\">في طريق التسليم</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 324,
+        "y": 393.390625,
+        "width": 26,
+        "height": 14
+      },
+      "message": "\"ملغى\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"status cancelled\">ملغى</div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 297.65625,
+        "y": 506.390625,
+        "width": 52.34375,
+        "height": 14
+      },
+      "message": "\"تم التسليم\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"status delivered\">تم التسليم</div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

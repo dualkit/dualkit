@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رمز التحقق لمرة واحدة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #006C35; /* لون الهوية المصرفية السعودية التراثية والحديثة */
+      --primary-light: #e8f5ed;
+      --primary-dark: #004d26;
+      --accent: #D4AF37;
+      --text-main: #1D2939;
+      --text-muted: #667085;
+      --bg: #F4F6F8;
+      --card-bg: #FFFFFF;
+      --border-color: #E4E7EC;
+      --border-focus: #006C35;
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #0f172a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    /* هيكل هاتف المحمول للعرض الواقعي */
+    .phone-container {
+      width: 100%;
+      max-width: 400px;
+      height: 844px;
+      background-color: var(--card-bg);
+      border-radius: 44px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 8px solid #222;
+    }
+
+    /* شريط الحالة والجزيرة التفاعلية */
+    .status-bar {
+      height: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 24px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      z-index: 10;
+    }
+
+    .island-pill {
+      width: 100px;
+      height: 24px;
+      background-color: #000;
+      border-radius: 20px;
+      position: absolute;
+      left: 50%;
+      top: 10px;
+      transform: translateX(-50%);
+    }
+
+    .status-icons {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    /* رأس الصفحة */
+    .app-header {
+      padding: 12px 20px 8px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+
+    .back-btn:active {
+      transform: scale(0.95);
+      background: var(--bg);
+    }
+
+    .bank-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      color: var(--primary);
+      font-size: 17px;
+    }
+
+    .bank-logo {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, var(--primary), #0a9950);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+    }
+
+    /* محتوى الشاشة */
+    .content {
+      padding: 24px 24px 20px 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .security-badge {
+      align-self: center;
+      width: 64px;
+      height: 64px;
+      background: var(--primary-light);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      margin-bottom: 24px;
+      box-shadow: 0 8px 16px rgba(0, 108, 53, 0.08);
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-main);
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 32px;
+      padding: 0 10px;
+    }
+
+    .phone-number {
+      direction: ltr;
+      display: inline-block;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* خانات إدخال الرمز السداسي */
+    .otp-wrapper {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      direction: ltr; /* لترتيب الخانات من اليسار لليمين بما يتوافق مع تدفق الأرقام */
+      margin-bottom: 24px;
+    }
+
+    .otp-input {
+      width: 48px;
+      height: 56px;
+      border: 2px solid var(--border-color);
+      border-radius: 14px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      background-color: #fafbfc;
+      outline: none;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .otp-input:focus {
+      border-color: var(--border-focus);
+      background-color: #fff;
+      box-shadow: 0 0 0 4px rgba(0, 108, 53, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .otp-input.filled {
+      border-color: var(--primary);
+      background-color: #fff;
+    }
+
+    /* المؤقت وإعادة الإرسال */
+    .timer-section {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .timer-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .timer-count {
+      color: var(--primary);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      direction: ltr;
+      display: inline-block;
+    }
+
+    .resend-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: none;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .resend-btn:disabled {
+      color: var(--text-muted);
+      cursor: not-allowed;
+      text-decoration: none;
+    }
+
+    /* زر التحقق الرئيسي */
+    .action-container {
+      margin-top: auto;
+      padding-bottom: 12px;
+    }
+
+    .verify-btn {
+      width: 100%;
+      height: 54px;
+      background: linear-gradient(135deg, var(--primary) 0%, #008744 100%);
+      color: #ffffff;
+      border: none;
+      border-radius: 16px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 8px 20px rgba(0, 108, 53, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .verify-btn:hover {
+      box-shadow: 0 10px 24px rgba(0, 108, 53, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .verify-btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 12px rgba(0, 108, 53, 0.2);
+    }
+
+    .verify-btn:disabled {
+      background: #D0D5DD;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* تذييل أمني */
+    .security-note {
+      text-align: center;
+      font-size: 11px;
+      color: #98A2B3;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    /* الشريط السفلي للهاتف */
+    .home-indicator {
+      width: 134px;
+      height: 5px;
+      background-color: #1a1a1a;
+      border-radius: 100px;
+      margin: 8px auto 6px auto;
+    }
+
+    /* تنبيه نجاح */
+    .toast {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      right: 20px;
+      background: #004d26;
+      color: white;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      text-align: center;
+      transform: translateY(-120px);
+      transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      z-index: 50;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-container">
+    <!-- توست الإشعار عند النقر -->
+    <div class="toast" id="toast">تم التحقق من الرمز بنجاح!</div>
+
+    <!-- شريط الهاتف العلوي -->
+    <div class="island-pill"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <div class="status-icons">
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
+          <path d="M0 8.5C0 7.67 0.67 7 1.5 7h1C3.33 7 4 7.67 4 8.5v2C4 11.33 3.33 12 2.5 12h-1C0.67 12 0 11.33 0 10.5v-2zm5-3.5C5 4.17 5.67 3.5 6.5 3.5h1c.83 0 1.5.67 1.5 1.5v5.5c0 .83-.67 1.5-1.5 1.5h-1c-.83 0-1.5-.67-1.5-1.5V5zm5-3.5C10 .67 10.67 0 11.5 0h1c.83 0 1.5.67 1.5 1.5v9c0 .83-.67 1.5-1.5 1.5h-1c-.83 0-1.5-.67-1.5-1.5V1.5z"/>
+        </svg>
+        <svg width="14" height="12" viewBox="0 0 16 12" fill="currentColor">
+          <path d="M8 2.5C10.8 2.5 13.3 3.6 15.1 5.4L16 4.5C13.9 2.4 11.1 1 8 1 4.9 1 2.1 2.4 0 4.5l.9.9C2.7 3.6 5.2 2.5 8 2.5zm0 3.8c1.8 0 3.4.7 4.6 1.9l.9-.9c-1.5-1.5-3.5-2.4-5.5-2.4S4 5.8 2.5 7.3l.9.9c1.2-1.2 2.8-1.9 4.6-1.9zm0 3.7c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+        </svg>
+        <svg width="22" height="11" viewBox="0 0 25 12" fill="currentColor">
+          <rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="currentColor"/>
+          <rect x="2" y="2" width="16" height="8" rx="2"/>
+          <path d="M23 4.5v3a1.5 1.5 0 0 0 1.5-1.5v0A1.5 1.5 0 0 0 23 4.5z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ترويسة التطبيق المصرفي -->
+    <header class="app-header">
+      <button class="back-btn" aria-label="الرجوع للخلف" onclick="window.history.back()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+      <div class="bank-brand">
+        <div class="bank-logo">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="4"/>
+            <path d="M7 15l5-5 5 5"/>
+          </svg>
+        </div>
+        <span>مصرف الأمان</span>
+      </div>
+      <div style="width: 40px;"></div> <!-- للموازنة البصرية -->
+    </header>
+
+    <!-- المحتوى التفاعلي -->
+    <main class="content">
+      <div class="security-badge">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+
+      <!-- العنوان الرئيسي المطلوب -->
+      <h1 class="title">أدخل الرمز</h1>
+
+      <!-- السطر التوضيحي المطلوب مع الرقم -->
+      <p class="subtitle">
+        أرسلنا رمزاً مكوناً من 6 أرقام إلى الرقم
+        <br>
+        <span class="phone-number">+966 55 123 4567</span>
+      </p>
+
+      <!-- 6 خانات لإدخال الرمز السداسي -->
+      <div class="otp-wrapper" id="otp-container">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-input" autofocus autocomplete="one-time-code">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-input">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-input">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-input">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-input">
+        <input type="text" inputmode="numeric" maxlength="1" class="otp-input">
+      </div>
+
+      <!-- العد التنازلي وإعادة الإرسال المطلوبين -->
+      <div class="timer-section">
+        <div class="timer-text" id="timer-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>إعادة الإرسال خلال</span>
+          <span class="timer-count" id="timer">0:45</span>
+        </div>
+        <button type="button" class="resend-btn" id="resend-btn" onclick="restartTimer()">إعادة إرسال الرمز الآن</button>
+      </div>
+
+      <!-- زر التحقق المطلوب -->
+      <div class="action-container">
+        <button class="verify-btn" id="verify-button" onclick="handleVerify()">
+          <span>تأكيد</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <div class="security-note">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>جلسة بنكية آمنة ومشفّرة بمعايير البنك المركزي السعودي</span>
+        </div>
+      </div>
+    </main>
+
+    <!-- مؤشر الشاشة الرئيسية للهاتف -->
+    <div class="home-indicator"></div>
+  </div>
+
+  <script>
+    // التحكم بخانات الإدخال التلقائي والتنقل بينها
+    const inputs = document.querySelectorAll('.otp-input');
+    const verifyBtn = document.getElementById('verify-button');
+
+    inputs.forEach((input, index) => {
+      // إدخال الأرقام فقط والانتقال للخانات التالية
+      input.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = val ? val[0] : '';
+
+        if (e.target.value) {
+          input.classList.add('filled');
+          if (index < inputs.length - 1) {
+            inputs[index + 1].focus();
+          }
+        } else {
+          input.classList.remove('filled');
+        }
+        checkFullCode();
+      });
+
+      // التعامل مع الحذف وزر الرجوع Backspace
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+
+      // لصق الرمز كاملاً
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pastedData = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+        if (pastedData) {
+          pastedData.split('').forEach((char, i) => {
+            if (inputs[i]) {
+              inputs[i].value = char;
+              inputs[i].classList.add('filled');
+            }
+          });
+          const nextIndex = Math.min(pastedData.length, inputs.length - 1);
+          inputs[nextIndex].focus();
+          checkFullCode();
+        }
+      });
+    });
+
+    function checkFullCode() {
+      const code = Array.from(inputs).map(i => i.value).join('');
+      // يمكن تفعيل أو تمييز الزر عند اكتمال الرمز
+      if (code.length === 6) {
+        verifyBtn.style.background = 'linear-gradient(135deg, #004d26 0%, #006C35 100%)';
+      }
+    }
+
+    // منطق العداد التنازلي (45 ثانية كما هو محدد)
+    let timeLeft = 45;
+    let timerInterval;
+    const timerElem = document.getElementById('timer');
+    const timerBox = document.getElementById('timer-box');
+    const resendBtn = document.getElementById('resend-btn');
+
+    function startCountdown() {
+      clearInterval(timerInterval);
+      timeLeft = 45;
+      timerBox.style.display = 'inline-flex';
+      resendBtn.style.display = 'none';
+      updateTimerDisplay();
+
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          timerBox.style.display = 'none';
+          resendBtn.style.display = 'inline-block';
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerElem.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    function restartTimer() {
+      startCountdown();
+      inputs.forEach(i => { i.value = ''; i.classList.remove('filled'); });
+      inputs[0].focus();
+    }
+
+    // إجراء زر التأكيد
+    function handleVerify() {
+      const code = Array.from(inputs).map(i => i.value).join('');
+      const toast = document.getElementById('toast');
+      
+      if (code.length === 6) {
+        toast.textContent = 'جاري التحقق من صحة الرمز...';
+        toast.style.background = '#006C35';
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.textContent = 'تم تأكيد العملية المصرفية بنجاح!';
+          setTimeout(() => toast.classList.remove('show'), 2000);
+        }, 800);
+      } else {
+        toast.textContent = 'الرجاء إدخال كامل الرمز المكون من 6 أرقام';
+        toast.style.background = '#B42318';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      }
+    }
+
+    // بدء العداد عند فتح الصفحة
+    startCountdown();
+  </script>
+</body>
+</html>

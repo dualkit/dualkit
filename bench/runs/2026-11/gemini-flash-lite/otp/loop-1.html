@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التحقق من الرمز - تطبيق المصرف</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f1f5f9;
+      --card-bg: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --primary: #006c35; /* Saudi green */
+      --primary-hover: #005429;
+      --border-color: #cbd5e1;
+      --focus-ring: rgba(0, 108, 53, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    :lang(ar) {
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.6;
+    }
+
+    .phone-container {
+      width: 100%;
+      max-width: 400px;
+      background-color: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-primary);
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+
+    .back-btn:hover {
+      background-color: var(--bg-color);
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--primary);
+    }
+
+    .title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    p {
+      font-size: 0.95rem; /* 15px, above the 14px floor */
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .otp-container {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: space-between;
+      margin-block: 0.5rem;
+      direction: ltr; /* Keeps sequence logical for 6-digit codes */
+    }
+
+    .otp-input {
+      width: 48px;
+      height: 56px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      text-align: center;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      background-color: #fff;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .otp-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--focus-ring);
+    }
+
+    .timer-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .resend-link {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    .resend-link:disabled {
+      color: var(--border-color);
+      cursor: not-allowed;
+    }
+
+    .verify-btn {
+      width: 100%;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 0.875rem;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      margin-top: 0.5rem;
+    }
+
+    .verify-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .verify-btn:active {
+      transform: scale(0.99);
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-container">
+    <div class="header">
+      <button class="back-btn" aria-label="السابق">
+        <!-- Directional arrow pointing right for RTL layout -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+      <div class="logo">الراجحي</div>
+    </div>
+
+    <div class="title-group">
+      <h1>أدخل الرمز</h1>
+      <p>أرسلنا رمزاً مكوناً من 6 أرقام إلى <bdi dir="ltr">+966 55 123 4567</bdi></p>
+    </div>
+
+    <div class="otp-container">
+      <input type="text" inputmode="numeric" maxlength="1" class="otp-input" autocomplete="one-time-code" aria-label="الرقم الأول">
+      <input type="text" inputmode="numeric" maxlength="1" class="otp-input" aria-label="الرقم الثاني">
+      <input type="text" inputmode="numeric" maxlength="1" class="otp-input" aria-label="الرقم الثالث">
+      <input type="text" inputmode="numeric" maxlength="1" class="otp-input" aria-label="الرقم الرابع">
+      <input type="text" inputmode="numeric" maxlength="1" class="otp-input" aria-label="الرقم الخامس">
+      <input type="text" inputmode="numeric" maxlength="1" class="otp-input" aria-label="الرقم السادس">
+    </div>
+
+    <div class="timer-container">
+      <span>إعادة الإرسال خلال <bdi dir="ltr">0:45</bdi></span>
+      <button class="resend-link" disabled>إعادة الإرسال</button>
+    </div>
+
+    <button class="verify-btn">التحقق</button>
+  </div>
+
+  <script>
+    // Auto-advance focus between OTP boxes
+    const inputs = document.querySelectorAll('.otp-input');
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        const value = e.target.value;
+        if (value && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

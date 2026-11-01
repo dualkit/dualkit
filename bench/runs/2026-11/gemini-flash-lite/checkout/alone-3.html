@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إتمام الطلب - بقالة الإمارات</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen p-0 sm:p-4">
+
+    <!-- Phone Frame -->
+    <div class="w-full max-w-[400px] bg-white sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col h-screen sm:h-[844px] relative border border-gray-200">
+
+        <!-- Top Header -->
+        <header class="bg-white border-b border-gray-100 px-4 py-3 flex items-center justify-between sticky top-0 z-10">
+            <button class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-700 hover:bg-gray-100 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+            <h1 class="text-lg font-bold text-gray-800">إتمام الطلب</h1>
+            <div class="w-10"></div> <!-- Spacer for balance -->
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-6 pb-28">
+
+            <!-- Delivery Address Snippet -->
+            <div class="bg-emerald-50 border border-emerald-100 rounded-2xl p-3.5 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-xs text-emerald-800 font-semibold">التوصيل إلى المنزل</p>
+                        <p class="text-sm text-gray-700 font-bold">دبي، مرسى دبي، برج الأميرة</p>
+                    </div>
+                </div>
+                <button class="text-xs text-emerald-600 font-bold hover:underline">تغيير</button>
+            </div>
+
+            <!-- Cart Items -->
+            <div>
+                <h2 class="text-sm font-bold text-gray-500 mb-3">منتجات السلة (٣)</h2>
+                <div class="space-y-3">
+                    
+                    <!-- Item 1 -->
+                    <div class="flex items-center justify-between bg-gray-50/70 border border-gray-100 p-3 rounded-2xl">
+                        <div class="flex items-center gap-3">
+                            <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=150&q=80" alt="حليب طازج" class="w-16 h-16 object-cover rounded-xl border border-gray-200">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800">حليب طازج المراعي</h3>
+                                <p class="text-xs text-gray-400 mt-0.5">٢ لتر</p>
+                                <span class="text-emerald-600 font-bold text-sm mt-1 block">١٢.٥٠ د.إ</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <button onclick="updateQty(this, 1)" class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold">+</button>
+                            <span class="w-8 text-center text-sm font-bold text-gray-800">1</span>
+                            <button onclick="updateQty(this, -1)" class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold">-</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="flex items-center justify-between bg-gray-50/70 border border-gray-100 p-3 rounded-2xl">
+                        <div class="flex items-center gap-3">
+                            <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=150&q=80" alt="خبز عربي" class="w-16 h-16 object-cover rounded-xl border border-gray-200">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800">خبز عربي أبيض</h3>
+                                <p class="text-xs text-gray-400 mt-0.5">كيس كبير</p>
+                                <span class="text-emerald-600 font-bold text-sm mt-1 block">٣.٠٠ د.إ</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <button onclick="updateQty(this, 1)" class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold">+</button>
+                            <span class="w-8 text-center text-sm font-bold text-gray-800">1</span>
+                            <button onclick="updateQty(this, -1)" class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold">-</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="flex items-center justify-between bg-gray-50/70 border border-gray-100 p-3 rounded-2xl">
+                        <div class="flex items-center gap-3">
+                            <img src="https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=150&q=80" alt="طماطم طازجة" class="w-16 h-16 object-cover rounded-xl border border-gray-200">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800">طماطم محلية طازجة</h3>
+                                <p class="text-xs text-gray-400 mt-0.5">١ كغ</p>
+                                <span class="text-emerald-600 font-bold text-sm mt-1 block">٨.٧٥ د.إ</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <button onclick="updateQty(this, 1)" class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold">+</button>
+                            <span class="w-8 text-center text-sm font-bold text-gray-800">1</span>
+                            <button onclick="updateQty(this, -1)" class="w-8 h-8 flex items-center justify-center text-gray-600 hover:bg-gray-100 font-bold">-</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Promo Code Section -->
+            <div class="flex gap-2">
+                <input type="text" placeholder="أدخل رمز القسيمة (مثال: UAE50)" class="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-600 text-gray-700">
+                <button class="bg-gray-900 text-white px-5 rounded-xl text-sm font-bold hover:bg-gray-800 transition">تطبيق</button>
+            </div>
+
+            <!-- Price Breakdown -->
+            <div class="bg-gray-50/70 border border-gray-100 rounded-2xl p-4 space-y-2.5">
+                <div class="flex justify-between text-sm text-gray-600">
+                    <span>المجموع الفرعي</span>
+                    <span class="font-semibold text-gray-800">٢٤.٢٥ د.إ</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600">
+                    <span>رسوم التوصيل</span>
+                    <span class="font-semibold text-gray-800">١٠.٠٠ د.إ</span>
+                </div>
+                <div class="flex justify-between text-sm text-gray-600">
+                    <span>ضريبة القيمة المضافة (5%)</span>
+                    <span class="font-semibold text-gray-800">١.٧١ د.إ</span>
+                </div>
+                <div class="border-t border-gray-200 pt-2.5 flex justify-between text-base font-bold text-gray-900">
+                    <span>المجموع الإجمالي</span>
+                    <span class="text-emerald-600">٣٥.٩٦ د.إ</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sticky Bottom Checkout Bar -->
+        <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-lg">
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs text-gray-400">الإجمالي شامل الضريبة</span>
+                <span class="text-lg font-bold text-gray-900">٣٥.٩٦ <span class="text-emerald-600 text-sm">د.إ</span></span>
+            </div>
+            <button class="w-full bg-emerald-600 text-white py-3.5 rounded-2xl font-bold text-base shadow-lg shadow-emerald-600/30 hover:bg-emerald-700 transition active:scale-[0.98]">
+                تأكيد الطلب
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        function updateQty(btn, change) {
+            const span = btn.parentElement.querySelector('span');
+            let val = parseInt(span.innerText) + change;
+            if (val < 1) val = 1;
+            span.innerText = val;
+        }
+    </script>
+</body>
+</html>

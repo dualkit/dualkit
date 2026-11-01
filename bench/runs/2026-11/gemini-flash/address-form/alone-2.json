@@ -1,0 +1,319 @@
+{
+  "month": "2026-11",
+  "model": "gemini-flash",
+  "screen": "address-form",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-11-01T12:00:03.923Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n  <title>عنوان التوصيل | بقالة دبي السريعة</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --primary: #059669;\n      --primary-dark: #047857;\n      --primary-light: #ecfdf5;\n      --accent: #f59e0b;\n      --bg: #f8fafc;\n      --surface: #ffffff;\n      --text: #0f172a;\n      --text-muted: #64748b;\n      --border: #e2e8f0;\n      --border-focus: #10b981;\n      --danger: #ef4444;\n      --radius: 16px;\n      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);\n      --shadow-md: 0 4px 14px -2px rgba(5, 150, 105, 0.12), 0 2px 6px -1px rgba(0,0,0,0.06);\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n      -webkit-tap-highlight-color: transparent;\n      font-family: 'Cairo', system-ui, -apple-system, sans-serif;\n    }\n\n    body {\n      background-color: #e5e7eb;\n      color: var(--text);\n      display: flex;\n      justify-content: center;\n      min-height: 100vh;\n      line-height: 1.4;\n    }\n\n    /* Device frame simulation for desktop / native full-width on mobile */\n    .app-container {\n      width: 100%;\n      max-width: 430px;\n      background: var(--bg);\n      min-height: 100vh;\n      display: flex;\n      flex-direction: column;\n      position: relative;\n      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);\n      overflow-x: hidden;\n    }\n\n    /* Top App Bar */\n    .app-header {\n      background: var(--surface);\n      padding: 14px 18px;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      position: sticky;\n      top: 0;\n      z-index: 30;\n      border-bottom: 1px solid var(--border);\n    }\n\n    .header-btn {\n      width: 38px;\n      height: 38px;\n      border-radius: 12px;\n      border: 1px solid var(--border);\n      background: var(--surface);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      cursor: pointer;\n      color: var(--text);\n      transition: all 0.2s;\n    }\n\n    .header-btn:active {\n      transform: scale(0.94);\n      background: #f1f5f9;\n    }\n\n    .header-title {\n      font-size: 1.05rem;\n      font-weight: 700;\n      color: var(--text);\n    }\n\n    .step-indicator {\n      font-size: 0.8rem;\n      color: var(--primary);\n      font-weight: 700;\n      background: var(--primary-light);\n      padding: 3px 10px;\n      border-radius: 20px;\n    }\n\n    /* Mini Map preview */\n    .map-preview {\n      position: relative;\n      background: #dcfce7;\n      height: 120px;\n      overflow: hidden;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      background-image: \n        radial-gradient(#10b981 1.2px, transparent 1.2px), \n        linear-gradient(to right, #e2e8f0 1px, transparent 1px),\n        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);\n      background-size: 20px 20px, 40px 40px, 40px 40px;\n      border-bottom: 1px solid var(--border);\n    }\n\n    .map-pin-pulse {\n      position: relative;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n    }\n\n    .pin-bubble {\n      background: var(--text);\n      color: #fff;\n      font-size: 0.72rem;\n      font-weight: 600;\n      padding: 4px 10px;\n      border-radius: 20px;\n      white-space: nowrap;\n      box-shadow: 0 4px 10px rgba(0,0,0,0.15);\n      margin-bottom: 4px;\n      display: flex;\n      align-items: center;\n      gap: 5px;\n    }\n\n    .pin-bubble::after {\n      content: \"\";\n      position: absolute;\n      bottom: 24px;\n      left: 50%;\n      transform: translateX(-50%);\n      border-width: 5px;\n      border-style: solid;\n      border-color: var(--text) transparent transparent transparent;\n    }\n\n    .pin-dot {\n      width: 16px;\n      height: 16px;\n      background: var(--primary);\n      border: 3px solid #fff;\n      border-radius: 50%;\n      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.35);\n    }\n\n    /* Form Body */\n    .form-wrapper {\n      padding: 18px 16px 110px 16px;\n      display: flex;\n      flex-direction: column;\n      gap: 16px;\n    }\n\n    /* Address Type Selector */\n    .label-heading {\n      font-size: 0.88rem;\n      font-weight: 700;\n      color: var(--text);\n      margin-bottom: 8px;\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n    }\n\n    .optional-tag {\n      font-size: 0.75rem;\n      color: var(--text-muted);\n      font-weight: 500;\n      background: #f1f5f9;\n      padding: 2px 8px;\n      border-radius: 6px;\n    }\n\n    .type-grid {\n      display: grid;\n      grid-template-columns: repeat(3, 1fr);\n      gap: 10px;\n    }\n\n    .type-pill {\n      background: var(--surface);\n      border: 1.5px solid var(--border);\n      border-radius: 12px;\n      padding: 10px 6px;\n      text-align: center;\n      cursor: pointer;\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      gap: 4px;\n      transition: all 0.2s ease;\n    }\n\n    .type-pill svg {\n      width: 20px;\n      height: 20px;\n      stroke: var(--text-muted);\n      fill: none;\n      transition: stroke 0.2s;\n    }\n\n    .type-pill span {\n      font-size: 0.82rem;\n      font-weight: 600;\n      color: var(--text-muted);\n    }\n\n    .type-pill.active {\n      background: var(--primary-light);\n      border-color: var(--primary);\n    }\n\n    .type-pill.active svg {\n      stroke: var(--primary);\n    }\n\n    .type-pill.active span {\n      color: var(--primary);\n    }\n\n    /* Field Styles */\n    .input-card {\n      background: var(--surface);\n      border-radius: var(--radius);\n      padding: 16px;\n      border: 1px solid var(--border);\n      box-shadow: var(--shadow-sm);\n      display: flex;\n      flex-direction: column;\n      gap: 14px;\n    }\n\n    .field-group {\n      display: flex;\n      flex-direction: column;\n      gap: 6px;\n    }\n\n    .field-group label {\n      font-size: 0.82rem;\n      font-weight: 700;\n      color: #334155;\n      display: flex;\n      align-items: center;\n      gap: 6px;\n    }\n\n    .field-group label svg {\n      stroke: var(--text-muted);\n      width: 15px;\n      height: 15px;\n    }\n\n    .input-wrapper {\n      position: relative;\n      display: flex;\n      align-items: center;\n    }\n\n    input, select {\n      width: 100%;\n      height: 48px;\n      background: #f8fafc;\n      border: 1.5px solid var(--border);\n      border-radius: 12px;\n      padding: 0 14px;\n      font-size: 0.95rem;\n      font-weight: 500;\n      color: var(--text);\n      outline: none;\n      transition: all 0.2s ease;\n    }\n\n    input:focus, select:focus {\n      background: #ffffff;\n      border-color: var(--border-focus);\n      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);\n    }\n\n    input::placeholder {\n      color: #94a3b8;\n      font-weight: 400;\n    }\n\n    /* Emirate Select */\n    .select-wrapper {\n      position: relative;\n    }\n\n    .select-wrapper select {\n      appearance: none;\n      padding-left: 36px;\n      cursor: pointer;\n      font-weight: 600;\n    }\n\n    .select-arrow {\n      position: absolute;\n      left: 14px;\n      top: 50%;\n      transform: translateY(-50%);\n      pointer-events: none;\n      color: var(--text-muted);\n    }\n\n    /* Phone Input with UAE Flag & Prefix */\n    .phone-container {\n      display: flex;\n      gap: 8px;\n      direction: ltr; /* keep phone digits natural */\n    }\n\n    .phone-prefix {\n      height: 48px;\n      background: #f1f5f9;\n      border: 1.5px solid var(--border);\n      border-radius: 12px;\n      padding: 0 12px;\n      display: flex;\n      align-items: center;\n      gap: 6px;\n      font-size: 0.88rem;\n      font-weight: 700;\n      color: #334155;\n      user-select: none;\n      flex-shrink: 0;\n    }\n\n    .flag-uae {\n      width: 22px;\n      height: 14px;\n      border-radius: 2px;\n      object-fit: cover;\n      box-shadow: 0 1px 2px rgba(0,0,0,0.1);\n    }\n\n    .phone-input {\n      letter-spacing: 0.5px;\n      text-align: left;\n    }\n\n    /* Makani Special Card */\n    .makani-card {\n      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);\n      border: 1.5px dashed #86efac;\n    }\n\n    .makani-badge {\n      display: inline-flex;\n      align-items: center;\n      gap: 4px;\n      background: #15803d;\n      color: #fff;\n      font-size: 0.68rem;\n      font-weight: 700;\n      padding: 2px 7px;\n      border-radius: 4px;\n      letter-spacing: 0.3px;\n    }\n\n    .field-hint {\n      font-size: 0.74rem;\n      color: var(--text-muted);\n      margin-top: 3px;\n    }\n\n    /* Floating / Sticky Footer */\n    .footer-actions {\n      position: fixed;\n      bottom: 0;\n      width: 100%;\n      max-width: 430px;\n      background: rgba(255, 255, 255, 0.95);\n      backdrop-filter: blur(10px);\n      border-top: 1px solid var(--border);\n      padding: 14px 18px;\n      box-shadow: 0 -8px 20px rgba(0,0,0,0.04);\n      z-index: 25;\n    }\n\n    .save-btn {\n      width: 100%;\n      height: 52px;\n      background: var(--primary);\n      color: white;\n      border: none;\n      border-radius: 14px;\n      font-size: 1.05rem;\n      font-weight: 700;\n      cursor: pointer;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      gap: 10px;\n      box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3);\n      transition: all 0.2s ease;\n    }\n\n    .save-btn:hover {\n      background: var(--primary-dark);\n    }\n\n    .save-btn:active {\n      transform: scale(0.98);\n      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);\n    }\n\n    /* Success Toast */\n    .toast {\n      position: fixed;\n      top: 20px;\n      left: 50%;\n      transform: translateX(-50%) translateY(-100px);\n      background: #064e3b;\n      color: white;\n      padding: 12px 20px;\n      border-radius: 14px;\n      display: flex;\n      align-items: center;\n      gap: 10px;\n      font-weight: 600;\n      font-size: 0.92rem;\n      box-shadow: 0 10px 25px rgba(0,0,0,0.2);\n      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);\n      z-index: 100;\n      max-width: 90%;\n      width: 360px;\n    }\n\n    .toast.show {\n      transform: translateX(-50%) translateY(0);\n    }\n\n    /* Delivery instruction note */\n    .instructions-box {\n      background: #fafaf9;\n      border: 1px dashed var(--border);\n      border-radius: 12px;\n      padding: 10px 12px;\n      display: flex;\n      align-items: flex-start;\n      gap: 8px;\n      font-size: 0.78rem;\n      color: var(--text-muted);\n    }\n  </style>\n</head>\n<body>\n\n  <!-- Success Toast Notification -->\n  <div class=\"toast\" id=\"successToast\">\n    <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#34d399\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n      <path d=\"M22 11.08V12a10 10 0 1 1-5.93-9.14\"></path>\n      <polyline points=\"22 4 12 14.01 9 11.01\"></polyline>\n    </svg>\n    <span>تم حفظ عنوان التوصيل بنجاح!</span>\n  </div>\n\n  <div class=\"app-container\">\n    <!-- Header -->\n    <header class=\"app-header\">\n      <button type=\"button\" class=\"header-btn\" aria-label=\"الرجوع\">\n        <!-- RTL back arrow -->\n        <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <polyline points=\"9 18 15 12 9 6\"></polyline>\n        </svg>\n      </button>\n      <div class=\"header-title\">عنوان التوصيل</div>\n      <span class=\"step-indicator\">خطوة ٢ من ٣</span>\n    </header>\n\n    <!-- Mini Map Indicator -->\n    <div class=\"map-preview\">\n      <div class=\"map-pin-pulse\">\n        <div class=\"pin-bubble\">\n          <span>دبي، الإمارات</span>\n          <svg width=\"12\" height=\"12\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\"><polyline points=\"20 6 9 17 4 12\"/></svg>\n        </div>\n        <div class=\"pin-dot\"></div>\n      </div>\n    </div>\n\n    <!-- Form -->\n    <form id=\"addressForm\" class=\"form-wrapper\" onsubmit=\"handleFormSubmit(event)\">\n\n      <!-- Address Type Selector -->\n      <div>\n        <div class=\"label-heading\">\n          <span>نوع العنوان</span>\n        </div>\n        <div class=\"type-grid\">\n          <div class=\"type-pill active\" onclick=\"selectType(this)\">\n            <svg viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"></path><polyline points=\"9 22 9 12 15 12 15 22\"></polyline></svg>\n            <span>شقة / منزل</span>\n          </div>\n          <div class=\"type-pill\" onclick=\"selectType(this)\">\n            <svg viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect width=\"16\" height=\"20\" x=\"4\" y=\"2\" rx=\"2\" ry=\"2\"></rect><path d=\"M9 22v-4h6v4\"></path><path d=\"M8 6h.01\"></path><path d=\"M16 6h.01\"></path><path d=\"M8 10h.01\"></path><path d=\"M16 10h.01\"></path><path d=\"M8 14h.01\"></path><path d=\"M16 14h.01\"></path></svg>\n            <span>مكتب عمل</span>\n          </div>\n          <div class=\"type-pill\" onclick=\"selectType(this)\">\n            <svg viewBox=\"0 0 24 24\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z\"></path><circle cx=\"12\" cy=\"10\" r=\"3\"></circle></svg>\n            <span>فيلا خاصة</span>\n          </div>\n        </div>\n      </div>\n\n      <!-- Main Address Card -->\n      <div class=\"input-card\">\n        <!-- Emirate Selector (Default Dubai) -->\n        <div class=\"field-group\">\n          <label for=\"emirate\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m4.93 4.93 4.24 4.24\"/><path d=\"m14.83 9.17 4.24-4.24\"/><path d=\"m14.83 14.83 4.24 4.24\"/><path d=\"m9.17 14.83-4.24 4.24\"/></svg>\n            الإمارة\n          </label>\n          <div class=\"select-wrapper\">\n            <select id=\"emirate\" name=\"emirate\" required>\n              <option value=\"dubai\" selected>دبي (Dubai)</option>\n              <option value=\"abu-dhabi\">أبوظبي (Abu Dhabi)</option>\n              <option value=\"sharjah\">الشارقة (Sharjah)</option>\n              <option value=\"ajman\">عجمان (Ajman)</option>\n              <option value=\"umm-al-quwain\">أم القيوين (Umm Al Quwain)</option>\n              <option value=\"ras-al-khaimah\">رأس الخيمة (Ras Al Khaimah)</option>\n              <option value=\"fujairah\">الفجيرة (Fujairah)</option>\n            </select>\n            <div class=\"select-arrow\">\n              <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n                <polyline points=\"6 9 12 15 18 9\"></polyline>\n              </svg>\n            </div>\n          </div>\n        </div>\n\n        <!-- Area -->\n        <div class=\"field-group\">\n          <label for=\"area\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke-width=\"2\"><path d=\"M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/></svg>\n            المنطقة / الحي\n          </label>\n          <input \n            type=\"text\" \n            id=\"area\" \n            name=\"area\" \n            placeholder=\"مثال: دبي مارينا، البرشاء، الخليج التجاري\" \n            required\n            autocomplete=\"address-level2\"\n          >\n        </div>\n\n        <!-- Street -->\n        <div class=\"field-group\">\n          <label for=\"street\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke-width=\"2\"><path d=\"m18 8 4 4-4 4\"/><path d=\"M2 12h20\"/><path d=\"m6 8-4 4 4 4\"/></svg>\n            اسم أو رقم الشارع\n          </label>\n          <input \n            type=\"text\" \n            id=\"street\" \n            name=\"street\" \n            placeholder=\"مثال: شارع الملك سلمان بن عبدالعزيز\" \n            required\n            autocomplete=\"address-line1\"\n          >\n        </div>\n\n        <!-- Building or Villa -->\n        <div class=\"field-group\">\n          <label for=\"building\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke-width=\"2\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\" ry=\"2\"/><line x1=\"9\" y1=\"22\" x2=\"9\" y2=\"22.01\"/><line x1=\"15\" y1=\"22\" x2=\"15\" y2=\"22.01\"/></svg>\n            المبنى أو الفيلا\n          </label>\n          <input \n            type=\"text\" \n            id=\"building\" \n            name=\"building\" \n            placeholder=\"مثال: برج الأميرة، شقة 1402 أو فيلا 25\" \n            required\n          >\n        </div>\n      </div>\n\n      <!-- Makani Card (Smart Dubai addressing) -->\n      <div class=\"input-card makani-card\">\n        <div class=\"field-group\">\n          <div class=\"label-heading\">\n            <label for=\"makani\" style=\"cursor: pointer;\">\n              <span class=\"makani-badge\">MAKANI</span>\n              رقم مكاني (دبي)\n            </label>\n            <span class=\"optional-tag\">اختياري - يوصى به</span>\n          </div>\n          <input \n            type=\"text\" \n            id=\"makani\" \n            name=\"makani\" \n            inputmode=\"numeric\" \n            placeholder=\"مثال: 30032 95320\" \n            maxlength=\"11\"\n            oninput=\"formatMakani(this)\"\n          >\n          <p class=\"field-hint\">الرمز المكون من 10 أرقام الموجود على مدخل المبنى لتوصيل أدق وأسرع.</p>\n        </div>\n      </div>\n\n      <!-- Phone Number Card -->\n      <div class=\"input-card\">\n        <div class=\"field-group\">\n          <label for=\"phone\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke-width=\"2\"><path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z\"/></svg>\n            رقم الهاتف للتواصل\n          </label>\n          <div class=\"phone-container\">\n            <div class=\"phone-prefix\">\n              <!-- UAE Flag SVG -->\n              <svg class=\"flag-uae\" viewBox=\"0 0 640 480\">\n                <path fill=\"#00732f\" d=\"M0 0h640v160H0z\"/>\n                <path fill=\"#fff\" d=\"M0 160h640v160H0z\"/>\n                <path fill=\"#000\" d=\"M0 320h640v160H0z\"/>\n                <path fill=\"#f00\" d=\"M0 0h160v480H0z\"/>\n              </svg>\n              <span>+971</span>\n            </div>\n            <input \n              type=\"tel\" \n              id=\"phone\" \n              name=\"phone\" \n              class=\"phone-input\" \n              placeholder=\"050 123 4567\" \n              required\n              inputmode=\"tel\"\n              maxlength=\"12\"\n              oninput=\"formatPhone(this)\"\n            >\n          </div>\n          <p class=\"field-hint\">سيتواصل معك مندوب البقالة عند الوصول للعنوان.</p>\n        </div>\n\n        <div class=\"instructions-box\">\n          <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#64748b\" stroke-width=\"2\" style=\"flex-shrink:0;\">\n            <circle cx=\"12\" cy=\"12\" r=\"10\"></circle>\n            <line x1=\"12\" y1=\"16\" x2=\"12\" y2=\"12\"></line>\n            <line x1=\"12\" y1=\"8\" x2=\"12.01\" y2=\"8\"></line>\n          </svg>\n          <span>توصيل مشترياتك مضمون مبرداً وطازجاً خلال ٣٠ دقيقة من وقت التأكيد.</span>\n        </div>\n      </div>\n\n      <!-- Sticky Bottom Button -->\n      <div class=\"footer-actions\">\n        <button type=\"submit\" class=\"save-btn\" id=\"submitBtn\">\n          <span>حفظ العنوان</span>\n          <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <polyline points=\"15 18 9 12 15 6\"></polyline>\n          </svg>\n        </button>\n      </div>\n\n    </form>\n  </div>\n\n  <script>\n    // Address type selector\n    function selectType(element) {\n      document.querySelectorAll('.type-pill').forEach(el => el.classList.remove('active'));\n      element.classList.add('active');\n    }\n\n    // Auto format phone number: 050 123 4567\n    function formatPhone(input) {\n      let digits = input.value.replace(/\\D/g, '');\n      if (digits.length > 10) digits = digits.substring(0, 10);\n      \n      let formatted = '';\n      if (digits.length > 0) {\n        formatted += digits.substring(0, 3);\n      }\n      if (digits.length >= 4) {\n        formatted += ' ' + digits.substring(3, 6);\n      }\n      if (digits.length >= 7) {\n        formatted += ' ' + digits.substring(6, 10);\n      }\n      input.value = formatted;\n    }\n\n    // Auto format 10-digit Makani: 12345 67890\n    function formatMakani(input) {\n      let digits = input.value.replace(/\\D/g, '');\n      if (digits.length > 10) digits = digits.substring(0, 10);\n      \n      let formatted = digits;\n      if (digits.length > 5) {\n        formatted = digits.substring(0, 5) + ' ' + digits.substring(5, 10);\n      }\n      input.value = formatted;\n    }\n\n    // Form submission handler\n    function handleFormSubmit(e) {\n      e.preventDefault();\n      \n      const submitBtn = document.getElementById('submitBtn');\n      const toast = document.getElementById('successToast');\n      \n      // Temporary loading effect\n      submitBtn.disabled = true;\n      submitBtn.style.opacity = '0.85';\n      submitBtn.innerHTML = `\n        <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" style=\"animation: spin 1s linear infinite;\">\n          <circle cx=\"12\" cy=\"12\" r=\"10\" stroke-dasharray=\"32\" stroke-dashoffset=\"12\"></circle>\n        </svg>\n        <span>جاري الحفظ...</span>\n      `;\n\n      setTimeout(() => {\n        // Show success state\n        toast.classList.add('show');\n        submitBtn.disabled = false;\n        submitBtn.style.opacity = '1';\n        submitBtn.innerHTML = `\n          <span>حفظ العنوان</span>\n          <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <polyline points=\"15 18 9 12 15 6\"></polyline>\n          </svg>\n        `;\n\n        // Hide toast after 3 seconds\n        setTimeout(() => {\n          toast.classList.remove('show');\n        }, 3200);\n      }, 700);\n    }\n  </script>\n\n  <style>\n    @keyframes spin {\n      100% {\n        transform: rotate(360deg);\n      }\n    }\n  </style>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 142,
+    "output": 8180
+  },
+  "ms": 146531,
+  "finish": "STOP",
+  "reasoningTokens": 1361,
+  "servedModel": "gemini-3.8-flash",
+  "ok": true,
+  "rulesPassed": 30,
+  "score": 64,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/drops-arabic-digits",
+      "title": "A code field that deletes Arabic digits",
+      "severity": "error",
+      "box": {
+        "x": 127,
+        "y": 910.90625,
+        "width": 230,
+        "height": 48
+      },
+      "message": "Typing ١٢ into this phone field kept neither ١٢ nor 12, so Arabic digits are deleted.",
+      "fix": "Accept Arabic-Indic digits and convert them to 0 to 9 before checking or sending the value, instead of stripping them.",
+      "snippet": "<input type=\"tel\" id=\"phone\" name=\"phone\" class=\"phone-input\" placeholder=\"050 123 4567\" required=\"\" inputmode=\"tel\" maxlength=\"12\" oninput=\"formatPhone(this)\">"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 800.375,
+        "width": 314,
+        "height": 38.578125
+      },
+      "message": "\"الرمز المكون من 10 أرقام الموجود على مدخ…\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<p class=\"field-hint\">الرمز المكون من 10 أرقام الموجود على مدخل المبنى لتوصيل أدق وأسرع.</p>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 800.375,
+        "width": 314,
+        "height": 38.578125
+      },
+      "message": "Line height is 1.40 on \"الرمز المكون من 10 أرقام الموجود على مدخ…\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<p class=\"field-hint\">الرمز المكون من 10 أرقام الموجود على مدخل المبنى لتوصيل أدق وأسرع.</p>"
+    },
+    {
+      "rule": "type/arabic-leading",
+      "title": "Arabic lines set too tight",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 1006.484375,
+        "width": 268,
+        "height": 40.46875
+      },
+      "message": "Line height is 1.40 on \"توصيل مشترياتك مضمون مبرداً وطازجاً خلال…\".",
+      "fix": "Give Arabic body text a line height of about 1.6 to 1.8, for example :lang(ar) { line-height: 1.7 }.",
+      "snippet": "<span>توصيل مشترياتك مضمون مبرداً وطازجاً خلال ٣٠ دقيقة من وقت التأكيد.</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 28,
+        "y": 20.046875,
+        "width": 76,
+        "height": 24
+      },
+      "message": "\"خطوة ٢ من ٣\" is 12.8px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"step-indicator\">خطوة ٢ من ٣</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 172.5,
+        "y": 105.4375,
+        "width": 62,
+        "height": 22
+      },
+      "message": "\"دبي، الإمارات\" is 11.52px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>دبي، الإمارات</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 285.671875,
+        "y": 264.703125,
+        "width": 64,
+        "height": 24
+      },
+      "message": "\"شقة / منزل\" is 13.12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>شقة / منزل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 164.515625,
+        "y": 264.703125,
+        "width": 61,
+        "height": 24
+      },
+      "message": "\"مكتب عمل\" is 13.12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>مكتب عمل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 45.34375,
+        "y": 264.703125,
+        "width": 54,
+        "height": 24
+      },
+      "message": "\"فيلا خاصة\" is 13.12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>فيلا خاصة</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 298,
+        "y": 327.078125,
+        "width": 38,
+        "height": 24
+      },
+      "message": "\"الإمارة\" is 13.12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"emirate\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"></circle><path d=\"m4.93 4.93 4.24 4.24\"><"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 246,
+        "y": 413.453125,
+        "width": 90,
+        "height": 24
+      },
+      "message": "\"المنطقة / الحي\" is 13.12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"area\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke-width=\"2\"><path d=\"M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z\"></path><circle cx="
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 234,
+        "y": 499.828125,
+        "width": 102,
+        "height": 24
+      },
+      "message": "\"اسم أو رقم الشارع\" is 13.12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"street\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke-width=\"2\"><path d=\"m18 8 4 4-4 4\"></path><path d=\"M2 12h20\"></path><path d=\"m6 8-4 "
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 249,
+        "y": 586.203125,
+        "width": 87,
+        "height": 24
+      },
+      "message": "\"المبنى أو الفيلا\" is 13.12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"building\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke-width=\"2\"><rect x=\"4\" y=\"2\" width=\"16\" height=\"20\" rx=\"2\" ry=\"2\"></rect><line x1="
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 200.1875,
+        "y": 709.78125,
+        "width": 96,
+        "height": 24
+      },
+      "message": "\"رقم مكاني (دبي)\" is 13.12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"makani\" style=\"cursor: pointer;\">\n              <span class=\"makani-badge\">MAKANI</span>\n              رقم مكاني (دبي)\n            </label>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 41,
+        "y": 709.578125,
+        "width": 89,
+        "height": 23
+      },
+      "message": "\"اختياري - يوصى به\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"optional-tag\">اختياري - يوصى به</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 43,
+        "y": 800.375,
+        "width": 314,
+        "height": 38.578125
+      },
+      "message": "\"الرمز المكون من 10 أرقام الموجود على مدخ…\" is 11.84px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"field-hint\">الرمز المكون من 10 أرقام الموجود على مدخل المبنى لتوصيل أدق وأسرع.</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 222,
+        "y": 883.53125,
+        "width": 114,
+        "height": 24
+      },
+      "message": "\"رقم الهاتف للتواصل\" is 13.12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<label for=\"phone\">\n            <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke-width=\"2\"><path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19."
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 114,
+        "y": 964.90625,
+        "width": 243,
+        "height": 22
+      },
+      "message": "\"سيتواصل معك مندوب البقالة عند الوصول للع…\" is 11.84px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<p class=\"field-hint\">سيتواصل معك مندوب البقالة عند الوصول للعنوان.</p>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 50,
+        "y": 1006.484375,
+        "width": 268,
+        "height": 40.46875
+      },
+      "message": "\"توصيل مشترياتك مضمون مبرداً وطازجاً خلال…\" is 12.48px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>توصيل مشترياتك مضمون مبرداً وطازجاً خلال ٣٠ دقيقة من وقت التأكيد.</span>"
+    },
+    {
+      "rule": "layout/physical-inset",
+      "title": "Position, float or border that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 47,
+        "y": 366.7578125,
+        "width": 18,
+        "height": 23.390625
+      },
+      "message": "left: 14px stays on the same side in Arabic.",
+      "fix": "Use inset-inline-start, float: inline-start, border-inline-start and border-start-start-radius.",
+      "snippet": "<div class=\"select-arrow\">\n              <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"roun"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 33,
+        "y": 354.453125,
+        "width": 324,
+        "height": 48
+      },
+      "message": "padding-right: 14px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<select id=\"emirate\" name=\"emirate\" required=\"\">\n              <option value=\"dubai\" selected=\"\">دبي (Dubai)</option>\n              <option value=\"abu-dhabi\">أب"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 1182
+}

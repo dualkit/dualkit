@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تاريخ الطلب</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 16px;
+    direction: rtl;
+  }
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .order {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .order-number {
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .status {
+    font-size: 14px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    color: #fff;
+  }
+  .delivered { background: #4CAF50; }
+  .onway { background: #FF9800; }
+  .cancelled { background: #F44336; }
+  .date, .total {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2 style="text-align:center; margin-bottom:20px;">تاريخ الطلب</h2>
+  <!-- Order 1 -->
+  <div class="order">
+    <div class="order-header">
+      <span class="order-number">#A-10293</span>
+      <span class="status delivered">تم التسليم</span>
+    </div>
+    <div class="date">15 فبراير 2024م - 5 رجب 1445هـ</div>
+    <div class="total">120 ريال</div>
+  </div>
+  <!-- Order 2 -->
+  <div class="order">
+    <div class="order-header">
+      <span class="order-number">#B-20451</span>
+      <span class="status onway">في النقل</span>
+    </div>
+    <div class="date">20 فبراير 2024م - 10 شعبان 1445هـ</div>
+    <div class="total">75 ريال</div>
+  </div>
+  <!-- Order 3 -->
+  <div class="order">
+    <div class="order-header">
+      <span class="order-number">#C-30567</span>
+      <span class="status cancelled">ملغى</span>
+    </div>
+    <div class="date">25 فبراير 2024م - 15 شعبان 1445هـ</div>
+    <div class="total">200 ريال</div>
+  </div>
+  <!-- Order 4 -->
+  <div class="order">
+    <div class="order-header">
+      <span class="order-number">#D-40789</span>
+      <span class="status delivered">تم التسليم</span>
+    </div>
+    <div class="date">1 مارس 2024م - 20 شعبان 1445هـ</div>
+    <div class="total">30 ريال</div>
+  </div>
+</div>
+</body>
+</html>

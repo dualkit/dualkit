@@ -1,0 +1,67 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "address-form",
+  "condition": "dualkit",
+  "run": 2,
+  "at": "2026-11-01T11:43:26.257Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\">\n<title>عنوان التسليم</title>\n<style>\n  :root {\n    --primary: #089172;\n    --primary-dark: #065f46;\n    --border: #e5e7eb;\n    --bg: #f9fafb;\n    --text: #1f2937;\n    --text-light: #6b7280;\n    --white: #ffffff;\n  }\n\n  * { box-sizing: border-box; margin: 0; padding: 0; }\n\n  body {\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'IBM Plex Sans Arabic', 'Noto Sans Arabic', sans-serif;\n    background: var(--bg);\n    color: var(--text);\n    line-height: 1.6;\n    min-height: 100vh;\n    display: flex;\n    align-items: flex-start;\n    justify-content: center;\n    padding: 20px;\n    -webkit-text-size-adjust: 100%;\n  }\n\n  .form-container {\n    background: var(--white);\n    border-radius: 16px;\n    padding: 28px 24px;\n    width: 100%;\n    max-width: 480px;\n    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);\n  }\n\n  .form-header {\n    text-align: start;\n    margin-bottom: 28px;\n  }\n\n  .form-header h1 {\n    font-size: 22px;\n    font-weight: 700;\n    color: var(--text);\n    margin-bottom: 6px;\n  }\n\n  .form-header p {\n    font-size: 14px;\n    color: var(--text-light);\n  }\n\n  .field {\n    margin-bottom: 18px;\n  }\n\n  .field label {\n    display: block;\n    font-size: 14px;\n    font-weight: 500;\n    color: var(--text);\n    margin-bottom: 6px;\n  }\n\n  .hint {\n    font-size: 12px;\n    color: var(--text-light);\n    margin-bottom: 6px;\n  }\n\n  .field input,\n  .field select {\n    width: 100%;\n    padding: 12px 14px;\n    font-size: 16px;\n    border: 1px solid var(--border);\n    border-radius: 10px;\n    background: var(--white);\n    color: var(--text);\n    font-family: inherit;\n    transition: border-color 0.15s, box-shadow 0.15s;\n  }\n\n  .field input:focus,\n  .field select:focus {\n    outline: none;\n    border-color: var(--primary);\n    box-shadow: 0 0 0 3px rgba(8, 145, 114, 0.12);\n  }\n\n  .submit-btn {\n    width: 100%;\n    padding: 14px;\n    font-size: 16px;\n    font-weight: 600;\n    color: var(--white);\n    background: var(--primary);\n    border: none;\n    border-radius: 10px;\n    cursor: pointer;\n    font-family: inherit;\n    transition: background 0.15s;\n    margin-top: 8px;\n  }\n\n  .submit-btn:hover { background: var(--primary-dark); }\n  .submit-btn:active { background: var(--primary-dark); }\n</style>\n</head>\n<body>\n  <form class=\"form-container\" onsubmit=\"event.preventDefault(); alert('تم حفظ عنوانك');\">\n    <div class=\"form-header\">\n      <h1>عنوان التسليم</h1>\n      <p>أدخل تفاصيل عنوانك التالية</p>\n    </div>\n\n    <div class=\"field\">\n      <label for=\"building\">مبنى أو فيلا</label>\n      <input type=\"text\" id=\"building\" autocomplete=\"address-level1\" placeholder=\"مثال: مبنى 12\">\n    </div>\n\n    <div class=\"field\">\n      <label for=\"street\">الشارع</label>\n      <input type=\"text\" id=\"street\" autocomplete=\"street-address\" placeholder=\"مثال: شارع الحمراء\">\n    </div>\n\n    <div class=\"field\">\n      <label for=\"area\">المنطقة</label>\n      <input type=\"text\" id=\"area\" autocomplete=\"address-level2\" placeholder=\"مثال: جميرة\">\n    </div>\n\n    <div class=\"field\">\n      <label for=\"makani\">رقم مكاني</label>\n      <div class=\"hint\">مثال: <bdi dir=\"ltr\">1234567890</bdi></div>\n      <input type=\"text\" id=\"makani\" inputmode=\"numeric\" dir=\"ltr\" placeholder=\"1234567890\">\n    </div>\n\n    <div class=\"field\">\n      <label for=\"emirate\">الإمارة</label>\n      <select id=\"emirate\">\n        <option value=\"dubai\" selected>دبي</option>\n        <option value=\"abudhabi\">أبوظبي</option>\n        <option value=\"sharjah\">الشارقة</option>\n        <option value=\"ajman\">عجمان</option>\n        <option value=\"rakhaimah\">رأس الخيمة</option>\n        <option value=\"fujairah\">الفجيرة</option>\n        <option value=\"ummquwain\">أم القوين</option>\n      </select>\n    </div>\n\n    <div class=\"field\">\n      <label for=\"phone\">رقم الهاتف</label>\n      <div class=\"hint\">مثال: <bdi dir=\"ltr\">050 123 4567</bdi></div>\n      <input type=\"tel\" id=\"phone\" dir=\"ltr\" inputmode=\"tel\" autocomplete=\"tel\" placeholder=\"050 123 4567\">\n    </div>\n\n    <button type=\"submit\" class=\"submit-btn\">حفظ عنوانك</button>\n  </form>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 6297,
+    "output": 8609
+  },
+  "ms": 96813,
+  "finish": "stop",
+  "reasoningTokens": 7238,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 88,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 217.875,
+        "y": 53,
+        "width": 128.125,
+        "height": 25
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>عنوان التسليم</h1>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 316.328125,
+        "y": 441.140625,
+        "width": 29.671875,
+        "height": 14
+      },
+      "message": "\"مثال:\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"hint\">مثال: <bdi dir=\"ltr\">1234567890</bdi></div>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 316.328125,
+        "y": 648.109375,
+        "width": 29.671875,
+        "height": 14
+      },
+      "message": "\"مثال:\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"hint\">مثال: <bdi dir=\"ltr\">050 123 4567</bdi></div>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

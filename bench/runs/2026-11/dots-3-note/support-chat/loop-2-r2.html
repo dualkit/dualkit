@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدعم - اتصال كويتي</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'IBM Plex Arabic', 'Noto Sans Arabic', sans-serif;
+    background: linear-gradient(135deg, #0d47a1, #1565c0);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    direction: rtl;
+  }
+  .phone {
+    width: 390px;
+    height: 844px;
+    background: #fff;
+    border-radius: 40px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 10px solid #1a1a2e;
+  }
+  .status-bar {
+    height: 44px;
+    background: #1a1a2e;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .chat-header {
+    background: linear-gradient(135deg, #0d47a1, #1565c0);
+    color: #fff;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #fff;
+    color: #1565c0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  .header-info h3 { font-size: 16px; font-weight: 600; }
+  .header-info p { font-size: 14px; opacity: 0.8; }
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scrollbar-width: none;
+  }
+  .messages::-webkit-scrollbar { display: none; }
+  .msg {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 18px;
+    font-size: 15px;
+    line-height: 1.5;
+    position: relative;
+    word-wrap: break-word;
+  }
+  .msg .time {
+    font-size: 11px;
+    opacity: 0.6;
+    margin-top: 4px;
+    display: block;
+  }
+  .msg.customer {
+    align-self: flex-start;
+    background: #e3f2fd;
+    color: #0d47a1;
+    border-bottom-left-radius: 4px;
+  }
+  .msg.customer .time { text-align: start; }
+  .msg.agent {
+    align-self: flex-end;
+    background: #fff;
+    color: #333;
+    border: 1px solid #e0e0e0;
+    border-bottom-right-radius: 4px;
+  }
+  .msg.agent .time { text-align: end; }
+  .input-area {
+    display: flex;
+    padding: 12px 16px;
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    gap: 10px;
+    align-items: center;
+  }
+  .input-area input {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 24px;
+    padding: 12px 18px;
+    font-size: 15px;
+    outline: none;
+    font-family: inherit;
+    direction: rtl;
+  }
+  .input-area input:focus { border-color: #1565c0; }
+  .send-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #1565c0;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .send-btn:hover { background: #0d47a1; }
+  .en {
+    font-family: 'Inter', 'IBM Plex Arabic', sans-serif;
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>●●●● ●●</span>
+      <span>WiFi 5G</span>
+    </div>
+    <div class="chat-header">
+      <div class="avatar">س</div>
+      <div class="header-info">
+        <h3>سارة</h3>
+        <p>متصل الآن</p>
+      </div>
+    </div>
+    <div class="messages">
+      <div class="msg customer">
+        مرحباً، أريد تفعيل خدمة <span class="en">5G</span> على بطاقة SIM الخاصة بي
+        <span class="time">10:15</span>
+      </div>
+      <div class="msg agent">
+        مرحباً بك، نعم ندعم خدمة <span class="en">5G</span>.يمكنك التفعيل من خلال تطبيق العميل
+        <span class="time">10:16</span>
+      </div>
+      <div class="msg customer">
+        أنا مستخدم بطاقة <span class="en">eSIM</span>،هل تدعمون تفعيل <span class="en">5G</span> عليها؟
+        <span class="time">10:17</span>
+      </div>
+      <div class="msg agent">
+        بالطبع، نعم ندعم تفعيل <span class="en">5G</span> على <span class="en">eSIM</span> أيضاً. فقط قم بتحديث تطبيق العميل
+        <span class="time">10:18</span>
+      </div>
+      <div class="msg customer">
+        ممتان، شكرًا. ما هي حالة طلبي <span class="en">TX-48213</span>؟
+        <span class="time">10:19</span>
+      </div>
+      <div class="msg agent">
+        تم تفعيل طلب <span class="en">TX-48213</span> بنجاح، ويتم التسليم خلال 24 ساعة
+        <span class="time">10:20</span>
+      </div>
+    </div>
+    <div class="input-area">
+      <input type="text" placeholder="اكتب رسالتك..." dir="auto">
+      <button class="send-btn">➤</button>
+    </div>
+  </div>
+</body>
+</html>

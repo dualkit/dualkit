@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملخص الدفع - تطبيق المدفوعات</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Tajawal for clean Arabic typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen p-0 sm:p-4">
+
+    <!-- Mobile Device Container -->
+    <div class="w-full sm:max-w-[390px] bg-white sm:rounded-[40px] shadow-2xl overflow-hidden flex flex-col justify-between min-h-screen sm:min-h-[800px] border border-gray-200">
+        
+        <!-- Top Section -->
+        <div>
+            <!-- Header -->
+            <header class="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100">
+                <button class="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-700 hover:bg-gray-100 transition">
+                    <!-- Right arrow for RTL back -->
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+                <h1 class="text-lg font-bold text-gray-900">ملخص الدفع</h1>
+                <div class="w-10"></div> <!-- Spacer for centering title -->
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="px-6 pt-6">
+                
+                <!-- Amount Due Card -->
+                <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 text-white shadow-lg mb-6 relative overflow-hidden">
+                    <div class="absolute -left-6 -bottom-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-xl"></div>
+                    <p class="text-slate-400 text-sm font-medium mb-1">المبلغ الإجمالي المستحق</p>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-4xl font-black tracking-tight">1,234.50</span>
+                        <span class="text-emerald-400 font-bold text-lg">درهم إماراتي</span>
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-t border-slate-700/60 flex justify-between items-center text-xs text-slate-300">
+                        <span>رقم الفاتورة: #UAE-8942</span>
+                        <span class="bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-full font-medium">مستحق الدفع</span>
+                    </div>
+                </div>
+
+                <!-- Due Date & Order Info -->
+                <div class="bg-gray-50 rounded-2xl p-4 mb-6 border border-gray-100 space-y-4">
+                    <!-- Due Date -->
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">تاريخ الاستحقاق</p>
+                                <p class="text-sm font-bold text-gray-800">3 نوفمبر 2026</p>
+                                <p class="text-xs text-gray-400 mt-0.5">22 جمادى الأولى 1448 هـ</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200/60 pt-3"></div>
+
+                    <!-- Items Count -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-gray-800">تفاصيل الطلب</p>
+                                <p class="text-xs text-gray-500 mt-0.5">لديك 3 عناصر في هذا الطلب</p>
+                            </div>
+                        </div>
+                        <button class="text-xs font-bold text-blue-600 hover:underline">عرض الكل</button>
+                    </div>
+                </div>
+
+                <!-- Phone Number Field for SMS Receipt -->
+                <div class="mb-6">
+                    <label class="block text-xs font-bold text-gray-700 mb-2">إرسال الإيصال عبر الرسائل النصية (SMS)</label>
+                    <div class="flex rounded-xl border border-gray-300 overflow-hidden focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100 transition bg-white">
+                        <!-- UAE Country Code Prefix -->
+                        <div class="bg-gray-50 px-3 py-3 flex items-center gap-1.5 border-l border-gray-200 text-gray-600 text-sm font-semibold select-none">
+                            <span>🇦🇪</span>
+                            <span>+971</span>
+                        </div>
+                        <input type="tel" 
+                               value="050 123 4567" 
+                               class="w-full px-4 py-3 text-gray-800 placeholder-gray-400 text-sm focus:outline-none bg-transparent"
+                               placeholder="050 123 4567">
+                    </div>
+                    <p class="text-[11px] text-gray-400 mt-1.5">سنقوم بإرسال تأكيد الدفع ورقم الإيصال إلى هذا الرقم.</p>
+                </div>
+
+            </main>
+        </div>
+
+        <!-- Bottom Footer Action -->
+        <footer class="p-6 bg-white border-t border-gray-100">
+            <button class="w-full bg-slate-900 hover:bg-slate-800 active:scale-[0.98] transition text-white font-bold py-4 rounded-2xl shadow-lg shadow-slate-900/20 flex items-center justify-center gap-2 text-base">
+                <span>ادفع الآن</span>
+                <svg class="w-5 h-5 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+            </button>
+            <p class="text-center text-[10px] text-gray-400 mt-3">معاملة آمنة ومشفرة بالكامل طبقاً لمعايير مصرف الإمارات العربية المتحدة المركزي</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

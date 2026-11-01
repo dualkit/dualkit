@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تاريخ الطلب</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 16px;
+    direction: rtl;
+  }
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  .order {
+    background: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .order-number {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    color: #222;
+  }
+  .detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-size: 0.95em;
+  }
+  .label {
+    font-weight: bold;
+    color: #555;
+  }
+  .value {
+    color: #333;
+  }
+  .status {
+    margin-top: 8px;
+    font-weight: bold;
+    text-align: center;
+    padding: 4px 0;
+    border-radius: 4px;
+  }
+  .delivered { background: #e8f5e9; color: #4caf50; }
+  .onway { background: #e3f2fd; color: #2196f3; }
+  .cancelled { background: #ffebee; color: #f44336; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>تاريخ الطلب</h1>
+  <div class="order">
+    <div class="order-number">#A-10293</div>
+    <div class="detail">
+      <span class="label">التاريخ:</span>
+      <span class="value">2023-09-15 / 1445-02-01</span>
+    </div>
+    <div class="detail">
+      <span class="label">الإجمالي:</span>
+      <span class="value">١٥٠٠ SAR</span>
+    </div>
+    <div class="status delivered">تم التسليم</div>
+  </div>
+  <div class="order">
+    <div class="order-number">#B-20456</div>
+    <div class="detail">
+      <span class="label">التاريخ:</span>
+      <span class="value">2023-10-01 / 1445-02-15</span>
+    </div>
+    <div class="detail">
+      <span class="label">الإجمالي:</span>
+      <span class="value">٢٣٠٠ SAR</span>
+    </div>
+    <div class="status onway">في طريقك</div>
+  </div>
+  <div class="order">
+    <div class="order-number">#C-30789</div>
+    <div class="detail">
+      <span class="label">التاريخ:</span>
+      <span class="value">2023-10-10 / 1445-02-20</span>
+    </div>
+    <div class="detail">
+      <span class="label">الإجمالي:</span>
+      <span class="value">٤٥٠ SAR</span>
+    </div>
+    <div class="status cancelled">ملغى</div>
+  </div>
+  <div class="order">
+    <div class="order-number">#D-40123</div>
+    <div class="detail">
+      <span class="label">التاريخ:</span>
+      <span class="value">2023-10-12 / 1445-02-22</span>
+    </div>
+    <div class="detail">
+      <span class="label">الإجمالي:</span>
+      <span class="value">٣٢٠٠ SAR</span>
+    </div>
+    <div class="status delivered">تم التسليم</div>
+  </div>
+</div>
+</body>
+</html>

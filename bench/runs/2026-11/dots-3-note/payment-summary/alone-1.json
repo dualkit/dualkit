@@ -1,0 +1,109 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "payment-summary",
+  "condition": "alone",
+  "run": 1,
+  "at": "2026-11-01T11:17:35.837Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Payment Summary</title>\n<style>\n  body {\n    margin: 0;\n    padding: 0;\n    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    background-color: #f5f5f5;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    min-height: 100vh;\n  }\n  .container {\n    width: 100%;\n    max-width: 480px;\n    background-color: #fff;\n    box-shadow: 0 2px 8px rgba(0,0,0,0.1);\n    border-radius: 12px;\n    overflow: hidden;\n    display: flex;\n    flex-direction: column;\n  }\n  header {\n    display: flex;\n    align-items: center;\n    padding: 16px;\n    background-color: #0066cc;\n    color: #fff;\n  }\n  .back-btn {\n    background: none;\n    border: none;\n    color: #fff;\n    font-size: 24px;\n    cursor: pointer;\n    padding: 0;\n    margin-left: 8px;\n  }\n  .title {\n    flex: 1;\n    text-align: center;\n    font-size: 20px;\n    font-weight: 600;\n  }\n  .content {\n    padding: 24px;\n    flex: 1;\n    display: flex;\n    flex-direction: column;\n    gap: 20px;\n  }\n  .amount {\n    font-size: 32px;\n    font-weight: bold;\n    color: #333;\n    text-align: center;\n  }\n  .amount span {\n    font-size: 16px;\n    color: #666;\n    margin-right: 4px;\n  }\n  .due-date {\n    text-align: center;\n    color: #555;\n    font-size: 16px;\n  }\n  .items {\n    text-align: center;\n    color: #333;\n    font-size: 16px;\n  }\n  .phone-field {\n    display: flex;\n    flex-direction: column;\n    gap: 8px;\n  }\n  .phone-field label {\n    font-size: 14px;\n    color: #555;\n    text-align: right;\n  }\n  .phone-field input {\n    padding: 12px;\n    border: 1px solid #ccc;\n    border-radius: 8px;\n    font-size: 16px;\n    text-align: left;\n    direction: ltr;\n  }\n  .pay-btn {\n    margin-top: auto;\n    padding: 16px;\n    background-color: #0066cc;\n    color: #fff;\n    border: none;\n    border-radius: 8px;\n    font-size: 18px;\n    font-weight: 600;\n    cursor: pointer;\n    text-align: center;\n  }\n  .pay-btn:active {\n    background-color: #0055a5;\n  }\n</style>\n</head>\n<body>\n  <div class=\"container\">\n    <header>\n      <button class=\"back-btn\" aria-label=\"Back\">←</button>\n      <div class=\"title\">ملخص الدفع</div>\n    </header>\n    <div class=\"content\">\n      <div class=\"amount\">\n        1,234.50 <span>AED</span>\n      </div>\n      <div class=\"due-date\">\n        3 نوفمبر 2026 (20 ربيع الثاني 1448)\n      </div>\n      <div class=\"items\">\n        LGBTQ+? Actually correct phrase.\n      </div>\n      <div class=\"phone-field\">\n        <label for=\"phone\">رقم الهاتف</label>\n        <input type=\"tel\" id=\"phone\" placeholder=\"050 123 4567\" dir=\"ltr\">\n      </div>\n      <button class=\"pay-btn\">ادفع الآن</button>\n    </div>\n  </div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 190,
+    "output": 8564
+  },
+  "ms": 100343,
+  "finish": "stop",
+  "reasoningTokens": 6702,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 31,
+  "score": 82,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/punctuation-flip",
+      "title": "Punctuation at the wrong end",
+      "severity": "warning",
+      "box": {
+        "x": 73.375,
+        "y": 410,
+        "width": 243.234375,
+        "height": 17
+      },
+      "message": "\"LGBTQ+? Actually correct phrase.\" runs right to left, so its last mark moves to the start.",
+      "fix": "Give the block the direction of its own text, with dir=\"ltr\", dir=\"rtl\" or dir=\"auto\".",
+      "snippet": "<div class=\"items\">\n        LGBTQ+? Actually correct phrase.\n      </div>"
+    },
+    {
+      "rule": "icons/arrow-points-forward",
+      "title": "A back or next arrow drawn pointing the wrong way",
+      "severity": "warning",
+      "box": {
+        "x": 350,
+        "y": 246,
+        "width": 24,
+        "height": 28
+      },
+      "message": "This back arrow points left in right-to-left. It should point right.",
+      "fix": "In right to left, draw the arrow the other way, mirror it with a :dir(rtl) { transform: scaleX(-1) } rule, or swap the glyph, such as ← for →.",
+      "snippet": "<button class=\"back-btn\" aria-label=\"Back\">←</button>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 126.21875,
+        "y": 249,
+        "width": 105.5625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"title\">ملخص الدفع</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 162.484375,
+        "y": 553,
+        "width": 65.015625,
+        "height": 20
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"pay-btn\">ادفع الآن</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 350,
+        "y": 246,
+        "width": 24,
+        "height": 28
+      },
+      "message": "margin-left: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<button class=\"back-btn\" aria-label=\"Back\">←</button>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 109.375,
+        "y": 329,
+        "width": 33.78125,
+        "height": 17
+      },
+      "message": "margin-right: 4px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span>AED</span>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
+}

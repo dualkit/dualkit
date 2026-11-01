@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ملخص الدفع - Payment Summary</title>
+  <!-- Google Fonts: IBM Plex Sans Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"IBM Plex Sans Arabic"', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    :lang(ar) {
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen flex items-center justify-center p-0 sm:p-4">
+
+  <!-- Mobile Screen Container -->
+  <div class="w-full max-w-md bg-white min-h-screen sm:min-h-[844px] sm:rounded-3xl shadow-xl flex flex-col justify-between overflow-hidden relative">
+
+    <!-- Top Header -->
+    <header class="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-white sticky top-0 z-10">
+      <button class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-100 transition-colors text-slate-700" aria-label="رجوع">
+        <!-- Directional arrow pointing right in RTL -->
+        <svg class="w-6 h-6 rtl:-scale-x-100" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round5" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      <h1 class="text-lg font-bold text-slate-900">ملخص الدفع</h1>
+      <div class="w-10"></div> <!-- Spacer for balance -->
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="flex-1 px-6 py-6 space-y-6 overflow-y-auto">
+
+      <!-- Amount Due Card -->
+      <div class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+        <div class="absolute -start-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full pointer-events-none"></div>
+        <p class="text-indigo-200 text-sm font-medium mb-1">المبلغ المستحق</p>
+        <div class="flex items-baseline gap-2">
+          <span class="text-4xl font-bold tracking-tight"><bdi dir="ltr">1,234.50</bdi></span>
+          <span class="text-xl font-semibold text-indigo-300">د.إ</span>
+        </div>
+        <div class="mt-4 pt-4 border-t border-white/10 flex justify-between items-center text-xs text-indigo-200">
+          <span>رقم الفاتورة: <bdi dir="ltr">#INV-2026-894</bdi></span>
+          <span class="bg-emerald-500/20 text-emerald-300 px-2.5 py-1 rounded-full font-medium">قيد الانتظار</span>
+        </div>
+      </div>
+
+      <!-- Details Section -->
+      <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 space-y-4">
+        <!-- Due Date -->
+        <div class="flex justify-between items-start pb-4 border-b border-slate-200/60">
+          <span class="text-slate-500 text-sm">تاريخ الاستحقاق</span>
+          <div class="text-end">
+            <p class="font-semibold text-slate-800"><bdi>3 نوفمبر 2026</bdi></p>
+            <p class="text-xs text-slate-500 mt-0.5"><bdi>22 جمادى الأولى 1448 هـ</bdi></p>
+          </div>
+        </div>
+
+        <!-- Items Count (Arabic plural form 'few' for count 3) -->
+        <div class="flex justify-between items-center">
+          <span class="text-slate-500 text-sm">تفاصيل الطلب</span>
+          <span class="font-medium text-slate-800">لديك 3 عناصر في هذا الطلب</span>
+        </div>
+      </div>
+
+      <!-- SMS Receipt Section -->
+      <div class="space-y-2">
+        <label for="phone-input" class="block text-sm font-semibold text-slate-700">
+          إرسال الإيصال عبر الرسائل النصية (SMS)
+        </label>
+        <div class="relative flex items-center">
+          <!-- Country Code Chip -->
+          <span class="absolute start-3 text-slate-500 text-sm font-medium bg-slate-100 px-2 py-1 rounded-md border border-slate-200" dir="ltr">
+            +971
+          </span>
+          <!-- Phone Input -->
+          <input 
+            id="phone-input"
+            type="tel" 
+            dir="ltr" 
+            inputmode="tel" 
+            autocomplete="tel"
+            placeholder="50 123 4567"
+            value="50 123 4567"
+            class="w-full ps-20 pe-4 py-3.5 bg-white border border-slate-300 rounded-xl text-slate-900 text-base font-medium focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent transition-all"
+          >
+        </div>
+        <p class="text-xs text-slate-500 mt-1">مثال: <bdi dir="ltr">050 123 4567</bdi></p>
+      </div>
+
+    </main>
+
+    <!-- Sticky Bottom CTA -->
+    <footer class="p-6 bg-white border-t border-slate-100">
+      <button class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-4 px-6 rounded-xl shadow-lg shadow-indigo-600/25 transition-all flex items-center justify-center gap-2 text-base">
+        <span>إتمام الدفع الآن</span>
+        <svg class="w-5 h-5 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"></path>
+        </svg>
+      </button>
+      <p class="text-center text-xs text-slate-400 mt-3">معاملة آمنة ومشفرة بالكامل طبقاً لمعايير البنك المركزي</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>

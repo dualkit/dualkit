@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الملف الشخصي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-primary: #0d8a4f;
+    --color-primary-light: #e8f5e9;
+    --color-bg: #f5f5f5;
+    --color-card: #ffffff;
+    --color-text: #1a1a1a;
+    --color-text-secondary: #6b7280;
+    --color-border: #e5e7eb;
+    --type-body-size: 16px;
+    --type-label-size: 14px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .phone {
+    width: 100%;
+    max-width: 375px;
+    background: var(--color-bg);
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .profile-header {
+    background: linear-gradient(135deg, #0d8a4f 0%, #0a6e3d 100%);
+    color: #fff;
+    padding: 48px 24px 32px;
+    text-align: center;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+  }
+
+  .avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-inline: auto;
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .profile-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 16px;
+  }
+
+  .profile-subtitle {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-top: 6px;
+  }
+
+  /* ── Info section ── */
+  .info-section {
+    padding: 24px;
+  }
+
+  .info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .info-item {
+    background: var(--color-card);
+    border-radius: 16px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--color-border);
+    gap: 12px;
+  }
+
+  .info-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .info-label {
+    font-size: var(--type-label-size);
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+
+  .info-value {
+    font-size: var(--type-body-size);
+    font-weight: 600;
+    color: var(--color-text);
+    word-break: break-all;
+  }
+
+  .edit-btn {
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-size: var(--type-label-size);
+    font-weight: 600;
+    cursor: pointer;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-family: inherit;
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+  }
+
+  .edit-btn:active {
+    background: var(--color-primary-light);
+  }
+
+  .edit-btn:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <header class="profile-header">
+      <div class="avatar">ل</div>
+      <h1 class="profile-name">لينا المنصوري</h1>
+      <p class="profile-subtitle">عميل مميز</p>
+    </header>
+
+    <section class="info-section">
+      <div class="info-list">
+
+        <div class="info-item">
+          <div class="info-text">
+            <span class="info-label">الاسم</span>
+            <span class="info-value">لينا المنصوري</span>
+          </div>
+          <button class="edit-btn">تعديل</button>
+        </div>
+
+        <div class="info-item">
+          <div class="info-text">
+            <span class="info-label">البريد الإلكتروني</span>
+            <span class="info-value"><bdi dir="ltr">layla@example.com</bdi></span>
+          </div>
+          <button class="edit-btn">تعديل</button>
+        </div>
+
+        <div class="info-item">
+          <div class="info-text">
+            <span class="info-label">رقم الهاتف</span>
+            <span class="info-value"><bdi dir="ltr">+971 50 123 4567</bdi></span>
+          </div>
+          <button class="edit-btn">تعديل</button>
+        </div>
+
+        <div class="info-item">
+          <div class="info-text">
+            <span class="info-label">الآيبان</span>
+            <span class="info-value"><bdi dir="ltr">AE07 0331 2345 6789 0123 456</bdi></span>
+          </div>
+          <button class="edit-btn">تعديل</button>
+        </div>
+
+      </div>
+    </section>
+  </div>
+</body>
+</html>

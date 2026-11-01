@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ملخص الدفع</title>
+    <!-- Google Fonts: Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00875a;
+            --primary-dark: #006644;
+            --primary-light: #e3fcef;
+            --accent-gold: #c59b27;
+            --bg-page: #f4f6f8;
+            --bg-card: #ffffff;
+            --text-main: #172b4d;
+            --text-muted: #6b778c;
+            --border-color: #ebecf0;
+            --shadow-subtle: 0 4px 12px rgba(9, 30, 66, 0.05);
+            --shadow-card: 0 8px 24px rgba(9, 30, 66, 0.08);
+            --radius-md: 14px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #0b192c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-main);
+            padding: 16px;
+        }
+
+        /* Mobile Container Mockup */
+        .phone-frame {
+            width: 100%;
+            max-width: 412px;
+            height: 870px;
+            max-height: 94vh;
+            background-color: var(--bg-page);
+            border-radius: 40px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4), inset 0 0 0 2px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            height: 44px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            background: transparent;
+            z-index: 10;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        /* App Header */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 20px 16px;
+            background: var(--bg-page);
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:active {
+            transform: scale(0.94);
+            background-color: #f1f2f4;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .header-spacer {
+            width: 40px;
+        }
+
+        /* Main Content Scroll Area */
+        .content-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 4px 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .content-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Fintech Badge */
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: rgba(0, 135, 90, 0.08);
+            border: 1px solid rgba(0, 135, 90, 0.2);
+            padding: 6px 14px;
+            border-radius: 20px;
+            align-self: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Amount Card */
+        .amount-card {
+            background: linear-gradient(145deg, #0f2b23, #051a14);
+            color: #ffffff;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 12px 28px rgba(0, 46, 30, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .amount-card::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            left: -40px;
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(197, 155, 39, 0.3), transparent 70%);
+            border-radius: 50%;
+        }
+
+        .amount-card::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: -30px;
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, rgba(0, 135, 90, 0.35), transparent 70%);
+            border-radius: 50%;
+        }
+
+        .amount-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .amount-display {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 8px;
+            direction: ltr;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .currency-symbol {
+            font-size: 20px;
+            font-weight: 600;
+            color: #d1fae5;
+        }
+
+        .amount-value {
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+        }
+
+        .order-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Detail Cards (White) */
+        .info-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 16px 18px;
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Due Date Section */
+        .date-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .date-icon-container {
+            width: 44px;
+            height: 44px;
+            background: var(--primary-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .date-details {
+            flex: 1;
+        }
+
+        .date-header {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .gregorian-date {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 2px;
+        }
+
+        .hijri-date {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Phone Input Section */
+        .input-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .input-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .sms-badge {
+            font-size: 11px;
+            background: #f0f4f8;
+            color: var(--text-muted);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .input-subtitle {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .phone-input-wrapper {
+            display: flex;
+            align-items: center;
+            direction: ltr;
+            background: #f9fafb;
+            border: 1.5px solid #dfe1e6;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .phone-input-wrapper:focus-within {
+            border-color: var(--primary);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0, 135, 90, 0.15);
+        }
+
+        .country-select {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 14px;
+            background: #f1f2f4;
+            border-right: 1px solid #dfe1e6;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            user-select: none;
+        }
+
+        .uae-flag {
+            width: 22px;
+            height: 14px;
+            border-radius: 2px;
+            object-fit: cover;
+            box-shadow: 0 0 1px rgba(0,0,0,0.4);
+        }
+
+        .phone-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 12px 14px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+            background: transparent;
+            font-family: inherit;
+        }
+
+        .phone-input::placeholder {
+            color: #a5adba;
+            font-weight: 400;
+        }
+
+        /* Order Breakdown Preview */
+        .order-preview {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px dashed var(--border-color);
+            font-size: 13px;
+        }
+
+        .order-preview-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .order-preview-tag {
+            color: var(--primary);
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Footer & Pay Button */
+        .action-footer {
+            padding: 16px 20px 24px;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .btn-pay {
+            width: 100%;
+            background: linear-gradient(135deg, #00875a, #006644);
+            color: #ffffff;
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 8px 18px rgba(0, 135, 90, 0.35);
+            transition: all 0.2s ease;
+        }
+
+        .btn-pay:hover {
+            opacity: 0.96;
+            transform: translateY(-1px);
+        }
+
+        .btn-pay:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px rgba(0, 135, 90, 0.25);
+        }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* SVG Icons Inline */
+        .icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+            stroke: currentColor;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-frame">
+    <!-- Top Status Bar -->
+    <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-icons">
+            <svg class="icon" style="width:15px;height:15px;" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+            <svg class="icon" style="width:15px;height:15px;" viewBox="0 0 24 24"><rect x="2" y="7" width="16" height="10" rx="2" ry="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg>
+        </div>
+    </div>
+
+    <!-- App Header -->
+    <header class="app-header">
+        <button class="back-btn" aria-label="رجوع" onclick="history.back()">
+            <!-- RTL Back Arrow (points to the right) -->
+            <svg class="icon" viewBox="0 0 24 24">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+        <h1 class="header-title">ملخص الدفع</h1>
+        <div class="header-spacer"></div>
+    </header>
+
+    <!-- Scrollable Body -->
+    <main class="content-scroll">
+        <!-- Fintech Regulatory Badge -->
+        <div class="trust-badge">
+            <svg class="icon" style="width: 14px; height: 14px;" viewBox="0 0 24 24">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <span>بوابة دفع آمنة ومعتمدة في الإمارات</span>
+        </div>
+
+        <!-- Hero Card: Total Amount & Order Summary -->
+        <section class="amount-card">
+            <p class="amount-label">المبلغ الإجمالي المستحق</p>
+            <div class="amount-display">
+                <span class="amount-value">1,234.50</span>
+                <span class="currency-symbol">AED</span>
+            </div>
+            <div class="order-badge-pill">
+                <svg class="icon" style="width: 16px; height: 16px;" viewBox="0 0 24 24">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span>لديك 3 عناصر في هذا الطلب</span>
+            </div>
+        </section>
+
+        <!-- Due Date Info Card -->
+        <section class="info-card">
+            <div class="date-box">
+                <div class="date-icon-container">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="date-details">
+                    <p class="date-header">تاريخ الاستحقاق النهائي</p>
+                    <p class="gregorian-date">3 نوفمبر 2026 م</p>
+                    <p class="hijri-date">
+                        <svg class="icon" style="width: 13px; height: 13px;" viewBox="0 0 24 24">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                        <span>الموافق 23 جمادى الأولى 1448 هـ</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Phone Input for SMS Receipt -->
+        <section class="info-card input-card">
+            <div class="input-label-row">
+                <label for="phoneNumber" class="input-title">رقم الهاتف المتحرك</label>
+                <span class="sms-badge">إشعار فوري</span>
+            </div>
+            <p class="input-subtitle">سيتم إرسال إيصال الدفع الإلكتروني وتفاصيل العملية عبر رسالة نصية (SMS)</p>
+
+            <div class="phone-input-wrapper">
+                <div class="country-select">
+                    <!-- UAE Flag SVG -->
+                    <svg class="uae-flag" viewBox="0 0 600 300">
+                        <rect width="600" height="100" fill="#00732f"/>
+                        <rect y="100" width="600" height="100" fill="#ffffff"/>
+                        <rect y="200" width="600" height="100" fill="#000000"/>
+                        <rect width="150" height="300" fill="#ff0000"/>
+                    </svg>
+                    <span>+971</span>
+                </div>
+                <input
+                    type="tel"
+                    id="phoneNumber"
+                    class="phone-input"
+                    placeholder="050 123 4567"
+                    inputmode="numeric"
+                    autocomplete="tel-national"
+                />
+            </div>
+        </section>
+
+        <!-- Quick Items Overview Pill -->
+        <div class="order-preview">
+            <div class="order-preview-left">
+                <svg class="icon" style="width: 17px; height: 17px; color: var(--text-muted);" viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                <span>تفاصيل المنتجات (3 عناصر)</span>
+            </div>
+            <span class="order-preview-tag">عرض الكل</span>
+        </div>
+    </main>
+
+    <!-- Footer Action -->
+    <footer class="action-footer">
+        <button class="btn-pay" type="button">
+            <span>ادفع الآن</span>
+            <span>•</span>
+            <span dir="ltr">1,234.50 AED</span>
+            <svg class="icon" style="width: 18px; height: 18px; margin-right: 4px;" viewBox="0 0 24 24">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+        </button>
+
+        <div class="security-note">
+            <svg class="icon" style="width: 14px; height: 14px; color: var(--primary);" viewBox="0 0 24 24">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <span>جميع المعاملات مشفرة وآمنة وفق معايير PCI-DSS</span>
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>

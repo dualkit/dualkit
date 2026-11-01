@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإعدادات</title>
+<style>
+body { font-family: 'Arial', sans-serif; background: #f5f5f5; margin:0; padding:0; direction: rtl; }
+.container { max-width: 480px; margin: 0 auto; background: #fff; }
+.group-title { background: #f0f0f0; padding: 10px 15px; font-weight: bold; border-bottom:1px solid #ddd; }
+.row { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom:1px solid #eee; }
+.row-text { flex:1; }
+.row-chevron { margin-left: 10px; color: #999; }
+.toggle { position: relative; width: 50px; height: 24px; }
+.toggle input { display: none; }
+.slider { position: absolute; cursor: pointer; top:0; left:0; right:0; bottom:0; background-color: #ccc; border-radius: 24px; transition: .4s; }
+.slider:before { content: ""; position: absolute; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; border-radius: 50%; transition: .4s; }
+input:checked + .slider { background-color: #007AFF; }
+input:checked + .slider:before { transform: translateX(26px); }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="group-title">الحساب</div>
+  <div class="row">
+    <div class="row-text">اسم المستخدم: محمد علي</div>
+    <div class="row-chevron">‹</div>
+  </div>
+  <div class="row">
+    <div class="row-text">رقم الهاتف: +973 3600 1234</div>
+    <div class="row-chevron">‹</div>
+  </div>
+  <div class="row">
+    <div class="row-text">اللغة: العربية</div>
+    <div class="row-chevron">‹</div>
+  </div>
+
+  <div class="group-title">الأمان</div>
+  <div class="row">
+    <div class="row-text">Face ID</div>
+    <label class="toggle">
+      <input type="checkbox">
+      <span class="slider"></span>
+    </label>
+  </div>
+  <div class="row">
+    <div class="row-text"> تسجيل الدخول بخطوتين</div>
+    <label class="toggle">
+      <input type="checkbox">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="group-title">الإخطارات</div>
+  <div class="row">
+    <div class="row-text">الحوالت</div>
+    <label class="toggle">
+      <input type="checkbox">
+      <span class="slider"></span>
+    </label>
+  </div>
+  <div class="row">
+    <div class="row-text">الOffers</div>
+    <label class="toggle">
+      <input type="checkbox">
+      <span class="slider"></span>
+    </label>
+  </div>
+  <div class="row">
+    <div class="row-text">الكشوفات</div>
+    <label class="toggle">
+      <input type="checkbox">
+      <span class="slider"></span>
+    </label>
+  </div>
+</div>
+</body>
+</html>

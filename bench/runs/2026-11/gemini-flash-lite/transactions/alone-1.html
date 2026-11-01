@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محفظتي - المعاملات</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0F766E', // Deep Teal
+                        secondary: '#F0FDFA',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-900 font-cairo flex justify-center items-center min-h-screen p-0 sm:p-4">
+
+    <!-- Phone Screen Container -->
+    <div class="w-full max-w-sm bg-gray-50 h-[844px] rounded-none sm:rounded-[40px] shadow-2xl flex flex-col overflow-hidden relative border-0 sm:border-8 sm:border-gray-800">
+        
+        <!-- Status Bar -->
+        <div class="bg-primary text-white px-6 pt-3 pb-2 flex justify-between items-center text-xs">
+            <span>9:41</span>
+            <div class="flex items-center space-x-2 space-x-reverse">
+                <i class="fa-solid fa-signal"></i>
+                <i class="fa-solid fa-wifi"></i>
+                <i class="fa-solid fa-battery-full"></i>
+            </div>
+        </div>
+
+        <!-- App Header -->
+        <div class="bg-primary text-white px-6 pb-6 pt-2 rounded-b-3xl shadow-md">
+            <div class="flex justify-between items-center mb-4">
+                <button class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <h1 class="text-lg font-bold">سجل المعاملات</h1>
+                <button class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </div>
+
+            <!-- Balance Card -->
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10">
+                <span class="text-xs text-teal-100 block mb-1">الرصيد الإجمالي</span>
+                <div class="flex items-baseline justify-between">
+                    <h2 class="text-2xl font-bold tracking-tight">١,٤٥٠.٧٥٠</h2>
+                    <span class="text-sm font-semibold text-teal-200">ر.ع.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+            
+            <!-- Filter Section -->
+            <div class="flex items-center justify-between">
+                <h3 class="font-bold text-gray-800 text-sm">المعاملات الأخيرة</h3>
+                
+                <!-- Filter Dropdown/Pill -->
+                <div class="flex items-center space-x-1 space-x-reverse bg-white border border-gray-200 px-3 py-1.5 rounded-full shadow-sm text-xs font-semibold text-gray-700 cursor-pointer hover:bg-gray-50">
+                    <i class="fa-solid fa-filter text-primary ml-1"></i>
+                    <span>هذا الشهر</span>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 mr-1"></i>
+                </div>
+            </div>
+
+            <!-- Transactions List -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 divide-y divide-gray-100">
+                
+                <!-- Transaction 1 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-gray-50 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-shopping-cart"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">Lulu Hypermarket</h4>
+                            <span class="text-[11px] text-gray-400">اليوم، ١٤:٣٠</span>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="text-sm font-bold text-red-600 block">- ٢٤.٥٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-gray-400">مشتريات</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 2 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-gray-50 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-tv"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">Netflix</h4>
+                            <span class="text-[11px] text-gray-400">أمس، ٠٩:١٥</span>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="text-sm font-bold text-red-600 block">- ٤.٢٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-gray-400">ترفيه</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 3 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-gray-50 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-teal-50 text-primary flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">راتب الشركة</h4>
+                            <span class="text-[11px] text-gray-400">٢٨ مايو، ٠٨:٠٠</span>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="text-sm font-bold text-emerald-600 block">+ ٨٥٠.٠٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-gray-400">إيداع</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 4 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-gray-50 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-yellow-50 text-yellow-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-gas-pump"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">Shell Oman</h4>
+                            <span class="text-[11px] text-gray-400">٢٥ مايو، ١٦:٤٥</span>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="text-sm font-bold text-red-600 block">- ١٥.٠٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-gray-400">وقود</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 5 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-gray-50 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-mug-hot"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">Starbucks</h4>
+                            <span class="text-[11px] text-gray-400">٢٤ مايو، ١٠:١٠</span>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="text-sm font-bold text-red-600 block">- ٢.٣٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-gray-400">مغذيات</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 6 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-gray-50 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-arrow-down-left"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">تحويل من أحمد</h4>
+                            <span class="text-[11px] text-gray-400">٢٠ مايو، ١٩:٢٠</span>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="text-sm font-bold text-emerald-600 block">+ ٥٠.٠٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-gray-400">تحويل وارد</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 7 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-gray-50 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-credit-card"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">Oman Arab Bank</h4>
+                            <span class="text-[11px] text-gray-400">١٨ مايو، ١٢:٠٠</span>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="text-sm font-bold text-red-600 block">- ١٢٠.٠٠٠ ر.ع.</span>
+                        <span class="text-[10px] text-gray-400">قرض / سداد</span>
+                    </div>
+                </div>
+
+                <!-- Transaction 8 -->
+                <div class="p-3.5 flex items-center justify-between hover:bg-gray-50 transition">
+                    <div class="flex items-center space-x-3 space-x-reverse">
+                        <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-sm">Grand Hyper</h4>
+                            <span class="text-[11px] text-gray-400">١٥ مايو، ١٧:١٥</span>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <span class="text-sm font-bold text-red-600 block">- ١٨.٧٥٠ ر.ع.</span>
+                        <span class="text-[10px] text-gray-400">مشتريات</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Bottom Navigation Bar -->
+        <div class="bg-white border-t border-gray-200 px-6 py-2.5 flex justify-between items-center text-gray-400 text-xs">
+            <button class="flex flex-col items-center hover:text-primary transition">
+                <i class="fa-solid fa-house text-lg mb-1"></i>
+                <span>الرئيسية</span>
+            </button>
+            <button class="flex flex-col items-center text-primary font-semibold">
+                <i class="fa-solid fa-wallet text-lg mb-1"></i>
+                <span>المعاملات</span>
+            </button>
+            <button class="flex flex-col items-center hover:text-primary transition">
+                <i class="fa-solid fa-credit-card text-lg mb-1"></i>
+                <span>البطاقات</span>
+            </button>
+            <button class="flex flex-col items-center hover:text-primary transition">
+                <i class="fa-solid fa-user text-lg mb-1"></i>
+                <span>حسابي</span>
+            </button>
+        </div>
+
+        <!-- Home Indicator Bar -->
+        <div class="bg-white pb-2 pt-1 flex justify-center">
+            <div class="w-32 h-1 bg-gray-300 rounded-full"></div>
+        </div>
+
+    </div>
+
+</body>
+</html>

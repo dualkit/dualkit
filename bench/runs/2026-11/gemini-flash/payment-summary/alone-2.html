@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ملخص الدفع | Payment Summary</title>
+    <!-- Google Font: Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0F766E;
+            --primary-dark: #115E59;
+            --primary-light: #CCFBF1;
+            --accent: #D97706;
+            --bg-body: #F1F5F9;
+            --surface: #FFFFFF;
+            --text-main: #0F172A;
+            --text-secondary: #64748B;
+            --border-color: #E2E8F0;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #E2E8F0;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 12px;
+        }
+
+        /* Phone Container Frame */
+        .phone-wrapper {
+            width: 100%;
+            max-width: 412px;
+            min-height: 840px;
+            background: #F8FAFC;
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 10px #FFFFFF, 0 0 0 11px #CBD5E1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Mobile Status Bar */
+        .status-bar {
+            height: 44px;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+            background: #FFFFFF;
+        }
+
+        .status-icons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Header */
+        .app-header {
+            background: #FFFFFF;
+            padding: 12px 20px 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #F1F5F9;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-main);
+        }
+
+        .header-btn:active {
+            background: #F8FAFC;
+            transform: scale(0.96);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .header-placeholder {
+            width: 40px;
+        }
+
+        /* Main Scrollable Content */
+        .content {
+            flex: 1;
+            padding: 16px 20px 100px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -2px rgba(0, 0, 0, 0.02);
+            padding: 20px;
+        }
+
+        /* Primary Payment Card */
+        .amount-card {
+            background: linear-gradient(145deg, #0d5f58, #0F766E);
+            color: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 10px 25px -5px rgba(15, 118, 110, 0.4);
+        }
+
+        .amount-card::after {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: -30px;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none;
+        }
+
+        .amount-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .amount-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #E6FFFA;
+        }
+
+        .uae-tag {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .amount-value {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .amount-value .currency {
+            font-size: 18px;
+            font-weight: 600;
+            color: #99F6E4;
+        }
+
+        /* Due Date Section */
+        .due-date-box {
+            background: rgba(0, 0, 0, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .date-icon-wrap {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .date-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .date-title {
+            font-size: 11px;
+            color: #CCFBF1;
+            font-weight: 500;
+        }
+
+        .date-text {
+            font-size: 13px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .date-hijri {
+            font-size: 11.5px;
+            color: #FEF3C7;
+            font-weight: 600;
+        }
+
+        /* Order Items Banner */
+        .items-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 18px;
+        }
+
+        .items-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .items-badge-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: #F0FDFA;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #CCFBF1;
+        }
+
+        .items-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .items-subtitle {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .view-link {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            background: #F8FAFC;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* SMS Phone Number Form */
+        .receipt-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: -6px;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 4px 12px;
+            background: #FFFFFF;
+            transition: all 0.2s ease;
+            direction: ltr; /* Keeps international number formatting natural */
+        }
+
+        .input-group:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.1);
+        }
+
+        .country-prefix {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding-right: 12px;
+            border-right: 1px solid var(--border-color);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+            user-select: none;
+        }
+
+        .flag-icon {
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        .phone-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 12px 10px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+            background: transparent;
+            letter-spacing: 0.5px;
+        }
+
+        .phone-input::placeholder {
+            color: #94A3B8;
+            font-weight: 400;
+        }
+
+        /* Safe & Secure Notice */
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .security-badge svg {
+            color: var(--primary);
+        }
+
+        /* Fixed Bottom Action */
+        .bottom-action {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+            padding: 16px 20px 24px 20px;
+            border-top: 1px solid #E2E8F0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .pay-button {
+            width: 100%;
+            height: 54px;
+            background: var(--primary);
+            border: none;
+            border-radius: var(--radius-md);
+            color: #FFFFFF;
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(15, 118, 110, 0.35);
+            transition: all 0.2s ease;
+        }
+
+        .pay-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .pay-button:active {
+            transform: scale(0.98);
+        }
+
+        .home-indicator {
+            width: 134px;
+            height: 4px;
+            background: #CBD5E1;
+            border-radius: 99px;
+            margin: 4px auto 0 auto;
+        }
+
+        /* Responsive on real small devices */
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+                background: #FFFFFF;
+            }
+            .phone-wrapper {
+                border-radius: 0;
+                box-shadow: none;
+                min-height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-wrapper">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <div class="status-icons">
+                <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor">
+                    <path d="M1 8.5C0.447715 8.5 0 8.94772 0 9.5C0 10.0523 0.447715 10.5 1 10.5H3C3.55228 10.5 4 10.0523 4 9.5C4 8.94772 3.55228 8.5 3 8.5H1Z"/>
+                    <path d="M5 6C4.44772 6 4 6.44772 4 7C4 7.55228 4.44772 8 5 8H7C7.55228 8 8 7.55228 8 7C8 6.44772 7.55228 6 7 6H5Z"/>
+                    <path d="M9 3.5C8.44772 3.5 8 3.94772 8 4.5C8 5.05228 8.44772 5.5 9 5.5H11C11.5523 5.5 12 5.05228 12 4.5C12 3.94772 11.5523 3.5 11 3.5H9Z"/>
+                    <path d="M13 1C12.4477 1 12 1.44772 12 2C12 2.55228 12.4477 3 13 3H15C15.5523 3 16 2.55228 16 2C16 1.44772 15.5523 1 15 1H13Z"/>
+                </svg>
+                <svg width="15" height="11" viewBox="0 0 16 12" fill="currentColor">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8 0C4.94 0 2.22 1.25 0.28 3.28C-0.09 3.66 -0.09 4.28 0.28 4.66L7.29 11.67C7.68 12.06 8.31 12.06 8.7 11.67L15.71 4.66C16.09 4.27 16.09 3.65 15.71 3.27C13.78 1.25 11.06 0 8 0Z"/>
+                </svg>
+                <svg width="24" height="12" viewBox="0 0 25 12" fill="currentColor">
+                    <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" fill="none" stroke="currentColor"/>
+                    <rect x="2" y="2" width="16" height="8" rx="1.5"/>
+                    <path d="M23 4C23.5523 4 24 4.44772 24 5V7C24 7.55228 23.5523 8 23 8V4Z"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="app-header">
+            <!-- Back Button (Points right for Arabic RTL) -->
+            <button class="header-btn" aria-label="الرجوع">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </button>
+            <h1 class="header-title">ملخص الدفع</h1>
+            <div class="header-placeholder"></div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="content">
+
+            <!-- Amount Due & Date Card -->
+            <section class="card amount-card">
+                <div class="amount-header">
+                    <span class="amount-label">المبلغ المستحق للدفع</span>
+                    <span class="uae-tag">
+                        <span>دولة الإمارات</span>
+                        🇦🇪
+                    </span>
+                </div>
+                
+                <div class="amount-value">
+                    <span>1,234.50</span>
+                    <span class="currency">درهم إماراتي</span>
+                </div>
+
+                <!-- Due Date (Gregorian & Hijri) -->
+                <div class="due-date-box">
+                    <div class="date-icon-wrap">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                    <div class="date-info">
+                        <span class="date-title">تاريخ الاستحقاق</span>
+                        <span class="date-text">٣ نوفمبر ٢٠٢٦ م</span>
+                        <span class="date-hijri">٢٣ جمادى الأولى ١٤٤٨ هـ</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Items In Order -->
+            <section class="card items-card">
+                <div class="items-meta">
+                    <div class="items-badge-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <path d="M16 10a4 4 0 0 1-8 0"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="items-title">لديك ٣ عناصر في هذا الطلب</div>
+                        <div class="items-subtitle">مشتريات معتمدة ومضمونة</div>
+                    </div>
+                </div>
+                <a href="#details" class="view-link">عرض التفاصيل</a>
+            </section>
+
+            <!-- Phone Number Receipt Section -->
+            <section class="card receipt-card">
+                <label for="phone-field" class="form-label">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    رقم الهاتف لإرسال الإيصال (SMS)
+                </label>
+                <p class="form-description">سنقوم بإرسال إشعار الدفع الفوري والإيصال الضريبي المعتمد عبر رسالة نصية قصيرة.</p>
+                
+                <div class="input-group">
+                    <div class="country-prefix">
+                        <span class="flag-icon">🇦🇪</span>
+                        <span>+971</span>
+                    </div>
+                    <input 
+                        type="tel" 
+                        id="phone-field"
+                        class="phone-input" 
+                        placeholder="050 123 4567" 
+                        pattern="[0-9]*"
+                        value="050 123 4567"
+                    />
+                </div>
+            </section>
+
+            <!-- Security Assurance Notice -->
+            <div class="security-badge">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <span>دفع آمن ومشفّر وفق معايير مصرف الإمارات المركزي</span>
+            </div>
+
+        </main>
+
+        <!-- Fixed Bottom Payment Bar -->
+        <div class="bottom-action">
+            <button class="pay-button" type="button">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <span>ادفع الآن • 1,234.50 د.إ</span>
+            </button>
+            <div class="home-indicator"></div>
+        </div>
+    </div>
+
+</body>
+</html>

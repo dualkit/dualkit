@@ -1,0 +1,81 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "profile",
+  "condition": "alone",
+  "run": 2,
+  "at": "2026-11-01T11:46:38.831Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>الملف الشخصي</title>\n<style>\n  body {\n    font-family: 'Arial', sans-serif;\n    background-color: #f5f5f5;\n    margin: 0;\n    padding: 0;\n    direction: rtl;\n  }\n  .container {\n    max-width: 375px;\n    margin: 0 auto;\n    background-color: #fff;\n    min-height: 100vh;\n    padding: 16px;\n  }\n  .profile-item {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding: 12px 0;\n    border-bottom: 1px solid #e0e0e0;\n  }\n  .info {\n    text-align: right;\n  }\n  .name, .email, .phone, .iban {\n    font-size: 16px;\n    color: #333;\n  }\n  .name {\n    font-weight: bold;\n  }\n  .email {\n    font-size: 14px;\n    color: #666;\n  }\n  .phone, .iban {\n    font-size: 16px;\n    color: #333;\n  }\n  .edit {\n    background: none;\n    border: none;\n    color: #007AFF;\n    font-size: 16px;\n    cursor: pointer;\n  }\n</style>\n</head>\n<body>\n<div class=\"container\">\n  <div class=\"profile-item\">\n    <div class=\"info\">\n      <div class=\"name\">Layla Al Mansouri</div>\n      <div class=\"email\">layla@example.com</div>\n    </div>\n    <button class=\"edit\">تعديل</button>\n  </div>\n  <div class=\"profile-item\">\n    <div class=\"info\">\n      <div class=\"phone\">+971 50 123 4567</div>\n    </div>\n    <button class=\"edit\">تعديل</button>\n  </div>\n  <div class=\"profile-item\">\n    <div class=\"info\">\n      <div class=\"iban\">AE07 0331 2345 6789 0123 456</div>\n    </div>\n    <button class=\"edit\">تعديل</button>\n  </div>\n</div>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 166,
+    "output": 3742
+  },
+  "ms": 41638,
+  "finish": "stop",
+  "reasoningTokens": 3043,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 31,
+  "score": 66,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-latin",
+      "title": "An email, link or code that will scramble",
+      "severity": "error",
+      "box": {
+        "x": 143.5625,
+        "y": 134.5,
+        "width": 230.4375,
+        "height": 17
+      },
+      "message": "\"AE07\" sits in right-to-left text without isolation, so part of it can move.",
+      "fix": "Wrap it in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"iban\">AE07 0331 2345 6789 0123 456</div>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 244.5,
+        "y": 88.5,
+        "width": 129.5,
+        "height": 17
+      },
+      "message": "\"+971 50 123 4567\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"phone\">+971 50 123 4567</div>"
+    },
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 143.5625,
+        "y": 134.5,
+        "width": 230.4375,
+        "height": 17
+      },
+      "message": "\"AE07 0331 2345 6789 0123 456\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<div class=\"iban\">AE07 0331 2345 6789 0123 456</div>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 22,
+        "y": 36.5,
+        "width": 36,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"edit\">تعديل</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 876
+}
