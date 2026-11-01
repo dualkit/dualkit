@@ -6,6 +6,22 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'convert-0-5-0',
+    date: '2026-11-01',
+    version: 'dualkit 0.10.0-beta.0',
+    tags: ['Convert'],
+    title: 'Convert now translates text in data, and catches 84% of strings',
+    body: [
+      'Most of the English Convert left behind sat in arrays and objects outside components, such as nav items, form options and pricing plans. Convert used to flag these and leave them.',
+      'Now each one becomes a function of t, and every place that reads it is updated, across files. Coverage on the 8 apps it converts went from 74% to 84%, and all 6 that built before still build.',
+      'Convert only does this when every read can change. Data read at module level, behind a barrel file, or holding values the code uses as types stays as it is.',
+    ],
+    shipped: [
+      { name: '@dualkit/convert 0.5.0-beta.0', line: 'Moves text out of module-level data, across files' },
+      { name: 'dualkit 0.10.0-beta.0', line: 'Uses convert 0.5' },
+    ],
+  },
+  {
     slug: 'convert-0-4-0',
     date: '2026-11-01',
     version: 'dualkit 0.9.0-beta.0',

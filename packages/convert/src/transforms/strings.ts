@@ -49,7 +49,7 @@ function routeDirs(dirs: string[]): string[] {
 }
 
 /** The key prefix for a file: its stem in kebab case, or for page, layout and other route files its route, `home` at the root. */
-function stemOf(path: string): string {
+export function stemOf(path: string): string {
   const parts = path.split(/[\\/]/).filter(Boolean)
   const stem = parts.pop()!.split('.')[0]!
   if (!ROUTE_STEMS.has(stem)) return kebab(stem) || 'file'
@@ -57,7 +57,7 @@ function stemOf(path: string): string {
 }
 
 /** The first four ASCII words of a message, placeholders left out, in kebab case. */
-const keyWords = (en: string): string =>
+export const keyWords = (en: string): string =>
   ascii(en.replace(/\{[^}]*\}|<[^>]*>/g, ' ')).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean).slice(0, 4).join('-') || 'text'
 
 function flag(ctx: Context, offset: number, kind: FlagKind, message: string, suggestion: string): void {
@@ -433,7 +433,7 @@ const indentAt = (text: string, offset: number): string =>
   /^[ \t]*/.exec(text.slice(text.lastIndexOf('\n', offset - 1) + 1, offset))![0]
 
 /** The edits that give a component its hook as its first statement, and the import the hook needs. */
-function hookEdits(fn: Node, lib: Lib, text: string, base: number, style: Style): { edits: Edit[]; imports: Import[] } {
+export function hookEdits(fn: Node, lib: Lib, text: string, base: number, style: Style): { edits: Edit[]; imports: Import[] } {
   const hook = hookFor(lib, Boolean(fn.async))
   const body = fn.body as Node
   const statement = hook.statement + style.semi
@@ -465,7 +465,7 @@ const hasImport = (program: Node, wanted: Import): boolean =>
     }))
 
 /** One import line per missing hook import, placed after the last import, else after the directives, else at the top. */
-function importEdits(program: Node, wanted: Import[], base: number, style: Style): Edit[] {
+export function importEdits(program: Node, wanted: Import[], base: number, style: Style): Edit[] {
   const unique = [...new Map(wanted.map((w) => [`${w.source}#${w.name}`, w])).values()].filter((w) => !hasImport(program, w))
   if (!unique.length) return []
   const lines = unique.map((w) => `import { ${w.name} } from ${style.quote}${w.source}${style.quote}${style.semi}`)

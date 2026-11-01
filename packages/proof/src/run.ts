@@ -138,7 +138,7 @@ export function runApp(app: App, cache: string, cli: string, typecheck = false, 
     })
     const served = converting(phase1)
     // An app that cannot be served here is the proof's problem, not a refusal, so it converts without screenshots and skips finish.
-    const unserved = phase2 && /did not answer|exited before it answered/.test(`${served.stdout ?? ''}${served.stderr ?? ''}`)
+    const unserved = phase2 && /did not answer|exited before it answered|ERR_CONNECTION_REFUSED/.test(`${served.stdout ?? ''}${served.stderr ?? ''}`)
     const run = unserved ? converting(['--no-baseline']) : served
     const output = `${run.stdout ?? ''}${run.stderr ?? ''}`
     if (run.status !== 0) {
