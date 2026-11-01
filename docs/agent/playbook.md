@@ -14,9 +14,10 @@ npm run proof -w @dualkit/proof
 
 1. Check open PRs from earlier runs. If one is open and unchanged for 3 days, or the score has not risen in 3 runs, stop and say so in your final message.
 2. Run the suite and pick the single failure that blocks the most. Refused apps come before missed strings.
-3. Search for existing open-source code before writing any. Note its licence in the PR.
+3. Search for existing open-source code before writing any. This step is required. Name what you searched and what you chose in the PR, with its licence.
 4. Fix one failure. Use the `tdd` skill, and `diagnosing-bugs` for anything not obvious.
-5. Run `npm test`, `npm run typecheck`, then the suite again. Use `code-review` on your diff.
+5. Run `npm test`, `npm run typecheck`, then the suite again. Run `code-review` on your diff before opening the PR. This step is required. If a test fails without your change too, say which one in the PR.
+   If pushing fails, stop and report it. A fix that is not pushed does not count.
 6. Open a PR with before and after scores, and commit the new scoreboard in it.
 
 ## Weekly scout
