@@ -1,19 +1,23 @@
 import { spawn } from 'node:child_process'
 import { resolve } from 'node:path'
 import { createInterface } from 'node:readline/promises'
-import type { Browser } from 'playwright'
+import type { Browser, Page } from 'playwright'
 import type { Shooter } from '@dualkit/convert'
 import type { audit as auditPage, AuditResult } from './audit'
 import { UserError, type Config } from './config'
 
 const SHOT_HEIGHT = 900
 const LOAD_TIMEOUT_MS = 30_000
+const SETTLE_TIMEOUT_MS = 5_000
+/** Both shots see the same date, so clocks and "today" labels cannot differ. */
+const SHOT_CLOCK = new Date('2026-01-15T09:00:00Z')
+const FREEZE_CSS = '*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}'
 const GRACE_MS = 10_000
 const INTERRUPTED = 130
 const MAX_OUTPUT = 200_000
 
 // Browser-side global: the CLI tsconfig has no DOM lib.
-declare const document: { fonts: { ready: Promise<unknown> } }
+declare const document: { fonts: { ready: Promise<unknown> }; images: Iterable<{ decode: () => Promise<void> }> }
 
 /** Thrown to the command when SIGINT or SIGTERM stopped the run. It exits 130. */
 export class InterruptedError extends Error {
@@ -29,6 +33,16 @@ export type BrowserKit = {
 
 /** Same browser, but `close` does nothing, so the audit function can reuse it. */
 const unclosable = (browser: Browser): Browser => new Proxy(browser, { get: (t, k) => (k === 'close' ? async () => {} : Reflect.get(t, k, t)) })
+
+/** Waits for late data, fonts and images, and stops animation, so two shots of an unchanged page match. A page that never goes quiet is shot after the wait. */
+async function settle(page: Page): Promise<void> {
+  await page.waitForLoadState('networkidle', { timeout: SETTLE_TIMEOUT_MS }).catch(() => {})
+  await page.addStyleTag({ content: FREEZE_CSS }).catch(() => {})
+  await page.evaluate(async () => {
+    await document.fonts.ready
+    await Promise.all(Array.from(document.images).map((image) => image.decode().catch(() => {})))
+  }).catch(() => {})
+}
 
 export function makeBrowserKit(settings: { storageState?: string }, config: Config, cwd: string, signal: AbortSignal): BrowserKit {
   let browser: Promise<Browser> | null = null
@@ -52,8 +66,9 @@ export function makeBrowserKit(settings: { storageState?: string }, config: Conf
       try {
         if (options?.cookies) await context.addCookies(Object.entries(options.cookies).map(([name, value]) => ({ name, value, url })))
         const page = await context.newPage()
+        await page.clock.setFixedTime(SHOT_CLOCK)
         await page.goto(url, { waitUntil: 'load', timeout: LOAD_TIMEOUT_MS })
-        await page.evaluate(() => document.fonts.ready).catch(() => {})
+        await settle(page)
         return await page.screenshot({ fullPage: true, animations: 'disabled', timeout: LOAD_TIMEOUT_MS })
       } finally {
         await context.close().catch(() => {})
