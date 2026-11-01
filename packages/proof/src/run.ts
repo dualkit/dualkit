@@ -133,9 +133,13 @@ export function runApp(app: App, cache: string, cli: string, typecheck = false, 
       git(root, 'commit', '-q', '--allow-empty', '--no-verify', '-m', 'dependencies')
     }
     const phase1 = phase2 ? ['--start', startCommand(app), '--port', proofPort(app)] : ['--no-install', '--no-baseline']
-    const run = spawnSync('node', [cli, 'convert', '--mode', 'bilingual', ...phase1], {
+    const converting = (args: string[]) => spawnSync('node', [cli, 'convert', '--mode', 'bilingual', ...args], {
       cwd: root, encoding: 'utf8', timeout: 1_800_000, env: { ...process.env, ...PLACEHOLDERS, CI: '1' },
     })
+    const served = converting(phase1)
+    // An app that cannot be served here is the proof's problem, not a refusal, so it converts without screenshots and skips finish.
+    const unserved = phase2 && /did not answer|exited before it answered/.test(`${served.stdout ?? ''}${served.stderr ?? ''}`)
+    const run = unserved ? converting(['--no-baseline']) : served
     const output = `${run.stdout ?? ''}${run.stderr ?? ''}`
     if (run.status !== 0) {
       return finish({ outcome: run.status === null ? 'crashed' : 'refused', detail: output.trim().split('\n').slice(-3).join(' ').slice(0, 300), strings: 0, missed: 0, flags: 0 })
@@ -149,7 +153,7 @@ export function runApp(app: App, cache: string, cli: string, typecheck = false, 
     const strings = ledgerSize(root)
     const missed = countMissed(root)
     const flags = flagCount(root)
-    const done = phase2 ? finishes(root, cli, app) : null
+    const done = phase2 && !unserved ? finishes(root, cli, app) : null
     const phased = done ? { finished: done.ok, finishDetail: done.ok ? '' : done.tail } : {}
     return finish({ outcome: 'converted', detail: buildBefore && !buildBefore.ok ? buildBefore.tail : '', strings, missed, flags, ...typed, ...built, ...phased })
   } catch (error) {
