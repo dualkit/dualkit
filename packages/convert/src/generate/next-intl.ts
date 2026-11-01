@@ -112,43 +112,54 @@ export const config = {
  * Runs the app's own middleware first, on the path without its locale prefix and only where its own
  * matcher applies. A redirect it returns is kept. Cookies it sets are copied onto next-intl's response.
  */
-const composedMiddlewareFile = (routing: string, matcher: string, own: string): string => `import { NextRequest, type NextFetchEvent } from 'next/server'
+const composedMiddlewareFile = (routing: string, matcher: string, own: string): string => `import { NextRequest, NextResponse, type NextFetchEvent } from 'next/server'
 import createMiddleware from 'next-intl/middleware'
 import { routing } from '${routing}'
-import { matchesApp } from '${matcher}'
-import * as own from '${own.replace(/\\.(ts|js|mjs|tsx|jsx)$/, '')}'
+import { matchesApp, type Matcher } from '${matcher}'
+import * as own from '${own}'
 
 const intl = createMiddleware(routing)
 const ownHandler = ((own as Record<string, unknown>).default ?? (own as Record<string, unknown>).middleware ?? (own as Record<string, unknown>).proxy) as
   | ((request: NextRequest, event: NextFetchEvent) => Response | null | undefined | Promise<Response | null | undefined>)
   | undefined
-const ownMatcher = (own as { config?: { matcher?: string | string[] } }).config?.matcher
+if (typeof ownHandler !== 'function') throw new Error('Dualkit could not find the middleware function exported by ${own}.')
+const ownMatcher = (own as { config?: { matcher?: Matcher } }).config?.matcher
+const OWN_ONLY = /^\\/(?:api|trpc)(?:\\/|$)/
 
 export default async function middleware(request: NextRequest, event: NextFetchEvent) {
   const url = request.nextUrl.clone()
   const [, first = '', ...rest] = url.pathname.split('/')
   if ((routing.locales as readonly string[]).includes(first)) url.pathname = \`/\${rest.join('/')}\`
-  let cookies: string[] = []
-  if (ownHandler && matchesApp(url.pathname, ownMatcher)) {
-    const result = await ownHandler(new NextRequest(url, request), event)
-    if (result?.headers.get('location')) return result
-    cookies = result?.headers.getSetCookie() ?? []
-  }
+  const result = matchesApp(url.pathname, ownMatcher) ? await ownHandler(new NextRequest(url, request), event) : null
+  // Anything but a plain "continue" is the app's answer: a redirect, a rewrite, a 401 or a page. Keep it as it is.
+  if (result && result.headers.get('x-middleware-next') !== '1') return result
+  if (OWN_ONLY.test(url.pathname)) return result ?? NextResponse.next()
   const response = intl(request)
-  for (const cookie of cookies) response.headers.append('set-cookie', cookie)
+  if (result) {
+    for (const cookie of result.headers.getSetCookie()) response.headers.append('set-cookie', cookie)
+    const overridden = result.headers.get('x-middleware-override-headers')
+    if (overridden) {
+      const names = new Set([...(response.headers.get('x-middleware-override-headers') ?? '').split(','), ...overridden.split(',')].filter(Boolean))
+      response.headers.set('x-middleware-override-headers', [...names].join(','))
+      result.headers.forEach((value, key) => { if (key.startsWith('x-middleware-request-')) response.headers.set(key, value) })
+    }
+  }
   return response
 }
 
 export const config = {
-  matcher: '/((?!(?:api|_next|_vercel)(?:/|$)|.*\\\\..*).*)',
+  matcher: '/((?!(?:_next|_vercel)(?:/|$)|.*\\\\..*).*)',
 }
 `
 
 /** Decides whether a path is covered by the app's own middleware matcher, with Next's path syntax: :name, :name*, :name+, :name? and (regex) groups. */
 const APP_MATCHER = String.raw`/** Whether a path is covered by an app's own middleware matcher. No matcher means every path. */
-export function matchesApp(pathname: string, matcher: string | string[] | undefined): boolean {
+export type Matcher = string | { source: string }  | (string | { source: string })[]
+
+/** An entry with has or missing conditions is treated as matching, so the app's middleware runs rather than being skipped. */
+export function matchesApp(pathname: string, matcher: Matcher | undefined): boolean {
   if (matcher === undefined) return true
-  return (Array.isArray(matcher) ? matcher : [matcher]).some((pattern) => toRegExp(pattern).test(pathname))
+  return (Array.isArray(matcher) ? matcher : [matcher]).some((entry) => toRegExp(typeof entry === 'string' ? entry : entry.source).test(pathname))
 }
 
 function toRegExp(pattern: string): RegExp {
@@ -157,7 +168,10 @@ function toRegExp(pattern: string): RegExp {
   while (i < pattern.length) {
     const char = pattern[i]!
     const param = char === '/' ? /^\/:[A-Za-z0-9_]+([*+?]?)/.exec(pattern.slice(i)) : null
-    if (param) {
+    if (param && pattern[i + param[0].length] === '(') {
+      out += '/'
+      i += param[0].length
+    } else if (param) {
       out += { '*': '(?:/.*)?', '+': '/.+', '?': '(?:/[^/]+)?', '': '/[^/]+' }[param[1]!]
       i += param[0].length
     } else if (char === '(') {
@@ -291,7 +305,7 @@ function bilingualParts(project: Project, appDir: string, files: (rel: string) =
   if (own && ownMoved) {
     flags.push(flagAt(ownMoved, 'info',
       `${own.path} moved to ${ownMoved}, and the new ${middlewarePath} runs it first on the path without its locale prefix, then next-intl.`,
-      'Check the app middleware still behaves as before. A redirect it returns is kept and next-intl adds the locale on the next request. Any config option other than matcher, such as runtime, is not carried over.'))
+      'Check the app middleware still behaves as before and that its auth checks still hold under /ar. Any answer other than a plain continue (a redirect, rewrite or 401) is returned as it is. Paths under /api and /trpc skip next-intl. Config options other than matcher, such as runtime, are not carried over, and has or missing conditions on a matcher entry are ignored, so the middleware runs on those paths.'))
   }
   if (catchAll) {
     flags.push(flagAt(catchAll, 'unsupported',

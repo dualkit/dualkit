@@ -324,6 +324,11 @@ describe('wireNextIntl bilingual', () => {
     expect(out['middleware.ts']).toContain("import * as own from './app-middleware'")
     expect(out['middleware.ts']).toContain('createMiddleware(routing)')
     for (const [path, text] of Object.entries(plan.writes)) parses(path, text)
+    const composed = out['middleware.ts']!
+    expect(composed).toContain("get('x-middleware-next') !== '1') return result")
+    expect(composed).toContain('getSetCookie()')
+    expect(composed).toContain('x-middleware-override-headers')
+    expect(plan.writes['middleware.ts']).not.toContain('(?:api|_next|_vercel)')
     expect(plan.flags.some((f) => f.kind === 'info' && f.file === 'app-middleware.ts')).toBe(true)
   })
 
