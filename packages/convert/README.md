@@ -94,11 +94,12 @@ Convert flags these in the report instead of guessing:
 It refuses, with a one-line reason, when:
 
 - The app is not Next.js App Router or Vite React. The Pages Router, Create React App, Remix, Vue, Svelte and Angular are refused.
-- The app already has its own middleware or proxy file, or files with the names convert would write.
+- The app already has files with the names convert would write, such as `app-middleware`.
 - The root layout is a client component, has no `<html>` element, or takes its props in a form convert cannot add params to.
 
 ## Known gaps
 
+- If the app has its own middleware or proxy file, convert moves it to `app-middleware` and runs it first, on the path without its locale. We tested this with a hand-written login check on Next.js 15. Clerk and other auth libraries are untested, so check your login after converting.
 - Convert does not place the language switch, because that would change the English look. It writes `components/dualkit-language-switch.tsx` and tells you to add it.
 - Next.js sends a visitor whose browser asks for Arabic from an English URL to the Arabic page. That is next-intl's locale detection, and convert leaves it on.
 

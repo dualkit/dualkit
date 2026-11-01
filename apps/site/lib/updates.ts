@@ -6,6 +6,23 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'convert-0-2-0',
+    date: '2026-11-01',
+    version: 'dualkit 0.7.0-beta.0',
+    tags: ['Convert'],
+    title: 'Convert now runs on apps that have their own middleware',
+    body: [
+      'Convert used to stop when an app already had a middleware or proxy file. Now it moves that file to app-middleware, runs it first on the path without its locale, and passes the request to next-intl only when the app lets it through. Redirects, 401s and rewrites from the app stay as they are.',
+      'We tested this in a real Next.js 15 build with a login middleware. Logged-out requests to /dashboard, /ar/dashboard and /ar/api/secret were all blocked, and logged-in pages worked in both languages. We have not tested it with Clerk or other auth libraries, so check your own login after converting.',
+      'Screenshots are steadier. Each shot freezes the clock, waits for late data, fonts and images, and stops animation, so an unchanged page can match its baseline. Finish also keeps keys you added to the messages files by hand.',
+      'We now publish a score. Convert runs on 10 real open-source apps, each pinned to one commit, and the scoreboard is in the repo. It gets through all 10 and catches 66% of their strings, so it still leaves a lot behind. The run covers the first phase only. It does not yet show that each app builds or that finish passes.',
+    ],
+    shipped: [
+      { name: '@dualkit/convert 0.2.0-beta.0', line: 'Works with existing middleware, keeps hand-added messages' },
+      { name: 'dualkit 0.7.0-beta.0', line: 'Steadier screenshots, uses convert 0.2' },
+    ],
+  },
+  {
     slug: 'convert-0-1-0',
     date: '2026-10-24',
     version: 'dualkit 0.6.0-beta.0',
