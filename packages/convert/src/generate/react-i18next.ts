@@ -7,7 +7,7 @@ import type { Edit, Flag, Mode, Plan, Project } from '../types'
 import { LOCALE_COOKIE, LOCALE_HELPER, SWITCH_CHOICES, guardWrites, localeHelperPath, switchPath } from './locale'
 
 const DEPS = { 'react-i18next': '17.1.6', i18next: '26.5.8' }
-const INIT_PATH = 'src/i18n.ts'
+const INIT_PATH = 'src/dualkit-i18n.ts'
 const HTML_PATH = 'index.html'
 const COOKIE_PATTERN = `/(?:^|; )${LOCALE_COOKIE}=([^;]*)/`
 

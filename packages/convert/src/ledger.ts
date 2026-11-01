@@ -49,6 +49,12 @@ export function mergeLedger(existing: LedgerEntry[], added: LedgerEntry[]): Ledg
   return [...existing, ...fresh].sort(byKey)
 }
 
+const marks = (text: string): string => [...text.matchAll(/\{[^}]*\}|<\/?[a-z0-9]+>/gi)].map((m) => m[0]).sort().join(' ')
+
+/** Entries whose Arabic dropped or changed a placeholder or tag from the English, which would break the app at run time. */
+export const brokenMarks = (entries: LedgerEntry[]): LedgerEntry[] =>
+  entries.filter((e) => e.status !== 'pending' && e.ar !== '' && marks(e.ar) !== marks(e.en))
+
 const textFor = (entry: LedgerEntry, locale: 'en' | 'ar'): string =>
   locale === 'en' || entry.status === 'pending' || entry.ar === '' ? entry.en : entry.ar
 

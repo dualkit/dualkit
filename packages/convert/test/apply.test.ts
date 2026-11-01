@@ -52,7 +52,7 @@ describe('state', () => {
   it('round-trips and is null when missing', () => {
     const root = dir()
     expect(readState(root)).toBeNull()
-    const state = { mode: 'arabic', base: 'main', branch: 'dualkit/arabic', framework: 'vite-react', phase: 'converted', generated: ['src/i18n.ts'] } as const
+    const state = { mode: 'arabic', base: 'main', branch: 'dualkit/arabic', framework: 'vite-react', phase: 'converted', generated: ['src/dualkit-i18n.ts'] } as const
     saveState(root, { ...state, generated: [...state.generated] })
     expect(readState(root)).toEqual(state)
   })

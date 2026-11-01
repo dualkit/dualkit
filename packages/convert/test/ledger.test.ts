@@ -112,3 +112,15 @@ describe('mergeLedger duplicates', () => {
     expect(mergeLedger([], [entry('a', 'one'), entry('a', 'two')]).map((e) => e.en)).toEqual(['one'])
   })
 })
+
+describe('brokenMarks', () => {
+  const entry = (en: string, ar: string, status: 'pending' | 'drafted' = 'drafted') => ({ key: 'k', en, ar, status, file: 'a', line: 1 })
+
+  it('passes reordered marks and flags changed ones', async () => {
+    const { brokenMarks } = await import('../src/ledger')
+    expect(brokenMarks([entry('Hi <b>{name}</b>', '<b>{name}</b> مرحبا')])).toEqual([])
+    expect(brokenMarks([entry('Hi <b>{name}</b>', 'مرحبا {name}')])).toHaveLength(1)
+    expect(brokenMarks([entry('Hi {name}', 'مرحبا {الاسم}')])).toHaveLength(1)
+    expect(brokenMarks([entry('Hi {name}', '', 'pending')])).toEqual([])
+  })
+})
