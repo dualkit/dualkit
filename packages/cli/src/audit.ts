@@ -96,6 +96,9 @@ async function read(page: Page, options: AuditOptions): Promise<{ model: ScreenM
   }
 }
 
+/** The page itself could not be read, as opposed to the browser or the setup. A multi-page run reports it and moves on. */
+export class PageError extends UserError {}
+
 export async function audit(options: AuditOptions, launch: () => Promise<Browser> = () => chromium.launch()): Promise<AuditResult> {
   const browser = await open(launch)
   try {
@@ -108,10 +111,10 @@ export async function audit(options: AuditOptions, launch: () => Promise<Browser
       // domcontentloaded, then a bounded wait for `load`: a hung image or font must not fail the audit.
       status = (await page.goto(options.url, { waitUntil: 'domcontentloaded', timeout: 30_000 }))?.status() ?? 0
     } catch (e) {
-      throw new UserError(`Could not open ${options.url}: ${firstLine(e)}`)
+      throw new PageError(`Could not open ${options.url}: ${firstLine(e)}`)
     }
     // An error page is not the screen the user asked about, so scoring it would mislead.
-    if (status >= HTTP_ERROR) throw new UserError(`${options.url} returned ${status}.`)
+    if (status >= HTTP_ERROR) throw new PageError(`${options.url} returned ${status}.`)
     await page.waitForLoadState('load', { timeout: LOAD_WAIT_MS }).catch(() => {})
     await waitForFonts(page)
     await page.waitForTimeout(SETTLE_MS)

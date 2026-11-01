@@ -178,6 +178,9 @@ function pieceOf(child: Node, ctx: Context): Piece {
   return { kind: 'value', name, source: mayBeEmpty(expression) ? `${source} ?? ''` : source, start, end }
 }
 
+/** Code that sets the direction of the page on its own. */
+const OWN_DIRECTION = /setAttribute\(\s*['"]dir['"]|documentElement\.dir\s*=[^=]/
+
 /** Names that usually hold a React node, which a message value cannot be. */
 const NODE_NAMES = /^(children|icon|avatar|logo|image|element|node)$/i
 
@@ -489,6 +492,10 @@ export function extractStrings(file: SourceFile, lib: Lib, taken: Set<string>): 
   for (const block of file.js) {
     const program = block.ast.program as unknown as Node
     if (isServerFile(program)) continue
+    if (OWN_DIRECTION.test(file.text.slice(block.offset))) {
+      flag({ file, flags } as Context, block.offset, 'unsupported', 'This file sets the page direction itself, which can clash with the Arabic layout.',
+        'Check the Arabic pages, and drive this direction from the locale so components read it too.')
+    }
     const ctx: Context = { file, base: block.offset, lib, stem: stemOf(file.path), used, byText: new Map(), entries, edits, flags, components: new Set(), sawJsx: false, consumed: new Set(), usedTrans: false }
     walk(program, ctx, [])
     if (ctx.sawJsx) flagModuleStrings(program, ctx)

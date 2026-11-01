@@ -7,7 +7,7 @@ You improve Dualkit's existing parts. Read `docs/superpowers/specs/2026-11-01-pr
 ```sh
 npm ci
 npm run build -w @dualkit/format -w @dualkit/rules -w @dualkit/lint -w @dualkit/convert -w dualkit
-npm run proof -w @dualkit/proof -- --typecheck
+npm run proof -w @dualkit/proof -- --build
 ```
 
 ## Daily builder

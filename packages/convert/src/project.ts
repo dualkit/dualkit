@@ -98,6 +98,15 @@ function detectPackageManager(root: string): Project['packageManager'] {
   }
 }
 
+/** Libraries that hold an app's own translations. Convert adds its own setup, and two setups collide. */
+const I18N_LIBRARIES = ['next-intl', 'react-i18next', 'i18next', 'next-i18next', 'react-intl', '@lingui/core', 'next-international', '@inlang/paraglide-js']
+
+/** The translation library the app already uses, or null. */
+export function existingI18n(root: string): string | null {
+  const deps = readDeps(root)
+  return I18N_LIBRARIES.find((name) => name in deps) ?? null
+}
+
 function detectI18n(deps: Record<string, string>): Project['i18n'] {
   if ('next-intl' in deps) return 'next-intl'
   if ('react-i18next' in deps) return 'react-i18next'

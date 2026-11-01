@@ -2,7 +2,7 @@ import { cpSync, mkdirSync, mkdtempSync, renameSync, rmSync, writeFileSync } fro
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { UnsupportedError, detectProject } from '../src/project'
+import { UnsupportedError, detectProject, existingI18n } from '../src/project'
 import { fixtureRepo } from './helpers'
 
 const tmp = (): string => mkdtempSync(join(tmpdir(), 'dualkit-project-'))
@@ -75,6 +75,13 @@ describe('detectProject', () => {
     expect(detectProject(dir).packageManager).toBe(manager)
   })
 
+  it('names an i18n library the app already has', () => {
+    const dir = tmp()
+    write(dir, 'package.json', pkg({ vite: '^6.0.0', react: '^19.0.0', i18next: '^23.0.0' }))
+    expect(existingI18n(dir)).toBe('i18next')
+    write(dir, 'package.json', pkg({ vite: '^6.0.0', react: '^19.0.0' }))
+    expect(existingI18n(dir)).toBeNull()
+  })
   it('reads i18n libraries from dependencies', () => {
     const dir = fixtureRepo('next-app')
     write(dir, 'package.json', pkg({ next: '^15.0.0', react: '^19.0.0', 'next-intl': '^3.0.0' }))

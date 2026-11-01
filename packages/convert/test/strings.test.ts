@@ -228,6 +228,13 @@ describe('extractStrings interpolation and mixed text', () => {
   })
 })
 
+describe('extractStrings direction', () => {
+  it('flags a file that sets the page direction itself', () => {
+    const text = `export function Dir({ d }) {\n  document.documentElement.setAttribute('dir', d)\n  return null\n}\n`
+    expect(run(text).flags.map((f) => f.kind)).toEqual(['unsupported'])
+  })
+})
+
 describe('extractStrings hooks', () => {
   it('gives an async server component getTranslations', () => {
     const { out } = run('export default async function Page() {\n  const data = await load()\n  return <h1>Orders</h1>\n}\n')

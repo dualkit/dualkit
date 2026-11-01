@@ -12,7 +12,7 @@ export type ReportData = {
   english: { route: string; width: number; ratio: number; diffPath?: string }[]
   /** English pages with no baseline screenshot to compare against. They are listed, and they do not fail the run. */
   noBaseline?: { route: string; width: number }[]
-  arabic: { route: string; score: number; errors: number; warnings: number }[]
+  arabic: { route: string; score: number; errors: number; warnings: number; problems?: string[] }[]
   unreachable: { route: string; reason: string }[]
   remainingLint: number
   tests?: { code: number; tail: string }
@@ -122,7 +122,7 @@ function english(data: ReportData): string {
 
 function arabic(data: ReportData): string {
   const lines = data.arabic.map(
-    (p) => !Number.isFinite(p.errors) ? `- ${esc(p.route)}: the check returned no result` : `- ${esc(p.route)}: score ${p.score}, ${plural(p.errors, 'error', 'errors')}, ${plural(p.warnings, 'warning', 'warnings')}`
+    (p) => !Number.isFinite(p.errors) ? `- ${esc(p.route)}: ${esc(p.problems?.[0] ?? 'the check returned no result')}` : `- ${esc(p.route)}: score ${p.score}, ${plural(p.errors, 'error', 'errors')}, ${plural(p.warnings, 'warning', 'warnings')}${(p.problems ?? []).map((m) => `\n  - ${esc(m)}`).join('')}`
   )
   return section('Arabic pages', lines, 'No pages were checked.')
 }

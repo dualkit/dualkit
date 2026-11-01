@@ -126,12 +126,31 @@ function visitExpression(container: Node, ancestors: Node[], ctx: Context): void
   ctx.edits.push({ start: ctx.base + container.end!, end: ctx.base + container.end!, text: '</bdi>' })
 }
 
+/** Text that is only a signed number or a percentage. Arabic bidi moves its sign and % unless it is isolated. */
+const SIGNED_NUMBER = /^(?:[+\-\u2212]\d[\d,.]*\s?%?|\d[\d,.]*\s?%)$/
+/** Elements whose content is not ordinary HTML, so a bdi inside them would be dropped or invalid. */
+const NO_BDI = new Set(['svg', 'text', 'option', 'title', 'textarea', 'style', 'script'])
+
+function visitText(text: Node, ancestors: Node[], ctx: Context): void {
+  const parent = ancestors[ancestors.length - 1]!
+  if (parent.type !== 'JSXElement' && parent.type !== 'JSXFragment') return
+  const value = String(text.value)
+  const trimmed = value.trim()
+  if (!SIGNED_NUMBER.test(trimmed)) return
+  const elements = ancestors.filter((a) => a.type === 'JSXElement')
+  if (elements.some((a) => isolates(a) || NO_BDI.has(tagName(a.openingElement as Node) ?? ''))) return
+  const start = ctx.base + text.start! + value.indexOf(trimmed)
+  ctx.edits.push({ start, end: start, text: '<bdi>' })
+  ctx.edits.push({ start: start + trimmed.length, end: start + trimmed.length, text: '</bdi>' })
+}
+
 function walk(node: unknown, ctx: Context, ancestors: Node[]): void {
   if (Array.isArray(node)) return node.forEach((child) => walk(child, ctx, ancestors))
   if (!node || typeof node !== 'object') return
   const n = node as Node
   if (n.type === 'JSXOpeningElement') visitOpening(n, ctx, ancestors)
   if (n.type === 'JSXExpressionContainer' && ancestors.length) visitExpression(n, ancestors, ctx)
+  if (n.type === 'JSXText' && ancestors.length) visitText(n, ancestors, ctx)
   const next = typeof n.type === 'string' ? [...ancestors, n] : ancestors
   for (const [key, child] of Object.entries(n)) if (!SKIP.has(key)) walk(child, ctx, next)
 }

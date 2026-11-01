@@ -27,6 +27,15 @@ describe('tailwindEdits', () => {
     expect(run(jsx('hover:!-mr-1 md:-ml-2'), '4.1.0').out).toBe(jsx('hover:!-me-1 md:-ms-2'))
   })
 
+  it('turns tracking off in Arabic once per class list', () => {
+    expect(run(jsx('text-3xl tracking-tight'), '4.1.0').out).toBe(jsx('text-3xl tracking-tight rtl:tracking-normal'))
+    expect(run(jsx('tracking-wide md:tracking-tight'), '3.4.0').out).toBe(jsx('tracking-wide rtl:tracking-normal md:tracking-tight'))
+    expect(run(jsx('tracking-[-0.02em]'), '4.1.0').out).toBe(jsx('tracking-[-0.02em] rtl:tracking-normal'))
+  })
+  it('leaves tracking-normal and a class list that already handles Arabic', () => {
+    expect(run(jsx('tracking-normal'), '4.1.0').edits).toEqual([])
+    expect(run(jsx('tracking-tight rtl:tracking-normal'), '4.1.0').edits).toEqual([])
+  })
   it('adds rtl:space-x-reverse once on 3.4 and leaves 4.1 alone', () => {
     expect(run(jsx('flex space-x-4'), '3.4.0').out).toBe(jsx('flex space-x-4 rtl:space-x-reverse'))
     expect(run(jsx('space-x-4 md:space-x-2'), '3.4.0').out).toBe(jsx('space-x-4 rtl:space-x-reverse md:space-x-2'))

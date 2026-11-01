@@ -53,7 +53,9 @@ export function DualkitLanguageSwitch() {
 
 /** Sets lang and dir on <html> from the cookie before first paint. */
 const INLINE_SCRIPT = `<script>(function(){var m=document.cookie.match(${COOKIE_PATTERN});var l=m&&m[1]==='ar'?'ar':'en';` +
-  `var h=document.documentElement;h.lang=l;h.dir=l==='ar'?'rtl':'ltr'})()</script>`
+  `var h=document.documentElement;h.lang=l;h.dir=l==='ar'?'rtl':'ltr';` +
+  // An app's own direction code would turn an Arabic page back to left to right, so Arabic holds the attribute.
+  `if(l==='ar')new MutationObserver(function(){if(h.dir!=='rtl')h.dir='rtl'}).observe(h,{attributes:true,attributeFilter:['dir']})})()</script>`
 
 /** The index.html edit: the inline script first in <head> (bilingual), or a fixed Arabic <html> (arabic). */
 function htmlEdits(html: string, mode: Mode): Edit[] {

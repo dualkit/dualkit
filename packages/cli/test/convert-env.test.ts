@@ -7,6 +7,7 @@ import { makeBrowserKit } from '../src/convert-env'
 /** Paints from the clock, then grows after a slow request, the way a real dashboard does. */
 const LIVE_PAGE = `<!doctype html><body style="margin:0"><div id="a" style="height:40px"></div><script>
 document.getElementById('a').style.background = '#' + String(Date.now() % 1000).padStart(3, '0')
+document.body.insertAdjacentHTML('beforeend', '<div style="height:' + Math.floor(Math.random() * 40) + 'px;background:#000"></div>')
 setTimeout(() => fetch('/slow').then((r) => r.text()).then(() => document.body.insertAdjacentHTML('beforeend', '<div style="height:2000px;background:#963"></div>')), 100)
 </script>`
 

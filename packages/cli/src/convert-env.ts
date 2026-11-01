@@ -11,6 +11,8 @@ const LOAD_TIMEOUT_MS = 30_000
 const SETTLE_TIMEOUT_MS = 5_000
 /** Both shots see the same date, so clocks and "today" labels cannot differ. */
 const SHOT_CLOCK = new Date('2026-01-15T09:00:00Z')
+/** Replaces Math.random with a fixed sequence, so charts and placeholder data drawn at random match between shots. */
+const SEEDED_RANDOM = 'let dualkitSeed=1;Math.random=()=>{dualkitSeed=(dualkitSeed*16807)%2147483647;return dualkitSeed/2147483647}'
 const FREEZE_CSS = '*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}'
 const GRACE_MS = 10_000
 const INTERRUPTED = 130
@@ -27,7 +29,7 @@ export class InterruptedError extends Error {
 /** One Chromium for a whole run. It starts on first use and `close` is safe to call more than once. */
 export type BrowserKit = {
   shoot: Shooter
-  audit: (url: string, width: number, options?: { cookies?: Record<string, string> }) => Promise<{ score: number; errors: number; warnings: number }>
+  audit: (url: string, width: number, options?: { cookies?: Record<string, string> }) => Promise<{ score: number; errors: number; warnings: number; problems?: string[] }>
   close: () => Promise<void>
 }
 
@@ -67,6 +69,7 @@ export function makeBrowserKit(settings: { storageState?: string }, config: Conf
         if (options?.cookies) await context.addCookies(Object.entries(options.cookies).map(([name, value]) => ({ name, value, url })))
         const page = await context.newPage()
         await page.clock.setFixedTime(SHOT_CLOCK)
+        await page.addInitScript(SEEDED_RANDOM)
         await page.goto(url, { waitUntil: 'load', timeout: LOAD_TIMEOUT_MS })
         await settle(page)
         return await page.screenshot({ fullPage: true, animations: 'disabled', timeout: LOAD_TIMEOUT_MS })
@@ -76,13 +79,22 @@ export function makeBrowserKit(settings: { storageState?: string }, config: Conf
     },
     audit: async (url, width, options) => {
       signal.throwIfAborted()
-      const { audit } = await import('./audit')
-      const result: AuditResult = await (audit as typeof auditPage)(
-        { url, width, height: SHOT_HEIGHT, config, ...(options?.cookies ? { cookies: options.cookies } : {}), ...(storageState ? { storageState } : {}) },
-        async () => unclosable(await launch()),
-      )
+      const { audit, PageError } = await import('./audit')
+      const result: AuditResult | { failed: string } = await (async () => {
+        try {
+          return await (audit as typeof auditPage)(
+            { url, width, height: SHOT_HEIGHT, config, ...(options?.cookies ? { cookies: options.cookies } : {}), ...(storageState ? { storageState } : {}) },
+            async () => unclosable(await launch()),
+          )
+        } catch (error) {
+          if (error instanceof PageError) return { failed: error.message }
+          throw error
+        }
+      })()
+      if ('failed' in result) return { score: Number.NaN, errors: Number.NaN, warnings: Number.NaN, problems: [result.failed] }
       const count = (severity: string): number => result.findings.filter((f) => f.severity === severity).length
-      return { score: result.score, errors: count('error'), warnings: count('warning') }
+      const problems = result.findings.filter((f) => f.severity === 'error').map((f) => `${f.title}: ${f.message}`)
+      return { score: result.score, errors: count('error'), warnings: count('warning'), problems }
     },
     close: async () => {
       const open = browser

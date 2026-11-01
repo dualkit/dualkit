@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { chmodSync, existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { createServer } from 'node:net'
 import { PNG } from 'pngjs'
@@ -58,9 +58,8 @@ describe('finish rollback', () => {
     const state = read(dir, STATE_FILE)
     writeLedger(dir, readLedger(dir).map((e, i) => (i === 0 ? { ...e, ar: 'changed' } : e)))
     const ledger = read(dir, 'dualkit-strings.json')
-    const hook = join(dir, '.git/hooks/pre-commit')
-    writeFileSync(hook, '#!/bin/sh\nexit 1\n')
-    chmodSync(hook, 0o755)
+    execFileSync('git', ['config', 'commit.gpgsign', 'true'], { cwd: dir })
+    execFileSync('git', ['config', 'gpg.program', 'false'], { cwd: dir })
     const port2 = await freePort()
     const error = (await finish({ root: dir, configAnswers: { start: serve(port2), port: port2 } }, io(serve(port2), port2)).catch((e: unknown) => e)) as Error
     expect(error.message).toMatch(/^finish failed at committing: .*Nothing was committed\.$/s)

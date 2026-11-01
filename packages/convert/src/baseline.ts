@@ -1,3 +1,4 @@
+import { closedRoutes } from './closed-routes'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { listRoutes } from './routes'
@@ -6,6 +7,8 @@ import { STATE_DIR } from './state'
 import type { ConvertConfig, Project, Shooter } from './types'
 
 export const BASELINE_DIR = `${STATE_DIR}/baseline`
+/** Routes already shut when the baseline was taken, so their screenshots show an error page, not the app. */
+export const CLOSED_FILE = `${BASELINE_DIR}/closed.json`
 /** The phone and desktop widths every page is shot at. */
 export const WIDTHS = [390, 1280] as const
 /** Used when the config names no port: the dev server default for each framework. */
@@ -32,6 +35,7 @@ export async function shootBaseline(
   const server = await startServer(config.start, port, project.root)
   const shots: string[] = []
   try {
+    writeFileSync(join(project.root, CLOSED_FILE), JSON.stringify((await closedRoutes(server.url, routes)).map((c) => c.route)))
     for (const route of routes) {
       for (const width of WIDTHS) {
         const path = baselinePath(route, width)
