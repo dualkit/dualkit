@@ -108,6 +108,95 @@ export const config = {
 }
 `
 
+/**
+ * Runs the app's own middleware first, on the path without its locale prefix and only where its own
+ * matcher applies. A redirect it returns is kept. Cookies it sets are copied onto next-intl's response.
+ */
+const composedMiddlewareFile = (routing: string, matcher: string, own: string): string => `import { NextRequest, NextResponse, type NextFetchEvent } from 'next/server'
+import createMiddleware from 'next-intl/middleware'
+import { routing } from '${routing}'
+import { matchesApp, type Matcher } from '${matcher}'
+import * as own from '${own}'
+
+const intl = createMiddleware(routing)
+type OwnHandler = (request: NextRequest, event: NextFetchEvent) => Response | null | undefined | Promise<Response | null | undefined>
+// A spread, so the bundler does not warn about the export names this app does not use.
+const exported: Record<string, unknown> = { ...own }
+const candidate = exported.default ?? exported.middleware ?? exported.proxy
+if (typeof candidate !== 'function') throw new Error('Dualkit could not find the middleware function exported by ${own}.')
+const ownHandler = candidate as OwnHandler
+const ownMatcher = (exported as { config?: { matcher?: Matcher } }).config?.matcher
+const OWN_ONLY = /^\\/(?:api|trpc)(?:\\/|$)/
+
+export default async function middleware(request: NextRequest, event: NextFetchEvent) {
+  const url = request.nextUrl.clone()
+  const [, first = '', ...rest] = url.pathname.split('/')
+  if ((routing.locales as readonly string[]).includes(first)) url.pathname = \`/\${rest.join('/')}\`
+  const result = matchesApp(url.pathname, ownMatcher) ? await ownHandler(new NextRequest(url, request), event) : null
+  // Anything but a plain "continue" is the app's answer: a redirect, a rewrite, a 401 or a page. Keep it as it is.
+  if (result && result.headers.get('x-middleware-next') !== '1') return result
+  if (OWN_ONLY.test(url.pathname)) return result ?? NextResponse.next()
+  const response = intl(request)
+  if (result) {
+    for (const cookie of result.headers.getSetCookie()) response.headers.append('set-cookie', cookie)
+    // Headers the app set for the browser, such as a content security policy.
+    result.headers.forEach((value, key) => { if (key !== 'set-cookie' && !key.startsWith('x-middleware-')) response.headers.set(key, value) })
+    const overridden = result.headers.get('x-middleware-override-headers')
+    if (overridden) {
+      const names = new Set([...(response.headers.get('x-middleware-override-headers') ?? '').split(','), ...overridden.split(',')].filter(Boolean))
+      response.headers.set('x-middleware-override-headers', [...names].join(','))
+      result.headers.forEach((value, key) => { if (key.startsWith('x-middleware-request-')) response.headers.set(key, value) })
+    }
+  }
+  return response
+}
+
+export const config = {
+  matcher: '/((?!(?:_next|_vercel)(?:/|$)|.*\\\\..*).*)',
+}
+`
+
+/** Decides whether a path is covered by the app's own middleware matcher, with Next's path syntax: :name, :name*, :name+, :name? and (regex) groups. */
+const APP_MATCHER = String.raw`/** Whether a path is covered by an app's own middleware matcher. No matcher means every path. */
+export type Matcher = string | { source: string }  | (string | { source: string })[]
+
+/** An entry with has or missing conditions is treated as matching, so the app's middleware runs rather than being skipped. */
+export function matchesApp(pathname: string, matcher: Matcher | undefined): boolean {
+  if (matcher === undefined) return true
+  return (Array.isArray(matcher) ? matcher : [matcher]).some((entry) => toRegExp(typeof entry === 'string' ? entry : entry.source).test(pathname))
+}
+
+function toRegExp(pattern: string): RegExp {
+  let out = ''
+  let i = 0
+  while (i < pattern.length) {
+    const char = pattern[i]!
+    const param = char === '/' ? /^\/:[A-Za-z0-9_]+([*+?]?)/.exec(pattern.slice(i)) : null
+    if (param && pattern[i + param[0].length] === '(') {
+      out += '/'
+      i += param[0].length
+    } else if (param) {
+      out += { '*': '(?:/.*)?', '+': '/.+', '?': '(?:/[^/]+)?', '': '/[^/]+' }[param[1]!]
+      i += param[0].length
+    } else if (char === '(') {
+      let depth = 0
+      let j = i
+      for (; j < pattern.length; j++) {
+        if (pattern[j] === '\\') j++
+        else if (pattern[j] === '(') depth++
+        else if (pattern[j] === ')' && --depth === 0) break
+      }
+      out += pattern.slice(i, j + 1)
+      i = j + 1
+    } else {
+      out += char.replace(/[.*+?^$|{}[\]\\]/g, '\\$&')
+      i++
+    }
+  }
+  return new RegExp('^' + out + (out.endsWith('/') ? '' : '/?') + '$')
+}
+`
+
 const switchFile = (navigation: string): string => `'use client'
 
 import { useLocale } from 'next-intl'
@@ -169,17 +258,29 @@ function alreadyWired(project: Project, mode: Mode, appDir: string, files: (rel:
   return wired ? project.entry : null
 }
 
-/** Throws when the app has its own middleware or proxy, which convert cannot merge with next-intl's. */
-function guardMiddleware(base: string, ours: string, text: string, files: (rel: string) => string | null): void {
+/** The app's own middleware or proxy file, or null. Throws when there are two, or when one is not a recognisable middleware. */
+function findMiddleware(base: string, files: (rel: string) => string | null): { path: string; text: string } | null {
+  const found: { path: string; text: string }[] = []
   for (const name of ['middleware', 'proxy']) {
     for (const ext of ['ts', 'js', 'mjs', 'tsx', 'jsx']) {
       const path = `${base}${name}.${ext}`
-      const existing = files(path)
-      if (existing === null || (path === ours && existing === text)) continue
-      throw new UnsupportedError(`This app already has ${path}. Convert cannot merge the next-intl middleware into it, so it stopped before changing anything.`)
+      const text = files(path)
+      if (text !== null) found.push({ path, text })
     }
   }
+  if (found.length > 1) throw new UnsupportedError(`This app has both ${found[0]!.path} and ${found[1]!.path}. Convert cannot tell which one to compose with next-intl, so it stopped before changing anything.`)
+  const only = found[0] ?? null
+  if (only && !EXPORTS_HANDLER.test(only.text)) {
+    throw new UnsupportedError(`Convert could not find the middleware function exported from ${only.path}, so it stopped before changing anything.`)
+  }
+  return only
 }
+
+/** A file that exports a default, or a function or constant named middleware or proxy. */
+const EXPORTS_HANDLER = /export\s+default\b|export\s+(?:async\s+)?function\s+(?:middleware|proxy)\b|export\s+(?:const|let|var)\s+(?:middleware|proxy)\b|export\s*\{[^}]*\b(?:middleware|proxy|default)\b[^}]*\}/
+
+/** The path the app's own middleware moves to, keeping its extension. */
+const movedMiddlewarePath = (base: string, existing: string): string => `${base}app-middleware.${existing.split('.').pop()}`
 
 const merge = (into: Record<string, Edit[]>, from: Record<string, Edit[]>): Record<string, Edit[]> => {
   const out = { ...into }
@@ -192,12 +293,24 @@ function bilingualParts(project: Project, appDir: string, files: (rel: string) =
   const base = sourceBase(project)
   const { moves, keptPages } = routeMoves(appDir, paths)
   const middlewarePath = `${base}${nextMajor(files) >= 16 ? 'proxy' : 'middleware'}.ts`
-  const middleware = middlewareFile(specifierTo(middlewarePath, `${base}i18n/routing.ts`))
-  guardMiddleware(base, middlewarePath, middleware, files)
+  const own = findMiddleware(base, files)
+  const routingSpec = specifierTo(middlewarePath, `${base}i18n/routing.ts`)
+  const ownMoved = own ? movedMiddlewarePath(base, own.path) : null
+  if (ownMoved && files(ownMoved) !== null) {
+    throw new UnsupportedError(`This app already has ${ownMoved}. Convert needs that name for the app's own middleware, so move or remove that file and run convert again.`)
+  }
+  const middleware = ownMoved
+    ? composedMiddlewareFile(routingSpec, specifierTo(middlewarePath, `${base}i18n/app-matcher.ts`), specifierTo(middlewarePath, ownMoved))
+    : middlewareFile(routingSpec)
   const catchAll = topCatchAll(appDir, moves, paths)
   const flags = keptPages.map((page) => flagAt(page, 'unsupported',
     `${page} stays outside [locale], because the middleware skips its path, so it has no Arabic version.`,
     'Move the page to a path the middleware matches, or translate it by hand.'))
+  if (own && ownMoved) {
+    flags.push(flagAt(ownMoved, 'info',
+      `${own.path} moved to ${ownMoved}, and the new ${middlewarePath} runs it first on the path without its locale prefix, then next-intl.`,
+      'Check the app middleware still behaves as before and that its auth checks still hold under /ar. Any answer other than a plain continue (a redirect, rewrite or 401) is returned as it is. Paths under /api and /trpc skip next-intl. Config options other than matcher, such as runtime, are not carried over, and has or missing conditions on a matcher entry are ignored, so the middleware runs on those paths.'))
+  }
   if (catchAll) {
     flags.push(flagAt(catchAll, 'unsupported',
       `${catchAll} already catches every path under [locale], so convert did not add its own catch-all.`,
@@ -207,11 +320,13 @@ function bilingualParts(project: Project, appDir: string, files: (rel: string) =
     [`${base}i18n/routing.ts`]: ROUTING,
     [`${base}i18n/navigation.ts`]: NAVIGATION,
     [middlewarePath]: middleware,
+    ...(own ? { [`${base}i18n/app-matcher.ts`]: APP_MATCHER } : {}),
     [switchPath(project)]: switchFile(specifierTo(switchPath(project), `${base}i18n/navigation.ts`)),
     ...(catchAll ? {} : { [`${appDir}/[locale]/[...rest]/page.tsx`]: CATCH_ALL }),
   }
   const rewrites = importRewrites(appDir, moves, paths, files, readAliases(files))
-  return { moves, writes, flags: [...flags, ...rewrites.flags], edits: rewrites.edits }
+  const ownMove: [string, string][] = own && ownMoved ? [[own.path, ownMoved]] : []
+  return { moves: [...moves, ...ownMove], writes, flags: [...flags, ...rewrites.flags], edits: rewrites.edits }
 }
 
 /**

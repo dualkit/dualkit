@@ -314,8 +314,47 @@ describe('wireNextIntl bilingual', () => {
     for (const [path, text] of Object.entries(plan.writes)) parses(path, text)
   })
 
-  it('refuses an app that already has its own middleware', () => {
-    const m = memory({ 'package.json': pkg('15.0.0'), 'app/layout.tsx': fixture.files('app/layout.tsx')!, 'middleware.ts': 'export function middleware() {}\n' })
+  it('composes with an app that already has its own middleware', () => {
+    const own = "import { NextResponse } from 'next/server'\nexport function middleware() { return NextResponse.next() }\nexport const config = { matcher: ['/dashboard/:path*'] }\n"
+    const m = memory({ 'package.json': pkg('15.0.0'), 'app/layout.tsx': fixture.files('app/layout.tsx')!, 'app/page.tsx': 'export default function P() { return null }\n', 'middleware.ts': own })
+    const plan = wireNextIntl(project, 'bilingual', m.files, m.paths)
+    expect(plan.moves).toContainEqual(['middleware.ts', 'app-middleware.ts'])
+    const out = applyPlan(Object.fromEntries(m.paths.map((p) => [p, m.files(p)!])), plan)
+    expect(out['app-middleware.ts']).toBe(own)
+    expect(out['middleware.ts']).toContain("import * as own from './app-middleware'")
+    expect(out['middleware.ts']).toContain('createMiddleware(routing)')
+    for (const [path, text] of Object.entries(plan.writes)) parses(path, text)
+    const composed = out['middleware.ts']!
+    expect(composed).toContain("get('x-middleware-next') !== '1') return result")
+    expect(composed).toContain('getSetCookie()')
+    expect(composed).toContain('x-middleware-override-headers')
+    expect(composed).toContain('const ownHandler = candidate as OwnHandler')
+    expect(composed).toContain('{ ...own }')
+    expect(composed).toContain("!key.startsWith('x-middleware-')")
+    expect(plan.writes['middleware.ts']).not.toContain('(?:api|_next|_vercel)')
+    expect(plan.flags.some((f) => f.kind === 'info' && f.file === 'app-middleware.ts')).toBe(true)
+  })
+
+  it('composes with a src/proxy.ts on Next 16 with a default export', () => {
+    const own = "import { clerkMiddleware } from '@clerk/nextjs/server'\nexport default clerkMiddleware()\n"
+    const m = memory({ 'package.json': pkg('16.0.0'), 'src/app/layout.tsx': fixture.files('app/layout.tsx')!, 'src/app/page.tsx': 'export default function P() { return null }\n', 'src/proxy.ts': own })
+    const p = { ...project, appDir: 'src/app', entry: 'src/app/layout.tsx' }
+    const plan = wireNextIntl(p, 'bilingual', m.files, m.paths)
+    expect(plan.moves).toContainEqual(['src/proxy.ts', 'src/app-middleware.ts'])
+    expect(plan.writes['src/proxy.ts']).toContain("from './app-middleware'")
+    expect(plan.writes['src/i18n/app-matcher.ts']).toContain('export function matchesApp')
+  })
+
+  it('refuses when two middleware files exist, or none exports a handler', () => {
+    const base = { 'package.json': pkg('15.0.0'), 'app/layout.tsx': fixture.files('app/layout.tsx')! }
+    const two = memory({ ...base, 'middleware.ts': 'export function middleware() {}\n', 'middleware.js': 'export function middleware() {}\n' })
+    expect(() => wireNextIntl(project, 'bilingual', two.files, two.paths)).toThrow(UnsupportedError)
+    const none = memory({ ...base, 'middleware.ts': 'const x = 1\n' })
+    expect(() => wireNextIntl(project, 'bilingual', none.files, none.paths)).toThrow(UnsupportedError)
+  })
+
+  it('refuses when the name for the moved middleware is taken', () => {
+    const m = memory({ 'package.json': pkg('15.0.0'), 'app/layout.tsx': fixture.files('app/layout.tsx')!, 'middleware.ts': 'export function middleware() {}\n', 'app-middleware.ts': 'x\n' })
     expect(() => wireNextIntl(project, 'bilingual', m.files, m.paths)).toThrow(UnsupportedError)
   })
 })
