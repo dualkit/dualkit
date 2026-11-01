@@ -119,11 +119,13 @@ import { matchesApp, type Matcher } from '${matcher}'
 import * as own from '${own}'
 
 const intl = createMiddleware(routing)
-const ownHandler = ((own as Record<string, unknown>).default ?? (own as Record<string, unknown>).middleware ?? (own as Record<string, unknown>).proxy) as
-  | ((request: NextRequest, event: NextFetchEvent) => Response | null | undefined | Promise<Response | null | undefined>)
-  | undefined
-if (typeof ownHandler !== 'function') throw new Error('Dualkit could not find the middleware function exported by ${own}.')
-const ownMatcher = (own as { config?: { matcher?: Matcher } }).config?.matcher
+type OwnHandler = (request: NextRequest, event: NextFetchEvent) => Response | null | undefined | Promise<Response | null | undefined>
+// A spread, so the bundler does not warn about the export names this app does not use.
+const exported: Record<string, unknown> = { ...own }
+const candidate = exported.default ?? exported.middleware ?? exported.proxy
+if (typeof candidate !== 'function') throw new Error('Dualkit could not find the middleware function exported by ${own}.')
+const ownHandler = candidate as OwnHandler
+const ownMatcher = (exported as { config?: { matcher?: Matcher } }).config?.matcher
 const OWN_ONLY = /^\\/(?:api|trpc)(?:\\/|$)/
 
 export default async function middleware(request: NextRequest, event: NextFetchEvent) {
@@ -137,6 +139,8 @@ export default async function middleware(request: NextRequest, event: NextFetchE
   const response = intl(request)
   if (result) {
     for (const cookie of result.headers.getSetCookie()) response.headers.append('set-cookie', cookie)
+    // Headers the app set for the browser, such as a content security policy.
+    result.headers.forEach((value, key) => { if (key !== 'set-cookie' && !key.startsWith('x-middleware-')) response.headers.set(key, value) })
     const overridden = result.headers.get('x-middleware-override-headers')
     if (overridden) {
       const names = new Set([...(response.headers.get('x-middleware-override-headers') ?? '').split(','), ...overridden.split(',')].filter(Boolean))
