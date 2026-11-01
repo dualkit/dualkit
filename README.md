@@ -49,7 +49,7 @@ Fresh agents built the same bilingual checkout three times without the skills an
 
 Three runs is a smoke test, not a benchmark. The task, the scorer and every run are in [`evals/payment-summary`](evals/payment-summary/RESULTS.md).
 
-We also run Convert on 10 real open-source apps and publish the score, including the failures. Today it gets through all 10 and catches 76% of their strings. All 8 apps that built before converting still build after, so there is a real base and a long way to go. See the [scoreboard](docs/proof/scoreboard.md).
+We also run Convert on 10 real open-source apps and publish the score, including the failures. Today it converts 8 and refuses 2 that already have their own translation library, and it catches 74% of their strings. All 6 apps that built before still build, and 3 pass the full check on stand-in Arabic. See the [scoreboard](docs/proof/scoreboard.md).
 
 ## Skills
 

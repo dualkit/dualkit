@@ -6,6 +6,22 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'convert-0-4-0',
+    date: '2026-11-01',
+    version: 'dualkit 0.9.0-beta.0',
+    tags: ['Convert'],
+    title: 'The proof now runs the apps in a browser, and the score got more honest',
+    body: [
+      'The proof run now builds each app and runs finish in a real browser with stand-in Arabic. All 6 apps that built before still build after, and 3 of 10 pass the full check.',
+      'That run showed two apps that already had their own translation library came out broken, so Convert now refuses those with a clear message and changes nothing. The score is 8 of 10 converted, not 10, and coverage is 74% because the refused apps no longer count.',
+      'Convert now isolates signed numbers and percentages such as +12.5% and turns tracking off in Arabic. A page that fails during finish is now a row in the report and no longer stops the run. A page that is shut in English is listed as not checked.',
+    ],
+    shipped: [
+      { name: '@dualkit/convert 0.4.0-beta.0', line: 'Refuses existing translation libraries, isolates signed numbers, turns tracking off in Arabic' },
+      { name: 'dualkit 0.9.0-beta.0', line: 'Uses convert 0.4' },
+    ],
+  },
+  {
     slug: 'convert-0-3-0',
     date: '2026-11-01',
     version: 'dualkit 0.8.0-beta.0',

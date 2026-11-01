@@ -2,13 +2,14 @@
   "date": "2026-11-01",
   "summary": {
     "apps": 10,
-    "converted": 10,
-    "strings": 5573,
-    "missed": 1788,
-    "coverage": 76,
+    "converted": 8,
+    "strings": 4629,
+    "missed": 1644,
+    "coverage": 74,
     "typeErrors": 76,
-    "buildable": 8,
-    "built": 8
+    "buildable": 6,
+    "built": 6,
+    "finished": 3
   },
   "results": [
     {
@@ -16,16 +17,12 @@
       "repo": "TailAdmin/free-nextjs-admin-dashboard",
       "commit": "1ef305c5b1332c899c5ffdeb72b56235d42d6d00",
       "framework": "next",
-      "outcome": "converted",
-      "detail": "",
-      "strings": 483,
-      "missed": 94,
-      "flags": 84,
-      "typeErrors": 0,
-      "buildBefore": true,
-      "buildAfter": true,
-      "buildDetail": "",
-      "seconds": 37
+      "outcome": "refused",
+      "detail": "This app already uses next-intl. Convert adds its own translation setup and the two collide, so nothing was changed. Convert supports apps with no translation library yet.",
+      "strings": 0,
+      "missed": 0,
+      "flags": 0,
+      "seconds": 25
     },
     {
       "id": "kiranism-dashboard",
@@ -41,7 +38,9 @@
       "buildBefore": true,
       "buildAfter": true,
       "buildDetail": "",
-      "seconds": 47
+      "finished": false,
+      "finishDetail": "- / at 390px: fail: 0.415% of pixels differ, limit 0.100%. Diff at .dualkit/diff/home-390.png - / at 1280px: fail: 0.126% of pixels differ, limit 0.100%. Diff at .dualkit/diff/home-1280.png - /auth at 390px: fail: 0.416% of pixels differ, limit 0.100%. Diff at .dualkit/diff/auth-390.png - /auth at 1280px: fail: 0.125% of pixels differ, limit 0.100%. Diff at .dualkit/diff/auth-1280.png",
+      "seconds": 145
     },
     {
       "id": "taxonomy",
@@ -52,12 +51,14 @@
       "detail": "Failed to compile.  ./components/ui/alert-dialog.tsx:14:3 Type error: Property 'className' does not exist on type 'AlertDialogPortalProps'.  \u001b[0m \u001b[90m 12 | \u001b[39m\u001b[0m \u001b[0m \u001b[90m 13 | \u001b[39m\u001b[36mconst\u001b[39m \u001b[33mAlertDialogPortal\u001b[39m \u001b[33m=\u001b[39m ({\u001b[0m \u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 14 | \u001b[39m  className\u001b[33m,\u001b[39m\u001b[0m \u001b[0m \u001b[90m    | \u001b[39m  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m \u001b[0m \u001b[90m 15 | \u001b[39m  children\u001b[33m,\u001b[39m\u001b[0m \u001b[0m \u001b[90m 16 | \u001b[39m  \u001b[33m...\u001b[39mprops\u001b[0m \u001b[0m \u001b[90m 17 | \u001b[39m}\u001b[33m:\u001b[39m \u001b[33mAl",
       "strings": 123,
       "missed": 39,
-      "flags": 25,
+      "flags": 26,
       "typeErrors": 76,
       "buildBefore": false,
       "buildAfter": false,
       "buildDetail": "Failed to compile.  ./app/[locale]/layout.tsx:11:34 Type error: Module '\"next-intl\"' has no exported member 'hasLocale'.  \u001b[0m \u001b[90m  9 | \u001b[39m\u001b[36mimport\u001b[39m { \u001b[33mTailwindIndicator\u001b[39m } \u001b[36mfrom\u001b[39m \u001b[32m\"@/components/tailwind-indicator\"\u001b[39m\u001b[0m \u001b[0m \u001b[90m 10 | \u001b[39m\u001b[36mimport\u001b[39m { \u001b[33mThemeProvider\u001b[39m } \u001b[36mfrom\u001b[39m \u001b[32m\"@/components/theme-provider\"\u001b[39m\u001b[0m \u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 11 | \u001b[39m\u001b[36mimport\u001b[39m { \u001b[33mNextIntlClientProvider\u001b[39m\u001b[33m,\u001b[39m hasLocale } \u001b[36m",
-      "seconds": 141
+      "finished": true,
+      "finishDetail": "",
+      "seconds": 206
     },
     {
       "id": "next-admin",
@@ -66,14 +67,16 @@
       "framework": "next",
       "outcome": "converted",
       "detail": "",
-      "strings": 1169,
+      "strings": 1168,
       "missed": 367,
       "flags": 228,
       "typeErrors": 0,
       "buildBefore": true,
       "buildAfter": true,
       "buildDetail": "",
-      "seconds": 62
+      "finished": false,
+      "finishDetail": "- /dashboard/patient-monitoring at 390px: fail: 3.214% of pixels differ, limit 0.100%. Diff at .dualkit/diff/dashboard-patient-monitoring-390.png - /dashboard/patient-monitoring at 1280px: fail: 2.541% of pixels differ, limit 0.100%. Diff at .dualkit/diff/dashboard-patient-monitoring-1280.png - /dashboard/products at 1280px: fail: 1.206% of pixels differ, limit 0.100%. Diff at .dualkit/diff/dashbo",
+      "seconds": 562
     },
     {
       "id": "saas-stripe",
@@ -84,12 +87,14 @@
       "detail": "",
       "strings": 358,
       "missed": 141,
-      "flags": 74,
+      "flags": 75,
       "typeErrors": 0,
       "buildBefore": true,
       "buildAfter": true,
       "buildDetail": "",
-      "seconds": 57
+      "finished": false,
+      "finishDetail": "- /ar at 1280px: score 48, 2 errors, 30 warnings",
+      "seconds": 152
     },
     {
       "id": "saas-starter",
@@ -100,12 +105,14 @@
       "detail": "  userMessage: undefined,   charge: undefined,   decline_code: undefined,   payment_intent: undefined,   payment_method: undefined,   payment_method_type: undefined,   setup_intent: undefined,   source: undefined,   digest: '2087864064' } Export encountered an error on /(dashboard)/pricing/page: /pricing, exiting the build.  ⨯ Next.js build worker exited with code: 1 and signal: null",
       "strings": 86,
       "missed": 10,
-      "flags": 9,
+      "flags": 10,
       "typeErrors": 0,
       "buildBefore": false,
       "buildAfter": false,
       "buildDetail": "  userMessage: undefined,   charge: undefined,   decline_code: undefined,   payment_intent: undefined,   payment_method: undefined,   payment_method_type: undefined,   setup_intent: undefined,   source: undefined,   digest: '2119443984' } Export encountered an error on /[locale]/(dashboard)/pricing/page: /ar/pricing, exiting the build.  ⨯ Next.js build worker exited with code: 1 and signal: null",
-      "seconds": 50
+      "finished": false,
+      "finishDetail": "- /ar/pricing at 390px: http://localhost:3742/ar/pricing returned 500. - /ar/pricing at 1280px: http://localhost:3742/ar/pricing returned 500.",
+      "seconds": 104
     },
     {
       "id": "shadcnstore-next",
@@ -116,12 +123,12 @@
       "detail": "",
       "strings": 980,
       "missed": 412,
-      "flags": 136,
+      "flags": 137,
       "typeErrors": 0,
       "buildBefore": true,
       "buildAfter": true,
       "buildDetail": "",
-      "seconds": 95
+      "seconds": 55
     },
     {
       "id": "shadcn-admin",
@@ -132,28 +139,26 @@
       "detail": "",
       "strings": 455,
       "missed": 127,
-      "flags": 74,
+      "flags": 76,
       "typeErrors": 0,
       "buildBefore": true,
       "buildAfter": true,
       "buildDetail": "",
-      "seconds": 28
+      "finished": true,
+      "finishDetail": "",
+      "seconds": 42
     },
     {
       "id": "tailadmin-react",
       "repo": "TailAdmin/free-react-tailwind-admin-dashboard",
       "commit": "df1e9f37e56e0bf83030e8063f5353da2e0ecf18",
       "framework": "vite",
-      "outcome": "converted",
-      "detail": "",
-      "strings": 460,
-      "missed": 50,
-      "flags": 60,
-      "typeErrors": 0,
-      "buildBefore": true,
-      "buildAfter": true,
-      "buildDetail": "",
-      "seconds": 27
+      "outcome": "refused",
+      "detail": "This app already uses react-i18next. Convert adds its own translation setup and the two collide, so nothing was changed. Convert supports apps with no translation library yet.",
+      "strings": 0,
+      "missed": 0,
+      "flags": 0,
+      "seconds": 18
     },
     {
       "id": "shadcnstore-vite",
@@ -164,12 +169,14 @@
       "detail": "",
       "strings": 991,
       "missed": 402,
-      "flags": 135,
+      "flags": 136,
       "typeErrors": 0,
       "buildBefore": true,
       "buildAfter": true,
       "buildDetail": "",
-      "seconds": 31
+      "finished": true,
+      "finishDetail": "",
+      "seconds": 44
     }
   ]
 }
