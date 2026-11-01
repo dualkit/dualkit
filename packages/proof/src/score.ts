@@ -9,6 +9,9 @@ export type AppResult = {
   buildBefore?: boolean
   buildAfter?: boolean
   buildDetail?: string
+  /** Whether `--finish` passed on stand-in Arabic. Absent when the run skipped it. */
+  finished?: boolean
+  finishDetail?: string
 }
 
 /** Share of user-facing strings convert caught, as a whole percent. 0 when nothing was found. */
@@ -23,7 +26,7 @@ export function summarise(results: AppResult[]) {
   const typeErrors = done.reduce((n, r) => n + (r.typeErrors ?? 0), 0)
   const buildable = done.filter((r) => r.buildBefore)
   const built = buildable.filter((r) => r.buildAfter).length
-  return { apps: results.length, converted: done.length, strings, missed, coverage: coverage(strings, missed), typeErrors, buildable: buildable.length, built }
+  return { apps: results.length, converted: done.length, strings, missed, coverage: coverage(strings, missed), typeErrors, buildable: buildable.length, built, finished: done.filter((r) => r.finished).length }
 }
 
 const buildCell = (r: AppResult): string => {
@@ -36,7 +39,7 @@ const buildCell = (r: AppResult): string => {
 export function scoreboard(results: AppResult[], date: string): string {
   const s = summarise(results)
   const rows = results.map((r) =>
-    `| [${r.id}](https://github.com/${r.repo}/tree/${r.commit}) | ${r.framework} | ${r.outcome} | ${r.strings} | ${r.missed} | ${r.outcome === 'converted' ? `${coverage(r.strings, r.missed)}%` : '-'} | ${r.flags} | ${r.typeErrors ?? '-'} | ${buildCell(r)} |`)
+    `| [${r.id}](https://github.com/${r.repo}/tree/${r.commit}) | ${r.framework} | ${r.outcome} | ${r.strings} | ${r.missed} | ${r.outcome === 'converted' ? `${coverage(r.strings, r.missed)}%` : '-'} | ${r.flags} | ${r.typeErrors ?? '-'} | ${buildCell(r)} | ${r.finished === undefined ? '-' : r.finished ? 'yes' : 'no'} |`)
   return [
     '# Dualkit proof scoreboard', '',
     `Measured ${date}. Convert ran on ${s.apps} real open-source apps, each pinned to one commit.`, '',
@@ -45,11 +48,12 @@ export function scoreboard(results: AppResult[], date: string): string {
     `- English strings left behind: ${s.missed}`,
     `- String coverage: ${s.coverage}%`,
     `- New type errors after converting: ${s.typeErrors}`,
-    `- Apps that still build after converting: ${s.built} of ${s.buildable} that built before`, '',
-    'This run covers phase 1, a TypeScript check and a production build before and after. It does not yet measure whether `--finish` passes.',
+    `- Apps that still build after converting: ${s.built} of ${s.buildable} that built before`,
+    `- Apps that pass \`--finish\`: ${s.finished} of ${s.converted}`, '',
+    'This run covers phase 1, a TypeScript check, a production build before and after, and `--finish` on stand-in Arabic. Stand-in Arabic proves the layout and the wiring, not the translation.',
     'The left-behind count comes from a separate scanner, and it is a floor because that scanner cannot see strings built at run time.', '',
-    '| App | Framework | Outcome | Strings | Left behind | Coverage | Flags | New type errors | Builds after |',
-    '| --- | --- | --- | --- | --- | --- | --- | --- | --- |',
+    '| App | Framework | Outcome | Strings | Left behind | Coverage | Flags | New type errors | Builds after | Passes finish |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |',
     ...rows, '',
   ].join('\n')
 }

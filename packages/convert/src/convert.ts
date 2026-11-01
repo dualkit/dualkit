@@ -10,7 +10,7 @@ import { RefusedError, assertCleanRepo, branchExists, createBranch, currentBranc
 import { LEDGER_FILE, mergeLedger, readLedger, type LedgerEntry } from './ledger'
 import { physicalContext } from './lint-context'
 import { runPasses, type PassContext, type PassKind } from './passes'
-import { detectProject } from './project'
+import { UnsupportedError, detectProject, existingI18n } from './project'
 import { rollBack } from './rollback'
 import { STATE_FILE, readState } from './state'
 import { mergeSummary, readSummary } from './summary'
@@ -143,6 +143,8 @@ export async function convert(options: ConvertOptions, ioIn: ConvertIo): Promise
   // Answers taken before the branch existed are part of the config this run uses, the baseline included.
   const io: ConvertIo = options.configAnswers ? { ...ioIn, config: { ...ioIn.config, ...options.configAnswers } } : ioIn
   const project = detectProject(root)
+  const library = rerun ? null : existingI18n(root)
+  if (library) throw new UnsupportedError(`This app already uses ${library}. Convert adds its own translation setup and the two collide, so nothing was changed. Convert supports apps with no translation library yet.`)
   const branch = branchFor(mode)
   const generated = new Set(state?.generated ?? [])
   const existing = readLedger(root)

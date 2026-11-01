@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { chmodSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { createServer } from 'node:net'
 import { PNG } from 'pngjs'
@@ -16,7 +16,7 @@ const CONFIG = 'dualkit.config.json'
 const answers = { start: 'npm run dev', port: 4010 }
 const text = (obj: unknown): string => `${JSON.stringify(obj, null, 2)}\n`
 const commitAll = (dir: string): void => { git(dir, 'add', '.'); git(dir, 'commit', '-q', '-m', 'config') }
-const failHook = (dir: string): void => { const h = join(dir, '.git/hooks/pre-commit'); writeFileSync(h, '#!/bin/sh\nexit 1\n'); chmodSync(h, 0o755) }
+const failHook = (dir: string): void => { execFileSync('git', ['config', 'commit.gpgsign', 'true'], { cwd: dir }); execFileSync('git', ['config', 'gpg.program', 'false'], { cwd: dir }) }
 
 describe('convert configAnswers', () => {
   it('commits the answers into an existing config and keeps its other keys', async () => {

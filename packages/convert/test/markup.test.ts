@@ -88,6 +88,18 @@ describe('markupEdits numbers', () => {
     expect(run('export const A = ({ price }) => <p title={price} />\n').edits).toEqual([])
   })
 
+  it('isolates signed numbers and percentages written as text', () => {
+    expect(run(page('+12.5%')).out).toBe(page('<bdi>+12.5%</bdi>'))
+    expect(run(page('\n  -4.5\n')).out).toBe(page('\n  <bdi>-4.5</bdi>\n'))
+    expect(run(page('40%')).out).toBe(page('<bdi>40%</bdi>'))
+  })
+  it('leaves plain numbers, words, and text that cannot hold bdi', () => {
+    expect(run(page('2026')).edits).toEqual([])
+    expect(run(page('+2 more')).edits).toEqual([])
+    expect(run(page('<bdi>+12%</bdi>')).edits).toEqual([])
+    expect(run('export const A = () => <svg><text>+12%</text></svg>').edits).toEqual([])
+    expect(run('export const A = () => <select><option>+12%</option></select>').edits).toEqual([])
+  })
   it('leaves an expression already in bdi or in an element with dir', () => {
     expect(run(page('<bdi>{price}</bdi>')).edits).toEqual([])
     expect(run('export const A = ({ price }) => <p dir="ltr">{price}</p>\n').edits).toEqual([])

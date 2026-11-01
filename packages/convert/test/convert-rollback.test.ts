@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { chmodSync, existsSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { convert } from '../src/convert'
@@ -33,9 +33,8 @@ function withoutLockfile(dir: string): string {
 }
 
 function failingHook(dir: string): void {
-  const hook = join(dir, '.git/hooks/pre-commit')
-  writeFileSync(hook, '#!/bin/sh\nexit 1\n')
-  chmodSync(hook, 0o755)
+  execFileSync('git', ['config', 'commit.gpgsign', 'true'], { cwd: dir })
+  execFileSync('git', ['config', 'gpg.program', 'false'], { cwd: dir })
 }
 
 /** The repo is on branch with a clean tree, nothing untracked, and the original page in place. */
@@ -47,7 +46,7 @@ function expectBackOn(dir: string, branch: string): void {
 }
 
 describe('convert rollback', () => {
-  it('puts the repo back on its base when the commit hook fails', async () => {
+  it('puts the repo back on its base when the commit fails', async () => {
     const dir = fixtureRepo('next-app')
     failingHook(dir)
     const error = (await convert(options(dir), io).catch((e: unknown) => e)) as Error
@@ -81,7 +80,7 @@ describe('convert rollback', () => {
     expect(head).not.toBe(extraHead)
     expect(git(dir, 'status', '--porcelain', '--untracked-files=all')).toBe('')
     expect(git(dir, 'show', 'HEAD:components/extra.tsx')).toContain('ml-2')
-    rmSync(join(dir, '.git/hooks/pre-commit'))
+    execFileSync('git', ['config', '--unset', 'commit.gpgsign'], { cwd: dir })
   })
 
   it('deletes a lockfile the install created when a later step fails', async () => {

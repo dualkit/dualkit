@@ -1,5 +1,5 @@
 import { execFileSync, spawnSync } from 'node:child_process'
-import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { findEnglish } from './missed'
 import type { AppResult } from './score'
@@ -75,6 +75,30 @@ function builds(root: string): { ok: boolean; tail: string } {
   return { ok: run.status === 0, tail: `${run.stdout ?? ''}${run.stderr ?? ''}`.trim().split('\n').filter((l) => !/^\s+at /.test(l)).slice(-12).join(' ').slice(0, 500) }
 }
 
+/** Each app gets its own port, so a server another app left behind cannot answer for this one. */
+const proofPort = (app: App): string => String(3200 + ([...app.id].reduce((sum, c) => sum + c.charCodeAt(0), 0) % 700))
+const startCommand = (app: App): string => (app.framework === 'next' ? `npx next dev -p ${proofPort(app)}` : `npx vite --port ${proofPort(app)}`)
+
+/** Fills the ledger with stand-in Arabic that keeps every placeholder and tag, so finish can run without a translator. */
+export function standInArabic(en: string): string {
+  const tags = [...en.matchAll(/<([a-z0-9]+)>(.*?)<\/\1>/g)].map((m) => `<${m[1]}>${m[2]}</${m[1]}>`)
+  const rest = [...en.replace(/<([a-z0-9]+)>.*?<\/\1>/g, ' ').matchAll(/\{[^}]*\}/g)].map((m) => m[0])
+  return ['نص عربي', ...tags, ...rest].join(' ')
+}
+
+/** Runs phase 2 on stand-in Arabic. Passed means English matched its baseline and the Arabic pages had no errors. */
+function finishes(root: string, cli: string, app: App): { ok: boolean; tail: string } {
+  const path = join(root, 'dualkit-strings.json')
+  const entries = (JSON.parse(readFileSync(path, 'utf8')) as { en: string }[]).map((e) => ({ ...e, ar: standInArabic(e.en), status: 'drafted' }))
+  writeFileSync(path, `${JSON.stringify(entries, null, 2)}\n`)
+  const run = spawnSync('node', [cli, 'convert', '--finish', '--start', startCommand(app), '--port', proofPort(app)], {
+    cwd: root, encoding: 'utf8', timeout: 1_800_000, env: { ...process.env, CI: '1' },
+  })
+  const report = join(root, 'dualkit-convert.md')
+  const failed = existsSync(report) ? readFileSync(report, 'utf8').split('\n').filter((l) => /: fail|[1-9]\d* errors?,|returned \d|Could not open|no result/.test(l)).slice(0, 4).join(' ') : ''
+  return { ok: run.status === 0, tail: (failed || `${run.stdout ?? ''}${run.stderr ?? ''}`.trim().slice(-300)).slice(0, 400) }
+}
+
 /** Errors in `after` beyond those in `before`, counted per file and code, because convert shifts line numbers. */
 export function newErrors(before: string[], after: string[]): number {
   const left = before.reduce((m, e) => m.set(e, (m.get(e) ?? 0) + 1), new Map<string, number>())
@@ -86,10 +110,10 @@ export function newErrors(before: string[], after: string[]): number {
 }
 
 /** Runs convert phase 1 on one app. A failure is a result, never a thrown error, so one app cannot stop the suite. */
-export function runApp(app: App, cache: string, cli: string, typecheck = false, build = false): AppResult {
+export function runApp(app: App, cache: string, cli: string, typecheck = false, build = false, phase2 = false): AppResult {
   const base = { id: app.id, repo: app.repo, commit: app.commit, framework: app.framework }
   const started = Date.now()
-  const finish = (rest: Pick<AppResult, 'outcome' | 'detail' | 'strings' | 'missed' | 'flags'> & Partial<Pick<AppResult, 'typeErrors' | 'buildBefore' | 'buildAfter' | 'buildDetail'>>): AppResult =>
+  const finish = (rest: Pick<AppResult, 'outcome' | 'detail' | 'strings' | 'missed' | 'flags'> & Partial<Pick<AppResult, 'typeErrors' | 'buildBefore' | 'buildAfter' | 'buildDetail' | 'finished' | 'finishDetail'>>): AppResult =>
     ({ ...base, ...rest, seconds: Math.round((Date.now() - started) / 1000) })
   try {
     const root = checkout(app, cache)
@@ -99,8 +123,9 @@ export function runApp(app: App, cache: string, cli: string, typecheck = false, 
       git(root, 'add', '-A')
       git(root, 'commit', '-q', '--allow-empty', '--no-verify', '-m', 'dependencies')
     }
-    const run = spawnSync('node', [cli, 'convert', '--mode', 'bilingual', '--no-install', '--no-baseline'], {
-      cwd: root, encoding: 'utf8', timeout: 300_000, env: { ...process.env, CI: '1' },
+    const phase1 = phase2 ? ['--start', startCommand(app), '--port', proofPort(app)] : ['--no-install', '--no-baseline']
+    const run = spawnSync('node', [cli, 'convert', '--mode', 'bilingual', ...phase1], {
+      cwd: root, encoding: 'utf8', timeout: 1_800_000, env: { ...process.env, CI: '1' },
     })
     const output = `${run.stdout ?? ''}${run.stderr ?? ''}`
     if (run.status !== 0) {
@@ -112,7 +137,12 @@ export function runApp(app: App, cache: string, cli: string, typecheck = false, 
     const built = buildBefore && buildAfter
       ? { buildBefore: buildBefore.ok, buildAfter: buildAfter.ok, buildDetail: buildAfter.ok ? '' : buildAfter.tail }
       : {}
-    return finish({ outcome: 'converted', detail: buildBefore && !buildBefore.ok ? buildBefore.tail : '', strings: ledgerSize(root), missed: countMissed(root), flags: flagCount(root), ...typed, ...built })
+    const strings = ledgerSize(root)
+    const missed = countMissed(root)
+    const flags = flagCount(root)
+    const done = phase2 ? finishes(root, cli, app) : null
+    const phased = done ? { finished: done.ok, finishDetail: done.ok ? '' : done.tail } : {}
+    return finish({ outcome: 'converted', detail: buildBefore && !buildBefore.ok ? buildBefore.tail : '', strings, missed, flags, ...typed, ...built, ...phased })
   } catch (error) {
     return finish({ outcome: 'crashed', detail: (error as Error).message.slice(0, 300), strings: 0, missed: 0, flags: 0 })
   }

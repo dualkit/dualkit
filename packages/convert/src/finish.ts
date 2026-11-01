@@ -9,6 +9,7 @@ import { MAX_DIFF_RATIO, compare } from './match'
 import { failFinish, snapshot } from './finish-undo'
 import { detectProject } from './project'
 import { renderConvertReport, type ReportData } from './report'
+import { closedRoutes } from './closed-routes'
 import { listRoutes } from './routes'
 import { startServer } from './server'
 import { STATE_DIR, STATE_FILE, readState, saveState } from './state'
@@ -23,11 +24,11 @@ const LOCALE_COOKIE = 'dk-locale'
 
 /** What phase 2 needs from outside: phase 1's io plus an accessibility audit and a lint count. */
 export type FinishIo = ConvertIo & {
-  audit: (url: string, width: number, options?: PageOptions) => Promise<{ score: number; errors: number; warnings: number }>
+  audit: (url: string, width: number, options?: PageOptions) => Promise<{ score: number; errors: number; warnings: number; problems?: string[] }>
   lint: (root: string) => Promise<number>
 }
 
-type Checks = Pick<ReportData, 'english' | 'arabic' | 'noBaseline'>
+type Checks = Pick<ReportData, 'english' | 'arabic' | 'noBaseline'> & { closed: ReportData['unreachable'] }
 
 /** The Arabic URL path for a route, and the cookies that select Arabic where the locale is not in the URL. */
 export function arabicTarget(project: Project, state: ConvertState, route: string): { path: string; options?: PageOptions } {
@@ -119,7 +120,7 @@ async function arabicChecks(project: Project, state: ConvertState, base: string,
       const result = await audit(`${base}${path}`, width, options)
       const usable = result && Number.isFinite(result.errors)
       const failed = { score: Number.NaN, errors: Number.NaN, warnings: Number.NaN }
-      arabic.push({ route: `${path} at ${width}px`, ...(usable ? result : failed) })
+      arabic.push({ route: `${path} at ${width}px`, ...(usable ? result : { ...failed, ...(result?.problems ? { problems: result.problems } : {}) }) })
     }
   }
   return arabic
@@ -137,7 +138,10 @@ async function runChecks(project: Project, state: ConvertState, routes: string[]
   try {
     step.name = 'checking the pages'
     const english = state.mode === 'bilingual' ? await englishChecks(project.root, server.url, routes, shoot) : { english: [], noBaseline: [] }
-    return { ...english, arabic: await arabicChecks(project, state, server.url, routes, audit) }
+    const closed = await closedRoutes(server.url, routes)
+    const shut = new Set(closed.map((c) => c.route))
+    const open = routes.filter((route) => !shut.has(route))
+    return { ...english, closed, arabic: await arabicChecks(project, state, server.url, open, audit) }
   } finally {
     await server.stop()
   }
@@ -183,7 +187,7 @@ async function run(ready: Ready, step: Step): Promise<{ reportPath: string; pass
   const data: ReportData = {
     mode: state.mode, base: state.base, branch: state.branch, summary: earlier ?? emptySummary(state, ledger.length), ledger, ...checks,
     ...(earlier ? {} : { summaryMissing: true }),
-    unreachable, remainingLint, ...(tests ? { tests: { code: tests.code, tail: tail(tests.out) } } : {}),
+    unreachable: [...unreachable, ...checks.closed], remainingLint, ...(tests ? { tests: { code: tests.code, tail: tail(tests.out) } } : {}),
   }
   writeFileSync(join(root, REPORT_FILE), renderConvertReport(data))
   step.name = 'saving the state'
