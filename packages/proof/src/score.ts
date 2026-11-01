@@ -5,6 +5,10 @@ export type AppResult = {
   strings: number; missed: number; flags: number; seconds: number
   /** Type errors convert added. Absent when the run skipped type checking. */
   typeErrors?: number
+  /** Whether the app built before and after converting. Absent when the run skipped builds. */
+  buildBefore?: boolean
+  buildAfter?: boolean
+  buildDetail?: string
 }
 
 /** Share of user-facing strings convert caught, as a whole percent. 0 when nothing was found. */
@@ -17,14 +21,22 @@ export function summarise(results: AppResult[]) {
   const strings = done.reduce((n, r) => n + r.strings, 0)
   const missed = done.reduce((n, r) => n + r.missed, 0)
   const typeErrors = done.reduce((n, r) => n + (r.typeErrors ?? 0), 0)
-  return { apps: results.length, converted: done.length, strings, missed, coverage: coverage(strings, missed), typeErrors }
+  const buildable = done.filter((r) => r.buildBefore)
+  const built = buildable.filter((r) => r.buildAfter).length
+  return { apps: results.length, converted: done.length, strings, missed, coverage: coverage(strings, missed), typeErrors, buildable: buildable.length, built }
+}
+
+const buildCell = (r: AppResult): string => {
+  if (r.buildBefore === undefined) return '-'
+  if (!r.buildBefore) return 'not buildable before'
+  return r.buildAfter ? 'yes' : 'no'
 }
 
 /** The scoreboard as Markdown. */
 export function scoreboard(results: AppResult[], date: string): string {
   const s = summarise(results)
   const rows = results.map((r) =>
-    `| [${r.id}](https://github.com/${r.repo}/tree/${r.commit}) | ${r.framework} | ${r.outcome} | ${r.strings} | ${r.missed} | ${r.outcome === 'converted' ? `${coverage(r.strings, r.missed)}%` : '-'} | ${r.flags} | ${r.typeErrors ?? '-'} |`)
+    `| [${r.id}](https://github.com/${r.repo}/tree/${r.commit}) | ${r.framework} | ${r.outcome} | ${r.strings} | ${r.missed} | ${r.outcome === 'converted' ? `${coverage(r.strings, r.missed)}%` : '-'} | ${r.flags} | ${r.typeErrors ?? '-'} | ${buildCell(r)} |`)
   return [
     '# Dualkit proof scoreboard', '',
     `Measured ${date}. Convert ran on ${s.apps} real open-source apps, each pinned to one commit.`, '',
@@ -32,11 +44,12 @@ export function scoreboard(results: AppResult[], date: string): string {
     `- Strings moved into translation files: ${s.strings}`,
     `- English strings left behind: ${s.missed}`,
     `- String coverage: ${s.coverage}%`,
-    `- New type errors after converting: ${s.typeErrors}`, '',
-    'This run covers phase 1 and a TypeScript check before and after. It does not yet measure a production build or whether `--finish` passes.',
+    `- New type errors after converting: ${s.typeErrors}`,
+    `- Apps that still build after converting: ${s.built} of ${s.buildable} that built before`, '',
+    'This run covers phase 1, a TypeScript check and a production build before and after. It does not yet measure whether `--finish` passes.',
     'The left-behind count comes from a separate scanner, and it is a floor because that scanner cannot see strings built at run time.', '',
-    '| App | Framework | Outcome | Strings | Left behind | Coverage | Flags | New type errors |',
-    '| --- | --- | --- | --- | --- | --- | --- | --- |',
+    '| App | Framework | Outcome | Strings | Left behind | Coverage | Flags | New type errors | Builds after |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- | --- |',
     ...rows, '',
   ].join('\n')
 }

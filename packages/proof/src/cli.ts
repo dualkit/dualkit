@@ -6,7 +6,8 @@ import { scoreboard, summarise } from './score'
 
 const repo = resolve(import.meta.dirname, '../../..')
 const args = process.argv.slice(2)
-const typecheck = args.includes('--typecheck')
+const build = args.includes('--build')
+const typecheck = build || args.includes('--typecheck')
 const only = args.find((a) => !a.startsWith('--'))
 const apps = (JSON.parse(readFileSync(join(import.meta.dirname, '../apps.json'), 'utf8')) as App[]).filter((a) => !only || a.id === only)
 if (apps.length === 0) throw new Error(`No app named ${only} in apps.json.`)
@@ -14,7 +15,7 @@ if (apps.length === 0) throw new Error(`No app named ${only} in apps.json.`)
 const cache = process.env.DUALKIT_PROOF_CACHE ?? join(tmpdir(), 'dualkit-proof')
 const cli = join(repo, 'packages/cli/dist/cli.js')
 const results = apps.map((app) => {
-  const result = runApp(app, cache, cli, typecheck)
+  const result = runApp(app, cache, cli, typecheck, build)
   console.log(`${app.id}: ${result.outcome} strings=${result.strings} missed=${result.missed} ${result.seconds}s ${result.detail}`)
   return result
 })

@@ -12,7 +12,7 @@ describe('score', () => {
   })
   it('leaves failed apps out of the string totals', () => {
     const s = summarise([app({}), app({ id: 'b', outcome: 'crashed', strings: 0, missed: 500 })])
-    expect(s).toEqual({ apps: 2, converted: 1, strings: 90, missed: 10, coverage: 90, typeErrors: 0 })
+    expect(s).toEqual({ apps: 2, converted: 1, strings: 90, missed: 10, coverage: 90, typeErrors: 0, buildable: 0, built: 0 })
   })
   it('states what the run does not measure', () => {
     expect(scoreboard([app({})], '2026-11-01')).toContain('does not yet measure')
@@ -24,5 +24,12 @@ describe('newErrors', () => {
     const { newErrors } = await import('../src/run')
     expect(newErrors(['a TS1', 'a TS1'], ['a TS1', 'a TS1', 'a TS1', 'b TS2'])).toBe(2)
     expect(newErrors(['a TS1'], [])).toBe(0)
+  })
+})
+
+describe('build score', () => {
+  it('counts only apps that built before converting', () => {
+    const s = summarise([app({ buildBefore: true, buildAfter: true }), app({ buildBefore: true, buildAfter: false }), app({ buildBefore: false, buildAfter: false })])
+    expect(s).toMatchObject({ buildable: 2, built: 1 })
   })
 })
