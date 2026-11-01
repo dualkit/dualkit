@@ -69,6 +69,19 @@ export async function applyPlan(disk: Disk, plan: Plan): Promise<AppliedPlan> {
 
 const json = (value: unknown): string => JSON.stringify(value, null, 2) + '\n'
 
+type Messages = { [key: string]: unknown }
+const isMessages = (value: unknown): value is Messages => typeof value === 'object' && value !== null && !Array.isArray(value)
+
+/** The generated messages plus any keys only the existing file has. Generated values win, so the ledger stays the source of truth. */
+export function keepHandAdded(existing: Messages, generated: Messages): Messages {
+  const kept = Object.entries(existing).map(([key, value]) => {
+    const fresh = generated[key]
+    if (fresh === undefined) return [key, value] as const
+    return [key, isMessages(value) && isMessages(fresh) ? keepHandAdded(value, fresh) : fresh] as const
+  })
+  return { ...generated, ...Object.fromEntries(kept) }
+}
+
 /** Both messages files, by root-relative path, built from the ledger. */
 export const messagesFiles = (ledger: LedgerEntry[]): Record<string, string> => ({
   [messagesPath('en')]: json(messagesFor(ledger, 'en')),

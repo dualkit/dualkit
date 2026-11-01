@@ -89,6 +89,15 @@ describe('finish refusals', () => {
 })
 
 describe('finish --force', () => {
+  it('keeps keys a person added to the messages files by hand', async () => {
+    const p = await freePort()
+    const dir = await converted('next-app', 'bilingual', 'pending', ['/', '/pricing', '/settings'])
+    const ar = JSON.parse(read(dir, 'messages/ar.json')) as Record<string, unknown>
+    writeFileSync(join(dir, 'messages/ar.json'), JSON.stringify({ ...ar, handAdded: { title: 'مرحبا' } }))
+    await finish({ root: dir, force: true }, finishIo(p))
+    expect(JSON.parse(read(dir, 'messages/ar.json'))).toMatchObject({ handAdded: { title: 'مرحبا' } })
+  })
+
   it('writes both messages files with English for pending entries, lists them, and commits', async () => {
     const p = await freePort()
     const dir = await converted('next-app', 'bilingual', 'pending', ['/', '/pricing', '/settings'])

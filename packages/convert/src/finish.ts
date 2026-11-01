@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { messagesFiles, messagesPath, writeText, type Disk } from './apply'
+import { keepHandAdded, messagesFiles, messagesPath, writeText, type Disk } from './apply'
 import { DEFAULT_PORTS, WIDTHS, baselinePath, routeSlug } from './baseline'
 import { CONFIG_FILE, checkConfigAnswers, writeConfigAnswers } from './config-answers'
 import { RefusedError, commit, currentBranch, stage, stagedFiles } from './git'
@@ -69,7 +69,20 @@ function pendingCheck(ledger: LedgerEntry[], force: boolean | undefined): void {
 /** Writes both messages files from the ledger. */
 function writeMessages(root: string, ledger: LedgerEntry[]): void {
   const disk: Disk = { root, created: [] }
-  for (const [path, text] of Object.entries(messagesFiles(ledger))) writeText(disk, path, text)
+  for (const [path, text] of Object.entries(messagesFiles(ledger))) writeText(disk, path, mergedMessages(root, path, text))
+}
+
+/** The generated file with hand-added keys kept. An existing file that cannot be read as JSON is replaced, as it always was. */
+function mergedMessages(root: string, path: string, generated: string): string {
+  const full = join(root, path)
+  if (!existsSync(full)) return generated
+  try {
+    const existing: unknown = JSON.parse(readFileSync(full, 'utf8'))
+    if (typeof existing !== 'object' || existing === null) return generated
+    return JSON.stringify(keepHandAdded(existing as Record<string, unknown>, JSON.parse(generated) as Record<string, unknown>), null, 2) + '\n'
+  } catch {
+    return generated
+  }
 }
 
 /** Shoots English at each width and compares it with the baseline. A page with no baseline is listed instead. */
