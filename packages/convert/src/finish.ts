@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { keepHandAdded, messagesFiles, messagesPath, writeText, type Disk } from './apply'
-import { DEFAULT_PORTS, WIDTHS, baselinePath, routeSlug } from './baseline'
+import { CLOSED_FILE, DEFAULT_PORTS, WIDTHS, baselinePath, routeSlug } from './baseline'
 import { CONFIG_FILE, checkConfigAnswers, writeConfigAnswers } from './config-answers'
 import { RefusedError, commit, currentBranch, stage, stagedFiles } from './git'
 import { LEDGER_FILE, readLedger, type LedgerEntry, brokenMarks } from './ledger'
@@ -126,6 +126,17 @@ async function arabicChecks(project: Project, state: ConvertState, base: string,
   return arabic
 }
 
+function closedAtBaseline(root: string): Set<string> {
+  const path = join(root, CLOSED_FILE)
+  if (!existsSync(path)) return new Set()
+  try {
+    const routes: unknown = JSON.parse(readFileSync(path, 'utf8'))
+    return new Set(Array.isArray(routes) ? routes.filter((r): r is string => typeof r === 'string') : [])
+  } catch {
+    return new Set()
+  }
+}
+
 /** Starts the app, runs every page check and stops the server, also when a check throws. */
 async function runChecks(project: Project, state: ConvertState, routes: string[], { config, shoot, audit }: FinishIo, step: Step): Promise<Checks> {
   const { start: cmd } = config
@@ -137,10 +148,13 @@ async function runChecks(project: Project, state: ConvertState, routes: string[]
   })
   try {
     step.name = 'checking the pages'
-    const english = state.mode === 'bilingual' ? await englishChecks(project.root, server.url, routes, shoot) : { english: [], noBaseline: [] }
     const closed = await closedRoutes(server.url, routes)
     const shut = new Set(closed.map((c) => c.route))
     const open = routes.filter((route) => !shut.has(route))
+    // A page shut then and now is an error page twice. One shut only now stays in, so a page convert broke still fails.
+    const before = closedAtBaseline(project.root)
+    const compared = routes.filter((route) => !(shut.has(route) && before.has(route)))
+    const english = state.mode === 'bilingual' ? await englishChecks(project.root, server.url, compared, shoot) : { english: [], noBaseline: [] }
     return { ...english, closed, arabic: await arabicChecks(project, state, server.url, open, audit) }
   } finally {
     await server.stop()

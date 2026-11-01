@@ -175,6 +175,18 @@ function groups(fragments: readonly ClassFragment[]): ClassFragment[][] {
  * Converts physical Tailwind classes to logical ones for the given Tailwind version, flags classes with
  * no logical form, and flags computed className templates. Below 3.3.0 it edits nothing.
  */
+const TRACKED = /^tracking-(?!normal$)/
+
+/** Letter-spacing breaks the joins between Arabic letters, so tracking goes off in rtl, once per class list. */
+function trackingEdits(fragments: readonly ClassFragment[]): Edit[] {
+  const tokens = tokensOf(fragments)
+  if (tokens.some((t) => t.parsed.core.startsWith('tracking-') && t.parsed.variants.includes('rtl'))) return []
+  const first = tokens.find((t) => TRACKED.test(t.parsed.core) && KEPT(t))
+  if (!first) return []
+  const end = first.at + first.text.length
+  return [{ start: end, end, text: ' rtl:tracking-normal' }]
+}
+
 export function tailwindEdits(file: SourceFile, version: string | null): FileResult {
   const parsed = parseVersion(version)
   const fragments = classStrings(file)
@@ -187,7 +199,7 @@ export function tailwindEdits(file: SourceFile, version: string | null): FileRes
     return { edits: [], flags: [{ file: file.path, line: lineOf(file.text, first.offset), kind: 'unsupported', message, suggestion }] }
   }
   const sources = groups(fragments)
-  const edits = sources.flatMap((g) => [...physicalEdits(g, parsed), ...(parsed[0] < 4 ? reverseEdits(g) : [])])
+  const edits = sources.flatMap((g) => [...physicalEdits(g, parsed), ...(parsed[0] < 4 ? reverseEdits(g) : []), ...trackingEdits(g)])
   const flags = [...sources.flatMap((g) => formFlags(file, g)), ...computedFlags(file)]
   return { edits, flags: flags.sort((a, b) => a.line - b.line) }
 }

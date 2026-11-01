@@ -66,18 +66,27 @@ function typeErrors(root: string): string[] {
   })
 }
 
+/** Stand-in settings, so an app can build and serve without real secrets. Pages that need the real service stay shut. */
+const PLACEHOLDERS: Record<string, string> = {
+  CI: '1', NEXT_TELEMETRY_DISABLED: '1', SKIP_ENV_VALIDATION: '1', DATABASE_URL: 'postgres://proof:proof@localhost:5432/proof', POSTGRES_URL: 'postgres://proof:proof@localhost:5432/proof', AUTH_SECRET: 'proof', NEXTAUTH_SECRET: 'proof', NEXT_PUBLIC_APP_URL: 'http://localhost:3000', STRIPE_SECRET_KEY: 'sk_test_proof', STRIPE_WEBHOOK_SECRET: 'whsec_proof',
+  STRIPE_API_KEY: 'sk_test_proof', STRIPE_PRO_MONTHLY_PLAN_ID: 'price_proof', NEXTAUTH_URL: 'http://localhost:3000', BASE_URL: 'http://localhost:3000',
+  GITHUB_CLIENT_ID: 'proof', GITHUB_CLIENT_SECRET: 'proof', GITHUB_ACCESS_TOKEN: 'proof', SMTP_FROM: 'proof@example.com',
+  POSTMARK_API_TOKEN: 'proof', POSTMARK_SIGN_IN_TEMPLATE: 'proof', POSTMARK_ACTIVATION_TEMPLATE: 'proof',
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: `pk_test_${Buffer.from('proof.clerk.accounts.dev$').toString('base64')}`, CLERK_SECRET_KEY: 'sk_test_proof',
+}
+
 /** The app's own build script, with placeholder settings so a build does not need real secrets. */
 function builds(root: string): { ok: boolean; tail: string } {
-  const placeholders = { CI: '1', NEXT_TELEMETRY_DISABLED: '1', SKIP_ENV_VALIDATION: '1', DATABASE_URL: 'postgres://proof:proof@localhost:5432/proof', POSTGRES_URL: 'postgres://proof:proof@localhost:5432/proof', AUTH_SECRET: 'proof', NEXTAUTH_SECRET: 'proof', NEXT_PUBLIC_APP_URL: 'http://localhost:3000', STRIPE_SECRET_KEY: 'sk_test_proof', STRIPE_WEBHOOK_SECRET: 'whsec_proof' }
-  const attempt = () => spawnSync('npm', ['run', 'build'], { cwd: root, encoding: 'utf8', timeout: 420_000, env: { ...process.env, ...placeholders } })
+  const attempt = () => spawnSync('npm', ['run', 'build'], { cwd: root, encoding: 'utf8', timeout: 420_000, env: { ...process.env, ...PLACEHOLDERS } })
   const first = attempt()
   const run = first.status === 0 ? first : attempt()
   return { ok: run.status === 0, tail: `${run.stdout ?? ''}${run.stderr ?? ''}`.trim().split('\n').filter((l) => !/^\s+at /.test(l)).slice(-12).join(' ').slice(0, 500) }
 }
 
+// CI is cleared for next dev because recent Next versions quit at a security notice under CI, on apps pinned to an old release.
 /** Each app gets its own port, so a server another app left behind cannot answer for this one. */
 const proofPort = (app: App): string => String(3200 + ([...app.id].reduce((sum, c) => sum + c.charCodeAt(0), 0) % 700))
-const startCommand = (app: App): string => (app.framework === 'next' ? `npx next dev -p ${proofPort(app)}` : `npx vite --port ${proofPort(app)}`)
+const startCommand = (app: App): string => (app.framework === 'next' ? `env -u CI npx next dev -p ${proofPort(app)}` : `npx vite --port ${proofPort(app)}`)
 
 /** Fills the ledger with stand-in Arabic that keeps every placeholder and tag, so finish can run without a translator. */
 export function standInArabic(en: string): string {
@@ -92,7 +101,7 @@ function finishes(root: string, cli: string, app: App): { ok: boolean; tail: str
   const entries = (JSON.parse(readFileSync(path, 'utf8')) as { en: string }[]).map((e) => ({ ...e, ar: standInArabic(e.en), status: 'drafted' }))
   writeFileSync(path, `${JSON.stringify(entries, null, 2)}\n`)
   const run = spawnSync('node', [cli, 'convert', '--finish', '--start', startCommand(app), '--port', proofPort(app)], {
-    cwd: root, encoding: 'utf8', timeout: 1_800_000, env: { ...process.env, CI: '1' },
+    cwd: root, encoding: 'utf8', timeout: 1_800_000, env: { ...process.env, ...PLACEHOLDERS, CI: '1' },
   })
   const report = join(root, 'dualkit-convert.md')
   const failed = existsSync(report) ? readFileSync(report, 'utf8').split('\n').filter((l) => /: fail|[1-9]\d* errors?,|returned \d|Could not open|no result/.test(l)).slice(0, 4).join(' ') : ''
@@ -125,7 +134,7 @@ export function runApp(app: App, cache: string, cli: string, typecheck = false, 
     }
     const phase1 = phase2 ? ['--start', startCommand(app), '--port', proofPort(app)] : ['--no-install', '--no-baseline']
     const run = spawnSync('node', [cli, 'convert', '--mode', 'bilingual', ...phase1], {
-      cwd: root, encoding: 'utf8', timeout: 1_800_000, env: { ...process.env, CI: '1' },
+      cwd: root, encoding: 'utf8', timeout: 1_800_000, env: { ...process.env, ...PLACEHOLDERS, CI: '1' },
     })
     const output = `${run.stdout ?? ''}${run.stderr ?? ''}`
     if (run.status !== 0) {
