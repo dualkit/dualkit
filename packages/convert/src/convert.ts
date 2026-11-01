@@ -10,6 +10,8 @@ import { RefusedError, assertCleanRepo, branchExists, createBranch, currentBranc
 import { LEDGER_FILE, mergeLedger, readLedger, type LedgerEntry } from './ledger'
 import { physicalContext } from './lint-context'
 import { runPasses, type PassContext, type PassKind } from './passes'
+import { liftData, type DataResult } from './transforms/data'
+import type { Lib } from './transforms/strings'
 import { UnsupportedError, detectProject, existingI18n } from './project'
 import { rollBack } from './rollback'
 import { STATE_FILE, readState } from './state'
@@ -41,9 +43,12 @@ function transformAll(project: Project, generated: ReadonlySet<string>, taken: R
     css: physicalContext(root),
   }
   const out: Transformed = { texts: new Map(), edits: 0, byKind: { tailwind: 0, css: 0, markup: 0, strings: 0, formats: 0 }, perFile: new Map(), flags: [], entries: [], skipped: [...walked.skipped] }
+  const lifted = lift(project, walked.files.filter((path) => !generated.has(path)), ctx.lib, used)
+  out.entries.push(...lifted.entries)
+  for (const entry of lifted.entries) used.add(entry.key)
   for (const path of walked.files) {
     if (generated.has(path)) continue
-    const raw = readText(root, path)
+    const raw = lifted.texts.get(path) ?? readText(root, path)
     if (raw === null) { out.skipped.push({ file: path, reason: 'unreadable' }); continue }
     if (isMinified(raw)) { out.skipped.push({ file: path, reason: 'minified' }); continue }
     const result = runPasses(path, raw, join(root, path), { ...ctx, taken: used })
@@ -51,13 +56,22 @@ function transformAll(project: Project, generated: ReadonlySet<string>, taken: R
     out.flags.push(...result.flags)
     out.entries.push(...result.entries)
     for (const entry of result.entries) used.add(entry.key)
-    if (result.edits === 0) continue
+    if (result.edits === 0 && !lifted.texts.has(path)) continue
     out.edits += result.edits
     for (const kind of Object.keys(out.byKind) as PassKind[]) out.byKind[kind] += result.byKind[kind]
     out.perFile.set(path, result.edits)
     out.texts.set(path, raw.startsWith(BOM) ? BOM + result.text : result.text)
   }
   return out
+}
+
+/** Moves text out of module-level data first, so the passes after it see the rewritten files. */
+function lift(project: Project, paths: string[], lib: Lib, taken: ReadonlySet<string>): DataResult {
+  const inputs = paths.flatMap((path) => {
+    const text = /\.[jt]sx?$/.test(path) ? readText(project.root, path) : null
+    return text !== null && !text.startsWith(BOM) && !isMinified(text) ? [{ path, text }] : []
+  })
+  return liftData(inputs, lib, taken)
 }
 
 /** Applied edits per file at post-move paths, sorted by file. */
