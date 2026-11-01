@@ -49,6 +49,8 @@ Fresh agents built the same bilingual checkout three times without the skills an
 
 Three runs is a smoke test, not a benchmark. The task, the scorer and every run are in [`evals/payment-summary`](evals/payment-summary/RESULTS.md).
 
+We also run Convert on 10 real open-source apps and publish the score, including the failures. Today it converts 6 of 10 and catches 67% of their strings. See the [scoreboard](docs/proof/scoreboard.md).
+
 ## Skills
 
 The skills are listed in the Claude plugin directory, so you can install them from there in Claude Code, Cowork and the Claude apps. Or, in Claude Code:
@@ -176,6 +178,8 @@ The most useful help right now:
 | `apps/site` | dualkit.dev (Next.js) |
 | `design` | Figma specs, tokens and the motion prototype the site was built from |
 | `evals` | Baseline evaluations for the skills |
+| `packages/proof` | The public scoreboard run on real apps |
+| `docs/agent` | The playbook for the daily improvement agent |
 
 ```
 npm install
