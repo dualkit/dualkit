@@ -4,13 +4,288 @@
   "screen": "profile",
   "condition": "alone",
   "run": 3,
-  "at": "2026-11-01T12:27:24.826Z",
-  "reply": null,
-  "usage": null,
-  "finish": null,
-  "reasoningTokens": null,
-  "servedModel": null,
-  "ms": 228562,
-  "ok": false,
-  "error": "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a"
+  "at": "2026-11-02T13:00:51.979Z",
+  "reply": "```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>الملف الشخصي - محفظة الإمارات</title>\n  <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n  <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n  <link href=\"https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap\" rel=\"stylesheet\">\n  <style>\n    :root {\n      --primary: #007A53; /* UAE Flag Green inspired tone */\n      --primary-dark: #005A3D;\n      --primary-light: #E8F5EE;\n      --accent-gold: #C69214;\n      --bg-body: #F4F6F8;\n      --surface: #FFFFFF;\n      --text-main: #141A24;\n      --text-muted: #6B7280;\n      --border: #E5E7EB;\n      --radius-lg: 20px;\n      --radius-md: 14px;\n      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);\n      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.06);\n    }\n\n    * {\n      box-sizing: border-box;\n      margin: 0;\n      padding: 0;\n      font-family: 'Tajawal', sans-serif;\n      -webkit-tap-highlight-color: transparent;\n    }\n\n    body {\n      background: #0D161F;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      min-height: 100vh;\n      color: var(--text-main);\n      padding: 16px;\n    }\n\n    /* Mobile Container Frame */\n    .mobile-wrapper {\n      width: 100%;\n      max-width: 412px;\n      background: var(--bg-body);\n      min-height: 844px;\n      border-radius: 40px;\n      overflow: hidden;\n      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4), 0 0 0 10px #1E2733;\n      display: flex;\n      flex-direction: column;\n      position: relative;\n    }\n\n    /* Status Bar */\n    .status-bar {\n      display: flex;\n      justify-content: space-between;\n      align-items: center;\n      padding: 14px 28px 8px;\n      font-size: 13px;\n      font-weight: 700;\n      color: #0E1726;\n      direction: ltr;\n    }\n\n    .status-bar .icons {\n      display: flex;\n      gap: 6px;\n      align-items: center;\n    }\n\n    /* Navigation Header */\n    .app-header {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      padding: 12px 20px 18px;\n    }\n\n    .header-btn {\n      width: 40px;\n      height: 40px;\n      border-radius: 12px;\n      background: var(--surface);\n      border: 1px solid var(--border);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      cursor: pointer;\n      color: var(--text-main);\n      transition: all 0.2s;\n    }\n\n    .header-btn:hover {\n      background: #f1f5f9;\n    }\n\n    .header-title {\n      font-size: 18px;\n      font-weight: 700;\n      color: var(--text-main);\n    }\n\n    /* Main Content */\n    .screen-content {\n      flex: 1;\n      padding: 0 20px 24px;\n      overflow-y: auto;\n    }\n\n    /* User Header Card */\n    .profile-hero {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      margin-bottom: 20px;\n      position: relative;\n    }\n\n    .avatar-wrap {\n      position: relative;\n      margin-bottom: 12px;\n    }\n\n    .avatar {\n      width: 86px;\n      height: 86px;\n      border-radius: 50%;\n      background: linear-gradient(135deg, #007A53, #00B176);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      color: white;\n      font-size: 30px;\n      font-weight: 800;\n      border: 4px solid var(--surface);\n      box-shadow: var(--shadow-md);\n    }\n\n    .badge-verified {\n      position: absolute;\n      bottom: -2px;\n      left: 50%;\n      transform: translateX(-50%);\n      background: #007A53;\n      color: #ffffff;\n      padding: 2px 8px;\n      border-radius: 20px;\n      font-size: 11px;\n      font-weight: 700;\n      display: flex;\n      align-items: center;\n      gap: 4px;\n      white-space: nowrap;\n      border: 2px solid var(--surface);\n    }\n\n    .uae-pass-pill {\n      display: inline-flex;\n      align-items: center;\n      gap: 6px;\n      background: #F1F4F9;\n      border: 1px solid #DCE3EC;\n      padding: 6px 14px;\n      border-radius: 30px;\n      font-size: 12px;\n      color: #2D3748;\n      font-weight: 600;\n      margin-top: 4px;\n    }\n\n    .uae-flag {\n      width: 16px;\n      height: 11px;\n      display: inline-block;\n      border-radius: 2px;\n      overflow: hidden;\n      box-shadow: 0 0 2px rgba(0,0,0,0.2);\n    }\n\n    /* Section Title */\n    .section-title {\n      font-size: 13px;\n      font-weight: 700;\n      color: var(--text-muted);\n      margin: 18px 4px 10px;\n      text-transform: uppercase;\n      letter-spacing: 0.5px;\n    }\n\n    /* Info Cards */\n    .info-card {\n      background: var(--surface);\n      border-radius: var(--radius-lg);\n      padding: 16px;\n      margin-bottom: 12px;\n      box-shadow: var(--shadow-sm);\n      border: 1px solid rgba(229, 231, 235, 0.8);\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      gap: 12px;\n      transition: transform 0.15s ease, box-shadow 0.15s ease;\n    }\n\n    .info-card:hover {\n      box-shadow: var(--shadow-md);\n    }\n\n    .card-right {\n      display: flex;\n      align-items: center;\n      gap: 14px;\n      flex: 1;\n      min-width: 0;\n    }\n\n    .icon-box {\n      width: 44px;\n      height: 44px;\n      border-radius: 12px;\n      background: var(--primary-light);\n      color: var(--primary);\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      flex-shrink: 0;\n    }\n\n    .info-texts {\n      display: flex;\n      flex-direction: column;\n      gap: 3px;\n      overflow: hidden;\n    }\n\n    .info-label {\n      font-size: 12px;\n      color: var(--text-muted);\n      font-weight: 500;\n    }\n\n    .info-primary {\n      font-size: 15px;\n      font-weight: 700;\n      color: var(--text-main);\n      white-space: nowrap;\n      overflow: hidden;\n      text-overflow: ellipsis;\n    }\n\n    .info-secondary {\n      font-size: 13px;\n      color: #4B5563;\n      direction: ltr;\n      text-align: right;\n    }\n\n    .number-ltr {\n      direction: ltr;\n      text-align: right;\n      font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;\n      font-weight: 600;\n      letter-spacing: 0.3px;\n    }\n\n    .iban-code {\n      font-size: 13.5px;\n      font-family: \"Courier New\", Courier, monospace;\n      font-weight: 700;\n      letter-spacing: 0.5px;\n      word-spacing: 2px;\n      color: #1F2937;\n    }\n\n    /* Edit Button */\n    .btn-edit {\n      background: #F3F4F6;\n      border: 1px solid #E5E7EB;\n      color: var(--primary);\n      padding: 7px 14px;\n      border-radius: 10px;\n      font-size: 13px;\n      font-weight: 700;\n      cursor: pointer;\n      display: inline-flex;\n      align-items: center;\n      gap: 5px;\n      transition: all 0.2s;\n      flex-shrink: 0;\n    }\n\n    .btn-edit:hover {\n      background: var(--primary);\n      color: #fff;\n      border-color: var(--primary);\n    }\n\n    .btn-edit svg {\n      width: 14px;\n      height: 14px;\n    }\n\n    /* Quick Shortcuts section */\n    .extra-settings {\n      background: var(--surface);\n      border-radius: var(--radius-lg);\n      border: 1px solid rgba(229, 231, 235, 0.8);\n      overflow: hidden;\n      margin-top: 14px;\n    }\n\n    .setting-item {\n      display: flex;\n      align-items: center;\n      justify-content: space-between;\n      padding: 14px 16px;\n      cursor: pointer;\n      transition: background 0.15s;\n    }\n\n    .setting-item:not(:last-child) {\n      border-bottom: 1px solid #F3F4F6;\n    }\n\n    .setting-item:hover {\n      background: #F9FAFB;\n    }\n\n    .setting-left {\n      display: flex;\n      align-items: center;\n      gap: 12px;\n      font-size: 14px;\n      font-weight: 600;\n      color: var(--text-main);\n    }\n\n    .setting-left svg {\n      color: var(--text-muted);\n    }\n\n    .chevron {\n      color: #9CA3AF;\n      transform: scaleX(-1);\n    }\n\n    /* Bottom Navigation */\n    .bottom-nav {\n      background: var(--surface);\n      border-top: 1px solid var(--border);\n      padding: 10px 20px 20px;\n      display: flex;\n      justify-content: space-around;\n      align-items: center;\n    }\n\n    .nav-link {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      gap: 4px;\n      color: var(--text-muted);\n      text-decoration: none;\n      font-size: 11px;\n      font-weight: 600;\n    }\n\n    .nav-link.active {\n      color: var(--primary);\n    }\n\n    .nav-link svg {\n      width: 22px;\n      height: 22px;\n    }\n\n    /* Modal for Editing */\n    .modal-overlay {\n      position: absolute;\n      inset: 0;\n      background: rgba(10, 16, 26, 0.65);\n      backdrop-filter: blur(4px);\n      display: none;\n      align-items: flex-end;\n      z-index: 100;\n      border-radius: 40px;\n    }\n\n    .modal-overlay.open {\n      display: flex;\n      animation: fadeIn 0.2s ease forwards;\n    }\n\n    .modal-sheet {\n      background: var(--surface);\n      width: 100%;\n      border-radius: 28px 28px 0 0;\n      padding: 24px 20px 30px;\n      animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;\n      box-shadow: 0 -10px 30px rgba(0,0,0,0.15);\n    }\n\n    .modal-drag {\n      width: 40px;\n      height: 4px;\n      background: #D1D5DB;\n      border-radius: 2px;\n      margin: 0 auto 16px;\n    }\n\n    .modal-title {\n      font-size: 17px;\n      font-weight: 700;\n      margin-bottom: 6px;\n      color: var(--text-main);\n    }\n\n    .modal-desc {\n      font-size: 13px;\n      color: var(--text-muted);\n      margin-bottom: 18px;\n    }\n\n    .modal-field {\n      margin-bottom: 14px;\n    }\n\n    .modal-field label {\n      display: block;\n      font-size: 12px;\n      font-weight: 700;\n      color: var(--text-main);\n      margin-bottom: 6px;\n    }\n\n    .modal-field input {\n      width: 100%;\n      padding: 12px 14px;\n      border-radius: 12px;\n      border: 1.5px solid var(--border);\n      font-size: 14px;\n      color: var(--text-main);\n      outline: none;\n      transition: border-color 0.2s;\n    }\n\n    .modal-field input:focus {\n      border-color: var(--primary);\n    }\n\n    .modal-buttons {\n      display: flex;\n      gap: 10px;\n      margin-top: 20px;\n    }\n\n    .btn-modal-save {\n      flex: 1;\n      background: var(--primary);\n      color: #fff;\n      border: none;\n      padding: 12px;\n      border-radius: 12px;\n      font-size: 14px;\n      font-weight: 700;\n      cursor: pointer;\n    }\n\n    .btn-modal-cancel {\n      flex: 1;\n      background: #F3F4F6;\n      color: #4B5563;\n      border: none;\n      padding: 12px;\n      border-radius: 12px;\n      font-size: 14px;\n      font-weight: 600;\n      cursor: pointer;\n    }\n\n    /* Toast */\n    .toast {\n      position: absolute;\n      top: 55px;\n      left: 50%;\n      transform: translateX(-50%) translateY(-20px);\n      background: #111827;\n      color: #fff;\n      padding: 10px 18px;\n      border-radius: 30px;\n      font-size: 13px;\n      font-weight: 600;\n      display: flex;\n      align-items: center;\n      gap: 8px;\n      opacity: 0;\n      pointer-events: none;\n      transition: all 0.25s ease;\n      z-index: 200;\n      box-shadow: var(--shadow-md);\n      white-space: nowrap;\n    }\n\n    .toast.show {\n      opacity: 1;\n      transform: translateX(-50%) translateY(0);\n    }\n\n    @keyframes slideUp {\n      from { transform: translateY(100%); }\n      to { transform: translateY(0); }\n    }\n\n    @keyframes fadeIn {\n      from { opacity: 0; }\n      to { opacity: 1; }\n    }\n  </style>\n</head>\n<body>\n\n  <div class=\"mobile-wrapper\">\n    <!-- Top System Bar -->\n    <div class=\"status-bar\">\n      <span>9:41</span>\n      <div class=\"icons\">\n        <span>5G</span>\n        <svg width=\"15\" height=\"11\" viewBox=\"0 0 16 12\" fill=\"none\">\n          <path d=\"M1 8.5C2.5 7 5 6 8 6C11 6 13.5 7 15 8.5M4 11C5.2 10 6.5 9.5 8 9.5C9.5 9.5 10.8 10 12 11\" stroke=\"#0E1726\" stroke-width=\"1.6\" stroke-linecap=\"round\"/>\n        </svg>\n        <svg width=\"22\" height=\"11\" viewBox=\"0 0 24 12\" fill=\"none\">\n          <rect x=\"1\" y=\"1\" width=\"19\" height=\"10\" rx=\"3\" stroke=\"#0E1726\" stroke-width=\"1.8\"/>\n          <rect x=\"3\" y=\"3\" width=\"13\" height=\"6\" rx=\"1.5\" fill=\"#0E1726\"/>\n          <path d=\"M22 4.5V7.5\" stroke=\"#0E1726\" stroke-width=\"1.8\" stroke-linecap=\"round\"/>\n        </svg>\n      </div>\n    </div>\n\n    <!-- App Bar -->\n    <header class=\"app-header\">\n      <button class=\"header-btn\" title=\"رجوع\" aria-label=\"رجوع\">\n        <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <polyline points=\"9 18 15 12 9 6\"></polyline>\n        </svg>\n      </button>\n      <h1 class=\"header-title\">الملف الشخصي</h1>\n      <button class=\"header-btn\" title=\"الإعدادات\" aria-label=\"الإعدادات\">\n        <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <circle cx=\"12\" cy=\"12\" r=\"3\"></circle>\n          <path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z\"></path>\n        </svg>\n      </button>\n    </header>\n\n    <!-- Scrollable Body -->\n    <div class=\"screen-content\">\n      \n      <!-- Avatar & KYC Badge -->\n      <div class=\"profile-hero\">\n        <div class=\"avatar-wrap\">\n          <div class=\"avatar\">ل.م</div>\n          <div class=\"badge-verified\">\n            <svg width=\"10\" height=\"10\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\">\n              <polyline points=\"20 6 9 17 4 12\"></polyline>\n            </svg>\n            موثّق\n          </div>\n        </div>\n        <div class=\"uae-pass-pill\">\n          <span class=\"uae-flag\">\n            <svg viewBox=\"0 0 640 480\" width=\"100%\" height=\"100%\">\n              <rect width=\"640\" height=\"160\" fill=\"#00732f\"/>\n              <rect y=\"160\" width=\"640\" height=\"160\" fill=\"#ffffff\"/>\n              <rect y=\"320\" width=\"640\" height=\"160\" fill=\"#000000\"/>\n              <rect width=\"190\" height=\"480\" fill=\"#ff0000\"/>\n            </svg>\n          </span>\n          معتمد عبر الهوية الرقمية (UAE PASS)\n        </div>\n      </div>\n\n      <!-- Section: البيانات المسجلة -->\n      <h2 class=\"section-title\">بيانات الحساب والمدفوعات</h2>\n\n      <!-- 1. Name & Email Card -->\n      <div class=\"info-card\">\n        <div class=\"card-right\">\n          <div class=\"icon-box\">\n            <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n              <path d=\"M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\"></path>\n              <circle cx=\"12\" cy=\"7\" r=\"4\"></circle>\n            </svg>\n          </div>\n          <div class=\"info-texts\">\n            <span class=\"info-label\">الاسم والبريد الإلكتروني</span>\n            <span class=\"info-primary\" id=\"display-name\">Layla Al Mansouri</span>\n            <span class=\"info-secondary\" id=\"display-email\">layla@example.com</span>\n          </div>\n        </div>\n        <button class=\"btn-edit\" onclick=\"openEditModal('identity')\" aria-label=\"تعديل الاسم والبريد\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <path d=\"M12 20h9\"></path>\n            <path d=\"M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z\"></path>\n          </svg>\n          <span>تعديل</span>\n        </button>\n      </div>\n\n      <!-- 2. Phone Number Card -->\n      <div class=\"info-card\">\n        <div class=\"card-right\">\n          <div class=\"icon-box\">\n            <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n              <path d=\"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z\"></path>\n            </svg>\n          </div>\n          <div class=\"info-texts\">\n            <span class=\"info-label\">رقم الهاتف المتحرك</span>\n            <span class=\"info-primary number-ltr\" id=\"display-phone\">+971 50 123 4567</span>\n            <span class=\"info-label\" style=\"color: #007A53; font-weight: 600;\">مرتبط بالتحويل الفوري (آني - Aani)</span>\n          </div>\n        </div>\n        <button class=\"btn-edit\" onclick=\"openEditModal('phone')\" aria-label=\"تعديل رقم الهاتف\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <path d=\"M12 20h9\"></path>\n            <path d=\"M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z\"></path>\n          </svg>\n          <span>تعديل</span>\n        </button>\n      </div>\n\n      <!-- 3. IBAN Card -->\n      <div class=\"info-card\">\n        <div class=\"card-right\">\n          <div class=\"icon-box\">\n            <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n              <rect x=\"2\" y=\"5\" width=\"20\" height=\"14\" rx=\"2\"></rect>\n              <line x1=\"2\" y1=\"10\" x2=\"22\" y2=\"10\"></line>\n            </svg>\n          </div>\n          <div class=\"info-texts\">\n            <span class=\"info-label\">الحساب المصرفي الدولي (IBAN)</span>\n            <span class=\"iban-code number-ltr\" id=\"display-iban\">AE07 0331 2345 6789 0123 456</span>\n            <span class=\"info-label\">الحساب الافتراضي لاستلام الأموال</span>\n          </div>\n        </div>\n        <button class=\"btn-edit\" onclick=\"openEditModal('iban')\" aria-label=\"تعديل الآيبان\">\n          <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n            <path d=\"M12 20h9\"></path>\n            <path d=\"M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z\"></path>\n          </svg>\n          <span>تعديل</span>\n        </button>\n      </div>\n\n      <!-- Extra UAE Payments App options -->\n      <h2 class=\"section-title\">الأمان والمدفوعات</h2>\n      <div class=\"extra-settings\">\n        <div class=\"setting-item\">\n          <div class=\"setting-left\">\n            <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n              <path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"></path>\n            </svg>\n            <span>البصمة والتعرف على الوجه (Face ID)</span>\n          </div>\n          <span class=\"chevron\">›</span>\n        </div>\n        <div class=\"setting-item\">\n          <div class=\"setting-left\">\n            <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n              <rect x=\"3\" y=\"11\" width=\"18\" height=\"11\" rx=\"2\" ry=\"2\"></rect>\n              <path d=\"M7 11V7a5 5 0 0 1 10 0v4\"></path>\n            </svg>\n            <span>حدود المعاملات والتحويل اليومي</span>\n          </div>\n          <span class=\"chevron\">›</span>\n        </div>\n      </div>\n\n    </div>\n\n    <!-- Bottom Navigation Bar -->\n    <nav class=\"bottom-nav\">\n      <a href=\"#\" class=\"nav-link\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n          <path d=\"M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"></path>\n        </svg>\n        <span>الرئيسية</span>\n      </a>\n      <a href=\"#\" class=\"nav-link\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n          <rect x=\"1\" y=\"4\" width=\"22\" height=\"16\" rx=\"2\" ry=\"2\"></rect>\n          <line x1=\"1\" y1=\"10\" x2=\"23\" y2=\"10\"></line>\n        </svg>\n        <span>بطاقاتي</span>\n      </a>\n      <a href=\"#\" class=\"nav-link\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n          <line x1=\"12\" y1=\"5\" x2=\"12\" y2=\"19\"></line>\n          <polyline points=\"19 12 12 19 5 12\"></polyline>\n        </svg>\n        <span>تحويل</span>\n      </a>\n      <a href=\"#\" class=\"nav-link active\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\">\n          <path d=\"M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\"></path>\n          <circle cx=\"12\" cy=\"7\" r=\"4\"></circle>\n        </svg>\n        <span>حسابي</span>\n      </a>\n    </nav>\n\n    <!-- Bottom Sheet Modal for Editing -->\n    <div class=\"modal-overlay\" id=\"editModal\" onclick=\"handleOverlayClick(event)\">\n      <div class=\"modal-sheet\" id=\"modalSheet\">\n        <div class=\"modal-drag\"></div>\n        <h3 class=\"modal-title\" id=\"modalTitle\">تعديل البيانات</h3>\n        <p class=\"modal-desc\" id=\"modalDesc\">قم بتحديث معلوماتك مع ضمان دقة بيانات التحويل.</p>\n        \n        <div id=\"modalInputs\">\n          <!-- Dynamic Content Injected Here -->\n        </div>\n\n        <div class=\"modal-buttons\">\n          <button class=\"btn-modal-save\" onclick=\"saveChanges()\">حفظ التغييرات</button>\n          <button class=\"btn-modal-cancel\" onclick=\"closeModal()\">إلغاء</button>\n        </div>\n      </div>\n    </div>\n\n    <!-- Feedback Toast -->\n    <div class=\"toast\" id=\"toast\">\n      <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#00C48C\" stroke-width=\"2.5\">\n        <polyline points=\"20 6 9 17 4 12\"></polyline>\n      </svg>\n      <span>تم تحديث البيانات بنجاح</span>\n    </div>\n\n  </div>\n\n  <script>\n    let currentField = null;\n\n    const dataStore = {\n      name: \"Layla Al Mansouri\",\n      email: \"layla@example.com\",\n      phone: \"+971 50 123 4567\",\n      iban: \"AE07 0331 2345 6789 0123 456\"\n    };\n\n    function openEditModal(field) {\n      currentField = field;\n      const modal = document.getElementById('editModal');\n      const container = document.getElementById('modalInputs');\n      const title = document.getElementById('modalTitle');\n      const desc = document.getElementById('modalDesc');\n\n      if (field === 'identity') {\n        title.innerText = 'تعديل الاسم والبريد الإلكتروني';\n        desc.innerText = 'يستخدم البريد في إرسال إشعارات المعاملات والتحويل.';\n        container.innerHTML = `\n          <div class=\"modal-field\">\n            <label>الاسم الكامل</label>\n            <input type=\"text\" id=\"input-name\" value=\"${dataStore.name}\">\n          </div>\n          <div class=\"modal-field\">\n            <label>البريد الإلكتروني</label>\n            <input type=\"email\" id=\"input-email\" dir=\"ltr\" style=\"text-align: right;\" value=\"${dataStore.email}\">\n          </div>\n        `;\n      } else if (field === 'phone') {\n        title.innerText = 'تعديل رقم الهاتف المتحرك';\n        desc.innerText = 'سنرسل رمز تأكيد (OTP) عبر الرسائل النصية للتحقق.';\n        container.innerHTML = `\n          <div class=\"modal-field\">\n            <label>رقم الهاتف المتحرك (دولة الإمارات)</label>\n            <input type=\"tel\" id=\"input-phone\" dir=\"ltr\" style=\"text-align: left;\" value=\"${dataStore.phone}\">\n          </div>\n        `;\n      } else if (field === 'iban') {\n        title.innerText = 'تعديل رقم الحساب المصرفي (IBAN)';\n        desc.innerText = 'تأكد من إدخال رمز الآيبان الصادر من مصرف إماراتي معتمد.';\n        container.innerHTML = `\n          <div class=\"modal-field\">\n            <label>رقم IBAN</label>\n            <input type=\"text\" id=\"input-iban\" dir=\"ltr\" style=\"text-align: left; font-family: monospace;\" value=\"${dataStore.iban}\">\n          </div>\n        `;\n      }\n\n      modal.classList.add('open');\n    }\n\n    function closeModal() {\n      document.getElementById('editModal').classList.remove('open');\n      currentField = null;\n    }\n\n    function handleOverlayClick(event) {\n      if (event.target === document.getElementById('editModal')) {\n        closeModal();\n      }\n    }\n\n    function saveChanges() {\n      if (currentField === 'identity') {\n        const newName = document.getElementById('input-name').value.trim();\n        const newEmail = document.getElementById('input-email').value.trim();\n        if (newName) dataStore.name = newName;\n        if (newEmail) dataStore.email = newEmail;\n        document.getElementById('display-name').innerText = dataStore.name;\n        document.getElementById('display-email').innerText = dataStore.email;\n      } else if (currentField === 'phone') {\n        const newPhone = document.getElementById('input-phone').value.trim();\n        if (newPhone) dataStore.phone = newPhone;\n        document.getElementById('display-phone').innerText = dataStore.phone;\n      } else if (currentField === 'iban') {\n        const newIban = document.getElementById('input-iban').value.trim();\n        if (newIban) dataStore.iban = newIban;\n        document.getElementById('display-iban').innerText = dataStore.iban;\n      }\n\n      closeModal();\n      showToast();\n    }\n\n    function showToast() {\n      const toast = document.getElementById('toast');\n      toast.classList.add('show');\n      setTimeout(() => {\n        toast.classList.remove('show');\n      }, 2500);\n    }\n  </script>\n</body>\n</html>\n```",
+  "usage": {
+    "input": 167,
+    "output": 9671
+  },
+  "ms": 881497,
+  "finish": "STOP",
+  "reasoningTokens": 1475,
+  "servedModel": "gemini-3.8-flash",
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 68,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 190,
+        "y": 275,
+        "width": 160,
+        "height": 13
+      },
+      "message": "0.5px letter-spacing on \"بيانات الحساب والمدفوعات\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<h2 class=\"section-title\">بيانات الحساب والمدفوعات</h2>"
+    },
+    {
+      "rule": "type/arabic-tracking",
+      "title": "Letter-spacing on Arabic",
+      "severity": "error",
+      "box": {
+        "x": 243,
+        "y": 656,
+        "width": 107,
+        "height": 13
+      },
+      "message": "0.5px letter-spacing on \"الأمان والمدفوعات\".",
+      "fix": "Set letter-spacing: 0 on Arabic, for example :lang(ar) { letter-spacing: 0 }.",
+      "snippet": "<h2 class=\"section-title\">الأمان والمدفوعات</h2>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 175.5,
+        "y": 196,
+        "width": 25,
+        "height": 11
+      },
+      "message": "\"موثّق\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"badge-verified\">\n            <svg width=\"10\" height=\"10\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\">\n              <poly"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 87.5,
+        "y": 234,
+        "width": 193,
+        "height": 12
+      },
+      "message": "\"معتمد عبر الهوية الرقمية (UAE PASS)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<div class=\"uae-pass-pill\">\n          <span class=\"uae-flag\">\n            <svg viewBox=\"0 0 640 480\" width=\"100%\" height=\"100%\">\n              <rect width=\"640\""
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 190,
+        "y": 275,
+        "width": 160,
+        "height": 13
+      },
+      "message": "\"بيانات الحساب والمدفوعات\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<h2 class=\"section-title\">بيانات الحساب والمدفوعات</h2>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 161,
+        "y": 318,
+        "width": 118,
+        "height": 12
+      },
+      "message": "\"الاسم والبريد الإلكتروني\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"info-label\">الاسم والبريد الإلكتروني</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 68,
+        "y": 337,
+        "width": 36,
+        "height": 13
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>تعديل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 177,
+        "y": 418,
+        "width": 102,
+        "height": 12
+      },
+      "message": "\"رقم الهاتف المتحرك\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"info-label\">رقم الهاتف المتحرك</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 161,
+        "y": 455,
+        "width": 118,
+        "height": 26
+      },
+      "message": "\"مرتبط بالتحويل الفوري (آني - Aani)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"info-label\" style=\"color: #007A53; font-weight: 600;\">مرتبط بالتحويل الفوري (آني - Aani)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 68,
+        "y": 442.5,
+        "width": 36,
+        "height": 13
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>تعديل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 153,
+        "y": 529,
+        "width": 126,
+        "height": 26
+      },
+      "message": "\"الحساب المصرفي الدولي (IBAN)\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"info-label\">الحساب المصرفي الدولي (IBAN)</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 183,
+        "y": 593,
+        "width": 96,
+        "height": 26
+      },
+      "message": "\"الحساب الافتراضي لاستلام الأموال\" is 12px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span class=\"info-label\">الحساب الافتراضي لاستلام الأموال</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 68,
+        "y": 567,
+        "width": 36,
+        "height": 13
+      },
+      "message": "\"تعديل\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>تعديل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 243,
+        "y": 656,
+        "width": 107,
+        "height": 13
+      },
+      "message": "\"الأمان والمدفوعات\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<h2 class=\"section-title\">الأمان والمدفوعات</h2>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 291.125,
+        "y": 844,
+        "width": 41,
+        "height": 11
+      },
+      "message": "\"الرئيسية\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>الرئيسية</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 208.375,
+        "y": 844,
+        "width": 39,
+        "height": 11
+      },
+      "message": "\"بطاقاتي\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>بطاقاتي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 134.625,
+        "y": 844,
+        "width": 30,
+        "height": 11
+      },
+      "message": "\"تحويل\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>تحويل</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 57.875,
+        "y": 844,
+        "width": 33,
+        "height": 11
+      },
+      "message": "\"حسابي\" is 11px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>حسابي</span>"
+    },
+    {
+      "rule": "type/arabic-size",
+      "title": "Arabic set too small",
+      "severity": "warning",
+      "box": {
+        "x": 113,
+        "y": 63,
+        "width": 138,
+        "height": 13
+      },
+      "message": "\"تم تحديث البيانات بنجاح\" is 13px.",
+      "fix": "Keep Arabic UI text at 14px or more, and body text at 16px.",
+      "snippet": "<span>تم تحديث البيانات بنجاح</span>"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 892
 }

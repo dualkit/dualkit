@@ -4,16 +4,162 @@
   "screen": "checkout",
   "condition": "dualkit",
   "run": 3,
-  "at": "2026-11-01T12:11:58.378Z",
-  "reply": "",
+  "at": "2026-11-02T12:41:40.715Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>الدفع — سلة المشتريات</title>\n<style>\n  :root {\n    --bg: #f4f5f7;\n    --surface: #ffffff;\n    --surface-2: #f9fafb;\n    --border: #eceef1;\n    --text: #111827;\n    --text-soft: #6b7280;\n    --text-muted: #9ca3af;\n    --primary: #16a34a;\n    --primary-dark: #15803d;\n    --accent: #f59e0b;\n    --danger: #ef4444;\n    --radius: 16px;\n    --radius-sm: 10px;\n    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);\n  }\n  * { box-sizing: border-box; }\n  html, body { margin: 0; padding: 0; }\n  body {\n    font-family: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;\n    background: var(--bg);\n    color: var(--text);\n    -webkit-font-smoothing: antialiased;\n    line-height: 1.6;\n  }\n  :lang(ar) {\n    --type-label-size: 14px;\n    --type-caption-size: 14px;\n    --type-body-size: 16px;\n    letter-spacing: 0;\n    text-transform: none;\n    font-style: normal;\n    line-height: 1.7;\n  }\n  body { font-size: var(--type-body-size); }\n\n  .phone {\n    max-width: 430px;\n    margin: 0 auto;\n    min-height: 100vh;\n    background: var(--bg);\n    display: flex;\n    flex-direction: column;\n  }\n\n  /* Top bar */\n  .topbar {\n    display: flex;\n    align-items: center;\n    gap: 10px;\n    padding: 14px 18px;\n    background: var(--surface);\n    border-bottom: 1px solid var(--border);\n    position: sticky;\n    top: 0;\n    z-index: 10;\n  }\n  .back {\n    width: 38px;\n    height: 38px;\n    border: none;\n    background: var(--surface-2);\n    border-radius: 50%;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    color: var(--text);\n    flex-shrink: 0;\n  }\n  .back svg { width: 20px; height: 20px; }\n  .back:active { background: var(--border); }\n  .topbar h1 {\n    font-size: 18px;\n    font-weight: 700;\n    margin: 0;\n    letter-spacing: 0;\n  }\n  .topbar .count {\n    font-size: var(--type-caption-size);\n    color: var(--text-soft);\n    margin-inline-start: auto;\n  }\n\n  /* Scrollable content */\n  .scroll { flex: 1; overflow-y: auto; padding-bottom: 110px; }\n\n  /* Cart items */\n  .items { padding: 8px 18px 4px; display: flex; flex-direction: column; gap: 4px; }\n  .item {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    padding: 12px;\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: var(--radius-sm);\n  }\n  .item .photo {\n    width: 64px;\n    height: 64px;\n    border-radius: 12px;\n    background: linear-gradient(135deg, #fde68a, #fcd34d);\n    flex-shrink: 0;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    font-size: 28px;\n    border: 1px solid #f59e0b22;\n  }\n  .item .meta { flex: 1; min-width: 0; }\n  .item .name {\n    font-size: 15px;\n    font-weight: 600;\n    margin: 0 0  4px;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n  .item .sub {\n    font-size: var(--type-caption-size);\n    color: var(--text-soft);\n    margin: 0;\n  }\n  .stepper {\n    display: flex;\n    align-items: center;\n    gap: 8px;\n    background: var(--surface-2);\n    border-radius: 999px;\n    padding: 4px;\n    flex-shrink: 0;\n  }\n  .stepper button {\n    width: 30px;\n    height: 30px;\n    border: none;\n    background: var(--surface);\n    border-radius: 50%;\n    cursor: pointer;\n    font-size: 18px;\n    font-weight: 600;\n    color: var(--text);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: var(--shadow);\n  }\n  .stepper button:active { transform: scale(0.94); }\n  .stepper .qty {\n    font-size: 14px;\n    font-weight: 700;\n    min-width: 18px;\n    text-align: center;\n    color: var(--text);\n  }\n  .price {\n    font-size: 15px;\n    font-weight: 700;\n    color: var(--primary-dark);\n    flex-shrink: 0;\n    min-width: 64px;\n    text-align: end;\n    font-variant-numeric: tabular-nums;\n  }\n\n  /* Promo */\n  .promo {\n    padding: 14px 18px 4px;\n  }\n  .promo-inner {\n    display: flex;\n    gap: 8px;\n    align-items: stretch;\n  }\n  .promo input {\n    flex: 1;\n    border: 1px solid var(--border);\n    border-radius: var(--radius-sm);\n    padding: 12px 14px;\n    font-size: 15px;\n    background: var(--surface);\n    color: var(--text);\n    font-family: inherit;\n    outline: none;\n    transition: border-color .15s, box-shadow .15s;\n  }\n  .promo input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px #16a34a22; }\n  .promo input::placeholder { color: var(--text-muted); }\n  .promo button {\n    border: none;\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: var(--radius-sm);\n    padding: 0 18px;\n    font-size: 14px;\n    font-weight: 600;\n    color: var(--primary-dark);\n    cursor: pointer;\n    white-space: nowrap;\n  }\n  .promo button:active { background: var(--surface-2); }\n  .promo-note {\n    font-size: var(--type-caption-size);\n    color: var(--text-muted);\n    margin: 8px 4px 0;\n  }\n\n  /* Summary */\n  .summary {\n    margin: 14px 18px 0;\n    background: var(--surface);\n    border: 1px solid var(--border);\n    border-radius: var(--radius);\n    padding: 6px 16px;\n    display: flex;\n    flex-direction: column;\n  }\n  .row {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    padding: 10px 0;\n    font-size: 15px;\n  }\n  .row .label { color: var(--text-soft); }\n  .row .value { font-weight: 600; font-variant-numeric: tabular-nums; }\n  .row.total {\n    font-size: 18px;\n    font-weight: 700;\n    color: var(--text);\n    border-top: 1px dashed var(--border);\n    margin-top: 4px;\n    padding-top: 14px;\n  }\n  .row.total .value { color: var(--primary-dark); }\n  .discount { color: var(--primary-dark); }\n\n  /* Bottom button */\n  .bottom {\n    position: absolute;\n    bottom: 0;\n    inset-inline: 0;\n    background: var(--surface);\n    border-top: 1px solid var(--border);\n    padding: 12px 18px 18px;\n  }\n  .checkout-btn {\n    width: 100%;\n    border: none;\n    background: var(--primary);\n    color: #fff;\n    font-size: 17px;\n    font-weight: 700;\n    padding: 16px;\n    border-radius: var(--radius-sm);\n    cursor: pointer;\n    font-family: inherit;\n    box-shadow: 0 6px 16px rgba(22,163,74,.30);\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    gap: 8px;\n  }\n  .checkout-btn:active { background: var(--primary-dark); transform: scale(0.99); }\n  .checkout-btn svg { width: 20px; height: 20px; }\n\n  /* Misc */\n  .divider { height: 1px; background: var(--border); margin: 0 18px; }\n  .hint {\n    font-size: var(--type-caption-size);\n    color: var(--text-muted);\n    text-align: center;\n    padding: 16px 18px 8px;\n  }\n</style>\n</head>\n<body>\n<div class=\"phone\">\n\n  <!-- Top bar -->\n  <div class=\"topbar\">\n    <button class=\"back\" aria-label=\"الرجوع\">\n      <svg class=\"icon-directional\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n        <path d=\"M19 12H5M12 19l-7-7 7-7\"/>\n      </svg>\n    </button>\n    <h1>سلة المشتريات</h1>\n    <span class=\"count\">٣ عناصر</span>\n  </div>\n\n  <div class=\"scroll\">\n\n    <!-- Items -->\n    <div class=\"items\">\n      <div class=\"item\">\n        <div class=\"photo\">🍎</div>\n        <div class=\"meta\">\n          <p class=\"name\">تفاحة روسية – 1 كجم</p>\n          <p class=\"sub\">طازجة من المزرعة</p>\n        </div>\n        <div class=\"stepper\">\n          <button aria-label=\"تقليل\">−</button>\n          <span class=\"qty\">٢</span>\n          <button aria-label=\"زيادة\">+</button>\n        </div>\n        <div class=\"price\">٢٤.٠٠ د.إ</div>\n      </div>\n\n      <div class=\"item\">\n        <div class=\"photo\">🥛</div>\n        <div class=\"meta\">\n          <p class=\"name\">حليب نور – 1 لتر</p>\n          <p class=\"sub\">دسم كامل</p>\n        </div>\n        <div class=\"stepper\">\n          <button aria-label=\"تقليل\">−</button>\n          <span class=\"qty\">١</span>\n          <button aria-label=\"زيادة\">+</button>\n        </div>\n        <div class=\"price\">٨.٥٠ د.إ</div>\n      </div>\n\n      <div class=\"item\">\n        <div class=\"photo\">🥖</div>\n        <div class=\"meta\">\n          <p class=\"name\">خبز ص樵 – 4 قطع</p>\n          <p class=\"sub\">طازج يوميًا</p>\n        </div>\n        <div class=\"stepper\">\n          <button aria-label=\"تقليل\">−</button>\n          <span class=\"qty\">٣</span>\n          <button aria-label=\"زيادة\">+</button>\n        </div>\n        <div class=\"price\">١٨.٠٠ د.إ</div>\n      </div>\n    </div>\n\n    <!-- Promo -->\n    <div class=\"promo\">\n      <div class=\"promo-inner\">\n        <input type=\"text\" dir=\"ltr\" inputmode=\"text\" autocomplete=\"off\" placeholder=\"رمز الخصم (اختياري)\" aria-label=\"رمز الخصم\">\n        <button>تطبيق</button>\n      </div>\n      <p class=\"promo-note\">لديك خصم بـ ١٠٪ برمز «GROCERY10»</p>\n    </div>\n\n    <!-- Summary -->\n    <div class=\"summary\">\n      <div class=\"row\">\n        <span class=\"label\">الإجمالي الفرعي</span>\n        <span class=\"value\">٥٠.٥٠ د.إ</span>\n      </div>\n      <div class=\"row\">\n        <span class=\"label\">ال Towline</span>\n        <span class=\"value discount\">مجانًا</span>\n      </div>\n      <div class=\"row\">\n        <span class=\"label\">ضريبة القيمة المضافة (٥٪)</span>\n        <span class=\"value\">٢.٥٣ د.إ</span>\n      </div>\n      <div class=\"row total\">\n        <span class=\"label\">الإجمالي</span>\n        <span class=\"value\">٥٣.٠٣ د.إ</span>\n      </div>\n    </div>\n\n    <p class=\"hint\">الDelivery مجانًا فوق ٥٠ د.إ · التسليم المتوقع غدًا</p>\n\n  </div>\n\n  <!-- Bottom button -->\n  <div class=\"bottom\">\n    <button class=\"checkout-btn\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n        <path d=\"M5 12h14M13 6l6 6-6 6\"/>\n      </svg>\n      تأكيد الطلب — ٥٣.٠٣ د.إ\n    </button>\n  </div>\n\n</div>\n\n<style>\n  /* RTL mirror for back arrow */\n  .icon-directional:dir(rtl) { transform: scaleX(-1); }\n</style>\n</body>\n</html>\n```",
   "usage": {
     "input": 6301,
-    "output": 16000
+    "output": 4059
   },
-  "finish": "length",
-  "reasoningTokens": 14920,
+  "ms": 47824,
+  "finish": "stop",
+  "reasoningTokens": 599,
   "servedModel": "dots-studio/dots-3-note-preview:free",
-  "ms": 171652,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 30,
+  "score": 64,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/field-placeholder",
+      "title": "An Arabic hint on the wrong side of the field",
+      "severity": "warning",
+      "box": {
+        "x": 99,
+        "y": 384.09375,
+        "width": 273,
+        "height": 51.5
+      },
+      "message": "The placeholder \"رمز الخصم (اختياري)\" is Arabic in a left-to-right field.",
+      "fix": "Keep dir=\"ltr\" for what people type, and right-align the Arabic hint with input:placeholder-shown { direction: rtl } or ::placeholder { text-align: right }.",
+      "snippet": "<input type=\"text\" dir=\"ltr\" inputmode=\"text\" autocomplete=\"off\" placeholder=\"رمز الخصم (اختياري)\" aria-label=\"رمز الخصم\">"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 148.625,
+        "y": 92,
+        "width": 134.375,
+        "height": 17
+      },
+      "message": "\"تفاحة روسية – 1 كجم\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<p class=\"name\">تفاحة روسية – 1 كجم</p>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 178.625,
+        "y": 204.4375,
+        "width": 104.375,
+        "height": 17
+      },
+      "message": "\"حليب نور – 1 لتر\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<p class=\"name\">حليب نور – 1 لتر</p>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 167.625,
+        "y": 298.4375,
+        "width": 115.375,
+        "height": 17
+      },
+      "message": "\"خبز ص樵 – 4 قطع\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<p class=\"name\">خبز ص樵 – 4 قطع</p>"
+    },
+    {
+      "rule": "content/mixed-digits",
+      "title": "Two digit systems on one screen",
+      "severity": "warning",
+      "box": {
+        "x": 129.84375,
+        "y": 446.59375,
+        "width": 238.15625,
+        "height": 16
+      },
+      "message": "\"لديك خصم بـ ١٠٪ برمز «GROCERY10»\" uses a different digit system from the rest of the screen.",
+      "fix": "Pick one digit system for the product and format every number with it.",
+      "snippet": "<p class=\"promo-note\">لديك خصم بـ ١٠٪ برمز «GROCERY10»</p>"
+    },
+    {
+      "rule": "layout/clipped-text",
+      "title": "Arabic text cut off by its box",
+      "severity": "warning",
+      "box": {
+        "x": 221,
+        "y": 88,
+        "width": 62,
+        "height": 25.5
+      },
+      "message": "Only 35% of this text shows before the ellipsis.",
+      "fix": "Let the box grow with min-width or min-height. If shortening is intended, add text-overflow: ellipsis and leave room for most of the text.",
+      "snippet": "<p class=\"name\">تفاحة روسية – 1 كجم</p>"
+    },
+    {
+      "rule": "layout/clipped-text",
+      "title": "Arabic text cut off by its box",
+      "severity": "warning",
+      "box": {
+        "x": 221,
+        "y": 200.4375,
+        "width": 62,
+        "height": 25.5
+      },
+      "message": "Only 45% of this text shows before the ellipsis.",
+      "fix": "Let the box grow with min-width or min-height. If shortening is intended, add text-overflow: ellipsis and leave room for most of the text.",
+      "snippet": "<p class=\"name\">حليب نور – 1 لتر</p>"
+    },
+    {
+      "rule": "layout/clipped-text",
+      "title": "Arabic text cut off by its box",
+      "severity": "warning",
+      "box": {
+        "x": 221,
+        "y": 294.4375,
+        "width": 62,
+        "height": 25.5
+      },
+      "message": "Only 41% of this text shows before the ellipsis.",
+      "fix": "Let the box grow with min-width or min-height. If shortening is intended, add text-overflow: ellipsis and leave room for most of the text.",
+      "snippet": "<p class=\"name\">خبز ص樵 – 4 قطع</p>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 209.984375,
+        "y": 22.703125,
+        "width": 114.015625,
+        "height": 20
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>سلة المشتريات</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 37,
+        "y": 400.9375,
+        "width": 35,
+        "height": 16
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button>تطبيق</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 881
 }

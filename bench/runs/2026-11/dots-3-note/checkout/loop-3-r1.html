@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>السداد — سلة المشتريات</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --surface: #ffffff;
+    --surface-2: #f9fafb;
+    --border: #eceef1;
+    --text: #111827;
+    --text-soft: #6b7280;
+    --text-muted: #9ca3af;
+    --primary: #16a34a;
+    --primary-dark: #15803d;
+    --accent: #f59e0b;
+    --danger: #ef4444;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans Arabic', 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+  :lang(ar) {
+    --type-label-size: 14px;
+    --type-caption-size: 14px;
+    --type-body-size: 16px;
+    letter-spacing: 0;
+    text-transform: none;
+    font-style: normal;
+    line-height: 1.7;
+  }
+  body { font-size: var(--type-body-size); }
+
+  .phone {
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .back {
+    width: 38px;
+    height: 38px;
+    border: none;
+    background: var(--surface-2);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    flex-shrink: 0;
+  }
+  .back svg { width: 20px; height: 20px; }
+  .back:active { background: var(--border); }
+  .topbar h1 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0;
+  }
+  .topbar .count {
+    font-size: var(--type-caption-size);
+    color: var(--text-soft);
+    margin-inline-start: auto;
+  }
+
+  /* Scrollable content */
+  .scroll { flex: 1; overflow-y: auto; padding-bottom: 110px; }
+
+  /* Cart items */
+  .items { padding: 8px 18px 4px; display: flex; flex-direction: column; gap: 4px; }
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .item .photo {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #fde68a, #fcd34d);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    border: 1px solid #f59e0b22;
+  }
+  .item .meta { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .item .name {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0  4px;
+    word-break: break-word;
+    /* Remove clipping — let the text wrap */
+  }
+  .item .sub {
+    font-size: var(--type-caption-size);
+    color: var(--text-soft);
+    margin: 0;
+  }
+  .stepper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-2);
+    border-radius: 999px;
+    padding: 4px;
+    flex-shrink: 0;
+  }
+  .stepper button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: var(--surface);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow);
+  }
+  .stepper button:active { transform: scale(0.94); }
+  .stepper .qty {
+    font-size: 14px;
+    font-weight: 700;
+    min-width: 18px;
+    text-align: center;
+    color: var(--text);
+  }
+  .price {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--primary-dark);
+    flex-shrink: 0;
+    min-width: 64px;
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Promo */
+  .promo {
+    padding: 14px 18px 4px;
+  }
+  .promo-inner {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .promo input {
+    flex: 1;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 15px;
+    background: var(--surface);
+    color: var(--text);
+    font-family: inherit;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .promo input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px #16a34a22; }
+  /* Right‑align the Arabic placeholder inside the LTR input */
+  .promo input::placeholder {
+    text-align: end;
+    color: var(--text-muted);
+  }
+  .promo button {
+    border: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--primary-dark);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .promo button:active { background: var(--surface-2); }
+  .promo-note {
+    font-size: var(--type-caption-size);
+    color: var(--text-muted);
+    margin: 8px 4px 0;
+  }
+
+  /* Summary */
+  .summary {
+    margin: 14px 18px 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 6px 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 15px;
+  }
+  .row .label { color: var(--text-soft); }
+  .row .value { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .row.total {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    border-top: 1px dashed var(--border);
+    margin-top: 4px;
+    padding-top: 14px;
+  }
+  .row.total .value { color: var(--primary-dark); }
+  .discount { color: var(--primary-dark); }
+
+  /* Bottom button */
+  .bottom {
+    position: absolute;
+    bottom: 0;
+    inset-inline: 0;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 12px 18px 18px;
+  }
+  .checkout-btn {
+    width: 100%;
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 6px 16px rgba(22,163,74,.30);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .checkout-btn:active { background: var(--primary-dark); transform: scale(0.99); }
+  .checkout-btn svg { width: 20px; height: 20px; }
+
+  /* Misc */
+  .divider { height: 1px; background: var(--border); margin: 0 18px; }
+  .hint {
+    font-size: var(--type-caption-size);
+    color: var(--text-muted);
+    text-align: center;
+    padding: 16px 18px 8px;
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <button class="back" aria-label="الرجوع">
+      <svg class="icon-directional" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+    <h1>سلة المشتريات</h1>
+    <span class="count">٣ عناصر</span>
+  </div>
+
+  <div class="scroll">
+
+    <!-- Items -->
+    <div class="items">
+      <div class="item">
+        <div class="photo">🍎</div>
+        <div class="meta">
+          <p class="name">تفاحة روسية – ١ كجم</p>
+          <p class="sub">طازجة من المزرعة</p>
+        </div>
+        <div class="stepper">
+          <button aria-label="تقليل">−</button>
+          <span class="qty">٢</span>
+          <button aria-label="زيادة">+</button>
+        </div>
+        <div class="price">٢٤.٠٠ د.إ</div>
+      </div>
+
+      <div class="item">
+        <div class="photo">🥛</div>
+        <div class="meta">
+          <p class="name">حليب نور – ١ لتر</p>
+          <p class="sub">دسم كامل</p>
+        </div>
+        <div class="stepper">
+          <button aria-label="تقليل">−</button>
+          <span class="qty">١</span>
+          <button aria-label="زيادة">+</button>
+        </div>
+        <div class="price">٨.٥٠ د.إ</div>
+      </div>
+
+      <div class="item">
+        <div class="photo">🥖</div>
+        <div class="meta">
+          <p class="name">خبز ص樵 – ٤ قطع</p>
+          <p class="sub">طازج يوميًا</p>
+        </div>
+        <div class="stepper">
+          <button aria-label="تقليل">−</button>
+          <span class="qty">٣</span>
+          <button aria-label="زيادة">+</button>
+        </div>
+        <div class="price">١٨.٠٠ د.إ</div>
+      </div>
+    </div>
+
+    <!-- Promo -->
+    <div class="promo">
+      <div class="promo-inner">
+        <input type="text" dir="ltr" inputmode="text" autocomplete="off" placeholder="رمز الخصم (اختياري)" aria-label="رمز الخصم">
+        <button>تطبيق</button>
+      </div>
+      <p class="promo-note">لديك خصم بـ ١٠٪ برمز «GROCERY١٠»</p>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary">
+      <div class="row">
+        <span class="label">الإجمالي الفرعي</span>
+        <span class="value">٥٠.٥٠ د.إ</span>
+      </div>
+      <div class="row">
+        <span class="label">ال Towline</span>
+        <span class="value discount">مجانًا</span>
+      </div>
+      <div class="row">
+        <span class="label">ضريبة القيمة المضافة (٥٪)</span>
+        <span class="value">٢.٥٣ د.إ</span>
+      </div>
+      <div class="row total">
+        <span class="label">الإجمالي</span>
+        <span class="value">٥٣.٠٣ د.إ</span>
+      </div>
+    </div>
+
+    <p class="hint">الDelivery مجانًا فوق ٥٠ د.إ · التسليم المتوقع غدًا</p>
+
+  </div>
+
+  <!-- Bottom button -->
+  <div class="bottom">
+    <button class="checkout-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12h14M13 6l6 6-6 6"/>
+      </svg>
+      تأكيد الطلب — ٥٣.٠٣ د.إ
+    </button>
+  </div>
+
+</div>
+
+<style>
+  /* RTL mirror for back arrow */
+  .icon-directional:dir(rtl) { transform: scaleX(-1); }
+</style>
+</body>
+</html>

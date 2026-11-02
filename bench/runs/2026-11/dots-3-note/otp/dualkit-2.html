@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>أدخل الرمز</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap');
+
+  :root {
+    --primary: #005c9b;
+    --primary-dark: #004a7d;
+    --bg: #f5f5f5;
+    --card-bg: #ffffff;
+    --text: #1a1a1a;
+    --text-secondary: #6b7280;
+    --border: #e5e7eb;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    direction: rtl;
+    text-align: right;
+    background-color: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .container {
+    background-color: var(--card-bg);
+    border-radius: 16px;
+    padding: 40px 32px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    text-align: center;
+  }
+
+  .title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+
+  .subtitle bdi {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .code-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .code-inputs input {
+    width: 48px;
+    height: 56px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    font-family: 'Cairo', sans-serif;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .code-inputs input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0,92,155,0.15);
+  }
+
+  .countdown {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+
+  .countdown span {
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Cairo', sans-serif;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .btn:hover {
+    background-color: var(--primary-dark);
+  }
+
+  .btn:disabled {
+    background-color: #d1d5db;
+    cursor: not-allowed;
+  }
+
+  .resend-section {
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  .resend-section a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .resend-section a.disabled {
+    pointer-events: none;
+    color: var(--text-secondary);
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">أدخل الرمز</h1>
+    <p class="subtitle">
+      أرسلنا رمزًا مكونًا من 6 أرقام إلى <bdi dir="ltr">+966 55 123 4567</bdi>
+    </p>
+
+    <form class="code-inputs" id="codeForm">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" data-index="0">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" data-index="1">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" data-index="2">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" data-index="3">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" data-index="4">
+      <input type="text" inputmode="numeric" maxlength="1" autocomplete="one-time-code" data-index="5">
+    </form>
+
+    <div class="countdown">إعادة الإرسال خلال <span id="timer">0:45</span></div>
+
+    <button class="btn" id="verifyBtn" disabled>تحقق</button>
+
+    <div class="resend-section">
+      <a id="resendLink" class="disabled">لم يصل الرمز؟</a>
+    </div>
+  </div>
+
+<script>
+  const inputs = document.querySelectorAll('.code-inputs input');
+  const verifyBtn = document.getElementById('verifyBtn');
+  const timerEl = document.getElementById('timer');
+  const resendLink = document.getElementById('resendLink');
+
+  let countdown = 45;
+  let timerInterval;
+
+  inputs[0].focus();
+
+  inputs.forEach((input, index) => {
+    input.addEventListener('input', () => {
+      input.value = input.value.replace(/[^0-9]/g, '');
+
+      if (input.value.length === 1) {
+        if (index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        } else {
+          verifyBtn.disabled = false;
+        }
+      }
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && input.value === '') {
+        if (index > 0) {
+          inputs[index - 1].focus();
+        }
+      }
+    });
+
+    input.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const pasted = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
+      if (pasted.length === 6) {
+        inputs.forEach((inp, i) => {
+          inp.value = pasted[i] || '';
+        });
+        verifyBtn.disabled = false;
+        inputs[5].focus();
+      }
+    });
+  });
+
+  startCountdown();
+
+  function startCountdown() {
+    timerInterval = setInterval(() => {
+      countdown--;
+      const mins = Math.floor(countdown / 60);
+      const secs = countdown % 60;
+      timerEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+
+      if (countdown <= 0) {
+        clearInterval(timerInterval);
+        resendLink.classList.remove('disabled');
+        resendLink.textContent = 'إعادة الإرسال';
+      }
+    }, 1000);
+  }
+
+  verifyBtn.addEventListener('click', () => {
+    const code = Array.from(inputs).map(i => i.value).join('');
+    if (code.length === 6) {
+      // In a real app this would call a verification API
+      alert('الرمز المُدخل: ' + code);
+    }
+  });
+
+  resendLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (countdown <= 0) {
+      inputs.forEach(i => i.value = '');
+      inputs[0].focus();
+      verifyBtn.disabled = true;
+
+      countdown = 45;
+      resendLink.classList.add('disabled');
+      resendLink.textContent = 'لم يصل الرمز؟';
+      startCountdown();
+    }
+  });
+</script>
+</body>
+</html>

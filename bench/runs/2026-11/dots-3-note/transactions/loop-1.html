@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>العمليات — محفظة عُمان</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ---- Type tokens scoped to Arabic ---- */
+  :lang(ar) {
+    --type-label-size: 14px;
+    --type-caption-size: 14px;
+    --type-body-size: 16px;
+    letter-spacing: 0;
+    text-transform: none;
+    font-style: normal;
+    line-height: 1.7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #1b1f23;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 24px 0;
+    font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--type-body-size);
+    color: #1a1a1a;
+  }
+  /* ---- Phone frame ---- */
+  .phone {
+    width: 390px;
+    height: 844px;
+    background: #fff;
+    border-radius: 44px;
+    border: 10px solid #1b1f23;
+    box-shadow: 0 30px 60px rgba(0,0,0,.45);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .screen { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* ---- Status bar ---- */
+  .statusbar {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 24px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  .statusbar .right { display: flex; gap: 6px; align-items: center; }
+
+  /* ---- App bar ---- */
+  .appbar {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px 12px;
+  }
+  .appbar .title {
+    flex: 1;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+  .icon-directional { display: inline-flex; }
+  .icon-directional:dir(rtl) { transform: scaleX(-1); }
+
+  /* ---- Balance card ---- */
+  .balance {
+    margin: 8px 20px 12px;
+    border-radius: 22px;
+    padding: 22px 22px 20px;
+    background: linear-gradient(135deg, #0f7d5c 0%, #0b5e46 100%);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  .balance::after {
+    content: "";
+    position: absolute;
+    inset-inline-end: -40px;
+    inset-block-start: -40px;
+    width: 140px; height: 140px;
+    background: rgba(255,255,255,.08);
+    border-radius: 50%;
+  }
+  .balance .label { font-size: 14px; opacity: .85; }
+  .balance .amount {
+    font-size: 36px;
+    font-weight: 800;
+    margin-top: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+  .balance .sub { font-size: 14px; opacity: .75; margin-top: 6px; }
+
+  /* ---- Filter row ---- */
+  .filterrow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 20px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filterrow::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #fff;
+    border: 1px solid #e3e6ea;
+    color: #3a3f45;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 9px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .chip.active { background: #0f7d5c; border-color: #0f7d5c; color: #fff; }
+  .chip svg { width: 12px; height: 12px; }
+
+  /* ---- Summary ---- */
+  .summary {
+    padding: 6px 22px 10px;
+    font-size: 14px;
+    color: #6b7077;
+    font-weight: 600;
+  }
+
+  /* ---- Transaction list ---- */
+  .txlist {
+    flex: 1;
+    overflow-y: auto;
+    margin: 0 20px 12px;
+    background: #fff;
+    border: 1px solid #eceef1;
+    border-radius: 18px;
+  }
+  .tx {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-block-end: 1px solid #f1f3f5;
+  }
+  .tx:last-child { border-block-end: none; }
+  .tx-date { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; min-width: 78px; }
+  .tx-day { font-size: 18px; font-weight: 800; color: #1a1a1a; font-variant-numeric: tabular-nums; }
+  .tx-meta { font-size: 14px; color: #8a8f98; font-weight: 600; }
+  .tx-mid { flex: 1; min-width: 0; }
+  .tx-name { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+  .tx-cat { font-size: 14px; color: #9aa0a7; font-weight: 600; margin-top: 2px; }
+  .tx-amt { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .tx-amt .amt { font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .tx-amt .amt.in { color: #1e9a6b; }
+  .tx-amt .amt.out { color: #c0392b; }
+  .pill {
+    font-size: 14px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 999px;
+  }
+  .pill.in { background: rgba(30,154,107,.14); color: #1e9a6b; }
+  .pill.out { background: rgba(192,57,43,.12); color: #c0392b; }
+
+  /* ---- Bottom nav ---- */
+  .bottomnav {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 8px 14px;
+    border-top: 1px solid #eceef1;
+    background: #fff;
+  }
+  .bottomnav .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: #9aa0a7;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .bottomnav .item.active { color: #0f7d5c; }
+  .bottomnav .item svg { width: 22px; height: 22px; }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="screen">
+      <!-- Status bar -->
+      <div class="statusbar">
+        <span>١٢:٣٠</span>
+        <span class="right">
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><rect x="0" y="2" width="10" height="7" rx="1.5" stroke="#1a1a1a" stroke-width="1.4"/><rect x="11" y="4" width="3" height="3" rx=".8" fill="#1a1a1a"/></svg>
+        </span>
+      </div>
+
+      <!-- App bar -->
+      <div class="appbar">
+        <svg class="icon-directional" width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15 6 9 12l6 6" stroke="#1a1a1a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="title">العمليات</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 4h4l2 7-1.5 2.5a2 2 0 0 0 .4 2.3L10 20a2 2 0 0 0 3.3-.6l.7-1.2M14 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+
+      <!-- Balance -->
+      <div class="balance">
+        <div class="label">رَصِيد المتاح</div>
+        <div class="amount">١٢٣٤٫٥٠٠ ر.ع</div>
+        <div class="sub">حدّث قبل قليل</div>
+      </div>
+
+      <!-- Filter -->
+      <div class="filterrow">
+        <span class="chip active">هذا الشهر<svg viewBox="0 0 12 12" fill="none"><path d="M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="chip">الكل</span>
+        <span class="chip">الدخل</span>
+        <span class="chip">المصروفات</span>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary">٨ عمليات هذا الشهر</div>
+
+      <!-- Transactions -->
+      <div class="txlist">
+        <div class="tx">
+          <div class="tx-date"><span class="tx-day">٢٥</span><span class="tx-meta">ديسمبر ٢٠٢٥</span></div>
+          <div class="tx-mid"><div class="tx-name"><bdi dir="ltr">Lulu Hypermarket</bdi></div><div class="tx-cat">سوبر ماركت</div></div>
+          <div class="tx-amt"><span class="amt out">١٢٫٥٠٠ ر.ع</span><span class="pill out">خرج</span></div>
+        </div>
+        <div class="tx">
+          <div class="tx-date"><span class="tx-day">٢٢</span><span class="tx-meta">ديسمبر ٢٠٢٥</span></div>
+          <div class="tx-mid"><div class="tx-name"><bdi dir="ltr">Netflix</bdi></div><div class="tx-cat">ترفيه</div></div>
+          <div class="tx-amt"><span class="amt out">٥٫٥٠٠ ر.ع</span><span class="pill out">خرج</span></div>
+        </div>
+        <div class="tx">
+          <div class="tx-date"><span class="tx-day">٢٠</span><span class="tx-meta">ديسمبر ٢٠٢٥</span></div>
+          <div class="tx-mid"><div class="tx-name"><bdi dir="ltr">Du</bdi></div><div class="tx-cat">راتب</div></div>
+          <div class="tx-amt"><span class="amt in">٥٠٠٫٠٠٠ ر.ع</span><span class="pill in">دخل</span></div>
+        </div>
+        <div class="tx">
+          <div class="tx-date"><span class="tx-day">١٨</span><span class="tx-meta">ديسمبر ٢٠٢٥</span></div>
+          <div class="tx-mid"><div class="tx-name"><bdi dir="ltr">Starbucks</bdi></div><div class="tx-cat">مطعم</div></div>
+          <div class="tx-amt"><span class="amt out">٣٫٢٥٠ ر.ع</span><span class="pill out">خرج</span></div>
+        </div>
+        <div class="tx">
+          <div class="tx-date"><span class="tx-day">١٥</span><span class="tx-meta">ديسمبر ٢٠٢٥</span></div>
+          <div class="tx-mid"><div class="tx-name"><bdi dir="ltr">Careem</bdi></div><div class="tx-cat">نقل</div></div>
+          <div class="tx-amt"><span class="amt out">٢٫٥٠٠ ر.ع</span><span class="pill out">خرج</span></div>
+        </div>
+        <div class="tx">
+          <div class="tx-date"><span class="tx-day">١٢</span><span class="tx-meta">ديسمبر ٢٠٢٥</span></div>
+          <div class="tx-mid"><div class="tx-name"><bdi dir="ltr">Omantel</bdi></div><div class="tx-cat">اتصالات</div></div>
+          <div class="tx-amt"><span class="amt out">١٥٫٠٠٠ ر.ع</span><span class="pill out">خرج</span></div>
+        </div>
+        <div class="tx">
+          <div class="tx-date"><span class="tx-day">١٠</span><span class="tx-meta">ديسمبر ٢٠٢٥</span></div>
+          <div class="tx-mid"><div class="tx-name"><bdi dir="ltr">Bank Nizwa</bdi></div><div class="tx-cat">بنك</div></div>
+          <div class="tx-amt"><span class="amt in">١٠٠٫٠٠٠ ر.ع</span><span class="pill in">دخل</span></div>
+        </div>
+        <div class="tx">
+          <div class="tx-date"><span class="tx-day">٥</span><span class="tx-meta">ديسمبر ٢٠٢٥</span></div>
+          <div class="tx-mid"><div class="tx-name"><bdi dir="ltr">Amazon.ae</bdi></div><div class="tx-cat">تسوق</div></div>
+          <div class="tx-amt"><span class="amt out">٨٫٧٥٠ ر.ع</span><span class="pill out">خرج</span></div>
+        </div>
+      </div>
+
+      <!-- Bottom nav -->
+      <div class="bottomnav">
+        <div class="item">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 11V6a2 2 0 0 1 2-2h1.5a1 1 0 0 0 .9-.5l2.6-3a1 1 0 0 1 1.4 0l2.6 3a1 1 0 0 0 .9.5H18a2 2 0 0 1 2 2v5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 11v9h14v-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="16" r="1.5" fill="currentColor"/></svg>
+          <span>الصفحة الرئيسية</span>
+        </div>
+        <div class="item active">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v11H7l-3 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          <span>العمليات</span>
+        </div>
+        <div class="item">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 7h13v10H3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M17 7h4v10h-4" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="8" cy="12" r="1.5" fill="currentColor"/></svg>
+          <span>المحفظة</span>
+        </div>
+        <div class="item">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 21v-2a6 6 0 0 1 12 0v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>الملف</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

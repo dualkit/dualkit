@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>عنوان التوصيل | بقالة دبي الطازجة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-arabic: 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif;
+      --color-primary: #15803d;
+      --color-primary-hover: #166534;
+      --color-primary-light: #f0fdf4;
+      --color-primary-border: #bbf7d0;
+      --color-bg: #f8fafc;
+      --color-surface: #ffffff;
+      --color-text-main: #0f172a;
+      --color-text-muted: #475569;
+      --color-border: #cbd5e1;
+      --color-border-focus: #15803d;
+      --color-error: #dc2626;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08);
+      --shadow-sheet: 0 -4px 16px 0 rgb(0 0 0 / 0.06);
+
+      /* Arabic typography tokens - 14px size floor */
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      --type-title-size: 20px;
+    }
+
+    :lang(ar) {
+      font-family: var(--font-arabic);
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+
+    * {
+      box-navigation: auto;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: #e2e8f0;
+      color: var(--color-text-main);
+      font-family: var(--font-arabic);
+      font-size: var(--type-body-size);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0;
+    }
+
+    @media (min-width: 480px) {
+      body {
+        padding: 24px 16px;
+      }
+    }
+
+    /* Mobile phone viewport shell */
+    .app-screen {
+      width: 100%;
+      max-width: 420px;
+      min-height: 100vh;
+      background-color: var(--color-bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: var(--shadow-md);
+    }
+
+    @media (min-width: 480px) {
+      .app-screen {
+        min-height: auto;
+        border-radius: 28px;
+        overflow: hidden;
+        border: 1px solid #cbd5e1;
+      }
+    }
+
+    /* App Header */
+    .app-header {
+      background-color: var(--color-surface);
+      border-block-end: 1px solid var(--color-border);
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 20;
+    }
+
+    .btn-icon {
+      background: none;
+      border: 1px solid var(--color-border);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--color-text-main);
+      flex-shrink: 0;
+    }
+
+    .btn-icon:hover {
+      background-color: #f1f5f9;
+    }
+
+    /* Directional navigation icon mirrored in RTL */
+    .icon-directional:dir(rtl) {
+      transform: scaleX(-1);
+    }
+
+    .header-titles {
+      flex: 1;
+    }
+
+    .header-title {
+      font-size: var(--type-title-size);
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--color-text-main);
+    }
+
+    .header-subtitle {
+      font-size: var(--type-caption-size);
+      color: var(--color-text-muted);
+      margin-block-start: 2px;
+    }
+
+    /* Grocery progress pill */
+    .delivery-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background-color: var(--color-primary-light);
+      border: 1px solid var(--color-primary-border);
+      border-radius: 9999px;
+      font-size: var(--type-caption-size);
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+
+    .delivery-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--color-primary);
+    }
+
+    /* Scrollable form content */
+    .form-content {
+      padding: 20px 18px 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      overflow-y: auto;
+    }
+
+    /* Address Type Selector */
+    .section-title {
+      font-size: var(--type-label-size);
+      font-weight: 600;
+      color: var(--color-text-main);
+      margin-block-end: 8px;
+    }
+
+    .address-type-group {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .type-pill {
+      position: relative;
+    }
+
+    .type-pill input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      inset: 0;
+      cursor: pointer;
+    }
+
+    .type-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 10px 8px;
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background-color: var(--color-surface);
+      font-size: var(--type-label-size);
+      font-weight: 500;
+      color: var(--color-text-main);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      min-height: 56px;
+      text-align: center;
+    }
+
+    .type-pill input[type="radio"]:checked + .type-label {
+      border-color: var(--color-primary);
+      background-color: var(--color-primary-light);
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+
+    .type-pill input[type="radio"]:focus-visible + .type-label {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Form Fields */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: var(--type-label-size);
+      font-weight: 600;
+      color: var(--color-text-main);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .field-required {
+      color: var(--color-error);
+      font-size: var(--type-label-size);
+    }
+
+    .field-optional {
+      font-size: var(--type-caption-size);
+      font-weight: 400;
+      color: var(--color-text-muted);
+    }
+
+    .field-input,
+    .field-select {
+      width: 100%;
+      height: 48px;
+      padding: 0 14px;
+      font-family: var(--font-arabic);
+      font-size: var(--type-body-size);
+      color: var(--color-text-main);
+      background-color: var(--color-surface);
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-md);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .field-input:focus,
+    .field-select:focus {
+      border-color: var(--color-border-focus);
+      box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.15);
+    }
+
+    .field-input::placeholder {
+      color: #94a3b8;
+    }
+
+    .field-hint {
+      font-size: var(--type-caption-size);
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* Select wrapper with custom arrow aligned to logical end */
+    .select-wrapper {
+      position: relative;
+    }
+
+    .field-select {
+      appearance: none;
+      -webkit-appearance: none;
+      padding-inline-end: 38px;
+      cursor: pointer;
+    }
+
+    .select-chevron {
+      position: absolute;
+      inset-inline-end: 14px;
+      inset-block-start: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+    }
+
+    /* Phone Input: strict LTR wrapper keeps prefix +971 on start edge */
+    .phone-control-wrapper {
+      display: flex;
+      align-items: stretch;
+      background-color: var(--color-surface);
+      border: 1.5px solid var(--color-border);
+      border-radius: var(--radius-md);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      overflow: hidden;
+    }
+
+    .phone-control-wrapper:focus-within {
+      border-color: var(--color-border-focus);
+      box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.15);
+    }
+
+    .phone-prefix-chip {
+      background-color: #f1f5f9;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: var(--type-label-size);
+      font-weight: 600;
+      color: var(--color-text-muted);
+      border-inline-end: 1.5px solid var(--color-border);
+      user-select: none;
+    }
+
+    .phone-field-input {
+      border: none !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      height: 48px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Makani card helper */
+    .makani-card {
+      background-color: #f8fafc;
+      border: 1px dashed var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .makani-badge-icon {
+      background-color: #e0f2fe;
+      color: #0369a1;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-weight: 700;
+      font-size: var(--type-label-size);
+    }
+
+    .makani-info {
+      flex: 1;
+    }
+
+    .makani-info-title {
+      font-size: var(--type-label-size);
+      font-weight: 600;
+      color: var(--color-text-main);
+      margin-block-end: 2px;
+    }
+
+    .makani-info-desc {
+      font-size: var(--type-caption-size);
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* Tabular numeric alignment for codes */
+    .numeral-code {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Sticky Footer Action */
+    .sticky-footer {
+      position: sticky;
+      inset-block-end: 0;
+      background-color: var(--color-surface);
+      border-block-start: 1px solid var(--color-border);
+      padding: 14px 18px;
+      box-shadow: var(--shadow-sheet);
+      z-index: 30;
+    }
+
+    .btn-submit {
+      width: 100%;
+      height: 52px;
+      background-color: var(--color-primary);
+      color: #ffffff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font-arabic);
+      font-size: var(--type-body-size);
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 2px 4px 0 rgba(21, 128, 61, 0.25);
+      transition: background-color 0.15s ease, transform 0.05s ease;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--color-primary-hover);
+    }
+
+    .btn-submit:active {
+      transform: scale(0.99);
+    }
+
+    /* Success toast */
+    .toast {
+      position: fixed;
+      inset-block-start: 24px;
+      inset-inline: 18px;
+      max-width: 384px;
+      margin-inline: auto;
+      background-color: #064e3b;
+      color: #ffffff;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      font-size: var(--type-label-size);
+      font-weight: 500;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+      z-index: 100;
+      animation: slideIn 0.2s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="app-screen" role="region" aria-label="شاشة عنوان التوصيل">
+
+    <!-- Header -->
+    <header class="app-header">
+      <button type="button" class="btn-icon" aria-label="الرجوع إلى السلة">
+        <svg class="icon-directional" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+
+      <div class="header-titles">
+        <h1 class="header-title">عنوان التوصيل</h1>
+        <p class="header-subtitle">توصيل البقالة السريع</p>
+      </div>
+
+      <div class="delivery-badge" aria-label="توصيل خلال ثلاثين دقيقة">
+        <span class="delivery-badge-dot" aria-hidden="true"></span>
+        <span>٣٠ دقيقة</span>
+      </div>
+    </header>
+
+    <!-- Address Form -->
+    <form id="addressForm" class="form-content" novalidate>
+
+      <!-- Address Type Selector -->
+      <div>
+        <p class="section-title">نوع المسكن</p>
+        <div class="address-type-group" role="radiogroup" aria-label="نوع المسكن">
+          <div class="type-pill">
+            <input type="radio" id="typeApartment" name="address_type" value="apartment" checked>
+            <label for="typeApartment" class="type-label">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                <line x1="9" y1="6" x2="9" y2="6.01"></line>
+                <line x1="15" y1="6" x2="15" y2="6.01"></line>
+                <line x1="9" y1="10" x2="9" y2="10.01"></line>
+                <line x1="15" y1="10" x2="15" y2="10.01"></line>
+                <line x1="9" y1="14" x2="9" y2="14.01"></line>
+                <line x1="15" y1="14" x2="15" y2="14.01"></line>
+                <path d="M10 22v-4h4v4"></path>
+              </svg>
+              <span>شقة</span>
+            </label>
+          </div>
+
+          <div class="type-pill">
+            <input type="radio" id="typeVilla" name="address_type" value="villa">
+            <label for="typeVilla" class="type-label">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              <span>فيلا</span>
+            </label>
+          </div>
+
+          <div class="type-pill">
+            <input type="radio" id="typeOffice" name="address_type" value="office">
+            <label for="typeOffice" class="type-label">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+              <span>مكتب</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emirate Picker (Default: Dubai) -->
+      <div class="field-group">
+        <label for="emirate" class="field-label">
+          <span>الإمارة</span>
+          <span class="field-required" aria-hidden="true">*</span>
+        </label>
+        <div class="select-wrapper">
+          <select id="emirate" name="emirate" class="field-select" required>
+            <option value="DXB" selected>دبي (الإمارة الحالية)</option>
+            <option value="AUH">أبوظبي</option>
+            <option value="SHJ">الشارقة</option>
+            <option value="AJM">عجمان</option>
+            <option value="UAQ">أم القيوين</option>
+            <option value="RAK">رأس الخيمة</option>
+            <option value="FUJ">الفجيرة</option>
+          </select>
+          <div class="select-chevron" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Area -->
+      <div class="field-group">
+        <label for="area" class="field-label">
+          <span>المنطقة أو الحي</span>
+          <span class="field-required" aria-hidden="true">*</span>
+        </label>
+        <input
+          type="text"
+          id="area"
+          name="area"
+          class="field-input"
+          dir="auto"
+          placeholder="مثال: البرشاء، وسط مدينة دبي، دبي مارينا"
+          autocomplete="address-level2"
+          required
+        >
+      </div>
+
+      <!-- Street -->
+      <div class="field-group">
+        <label for="street" class="field-label">
+          <span>اسم الشارع</span>
+          <span class="field-required" aria-hidden="true">*</span>
+        </label>
+        <input
+          type="text"
+          id="street"
+          name="street"
+          class="field-input"
+          dir="auto"
+          placeholder="مثال: شارع السعادة، شارع الشيخ زايد"
+          autocomplete="street-address"
+          required
+        >
+      </div>
+
+      <!-- Building or Villa -->
+      <div class="field-group">
+        <label for="building" class="field-label">
+          <span>المبنى أو الفيلا</span>
+          <span class="field-required" aria-hidden="true">*</span>
+        </label>
+        <input
+          type="text"
+          id="building"
+          name="building"
+          class="field-input"
+          dir="auto"
+          placeholder="اسم البرج ورقم الشقة، أو رقم الفيلا"
+          required
+        >
+      </div>
+
+      <!-- Makani Number Field -->
+      <div class="field-group">
+        <label for="makani" class="field-label">
+          <span>رقم مكاني</span>
+          <span class="field-optional">(اختياري — يساعد السائق في الوصول بدقة)</span>
+        </label>
+        <input
+          type="text"
+          id="makani"
+          name="makani"
+          class="field-input numeral-code"
+          dir="ltr"
+          inputmode="numeric"
+          pattern="[0-9]{5}\s?[0-9]{5}"
+          maxlength="11"
+          placeholder="30032 95320"
+          aria-describedby="makani-hint"
+        >
+        <p id="makani-hint" class="field-hint">
+          الرمز الذكي المكوّن من 10 أرقام على مدخل المبنى في دبي، مثال: <bdi dir="ltr">30032 95320</bdi>
+        </p>
+      </div>
+
+      <!-- Phone Number Field with isolate for the UAE example -->
+      <div class="field-group">
+        <label for="phone" class="field-label">
+          <span>رقم الهاتف للتواصل مع السائق</span>
+          <span class="field-required" aria-hidden="true">*</span>
+        </label>
+        <!-- LTR control keeps +971 on start edge and digits ordered correctly -->
+        <div class="phone-control-wrapper" dir="ltr">
+          <div class="phone-prefix-chip">
+            <span aria-hidden="true">🇦🇪</span>
+            <span dir="ltr">+971</span>
+          </div>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            class="field-input phone-field-input"
+            dir="ltr"
+            inputmode="tel"
+            autocomplete="tel-national"
+            placeholder="050 123 4567"
+            aria-describedby="phone-hint"
+            required
+          >
+        </div>
+        <p id="phone-hint" class="field-hint">
+          أدخل رقم الهاتف المتحرك الإماراتي، مثال: <bdi dir="ltr">050 123 4567</bdi>
+        </p>
+      </div>
+
+      <!-- Delivery Note -->
+      <div class="field-group">
+        <label for="notes" class="field-label">
+          <span>تعليمات التوصيل</span>
+          <span class="field-optional">(اختياري)</span>
+        </label>
+        <input
+          type="text"
+          id="notes"
+          name="notes"
+          class="field-input"
+          dir="auto"
+          placeholder="مثال: اترك الطلب عند الباب، أو اتصل عند الوصول"
+        >
+      </div>
+
+    </form>
+
+    <!-- Sticky Bottom Bar -->
+    <footer class="sticky-footer">
+      <button type="submit" form="addressForm" class="btn-submit" id="saveBtn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+          <polyline points="17 21 17 13 7 13 7 21"></polyline>
+          <polyline points="7 3 7 8 15 8"></polyline>
+        </svg>
+        <span>حفظ العنوان</span>
+      </button>
+    </footer>
+
+    <!-- Notification Toast -->
+    <div id="saveToast" class="toast" role="status" aria-live="polite">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span>تم حفظ عنوان التوصيل بنجاح</span>
+    </div>
+
+  </main>
+
+  <script>
+    // Normalise typed Eastern Arabic and Persian numerals to Western digits
+    function toWesternDigits(str) {
+      if (!str) return '';
+      const eastern = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+      const persian = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+      return str
+        .replace(/[٠-٩]/g, d => eastern.indexOf(d))
+        .replace(/[۰-۹]/g, d => persian.indexOf(d));
+    }
+
+    const phoneInput = document.getElementById('phone');
+    const makaniInput = document.getElementById('makani');
+    const form = document.getElementById('addressForm');
+    const toast = document.getElementById('saveToast');
+
+    // Live normalisation for phone and Makani inputs
+    phoneInput.addEventListener('input', (e) => {
+      const cursor = e.target.selectionStart;
+      e.target.value = toWesternDigits(e.target.value);
+      e.target.setSelectionRange(cursor, cursor);
+    });
+
+    makaniInput.addEventListener('input', (e) => {
+      let val = toWesternDigits(e.target.value).replace(/\D/g, '').slice(0, 10);
+      if (val.length > 5) {
+        val = val.slice(0, 5) + ' ' + val.slice(5);
+      }
+      e.target.value = val;
+    });
+
+    // Form submission handling
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      // Show confirmed toast
+      toast.style.display = 'flex';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3500);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أدخل الرمز</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #f5f5f5;
+      --color-surface: #ffffff;
+      --color-text: #333333;
+      --color-text-secondary: #666666;
+      --color-primary: #4caf50;
+      --color-primary-hover: #45a049;
+      --color-border: #dddddd;
+      --color-focus: #4caf50;
+      --spacing-xs: 0.25rem;
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+      --radius-sm: 0.5rem;
+      --radius-md: 1rem;
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      --font-family: 'IBM Plex Arabic', system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: var(--spacing-md);
+      direction: rtl;
+      text-align: right;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      background-color: var(--color-surface);
+      padding: var(--spacing-xl);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: var(--spacing-sm);
+      color: var(--color-text);
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--spacing-xl);
+      line-height: 1.6;
+    }
+
+    .subtitle bdi {
+      white-space: nowrap;
+    }
+
+    .otp-container {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .otp-input {
+      width: 2.5rem;
+      height: 3rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      text-align: center;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background-color: var(--color-surface);
+      color: var(--color-text);
+      direction: ltr;
+    }
+
+    .otp-input:focus {
+      border-color: var(--color-focus);
+      box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    }
+
+    .otp-input:disabled {
+      background-color: #f9f9f9;
+      cursor: not-allowed;
+    }
+
+    .countdown {
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--spacing-lg);
+      min-height: 1.5rem;
+    }
+
+    .countdown span {
+      font-weight: 600;
+      color: var(--color-text);
+    }
+
+    .verify-btn {
+      width: 100%;
+      padding: var(--spacing-md);
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      background-color: var(--color-primary);
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+
+    .verify-btn:hover {
+      background-color: var(--color-primary-hover);
+    }
+
+    .verify-btn:active {
+      transform: scale(0.98);
+    }
+
+    .verify-btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    .resend-btn {
+      background: none;
+      border: none;
+      color: var(--color-primary);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    .resend-btn:hover {
+      color: var(--color-primary-hover);
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: var(--spacing-lg);
+      }
+      .otp-input {
+        width: 2rem;
+        height: 2.5rem;
+        font-size: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>أدخل الرمز</h1>
+    <p class="subtitle">
+      أرسلنا رمزًا مكوّنًا من <bdi dir="ltr">6</bdi> أرقام إلى <bdi dir="ltr">+966 55 123 4567</bdi>
+    </p>
+
+    <div class="otp-container">
+      <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9٠-٩]" autocomplete="one-time-code" autofocus dir="ltr">
+      <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9٠-٩]" autocomplete="one-time-code" dir="ltr">
+      <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9٠-٩]" autocomplete="one-time-code" dir="ltr">
+      <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9٠-٩]" autocomplete="one-time-code" dir="ltr">
+      <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9٠-٩]" autocomplete="one-time-code" dir="ltr">
+      <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9٠-٩]" autocomplete="one-time-code" dir="ltr">
+    </div>
+
+    <div class="countdown">
+      عادة إرسال بعد <span id="timer" dir="ltr">0:45</span>
+    </div>
+
+    <button class="verify-btn" id="verify-btn">IR</button>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const inputs = document.querySelectorAll('.otp-input');
+      const verifyBtn = document.getElementById('verify-btn');
+      const timerEl = document.getElementById('timer');
+      const countdownContainer = timerEl.parentElement;
+
+      // Convert Arabic-Indic digits to Western digits
+      function toWesternDigits(str) {
+        return str.replace(/[٠١٢٣٤٥٦٧٨٩]/g, function (c) {
+          return c.charCodeAt(0) - 1632;
+        });
+      }
+
+      // OTP input navigation
+      inputs.forEach((input, index) => {
+        input.addEventListener('input', function () {
+          // Convert Arabic digits to Western
+          this.value = toWesternDigits(this.value);
+          // Keep only digits
+          this.value = this.value.replace(/[^0-9]/g, '');
+          if (this.value.length === 1) {
+            if (index < inputs.length - 1) {
+              inputs[index + 1].focus();
+              inputs[index + 1].select();
+            }
+          }
+        });
+
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Backspace') {
+            if (this.value === '' && index > 0) {
+              inputs[index - 1].focus();
+            }
+          }
+          if (e.key === 'ArrowRight' && index < inputs.length - 1) {
+            inputs[index + 1].focus();
+          }
+          if (e.key === 'ArrowLeft' && index > 0) {
+            inputs[index - 1].focus();
+          }
+        });
+
+        input.addEventListener('paste', function (e) {
+          e.preventDefault();
+          const pasted = e.clipboardData.getData('text');
+          const converted = toWesternDigits(pasted).replace(/[^0-9]/g, '');
+          if (converted.length === 6) {
+            inputs.forEach((inp, i) => {
+              inp.value = converted[i] || '';
+            });
+            inputs[5].focus();
+          }
+        });
+      });
+
+      // Verify button handler
+      verifyBtn.addEventListener('click', function () {
+        const code = Array.from(inputs).map(input => input.value).join('');
+        if (code.length !== 6) {
+          // Simple visual feedback for incomplete code
+          inputs.forEach(input => {
+            input.style.borderColor = '#f44336';
+            setTimeout(() => {
+              input.style.borderColor = '';
+            }, 1000);
+          });
+          return;
+        }
+        // Simulate verification
+        this.textContent = '...';
+        this.disabled = true;
+        setTimeout(() => {
+          alert('الرمز تم التحقق منه بنجاح: ' + code);
+          this.textContent = 'IR';
+          this.disabled = false;
+        }, 1000);
+      });
+
+      // Countdown logic
+      let timeLeft = 45;
+      let countdownInterval = null;
+
+      function formatTime(seconds) {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+      }
+
+      function startCountdown() {
+        timeLeft = 45;
+        timerEl.textContent = formatTime(timeLeft);
+        timerEl.dir = 'ltr';
+
+        countdownInterval = setInterval(() => {
+          timeLeft--;
+          if (timeLeft >= 0) {
+            timerEl.textContent = formatTime(timeLeft);
+          }
+          if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            showResendButton();
+          }
+        }, 1000);
+      }
+
+      function showResendButton() {
+        countdownContainer.innerHTML = '';
+        const resendBtn = document.createElement('button');
+        resendBtn.className = 'resend-btn';
+        resendBtn.textContent = 'أعد الإرسال';
+        resendBtn.addEventListener('click', function () {
+          // Reset inputs
+          inputs.forEach(input => input.value = '');
+          inputs[0].focus();
+          // Restart countdown
+          countdownContainer.innerHTML = 'إعادة إرسال بعد <span id="timer" dir="ltr">0:45</span>';
+          timerEl = document.getElementById('timer');
+          startCountdown();
+        });
+        countdownContainer.appendChild(resendBtn);
+      }
+
+      // Initialize countdown
+      startCountdown();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الملف الشخصي</title>
+  
+  <!-- Fonts: IBM Plex Sans Arabic + IBM Plex Sans Latin partner -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+    }
+
+    :lang(ar) {
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+      font-style: normal;
+      line-height: 1.65;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans Arabic', 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: var(--type-body-size);
+      background-color: #0b111a;
+      color: #f1f5f9;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Directional icons that mirror in RTL */
+    .icon-directional:dir(rtl) {
+      transform: scaleX(-1);
+    }
+
+    /* Tabular numbers for financial strings */
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 14px floor guarantee on all UI labels & captions */
+    .caption-floor {
+      font-size: max(14px, 0.875rem);
+      line-height: 1.5;
+    }
+
+    /* Smooth sheet transition */
+    .sheet-transition {
+      transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-0 sm:p-4 bg-slate-950">
+
+  <!-- Mobile phone frame container -->
+  <main class="w-full max-w-[420px] min-h-screen sm:min-h-[860px] bg-slate-900 sm:rounded-[40px] shadow-2xl border border-slate-800/80 flex flex-col overflow-hidden relative">
+
+    <!-- Top status bar (Phone mockup) -->
+    <header class="pt-3 px-6 pb-2 flex items-center justify-between text-slate-400 select-none caption-floor">
+      <span class="font-medium text-slate-300 tabular-nums" dir="ltr">9:41</span>
+      <div class="flex items-center gap-2" dir="ltr">
+        <!-- Signal -->
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 18.25c-.2.2-.2.51 0 .71.2.2.51.2.71 0l.64-.64C7.24 19.46 9.48 20.25 12 20.25s4.76-.79 6.3-1.93l.64.64c.2.2.51.2.71 0 .2-.2.2-.51 0-.71l-.62-.64C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9z"/></svg>
+        <!-- 5G indicator -->
+        <span class="text-xs font-semibold px-1 py-0.5 rounded bg-slate-800 text-slate-300">5G</span>
+        <!-- Battery -->
+        <div class="w-6 h-3 border border-slate-400 rounded-sm p-0.5 flex items-center">
+          <div class="h-full w-4/5 bg-slate-200 rounded-2xs"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- App navigation bar -->
+    <nav class="px-5 py-3 flex items-center justify-between border-b border-slate-800/70" aria-label="شريط التنقل العلوي">
+      <button type="button" aria-label="الرجوع" class="p-2 -ms-2 rounded-full hover:bg-slate-800 text-slate-200 transition-colors">
+        <!-- Back chevron: directional, must mirror in RTL -->
+        <svg class="w-5 h-5 icon-directional" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </button>
+
+      <h1 class="text-base font-semibold text-white">الملف الشخصي</h1>
+
+      <button type="button" aria-label="المساعدة والدعم" class="p-2 -me-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </button>
+    </nav>
+
+    <!-- Scrollable content area -->
+    <div class="flex-1 overflow-y-auto px-5 py-6 space-y-6">
+
+      <!-- Profile Header Summary -->
+      <section class="flex flex-col items-center text-center pb-2">
+        <div class="relative mb-3">
+          <!-- Avatar badge with UAE primary emerald tones -->
+          <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-emerald-600 via-teal-700 to-emerald-400 p-0.5 shadow-lg shadow-emerald-950/50">
+            <div class="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-2xl font-bold text-emerald-300">
+              <span>ل م</span>
+            </div>
+          </div>
+          <span class="absolute bottom-0 end-0 bg-emerald-500 text-slate-950 p-1 rounded-full ring-2 ring-slate-900" title="موثق">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+            </svg>
+          </span>
+        </div>
+
+        <h2 class="text-xl font-bold text-white mb-1">ليلى المنصوري</h2>
+        
+        <!-- UAE Pass verification tag -->
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-700/50 text-emerald-300 caption-floor">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>موثق عبر الهوية الرقمية للإمارات</span>
+        </div>
+      </section>
+
+      <!-- Main Profile Cards Section -->
+      <section class="space-y-3.5" aria-label="بيانات الحساب الأساسية">
+
+        <!-- Card 1: Name and Email -->
+        <article class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 transition hover:border-slate-600">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3 min-w-0">
+              <div class="p-2.5 rounded-xl bg-slate-700/50 text-slate-300 shrink-0 mt-0.5">
+                <!-- User card icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+              </div>
+              <div class="min-w-0">
+                <span class="block text-slate-400 caption-floor font-medium mb-1">الاسم والبريد الإلكتروني</span>
+                <p class="text-base font-semibold text-white truncate">ليلى المنصوري</p>
+                <p class="caption-floor text-slate-300 truncate mt-0.5">
+                  <!-- Email is strictly LTR, isolated to prevent bidi reordering -->
+                  <bdi dir="ltr">layla@example.com</bdi>
+                </p>
+              </div>
+            </div>
+
+            <!-- Edit Action Button (Neutral verbal noun) -->
+            <button 
+              type="button" 
+              onclick="openEditor('name_email', 'الاسم والبريد الإلكتروني', 'ليلى المنصوري', 'layla@example.com')"
+              class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-700/70 hover:bg-emerald-600/30 text-emerald-400 hover:text-emerald-300 text-sm font-medium border border-slate-600/50 hover:border-emerald-500/40 transition-colors flex items-center gap-1.5"
+            >
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+              </svg>
+              <span>تعديل</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 2: Phone Number -->
+        <article class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 transition hover:border-slate-600">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3 min-w-0">
+              <div class="p-2.5 rounded-xl bg-slate-700/50 text-slate-300 shrink-0 mt-0.5">
+                <!-- Phone icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+                </svg>
+              </div>
+              <div class="min-w-0">
+                <span class="block text-slate-400 caption-floor font-medium mb-1">رقم الهاتف المتحرك</span>
+                <p class="text-base font-semibold text-white tracking-normal">
+                  <!-- Phone isolated with dir="ltr" so bidi algorithm doesn't reorder groups -->
+                  <bdi dir="ltr" class="tabular-nums">+971 50 123 4567</bdi>
+                </p>
+                <div class="flex items-center gap-1.5 mt-1 text-emerald-400 caption-floor">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span>مفعّل لاستلام التحويلات الفورية (آني)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Edit Action Button -->
+            <button 
+              type="button" 
+              onclick="openEditor('phone', 'رقم الهاتف المتحرك', '+971 50 123 4567', '')"
+              class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-700/70 hover:bg-emerald-600/30 text-emerald-400 hover:text-emerald-300 text-sm font-medium border border-slate-600/50 hover:border-emerald-500/40 transition-colors flex items-center gap-1.5"
+            >
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+              </svg>
+              <span>تعديل</span>
+            </button>
+          </div>
+        </article>
+
+        <!-- Card 3: UAE IBAN -->
+        <article class="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-4 transition hover:border-slate-600">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex items-start gap-3 min-w-0">
+              <div class="p-2.5 rounded-xl bg-slate-700/50 text-slate-300 shrink-0 mt-0.5">
+                <!-- Bank building icon -->
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+                </svg>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-slate-400 caption-floor font-medium">رقم الحساب المصرفي الدولي (IBAN)</span>
+                </div>
+
+                <!-- Primary UAE IBAN with 4-character grouping, isolated in LTR -->
+                <div class="p-2.5 rounded-xl bg-slate-900/90 border border-slate-700/80 my-1">
+                  <p class="font-mono text-sm sm:text-base font-semibold text-emerald-300 text-start">
+                    <bdi dir="ltr" class="tabular-nums select-all">AE07 0331 2345 6789 0123 456</bdi>
+                  </p>
+                </div>
+
+                <div class="flex items-center justify-between text-slate-400 caption-floor mt-1.5">
+                  <span>الحساب الأساسي للتحويلات</span>
+                  <button 
+                    type="button" 
+                    onclick="copyIban('AE070331234567890123456')" 
+                    id="copyBtn"
+                    class="text-xs text-slate-300 hover:text-white flex items-center gap-1 font-medium bg-slate-700/40 px-2 py-1 rounded-lg"
+                  >
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
+                    </svg>
+                    <span id="copyText">نسخ الآيبان</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Edit Action Button -->
+            <button 
+              type="button" 
+              onclick="openEditor('iban', 'رقم الآيبان (IBAN)', 'AE07 0331 2345 6789 0123 456', '')"
+              class="shrink-0 px-3 py-1.5 rounded-xl bg-slate-700/70 hover:bg-emerald-600/30 text-emerald-400 hover:text-emerald-300 text-sm font-medium border border-slate-600/50 hover:border-emerald-500/40 transition-colors flex items-center gap-1.5"
+            >
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+              </svg>
+              <span>تعديل</span>
+            </button>
+          </div>
+        </article>
+
+      </section>
+
+      <!-- Security and Identity Details Note (Emirates ID masked) -->
+      <section class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="p-2 rounded-lg bg-emerald-950/70 text-emerald-400">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+          </div>
+          <div>
+            <span class="block text-slate-300 font-medium caption-floor">بطاقة الهوية الإماراتية</span>
+            <!-- Masked Emirates ID with LTR direction -->
+            <p class="caption-floor text-slate-400">
+              <bdi dir="ltr" class="tabular-nums">784-1994-*******-3</bdi>
+            </p>
+          </div>
+        </div>
+        <span class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700/60 font-medium">سارية</span>
+      </section>
+
+      <!-- Logout / Action (Neutral verbal noun) -->
+      <div class="pt-2 pb-4">
+        <button type="button" class="w-full py-3.5 px-4 rounded-2xl border border-red-500/20 bg-red-950/20 hover:bg-red-950/40 text-red-400 text-sm font-semibold transition-colors flex items-center justify-center gap-2">
+          <!-- Non-directional logout signout -->
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+          </svg>
+          <span>تسجيل الخروج</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Interactive Edit Bottom Sheet / Modal -->
+    <div 
+      id="editModal" 
+      class="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs hidden opacity-0 transition-opacity flex items-end sm:items-center justify-center p-0 sm:p-4"
+      aria-hidden="true"
+      role="dialog"
+      aria-labelledby="modalTitle"
+    >
+      <div 
+        id="modalContent"
+        class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl translate-y-8 sheet-transition"
+      >
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <h3 id="modalTitle" class="text-lg font-bold text-white">تعديل البيانات</h3>
+          <button 
+            type="button" 
+            onclick="closeEditor()" 
+            aria-label="إغلاق"
+            class="p-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <form id="editForm" onsubmit="handleFormSubmit(event)" class="mt-4 space-y-4">
+          <div id="dynamicFields" class="space-y-4">
+            <!-- Dynamically injected fields -->
+          </div>
+
+          <p class="caption-floor text-slate-400 pt-1">
+            قد يتطلب اعتماد التعديلات إدخال رمز التحقق لمرة واحدة (OTP) لضمان أمان حسابك.
+          </p>
+
+          <div class="flex items-center gap-3 pt-3">
+            <button 
+              type="submit" 
+              class="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-slate-950 font-semibold transition-colors text-base"
+            >
+              حفظ التغييرات
+            </button>
+            <button 
+              type="button" 
+              onclick="closeEditor()" 
+              class="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold transition-colors text-base"
+            >
+              إلغاء
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast feedback message -->
+    <div 
+      id="toast" 
+      class="fixed bottom-6 inset-x-6 sm:inset-x-auto sm:start-1/2 sm:-translate-x-1/2 z-50 bg-emerald-600 text-slate-950 px-4 py-3 rounded-xl shadow-lg font-semibold text-center caption-floor opacity-0 pointer-events-none transition-all duration-300 flex items-center justify-center gap-2"
+    >
+      <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+      </svg>
+      <span id="toastMsg">تم التحديث بنجاح</span>
+    </div>
+
+  </main>
+
+  <script>
+    // Copy IBAN feedback function
+    function copyIban(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        const copyText = document.getElementById('copyText');
+        copyText.textContent = 'تم النسخ!';
+        showToast('تم نسخ رقم الآيبان إلى الحافظة');
+        setTimeout(() => {
+          copyText.textContent = 'نسخ الآيبان';
+        }, 2200);
+      }).catch(() => {
+        showToast('تعذر النسخ تلقائياً');
+      });
+    }
+
+    // Modal Sheet Management
+    const editModal = document.getElementById('editModal');
+    const modalContent = document.getElementById('modalContent');
+    const modalTitle = document.getElementById('modalTitle');
+    const dynamicFields = document.getElementById('dynamicFields');
+
+    function openEditor(type, title, val1, val2) {
+      modalTitle.textContent = 'تعديل ' + title;
+      dynamicFields.innerHTML = '';
+
+      if (type === 'name_email') {
+        dynamicFields.innerHTML = `
+          <div>
+            <label class="block text-slate-300 caption-floor font-medium mb-1.5" for="nameInput">الاسم الكامل</label>
+            <input 
+              id="nameInput" 
+              type="text" 
+              dir="auto" 
+              value="${val1}"
+              required 
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-emerald-500 text-base"
+            />
+          </div>
+          <div>
+            <label class="block text-slate-300 caption-floor font-medium mb-1.5" for="emailInput">البريد الإلكتروني</label>
+            <input 
+              id="emailInput" 
+              type="email" 
+              dir="ltr" 
+              inputmode="email"
+              value="${val2}"
+              required 
+              class="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-emerald-500 text-base text-start"
+            />
+          </div>
+        `;
+      } else if (type === 'phone') {
+        dynamicFields.innerHTML = `
+          <div>
+            <label class="block text-slate-300 caption-floor font-medium mb-1.5" for="phoneInput">رقم الهاتف المتحرك في الإمارات</label>
+            <div class="flex items-center rounded-xl bg-slate-800 border border-slate-700 focus-within:border-emerald-500 overflow-hidden" dir="ltr">
+              <span class="px-3.5 py-2.5 bg-slate-800/80 text-slate-400 border-e border-slate-700 font-mono text-sm">+971</span>
+              <input 
+                id="phoneInput" 
+                type="tel" 
+                dir="ltr" 
+                inputmode="tel" 
+                placeholder="50 123 4567" 
+                value="50 123 4567" 
+                required 
+                class="w-full px-3.5 py-2.5 bg-transparent text-white focus:outline-none text-base"
+              />
+            </div>
+            <p class="caption-floor text-slate-400 mt-1.5">
+              مثال: <bdi dir="ltr">050 123 4567</bdi>
+            </p>
+          </div>
+        `;
+      } else if (type === 'iban') {
+        dynamicFields.innerHTML = `
+          <div>
+            <label class="block text-slate-300 caption-floor font-medium mb-1.5" for="ibanInput">رقم الحساب المصرفي الدولي (IBAN)</label>
+            <input 
+              id="ibanInput" 
+              type="text" 
+              dir="ltr" 
+              inputmode="text" 
+              maxlength="27"
+              value="${val1}"
+              required 
+              class="w-full font-mono px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-emerald-300 focus:outline-none focus:border-emerald-500 text-sm sm:text-base text-start"
+            />
+            <p class="caption-floor text-slate-400 mt-1.5">
+              يبدأ بـ <bdi dir="ltr">AE</bdi> ويليه 21 رقماً.
+            </p>
+          </div>
+        `;
+      }
+
+      editModal.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        editModal.classList.remove('opacity-0');
+        modalContent.classList.remove('translate-y-8');
+      });
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeEditor() {
+      editModal.classList.add('opacity-0');
+      modalContent.classList.add('translate-y-8');
+      setTimeout(() => {
+        editModal.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 250);
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      closeEditor();
+      showToast('تم حفظ التعديلات بنجاح');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = message;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      toast.classList.add('opacity-100');
+      
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 2600);
+    }
+  </script>
+</body>
+</html>

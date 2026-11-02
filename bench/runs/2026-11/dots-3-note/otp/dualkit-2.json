@@ -4,16 +4,120 @@
   "screen": "otp",
   "condition": "dualkit",
   "run": 2,
-  "at": "2026-11-01T11:35:22.065Z",
-  "reply": "",
+  "at": "2026-11-02T12:36:05.898Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<title>أدخل الرمز</title>\n<style>\n  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap');\n\n  :root {\n    --primary: #005c9b;\n    --primary-dark: #004a7d;\n    --bg: #f5f5f5;\n    --card-bg: #ffffff;\n    --text: #1a1a1a;\n    --text-secondary: #6b7280;\n    --border: #e5e7eb;\n  }\n\n  * { margin: 0; padding: 0; box-sizing: border-box; }\n\n  body {\n    font-family: 'Cairo', sans-serif;\n    direction: rtl;\n    text-align: right;\n    background-color: var(--bg);\n    min-height: 100vh;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    padding: 20px;\n  }\n\n  .container {\n    background-color: var(--card-bg);\n    border-radius: 16px;\n    padding: 40px 32px;\n    width: 100%;\n    max-width: 420px;\n    box-shadow: 0 4px 24px rgba(0,0,0,0.08);\n    text-align: center;\n  }\n\n  .title {\n    font-size: 24px;\n    font-weight: 700;\n    color: var(--text);\n    margin-bottom: 12px;\n  }\n\n  .subtitle {\n    font-size: 15px;\n    color: var(--text-secondary);\n    margin-bottom: 32px;\n    line-height: 1.7;\n  }\n\n  .subtitle bdi {\n    font-weight: 600;\n    color: var(--text);\n  }\n\n  .code-inputs {\n    display: flex;\n    justify-content: center;\n    gap: 10px;\n    margin-bottom: 24px;\n  }\n\n  .code-inputs input {\n    width: 48px;\n    height: 56px;\n    border: 2px solid var(--border);\n    border-radius: 10px;\n    text-align: center;\n    font-size: 24px;\n    font-weight: 600;\n    font-family: 'Cairo', sans-serif;\n    outline: none;\n    transition: border-color 0.2s, box-shadow 0.2s;\n  }\n\n  .code-inputs input:focus {\n    border-color: var(--primary);\n    box-shadow: 0 0 0 3px rgba(0,92,155,0.15);\n  }\n\n  .countdown {\n    font-size: 14px;\n    color: var(--text-secondary);\n    margin-bottom: 24px;\n  }\n\n  .countdown span {\n    color: var(--primary);\n    font-weight: 600;\n  }\n\n  .btn {\n    width: 100%;\n    padding: 14px;\n    background-color: var(--primary);\n    color: #ffffff;\n    border: none;\n    border-radius: 10px;\n    font-size: 16px;\n    font-weight: 600;\n    font-family: 'Cairo', sans-serif;\n    cursor: pointer;\n    transition: background-color 0.2s;\n  }\n\n  .btn:hover {\n    background-color: var(--primary-dark);\n  }\n\n  .btn:disabled {\n    background-color: #d1d5db;\n    cursor: not-allowed;\n  }\n\n  .resend-section {\n    margin-top: 20px;\n    font-size: 14px;\n    color: var(--text-secondary);\n  }\n\n  .resend-section a {\n    color: var(--primary);\n    text-decoration: none;\n    font-weight: 600;\n    cursor: pointer;\n  }\n\n  .resend-section a.disabled {\n    pointer-events: none;\n    color: var(--text-secondary);\n  }\n</style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1 class=\"title\">أدخل الرمز</h1>\n    <p class=\"subtitle\">\n      أرسلنا رمزًا مكونًا من 6 أرقام إلى <bdi dir=\"ltr\">+966 55 123 4567</bdi>\n    </p>\n\n    <form class=\"code-inputs\" id=\"codeForm\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"0\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"1\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"2\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"3\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"4\">\n      <input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"5\">\n    </form>\n\n    <div class=\"countdown\">إعادة الإرسال خلال <span id=\"timer\">0:45</span></div>\n\n    <button class=\"btn\" id=\"verifyBtn\" disabled>تحقق</button>\n\n    <div class=\"resend-section\">\n      <a id=\"resendLink\" class=\"disabled\">لم يصل الرمز؟</a>\n    </div>\n  </div>\n\n<script>\n  const inputs = document.querySelectorAll('.code-inputs input');\n  const verifyBtn = document.getElementById('verifyBtn');\n  const timerEl = document.getElementById('timer');\n  const resendLink = document.getElementById('resendLink');\n\n  let countdown = 45;\n  let timerInterval;\n\n  inputs[0].focus();\n\n  inputs.forEach((input, index) => {\n    input.addEventListener('input', () => {\n      input.value = input.value.replace(/[^0-9]/g, '');\n\n      if (input.value.length === 1) {\n        if (index < inputs.length - 1) {\n          inputs[index + 1].focus();\n        } else {\n          verifyBtn.disabled = false;\n        }\n      }\n    });\n\n    input.addEventListener('keydown', (e) => {\n      if (e.key === 'Backspace' && input.value === '') {\n        if (index > 0) {\n          inputs[index - 1].focus();\n        }\n      }\n    });\n\n    input.addEventListener('paste', (e) => {\n      e.preventDefault();\n      const pasted = e.clipboardData.getData('text').replace(/[^0-9]/g, '');\n      if (pasted.length === 6) {\n        inputs.forEach((inp, i) => {\n          inp.value = pasted[i] || '';\n        });\n        verifyBtn.disabled = false;\n        inputs[5].focus();\n      }\n    });\n  });\n\n  startCountdown();\n\n  function startCountdown() {\n    timerInterval = setInterval(() => {\n      countdown--;\n      const mins = Math.floor(countdown / 60);\n      const secs = countdown % 60;\n      timerEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;\n\n      if (countdown <= 0) {\n        clearInterval(timerInterval);\n        resendLink.classList.remove('disabled');\n        resendLink.textContent = 'إعادة الإرسال';\n      }\n    }, 1000);\n  }\n\n  verifyBtn.addEventListener('click', () => {\n    const code = Array.from(inputs).map(i => i.value).join('');\n    if (code.length === 6) {\n      // In a real app this would call a verification API\n      alert('الرمز المُدخل: ' + code);\n    }\n  });\n\n  resendLink.addEventListener('click', (e) => {\n    e.preventDefault();\n    if (countdown <= 0) {\n      inputs.forEach(i => i.value = '');\n      inputs[0].focus();\n      verifyBtn.disabled = true;\n\n      countdown = 45;\n      resendLink.classList.add('disabled');\n      resendLink.textContent = 'لم يصل الرمز؟';\n      startCountdown();\n    }\n  });\n</script>\n</body>\n</html>\n```",
   "usage": {
     "input": 6304,
-    "output": 16000
+    "output": 4517
   },
-  "finish": "length",
-  "reasoningTokens": 11070,
+  "ms": 50267,
+  "finish": "stop",
+  "reasoningTokens": 2451,
   "servedModel": "dots-studio/dots-3-note-preview:free",
-  "ms": 142820,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 78,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "content/drops-arabic-digits",
+      "title": "A code field that deletes Arabic digits",
+      "severity": "error",
+      "box": {
+        "x": 316,
+        "y": 375,
+        "width": 48,
+        "height": 56
+      },
+      "message": "Typing ١٢ into this code field kept neither ١٢ nor 12, so Arabic digits are deleted.",
+      "fix": "Accept Arabic-Indic digits and convert them to 0 to 9 before checking or sending the value, instead of stripping them.",
+      "snippet": "<input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"0\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 316,
+        "y": 375,
+        "width": 48,
+        "height": 56
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"0\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 258,
+        "y": 375,
+        "width": 48,
+        "height": 56
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"1\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 200,
+        "y": 375,
+        "width": 48,
+        "height": 56
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"2\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 142,
+        "y": 375,
+        "width": 48,
+        "height": 56
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"3\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 84,
+        "y": 375,
+        "width": 48,
+        "height": 56
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"4\">"
+    },
+    {
+      "rule": "bidi/field-direction",
+      "title": "A left-to-right field typed right to left",
+      "severity": "warning",
+      "box": {
+        "x": 26,
+        "y": 375,
+        "width": 48,
+        "height": 56
+      },
+      "message": "This code field inherits right to left.",
+      "fix": "Add dir=\"ltr\" to the input, or dir=\"auto\" if people may type Arabic too.",
+      "snippet": "<input type=\"text\" inputmode=\"numeric\" maxlength=\"1\" autocomplete=\"one-time-code\" data-index=\"5\">"
+    }
+  ],
+  "unreadableStylesheets": 1,
+  "pageHeight": 844
 }

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Summary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #6b7280;
+    --color-border: #e5e7eb;
+    --color-primary: #0066cc;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'IBM Plex Sans Arabic', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+  }
+  .phone {
+    max-width: 375px;
+    margin: 0 auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg);
+  }
+  header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .back-btn {
+    position: absolute;
+    inset-inline-start: var(--spacing-md);
+    background: none;
+    border: none;
+    color: var(--color-text);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    margin: calc(-1 * var(--spacing-sm));
+    border-radius: var(--radius);
+  }
+  .back-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  .back-arrow {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+  :dir(rtl) .back-arrow {
+    transform: scaleX(-1);
+  }
+  .header-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  main {
+    flex: 1;
+    padding: var(--spacing-lg) var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+  .amount-section {
+    text-align: center;
+  }
+  .amount-label {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    margin-bottom: var(--spacing-sm);
+  }
+  .amount-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .date-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  .date-line {
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  .date-label {
+    color: var(--color-muted);
+  }
+  .items-section {
+    font-size: 1rem;
+    text-align: center;
+  }
+  .phone-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  .phone-label {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+  .phone-input {
+    width: 100%;
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    direction: ltr;
+    text-align: start;
+  }
+  .phone-input:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  .phone-hint {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+  .pay-btn {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--color-primary);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: auto;
+    font-family: 'IBM Plex Sans Arabic', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  .pay-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  /* Arabic-specific type rules */
+  :lang(ar) {
+    letter-spacing: 0;
+    text-transform: none;
+    font-style: normal;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <header>
+      <button class="back-btn" aria-label="الرجوع">
+        <svg class="back-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <h1 class="header-title">ملخص الدفع</h1>
+    </header>
+    <main>
+      <section class="amount-section">
+        <div class="amount-label">المبلغ المستحق</div>
+        <div class="amount-value">1,234.50 د.إ</div>
+      </section>
+      <section class="date-section">
+        <div class="date-line">
+          <span class="date-label">التاريخ</span>
+          <span>3 نوفمبر 2026</span>
+        </div>
+        <div class="date-line">
+          <span class="date-label">الموافق</span>
+          <span>22 جمادى الأولى 1448</span>
+        </div>
+      </section>
+      <section class="items-section">
+        <strong>لديك 3 عناصر في هذا الطلب</strong>
+      </section>
+      <section class="phone-section">
+        <label class="phone-label" for="phone">رقم هاتف</label>
+        <input type="tel" id="phone" class="phone-input" placeholder="050 123 4567" autocomplete="tel" inputmode="tel" dir="ltr">
+        <div class="phone-hint">
+          مثال: <bdi dir="ltr">050 123 4567</bdi>
+        </div>
+      </section>
+      <button class="pay-btn">إتمام الدفع</button>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
   "month": "2026-11",
-  "generatedAt": "2026-11-01T14:58:52.276Z",
+  "generatedAt": "2026-11-02T15:36:33.611Z",
   "ruleCount": 34,
   "models": [
     {
@@ -4207,12 +4207,16 @@
       "provider": "openrouter",
       "by": "Dots Studio",
       "mark": "dots-studio",
-      "rank": null,
+      "rank": 2,
       "previousRank": null,
       "move": null,
       "isNew": true,
       "alone": null,
-      "dualkit": null,
+      "dualkit": {
+        "rulesPassed": 321,
+        "outOf": 340,
+        "score": 86
+      },
       "lift": null,
       "screens": [
         {
@@ -4275,29 +4279,176 @@
             "raw": "bench/runs/2026-11/dots-3-note/payment-summary/alone-2.json"
           },
           "dualkit": {
-            "ran": false,
-            "runs": 1,
-            "reasons": [
-              "Hit the token cap"
-            ]
+            "ran": true,
+            "runs": 2,
+            "rulesPassed": 33,
+            "score": 92,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 140.15625,
+                  "y": 32.046875,
+                  "width": 109.703125,
+                  "height": 21
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 159.765625,
+                  "y": 781.8125,
+                  "width": 70.453125,
+                  "height": 17
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/payment-summary-dualkit.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/payment-summary/dualkit-2.json"
           }
         },
         {
           "id": "otp",
           "title": "OTP",
           "alone": {
-            "ran": false,
-            "runs": 1,
-            "reasons": [
-              "Hit the token cap"
-            ]
+            "ran": true,
+            "runs": 2,
+            "rulesPassed": 32,
+            "score": 82,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "bidi/unisolated-number",
+                "title": "A number that will show in reverse",
+                "severity": "error",
+                "box": {
+                  "x": 57.515625,
+                  "y": 349,
+                  "width": 312.484375,
+                  "height": 35
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 139.671875,
+                  "y": 310,
+                  "width": 110.671875,
+                  "height": 27
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 169.5,
+                  "y": 541,
+                  "width": 51,
+                  "height": 20
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/otp-alone.webp",
+            "pageHeight": 884,
+            "raw": "bench/runs/2026-11/dots-3-note/otp/alone-3.json"
           },
           "dualkit": {
-            "ran": false,
-            "runs": 1,
-            "reasons": [
-              "Hit the token cap"
-            ]
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 32,
+            "score": 78,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "content/drops-arabic-digits",
+                "title": "A code field that deletes Arabic digits",
+                "severity": "error",
+                "box": {
+                  "x": 316,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 316,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 258,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 200,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 142,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 84,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 26,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/otp-dualkit.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/otp/dualkit-2.json"
           }
         },
         {
@@ -4918,7 +5069,7 @@
           },
           "dualkit": {
             "ran": true,
-            "runs": 2,
+            "runs": 3,
             "rulesPassed": 31,
             "score": 70,
             "missing": [],
@@ -5547,7 +5698,7 @@
           },
           "dualkit": {
             "ran": true,
-            "runs": 2,
+            "runs": 3,
             "rulesPassed": 32,
             "score": 92,
             "missing": [],
@@ -5585,7 +5736,7 @@
           "title": "Transactions",
           "alone": {
             "ran": true,
-            "runs": 2,
+            "runs": 3,
             "rulesPassed": 33,
             "score": 92,
             "missing": [],
@@ -5618,11 +5769,115 @@
             "raw": "bench/runs/2026-11/dots-3-note/transactions/alone-2.json"
           },
           "dualkit": {
-            "ran": false,
-            "runs": 1,
-            "reasons": [
-              "Hit the token cap"
-            ]
+            "ran": true,
+            "runs": 2,
+            "rulesPassed": 32,
+            "score": 84,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 293.609375,
+                  "y": 206.1875,
+                  "width": 55.890625,
+                  "height": 16
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 0,
+                  "y": 322.375,
+                  "width": 21,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 0,
+                  "y": 392.15625,
+                  "width": 21,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": -1.5,
+                  "y": 461.9375,
+                  "width": 24,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 0,
+                  "y": 531.71875,
+                  "width": 21,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 0,
+                  "y": 601.5,
+                  "width": 21,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": -1.5,
+                  "y": 671.28125,
+                  "width": 24,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 0,
+                  "y": 741.0625,
+                  "width": 21,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": -1.5,
+                  "y": 810.84375,
+                  "width": 24,
+                  "height": 17
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/transactions-dualkit.webp",
+            "pageHeight": 854,
+            "raw": "bench/runs/2026-11/dots-3-note/transactions/dualkit-3.json"
           }
         }
       ]
@@ -6096,30 +6351,363 @@
             "raw": "bench/runs/2026-11/gemini-flash/address-form/alone-2.json"
           },
           "dualkit": {
-            "ran": false,
-            "runs": 1,
-            "reasons": [
-              "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and bi"
-            ]
+            "ran": true,
+            "runs": 2,
+            "rulesPassed": 32,
+            "score": 83,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "bidi/field-placeholder",
+                "title": "An Arabic hint on the wrong side of the field",
+                "severity": "warning",
+                "box": {
+                  "x": 18,
+                  "y": 355.984375,
+                  "width": 354,
+                  "height": 48
+                }
+              },
+              {
+                "rule": "bidi/field-placeholder",
+                "title": "An Arabic hint on the wrong side of the field",
+                "severity": "warning",
+                "box": {
+                  "x": 18,
+                  "y": 453.78125,
+                  "width": 354,
+                  "height": 48
+                }
+              },
+              {
+                "rule": "bidi/field-placeholder",
+                "title": "An Arabic hint on the wrong side of the field",
+                "severity": "warning",
+                "box": {
+                  "x": 18,
+                  "y": 551.578125,
+                  "width": 354,
+                  "height": 48
+                }
+              },
+              {
+                "rule": "bidi/field-placeholder",
+                "title": "An Arabic hint on the wrong side of the field",
+                "severity": "warning",
+                "box": {
+                  "x": 18,
+                  "y": 928.953125,
+                  "width": 354,
+                  "height": 48
+                }
+              },
+              {
+                "rule": "content/mixed-digits",
+                "title": "Two digit systems on one screen",
+                "severity": "warning",
+                "box": {
+                  "x": 29,
+                  "y": 32,
+                  "width": 49,
+                  "height": 21
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 18,
+                  "y": 258.1875,
+                  "width": 354,
+                  "height": 48
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/gemini-flash/address-form-dualkit.webp",
+            "pageHeight": 1178,
+            "raw": "bench/runs/2026-11/gemini-flash/address-form/dualkit-3.json"
           }
         },
         {
           "id": "profile",
           "title": "Profile",
           "alone": {
-            "ran": false,
-            "runs": 0,
-            "reasons": [
-              "Empty reply",
-              "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and bi"
-            ]
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 32,
+            "score": 68,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-tracking",
+                "title": "Letter-spacing on Arabic",
+                "severity": "error",
+                "box": {
+                  "x": 190,
+                  "y": 275,
+                  "width": 160,
+                  "height": 13
+                }
+              },
+              {
+                "rule": "type/arabic-tracking",
+                "title": "Letter-spacing on Arabic",
+                "severity": "error",
+                "box": {
+                  "x": 243,
+                  "y": 656,
+                  "width": 107,
+                  "height": 13
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 175.5,
+                  "y": 196,
+                  "width": 25,
+                  "height": 11
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 87.5,
+                  "y": 234,
+                  "width": 193,
+                  "height": 12
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 190,
+                  "y": 275,
+                  "width": 160,
+                  "height": 13
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 161,
+                  "y": 318,
+                  "width": 118,
+                  "height": 12
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 68,
+                  "y": 337,
+                  "width": 36,
+                  "height": 13
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 177,
+                  "y": 418,
+                  "width": 102,
+                  "height": 12
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 161,
+                  "y": 455,
+                  "width": 118,
+                  "height": 26
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 68,
+                  "y": 442.5,
+                  "width": 36,
+                  "height": 13
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 153,
+                  "y": 529,
+                  "width": 126,
+                  "height": 26
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 183,
+                  "y": 593,
+                  "width": 96,
+                  "height": 26
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 68,
+                  "y": 567,
+                  "width": 36,
+                  "height": 13
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 243,
+                  "y": 656,
+                  "width": 107,
+                  "height": 13
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 291.125,
+                  "y": 844,
+                  "width": 41,
+                  "height": 11
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 208.375,
+                  "y": 844,
+                  "width": 39,
+                  "height": 11
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 134.625,
+                  "y": 844,
+                  "width": 30,
+                  "height": 11
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 57.875,
+                  "y": 844,
+                  "width": 33,
+                  "height": 11
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 113,
+                  "y": 63,
+                  "width": 138,
+                  "height": 13
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/gemini-flash/profile-alone.webp",
+            "pageHeight": 892,
+            "raw": "bench/runs/2026-11/gemini-flash/profile/alone-3.json"
           },
           "dualkit": {
-            "ran": false,
-            "runs": 1,
-            "reasons": [
-              "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and bi"
-            ]
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 33,
+            "score": 90,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 141.71875,
+                  "y": 731.046875,
+                  "width": 27,
+                  "height": 37.796875
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 49,
+                  "y": 845.6875,
+                  "width": 25,
+                  "height": 18
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 341,
+                  "y": 56.09375,
+                  "width": 36,
+                  "height": 36
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 13,
+                  "y": 56.09375,
+                  "width": 36,
+                  "height": 36
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/gemini-flash/profile-dualkit.webp",
+            "pageHeight": 1020,
+            "raw": "bench/runs/2026-11/gemini-flash/profile/dualkit-1.json"
           }
         },
         {

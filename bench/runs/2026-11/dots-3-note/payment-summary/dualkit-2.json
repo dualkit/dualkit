@@ -4,16 +4,50 @@
   "screen": "payment-summary",
   "condition": "dualkit",
   "run": 2,
-  "at": "2026-11-01T11:23:57.776Z",
-  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>ملخص الدفع</title>\n<link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">\n<style>\n  :lang(ar) {\n    --type-label-size: 14px;\n    --type-caption-size: 14px;\n    --type-body-size: 16px;\n    letter-spacing: 0;\n    text-transform: none;\n    font-style: normal;\n    line-height: 1.7;\n  }\n\n  * { margin: 0; padding: 0; box-sizing: border-box; }\n\n  body {\n    font-family: 'IBM Plex Sans Arabic', sans-serif;\n    font-size: var(--type-body-size);\n    background: #f5f5f5;\n    color: #1a1a1a;\n    min-height: 100vh;\n    display: flex;\n    justify-content: center;\n    align-items: flex-start;\n  }\n\n  .screen {\n    width: 100%;\n    max-width: 480px;\n    background: #fff;\n    min-height: 100vh;\n    display: flex;\n    flex-direction: column;\n  }\n\n  /* ── Header ── */\n  .header {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    padding: 16px;\n    border-bottom: 1px solid #e5e5e5;\n  }\n\n  .back-btn {\n    background: none;\n    border: none;\n    cursor: pointer;\n    padding: 8px;\n    color: #1a1a1a;\n    border-radius: 8px;\n  }\n\n  .back-btn:active { background: #f0f0f0; }\n\n  .back-icon:dir(rtl) { transform: scaleX(-1); }\n\n  .header-title {\n    font-size: 18px;\n    font-weight: 600;\n  }\n\n  /* ── Content ── */\n  .content {\n    flex: 1;\n    padding: 24px;\n    display: flex;\n    flex-direction: column;\n    gap: 24px;\n  }\n\n  /* ── Amount ── */\n  .amount-section {\n    text-align: center;\n    padding: 32px 0;\n    border-bottom: 1px solid #e5e5e5;\n  }\n\n  .amount-label {\n    font-size: 14px;\n    color: #666;\n    margin-bottom: 8px;\n  }\n\n  .amount-value {\n    font-size: 48px;\n    font-weight: 700;\n    line-height: 1.2;\n    font-variant-numeric: tabular-nums;\n  }\n\n  /* ── Details ── */\n  .details {\n    display: flex;\n    flex-direction: column;\n    gap: 16px;\n  }\n\n  .detail-row {\n    display: flex;\n    justify-content: space-between;\n    align-items: flex-start;\n  }\n\n  .detail-label {\n    font-size: 14px;\n    color: #6",
+  "at": "2026-11-02T12:30:00.538Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Payment Summary</title>\n<style>\n  :root {\n    --color-bg: #ffffff;\n    --color-text: #000000;\n    --color-muted: #6b7280;\n    --color-border: #e5e7eb;\n    --color-primary: #0066cc;\n    --spacing-sm: 8px;\n    --spacing-md: 16px;\n    --spacing-lg: 24px;\n    --radius: 8px;\n  }\n  * { box-sizing: border-box; }\n  body {\n    margin: 0;\n    font-family: system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif;\n    background: var(--color-bg);\n    color: var(--color-text);\n    line-height: 1.6;\n  }\n  .phone {\n    max-width: 375px;\n    margin: 0 auto;\n    min-height: 100vh;\n    display: flex;\n    flex-direction: column;\n    background: var(--color-bg);\n  }\n  header {\n    position: relative;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    padding: var(--spacing-md);\n    border-bottom: 1px solid var(--color-border);\n  }\n  .back-btn {\n    position: absolute;\n    inset-inline-start: var(--spacing-md);\n    background: none;\n    border: none;\n    color: var(--color-text);\n    cursor: pointer;\n    padding: var(--spacing-sm);\n    margin: calc(-1 * var(--spacing-sm));\n    border-radius: var(--radius);\n  }\n  .back-btn:focus-visible {\n    outline: 2px solid var(--color-primary);\n    outline-offset: 2px;\n  }\n  .back-arrow {\n    width: 24px;\n    height: 24px;\n    display: block;\n  }\n  :dir(rtl) .back-arrow {\n    transform: scaleX(-1);\n  }\n  .header-title {\n    font-size: 1.125rem;\n    font-weight: 600;\n  }\n  main {\n    flex: 1;\n    padding: var(--spacing-lg) var(--spacing-md);\n    display: flex;\n    flex-direction: column;\n    gap: var(--spacing-lg);\n  }\n  .amount-section {\n    text-align: center;\n  }\n  .amount-label {\n    font-size: 0.875rem;\n    color: var(--color-muted);\n    margin-bottom: var(--spacing-sm);\n  }\n  .amount-value {\n    font-size: 2.5rem;\n    font-weight: 700;\n    font-variant-numeric: tabular-nums;\n  }\n  .date-section {\n    display: flex;\n    flex-direction: column;\n    gap: var(--spacing-sm);\n  }\n  .date-line {\n    font-size: 1rem;\n    display: flex;\n    justify-content: space-between;\n  }\n  .date-label {\n    color: var(--color-muted);\n  }\n  .items-section {\n    font-size: 1rem;\n    text-align: center;\n  }\n  .phone-section {\n    display: flex;\n    flex-direction: column;\n    gap: var(--spacing-sm);\n  }\n  .phone-label {\n    font-size: 0.875rem;\n    color: var(--color-muted);\n  }\n  .phone-input {\n    width: 100%;\n    padding: var(--spacing-md);\n    border: 1px solid var(--color-border);\n    border-radius: var(--radius);\n    font-size: 1rem;\n    direction: ltr;\n    text-align: start;\n  }\n  .phone-input:focus-visible {\n    outline: 2px solid var(--color-primary);\n    outline-offset: 2px;\n  }\n  .phone-hint {\n    font-size: 0.875rem;\n    color: var(--color-muted);\n  }\n  .pay-btn {\n    width: 100%;\n    padding: var(--spacing-md);\n    background: var(--color-primary);\n    color: #ffffff;\n    border: none;\n    border-radius: var(--radius);\n    font-size: 1rem;\n    font-weight: 600;\n    cursor: pointer;\n    margin-top: auto;\n  }\n  .pay-btn:focus-visible {\n    outline: 2px solid var(--color-primary);\n    outline-offset: 2px;\n  }\n  /* Arabic-specific type rules */\n  :lang(ar) {\n    letter-spacing: 0;\n    text-transform: none;\n    font-style: normal;\n    line-height: 1.7;\n  }\n</style>\n</head>\n<body>\n  <div class=\"phone\">\n    <header>\n      <button class=\"back-btn\" aria-label=\"الرجوع\">\n        <svg class=\"back-arrow\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <polyline points=\"15 18 9 12 15 6\"></polyline>\n        </svg>\n      </button>\n      <h1 class=\"header-title\">ملخص الدفع</h1>\n    </header>\n    <main>\n      <section class=\"amount-section\">\n        <div class=\"amount-label\">المبلغ المستحق</div>\n        <div class=\"amount-value\">1,234.50 د.إ</div>\n      </section>\n      <section class=\"date-section\">\n        <div class=\"date-line\">\n          <span class=\"date-label\">التاريخ</span>\n          <span>3 نوفمبر 2026</span>\n        </div>\n        <div class=\"date-line\">\n          <span class=\"date-label\">الموافق</span>\n          <span>22 جمادى الأولى 1448</span>\n        </div>\n      </section>\n      <section class=\"items-section\">\n        <strong>لديك 3 عناصر في هذا الطلب</strong>\n      </section>\n      <section class=\"phone-section\">\n        <label class=\"phone-label\" for=\"phone\">رقم هاتف</label>\n        <input type=\"tel\" id=\"phone\" class=\"phone-input\" placeholder=\"050 123 4567\" autocomplete=\"tel\" inputmode=\"tel\" dir=\"ltr\">\n        <div class=\"phone-hint\">\n          مثال: <bdi dir=\"ltr\">050 123 4567</bdi>\n        </div>\n      </section>\n      <button class=\"pay-btn\">إتمام الدفع</button>\n    </main>\n  </div>\n</body>\n</html>\n```",
   "usage": {
     "input": 6343,
-    "output": 16000
+    "output": 11744
   },
-  "finish": "length",
-  "reasoningTokens": 14331,
+  "ms": 134886,
+  "finish": "stop",
+  "reasoningTokens": 8688,
   "servedModel": "dots-studio/dots-3-note-preview:free",
-  "ms": 170861,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 140.15625,
+        "y": 32.046875,
+        "width": 109.703125,
+        "height": 21
+      },
+      "message": "Arabic falls back from system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1 class=\"header-title\">ملخص الدفع</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 159.765625,
+        "y": 781.8125,
+        "width": 70.453125,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"pay-btn\">إتمام الدفع</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
 }

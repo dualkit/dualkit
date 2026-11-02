@@ -4,16 +4,136 @@
   "screen": "transactions",
   "condition": "alone",
   "run": 3,
-  "at": "2026-11-01T12:52:42.585Z",
-  "reply": "",
+  "at": "2026-11-02T12:56:26.552Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>المعاملات</title>\n<style>\n  body {\n    font-family: Arial, sans-serif;\n    background-color: #f5f5f5;\n    margin: 0;\n    padding: 16px;\n    direction: rtl;\n  }\n  .container {\n    max-width: 480px;\n    margin: 0 auto;\n    background: #fff;\n    border-radius: 8px;\n    padding: 16px;\n    box-shadow: 0 2px 4px rgba(0,0,0,0.1);\n  }\n  .balance {\n    font-size: 20px;\n    font-weight: bold;\n    margin-bottom: 16px;\n    text-align: center;\n  }\n  .filter {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    margin-bottom: 16px;\n  }\n  .filter label {\n    font-size: 16px;\n    margin-left: 8px;\n  }\n  .filter select {\n    padding: 8px;\n    font-size: 16px;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    flex: 1;\n  }\n  table {\n    width: 100%;\n    border-collapse: collapse;\n    font-size: 14px;\n  }\n  th, td {\n    padding: 12px 8px;\n    text-align: left;\n    border-bottom: 1px solid #ddd;\n  }\n  th {\n    background-color: #f0f0f0;\n    font-weight: bold;\n  }\n  tr.incoming td:nth-child(4) {\n    color: green;\n  }\n  tr.outgoing td:nth-child(4) {\n    color: red;\n  }\n</style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"balance\">ال سولومون: 1234567890.000 رIAL</div>\n    <div class=\"filter\">\n      <label for=\"filter\">تصفية:</label>\n      <select id=\"filter\">\n        <option>هذا الشهر</option>\n        <option>الشهر الماضي</option>\n        <option>كل الفترات</option>\n      </select>\n    </div>\n    <table>\n      <thead>\n        <tr>\n          <th>التاريخ</th>\n          <th>المتجر</th>\n          <th>المبلغ</th>\n          <th>النوع</th>\n        </tr>\n      </thead>\n      <tbody>\n        <tr class=\"outgoing\">\n          <td>01/04/2025</td>\n          <td>Lulu Hypermarket</td>\n          <td>123.456</td>\n          <td>صادر</td>\n        </tr>\n        <tr class=\"outgoing\">\n          <td>02/04/2025</td>\n          <td>Netflix</td>\n          <td>12.345</td>\n          <td>صادر</td>\n        </tr>\n        <tr class=\"outgoing\">\n          <td>03/04/2025</td>\n          <td>Amazon</td>\n          <td>456.789</td>\n          <td>صادر</td>\n        </tr>\n        <tr class=\"outgoing\">\n          <td>04/04/2025</td>\n          <td>Starbucks</td>\n          <td>78.901</td>\n          <td>صادر</td>\n        </tr>\n        <tr class=\"outgoing\">\n          <td>05/04/2025</td>\n          <td>Careem</td>\n          <td>23.456</td>\n          <td>صادر</td>\n        </tr>\n        <tr class=\"incoming\">\n          <td>06/04/2025</td>\n          <td>Transfer</td>\n          <td>1000.000</td>\n          <td>وارد</td>\n        </tr>\n        <tr class=\"incoming\">\n          <td>07/04/2025</td>\n          <td>Salary</td>\n          <td>5000.000</td>\n          <td>وارد</td>\n        </tr>\n        <tr class=\"incoming\">\n          <td>08/04/2025</td>\n          <td>Refund</td>\n          <td>50.000</td>\n          <td>وارد</td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n</body>\n</html>\n```",
   "usage": {
     "input": 144,
-    "output": 16000
+    "output": 7267
   },
-  "finish": "length",
-  "reasoningTokens": 16714,
+  "ms": 86002,
+  "finish": "stop",
+  "reasoningTokens": 6271,
   "servedModel": "dots-studio/dots-3-note-preview:free",
-  "ms": 145989,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 65,
+  "missing": [
+    "OMR amounts"
+  ],
+  "findings": [
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 271.921875,
+        "y": 125,
+        "width": 86.078125,
+        "height": 40.5
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<th>التاريخ</th>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 151.40625,
+        "y": 125,
+        "width": 120.515625,
+        "height": 40.5
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<th>المتجر</th>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 77,
+        "y": 125,
+        "width": 74.40625,
+        "height": 40.5
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<th>المبلغ</th>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 32,
+        "y": 386.5,
+        "width": 45,
+        "height": 41
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<td>وارد</td>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 32,
+        "y": 427.5,
+        "width": 45,
+        "height": 41
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<td>وارد</td>"
+    },
+    {
+      "rule": "layout/text-align-left",
+      "title": "Arabic text forced to the left",
+      "severity": "error",
+      "box": {
+        "x": 32,
+        "y": 468.5,
+        "width": 45,
+        "height": 41
+      },
+      "message": "This right-to-left text is aligned left.",
+      "fix": "Use text-align: start.",
+      "snippet": "<td>وارد</td>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 37.140625,
+        "y": 33,
+        "width": 315.71875,
+        "height": 22
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<div class=\"balance\">ال سولومون: 1234567890.000 رIAL</div>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 313.546875,
+        "y": 81,
+        "width": 44.453125,
+        "height": 19
+      },
+      "message": "margin-left: 8px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<label for=\"filter\">تصفية:</label>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
 }
