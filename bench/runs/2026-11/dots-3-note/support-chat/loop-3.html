@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دعم زين</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'IBM Plex Arabic', 'Noto Sans Arabic', sans-serif;
+    background: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    direction: rtl;
+    -webkit-font-smoothing: antialiased;
+  }
+  .phone-frame {
+    width: 390px;
+    height: 844px;
+    background: #fff;
+    box-shadow: 0 0 0 14px #1a1a1a, 0 0 0 16px #333, 0 0 0 46px #333, 0 0 0 48px #000;
+    border-radius: 40px;
+    overflow: hidden;
+    position: relative;
+  }
+  .chat-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .header {
+    background: #00843D;
+    color: #fff;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #fff;
+    color: #00843D;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .header-info h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .header-info p {
+    font-size: 14px;
+    opacity: 0.9;
+  }
+  .messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: #f0f2f5;
+  }
+  .message {
+    max-width: 85%;
+    padding: 10px 16px;
+    border-radius: 20px;
+    position: relative;
+    font-size: 15px;
+    line-height: 1.6;
+    word-wrap: break-word;
+  }
+  .customer {
+    align-self: flex-end;
+    background: #00843D;
+    color: #fff;
+    border-start-end-radius: 4px;
+  }
+  .agent {
+    align-self: flex-start;
+    background: #fff;
+    color: #333;
+    border-start-start-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .time {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-top: 6px;
+    display: block;
+  }
+  .customer .time { text-align: end; }
+  .agent .time { text-align: start; }
+  .input-area {
+    padding: 12px 16px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #fff;
+    flex-shrink: 0;
+  }
+  .text-field {
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 24px;
+    padding: 12px 20px;
+    font-size: 15px;
+    outline: none;
+    font-family: inherit;
+    direction: rtl;
+    background: #f8f9fa;
+  }
+  .text-field:focus {
+    border-color: #00843D;
+    background: #fff;
+  }
+  .send-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #00843D;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .send-btn:hover {
+    background: #006b30;
+  }
+  .send-btn svg {
+    width: 22px;
+    height: 22px;
+    transform: scaleX(-1);
+  }
+</style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="chat-container">
+    <div class="header">
+      <div class="avatar">س</div>
+      <div class="header-info">
+        <h3>سارة</h3>
+        <p>متصل الآن</p>
+      </div>
+    </div>
+    <div class="messages">
+      <div class="message customer">
+        أهلاً بك، أريد تفعيل بطاقة <bdi dir="ltr">eSIM</bdi> لهاتفي
+        <span class="time">09:15 ص</span>
+      </div>
+      <div class="message agent">
+        أهلاً بك في خدمة دعم زين، نعم، جهازك يدعم <bdi dir="ltr">5G</bdi>. برجاء تزويدي برقم طلبك
+        <span class="time">09:16 ص</span>
+      </div>
+      <div class="message customer">
+        رقم الطلب هو <bdi dir="ltr">TX-48213</bdi>، أتمنى التفعيل سريعاً
+        <span class="time">09:17 ص</span>
+      </div>
+      <div class="message agent">
+        شكرًا، تم العثور على طلبك <bdi dir="ltr">TX-48213</bdi>. سأقوم بارسال رمز التفعيل إلى بريدك الإلكتروني خلال دقيقتين
+        <span class="time">09:18 ص</span>
+      </div>
+      <div class="message customer">
+        ممتين، سأنتظركم
+        <span class="time">09:19 ص</span>
+      </div>
+      <div class="message agent">
+        تم إرسال الرمز بالفعل. برجاء التحقق من صندوق البريد والضغط على الرابط. <bdi dir="ltr">If you have any questions, please let us know</bdi>
+        <span class="time">09:20 ص</span>
+      </div>
+    </div>
+    <div class="input-area">
+      <input type="text" class="text-field" placeholder="اكتب رسالتك..." dir="auto">
+      <button class="send-btn" aria-label="ارسال">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

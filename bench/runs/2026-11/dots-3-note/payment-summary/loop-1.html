@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ملخص الدفع</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+    }
+    :lang(ar) {
+      --type-label-size: 14px;
+      --type-caption-size: 14px;
+      --type-body-size: 16px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      line-height: 1.7;
+    }
+    body {
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      font-size: var(--type-body-size);
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .phone {
+      width: 100%;
+      max-width: 375px;
+      height: 667px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      padding-inline: 1rem;
+      padding-block: 1rem;
+      border-block-end: 1px solid #eee;
+    }
+    .back-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: none;
+      border: none;
+      font-size: var(--type-body-size);
+      cursor: pointer;
+      color: #000;
+    }
+    .back-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+    .icon-directional:dir(rtl) {
+      transform: scaleX(-1);
+    }
+    .title {
+      flex: 1;
+      text-align: start;
+      font-size: var(--type-body-size);
+      font-weight: 600;
+    }
+    main {
+      flex: 1;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .amount-section, .date-section, .items-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .label {
+      font-size: var(--type-label-size);
+      color: #666;
+    }
+    .amount {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #000;
+    }
+    .date {
+      font-size: var(--type-body-size);
+      color: #000;
+    }
+    .items {
+      font-size: var(--type-body-size);
+      color: #000;
+    }
+    .phone-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    input {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: var(--type-body-size);
+      dir: ltr;
+    }
+    .pay-btn {
+      margin-block-start: auto;
+      padding: 1rem;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: var(--type-body-size);
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <header>
+      <button class="back-btn">
+        <svg class="icon-directional" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+        <span>رجوع</span>
+      </button>
+      <h1 class="title">ملخص الدفع</h1>
+    </header>
+    <main>
+      <section class="amount-section">
+        <span class="label">المبلغ المستحق</span>
+        <span class="amount"><bdi dir="ltr">1,234.50</bdi> د.إ</span>
+      </section>
+      <section class="date-section">
+        <span class="label">التاريخ المستحق</span>
+        <span class="date"><bdi dir="ltr">3 November 2026</bdi> (<bdi>12 جمادى الأولى 1448 هـ</bdi>)</span>
+      </section>
+      <section class="items-section">
+        <span class="items">لديك <bdi dir="ltr">3</bdi> عناصر في هذا الطلب</span>
+      </section>
+      <section class="phone-field">
+        <span class="label">رقم الجوال</span>
+        <input type="tel" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="050 123 4567">
+      </section>
+      <button class="pay-btn">السداد</button>
+    </main>
+  </div>
+</body>
+</html>

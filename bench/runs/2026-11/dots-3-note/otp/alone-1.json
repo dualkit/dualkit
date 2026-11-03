@@ -4,16 +4,64 @@
   "screen": "otp",
   "condition": "alone",
   "run": 1,
-  "at": "2026-11-02T12:32:17.809Z",
-  "reply": "",
+  "at": "2026-11-03T11:59:20.406Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>أدخل الرمز</title>\n<style>\n  body {\n    font-family: 'Arial', sans-serif;\n    direction: rtl;\n    text-align: center;\n    padding: 20px;\n    background-color: #f5f5f5;\n    margin: 0;\n  }\n  h1 {\n    font-size: 1.5rem;\n    margin-bottom: 10px;\n  }\n  p {\n    color: #555;\n    margin-bottom: 20px;\n  }\n  .code-inputs {\n    display: flex;\n    justify-content: center;\n    gap: 10px;\n    margin-bottom: 20px;\n  }\n  .code-inputs input {\n    width: 40px;\n    height: 50px;\n    font-size: 1.5rem;\n    text-align: center;\n    border: 1px solid #ccc;\n    border-radius: 5px;\n  }\n  .countdown {\n    margin-bottom: 20px;\n    font-size: 1rem;\n    color: #333;\n  }\n  button {\n    padding: 12px 30px;\n    font-size: 1rem;\n    background-color: #007bff;\n    color: white;\n    border: none;\n    border-radius: 5px;\n    cursor: pointer;\n  }\n  button:hover {\n    background-color: #0056b3;\n  }\n</style>\n</head>\n<body>\n  <h1>أدخل الرمز</h1>\n  <p>أرسلنا رمزًا مكونًا من 6 أرقام إلى +966 55 123 4567</p>\n  <div class=\"code-inputs\">\n    <input type=\"text\" maxlength=\"1\">\n    <input type=\"text\" maxlength=\"1\">\n    <input type=\"text\" maxlength=\"1\">\n    <input type=\"text\" maxlength=\"1\">\n    <input type=\"text\" maxlength=\"1\">\n    <input type=\"text\" maxlength=\"1\">\n  </div>\n  <div class=\"countdown\" id=\"countdown\">إعادة الإرسال خلال 0:45</div>\n  <button id=\"verify\">تحقق</button>\n\n<script>\n  // Countdown timer\n  let totalSeconds = 45;\n  const countdownElement = document.getElementById('countdown');\n  function updateCountdown() {\n    if (totalSeconds <= 0) {\n      countdownElement.textContent = \"أعد الإرسال\";\n      return;\n    }\n    const minutes = Math.floor(totalSeconds / 60);\n    const seconds = totalSeconds % 60;\n    const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;\n    countdownElement.textContent = `إعادة الإرسال خلال ${minutes}:${formattedSeconds}`;\n    totalSeconds--;\n  }\n  updateCountdown();\n  setInterval(updateCountdown, 1000);\n</script>\n</body>\n</html>\n```",
   "usage": {
     "input": 151,
-    "output": 16000
+    "output": 5143
   },
-  "finish": "length",
-  "reasoningTokens": 10722,
+  "ms": 58854,
+  "finish": "stop",
+  "reasoningTokens": 4498,
   "servedModel": "dots-studio/dots-3-note-preview:free",
-  "ms": 144537,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 82,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 38.75,
+        "y": 81.078125,
+        "width": 312.484375,
+        "height": 35
+      },
+      "message": "\"أرسلنا رمزًا مكونًا من 6 أرقام إلى +966 …\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<p>أرسلنا رمزًا مكونًا من 6 أرقام إلى +966 55 123 4567</p>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 139.65625,
+        "y": 36.078125,
+        "width": 110.671875,
+        "height": 27
+      },
+      "message": "Arabic falls back from Arial, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>أدخل الرمز</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 177.5,
+        "y": 263.078125,
+        "width": 35,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button id=\"verify\">تحقق</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
 }

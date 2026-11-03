@@ -4,16 +4,162 @@
   "screen": "settings",
   "condition": "alone",
   "run": 2,
-  "at": "2026-11-02T12:51:04.660Z",
-  "reply": "",
+  "at": "2026-11-03T12:09:37.405Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>الإعدادات</title>\n<style>\nbody {\n  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n  background-color: #f5f5f5;\n  margin: 0;\n  padding: 0;\n  color: #333;\n  direction: rtl;\n  text-align: right;\n}\n.container {\n  max-width: 375px;\n  margin: 0 auto;\n  padding: 16px;\n}\n.group-title {\n  font-size: 14px;\n  color: #888;\n  margin: 16px 0 8px;\n  padding: 0 16px;\n}\n.list {\n  list-style: none;\n  margin: 0 0 16px;\n  padding: 0;\n  background: #fff;\n  border-radius: 8px;\n  overflow: hidden;\n}\n.item {\n  display: flex;\n  align-items: center;\n  padding: 12px 16px;\n  border-bottom: 1px solid #eee;\n}\n.item:last-child {\n  border-bottom: none;\n}\n.label {\n  font-size: 16px;\n  color: #000;\n}\n.value {\n  margin: 0 8px;\n  color: #555;\n  font-size: 14px;\n}\n.chevron {\n  color: #ccc;\n  font-size: 18px;\n  margin-left: auto;\n}\n/* Toggle switch */\n.switch {\n  position: relative;\n  display: inline-block;\n  width: 44px;\n  height: 24px;\n  margin-left: auto;\n}\n.switch input {\n  opacity: 0;\n  width: 0;\n  height: 0;\n}\n.slider {\n  position: absolute;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  background: #ccc;\n  border-radius: 24px;\n  transition: background 0.3s;\n}\n.slider::before {\n  content: \"\";\n  position: absolute;\n  height: 18px;\n  width: 18px;\n  left: 3px;\n  bottom: 3px;\n  background: white;\n  border-radius: 50%;\n  transition: transform 0.3s;\n}\n.switch input:checked + .slider {\n  background: #007AFF;\n}\n.switch input:checked + .slider::before {\n  transform: translateX(20px);\n}\n/* Hover for clickable rows */\n.item[role=\"link\"]:hover,\n.item[role=\"link\"]:focus {\n  background: #f9f9f9;\n  outline: none;\n}\n</style>\n</head>\n<body>\n<div class=\"container\">\n  <!-- Account Group -->\n  <h2 class=\"group-title\">الحساب</h2>\n  <ul class=\"list\">\n    <li class=\"item\" role=\"link\" tabindex=\"0\">\n      <span class=\"label\">الاسم</span>\n      <span class=\"value\">أحمد محمد</span>\n      <span class=\"chevron\">›</span>\n    </li>\n    <li class=\"item\" role=\"link\" tabindex=\"0\">\n      <span class=\"label\">رقم الهاتف</span>\n      <span class=\"value\">+973 3600 1234</span>\n      <span class=\"chevron\">›</span>\n    </li>\n    <li class=\"item\" role=\"link\" tabindex=\"0\">\n      <span class=\"label\">اللغة</span>\n      <span class=\"value\">العربية</span>\n      <span class=\"chevron\">›</span>\n    </li>\n  </ul>\n\n  <!-- Security Group -->\n  <h2 class=\"group-title\">الأمان</h2>\n  <ul class=\"list\">\n    <li class=\"item\">\n      <span class=\"label\">Face ID</span>\n      <label class=\"switch\">\n        <input type=\"checkbox\">\n        <span class=\"slider\"></span>\n      </label>\n    </li>\n    <li class=\"item\">\n      <span class=\"label\"> تسجيل الدخول خطوة مزدوجة</span>\n      <label class=\"switch\">\n        <input type=\"checkbox\">\n        <span class=\"slider\"></span>\n      </label>\n    </li>\n  </ul>\n\n  <!-- Notifications Group -->\n  <h2 class=\"group-title\">الإشعارات</h2>\n  <ul class=\"list\">\n    <li class=\"item\">\n      <span class=\"label\">الحوالت</span>\n      <label class=\"switch\">\n        <input type=\"checkbox\" checked>\n        <span class=\"slider\"></span>\n      </label>\n    </li>\n    <li class=\"item\">\n      <span class=\"label\">العرض</span>\n      <label class=\"switch\">\n        <input type=\"checkbox\" checked>\n        <span class=\"slider\"></span>\n      </label>\n    </li>\n    <li class=\"item\">\n      <span class=\"label\">كشوف الحسابات</span>\n      <label class=\"switch\">\n        <input type=\"checkbox\" checked>\n        <span class=\"slider\"></span>\n      </label>\n    </li>\n  </ul>\n</div>\n</body>\n</html>\n```",
   "usage": {
     "input": 148,
-    "output": 16000
+    "output": 8806
   },
-  "finish": "length",
-  "reasoningTokens": 16486,
+  "ms": 98782,
+  "finish": "stop",
+  "reasoningTokens": 7615,
   "servedModel": "dots-studio/dots-3-note-preview:free",
-  "ms": 154537,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 32,
+  "score": 83,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "bidi/unisolated-number",
+      "title": "A number that will show in reverse",
+      "severity": "error",
+      "box": {
+        "x": 174.90625,
+        "y": 116.5,
+        "width": 101.640625,
+        "height": 16
+      },
+      "message": "\"+973 3600 1234\" is not isolated, so its groups can show in reverse order.",
+      "fix": "Wrap the number in <bdi>, or give its element dir=\"ltr\".",
+      "snippet": "<span class=\"value\">+973 3600 1234</span>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 312,
+        "y": 32,
+        "width": 46,
+        "height": 16
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h2 class=\"group-title\">الحساب</h2>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 235.109375,
+        "y": 68,
+        "width": 6,
+        "height": 21
+      },
+      "message": "margin-left: 203.109px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"chevron\">›</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 160.90625,
+        "y": 114,
+        "width": 6,
+        "height": 21
+      },
+      "message": "margin-left: 128.906px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"chevron\">›</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 266,
+        "y": 160,
+        "width": 6,
+        "height": 21
+      },
+      "message": "margin-left: 234px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"chevron\">›</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 257.984375,
+        "y": 245,
+        "width": 44,
+        "height": 24
+      },
+      "message": "margin-left: 225.984px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<label class=\"switch\">\n        <input type=\"checkbox\">\n        <span class=\"slider\"></span>\n      </label>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 117.65625,
+        "y": 294,
+        "width": 44,
+        "height": 24
+      },
+      "message": "margin-left: 85.6562px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<label class=\"switch\">\n        <input type=\"checkbox\">\n        <span class=\"slider\"></span>\n      </label>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 262,
+        "y": 382,
+        "width": 44,
+        "height": 24
+      },
+      "message": "margin-left: 230px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<label class=\"switch\">\n        <input type=\"checkbox\" checked=\"\">\n        <span class=\"slider\"></span>\n      </label>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 269,
+        "y": 431,
+        "width": 44,
+        "height": 24
+      },
+      "message": "margin-left: 237px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<label class=\"switch\">\n        <input type=\"checkbox\" checked=\"\">\n        <span class=\"slider\"></span>\n      </label>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 200.546875,
+        "y": 480,
+        "width": 44,
+        "height": 24
+      },
+      "message": "margin-left: 168.547px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<label class=\"switch\">\n        <input type=\"checkbox\" checked=\"\">\n        <span class=\"slider\"></span>\n      </label>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
 }

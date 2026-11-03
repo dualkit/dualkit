@@ -4,16 +4,50 @@
   "screen": "booking",
   "condition": "alone",
   "run": 1,
-  "at": "2026-11-02T12:45:13.864Z",
-  "reply": "",
+  "at": "2026-11-03T12:05:16.582Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>مواعيد العيادة</title>\n<style>\n  body {\n    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n    background-color: #f5f5f5;\n    margin: 0;\n    padding: 0;\n    direction: rtl;\n  }\n  .container {\n    max-width: 480px;\n    margin: 0 auto;\n    background: #fff;\n    min-height: 100vh;\n    padding: 16px;\n    box-sizing: border-box;\n  }\n  .header {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    margin-bottom: 16px;\n  }\n  .nav-arrow {\n    background: none;\n    border: none;\n    font-size: 24px;\n    cursor: pointer;\n    color: #333;\n  }\n  #month-name {\n    font-size: 20px;\n    margin: 0 8px;\n  }\n  .weekdays {\n    display: grid;\n    grid-template-columns: repeat(7, 1fr);\n    text-align: center;\n    font-weight: bold;\n    margin-bottom: 8px;\n  }\n  .weekdays div {\n    padding: 8px 0;\n    border-bottom: 1px solid #ddd;\n  }\n  .calendar-grid {\n    display: grid;\n    grid-template-columns: repeat(7, 1fr);\n    gap: 4px;\n    margin-bottom: 16px;\n  }\n  .day {\n    aspect-ratio: 1;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    border: 1px solid #eee;\n    border-radius: 4px;\n    cursor: pointer;\n    font-size: 14px;\n  }\n  .day.other-month {\n    color: #bbb;\n  }\n  .day.today {\n    background-color: #007AFF;\n    color: #fff;\n    border-radius: 50%;\n  }\n  .time-slots {\n    display: flex;\n    flex-wrap: wrap;\n    gap: 8px;\n    margin-bottom: 16px;\n  }\n  .time-slot {\n    padding: 8px 12px;\n    border: 1px solid #ccc;\n    border-radius: 4px;\n    background: #f9f9f9;\n    cursor: pointer;\n  }\n  .time-slot:hover {\n    background: #e9e9e9;\n  }\n  .doctor-info {\n    margin-bottom: 16px;\n    text-align: center;\n    font-size: 16px;\n  }\n  .confirm-btn {\n    width: 100%;\n    padding: 12px;\n    background-color: #007AFF;\n    color: white;\n    border: none;\n    border-radius: 4px;\n    font-size: 16px;\n    cursor: pointer;\n  }\n  .confirm-btn:hover {\n    background-color: #0056b3;\n  }\n</style>\n</head>\n<body>\n<div class=\"container\">\n  <header class=\"header\">\n    <button id=\"prev-month\" class=\"nav-arrow\">‹</button>\n    <h1 id=\"month-name\"></h1>\n    <button id=\"next-month\" class=\"nav-arrow\">›</button>\n  </header>\n  <div class=\"weekdays\">\n    <div>السبت</div>\n    <div>الأحد</div>\n    <div>الإثنين</div>\n    <div>الثلاثاء</div>\n    <div>الأربعاء</div>\n    <div>الخميس</div>\n    <div>الجمعة</div>\n  </div>\n  <div class=\"calendar-grid\" id=\"calendar-grid\"></div>\n  <div class=\"time-slots\" id=\"time-slots\"></div>\n  <div class=\"doctor-info\">\n    <p>د. محمد علي</p>\n  </div>\n  <button class=\"confirm-btn\">تأكيد الحجز</button>\n</div>\n<script>\n  const monthNames = [\n    \"يناير\", \"فبراير\", \"مارس\", \"أبريل\", \"مايو\", \"يونيو\",\n    \"يوليو\", \"أغسطس\", \"سبتمبر\", \"أكتوبر\", \"نوفمبر\", \"ديسمبر\"\n  ];\n\n  let currentViewDate = new Date();\n\n  const calendarGrid = document.getElementById('calendar-grid');\n  const monthNameEl = document.getElementById('month-name');\n  const prevBtn = document.getElementById('prev-month');\n  const nextBtn = document.getElementById('next-month');\n  const timeSlotsEl = document.getElementById('time-slots');\n\n  function renderCalendar(date) {\n    calendarGrid.innerHTML = '';\n    const year = date.getFullYear();\n    const month = date.getMonth();\n\n    monthNameEl.textContent = `${monthNames[month]} ${year}`;\n\n    const firstDay = new Date(year, month, 1);\n    // Week starts on Saturday (6). Adjust offset so Saturday is first column.\n    const startOffset = (firstDay.getDay() + 1) % 7;\n\n    const startDate = new Date(firstDay);\n    startDate.setDate(startDate.getDate() - startOffset);\n\n    for (let i = 0; i < 42; i++) {\n      const dayDate = new Date(startDate);\n      dayDate.setDate(startDate.getDate() + i);\n\n      const dayElement = document.createElement('div');\n      dayElement.className = 'day';\n      dayElement.textContent = dayDate.getDate();\n\n      if (dayDate.getMonth() !== month) {\n        dayElement.classList.add('other-month');\n      }\n\n      const today = new Date();\n      if (dayDate.toDateString() === today.toDateString()) {\n        dayElement.classList.add('today');\n      }\n\n      dayElement.addEventListener('click', () => {\n        // Optionally handle day selection\n      });\n\n      calendarGrid.appendChild(dayElement);\n    }\n  }\n\n  function renderTimeSlots() {\n    timeSlotsEl.innerHTML = '';\n    for (let hour = 9; hour <= 12; hour++) {\n      for (let min = 0; min < 60; min += 30) {\n        if (hour === 12 && min > 0) break;\n        const timeString = `${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}`;\n        const slot = document.createElement('div');\n        slot.className = 'time-slot';\n        slot.textContent = timeString;\n        slot.addEventListener('click', () => {\n          // Optionally handle slot selection\n        });\n        timeSlotsEl.appendChild(slot);\n      }\n    }\n  }\n\n  prevBtn.addEventListener('click', () => {\n    currentViewDate.setMonth(currentViewDate.getMonth() - 1);\n    renderCalendar(currentViewDate);\n  });\n\n  nextBtn.addEventListener('click', () => {\n    currentViewDate.setMonth(currentViewDate.getMonth() + 1);\n    renderCalendar(currentViewDate);\n  });\n\n  renderCalendar(currentViewDate);\n  renderTimeSlots();\n</script>\n</body>\n</html>\n```",
   "usage": {
     "input": 146,
-    "output": 16000
+    "output": 7507
   },
-  "finish": "length",
-  "reasoningTokens": 14599,
+  "ms": 93419,
+  "finish": "stop",
+  "reasoningTokens": 6207,
   "servedModel": "dots-studio/dots-3-note-preview:free",
-  "ms": 182344,
-  "ok": false,
-  "error": "Hit the token cap"
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 92,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 142.46875,
+        "y": 20,
+        "width": 105.0625,
+        "height": 22
+      },
+      "message": "Arabic falls back from Segoe UI, Tahoma, Geneva, Verdana, sans-serif.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1 id=\"month-name\">نوفمبر 2026</h1>"
+    },
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 158.765625,
+        "y": 572.3125,
+        "width": 72.453125,
+        "height": 17
+      },
+      "message": "Arabic falls back from Arial.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<button class=\"confirm-btn\">تأكيد الحجز</button>"
+    }
+  ],
+  "unreadableStylesheets": 0,
+  "pageHeight": 844
 }
