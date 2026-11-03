@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مواعيد العيادة</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+  }
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #fff;
+    min-height: 100vh;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .nav-arrow {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+  }
+  #month-name {
+    font-size: 20px;
+    margin: 0 8px;
+  }
+  .weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  .weekdays div {
+    padding: 8px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+  .day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .day.other-month {
+    color: #bbb;
+  }
+  .day.today {
+    background-color: #007AFF;
+    color: #fff;
+    border-radius: 50%;
+  }
+  .time-slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .time-slot {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #f9f9f9;
+    cursor: pointer;
+  }
+  .time-slot:hover {
+    background: #e9e9e9;
+  }
+  .doctor-info {
+    margin-bottom: 16px;
+    text-align: center;
+    font-size: 16px;
+  }
+  .confirm-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #007AFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .confirm-btn:hover {
+    background-color: #0056b3;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <button id="prev-month" class="nav-arrow">‹</button>
+    <h1 id="month-name"></h1>
+    <button id="next-month" class="nav-arrow">›</button>
+  </header>
+  <div class="weekdays">
+    <div>السبت</div>
+    <div>الأحد</div>
+    <div>الإثنين</div>
+    <div>الثلاثاء</div>
+    <div>الأربعاء</div>
+    <div>الخميس</div>
+    <div>الجمعة</div>
+  </div>
+  <div class="calendar-grid" id="calendar-grid"></div>
+  <div class="time-slots" id="time-slots"></div>
+  <div class="doctor-info">
+    <p>د. محمد علي</p>
+  </div>
+  <button class="confirm-btn">تأكيد الحجز</button>
+</div>
+<script>
+  const monthNames = [
+    "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+    "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+  ];
+
+  let currentViewDate = new Date();
+
+  const calendarGrid = document.getElementById('calendar-grid');
+  const monthNameEl = document.getElementById('month-name');
+  const prevBtn = document.getElementById('prev-month');
+  const nextBtn = document.getElementById('next-month');
+  const timeSlotsEl = document.getElementById('time-slots');
+
+  function renderCalendar(date) {
+    calendarGrid.innerHTML = '';
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    monthNameEl.textContent = `${monthNames[month]} ${year}`;
+
+    const firstDay = new Date(year, month, 1);
+    // Week starts on Saturday (6). Adjust offset so Saturday is first column.
+    const startOffset = (firstDay.getDay() + 1) % 7;
+
+    const startDate = new Date(firstDay);
+    startDate.setDate(startDate.getDate() - startOffset);
+
+    for (let i = 0; i < 42; i++) {
+      const dayDate = new Date(startDate);
+      dayDate.setDate(startDate.getDate() + i);
+
+      const dayElement = document.createElement('div');
+      dayElement.className = 'day';
+      dayElement.textContent = dayDate.getDate();
+
+      if (dayDate.getMonth() !== month) {
+        dayElement.classList.add('other-month');
+      }
+
+      const today = new Date();
+      if (dayDate.toDateString() === today.toDateString()) {
+        dayElement.classList.add('today');
+      }
+
+      dayElement.addEventListener('click', () => {
+        // Optionally handle day selection
+      });
+
+      calendarGrid.appendChild(dayElement);
+    }
+  }
+
+  function renderTimeSlots() {
+    timeSlotsEl.innerHTML = '';
+    for (let hour = 9; hour <= 12; hour++) {
+      for (let min = 0; min < 60; min += 30) {
+        if (hour === 12 && min > 0) break;
+        const timeString = `${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+        const slot = document.createElement('div');
+        slot.className = 'time-slot';
+        slot.textContent = timeString;
+        slot.addEventListener('click', () => {
+          // Optionally handle slot selection
+        });
+        timeSlotsEl.appendChild(slot);
+      }
+    }
+  }
+
+  prevBtn.addEventListener('click', () => {
+    currentViewDate.setMonth(currentViewDate.getMonth() - 1);
+    renderCalendar(currentViewDate);
+  });
+
+  nextBtn.addEventListener('click', () => {
+    currentViewDate.setMonth(currentViewDate.getMonth() + 1);
+    renderCalendar(currentViewDate);
+  });
+
+  renderCalendar(currentViewDate);
+  renderTimeSlots();
+</script>
+</body>
+</html>

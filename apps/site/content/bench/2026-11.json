@@ -1,15 +1,1782 @@
 {
   "month": "2026-11",
-  "generatedAt": "2026-11-02T15:36:33.611Z",
+  "generatedAt": "2026-11-03T14:40:26.178Z",
   "ruleCount": 34,
   "models": [
+    {
+      "id": "dots-3-note",
+      "label": "Dots3 Note Preview",
+      "provider": "openrouter",
+      "by": "Dots Studio",
+      "mark": "dots-studio",
+      "rank": 1,
+      "previousRank": null,
+      "move": null,
+      "isNew": true,
+      "alone": {
+        "rulesPassed": 320,
+        "outOf": 340,
+        "score": 80
+      },
+      "dualkit": {
+        "rulesPassed": 321,
+        "outOf": 340,
+        "score": 86
+      },
+      "lift": 1,
+      "screens": [
+        {
+          "id": "payment-summary",
+          "title": "Payment summary",
+          "alone": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 32,
+            "score": 87,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "icons/arrow-points-forward",
+                "title": "A back or next arrow drawn pointing the wrong way",
+                "severity": "warning",
+                "box": {
+                  "x": 344,
+                  "y": 20.390625,
+                  "width": 36,
+                  "height": 30
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 119.21875,
+                  "y": 24.390625,
+                  "width": 105.5625,
+                  "height": 22
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 162.484375,
+                  "y": 338.78125,
+                  "width": 65.015625,
+                  "height": 20
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 344,
+                  "y": 20.390625,
+                  "width": 36,
+                  "height": 30
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/payment-summary-alone.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/payment-summary/alone-2.json"
+          },
+          "dualkit": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 33,
+            "score": 92,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 140.15625,
+                  "y": 32.046875,
+                  "width": 109.703125,
+                  "height": 21
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 159.765625,
+                  "y": 781.8125,
+                  "width": 70.453125,
+                  "height": 17
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/payment-summary-dualkit.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/payment-summary/dualkit-2.json"
+          }
+        },
+        {
+          "id": "otp",
+          "title": "OTP",
+          "alone": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 32,
+            "score": 82,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "bidi/unisolated-number",
+                "title": "A number that will show in reverse",
+                "severity": "error",
+                "box": {
+                  "x": 38.75,
+                  "y": 353.03125,
+                  "width": 312.484375,
+                  "height": 35
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 139.65625,
+                  "y": 308.03125,
+                  "width": 110.671875,
+                  "height": 27
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 173.5,
+                  "y": 522.03125,
+                  "width": 43,
+                  "height": 17
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/otp-alone.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/otp/alone-2.json"
+          },
+          "dualkit": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 32,
+            "score": 78,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "content/drops-arabic-digits",
+                "title": "A code field that deletes Arabic digits",
+                "severity": "error",
+                "box": {
+                  "x": 316,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 316,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 258,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 200,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 142,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 84,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 26,
+                  "y": 375,
+                  "width": 48,
+                  "height": 56
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/otp-dualkit.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/otp/dualkit-2.json"
+          }
+        },
+        {
+          "id": "address-form",
+          "title": "Address form",
+          "alone": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 33,
+            "score": 92,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 298.109375,
+                  "y": 17,
+                  "width": 75.890625,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 156.765625,
+                  "y": 499,
+                  "width": 76.453125,
+                  "height": 17
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/address-form-alone.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/address-form/alone-3.json"
+          },
+          "dualkit": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 32,
+            "score": 88,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 217.875,
+                  "y": 53,
+                  "width": 128.125,
+                  "height": 25
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 316.328125,
+                  "y": 441.140625,
+                  "width": 29.671875,
+                  "height": 14
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 316.328125,
+                  "y": 648.109375,
+                  "width": 29.671875,
+                  "height": 14
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/address-form-dualkit.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/address-form/dualkit-2.json"
+          }
+        },
+        {
+          "id": "profile",
+          "title": "Profile",
+          "alone": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 30,
+            "score": 55,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "bidi/unisolated-latin",
+                "title": "An email, link or code that will scramble",
+                "severity": "error",
+                "box": {
+                  "x": 55.125,
+                  "y": 316.078125,
+                  "width": 230.4375,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "bidi/unisolated-number",
+                "title": "A number that will show in reverse",
+                "severity": "error",
+                "box": {
+                  "x": 121.71875,
+                  "y": 261.578125,
+                  "width": 129.5,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "bidi/unisolated-number",
+                "title": "A number that will show in reverse",
+                "severity": "error",
+                "box": {
+                  "x": 55.125,
+                  "y": 316.078125,
+                  "width": 230.4375,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "bidi/punctuation-flip",
+                "title": "Punctuation at the wrong end",
+                "severity": "warning",
+                "box": {
+                  "x": 305.5625,
+                  "y": 316.078125,
+                  "width": 44.4375,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 150.5,
+                  "y": 56.078125,
+                  "width": 89,
+                  "height": 27
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 45,
+                  "y": 135.078125,
+                  "width": 36,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 307.671875,
+                  "y": 134.078125,
+                  "width": 42.328125,
+                  "height": 19
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 239.21875,
+                  "y": 197.578125,
+                  "width": 110.78125,
+                  "height": 19
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 271.21875,
+                  "y": 261.078125,
+                  "width": 78.78125,
+                  "height": 19
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 305.5625,
+                  "y": 316.078125,
+                  "width": 44.4375,
+                  "height": 18
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/profile-alone.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/profile/alone-1.json"
+          },
+          "dualkit": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 33,
+            "score": 96,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 56.5,
+                  "y": 158.453125,
+                  "width": 36,
+                  "height": 17
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/profile-dualkit.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/profile/dualkit-1.json"
+          }
+        },
+        {
+          "id": "order-history",
+          "title": "Order history",
+          "alone": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 32,
+            "score": 66,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "bidi/unisolated-latin",
+                "title": "An email, link or code that will scramble",
+                "severity": "error",
+                "box": {
+                  "x": 287.71875,
+                  "y": 102.90625,
+                  "width": 70.28125,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "bidi/unisolated-latin",
+                "title": "An email, link or code that will scramble",
+                "severity": "error",
+                "box": {
+                  "x": 287.71875,
+                  "y": 222.90625,
+                  "width": 70.28125,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "bidi/unisolated-latin",
+                "title": "An email, link or code that will scramble",
+                "severity": "error",
+                "box": {
+                  "x": 287.71875,
+                  "y": 342.90625,
+                  "width": 70.28125,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "bidi/unisolated-latin",
+                "title": "An email, link or code that will scramble",
+                "severity": "error",
+                "box": {
+                  "x": 287.71875,
+                  "y": 462.90625,
+                  "width": 70.28125,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 134.15625,
+                  "y": 35.90625,
+                  "width": 121.671875,
+                  "height": 27
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/order-history-alone.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/order-history/alone-3.json"
+          },
+          "dualkit": {
+            "ran": true,
+            "runs": 2,
+            "rulesPassed": 33,
+            "score": 88,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 43,
+                  "y": 158.59375,
+                  "width": 56,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 329,
+                  "y": 214.6875,
+                  "width": 32,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 29,
+                  "y": 240.484375,
+                  "width": 131,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 317,
+                  "y": 272.578125,
+                  "width": 44,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 43,
+                  "y": 349.375,
+                  "width": 65,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 329,
+                  "y": 405.46875,
+                  "width": 32,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 29,
+                  "y": 431.265625,
+                  "width": 131,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 317,
+                  "y": 463.359375,
+                  "width": 44,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 43,
+                  "y": 540.15625,
+                  "width": 56,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 329,
+                  "y": 596.25,
+                  "width": 32,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 29,
+                  "y": 622.046875,
+                  "width": 124,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 317,
+                  "y": 654.140625,
+                  "width": 44,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 43,
+                  "y": 730.9375,
+                  "width": 28,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 329,
+                  "y": 787.03125,
+                  "width": 32,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 29,
+                  "y": 812.828125,
+                  "width": 124,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 317,
+                  "y": 844.921875,
+                  "width": 44,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 156,
+                  "y": 923.71875,
+                  "width": 117,
+                  "height": 25
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/order-history-dualkit.webp",
+            "pageHeight": 983,
+            "raw": "bench/runs/2026-11/dots-3-note/order-history/dualkit-2.json"
+          }
+        },
+        {
+          "id": "checkout",
+          "title": "Checkout",
+          "alone": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 32,
+            "score": 77,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 224,
+                  "y": 106,
+                  "width": 40,
+                  "height": 19
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 224,
+                  "y": 191,
+                  "width": 40,
+                  "height": 19
+                }
+              },
+              {
+                "rule": "bidi/field-direction",
+                "title": "A left-to-right field typed right to left",
+                "severity": "warning",
+                "box": {
+                  "x": 224,
+                  "y": 276,
+                  "width": 40,
+                  "height": 19
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 238.4375,
+                  "y": 19,
+                  "width": 103.5625,
+                  "height": 22
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 149.984375,
+                  "y": 534,
+                  "width": 90.015625,
+                  "height": 20
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 350,
+                  "y": 16,
+                  "width": 24,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 314,
+                  "y": 72,
+                  "width": 60,
+                  "height": 60
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 314,
+                  "y": 157,
+                  "width": 60,
+                  "height": 60
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 314,
+                  "y": 242,
+                  "width": 60,
+                  "height": 60
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/checkout-alone.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/checkout/alone-2.json"
+          },
+          "dualkit": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 31,
+            "score": 70,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "bidi/field-placeholder",
+                "title": "An Arabic hint on the wrong side of the field",
+                "severity": "warning",
+                "box": {
+                  "x": 110,
+                  "y": 526.046875,
+                  "width": 252,
+                  "height": 47.796875
+                }
+              },
+              {
+                "rule": "content/mixed-digits",
+                "title": "Two digit systems on one screen",
+                "severity": "warning",
+                "box": {
+                  "x": 297,
+                  "y": 31,
+                  "width": 53,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "content/mixed-digits",
+                "title": "Two digit systems on one screen",
+                "severity": "warning",
+                "box": {
+                  "x": 40,
+                  "y": 31,
+                  "width": 37,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "content/mixed-digits",
+                "title": "Two digit systems on one screen",
+                "severity": "warning",
+                "box": {
+                  "x": 187,
+                  "y": 69.046875,
+                  "width": 42,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "content/mixed-digits",
+                "title": "Two digit systems on one screen",
+                "severity": "warning",
+                "box": {
+                  "x": 221,
+                  "y": 687.828125,
+                  "width": 141,
+                  "height": 29
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 297,
+                  "y": 31,
+                  "width": 53,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 40,
+                  "y": 31,
+                  "width": 37,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 187,
+                  "y": 69.046875,
+                  "width": 42,
+                  "height": 28
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 190,
+                  "y": 576.84375,
+                  "width": 168,
+                  "height": 25
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 28,
+                  "y": 655.734375,
+                  "width": 31,
+                  "height": 25
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 328,
+                  "y": 66.09375,
+                  "width": 34,
+                  "height": 34
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 28,
+                  "y": 579.84375,
+                  "width": 334,
+                  "height": 20.390625
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/checkout-dualkit.webp",
+            "pageHeight": 888,
+            "raw": "bench/runs/2026-11/dots-3-note/checkout/dualkit-1.json"
+          }
+        },
+        {
+          "id": "support-chat",
+          "title": "Support chat",
+          "alone": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 31,
+            "score": 70,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "bidi/unisolated-latin",
+                "title": "An email, link or code that will scramble",
+                "severity": "error",
+                "box": {
+                  "x": 78.703125,
+                  "y": 229.6875,
+                  "width": 281.796875,
+                  "height": 35.59375
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 156.53125,
+                  "y": 99.5,
+                  "width": 76.921875,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 40.5,
+                  "y": 718.5,
+                  "width": 34,
+                  "height": 16
+                }
+              },
+              {
+                "rule": "type/arabic-leading",
+                "title": "Arabic lines set too tight",
+                "severity": "warning",
+                "box": {
+                  "x": 52.890625,
+                  "y": 146.5,
+                  "width": 260.609375,
+                  "height": 35.59375
+                }
+              },
+              {
+                "rule": "type/arabic-leading",
+                "title": "Arabic lines set too tight",
+                "severity": "warning",
+                "box": {
+                  "x": 78.703125,
+                  "y": 229.6875,
+                  "width": 281.796875,
+                  "height": 35.59375
+                }
+              },
+              {
+                "rule": "layout/physical-inset",
+                "title": "Position, float or border that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 17.5,
+                  "y": 137.5,
+                  "width": 308,
+                  "height": 73.1875
+                }
+              },
+              {
+                "rule": "layout/physical-inset",
+                "title": "Position, float or border that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 64.5,
+                  "y": 220.6875,
+                  "width": 308,
+                  "height": 73.1875
+                }
+              },
+              {
+                "rule": "layout/physical-inset",
+                "title": "Position, float or border that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 17.5,
+                  "y": 303.875,
+                  "width": 242.9375,
+                  "height": 53.59375
+                }
+              },
+              {
+                "rule": "layout/physical-inset",
+                "title": "Position, float or border that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 105.265625,
+                  "y": 367.46875,
+                  "width": 267.234375,
+                  "height": 53.59375
+                }
+              },
+              {
+                "rule": "layout/physical-inset",
+                "title": "Position, float or border that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 17.5,
+                  "y": 431.0625,
+                  "width": 238.140625,
+                  "height": 53.59375
+                }
+              },
+              {
+                "rule": "layout/physical-inset",
+                "title": "Position, float or border that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 80,
+                  "y": 494.65625,
+                  "width": 292.5,
+                  "height": 53.59375
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 25.5,
+                  "y": 707.5,
+                  "width": 64,
+                  "height": 38
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/support-chat-alone.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/support-chat/alone-2.json"
+          },
+          "dualkit": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 32,
+            "score": 89,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 309,
+                  "y": 100,
+                  "width": 22,
+                  "height": 20
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 236.65625,
+                  "y": 112.5,
+                  "width": 51.34375,
+                  "height": 14
+                }
+              },
+              {
+                "rule": "layout/physical-inset",
+                "title": "Position, float or border that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 122.5,
+                  "y": 162,
+                  "width": 217.5,
+                  "height": 85.5
+                }
+              },
+              {
+                "rule": "layout/physical-inset",
+                "title": "Position, float or border that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 50,
+                  "y": 259.5,
+                  "width": 217.5,
+                  "height": 110
+                }
+              },
+              {
+                "rule": "layout/physical-inset",
+                "title": "Position, float or border that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 122.5,
+                  "y": 381.5,
+                  "width": 217.5,
+                  "height": 85.5
+                }
+              },
+              {
+                "rule": "layout/physical-inset",
+                "title": "Position, float or border that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 50,
+                  "y": 479,
+                  "width": 217.5,
+                  "height": 110
+                }
+              },
+              {
+                "rule": "layout/physical-inset",
+                "title": "Position, float or border that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 122.5,
+                  "y": 601,
+                  "width": 217.5,
+                  "height": 85.5
+                }
+              },
+              {
+                "rule": "layout/physical-inset",
+                "title": "Position, float or border that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 50,
+                  "y": 698.5,
+                  "width": 217.5,
+                  "height": 110
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/support-chat-dualkit.webp",
+            "pageHeight": 884,
+            "raw": "bench/runs/2026-11/dots-3-note/support-chat/dualkit-2.json"
+          }
+        },
+        {
+          "id": "booking",
+          "title": "Booking",
+          "alone": {
+            "ran": true,
+            "runs": 2,
+            "rulesPassed": 33,
+            "score": 92,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 142.46875,
+                  "y": 20,
+                  "width": 105.0625,
+                  "height": 22
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 158.765625,
+                  "y": 401,
+                  "width": 72.453125,
+                  "height": 17
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/booking-alone.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/booking/alone-2.json"
+          },
+          "dualkit": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 31,
+            "score": 80,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "icons/arrow-points-forward",
+                "title": "A back or next arrow drawn pointing the wrong way",
+                "severity": "warning",
+                "box": {
+                  "x": 346,
+                  "y": 104.125,
+                  "width": 20,
+                  "height": 20
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 233.453125,
+                  "y": 18,
+                  "width": 88.546875,
+                  "height": 21
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 178.265625,
+                  "y": 47.59375,
+                  "width": 143.734375,
+                  "height": 15
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 337.15625,
+                  "y": 159.578125,
+                  "width": 29.40625,
+                  "height": 14
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 293.1875,
+                  "y": 159.578125,
+                  "width": 12.765625,
+                  "height": 14
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 240.484375,
+                  "y": 159.578125,
+                  "width": 13.625,
+                  "height": 14
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 183.453125,
+                  "y": 159.578125,
+                  "width": 23.09375,
+                  "height": 14
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 128.296875,
+                  "y": 159.578125,
+                  "width": 28.84375,
+                  "height": 14
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 77.984375,
+                  "y": 159.578125,
+                  "width": 24.890625,
+                  "height": 14
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 33.828125,
+                  "y": 159.578125,
+                  "width": 8.65625,
+                  "height": 14
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 327.609375,
+                  "y": 484.859375,
+                  "width": 46.390625,
+                  "height": 15
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 159.921875,
+                  "y": 557.65625,
+                  "width": 139.078125,
+                  "height": 15
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 302.484375,
+                  "y": 614.953125,
+                  "width": 71.515625,
+                  "height": 15
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/booking-dualkit.webp",
+            "pageHeight": 974,
+            "raw": "bench/runs/2026-11/dots-3-note/booking/dualkit-3.json"
+          }
+        },
+        {
+          "id": "settings",
+          "title": "Settings",
+          "alone": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 32,
+            "score": 83,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "bidi/unisolated-number",
+                "title": "A number that will show in reverse",
+                "severity": "error",
+                "box": {
+                  "x": 174.90625,
+                  "y": 116.5,
+                  "width": 101.640625,
+                  "height": 16
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 312,
+                  "y": 32,
+                  "width": 46,
+                  "height": 16
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 235.109375,
+                  "y": 68,
+                  "width": 6,
+                  "height": 21
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 160.90625,
+                  "y": 114,
+                  "width": 6,
+                  "height": 21
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 266,
+                  "y": 160,
+                  "width": 6,
+                  "height": 21
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 257.984375,
+                  "y": 245,
+                  "width": 44,
+                  "height": 24
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 117.65625,
+                  "y": 294,
+                  "width": 44,
+                  "height": 24
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 262,
+                  "y": 382,
+                  "width": 44,
+                  "height": 24
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 269,
+                  "y": 431,
+                  "width": 44,
+                  "height": 24
+                }
+              },
+              {
+                "rule": "layout/physical-spacing",
+                "title": "Spacing that does not mirror",
+                "severity": "note",
+                "box": {
+                  "x": 200.546875,
+                  "y": 480,
+                  "width": 44,
+                  "height": 24
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/settings-alone.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/settings/alone-2.json"
+          },
+          "dualkit": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 32,
+            "score": 92,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "bidi/punctuation-flip",
+                "title": "Punctuation at the wrong end",
+                "severity": "warning",
+                "box": {
+                  "x": 178.5,
+                  "y": 481.046875,
+                  "width": 188,
+                  "height": 22
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 296.5,
+                  "y": 19,
+                  "width": 70,
+                  "height": 24
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/settings-dualkit.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/settings/dualkit-3.json"
+          }
+        },
+        {
+          "id": "transactions",
+          "title": "Transactions",
+          "alone": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 33,
+            "score": 92,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 130.5,
+                  "y": 54.4375,
+                  "width": 129,
+                  "height": 36
+                }
+              },
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 163.265625,
+                  "y": 178.4375,
+                  "width": 63.453125,
+                  "height": 17
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/transactions-alone.webp",
+            "pageHeight": 844,
+            "raw": "bench/runs/2026-11/dots-3-note/transactions/alone-2.json"
+          },
+          "dualkit": {
+            "ran": true,
+            "runs": 3,
+            "rulesPassed": 32,
+            "score": 84,
+            "missing": [],
+            "findings": [
+              {
+                "rule": "type/arabic-font",
+                "title": "No Arabic font in the stack",
+                "severity": "warning",
+                "box": {
+                  "x": 293.609375,
+                  "y": 206.1875,
+                  "width": 55.890625,
+                  "height": 16
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 0,
+                  "y": 322.375,
+                  "width": 21,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 0,
+                  "y": 392.15625,
+                  "width": 21,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": -1.5,
+                  "y": 461.9375,
+                  "width": 24,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 0,
+                  "y": 531.71875,
+                  "width": 21,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 0,
+                  "y": 601.5,
+                  "width": 21,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": -1.5,
+                  "y": 671.28125,
+                  "width": 24,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": 0,
+                  "y": 741.0625,
+                  "width": 21,
+                  "height": 17
+                }
+              },
+              {
+                "rule": "type/arabic-size",
+                "title": "Arabic set too small",
+                "severity": "warning",
+                "box": {
+                  "x": -1.5,
+                  "y": 810.84375,
+                  "width": 24,
+                  "height": 17
+                }
+              }
+            ],
+            "shot": "/bench/2026-11/dots-3-note/transactions-dualkit.webp",
+            "pageHeight": 854,
+            "raw": "bench/runs/2026-11/dots-3-note/transactions/dualkit-3.json"
+          }
+        }
+      ]
+    },
     {
       "id": "gemini-flash-lite",
       "label": "Gemini Flash Lite",
       "provider": "gemini",
       "by": "Google",
       "mark": "google",
-      "rank": 1,
+      "rank": 2,
       "previousRank": null,
       "move": null,
       "isNew": true,
@@ -4202,1687 +5969,6 @@
       ]
     },
     {
-      "id": "dots-3-note",
-      "label": "Dots3 Note Preview",
-      "provider": "openrouter",
-      "by": "Dots Studio",
-      "mark": "dots-studio",
-      "rank": 2,
-      "previousRank": null,
-      "move": null,
-      "isNew": true,
-      "alone": null,
-      "dualkit": {
-        "rulesPassed": 321,
-        "outOf": 340,
-        "score": 86
-      },
-      "lift": null,
-      "screens": [
-        {
-          "id": "payment-summary",
-          "title": "Payment summary",
-          "alone": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 32,
-            "score": 87,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "icons/arrow-points-forward",
-                "title": "A back or next arrow drawn pointing the wrong way",
-                "severity": "warning",
-                "box": {
-                  "x": 344,
-                  "y": 20.390625,
-                  "width": 36,
-                  "height": 30
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 119.21875,
-                  "y": 24.390625,
-                  "width": 105.5625,
-                  "height": 22
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 162.484375,
-                  "y": 338.78125,
-                  "width": 65.015625,
-                  "height": 20
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 344,
-                  "y": 20.390625,
-                  "width": 36,
-                  "height": 30
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/payment-summary-alone.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/payment-summary/alone-2.json"
-          },
-          "dualkit": {
-            "ran": true,
-            "runs": 2,
-            "rulesPassed": 33,
-            "score": 92,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 140.15625,
-                  "y": 32.046875,
-                  "width": 109.703125,
-                  "height": 21
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 159.765625,
-                  "y": 781.8125,
-                  "width": 70.453125,
-                  "height": 17
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/payment-summary-dualkit.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/payment-summary/dualkit-2.json"
-          }
-        },
-        {
-          "id": "otp",
-          "title": "OTP",
-          "alone": {
-            "ran": true,
-            "runs": 2,
-            "rulesPassed": 32,
-            "score": 82,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "bidi/unisolated-number",
-                "title": "A number that will show in reverse",
-                "severity": "error",
-                "box": {
-                  "x": 57.515625,
-                  "y": 349,
-                  "width": 312.484375,
-                  "height": 35
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 139.671875,
-                  "y": 310,
-                  "width": 110.671875,
-                  "height": 27
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 169.5,
-                  "y": 541,
-                  "width": 51,
-                  "height": 20
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/otp-alone.webp",
-            "pageHeight": 884,
-            "raw": "bench/runs/2026-11/dots-3-note/otp/alone-3.json"
-          },
-          "dualkit": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 32,
-            "score": 78,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "content/drops-arabic-digits",
-                "title": "A code field that deletes Arabic digits",
-                "severity": "error",
-                "box": {
-                  "x": 316,
-                  "y": 375,
-                  "width": 48,
-                  "height": 56
-                }
-              },
-              {
-                "rule": "bidi/field-direction",
-                "title": "A left-to-right field typed right to left",
-                "severity": "warning",
-                "box": {
-                  "x": 316,
-                  "y": 375,
-                  "width": 48,
-                  "height": 56
-                }
-              },
-              {
-                "rule": "bidi/field-direction",
-                "title": "A left-to-right field typed right to left",
-                "severity": "warning",
-                "box": {
-                  "x": 258,
-                  "y": 375,
-                  "width": 48,
-                  "height": 56
-                }
-              },
-              {
-                "rule": "bidi/field-direction",
-                "title": "A left-to-right field typed right to left",
-                "severity": "warning",
-                "box": {
-                  "x": 200,
-                  "y": 375,
-                  "width": 48,
-                  "height": 56
-                }
-              },
-              {
-                "rule": "bidi/field-direction",
-                "title": "A left-to-right field typed right to left",
-                "severity": "warning",
-                "box": {
-                  "x": 142,
-                  "y": 375,
-                  "width": 48,
-                  "height": 56
-                }
-              },
-              {
-                "rule": "bidi/field-direction",
-                "title": "A left-to-right field typed right to left",
-                "severity": "warning",
-                "box": {
-                  "x": 84,
-                  "y": 375,
-                  "width": 48,
-                  "height": 56
-                }
-              },
-              {
-                "rule": "bidi/field-direction",
-                "title": "A left-to-right field typed right to left",
-                "severity": "warning",
-                "box": {
-                  "x": 26,
-                  "y": 375,
-                  "width": 48,
-                  "height": 56
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/otp-dualkit.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/otp/dualkit-2.json"
-          }
-        },
-        {
-          "id": "address-form",
-          "title": "Address form",
-          "alone": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 33,
-            "score": 92,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 298.109375,
-                  "y": 17,
-                  "width": 75.890625,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 156.765625,
-                  "y": 499,
-                  "width": 76.453125,
-                  "height": 17
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/address-form-alone.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/address-form/alone-3.json"
-          },
-          "dualkit": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 32,
-            "score": 88,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 217.875,
-                  "y": 53,
-                  "width": 128.125,
-                  "height": 25
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 316.328125,
-                  "y": 441.140625,
-                  "width": 29.671875,
-                  "height": 14
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 316.328125,
-                  "y": 648.109375,
-                  "width": 29.671875,
-                  "height": 14
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/address-form-dualkit.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/address-form/dualkit-2.json"
-          }
-        },
-        {
-          "id": "profile",
-          "title": "Profile",
-          "alone": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 30,
-            "score": 55,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "bidi/unisolated-latin",
-                "title": "An email, link or code that will scramble",
-                "severity": "error",
-                "box": {
-                  "x": 55.125,
-                  "y": 316.078125,
-                  "width": 230.4375,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "bidi/unisolated-number",
-                "title": "A number that will show in reverse",
-                "severity": "error",
-                "box": {
-                  "x": 121.71875,
-                  "y": 261.578125,
-                  "width": 129.5,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "bidi/unisolated-number",
-                "title": "A number that will show in reverse",
-                "severity": "error",
-                "box": {
-                  "x": 55.125,
-                  "y": 316.078125,
-                  "width": 230.4375,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "bidi/punctuation-flip",
-                "title": "Punctuation at the wrong end",
-                "severity": "warning",
-                "box": {
-                  "x": 305.5625,
-                  "y": 316.078125,
-                  "width": 44.4375,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 150.5,
-                  "y": 56.078125,
-                  "width": 89,
-                  "height": 27
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 45,
-                  "y": 135.078125,
-                  "width": 36,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 307.671875,
-                  "y": 134.078125,
-                  "width": 42.328125,
-                  "height": 19
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 239.21875,
-                  "y": 197.578125,
-                  "width": 110.78125,
-                  "height": 19
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 271.21875,
-                  "y": 261.078125,
-                  "width": 78.78125,
-                  "height": 19
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 305.5625,
-                  "y": 316.078125,
-                  "width": 44.4375,
-                  "height": 18
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/profile-alone.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/profile/alone-1.json"
-          },
-          "dualkit": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 33,
-            "score": 96,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 56.5,
-                  "y": 158.453125,
-                  "width": 36,
-                  "height": 17
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/profile-dualkit.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/profile/dualkit-1.json"
-          }
-        },
-        {
-          "id": "order-history",
-          "title": "Order history",
-          "alone": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 32,
-            "score": 66,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "bidi/unisolated-latin",
-                "title": "An email, link or code that will scramble",
-                "severity": "error",
-                "box": {
-                  "x": 287.71875,
-                  "y": 102.90625,
-                  "width": 70.28125,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "bidi/unisolated-latin",
-                "title": "An email, link or code that will scramble",
-                "severity": "error",
-                "box": {
-                  "x": 287.71875,
-                  "y": 222.90625,
-                  "width": 70.28125,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "bidi/unisolated-latin",
-                "title": "An email, link or code that will scramble",
-                "severity": "error",
-                "box": {
-                  "x": 287.71875,
-                  "y": 342.90625,
-                  "width": 70.28125,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "bidi/unisolated-latin",
-                "title": "An email, link or code that will scramble",
-                "severity": "error",
-                "box": {
-                  "x": 287.71875,
-                  "y": 462.90625,
-                  "width": 70.28125,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 134.15625,
-                  "y": 35.90625,
-                  "width": 121.671875,
-                  "height": 27
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/order-history-alone.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/order-history/alone-3.json"
-          },
-          "dualkit": {
-            "ran": true,
-            "runs": 2,
-            "rulesPassed": 33,
-            "score": 88,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 43,
-                  "y": 158.59375,
-                  "width": 56,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 329,
-                  "y": 214.6875,
-                  "width": 32,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 29,
-                  "y": 240.484375,
-                  "width": 131,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 317,
-                  "y": 272.578125,
-                  "width": 44,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 43,
-                  "y": 349.375,
-                  "width": 65,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 329,
-                  "y": 405.46875,
-                  "width": 32,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 29,
-                  "y": 431.265625,
-                  "width": 131,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 317,
-                  "y": 463.359375,
-                  "width": 44,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 43,
-                  "y": 540.15625,
-                  "width": 56,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 329,
-                  "y": 596.25,
-                  "width": 32,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 29,
-                  "y": 622.046875,
-                  "width": 124,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 317,
-                  "y": 654.140625,
-                  "width": 44,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 43,
-                  "y": 730.9375,
-                  "width": 28,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 329,
-                  "y": 787.03125,
-                  "width": 32,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 29,
-                  "y": 812.828125,
-                  "width": 124,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 317,
-                  "y": 844.921875,
-                  "width": 44,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 156,
-                  "y": 923.71875,
-                  "width": 117,
-                  "height": 25
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/order-history-dualkit.webp",
-            "pageHeight": 983,
-            "raw": "bench/runs/2026-11/dots-3-note/order-history/dualkit-2.json"
-          }
-        },
-        {
-          "id": "checkout",
-          "title": "Checkout",
-          "alone": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 32,
-            "score": 77,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "bidi/field-direction",
-                "title": "A left-to-right field typed right to left",
-                "severity": "warning",
-                "box": {
-                  "x": 224,
-                  "y": 106,
-                  "width": 40,
-                  "height": 19
-                }
-              },
-              {
-                "rule": "bidi/field-direction",
-                "title": "A left-to-right field typed right to left",
-                "severity": "warning",
-                "box": {
-                  "x": 224,
-                  "y": 191,
-                  "width": 40,
-                  "height": 19
-                }
-              },
-              {
-                "rule": "bidi/field-direction",
-                "title": "A left-to-right field typed right to left",
-                "severity": "warning",
-                "box": {
-                  "x": 224,
-                  "y": 276,
-                  "width": 40,
-                  "height": 19
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 238.4375,
-                  "y": 19,
-                  "width": 103.5625,
-                  "height": 22
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 149.984375,
-                  "y": 534,
-                  "width": 90.015625,
-                  "height": 20
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 350,
-                  "y": 16,
-                  "width": 24,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 314,
-                  "y": 72,
-                  "width": 60,
-                  "height": 60
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 314,
-                  "y": 157,
-                  "width": 60,
-                  "height": 60
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 314,
-                  "y": 242,
-                  "width": 60,
-                  "height": 60
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/checkout-alone.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/checkout/alone-2.json"
-          },
-          "dualkit": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 31,
-            "score": 70,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "bidi/field-placeholder",
-                "title": "An Arabic hint on the wrong side of the field",
-                "severity": "warning",
-                "box": {
-                  "x": 110,
-                  "y": 526.046875,
-                  "width": 252,
-                  "height": 47.796875
-                }
-              },
-              {
-                "rule": "content/mixed-digits",
-                "title": "Two digit systems on one screen",
-                "severity": "warning",
-                "box": {
-                  "x": 297,
-                  "y": 31,
-                  "width": 53,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "content/mixed-digits",
-                "title": "Two digit systems on one screen",
-                "severity": "warning",
-                "box": {
-                  "x": 40,
-                  "y": 31,
-                  "width": 37,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "content/mixed-digits",
-                "title": "Two digit systems on one screen",
-                "severity": "warning",
-                "box": {
-                  "x": 187,
-                  "y": 69.046875,
-                  "width": 42,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "content/mixed-digits",
-                "title": "Two digit systems on one screen",
-                "severity": "warning",
-                "box": {
-                  "x": 221,
-                  "y": 687.828125,
-                  "width": 141,
-                  "height": 29
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 297,
-                  "y": 31,
-                  "width": 53,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 40,
-                  "y": 31,
-                  "width": 37,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 187,
-                  "y": 69.046875,
-                  "width": 42,
-                  "height": 28
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 190,
-                  "y": 576.84375,
-                  "width": 168,
-                  "height": 25
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 28,
-                  "y": 655.734375,
-                  "width": 31,
-                  "height": 25
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 328,
-                  "y": 66.09375,
-                  "width": 34,
-                  "height": 34
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 28,
-                  "y": 579.84375,
-                  "width": 334,
-                  "height": 20.390625
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/checkout-dualkit.webp",
-            "pageHeight": 888,
-            "raw": "bench/runs/2026-11/dots-3-note/checkout/dualkit-1.json"
-          }
-        },
-        {
-          "id": "support-chat",
-          "title": "Support chat",
-          "alone": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 31,
-            "score": 70,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "bidi/unisolated-latin",
-                "title": "An email, link or code that will scramble",
-                "severity": "error",
-                "box": {
-                  "x": 78.703125,
-                  "y": 229.6875,
-                  "width": 281.796875,
-                  "height": 35.59375
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 156.53125,
-                  "y": 99.5,
-                  "width": 76.921875,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 40.5,
-                  "y": 718.5,
-                  "width": 34,
-                  "height": 16
-                }
-              },
-              {
-                "rule": "type/arabic-leading",
-                "title": "Arabic lines set too tight",
-                "severity": "warning",
-                "box": {
-                  "x": 52.890625,
-                  "y": 146.5,
-                  "width": 260.609375,
-                  "height": 35.59375
-                }
-              },
-              {
-                "rule": "type/arabic-leading",
-                "title": "Arabic lines set too tight",
-                "severity": "warning",
-                "box": {
-                  "x": 78.703125,
-                  "y": 229.6875,
-                  "width": 281.796875,
-                  "height": 35.59375
-                }
-              },
-              {
-                "rule": "layout/physical-inset",
-                "title": "Position, float or border that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 17.5,
-                  "y": 137.5,
-                  "width": 308,
-                  "height": 73.1875
-                }
-              },
-              {
-                "rule": "layout/physical-inset",
-                "title": "Position, float or border that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 64.5,
-                  "y": 220.6875,
-                  "width": 308,
-                  "height": 73.1875
-                }
-              },
-              {
-                "rule": "layout/physical-inset",
-                "title": "Position, float or border that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 17.5,
-                  "y": 303.875,
-                  "width": 242.9375,
-                  "height": 53.59375
-                }
-              },
-              {
-                "rule": "layout/physical-inset",
-                "title": "Position, float or border that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 105.265625,
-                  "y": 367.46875,
-                  "width": 267.234375,
-                  "height": 53.59375
-                }
-              },
-              {
-                "rule": "layout/physical-inset",
-                "title": "Position, float or border that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 17.5,
-                  "y": 431.0625,
-                  "width": 238.140625,
-                  "height": 53.59375
-                }
-              },
-              {
-                "rule": "layout/physical-inset",
-                "title": "Position, float or border that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 80,
-                  "y": 494.65625,
-                  "width": 292.5,
-                  "height": 53.59375
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 25.5,
-                  "y": 707.5,
-                  "width": 64,
-                  "height": 38
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/support-chat-alone.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/support-chat/alone-2.json"
-          },
-          "dualkit": {
-            "ran": true,
-            "runs": 2,
-            "rulesPassed": 32,
-            "score": 89,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 309,
-                  "y": 100,
-                  "width": 22,
-                  "height": 20
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 236.65625,
-                  "y": 112.5,
-                  "width": 51.34375,
-                  "height": 14
-                }
-              },
-              {
-                "rule": "layout/physical-inset",
-                "title": "Position, float or border that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 122.5,
-                  "y": 162,
-                  "width": 217.5,
-                  "height": 85.5
-                }
-              },
-              {
-                "rule": "layout/physical-inset",
-                "title": "Position, float or border that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 50,
-                  "y": 259.5,
-                  "width": 217.5,
-                  "height": 110
-                }
-              },
-              {
-                "rule": "layout/physical-inset",
-                "title": "Position, float or border that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 122.5,
-                  "y": 381.5,
-                  "width": 217.5,
-                  "height": 85.5
-                }
-              },
-              {
-                "rule": "layout/physical-inset",
-                "title": "Position, float or border that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 50,
-                  "y": 479,
-                  "width": 217.5,
-                  "height": 110
-                }
-              },
-              {
-                "rule": "layout/physical-inset",
-                "title": "Position, float or border that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 122.5,
-                  "y": 601,
-                  "width": 217.5,
-                  "height": 85.5
-                }
-              },
-              {
-                "rule": "layout/physical-inset",
-                "title": "Position, float or border that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 50,
-                  "y": 698.5,
-                  "width": 217.5,
-                  "height": 110
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/support-chat-dualkit.webp",
-            "pageHeight": 884,
-            "raw": "bench/runs/2026-11/dots-3-note/support-chat/dualkit-2.json"
-          }
-        },
-        {
-          "id": "booking",
-          "title": "Booking",
-          "alone": {
-            "ran": false,
-            "runs": 1,
-            "reasons": [
-              "Hit the token cap"
-            ]
-          },
-          "dualkit": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 31,
-            "score": 80,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "icons/arrow-points-forward",
-                "title": "A back or next arrow drawn pointing the wrong way",
-                "severity": "warning",
-                "box": {
-                  "x": 346,
-                  "y": 104.125,
-                  "width": 20,
-                  "height": 20
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 233.453125,
-                  "y": 18,
-                  "width": 88.546875,
-                  "height": 21
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 178.265625,
-                  "y": 47.59375,
-                  "width": 143.734375,
-                  "height": 15
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 337.15625,
-                  "y": 159.578125,
-                  "width": 29.40625,
-                  "height": 14
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 293.1875,
-                  "y": 159.578125,
-                  "width": 12.765625,
-                  "height": 14
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 240.484375,
-                  "y": 159.578125,
-                  "width": 13.625,
-                  "height": 14
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 183.453125,
-                  "y": 159.578125,
-                  "width": 23.09375,
-                  "height": 14
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 128.296875,
-                  "y": 159.578125,
-                  "width": 28.84375,
-                  "height": 14
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 77.984375,
-                  "y": 159.578125,
-                  "width": 24.890625,
-                  "height": 14
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 33.828125,
-                  "y": 159.578125,
-                  "width": 8.65625,
-                  "height": 14
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 327.609375,
-                  "y": 484.859375,
-                  "width": 46.390625,
-                  "height": 15
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 159.921875,
-                  "y": 557.65625,
-                  "width": 139.078125,
-                  "height": 15
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 302.484375,
-                  "y": 614.953125,
-                  "width": 71.515625,
-                  "height": 15
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/booking-dualkit.webp",
-            "pageHeight": 974,
-            "raw": "bench/runs/2026-11/dots-3-note/booking/dualkit-3.json"
-          }
-        },
-        {
-          "id": "settings",
-          "title": "Settings",
-          "alone": {
-            "ran": true,
-            "runs": 2,
-            "rulesPassed": 32,
-            "score": 83,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "bidi/unisolated-number",
-                "title": "A number that will show in reverse",
-                "severity": "error",
-                "box": {
-                  "x": 20.328125,
-                  "y": 96.5,
-                  "width": 116.140625,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 322,
-                  "y": 11,
-                  "width": 53,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 20.328125,
-                  "y": 52,
-                  "width": 71.453125,
-                  "height": 19
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 20.328125,
-                  "y": 96.5,
-                  "width": 116.140625,
-                  "height": 18
-                }
-              },
-              {
-                "rule": "layout/physical-spacing",
-                "title": "Spacing that does not mirror",
-                "severity": "note",
-                "box": {
-                  "x": 20.328125,
-                  "y": 140,
-                  "width": 44,
-                  "height": 19
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/settings-alone.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/settings/alone-3.json"
-          },
-          "dualkit": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 32,
-            "score": 92,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "bidi/punctuation-flip",
-                "title": "Punctuation at the wrong end",
-                "severity": "warning",
-                "box": {
-                  "x": 178.5,
-                  "y": 481.046875,
-                  "width": 188,
-                  "height": 22
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 296.5,
-                  "y": 19,
-                  "width": 70,
-                  "height": 24
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/settings-dualkit.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/settings/dualkit-3.json"
-          }
-        },
-        {
-          "id": "transactions",
-          "title": "Transactions",
-          "alone": {
-            "ran": true,
-            "runs": 3,
-            "rulesPassed": 33,
-            "score": 92,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 130.5,
-                  "y": 54.4375,
-                  "width": 129,
-                  "height": 36
-                }
-              },
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 163.265625,
-                  "y": 178.4375,
-                  "width": 63.453125,
-                  "height": 17
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/transactions-alone.webp",
-            "pageHeight": 844,
-            "raw": "bench/runs/2026-11/dots-3-note/transactions/alone-2.json"
-          },
-          "dualkit": {
-            "ran": true,
-            "runs": 2,
-            "rulesPassed": 32,
-            "score": 84,
-            "missing": [],
-            "findings": [
-              {
-                "rule": "type/arabic-font",
-                "title": "No Arabic font in the stack",
-                "severity": "warning",
-                "box": {
-                  "x": 293.609375,
-                  "y": 206.1875,
-                  "width": 55.890625,
-                  "height": 16
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 0,
-                  "y": 322.375,
-                  "width": 21,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 0,
-                  "y": 392.15625,
-                  "width": 21,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": -1.5,
-                  "y": 461.9375,
-                  "width": 24,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 0,
-                  "y": 531.71875,
-                  "width": 21,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 0,
-                  "y": 601.5,
-                  "width": 21,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": -1.5,
-                  "y": 671.28125,
-                  "width": 24,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": 0,
-                  "y": 741.0625,
-                  "width": 21,
-                  "height": 17
-                }
-              },
-              {
-                "rule": "type/arabic-size",
-                "title": "Arabic set too small",
-                "severity": "warning",
-                "box": {
-                  "x": -1.5,
-                  "y": 810.84375,
-                  "width": 24,
-                  "height": 17
-                }
-              }
-            ],
-            "shot": "/bench/2026-11/dots-3-note/transactions-dualkit.webp",
-            "pageHeight": 854,
-            "raw": "bench/runs/2026-11/dots-3-note/transactions/dualkit-3.json"
-          }
-        }
-      ]
-    },
-    {
       "id": "gemini-flash",
       "label": "Gemini Flash",
       "provider": "gemini",
@@ -6717,6 +6803,7 @@
             "ran": false,
             "runs": 0,
             "reasons": [
+              "HTTP 503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in de",
               "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and bi"
             ]
           },
@@ -6753,7 +6840,8 @@
             "ran": false,
             "runs": 0,
             "reasons": [
-              "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and bi"
+              "HTTP 429: {\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and bi",
+              "HTTP 503: {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in de"
             ]
           },
           "dualkit": {

@@ -1,0 +1,193 @@
+{
+  "month": "2026-11",
+  "model": "dots-3-note",
+  "screen": "transactions",
+  "condition": "loop",
+  "run": 2,
+  "at": "2026-11-03T12:19:41.256Z",
+  "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>المعاملات</title>\n<style>\n  @font-face {\n    font-family: 'IBM Plex Sans Arabic';\n    src: url('https://fonts.gstatic.com/s/ibmplexsansarabic/v23/KFOmCnqEu92Fr1Mu5mxK.woff2') format('woff2');\n    font-weight: 400;\n    unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;\n    size-adjust: 112%;\n  }\n  @font-face {\n    font-family: 'IBM Plex Sans Arabic';\n    src: url('https://fonts.gstatic.com/s/ibmplexsansarabic/v23/KFOmCnqEu92Fr1Mu5mxKZ2dKx.woff2') format('woff2');\n    font-weight: 700;\n    unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;\n    size-adjust: 112%;\n  }\n\n  :lang(ar) {\n    --type-label-size: 14px;\n    --type-caption-size: 14px;\n    --type-body-size: 16px;\n    letter-spacing: 0;\n    text-transform: none;\n    font-style: normal;\n    line-height: 1.7;\n  }\n\n  * { margin: 0; padding: 0; box-sizing: border-box; }\n\n  body {\n    font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif;\n    background: #0f172a;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    min-height: 100vh;\n    padding: 20px;\n  }\n\n  .phone {\n    width: 375px;\n    height: 812px;\n    background: #f8fafc;\n    border-radius: 40px;\n    overflow: hidden;\n    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);\n    position: relative;\n    border: 8px solid #1e293b;\n  }\n\n  .screen {\n    padding: 24px 20px 0;\n    height: 100%;\n    overflow-y: auto;\n    scrollbar-width: none;\n  }\n  .screen::-webkit-scrollbar { display: none; }\n\n  /* ── Header ── */\n  .header {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding-bottom: 16px;\n    margin-bottom: 4px;\n  }\n  .header h1 {\n    font-size: 18px;\n    font-weight: 700;\n    color: #0f172a;\n    flex: 1;\n    text-align: center;\n  }\n  .icon-btn {\n    width: 38px;\n    height: 38px;\n    border-radius: 50%;\n    background: #f1f5f9;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    cursor: pointer;\n    border: none;\n    flex-shrink: 0;\n  }\n  .icon-btn svg { width: 20px; height: 20px; }\n\n  /* ── Balance card ── */\n  .balance-card {\n    background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);\n    border-radius: 20px;\n    padding: 22px;\n    color: #fff;\n    margin: 20px 0;\n    box-shadow: 0 8px 24px rgba(13, 148, 136, 0.3);\n  }\n  .balance-card .label {\n    font-size: 14px;\n    opacity: 0.8;\n    margin-bottom: 8px;\n  }\n  .balance-card .amount-row {\n    display: flex;\n    align-items: baseline;\n    gap: 8px;\n  }\n  .balance-card .amount {\n    font-size: 34px;\n    font-weight: 800;\n    font-variant-numeric: tabular-nums;\n  }\n  .balance-card .currency {\n    font-size: 16px;\n    font-weight: 600;\n    opacity: 0.85;\n  }\n\n  /* ── Filter pills ── */\n  .filter-row {\n    display: flex;\n    gap: 8px;\n    margin-bottom: 20px;\n  }\n  .filter-pill {\n    padding: 9px 18px;\n    border-radius: 22px;\n    font-size: 14px;\n    font-weight: 600;\n    cursor: pointer;\n    border: 1px solid #e2e8f0;\n    background: #fff;\n    color: #64748b;\n    transition: all 0.2s ease;\n  }\n  .filter-pill.active {\n    background: #0f172a;\n    color: #fff;\n    border-color: #0f172a;\n  }\n\n  /* ── Transaction list ── */\n  .tx-list {\n    display: flex;\n    flex-direction: column;\n    gap: 2px;\n    margin-bottom: 80px;\n  }\n  .tx-item {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    padding: 14px 12px;\n    border-radius: 14px;\n    cursor: pointer;\n    transition: background 0.15s ease;\n  }\n  .tx-item:active { background: #f1f5f9; }\n  .tx-icon {\n    width: 46px;\n    height: 46px;\n    border-radius: 13px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    font-size: 22px;\n    flex-shrink: 0;\n  }\n  .tx-info { flex: 1; min-width: 0; }\n  .tx-merchant {\n    font-size: 15px;\n    font-weight: 600;\n    color: #0f172a;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n  .tx-date {\n    font-size: 14px;\n    color: #94a3b8;\n    margin-top: 3px;\n  }\n  .tx-amount {\n    font-size: 16px;\n    font-weight: 700;\n    font-variant-numeric: tabular-nums;\n    display: flex;\n    align-items: center;\n    gap: 2px;\n  }\n  .tx-amount.in { color: #16a34a; }\n  .tx-amount.out { color: #dc2626; }\n  .tx-amount .cur {\n    font-size: 14px;\n    font-weight: 600;\n    margin-inline-start: 2px;\n    opacity: 0.7;\n  }\n\n  /* ── Bottom nav ── */\n  .bottom-nav {\n    position: absolute;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    height: 64px;\n    background: #fff;\n    border-top: 1px solid #e2e8f0;\n    display: flex;\n    justify-content: space-around;\n    align-items: center;\n    padding-bottom: 8px;\n  }\n  .nav-item {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    gap: 3px;\n    cursor: pointer;\n    flex: 1;\n    max-width: 80px;\n  }\n  .nav-item svg { width: 22px; height: 22px; }\n  .nav-item span {\n    font-size: 14px;\n    font-weight: 500;\n    color: #94a3b8;\n  }\n  .nav-item.active span { color: #0d9488; }\n  .nav-item.active svg { color: #0d9488; }\n</style>\n</head>\n<body>\n\n<div class=\"phone\">\n  <div class=\"screen\">\n\n    <!-- Header -->\n    <div class=\"header\">\n      <div class=\"icon-btn\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <path d=\"M9 6l6 6-6 6\"/>\n        </svg>\n      </div>\n      <h1>المعاملات</h1>\n      <div style=\"width:38px\"></div>\n    </div>\n\n    <!-- Balance -->\n    <div class=\"balance-card\">\n      <div class=\"label\">الر-user</div>\n      <div class=\"amount-row\">\n        <span class=\"amount\">٥٨٢٫٣٥٠</span>\n        <span class=\"currency\">ر.ع</span>\n      </div>\n    </div>\n\n    <!-- Filter -->\n    <div class=\"filter-row\">\n      <div class=\"filter-pill active\">هذا الشهر</div>\n      <div class=\"filter-pill\">الكل</div>\n    </div>\n\n    <!-- Transactions -->\n    <div class=\"tx-list\">\n\n      <!-- 1 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#dcfce7;\">💰</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">راتب - بنك مساق</div>\n          <div class=\"tx-date\">١ فبراير ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount in\">\n          <span>+</span>٥٠٠٫٠٠٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 2 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#fee2e2;\">🛒</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">Lulu Hypermarket</div>\n          <div class=\"tx-date\">٣ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount out\">\n          <span>−</span>١٢٣٫٤٥٦<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 3 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#dbeafe;\">🎬</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">Netflix</div>\n          <div class=\"tx-date\">٥ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount out\">\n          <span>−</span>٩٫٩٠٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 4 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#fef3c7;\">⚡</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">شركة كهرباء عمان</div>\n          <div class=\"tx-date\">٧ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount out\">\n          <span>−</span>٤٥٫٥٠٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 5 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#dcfce7;\">⛽</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">محطة ووقود</div>\n          <div class=\"tx-date\">١٠ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount in\">\n          <span>+</span>٢٠٫٠٠٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 6 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#fce7f3;\">🍽️</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">مطعم بحر</div>\n          <div class=\"tx-date\">١٢ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount out\">\n          <span>−</span>٨٧٫٢٥٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 7 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#e0e7ff;\">📡</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">اتصالات عمان</div>\n          <div class=\"tx-date\">١٤ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount out\">\n          <span>−</span>١٥٫٠٠٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 8 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#dcfce7;\">📤</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">تحويل من صديق</div>\n          <div class=\"tx-date\">١٥ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount in\">\n          <span>+</span>١٠٠٫٠٠٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n    </div>\n\n  </div>\n\n  <!-- Bottom navigation -->\n  <div class=\"bottom-nav\">\n    <div class=\"nav-item\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/><polyline points=\"9 22 9 12 15 12 15 22\"/></svg>\n      <span>الRFID</span>\n    </div>\n    <div class=\"nav-item active\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"3\" y1=\"6\" x2=\"21\" y2=\"6\"/><line x1=\"3\" y1=\"12\" x2=\"21\" y2=\"12\"/><line x1=\"3\" y1=\"18\" x2=\"21\" y2=\"18\"/></svg>\n      <span>المعاملات</span>\n    </div>\n    <div class=\"nav-item\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4l3 3\"/><line x1=\"12\" y1=\"16\" x2=\"12\" y2=\"12\"/></svg>\n      <span>أرسل</span>\n    </div>\n    <div class=\"nav-item\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z\"/></svg>\n      <span>المزيد</span>\n    </div>\n  </div>\n\n</div>\n\n</body>\n</html>\n```",
+  "usage": {
+    "input": 24594,
+    "output": 20757
+  },
+  "ms": 192559,
+  "finish": "stop",
+  "reasoningTokens": 233,
+  "servedModel": "dots-studio/dots-3-note-preview:free",
+  "ok": true,
+  "rulesPassed": 33,
+  "score": 93,
+  "unreadableStylesheets": 0,
+  "pageHeight": 852,
+  "missing": [],
+  "findings": [
+    {
+      "rule": "type/arabic-font",
+      "title": "No Arabic font in the stack",
+      "severity": "warning",
+      "box": {
+        "x": 159,
+        "y": 60.703125,
+        "width": 72,
+        "height": 20
+      },
+      "message": "\"IBM Plex Sans Arabic\" is named but never loaded.",
+      "fix": "Load an Arabic family with @font-face or a font link and name it in the stack, for example \"IBM Plex Sans Arabic\".",
+      "snippet": "<h1>المعاملات</h1>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 60,
+        "y": 371.625,
+        "width": 18.890625,
+        "height": 23.796875
+      },
+      "message": "margin-right: 2px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"cur\">ر.ع</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 60,
+        "y": 453.921875,
+        "width": 18.890625,
+        "height": 23.796875
+      },
+      "message": "margin-right: 2px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"cur\">ر.ع</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 60,
+        "y": 536.21875,
+        "width": 18.890625,
+        "height": 23.796875
+      },
+      "message": "margin-right: 2px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"cur\">ر.ع</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 60,
+        "y": 618.515625,
+        "width": 18.890625,
+        "height": 23.796875
+      },
+      "message": "margin-right: 2px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"cur\">ر.ع</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 60,
+        "y": 700.8125,
+        "width": 18.890625,
+        "height": 23.796875
+      },
+      "message": "margin-right: 2px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"cur\">ر.ع</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 60,
+        "y": 783.109375,
+        "width": 18.890625,
+        "height": 23.796875
+      },
+      "message": "margin-right: 2px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"cur\">ر.ع</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 60,
+        "y": 865.40625,
+        "width": 18.890625,
+        "height": 23.796875
+      },
+      "message": "margin-right: 2px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"cur\">ر.ع</span>"
+    },
+    {
+      "rule": "layout/physical-spacing",
+      "title": "Spacing that does not mirror",
+      "severity": "note",
+      "box": {
+        "x": 60,
+        "y": 947.703125,
+        "width": 18.890625,
+        "height": 23.796875
+      },
+      "message": "margin-right: 2px stays on the same side in Arabic.",
+      "fix": "Use margin-inline-start, padding-inline-end and the other logical properties.",
+      "snippet": "<span class=\"cur\">ر.ع</span>"
+    }
+  ],
+  "from": {
+    "rulesPassed": 31,
+    "score": 71
+  },
+  "rounds": [
+    {
+      "at": "2026-11-03T12:19:43.288Z",
+      "ms": 146337,
+      "usage": {
+        "input": 12297,
+        "output": 16000
+      },
+      "reply": "",
+      "sent": 25,
+      "ok": false,
+      "error": "Hit the token cap",
+      "rulesPassed": null,
+      "score": null,
+      "missing": [],
+      "regressed": [],
+      "lostParts": [],
+      "arabicKept": null
+    },
+    {
+      "at": "2026-11-03T12:22:09.632Z",
+      "ms": 46222,
+      "usage": {
+        "input": 12297,
+        "output": 4757
+      },
+      "reply": "\n\n```html\n<!DOCTYPE html>\n<html lang=\"ar\" dir=\"rtl\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>المعاملات</title>\n<style>\n  @font-face {\n    font-family: 'IBM Plex Sans Arabic';\n    src: url('https://fonts.gstatic.com/s/ibmplexsansarabic/v23/KFOmCnqEu92Fr1Mu5mxK.woff2') format('woff2');\n    font-weight: 400;\n    unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;\n    size-adjust: 112%;\n  }\n  @font-face {\n    font-family: 'IBM Plex Sans Arabic';\n    src: url('https://fonts.gstatic.com/s/ibmplexsansarabic/v23/KFOmCnqEu92Fr1Mu5mxKZ2dKx.woff2') format('woff2');\n    font-weight: 700;\n    unicode-range: U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;\n    size-adjust: 112%;\n  }\n\n  :lang(ar) {\n    --type-label-size: 14px;\n    --type-caption-size: 14px;\n    --type-body-size: 16px;\n    letter-spacing: 0;\n    text-transform: none;\n    font-style: normal;\n    line-height: 1.7;\n  }\n\n  * { margin: 0; padding: 0; box-sizing: border-box; }\n\n  body {\n    font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif;\n    background: #0f172a;\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    min-height: 100vh;\n    padding: 20px;\n  }\n\n  .phone {\n    width: 375px;\n    height: 812px;\n    background: #f8fafc;\n    border-radius: 40px;\n    overflow: hidden;\n    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);\n    position: relative;\n    border: 8px solid #1e293b;\n  }\n\n  .screen {\n    padding: 24px 20px 0;\n    height: 100%;\n    overflow-y: auto;\n    scrollbar-width: none;\n  }\n  .screen::-webkit-scrollbar { display: none; }\n\n  /* ── Header ── */\n  .header {\n    display: flex;\n    align-items: center;\n    justify-content: space-between;\n    padding-bottom: 16px;\n    margin-bottom: 4px;\n  }\n  .header h1 {\n    font-size: 18px;\n    font-weight: 700;\n    color: #0f172a;\n    flex: 1;\n    text-align: center;\n  }\n  .icon-btn {\n    width: 38px;\n    height: 38px;\n    border-radius: 50%;\n    background: #f1f5f9;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    cursor: pointer;\n    border: none;\n    flex-shrink: 0;\n  }\n  .icon-btn svg { width: 20px; height: 20px; }\n\n  /* ── Balance card ── */\n  .balance-card {\n    background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);\n    border-radius: 20px;\n    padding: 22px;\n    color: #fff;\n    margin: 20px 0;\n    box-shadow: 0 8px 24px rgba(13, 148, 136, 0.3);\n  }\n  .balance-card .label {\n    font-size: 14px;\n    opacity: 0.8;\n    margin-bottom: 8px;\n  }\n  .balance-card .amount-row {\n    display: flex;\n    align-items: baseline;\n    gap: 8px;\n  }\n  .balance-card .amount {\n    font-size: 34px;\n    font-weight: 800;\n    font-variant-numeric: tabular-nums;\n  }\n  .balance-card .currency {\n    font-size: 16px;\n    font-weight: 600;\n    opacity: 0.85;\n  }\n\n  /* ── Filter pills ── */\n  .filter-row {\n    display: flex;\n    gap: 8px;\n    margin-bottom: 20px;\n  }\n  .filter-pill {\n    padding: 9px 18px;\n    border-radius: 22px;\n    font-size: 14px;\n    font-weight: 600;\n    cursor: pointer;\n    border: 1px solid #e2e8f0;\n    background: #fff;\n    color: #64748b;\n    transition: all 0.2s ease;\n  }\n  .filter-pill.active {\n    background: #0f172a;\n    color: #fff;\n    border-color: #0f172a;\n  }\n\n  /* ── Transaction list ── */\n  .tx-list {\n    display: flex;\n    flex-direction: column;\n    gap: 2px;\n    margin-bottom: 80px;\n  }\n  .tx-item {\n    display: flex;\n    align-items: center;\n    gap: 12px;\n    padding: 14px 12px;\n    border-radius: 14px;\n    cursor: pointer;\n    transition: background 0.15s ease;\n  }\n  .tx-item:active { background: #f1f5f9; }\n  .tx-icon {\n    width: 46px;\n    height: 46px;\n    border-radius: 13px;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    font-size: 22px;\n    flex-shrink: 0;\n  }\n  .tx-info { flex: 1; min-width: 0; }\n  .tx-merchant {\n    font-size: 15px;\n    font-weight: 600;\n    color: #0f172a;\n    white-space: nowrap;\n    overflow: hidden;\n    text-overflow: ellipsis;\n  }\n  .tx-date {\n    font-size: 14px;\n    color: #94a3b8;\n    margin-top: 3px;\n  }\n  .tx-amount {\n    font-size: 16px;\n    font-weight: 700;\n    font-variant-numeric: tabular-nums;\n    display: flex;\n    align-items: center;\n    gap: 2px;\n  }\n  .tx-amount.in { color: #16a34a; }\n  .tx-amount.out { color: #dc2626; }\n  .tx-amount .cur {\n    font-size: 14px;\n    font-weight: 600;\n    margin-inline-start: 2px;\n    opacity: 0.7;\n  }\n\n  /* ── Bottom nav ── */\n  .bottom-nav {\n    position: absolute;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    height: 64px;\n    background: #fff;\n    border-top: 1px solid #e2e8f0;\n    display: flex;\n    justify-content: space-around;\n    align-items: center;\n    padding-bottom: 8px;\n  }\n  .nav-item {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    gap: 3px;\n    cursor: pointer;\n    flex: 1;\n    max-width: 80px;\n  }\n  .nav-item svg { width: 22px; height: 22px; }\n  .nav-item span {\n    font-size: 14px;\n    font-weight: 500;\n    color: #94a3b8;\n  }\n  .nav-item.active span { color: #0d9488; }\n  .nav-item.active svg { color: #0d9488; }\n</style>\n</head>\n<body>\n\n<div class=\"phone\">\n  <div class=\"screen\">\n\n    <!-- Header -->\n    <div class=\"header\">\n      <div class=\"icon-btn\">\n        <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#0f172a\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n          <path d=\"M9 6l6 6-6 6\"/>\n        </svg>\n      </div>\n      <h1>المعاملات</h1>\n      <div style=\"width:38px\"></div>\n    </div>\n\n    <!-- Balance -->\n    <div class=\"balance-card\">\n      <div class=\"label\">الر-user</div>\n      <div class=\"amount-row\">\n        <span class=\"amount\">٥٨٢٫٣٥٠</span>\n        <span class=\"currency\">ر.ع</span>\n      </div>\n    </div>\n\n    <!-- Filter -->\n    <div class=\"filter-row\">\n      <div class=\"filter-pill active\">هذا الشهر</div>\n      <div class=\"filter-pill\">الكل</div>\n    </div>\n\n    <!-- Transactions -->\n    <div class=\"tx-list\">\n\n      <!-- 1 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#dcfce7;\">💰</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">راتب - بنك مساق</div>\n          <div class=\"tx-date\">١ فبراير ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount in\">\n          <span>+</span>٥٠٠٫٠٠٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 2 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#fee2e2;\">🛒</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">Lulu Hypermarket</div>\n          <div class=\"tx-date\">٣ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount out\">\n          <span>−</span>١٢٣٫٤٥٦<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 3 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#dbeafe;\">🎬</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">Netflix</div>\n          <div class=\"tx-date\">٥ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount out\">\n          <span>−</span>٩٫٩٠٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 4 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#fef3c7;\">⚡</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">شركة كهرباء عمان</div>\n          <div class=\"tx-date\">٧ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount out\">\n          <span>−</span>٤٥٫٥٠٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 5 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#dcfce7;\">⛽</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">محطة ووقود</div>\n          <div class=\"tx-date\">١٠ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount in\">\n          <span>+</span>٢٠٫٠٠٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 6 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#fce7f3;\">🍽️</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">مطعم بحر</div>\n          <div class=\"tx-date\">١٢ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount out\">\n          <span>−</span>٨٧٫٢٥٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 7 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#e0e7ff;\">📡</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">اتصالات عمان</div>\n          <div class=\"tx-date\">١٤ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount out\">\n          <span>−</span>١٥٫٠٠٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n      <!-- 8 -->\n      <div class=\"tx-item\">\n        <div class=\"tx-icon\" style=\"background:#dcfce7;\">📤</div>\n        <div class=\"tx-info\">\n          <div class=\"tx-merchant\">تحويل من صديق</div>\n          <div class=\"tx-date\">١٥ مارس ٢٠٢٥</div>\n        </div>\n        <div class=\"tx-amount in\">\n          <span>+</span>١٠٠٫٠٠٠<span class=\"cur\">ر.ع</span>\n        </div>\n      </div>\n\n    </div>\n\n  </div>\n\n  <!-- Bottom navigation -->\n  <div class=\"bottom-nav\">\n    <div class=\"nav-item\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/><polyline points=\"9 22 9 12 15 12 15 22\"/></svg>\n      <span>الRFID</span>\n    </div>\n    <div class=\"nav-item active\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"3\" y1=\"6\" x2=\"21\" y2=\"6\"/><line x1=\"3\" y1=\"12\" x2=\"21\" y2=\"12\"/><line x1=\"3\" y1=\"18\" x2=\"21\" y2=\"18\"/></svg>\n      <span>المعاملات</span>\n    </div>\n    <div class=\"nav-item\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4l3 3\"/><line x1=\"12\" y1=\"16\" x2=\"12\" y2=\"12\"/></svg>\n      <span>أرسل</span>\n    </div>\n    <div class=\"nav-item\">\n      <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"3\"/><path d=\"M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z\"/></svg>\n      <span>المزيد</span>\n    </div>\n  </div>\n\n</div>\n\n</body>\n</html>\n```",
+      "sent": 25,
+      "ok": true,
+      "error": null,
+      "rulesPassed": 33,
+      "score": 93,
+      "missing": [],
+      "regressed": [],
+      "lostParts": [],
+      "arabicKept": 1
+    }
+  ]
+}

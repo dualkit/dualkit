@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أدخل الرمز</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    direction: rtl;
+    text-align: center;
+    padding: 20px;
+    background-color: #f5f5f5;
+    margin: 0;
+  }
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  p {
+    color: #555;
+    margin-bottom: 20px;
+  }
+  .code-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .code-inputs input {
+    width: 40px;
+    height: 50px;
+    font-size: 1.5rem;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  .countdown {
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: #333;
+  }
+  button {
+    padding: 12px 30px;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+</style>
+</head>
+<body>
+  <h1>أدخل الرمز</h1>
+  <p>أرسلنا رمزًا مكونًا من 6 أرقام إلى +966 55 123 4567</p>
+  <div class="code-inputs">
+    <input type="text" maxlength="1">
+    <input type="text" maxlength="1">
+    <input type="text" maxlength="1">
+    <input type="text" maxlength="1">
+    <input type="text" maxlength="1">
+    <input type="text" maxlength="1">
+  </div>
+  <div class="countdown" id="countdown">إعادة الإرسال خلال 0:45</div>
+  <button id="verify">تحقق</button>
+
+<script>
+  // Countdown timer
+  let totalSeconds = 45;
+  const countdownElement = document.getElementById('countdown');
+  function updateCountdown() {
+    if (totalSeconds <= 0) {
+      countdownElement.textContent = "أعد الإرسال";
+      return;
+    }
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+    countdownElement.textContent = `إعادة الإرسال خلال ${minutes}:${formattedSeconds}`;
+    totalSeconds--;
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>
