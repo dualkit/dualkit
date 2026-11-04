@@ -62,4 +62,32 @@ describe('liftData', () => {
     expect(run({ 'src/config/nav.ts': NAV, 'src/menu.tsx': page }, 'next-intl').texts.get('src/menu.tsx')).toContain('getTranslations')
     expect(run({ 'src/config/nav.ts': NAV, 'src/menu.tsx': page }).moved).toBe(0)
   })
+
+  describe('data declared inside a component', () => {
+    const LOCAL = `export function Search() {\n  const items = [{ title: 'Mail', url: '/mail', group: 'Apps' }, { title: 'Chat', url: '/chat', group: 'Apps' }]\n  return <ul>{items.map((i) => <li key={i.url}>{i.title}</li>)}</ul>\n}\n`
+    it('turns the text into t calls and adds the hook', () => {
+      const result = run({ 'src/search.tsx': LOCAL })
+      const text = result.texts.get('src/search.tsx')!
+      expect(text).toContain(`title: t('search.mail')`)
+      expect(text).toContain(`group: t('search.apps')`)
+      expect(text.indexOf('const { t } = useTranslation()')).toBeLessThan(text.indexOf('const items'))
+      expect(result.entries.map((e) => e.en)).toEqual(['Mail', 'Apps', 'Chat'])
+    })
+    it('reuses one key for repeated text', () => {
+      expect(run({ 'src/search.tsx': LOCAL }).entries.filter((e) => e.en === 'Apps')).toHaveLength(1)
+    })
+    it('leaves a component that already has a t, and an async react-i18next component', () => {
+      expect(run({ 'src/search.tsx': LOCAL.replace('Search()', 'Search({ t })') }).moved).toBe(0)
+      expect(run({ 'src/search.tsx': LOCAL.replace('export function', 'export async function') }).moved).toBe(0)
+    })
+    it('leaves names that are not beside a link, and data inside a callback', () => {
+      expect(run({ 'src/a.tsx': `export function A() {\n  const people = [{ name: 'Olivia Martin' }]\n  return <b>{people.length}</b>\n}\n` }).moved).toBe(0)
+      expect(run({ 'src/a.tsx': `export function A() {\n  const f = () => { const x = [{ title: 'Open' }]; return x }\n  return <b>{f().length}</b>\n}\n` }).moved).toBe(0)
+    })
+    it('uses the server form in an async next-intl component', () => {
+      const text = run({ 'src/search.tsx': LOCAL.replace('export function', 'export async function') }, 'next-intl').texts.get('src/search.tsx')!
+      expect(text).toContain('await getTranslations()')
+      expect(text).toContain(`t('search.mail')`)
+    })
+  })
 })
