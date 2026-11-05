@@ -63,3 +63,49 @@ describe('liftData', () => {
     expect(run({ 'src/config/nav.ts': NAV, 'src/menu.tsx': page }).moved).toBe(0)
   })
 })
+
+describe('liftData metadata', () => {
+  const PAGE_META = `import type { Metadata } from "next";\n\nexport const metadata: Metadata = {\n  title: "Open Source Login",\n  description: "Explore a login page.",\n  alternates: { canonical: "/login" },\n};\n\nexport default function Page() {\n  return <b>Hi</b>;\n}\n`
+  const meta = (text: string, path = 'src/app/login/page.tsx') => run({ [path]: text }, 'next-intl')
+
+  it('turns a static metadata export into generateMetadata with translated title and description', () => {
+    const result = meta(PAGE_META)
+    const text = result.texts.get('src/app/login/page.tsx')!
+    expect(text).toContain('export async function generateMetadata(): Promise<Metadata> {')
+    expect(text).toContain('const t = await getTranslations();')
+    expect(text).toContain(`title: t("login.open-source-login")`)
+    expect(text).toContain(`description: t("login.explore-a-login-page")`)
+    expect(text).toContain('alternates: { canonical: "/login" }')
+    expect(text).toContain('import { getTranslations } from "next-intl/server";')
+    expect(text).not.toContain('export const metadata')
+    expect(result.entries.map((e) => e.en)).toEqual(['Open Source Login', 'Explore a login page.'])
+    expect(result.moved).toBe(2)
+  })
+  it('works for a layout without a type annotation', () => {
+    const text = meta(`export const metadata = { title: 'Dashboard' }\nexport default function L({ children }) {\n  return children\n}\n`, 'src/app/layout.tsx').texts.get('src/app/layout.tsx')!
+    expect(text).toContain('export async function generateMetadata() {')
+    expect(text).toContain("title: t('home.dashboard')")
+    expect(text).toContain(`import { getTranslations } from 'next-intl/server'`)
+  })
+  it('leaves metadata that the file reads, files that are not routes, and react-i18next projects', () => {
+    expect(meta(`export const metadata = { title: 'Home' }\nexport default function P() {\n  return <b>{metadata.title}</b>\n}\n`).moved).toBe(0)
+    expect(meta(PAGE_META, 'src/lib/seo.tsx').moved).toBe(0)
+    expect(run({ 'src/app/login/page.tsx': PAGE_META }, 'react-i18next').moved).toBe(0)
+  })
+  it('does not collide with other data in a file that has no imports', () => {
+    const text = `export const metadata = { title: 'Hello World' }\nconst items = [{ label: 'Open Item' }]\nexport default function P() {\n  return <b>{items[0].label}</b>\n}\n`
+    const result = meta(text)
+    expect(result.moved).toBe(2)
+    const out = result.texts.get('src/app/login/page.tsx')!
+    expect(out).toContain(`import { getTranslations } from 'next-intl/server'`)
+    expect(out).toContain('export async function generateMetadata() {')
+    expect(out).toContain('items(t)')
+  })
+  it('leaves client route files alone', () => {
+    expect(meta(`'use client'\nexport const metadata = { title: 'Home' }\n`).moved).toBe(0)
+  })
+  it('leaves a file that already has generateMetadata or titles that are not plain text', () => {
+    expect(meta(`export const metadata = { title: 'Home' }\nexport async function generateMetadata() {\n  return {}\n}\n`).moved).toBe(0)
+    expect(meta(`export const metadata = { title: { default: 'Home', template: '%s | App' } }\n`).moved).toBe(0)
+  })
+})
