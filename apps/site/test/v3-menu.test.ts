@@ -6,8 +6,18 @@ import { LEAVE_MS, MENU_CLOSED, PART_COUNT, benchCountdown, daysUntil, insideAny
 const open = (active = 0, via: MenuState['via'] = 'pointer', away = false, step: MenuState['step'] = 'pointer'): MenuState => ({ open: true, active, via, step, away })
 
 describe('menuReducer', () => {
-  it('has a part for each product, Convert included', () => {
-    expect(PART_COUNT).toBe(6)
+  it('has a part for each product, MCP and Figma included', () => {
+    expect(PART_COUNT).toBe(8)
+    expect(V3.menu.parts.map(([, name]) => name)).toEqual(['Skills', 'Format', 'Starter', 'Check', 'Convert', 'MCP', 'Figma', 'Bench'])
+  })
+  it('numbers the parts in order', () => {
+    expect(V3.menu.parts.map(([no]) => no)).toEqual(V3.menu.parts.map((_, k) => `0${k + 1}`))
+  })
+  it('names the Gulf inputs with Starter, and never calls Figma installable', () => {
+    const line = (name: string) => V3.menu.parts.find(([, n]) => n === name)
+    expect(line('Starter')?.[2]).toContain('Gulf inputs')
+    expect(line('Figma')?.[2]).toContain('coming to Figma Community')
+    expect(line('Figma')?.[3]).toBe('Soon')
   })
   it('wraps a move down from the last part to the first', () => {
     expect(menuReducer(open(PART_COUNT - 1), { type: 'move', dir: 1 }).active).toBe(0)

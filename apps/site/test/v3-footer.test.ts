@@ -53,3 +53,21 @@ describe('downloadsLine', () => {
     expect(downloadsLine(87)).toBe('87 npm downloads last week')
   })
 })
+
+describe('v3 footer products', () => {
+  it('links every product, the Gulf components, MCP and Figma included', () => {
+    const product = footerColumns().find((c) => c.title === 'Product')
+    expect(product?.links).toEqual([
+      { label: 'Skills', href: '/docs#skills' },
+      { label: 'Format', href: '/docs#format' },
+      { label: 'Starter', href: '/docs#starter' },
+      { label: 'Gulf components', href: '/components/gulf' },
+      { label: 'Check', href: '/docs#check' },
+      { label: 'Lint', href: '/docs#lint' },
+      { label: 'Convert', href: '/convert' },
+      { label: 'MCP', href: '/docs#mcp' },
+      { label: 'Figma', href: '/docs#figma' },
+      { label: 'Bench', href: '/bench' },
+    ])
+  })
+})

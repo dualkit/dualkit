@@ -205,7 +205,7 @@ export function ProductsMenu({ parts, previews, latest, benchDays, end }: {
                     <Link ref={(el) => { rows.current[k] = el }} href={parts[k]?.href ?? '/docs'} className="v3-menu-row" data-on={state.active === k || undefined}
                       onPointerEnter={() => dispatch({ type: 'hover', index: k, via: 'pointer' })} onFocus={() => dispatch({ type: 'hover', index: k, via: 'keyboard' })} {...linkProps}>
                       <span className="v3-small v3-menu-faint">{no}</span>
-                      <span className="v3-menu-words"><span className="v3-step">{name}</span><span className="v3-small v3-menu-soft">{line}</span></span>
+                      <span className="v3-menu-words"><span className="v3-step">{name}</span><span className="v3-small v3-menu-soft v3-menu-line">{line}</span></span>
                       <span className="v3-small v3-menu-tag">{tag}</span>
                     </Link>
                   </li>
@@ -220,6 +220,7 @@ export function ProductsMenu({ parts, previews, latest, benchDays, end }: {
                 <div className="v3-menu-foot">
                   {parts.map((p, k) => (
                     <div key={k} className="v3-menu-foot-part" data-on={state.active === k || undefined} inert={state.active !== k}>
+                      <p className="v3-small v3-menu-soft v3-menu-foot-line" aria-hidden="true">{m.parts[k]?.[2]}</p>
                       {p.command ? <CopyLine command={p.command} /> : null}
                       <div className="v3-menu-foot-links">
                         <Link href={p.href} className="v3-menu-go" {...linkProps}>{p.docs}{ARROW}</Link>
