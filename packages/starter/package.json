@@ -15,7 +15,8 @@
     "./theme.css": "./generated/theme.css",
     "./figma-variables.json": "./generated/figma-variables.json",
     "./components": "./components/index.ts",
-    "./components/styles.css": "./components/styles.css"
+    "./components/styles.css": "./components/styles.css",
+    "./gulf/*": "./gulf/*.tsx"
   },
   "scripts": {
     "build": "node scripts/build.mjs",
@@ -41,6 +42,7 @@
     "figma"
   ],
   "devDependencies": {
+    "@dualkit/format": "*",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
@@ -49,7 +51,7 @@
     "jsdom": "^26.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "@dualkit/format": "*"
+    "vitest-axe": "^0.1.0"
   },
   "peerDependencies": {
     "@dualkit/format": ">=0.1.0-beta.0 <0.3.0 || >=0.2.0-beta.0 <0.3.0",
