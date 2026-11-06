@@ -45,10 +45,20 @@ function paragraphs(characters: string): Paragraph[] {
   })
 }
 
-/** Lines the layer wraps to, from its height and leading. One when the leading is auto, since its height is then unknown. */
-const lineCount = (height: number, font: Font): number => (font.lineHeight ? Math.max(1, Math.round(height / font.lineHeight)) : 1)
+/**
+ * Lines a paragraph wraps to. The layer's lines come from its height and leading (one when the leading is auto, since the height
+ * then says nothing). Figma does not say where each paragraph breaks, so every paragraph, empty ones included, takes one line, and
+ * the lines left over go to the paragraphs by their share of the characters. A layer of one-line labels so never counts as wrapped.
+ */
+function lineCount(height: number, font: Font, p: Paragraph, all: readonly Paragraph[]): number {
+  const layerLines = font.lineHeight ? Math.max(1, Math.round(height / font.lineHeight)) : 1
+  if (all.length === 1) return layerLines
+  const spare = Math.max(0, layerLines - all.length)
+  const characters = all.reduce((n, q) => n + q.text.length, 0)
+  return 1 + Math.round((spare * p.text.length) / Math.max(1, characters))
+}
 
-function runsOfParagraph(layer: FigmaTextSnapshot, p: Paragraph, origin: FigmaRect): TextRun[] {
+function runsOfParagraph(layer: FigmaTextSnapshot, p: Paragraph, all: readonly Paragraph[], origin: FigmaRect): TextRun[] {
   const pieces = layer.segments
     .map((s) => ({ s, text: layer.characters.slice(Math.max(s.start, p.start), Math.min(s.end, p.end)) }))
     .filter(({ text }) => text.trim() !== '')
@@ -61,7 +71,7 @@ function runsOfParagraph(layer: FigmaTextSnapshot, p: Paragraph, origin: FigmaRe
       blockId: `${layer.id}#${p.index}`, blockText: p.text,
       blockArabicShare: arabicShare(p.text), blockHasArabic: hasArabic(p.text), blockArabicWords: arabicWordCount(p.text),
       blockDir, dir: blockDir, lang: null, isolated: false, forcedLtr: false,
-      isLastInBlock: i === pieces.length - 1, endsLine: false, font, lines: lineCount(layer.box.height, font),
+      isLastInBlock: i === pieces.length - 1, endsLine: false, font, lines: lineCount(layer.box.height, font, p, all),
       signs: [], mirrored: false, mirroredBy: null,
     }
   })
@@ -102,7 +112,10 @@ function facesOf(runs: readonly TextRun[]): LoadedFace[] {
 /** The screen model for a frame, group, section or single text layer, with boxes measured from its top-left corner. */
 export function figmaToScreenModel(root: FigmaSnapshot): ScreenModel {
   const layers = textLayers(root)
-  const texts = layers.flatMap((layer) => paragraphs(layer.characters).flatMap((p) => runsOfParagraph(layer, p, root.box)))
+  const texts = layers.flatMap((layer) => {
+    const all = paragraphs(layer.characters)
+    return all.flatMap((p) => runsOfParagraph(layer, p, all, root.box))
+  })
   const share = arabicShare(texts.map((t) => t.text).join(' '))
   return {
     root: { lang: null, dir: null, computedDir: share > 0.5 ? 'rtl' : 'ltr' },

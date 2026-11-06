@@ -131,6 +131,11 @@ describe('checkFrame: clean fixtures', () => {
     expect(result.findings).toEqual([])
   })
 
+  it('finds no tight leading in a layer of one-line paragraphs', () => {
+    const layer = text('الاسم\nالهاتف\nالعنوان', { height: 3 * 20, lineHeight: { unit: 'PIXELS', value: 20 } })
+    expect(checkFrame(frame([layer])).findings).toEqual([])
+  })
+
   it('finds nothing when Arabic uses an Arabic system font', () => {
     expect(checkFrame(frame([text('مرحبا', { family: 'Geeza Pro' })])).findings).toEqual([])
   })

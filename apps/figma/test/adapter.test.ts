@@ -40,6 +40,17 @@ describe('figmaToScreenModel', () => {
     expect(model.texts.map((t) => t.lines)).toEqual([3, 1, 1])
   })
 
+  it('gives each paragraph of a multi-paragraph layer one line when the layer has no lines to spare', () => {
+    const model = figmaToScreenModel(frame([text('سطر أول\nسطر ثان\nسطر ثالث', { height: 81, lineHeight: { unit: 'PIXELS', value: 27 } })]))
+    expect(model.texts.map((t) => t.lines)).toEqual([1, 1, 1])
+  })
+
+  it('shares spare lines among paragraphs by length, and counts empty paragraphs as lines', () => {
+    const long = 'هذه فقرة طويلة تلتف على عدة أسطر في التصميم لأنها تحمل نصا كثيرا جدا'
+    const model = figmaToScreenModel(frame([text(`${long}\n\nقصير`, { height: 5 * 27, lineHeight: { unit: 'PIXELS', value: 27 } })]))
+    expect(model.texts.map((t) => [t.text === long ? 'long' : 'short', t.lines])).toEqual([['long', 3], ['short', 1]])
+  })
+
   it('reads italic from the font style or the style name', () => {
     const model = figmaToScreenModel(frame([
       text('أ', { italic: true }), text('ب', { style: 'Oblique' }), text('ت', { style: 'Light Italic' }), text('ث'),
