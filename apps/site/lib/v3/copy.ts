@@ -164,7 +164,7 @@ export const V3 = {
   numbers: {
     label: 'In numbers',
     heading: 'Open source, tested,\nand checked every month.',
-    stats: [['1,031', 'tests across the kit'], ['34', 'rules in dualkit check'], ['6', 'Gulf currencies'], ['4', 'skills for your agent']],
+    stats: [['1,031', 'tests across the kit'], ['34', 'rules in dualkit check'], ['6', 'Gulf currencies'], ['5', 'skills for your agent']],
     phoneHeading: 'Open source, tested,\nand checked\nevery month.',
   },
   closing: { heading: 'Ship in both directions today.', command: '/plugin install dualkit@dualkit', primary: 'Get started', secondary: 'Read the docs' },
@@ -181,6 +181,6 @@ export const V3 = {
     madeBy: 'Made by',
     maker: 'Sam Santos',
   },
-  seals: [['UAX #9', 'Unicode bidi'], ['ISO 13616', 'IBAN'], ['Umm al-Qura', 'Hijri calendar'], ['npm', 'Provenance'], ['MIT', 'Open source'], ['Native', 'Arabic review']],
+  seals: [['UAX #9', 'Unicode bidi'], ['ISO 13616', 'IBAN'], ['Umm al-Qura', 'Hijri calendar'], ['npm', 'Provenance'], ['MIT', 'Open source'], ['E.164', 'Phone numbers']],
   sealNote: 'Standards Dualkit follows. None of them is a third-party certification.',
 } as const

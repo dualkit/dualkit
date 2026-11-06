@@ -15,6 +15,10 @@ describe('v3 seals', () => {
       expect(m.href.startsWith('https://opensource.org/')).toBe(true)
     }
   })
+  it('claims no native Arabic review, which has not happened', () => {
+    expect(JSON.stringify(V3.seals).toLowerCase()).not.toContain('native')
+    expect(JSON.stringify(V3.seals).toLowerCase()).not.toContain('arabic review')
+  })
   it('keeps text seals short enough for the ring', () => {
     for (const m of Object.values(SEAL_MARKS)) if (m.kind === 'text') expect(m.text.length).toBeLessThanOrEqual(5)
   })
