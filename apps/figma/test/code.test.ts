@@ -39,11 +39,18 @@ function fakeFigma(command: string) {
   const notes: string[] = []
   const a = fakeText('1:1', 'مرحبا', events)
   const b = { ...fakeText('1:2', 'x', events), hasMissingFont: true }
-  const frame = { id: '0:1', name: 'Screen', type: 'FRAME', visible: true, removed: false, layoutMode: 'VERTICAL', absoluteBoundingBox: { x: 0, y: 0, width: 390, height: 800 }, children: [a, b] }
-  const nodes = new Map<string, unknown>([['0:1', frame], ['1:1', a], ['1:2', b]])
+  const page1 = { id: 'p:1', name: 'Page 1', type: 'PAGE', selection: [] as unknown[] }
+  const page2 = { id: 'p:2', name: 'Page 2', type: 'PAGE', selection: [] as unknown[] }
+  const frame = { id: '0:1', name: 'Screen', type: 'FRAME', visible: true, removed: false, layoutMode: 'VERTICAL', absoluteBoundingBox: { x: 0, y: 0, width: 390, height: 800 }, children: [a, b], parent: page1 }
+  Object.assign(a, { parent: frame })
+  Object.assign(b, { parent: frame })
+  const other = { ...fakeText('2:1', 'other', events), parent: page2 }
+  const nodes = new Map<string, unknown>([['0:1', frame], ['1:1', a], ['1:2', b], ['2:1', other], ['p:1', page1]])
+  page1.selection = [frame]
   const figma = {
     command,
-    currentPage: { selection: [frame] as unknown[] },
+    currentPage: page1 as { selection: unknown[]; id?: string },
+    setCurrentPageAsync: async (page: typeof page1) => { events.push(`page ${page.id}`); figma.currentPage = page },
     viewport: { scrollAndZoomIntoView: (n: Array<{ id: string }>) => events.push(`zoom ${n[0]!.id}`) },
     showUI: () => events.push('showUI'),
     ui: { postMessage: (m: { type: string }) => posted.push(m), onmessage: null as null | ((m: unknown) => void) },
@@ -92,8 +99,23 @@ describe('main thread', () => {
     await send(fake, { type: 'select', id: '1:1' })
     expect(fake.figma.currentPage.selection[0]).toMatchObject({ id: '1:1' })
     expect(fake.events).toContain('zoom 1:1')
+    expect(fake.events).not.toContain('page p:1')
     await send(fake, { type: 'select', id: '9:9' })
     expect(fake.notes.at(-1)).toMatch(/no longer in the file/)
+  })
+
+  it('switches to the layer\'s page before selecting it', async () => {
+    const fake = run('check')
+    await send(fake, { type: 'select', id: '2:1' })
+    expect(fake.events.slice(-2)).toEqual(['page p:2', 'zoom 2:1'])
+    expect(fake.figma.currentPage).toMatchObject({ id: 'p:2', selection: [{ id: '2:1' }] })
+  })
+
+  it('does not try to select a page', async () => {
+    const fake = run('check')
+    await send(fake, { type: 'select', id: 'p:1' })
+    expect(fake.notes.at(-1)).toMatch(/no longer in the file/)
+    expect(fake.events.some((e) => e.startsWith('zoom'))).toBe(false)
   })
 
   it('opens only Dualkit documentation links', async () => {

@@ -23,12 +23,25 @@ function sendSnapshot(): void {
   post({ type: 'snapshot', root: snapshot(asLive([first])[0]!), note })
 }
 
+const isSceneNode = (node: BaseNode | null): node is SceneNode =>
+  node !== null && !node.removed && node.type !== 'PAGE' && node.type !== 'DOCUMENT'
+
+/** The page a layer sits on, found by walking up its parents. */
+function pageOf(node: SceneNode): PageNode | null {
+  let current: BaseNode | null = node.parent
+  while (current && current.type !== 'PAGE') current = current.parent
+  return current
+}
+
 async function selectLayer(id: string): Promise<void> {
   const node = await figma.getNodeByIdAsync(id)
-  if (!node || !('visible' in node) || node.removed) {
+  if (!isSceneNode(node)) {
     figma.notify('That layer is no longer in the file.')
     return
   }
+  // The person may have moved to another page since the check; selection only works on the current page.
+  const page = pageOf(node)
+  if (page && page.id !== figma.currentPage.id) await figma.setCurrentPageAsync(page)
   figma.currentPage.selection = [node]
   figma.viewport.scrollAndZoomIntoView([node])
 }
