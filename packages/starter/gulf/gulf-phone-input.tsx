@@ -4,7 +4,7 @@ import {
 } from '@dualkit/format'
 import { useState } from 'react'
 import { Input } from '@/components/ui/input'
-import { GulfField, cx, useMaskedInput, useShownError, withNumerals, type GulfFieldText, type Mask } from './gulf-field'
+import { GulfField, cx, LTR_PLACEHOLDER, useMaskedInput, useShownError, withNumerals, type GulfFieldText, type Mask } from './gulf-field'
 
 export type GulfPhoneResult = Result<GulfPhone, GulfPhoneError>
 
@@ -87,7 +87,7 @@ export function GulfPhoneInput(props: GulfPhoneInputProps) {
           </select>
           <Input {...aria} {...input} dir="ltr" type="tel" inputMode="tel" autoComplete="tel-national"
             name={name} placeholder={placeholder} disabled={disabled} required={required}
-            className="text-start" onBlur={shown.onBlur} />
+            className={cx('text-start', LTR_PLACEHOLDER)} onBlur={shown.onBlur} />
         </div>
       )}
     </GulfField>

@@ -52,6 +52,8 @@ describe('GulfNationalIdInput', () => {
     expect(field('رقم الهوية').getAttribute('dir')).toBe('ltr')
     // Arabic-Indic digit groups count as Arabic numbers, so spaces or hyphens between them would flip their order.
     expect(field('رقم الهوية').style.unicodeBidi).toBe('bidi-override')
+    // The override would also reverse an Arabic placeholder, so the placeholder opts out.
+    expect(field('رقم الهوية').className).toContain('placeholder:[unicode-bidi:normal]')
     expect(field('رقم الهوية').getAttribute('inputmode')).toBe('numeric')
   })
 

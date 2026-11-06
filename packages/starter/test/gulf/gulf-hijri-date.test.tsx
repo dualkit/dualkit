@@ -69,6 +69,11 @@ describe('GulfHijriDate', () => {
     expect(onChange).toHaveBeenLastCalledWith('2026-10-13')
   })
 
+  it('does not announce the dates on every keystroke', () => {
+    renderIn(SCRIPTS[0], <GulfHijriDate label="Date" {...DUBAI} value="2026-10-13" onChange={() => {}} />)
+    expect(document.querySelector('output')?.getAttribute('aria-live')).toBe('off')
+  })
+
   it('shows nothing under the field until the date reads', () => {
     renderIn(SCRIPTS[0], <GulfHijriDate label="Date" {...DUBAI} value="2026-10" onChange={() => {}} />)
     expect(document.querySelector('time')).toBeNull()
@@ -85,6 +90,8 @@ describe('GulfHijriDate', () => {
     expect(field('التاريخ').getAttribute('dir')).toBe('ltr')
     // Arabic-Indic digit groups count as Arabic numbers, so spaces or hyphens between them would flip their order.
     expect(field('التاريخ').style.unicodeBidi).toBe('bidi-override')
+    // The override would also reverse an Arabic placeholder, so the placeholder opts out.
+    expect(field('التاريخ').className).toContain('placeholder:[unicode-bidi:normal]')
   })
 
   it('has no axe violations in either direction', async () => {

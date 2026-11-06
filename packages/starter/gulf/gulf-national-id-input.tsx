@@ -1,6 +1,6 @@
 import { parseEmiratesId, toWesternDigits, type EmiratesId, type EmiratesIdError, type Numerals, type Result } from '@dualkit/format'
 import { Input } from '@/components/ui/input'
-import { GulfField, useMaskedInput, useShownError, withNumerals, type GulfFieldText, type Mask } from './gulf-field'
+import { GulfField, cx, LTR_PLACEHOLDER, useMaskedInput, useShownError, withNumerals, type GulfFieldText, type Mask } from './gulf-field'
 
 export type GulfNationalIdResult = Result<EmiratesId, EmiratesIdError>
 
@@ -49,7 +49,7 @@ export function GulfNationalIdInput(props: GulfNationalIdInputProps) {
       {(aria) => (
         <Input {...aria} {...input} dir="ltr" inputMode="numeric" autoComplete="off"
           name={name} placeholder={placeholder} disabled={disabled} required={required}
-          className="text-start font-mono" onBlur={shown.onBlur} />
+          className={cx('text-start font-mono', LTR_PLACEHOLDER)} onBlur={shown.onBlur} />
       )}
     </GulfField>
   )

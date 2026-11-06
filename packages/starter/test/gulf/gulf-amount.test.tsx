@@ -21,8 +21,29 @@ describe('readGulfAmount', () => {
     expect(readGulfAmount('١٢٥٠٫٥', { currency: 'SAR' })).toMatchObject({ ok: true, value: { amount: 1250.5 } })
   })
 
-  it('reads a negative amount', () => {
-    expect(readGulfAmount('-12', { currency: 'AED' })).toMatchObject({ ok: true, value: { amount: -12, formatted: `-AED${NBSP}12.00` } })
+  it('reads a negative amount only when negatives are allowed', () => {
+    expect(readGulfAmount('-12', { currency: 'AED', allowNegative: true })).toMatchObject({ ok: true, value: { amount: -12, formatted: `-AED${NBSP}12.00` } })
+    expect(readGulfAmount('-12', { currency: 'AED' })).toMatchObject({ ok: false, error: { code: 'invalid_number' } })
+  })
+
+  it('reads minus zero as zero', () => {
+    const result = readGulfAmount('-0.00', { currency: 'AED', allowNegative: true })
+    expect(result.ok && Object.is(result.value.amount, 0)).toBe(true)
+  })
+
+  it('takes commas only as thousands grouping', () => {
+    expect(readGulfAmount('12,5', { currency: 'AED' })).toMatchObject({ ok: false, error: { code: 'invalid_number' } })
+    expect(readGulfAmount('12,50,000', { currency: 'AED' })).toMatchObject({ ok: false, error: { code: 'invalid_number' } })
+    expect(readGulfAmount('1,250', { currency: 'AED' })).toMatchObject({ ok: true, value: { amount: 1250 } })
+    expect(readGulfAmount('1,250,000.5', { currency: 'AED' })).toMatchObject({ ok: true, value: { amount: 1250000.5 } })
+    expect(readGulfAmount('١٬٢٥٠٫٥', { currency: 'AED' })).toMatchObject({ ok: true, value: { amount: 1250.5 } })
+    expect(readGulfAmount('١٢٬٥', { currency: 'AED' })).toMatchObject({ ok: false, error: { code: 'invalid_number' } })
+  })
+
+  it('caps the whole part at 15 digits, so the number stays exact', () => {
+    expect(readGulfAmount('999999999999999', { currency: 'AED' }).ok).toBe(true)
+    expect(readGulfAmount('1000000000000000', { currency: 'AED' })).toMatchObject({ ok: false, error: { code: 'too_large' } })
+    expect(readGulfAmount('1,000,000,000,000,000', { currency: 'AED' })).toMatchObject({ ok: false, error: { code: 'too_large' } })
   })
 
   it('refuses more decimals than the currency has', () => {
@@ -81,6 +102,23 @@ describe('GulfAmount', () => {
     expect(screen.getByText(`١٬٢٥٠٫٥٠${NBSP}ر.س`, exact)).toBeTruthy()
   })
 
+  it('keeps a minus sign only at the start, and only when negatives are allowed', () => {
+    const onChange = vi.fn()
+    const { rerender } = renderIn(SCRIPTS[0], <GulfAmount label="Amount" currency="AED" value="" onChange={onChange} />)
+    fireEvent.change(field('Amount'), { target: { value: '-12-5' } })
+    expect(onChange).toHaveBeenLastCalledWith('125')
+    rerender(<div dir="ltr" lang="en"><GulfAmount label="Amount" currency="AED" value="" onChange={onChange} allowNegative /></div>)
+    fireEvent.change(field('Amount'), { target: { value: '-12-5' } })
+    expect(onChange).toHaveBeenLastCalledWith('-125')
+    fireEvent.change(field('Amount'), { target: { value: '1-2' } })
+    expect(onChange).toHaveBeenLastCalledWith('12')
+  })
+
+  it('does not announce the preview on every keystroke', () => {
+    renderIn(SCRIPTS[0], <GulfAmount label="Amount" currency="AED" value="5" onChange={() => {}} />)
+    expect(document.querySelector('output')?.getAttribute('aria-live')).toBe('off')
+  })
+
   it('drops letters as they are typed', () => {
     const onChange = vi.fn()
     renderIn(SCRIPTS[0], <GulfAmount label="Amount" currency="AED" value="" onChange={onChange} />)
@@ -93,6 +131,8 @@ describe('GulfAmount', () => {
     expect(field('المبلغ').getAttribute('dir')).toBe('ltr')
     // Arabic-Indic digit groups count as Arabic numbers, so spaces or hyphens between them would flip their order.
     expect(field('المبلغ').style.unicodeBidi).toBe('bidi-override')
+    // The override would also reverse an Arabic placeholder, so the placeholder opts out.
+    expect(field('المبلغ').className).toContain('placeholder:[unicode-bidi:normal]')
     expect(field('المبلغ').getAttribute('inputmode')).toBe('decimal')
   })
 

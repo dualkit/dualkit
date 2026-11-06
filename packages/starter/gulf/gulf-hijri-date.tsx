@@ -4,7 +4,7 @@ import {
 } from '@dualkit/format'
 import type { ReactNode } from 'react'
 import { Input } from '@/components/ui/input'
-import { GulfField, useMaskedInput, useShownError, withNumerals, type GulfFieldText, type Mask } from './gulf-field'
+import { GulfField, cx, LTR_PLACEHOLDER, useMaskedInput, useShownError, withNumerals, type GulfFieldText, type Mask } from './gulf-field'
 
 export type GulfDateError = 'empty' | 'invalid_format' | 'invalid_date'
 export type GulfDateValue = {
@@ -99,9 +99,9 @@ export function GulfHijriDate(props: GulfHijriDateProps) {
         <div className="grid gap-1">
           <Input {...aria} {...input} dir="ltr" inputMode="numeric" autoComplete="off"
             name={name} placeholder={placeholder} disabled={disabled} required={required}
-            className="text-start tabular-nums" onBlur={shown.onBlur} />
+            className={cx('text-start tabular-nums', LTR_PLACEHOLDER)} onBlur={shown.onBlur} />
           {result.ok && (
-            <output htmlFor={aria.id} className="text-sm">
+            <output htmlFor={aria.id} aria-live="off" className="text-sm">
               <time dateTime={result.value.iso} className="flex flex-wrap gap-x-4 gap-y-1">
                 <Line caption={calendarLabels?.gregorian} text={gregorianText(result.value.date, locale, numerals, timeZone)} />
                 <Line caption={calendarLabels?.hijri} text={formatHijri(result.value.date, { timeZone, locale, numerals })} />

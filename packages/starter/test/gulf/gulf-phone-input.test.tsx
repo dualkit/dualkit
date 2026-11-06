@@ -64,6 +64,8 @@ describe('GulfPhoneInput', () => {
     expect(input.getAttribute('dir')).toBe('ltr')
     // Arabic-Indic digit groups count as Arabic numbers, so spaces or hyphens between them would flip their order.
     expect(input.style.unicodeBidi).toBe('bidi-override')
+    // The override would also reverse an Arabic placeholder, so the placeholder opts out.
+    expect(input.className).toContain('placeholder:[unicode-bidi:normal]')
     expect(input.parentElement?.closest('[dir="ltr"]')?.contains(screen.getByLabelText('رمز الدولة'))).toBe(true)
     expect(input.getAttribute('inputmode')).toBe('tel')
     expect(input.getAttribute('autocomplete')).toBe('tel-national')
@@ -82,6 +84,21 @@ describe('GulfPhoneInput', () => {
     await userEvent.selectOptions(screen.getByLabelText('Country code'), 'QA')
     expect(onCountryChange).toHaveBeenCalledWith('QA')
     expect(onResult).toHaveBeenLastCalledWith({ ok: true, value: { country: 'QA', e164: '+97433123456', type: 'mobile' } })
+  })
+
+  it('announces an error and keeps help quiet', () => {
+    const { rerender } = renderIn(SCRIPTS[0], <GulfPhoneInput {...english} value="" onChange={() => {}} help="We text a code." />)
+    expect(screen.getByText('We text a code.').getAttribute('role')).toBeNull()
+    rerender(<div dir="ltr" lang="en"><GulfPhoneInput {...english} value="" onChange={() => {}} error="Enter a number." /></div>)
+    expect(screen.getByRole('alert').textContent).toBe('Enter a number.')
+  })
+
+  it('reports the result for the newly picked country before the app updates its own', async () => {
+    const onResult = vi.fn()
+    renderIn(SCRIPTS[0], <GulfPhoneInput {...english} value="55 123 4567" onChange={() => {}} onResult={onResult} country="AE" />)
+    await userEvent.selectOptions(screen.getByLabelText('Country code'), 'SA')
+    expect(onResult).toHaveBeenCalledTimes(1)
+    expect(onResult).toHaveBeenLastCalledWith({ ok: true, value: { country: 'SA', e164: '+966551234567', type: 'mobile' } })
   })
 
   it('follows a controlled country', () => {

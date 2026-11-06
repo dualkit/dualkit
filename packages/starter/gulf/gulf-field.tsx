@@ -56,7 +56,8 @@ export function GulfField({ id, label, help, error, className, children }: GulfF
         'aria-describedby': note != null ? noteId : undefined,
       })}
       {note != null && (
-        <p id={noteId} className={cx('text-sm', error != null ? 'text-destructive' : 'text-muted-foreground')}>{note}</p>
+        <p id={noteId} role={error != null ? 'alert' : undefined}
+          className={cx('text-sm', error != null ? 'text-destructive' : 'text-muted-foreground')}>{note}</p>
       )}
     </div>
   )
@@ -103,6 +104,8 @@ function positionAfter(text: string, n: number, separator: RegExp | undefined): 
  * to the bidi algorithm, so a space or hyphen between two groups would flip their order; overriding keeps typed order.
  */
 export const LTR_VALUE: CSSProperties = { unicodeBidi: 'bidi-override' }
+/** The override is inherited by ::placeholder and would reverse an Arabic placeholder, so the placeholder opts out. */
+export const LTR_PLACEHOLDER = 'placeholder:[unicode-bidi:normal]'
 
 type MaskedInput = {
   ref: RefObject<HTMLInputElement | null>
@@ -118,20 +121,33 @@ export function useMaskedInput(value: string, mask: Mask, commit: (next: string)
   const caret = useRef<number | null>(null)
   const { normalize, display, separator } = mask
 
+  const place = (el: HTMLInputElement, n: number) => {
+    if (el.ownerDocument.activeElement !== el) return
+    const at = positionAfter(el.value, n, separator)
+    el.setSelectionRange(at, at)
+  }
+
   useLayoutEffect(() => {
     const el = ref.current
     const n = caret.current
     caret.current = null
-    if (n === null || !el || el.ownerDocument.activeElement !== el) return
-    const at = positionAfter(el.value, n, separator)
-    el.setSelectionRange(at, at)
+    if (n !== null && el) place(el, n)
   })
 
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const raw = event.currentTarget.value
-    const at = event.currentTarget.selectionStart ?? raw.length
-    caret.current = normalize(raw.slice(0, at)).length
-    commit(normalize(raw))
+    const el = event.currentTarget
+    const raw = el.value
+    const n = normalize(raw.slice(0, el.selectionStart ?? raw.length)).length
+    const next = normalize(raw)
+    if (next === value) {
+      // Nothing to store, so React skips the render and puts the old text back once this handler returns,
+      // which sends the caret to the end. Put it back after that.
+      caret.current = null
+      queueMicrotask(() => place(el, n))
+      return
+    }
+    caret.current = n
+    commit(next)
   }
 
   /** Backspace or Delete next to a separator removes the character beyond it, or the key would do nothing. */

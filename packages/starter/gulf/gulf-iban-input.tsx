@@ -1,6 +1,6 @@
 import { parseIban, toWesternDigits, type GulfIbanCountry, type Iban, type IbanError, type Numerals, type Result } from '@dualkit/format'
 import { Input } from '@/components/ui/input'
-import { GulfField, useMaskedInput, useShownError, withNumerals, type GulfFieldText, type Mask } from './gulf-field'
+import { GulfField, cx, LTR_PLACEHOLDER, useMaskedInput, useShownError, withNumerals, type GulfFieldText, type Mask } from './gulf-field'
 
 export type GulfIbanResult = Result<Iban, IbanError>
 
@@ -41,7 +41,7 @@ export function GulfIbanInput(props: GulfIbanInputProps) {
       {(aria) => (
         <Input {...aria} {...input} dir="ltr" autoCapitalize="characters" autoComplete="off" spellCheck={false}
           name={name} placeholder={placeholder} disabled={disabled} required={required}
-          className="text-start font-mono" onBlur={shown.onBlur} />
+          className={cx('text-start font-mono', LTR_PLACEHOLDER)} onBlur={shown.onBlur} />
       )}
     </GulfField>
   )

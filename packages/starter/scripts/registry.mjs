@@ -74,7 +74,8 @@ const gulf = (name, title, description) => ({
   title,
   description,
   dependencies: [FORMAT],
-  registryDependencies: ['input', 'label', `${BASE_URL}/gulf-field.json`],
+  // Label comes in through gulf-field, which is the only file that imports it.
+  registryDependencies: ['input', `${BASE_URL}/gulf-field.json`],
   files: [gulfFile(name)],
   docs: GULF_DOCS,
 })

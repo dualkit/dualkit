@@ -56,13 +56,12 @@ describe('gulf registry items', () => {
 
   it('builds on shadcn primitives and format, never on the Dualkit base', () => {
     for (const item of gulf) {
-      expect(item.registryDependencies, item.name).toContain('label')
       expect(item.registryDependencies, item.name).not.toContain('https://dualkit.dev/r/base.json')
-      if (item.name !== 'gulf-field') {
-        expect(item.registryDependencies, item.name).toContain('input')
-        expect(item.registryDependencies, item.name).toContain('https://dualkit.dev/r/gulf-field.json')
-        expect(item.dependencies, item.name).toEqual(['@dualkit/format'])
-      }
+      expect(item.dependencies, item.name).toEqual(['@dualkit/format'])
+      // Each item declares only the primitives its own file imports; Label comes in through gulf-field.
+      expect(item.registryDependencies, item.name).toEqual(
+        item.name === 'gulf-field' ? ['label'] : ['input', 'https://dualkit.dev/r/gulf-field.json'],
+      )
     }
   })
 

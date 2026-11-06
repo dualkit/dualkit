@@ -48,6 +48,20 @@ describe('GulfIbanInput', () => {
     expect(field('رقم الآيبان').value).toBe('AE٠٧ ٠٣٣١')
   })
 
+  it('keeps the caret where it was when a dropped character is typed mid-field', async () => {
+    renderIn(SCRIPTS[0], <Harness initial="AE070331">{(p) => <GulfIbanInput {...english} {...p} />}</Harness>)
+    const input = field('IBAN')
+    input.focus()
+    input.setSelectionRange(2, 2)
+    await userEvent.keyboard('#')
+    await Promise.resolve()
+    expect(input.value).toBe('AE07 0331')
+    expect(input.selectionStart).toBe(2)
+    await userEvent.keyboard('9')
+    expect(input.value).toBe('AE90 7033 1')
+    expect(input.selectionStart).toBe(3)
+  })
+
   it('drops characters an IBAN never has', () => {
     const onChange = vi.fn()
     renderIn(SCRIPTS[0], <GulfIbanInput {...english} value="" onChange={onChange} />)
@@ -60,6 +74,8 @@ describe('GulfIbanInput', () => {
     expect(field('رقم الآيبان').getAttribute('dir')).toBe('ltr')
     // Arabic-Indic digit groups count as Arabic numbers, so spaces or hyphens between them would flip their order.
     expect(field('رقم الآيبان').style.unicodeBidi).toBe('bidi-override')
+    // The override would also reverse an Arabic placeholder, so the placeholder opts out.
+    expect(field('رقم الآيبان').className).toContain('placeholder:[unicode-bidi:normal]')
     expect(field('رقم الآيبان').getAttribute('autocapitalize')).toBe('characters')
   })
 
