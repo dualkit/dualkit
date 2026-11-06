@@ -168,6 +168,11 @@ body { background: var(--v3-ground); }
   .v3-menu-list { border-bottom: 0; }
   .v3-menu-list li:last-child { border-bottom: 1px solid var(--v3-line); }
   .v3-menu-install { display: none; }
+  /* Eight parts fit an 800px-tall screen only as one-line rows, so on wide screens the active part's line shows under its
+     preview. The row keeps its line for screen readers; the copy under the preview is hidden from them. */
+  .v3-menu-row { position: relative; align-items: center; padding-block: 12px; }
+  .v3-menu-line { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .v3-menu-foot-line { margin: 0; }
   .v3-menu-preview { display: flex; flex-direction: column; gap: 16px; padding: 40px; border-inline: 1px solid var(--v3-line); }
   .v3-menu-side { padding: 24px 40px; }
   .v3-menu-block { padding-block: 16px; }
@@ -194,7 +199,9 @@ body { background: var(--v3-ground); }
 .v3-menu-shot[data-part='2'] { --pv-scale: 0.72; }
 .v3-menu-shot[data-part='3'] { --pv-scale: 0.7; }
 .v3-menu-shot[data-part='4'] { --pv-scale: 0.74; }
-.v3-menu-shot[data-part='5'] { --pv-scale: 0.82; }
+.v3-menu-shot[data-part='5'] { --pv-scale: 0.72; }
+.v3-menu-shot[data-part='6'] { --pv-scale: 0.82; }
+.v3-menu-shot[data-part='7'] { --pv-scale: 0.82; }
 .v3-menu-foot { display: grid; }
 .v3-menu-foot-part { grid-area: 1 / 1; display: flex; flex-direction: column; justify-content: flex-end; gap: 16px; opacity: 0; transition: opacity 150ms var(--ease-ui); }
 .v3-menu-foot-part[data-on] { opacity: 1; }
@@ -251,6 +258,12 @@ body { background: var(--v3-ground); }
 .v3-pv-edit { flex-direction: row; align-items: center; gap: 12px; }
 .v3-pv-from { color: var(--v3-glass-soft); text-decoration: line-through; text-decoration-color: rgba(255, 255, 255, 0.4); }
 .v3-pv-convert .v3-pv-install { margin-top: 8px; }
+.v3-pv-mcp { width: 400px; }
+.v3-pv-mcp .v3-pv-install { margin-top: 8px; }
+.v3-pv-mcp .v3-pv-fill { overflow-wrap: anywhere; }
+.v3-pv-figma { width: 360px; }
+.v3-pv-mcp .v3-pv-skill, .v3-pv-figma .v3-pv-skill { gap: 16px; }
+.v3-pv-mcp .v3-pv-skill .v3-pv-soft, .v3-pv-figma .v3-pv-skill .v3-pv-soft { text-align: end; }
 .v3-pv-bench { display: flex; flex-direction: column; gap: 4px; width: 380px; padding: 16px; }
 .v3-pv-bench .v3-pv-line { gap: 12px; }
 .v3-pv-bench-name, .v3-pv-bench-figures { display: inline-flex; align-items: center; gap: 8px; }

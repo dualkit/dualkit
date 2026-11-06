@@ -15,6 +15,10 @@ describe('v3 seals', () => {
       expect(m.href.startsWith('https://opensource.org/')).toBe(true)
     }
   })
+  it('claims no native Arabic review, which has not happened', () => {
+    expect(JSON.stringify(V3.seals).toLowerCase()).not.toContain('native')
+    expect(JSON.stringify(V3.seals).toLowerCase()).not.toContain('arabic review')
+  })
   it('keeps text seals short enough for the ring', () => {
     for (const m of Object.values(SEAL_MARKS)) if (m.kind === 'text') expect(m.text.length).toBeLessThanOrEqual(5)
   })
@@ -51,5 +55,23 @@ describe('downloadsLine', () => {
   it('shows the compact weekly count in the v2 wording', () => {
     expect(downloadsLine(1234)).toBe('1.2k npm downloads last week')
     expect(downloadsLine(87)).toBe('87 npm downloads last week')
+  })
+})
+
+describe('v3 footer products', () => {
+  it('links every product, the Gulf components, MCP and Figma included', () => {
+    const product = footerColumns().find((c) => c.title === 'Product')
+    expect(product?.links).toEqual([
+      { label: 'Skills', href: '/docs#skills' },
+      { label: 'Format', href: '/docs#format' },
+      { label: 'Starter', href: '/docs#starter' },
+      { label: 'Gulf components', href: '/components/gulf' },
+      { label: 'Check', href: '/docs#check' },
+      { label: 'Lint', href: '/docs#lint' },
+      { label: 'Convert', href: '/convert' },
+      { label: 'MCP', href: '/docs#mcp' },
+      { label: 'Figma', href: '/docs#figma' },
+      { label: 'Bench', href: '/bench' },
+    ])
   })
 })

@@ -37,6 +37,8 @@ Dualkit fixes them at the source, in the agent and in the code, and checks any p
 | **[Lint](packages/lint/)** | 8 source rules on by default that catch Arabic and RTL bugs in your CSS, HTML, JavaScript and TypeScript, with no browser | `npx dualkit@beta lint .` |
 | **[Convert](packages/convert/)** | Turns an English Next.js or Vite React app into an Arabic one on a new git branch, and proves English did not change | `npx dualkit@beta convert` |
 | **[MCP](packages/mcp/)** | An MCP server for Claude Code, Cursor and Codex: Gulf formats and validators, the rules, and a no-browser check of HTML | `claude mcp add dualkit -- npx -y @dualkit/mcp` |
+| **[Gulf components](packages/starter/gulf/)** | Five shadcn inputs that use your own theme: GCC phone, IBAN, Emirates ID, amount and Hijri date, checked with Format | `npx shadcn@latest add https://dualkit.dev/r/gulf-phone-input.json` |
+| **[Figma plugin](apps/figma/)** | Check a frame against 16 of the 34 rules, and fill it with Gulf sample data. Coming to Figma Community; not tested in Figma yet | [In progress](#figma-plugin) |
 
 ## Proof
 
@@ -109,6 +111,16 @@ npx shadcn@latest add https://dualkit.dev/r/amount.json
 
 Swap `amount` for `button`, `date-display`, `digit-input`, `field`, `sheet`, `tabs` or `toast`.
 
+## Gulf components
+
+Five inputs for a shadcn project. They use your shadcn theme instead of the Starter tokens, work with and without `shadcn init --rtl`, and validate with `@dualkit/format`. All labels and messages come in as props.
+
+```
+npx shadcn@latest add https://dualkit.dev/r/gulf-phone-input.json
+```
+
+Swap `gulf-phone-input` for `gulf-iban-input`, `gulf-national-id-input` (Emirates ID for now), `gulf-amount` or `gulf-hijri-date`. Each brings the shared `gulf-field` file. Live English and Arabic demos are at [dualkit.dev/components/gulf](https://dualkit.dev/components/gulf).
+
 ## Check
 
 Point one command at any page, local or live. It opens it in Chromium, runs 34 Arabic and right-to-left rules, and writes a report with a score out of 100 and every bug marked on a screenshot.
@@ -155,6 +167,20 @@ npx dualkit@beta convert --mode bilingual --start "npm run dev" --port 3000
 
 Dualkit makes no model calls in convert, and every drafted Arabic string is marked for a native speaker to check. What it converts and what it leaves to you: [the convert README](packages/convert/README.md).
 
+## MCP
+
+`@dualkit/mcp` runs on your machine over stdio. It needs no browser and makes no network calls.
+
+```
+claude mcp add dualkit -- npx -y @dualkit/mcp
+```
+
+It has four tools: `format` (money, Hijri dates, numerals, phones), `validate` (IBAN, Emirates ID, Saudi VAT number, GCC phones), `rules` (the 34 rules and their fixes) and `check_html`. `check_html` runs the 16 rules that work in jsdom on an HTML string, and lists the other 18 as needing a browser, so use `npx dualkit check` for those. The lines for Cursor and Codex are in [the MCP README](packages/mcp/README.md).
+
+## Figma plugin
+
+Coming to Figma Community, and not tested in Figma yet. **Check frame** runs 16 of the 34 rules on the text layers of a frame and lists the other 18 as not checked in Figma, each with a reason. **Fill Gulf samples** fills the selected text with phones, IBANs and Emirates IDs that pass Format, amounts, and Gregorian and Hijri dates. To load it in Figma desktop for development, see [apps/figma](apps/figma/README.md).
+
 ## Contributing
 
 The most useful help right now:
@@ -177,7 +203,8 @@ The most useful help right now:
 | `plugin/skills` | The five skills (`SKILL.md` each) |
 | `cursor/rules` | Cursor rules generated from `plugin/skills` |
 | `packages/skills` | The generator and the tests that keep skills, rules and the plugin manifest in step |
-| `apps/site` | dualkit.dev (Next.js) |
+| `apps/site` | dualkit.dev (Next.js), including the shadcn registry in `public/r` |
+| `apps/figma` | The Figma plugin, with its tests. Not on Figma Community yet |
 | `design` | Figma specs, tokens and the motion prototype the site was built from |
 | `evals` | Baseline evaluations for the skills |
 | `packages/proof` | The public scoreboard run on real apps |

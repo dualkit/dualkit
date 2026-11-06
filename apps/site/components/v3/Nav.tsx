@@ -1,13 +1,15 @@
 import { latestBenchMonth, plannedBench } from '@/lib/bench'
 import { compactCount } from '@/lib/counters'
-import { CHECK_COMMAND, CONVERT_COMMAND, FORMAT_COMMAND, REPO_URL, STARTER_COMMAND } from '@/lib/copy'
+import { CHECK_COMMAND, CONVERT_COMMAND, FORMAT_COMMAND, MCP_COMMAND, REPO_URL, STARTER_COMMAND } from '@/lib/copy'
 import { RELEASES, displayDate } from '@/lib/updates'
 import { V3 } from '@/lib/v3/copy'
 import { daysUntil, nextBenchRun } from '@/lib/v3/menu'
 import { BenchPreview } from './previews/Bench'
 import { CheckPreview } from './previews/Check'
 import { ConvertPreview } from './previews/Convert'
+import { FigmaPreview } from './previews/Figma'
 import { FormatPreview } from './previews/Format'
+import { McpPreview } from './previews/Mcp'
 import { SkillsPreview } from './previews/Skills'
 import { StarterPreview } from './previews/Starter'
 import { Button } from './primitives'
@@ -20,6 +22,8 @@ const PARTS: readonly MenuPart[] = [
   { href: '/docs#starter', command: STARTER_COMMAND, docs: 'Open the Starter docs', note: null },
   { href: '/docs#check', command: CHECK_COMMAND, docs: 'Open the Check docs', note: null },
   { href: '/convert', command: CONVERT_COMMAND, docs: 'See a real app converted', note: null },
+  { href: '/docs#mcp', command: MCP_COMMAND, docs: 'Open the MCP docs', note: null },
+  { href: '/docs#figma', command: null, docs: 'Read about the Figma plugin', note: 'Not on Figma Community yet' },
   { href: '/bench', command: null, docs: V3.bench.action, note: null },
 ]
 
@@ -43,7 +47,7 @@ export function Nav({ stars }: { stars: number | null }) {
   return (
     <ProductsMenu
       parts={PARTS}
-      previews={[<SkillsPreview key="skills" />, <FormatPreview key="format" />, <StarterPreview key="starter" />, <CheckPreview key="check" />, <ConvertPreview key="convert" />, <BenchPreview key="bench" />]}
+      previews={[<SkillsPreview key="skills" />, <FormatPreview key="format" />, <StarterPreview key="starter" />, <CheckPreview key="check" />, <ConvertPreview key="convert" />, <McpPreview key="mcp" />, <FigmaPreview key="figma" />, <BenchPreview key="bench" />]}
       latest={latest ? { title: latest.title, date: displayDate(latest.date), href: `/updates#${latest.slug}` } : null}
       benchDays={benchDays(new Date())}
       end={end}

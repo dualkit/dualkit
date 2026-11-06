@@ -6,10 +6,12 @@ export const V3 = {
     parts: [
       ['01', 'Skills', 'Teach Claude Code and Cursor to build right to left', '5 skills'],
       ['02', 'Format', 'Money, dates, phones and IBANs from the digits people type', 'npm'],
-      ['03', 'Starter', 'Eight bilingual components to copy into your app', 'shadcn'],
+      ['03', 'Starter', 'Bilingual components and five Gulf inputs to copy into your app', 'shadcn'],
       ['04', 'Check', 'Score live pages, or lint your source before it ships', 'CLI'],
       ['05', 'Convert', 'Turn an English app into an Arabic one on a new branch', 'Beta'],
-      ['06', 'Bench', 'How free AI models build Arabic, every month', 'Monthly'],
+      ['06', 'MCP', 'Gulf formats, validators and the rules for any MCP client', 'Beta'],
+      ['07', 'Figma', 'Check a frame and fill Gulf samples, coming to Figma Community', 'Soon'],
+      ['08', 'Bench', 'How free AI models build Arabic, every month', 'Monthly'],
     ],
     command: '/plugin install dualkit@dualkit',
     installLabel: 'Install the skills',
@@ -91,14 +93,14 @@ export const V3 = {
   },
   kit: {
     label: 'The kit',
-    heading: 'Six parts, each\ninstalled on its own.',
-    lede: 'Start with the skills, then add formats, components, checks and conversion when you need them.',
+    heading: 'Eight parts. Use only\nthe ones you need.',
+    lede: 'Start with the skills, then add formats, components, checks, conversion and the MCP server when you need them.',
     open: {
       name: 'Skills', title: 'Teach your agent Arabic.',
       body: 'Five skills for Claude Code and Cursor: right-to-left layout, type pairing, Gulf formats, bilingual copy and finishing a conversion.',
       points: ['Load on their own when a task touches Arabic', 'Took a fresh agent from 0 of 3 to 3 of 3 on bidi bugs', 'Listed in the Claude plugin directory'],
     },
-    rest: ['Format', 'Starter', 'Check', 'Convert', 'Bench'],
+    rest: ['Format', 'Starter', 'Check', 'Convert', 'MCP', 'Figma', 'Bench'],
     skillsPanel: { fixed: 'Fixed', diff: 'View the diff' },
     previews: {
       format: {
@@ -115,6 +117,14 @@ export const V3 = {
         title: 'dualkit convert', status: 'Branch ready', branch: 'dualkit/bilingual',
         edits: [['ml-auto', 'ms-auto'], ['text-left', 'text-start'], ['Orders', "t('ecommerce-metrics.orders')"]],
         summary: ['679 edits', '310 strings', '27 s'],
+      },
+      mcp: {
+        title: '@dualkit/mcp', status: '4 tools',
+        tools: [['format', 'money, Hijri, numerals, phones'], ['validate', 'IBAN, Emirates ID, VAT, phones'], ['rules', 'the 34 rules and their fixes'], ['check_html', '16 rules, no browser']],
+      },
+      figma: {
+        title: 'Dualkit for Figma', status: 'Coming to Figma Community',
+        commands: [['Check frame', '16 of 34 rules'], ['Fill Gulf samples', 'phones, IBANs, dates']],
       },
       bench: { head: 'Alone, then with Dualkit', sample: 'Sample data until 1 November' },
     },
@@ -154,14 +164,14 @@ export const V3 = {
   numbers: {
     label: 'In numbers',
     heading: 'Open source, tested,\nand checked every month.',
-    stats: [['1,031', 'tests across the kit'], ['34', 'rules in dualkit check'], ['6', 'Gulf currencies'], ['4', 'skills for your agent']],
+    stats: [['1,031', 'tests across the kit'], ['34', 'rules in dualkit check'], ['6', 'Gulf currencies'], ['5', 'skills for your agent']],
     phoneHeading: 'Open source, tested,\nand checked\nevery month.',
   },
   closing: { heading: 'Ship in both directions today.', command: '/plugin install dualkit@dualkit', primary: 'Get started', secondary: 'Read the docs' },
   footer: {
     line: 'Arabic and English, built right the first time.',
     columns: [
-      ['Product', ['Skills', 'Format', 'Starter', 'Check', 'Lint', 'Convert', 'Bench']],
+      ['Product', ['Skills', 'Format', 'Starter', 'Gulf components', 'Check', 'Lint', 'Convert', 'MCP', 'Figma', 'Bench']],
       ['Resources', ['Docs', 'Updates', 'Status', 'Registry', 'Careers']],
       ['Community', ['GitHub', 'Discussions', 'npm', 'Plugin directory']],
       ['Legal', ['MIT licence']],
@@ -171,6 +181,6 @@ export const V3 = {
     madeBy: 'Made by',
     maker: 'Sam Santos',
   },
-  seals: [['UAX #9', 'Unicode bidi'], ['ISO 13616', 'IBAN'], ['Umm al-Qura', 'Hijri calendar'], ['npm', 'Provenance'], ['MIT', 'Open source'], ['Native', 'Arabic review']],
+  seals: [['UAX #9', 'Unicode bidi'], ['ISO 13616', 'IBAN'], ['Umm al-Qura', 'Hijri calendar'], ['npm', 'Provenance'], ['MIT', 'Open source'], ['E.164', 'Phone numbers']],
   sealNote: 'Standards Dualkit follows. None of them is a third-party certification.',
 } as const

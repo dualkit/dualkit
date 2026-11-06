@@ -2,10 +2,11 @@ import type { Metadata } from 'next'
 import { CopyCommand } from '@/components/CopyCommand'
 import { Footer } from '@/components/v3/Footer'
 import { Nav } from '@/components/v3/Nav'
-import { ACTION_URL, CHECK_COMMAND, CONVERT_COMMAND, FORMAT_COMMAND, LINT_COMMAND, SKILLS_COMMAND } from '@/lib/copy'
+import { ACTION_URL, CHECK_COMMAND, CONVERT_COMMAND, FIGMA_URL, FORMAT_COMMAND, LINT_COMMAND, MCP_COMMAND, SKILLS_COMMAND } from '@/lib/copy'
+import { gulfInstall } from '@/lib/gulf-copy'
 import { liveData } from '@/lib/live'
 
-export const metadata: Metadata = { title: 'Docs', description: 'Install the Dualkit skills, @dualkit/format, the Starter components, dualkit check, dualkit lint and dualkit convert.' }
+export const metadata: Metadata = { title: 'Docs', description: 'Install the Dualkit skills, @dualkit/format, the Starter and Gulf components, dualkit check, dualkit lint, dualkit convert and @dualkit/mcp.' }
 export const revalidate = 300
 
 const API: [string, string, string][] = [
@@ -54,7 +55,12 @@ export default async function Docs() {
           <p className="soft">Each of the eight installs with the shadcn CLI as source you own, along with the shared tokens and styles.</p>
           <CopyCommand command="npx shadcn@latest add https://dualkit.dev/r/amount.json" />
           <p className="small soft">Swap <code>amount</code> for <code>button</code>, <code>date-display</code>, <code>digit-input</code>, <code>field</code>, <code>sheet</code>, <code>tabs</code> or <code>toast</code>. Then import <code>components/dualkit/tokens.css</code> and <code>styles.css</code> once.</p>
-          <p className="small soft">For a shadcn project, the <a href="/components/gulf">Gulf components</a> use your own theme instead: phone, IBAN, Emirates ID, amount and Hijri date inputs.</p>
+        </section>
+        <section className="doc-block" id="gulf">
+          <h2 className="h2">Gulf components</h2>
+          <p className="soft">Five inputs for a shadcn project: phone, IBAN, Emirates ID, amount and Hijri date. They use your own shadcn theme instead of the Starter tokens, work with and without <code>shadcn init --rtl</code>, and every check comes from @dualkit/format.</p>
+          <CopyCommand command={gulfInstall('gulf-phone-input')} />
+          <p className="small soft">Swap <code>gulf-phone-input</code> for <code>gulf-iban-input</code>, <code>gulf-national-id-input</code>, <code>gulf-amount</code> or <code>gulf-hijri-date</code>. Each brings the shared <code>gulf-field</code> file with it. All labels, help text and error messages come in as props. The ID input reads Emirates ID only for now. Try each one in English and Arabic on the <a href="/components/gulf">Gulf components page</a>.</p>
         </section>
         <section className="doc-block" id="check">
           <h2 className="h2">Check a screen</h2>
@@ -78,6 +84,17 @@ export default async function Docs() {
           <p className="soft">Run it in a React or Next.js app with a clean git tree. It makes a new branch, rewrites the layout to logical properties, moves every English string into a translation file and lists each one for you or your agent to put into Arabic. It makes no model calls.</p>
           <CopyCommand command={CONVERT_COMMAND} />
           <p className="small soft">Use <code>--mode bilingual</code> for English and Arabic with a language switch, or <code>--mode arabic</code> for an Arabic-only app. Fill the Arabic in <code>dualkit-strings.json</code>, then run <code>npx dualkit@beta convert --finish</code>. It checks that every English page still looks the same, runs the 34 check rules on each Arabic page, runs your tests and writes <code>dualkit-convert.md</code>. Add <code>--start</code> and <code>--port</code> so it can open the app. Details are in the <a href="https://github.com/dualkit/dualkit/blob/main/packages/convert/README.md">convert README</a>. See a real app before and after on the <a href="/convert">convert page</a>.</p>
+        </section>
+        <section className="doc-block" id="mcp">
+          <h2 className="h2">MCP server</h2>
+          <p className="soft">@dualkit/mcp gives any MCP client the Gulf formats, the validators and the rules. It runs on your machine over stdio, needs no browser and makes no network calls. In Claude Code:</p>
+          <CopyCommand command={MCP_COMMAND} />
+          <p className="small soft">It has four tools. <code>format</code> formats money, Hijri dates, numerals and phones. <code>validate</code> checks an IBAN, Emirates ID, Saudi VAT number or GCC phone and returns format&rsquo;s result unchanged. <code>rules</code> lists the 34 check rules or returns one with its fix. <code>check_html</code> runs the rules on an HTML string in jsdom: 16 of them can run there, and the other 18 are listed as needing a browser, so use <code>npx dualkit check</code> for those. Input is capped at 512 KB and each check stops after 10 seconds. The lines for Cursor and Codex are in the <a href="https://github.com/dualkit/dualkit/blob/main/packages/mcp/README.md">MCP README</a>.</p>
+        </section>
+        <section className="doc-block" id="figma">
+          <h2 className="h2">Figma plugin</h2>
+          <p className="soft">Coming to Figma Community. It has two commands. Check frame runs 16 of the 34 rules on the text layers of the selected frame and lists the other 18 as not checked in Figma, each with a reason. Fill Gulf samples replaces the selected text with phones, IBANs and Emirates IDs that pass format, amounts, and Gregorian and Hijri dates.</p>
+          <p className="small soft">It is not on Figma Community yet, and we have not tried it in Figma on a real Arabic frame. The code is in <a href={FIGMA_URL}>apps/figma</a>.</p>
         </section>
         <section className="doc-block">
           <h2 className="h2">Source</h2>

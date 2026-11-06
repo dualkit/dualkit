@@ -17,5 +17,5 @@ export const SEAL_MARKS: Record<string, SealMark> = {
   'Umm al-Qura': { kind: 'text', text: 'UQ' },
   npm: { kind: 'text', text: 'npm' },
   MIT: { kind: 'logo', src: '/v3/marks/osi-approved.svg', width: 535, height: 698, href: OSI_URL, label: 'MIT is an OSI Approved License (opensource.org)' },
-  Native: { kind: 'text', text: 'AR' },
+  'E.164': { kind: 'text', text: 'E.164' },
 }
