@@ -8,3 +8,5 @@ export { wantsDigitProbe } from './rules/content'
 export { PER_RULE_CAP, WEIGHT, docsUrl, runRules, score } from './run'
 export { renderRulesMarkdown } from './docs'
 export { MIN_ARABIC_LEADING, MIN_ARABIC_SIZE } from './rules/type'
+/** Script helpers, so other readers (the Figma plugin) build a ScreenModel with the same tests the rules use. */
+export { arabicShare, arabicWordCount, firstStrong, hasArabic } from './text'
