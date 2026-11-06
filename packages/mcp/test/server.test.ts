@@ -31,7 +31,8 @@ describe('server', () => {
   it('exports createServer for other transports', async () => {
     const index = await import('../src/index')
     expect(index.createServer().server).toBeDefined()
-    expect(index.MAX_HTML_BYTES).toBe(2 * 1024 * 1024)
+    expect(index.MAX_HTML_BYTES).toBe(512 * 1024)
+    expect(index.CHECK_TIMEOUT_MS).toBe(10_000)
   })
 
   it('turns an unknown tool into a tool error', async () => {

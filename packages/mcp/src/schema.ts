@@ -48,22 +48,38 @@ export function firstProblem(error: z.ZodError): string {
 export const result = (data: unknown): CallToolResult => ({ content: [{ type: 'text', text: JSON.stringify(data, null, 2) }] })
 export const failure = (message: string): CallToolResult => ({ content: [{ type: 'text', text: message }], isError: true })
 
+type Extra = { signal?: AbortSignal }
+type Run<T> = (input: T, signal?: AbortSignal) => CallToolResult | Promise<CallToolResult>
+
 /** The tool's reply for any input: a strict parse, then the handler, with every error turned into a sentence. */
-export function handle<T>(schema: z.ZodType<T>, run: (input: T) => CallToolResult): (args: unknown) => CallToolResult {
-  return (args) => {
+export function handle<T>(schema: z.ZodType<T>, run: Run<T>): (args: unknown, extra?: Extra) => Promise<CallToolResult> {
+  return async (args, extra) => {
     const parsed = schema.safeParse(args ?? {})
     if (!parsed.success) return failure(firstProblem(parsed.error))
     try {
-      return run(parsed.data)
+      return await run(parsed.data, extra?.signal)
     } catch (error) {
       return failure(unexpected(error))
     }
   }
 }
 
-/** A thrown error's own message, never its stack. */
+/** What a tool says when something fails that the input did not cause. */
+export const INTERNAL_ERROR = 'Dualkit could not finish this call. Try again, and if it fails again, report it with the input you sent.'
+
+/**
+ * @dualkit/format throws RangeError for input it cannot use, and that message is written for the caller, so it is
+ * kept (first line only, never the stack). Any other error can carry paths or internals: the client gets one plain
+ * sentence and the detail goes to stderr, where an MCP host keeps the server's log.
+ */
 export function unexpected(error: unknown): string {
-  const message = error instanceof Error ? error.message.split('\n')[0]!.trim() : ''
-  if (message === '') return 'Something went wrong. Try again with different input.'
-  return /[.?]$/.test(message) ? message : `${message}.`
+  const message = error instanceof RangeError ? error.message.split('\n')[0]!.trim() : ''
+  if (message !== '') return /[.?]$/.test(message) ? message : `${message}.`
+  logError(error)
+  return INTERNAL_ERROR
+}
+
+export function logError(error: unknown): void {
+  const detail = error instanceof Error ? (error.stack ?? error.message) : String(error)
+  process.stderr.write(`dualkit-mcp: ${detail}\n`)
 }

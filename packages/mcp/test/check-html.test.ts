@@ -80,8 +80,8 @@ describe('check_html', () => {
   })
 
   it('refuses HTML over the size cap with a plain sentence', async () => {
-    const html = page(`<p>${'a'.repeat(MAX_HTML_BYTES)}</p>`)
-    expect(expectPlainError(await call('check_html', { html }))).toMatch(/2 MB/)
+    const html = 'a'.repeat(MAX_HTML_BYTES + 1024)
+    expect(expectPlainError(await call('check_html', { html }))).toBe('The HTML is 513 KB, and check_html reads up to 512 KB. Send one page, or the part you changed.')
   })
 
   it('needs some HTML', async () => {

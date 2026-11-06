@@ -17,10 +17,19 @@ const TEXT_NODE = 3
 const DOCUMENT_NODE = 9
 const DOCTYPE_NODE = 10
 
-const RTL_CHAR =/[֐-ࣿיִ-﷿ﹰ-﻿]/
+const RTL_CHAR = /[֐-ࣿיִ-﷿ﹰ-﻿]/
 const LTR_CHAR = /[A-Za-zÀ-ɏ]/
 
-type BoxLike = { x: number; y: number; left: number; top: number; right: number; bottom: number; width: number; height: number }
+type BoxLike = {
+  x: number
+  y: number
+  left: number
+  top: number
+  right: number
+  bottom: number
+  width: number
+  height: number
+}
 const box = (shown: boolean): BoxLike => {
   const width = shown ? VIEWPORT_WIDTH : 0
   const height = shown ? LINE_HEIGHT : 0
@@ -28,8 +37,10 @@ const box = (shown: boolean): BoxLike => {
 }
 
 /** dir="auto" takes the direction of the first strong letter, as the HTML standard says. */
-function autoDirection(el: Element): 'ltr' | 'rtl' | null {
-  const value = el instanceof el.ownerDocument.defaultView!.HTMLInputElement ? el.value : el.textContent ?? ''
+type Direction = 'ltr' | 'rtl'
+
+function autoDirection(el: Element): Direction | null {
+  const value = el instanceof el.ownerDocument.defaultView!.HTMLInputElement ? el.value : (el.textContent ?? '')
   for (const ch of value) {
     if (RTL_CHAR.test(ch)) return 'rtl'
     if (LTR_CHAR.test(ch)) return 'ltr'
@@ -53,25 +64,44 @@ function shimBrowser(window: DOMWindow): void {
     styles.set(el, (styles.get(el) ?? new Map()).set(key, s))
     return s
   }
+  // Both walks go up the ancestors in a loop, not by recursion, so a deeply nested page cannot overflow the stack.
   const shownMemo = new WeakMap<Element, boolean>()
-  const shown = (el: Element): boolean => {
-    const known = shownMemo.get(el)
-    if (known !== undefined) return known
-    const result = el.isConnected && style(el).display !== 'none' && (el.parentElement === null || shown(el.parentElement))
-    shownMemo.set(el, result)
-    return result
+  const shown = (start: Element): boolean => {
+    const unknown: Element[] = []
+    let el: Element | null = start
+    while (el !== null && !shownMemo.has(el)) {
+      unknown.push(el)
+      el = el.parentElement
+    }
+    let visible = el === null ? true : shownMemo.get(el)!
+    for (const node of unknown.reverse()) {
+      visible = visible && node.isConnected && style(node).display !== 'none'
+      shownMemo.set(node, visible)
+    }
+    return visible
   }
-  const dirMemo = new WeakMap<Element, 'ltr' | 'rtl'>()
-  const direction = (el: Element): 'ltr' | 'rtl' => {
-    const known = dirMemo.get(el)
-    if (known) return known
+  const ownDirection = (el: Element): Direction | null => {
     const own = style(el).direction
+    if (own === 'rtl' || own === 'ltr') return own
     const attr = (el.getAttribute('dir') ?? '').toLowerCase()
-    const result = own === 'rtl' || own === 'ltr' ? own
-      : attr === 'rtl' || attr === 'ltr' ? attr
-        : (attr === 'auto' && autoDirection(el)) || (el.parentElement ? direction(el.parentElement) : 'ltr')
-    dirMemo.set(el, result)
-    return result
+    if (attr === 'rtl' || attr === 'ltr') return attr
+    return attr === 'auto' ? autoDirection(el) : null
+  }
+  const dirMemo = new WeakMap<Element, Direction>()
+  const direction = (start: Element): Direction => {
+    const unknown: Element[] = []
+    let found: Direction = 'ltr'
+    for (let el: Element | null = start; el !== null; el = el.parentElement) {
+      const known = dirMemo.get(el) ?? ownDirection(el)
+      if (known !== null) {
+        found = known
+        dirMemo.set(el, known)
+        break
+      }
+      unknown.push(el)
+    }
+    for (const node of unknown) dirMemo.set(node, found)
+    return found
   }
 
   window.getComputedStyle = ((el: Element, pseudo?: string | null) => {
@@ -85,13 +115,17 @@ function shimBrowser(window: DOMWindow): void {
     })
   }) as typeof window.getComputedStyle
 
-  window.Element.prototype.getBoundingClientRect = function (this: Element) { return box(shown(this)) as DOMRect }
+  window.Element.prototype.getBoundingClientRect = function (this: Element) {
+    return box(shown(this)) as DOMRect
+  }
   window.Range.prototype.getBoundingClientRect = function (this: Range) {
     const node = this.commonAncestorContainer
     const el = node.nodeType === 1 ? (node as Element) : node.parentElement
     return box(el !== null && shown(el)) as DOMRect
   }
-  window.Range.prototype.getClientRects = function (this: Range) { return [this.getBoundingClientRect()] as unknown as DOMRectList }
+  window.Range.prototype.getClientRects = function (this: Range) {
+    return [this.getBoundingClientRect()] as unknown as DOMRectList
+  }
   // The reader clones a range only to find split Arabic words, for type/arabic-broken-join, which needs painted letter
   // positions and so is not checked here. In jsdom each clone walks every child of the two texts' common ancestor, which
   // makes a minified page cost its square. A clone that is never empty tells the reader there is a gap, so it moves on.
@@ -103,9 +137,10 @@ function shimBrowser(window: DOMWindow): void {
   // A new range sits at the start of the document, and jsdom orders a boundary point by walking the tree from there,
   // so setStart on a fresh range costs the whole page. Moving the range onto the node first is cheap and leaves the
   // same range once setStart and setEnd have run.
-    const setStart = window.Range.prototype.setStart
+  const setStart = window.Range.prototype.setStart
   window.Range.prototype.setStart = function (this: Range, node: Node, offset: number) {
-    if (this.collapsed && this.startContainer.nodeType === DOCUMENT_NODE && node.nodeType !== DOCTYPE_NODE) this.selectNodeContents(node)
+    if (this.collapsed && this.startContainer.nodeType === DOCUMENT_NODE && node.nodeType !== DOCTYPE_NODE)
+      this.selectNodeContents(node)
     return setStart.call(this, node, offset)
   }
   // The reader ends a range in another node only between two texts for type/arabic-broken-join, which the clone above
@@ -116,7 +151,14 @@ function shimBrowser(window: DOMWindow): void {
     return setEnd.call(this, node, offset)
   }
   Object.defineProperty(window.document.documentElement, 'clientWidth', { get: () => VIEWPORT_WIDTH })
-  Object.defineProperty(window.document, 'fonts', { value: { ready: Promise.resolve(), [Symbol.iterator]: function* () { /* jsdom loads no fonts */ } } })
+  Object.defineProperty(window.document, 'fonts', {
+    value: {
+      ready: Promise.resolve(),
+      [Symbol.iterator]: function* () {
+        /* jsdom loads no fonts */
+      },
+    },
+  })
 }
 
 /**
@@ -125,9 +167,9 @@ function shimBrowser(window: DOMWindow): void {
  */
 export function readHtml(html: string): ScreenModel {
   readerSource ??= readFileSync(READER_PATH, 'utf8')
-  // The window is left for the garbage collector, not closed: no script runs and no timer is set, and close() empties
-  // the page node by node against every range the reader made, which costs seconds on a large page.
-  const { window } = new JSDOM(html, { runScripts: 'outside-only', pretendToBeVisual: true, virtualConsole: new VirtualConsole() })
+  // The window is not closed: close() empties the page node by node against every range the reader made, which costs
+  // seconds on a large page. Each check runs in its own worker thread, and the window ends with that thread.
+  const { window } = new JSDOM(html, { runScripts: 'outside-only', virtualConsole: new VirtualConsole() })
   shimBrowser(window)
   window.eval(readerSource)
   const reader = (window as unknown as { dualkitReader: { readScreen: (d: Document) => ScreenModel } }).dualkitReader

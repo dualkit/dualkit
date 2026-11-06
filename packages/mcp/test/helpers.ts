@@ -1,16 +1,16 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js'
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js'
 import { afterAll, beforeAll } from 'vitest'
-import { createServer } from '../src/server'
+import { createServer, type ServerOptions } from '../src/server'
 
 type ToolResult = { isError?: boolean; content: { type: string; text?: string }[] }
 
 /** A real client wired to the server over the SDK's in-memory transport, opened once per test file. */
-export function useClient(): { call: (name: string, args: Record<string, unknown>) => Promise<ToolResult>; client: () => Client } {
+export function useClient(options: ServerOptions = {}): { call: (name: string, args: Record<string, unknown>) => Promise<ToolResult>; client: () => Client } {
   let client: Client
   beforeAll(async () => {
     const [clientSide, serverSide] = InMemoryTransport.createLinkedPair()
-    await createServer().connect(serverSide)
+    await createServer(options).connect(serverSide)
     client = new Client({ name: 'test', version: '0' })
     await client.connect(clientSide)
   })

@@ -70,7 +70,7 @@ Lists the 34 rules that `dualkit check` runs, with each one's severity, fix and 
 
 ### `check_html`
 
-Runs the rules on an HTML string in jsdom. Scripts do not run and nothing is fetched. Input is capped at 2 MB, and a page near that size takes about half a minute.
+Runs the rules on an HTML string in jsdom. Scripts do not run and nothing is fetched. Input is capped at 512 KB, and a check that runs longer than 10 seconds is stopped with a plain error. Each check runs in its own worker thread, so the server keeps answering other calls meanwhile.
 
 ```json
 { "html": "<html lang=\"ar\" dir=\"rtl\"><body><p>اتصل على <span>050 123 4567</span></p></body></html>" }
