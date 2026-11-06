@@ -9,6 +9,8 @@ const small = '<!doctype html><html lang="ar" dir="rtl"><body><p>اتصل على
 describe('check_html in a worker', () => {
   const slow = useClient({ checkTimeoutMs: 200 })
   const normal = useClient()
+  // Shared CI runners are slow; this test is about concurrency, not speed, so it gets a long limit.
+  const patient = useClient({ checkTimeoutMs: 120_000 })
 
   it('stops a check that runs past its time limit, with a plain sentence', async () => {
     const message = expectPlainError(await slow.call('check_html', { html: bigPage(2000) }))
@@ -21,14 +23,14 @@ describe('check_html in a worker', () => {
 
   it('keeps answering other calls while a page is checked', async () => {
     const order: string[] = []
-    const check = normal.call('check_html', { html: bigPage(1500) }).then((r) => {
+    const check = patient.call('check_html', { html: bigPage(1500) }).then((r) => {
       order.push('check_html')
       return r
     })
-    await normal.call('rules', {}).then(() => order.push('rules'))
+    await patient.call('rules', {}).then(() => order.push('rules'))
     expect(json(await check)).toHaveProperty('findings')
     expect(order).toEqual(['rules', 'check_html'])
-  })
+  }, 150_000)
 
   it('stops the check when the client cancels the call', async () => {
     const controller = new AbortController()
