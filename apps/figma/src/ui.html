@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --bg: var(--figma-color-bg, #fff);
+    --bg-2: var(--figma-color-bg-secondary, #f5f5f5);
+    --text: var(--figma-color-text, #1e1e1e);
+    --muted: var(--figma-color-text-secondary, #6b6b6b);
+    --border: var(--figma-color-border, #e6e6e6);
+    --accent: var(--figma-color-bg-brand, #0d99ff);
+    --on-accent: var(--figma-color-text-onbrand, #fff);
+    --error: var(--figma-color-text-danger, #dc3412);
+    --warning: var(--figma-color-text-warning, #b86200);
+    --note: var(--figma-color-text-secondary, #6b6b6b);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 12px/1.5 Inter, system-ui, sans-serif; color: var(--text); background: var(--bg); }
+  [role="tablist"] { display: flex; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); }
+  [role="tab"] { flex: 1; padding: 10px; border: 0; background: none; color: var(--muted); font: inherit; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent; }
+  [role="tab"][aria-selected="true"] { color: var(--text); border-bottom-color: var(--accent); }
+  .panel { padding: 12px; display: grid; gap: 12px; }
+  .primary { padding: 8px 12px; border: 0; border-radius: 6px; background: var(--accent); color: var(--on-accent); font: inherit; font-weight: 600; cursor: pointer; }
+  .status { margin: 0; color: var(--muted); }
+  .group { border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: grid; gap: 6px; }
+  .group header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; }
+  .group h3 { margin: 0; font-size: 12px; }
+  .group code, #skipped code { color: var(--muted); font-size: 11px; }
+  .badge { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+  .error .badge { color: var(--error); }
+  .warning .badge { color: var(--warning); }
+  .note .badge { color: var(--note); }
+  .fix { margin: 0; }
+  .hits { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .hits li { display: grid; gap: 2px; padding: 6px; border-radius: 6px; background: var(--bg-2); }
+  .hit { justify-self: start; border: 0; padding: 0; background: none; color: var(--accent); font: inherit; font-weight: 600; cursor: pointer; text-align: start; }
+  .message { color: var(--muted); unicode-bidi: plaintext; }
+  a { color: var(--accent); }
+  details summary { cursor: pointer; font-weight: 600; }
+  #skipped { margin: 8px 0 0; padding-inline-start: 16px; display: grid; gap: 6px; }
+  #skipped li span { display: block; color: var(--muted); }
+  #skipped code { margin-inline-start: 6px; }
+  label { display: grid; gap: 4px; font-weight: 600; }
+  select, input { font: inherit; padding: 6px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); }
+  /* Last, so it wins over display: grid on .panel by order as well as by !important. Otherwise both tabs show. */
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div role="tablist">
+  <button role="tab" id="tab-check" aria-selected="true" aria-controls="panel-check">Check frame</button>
+  <button role="tab" id="tab-fill" aria-selected="false" aria-controls="panel-fill">Fill Gulf samples</button>
+</div>
+
+<div class="panel" id="panel-check" role="tabpanel" aria-labelledby="tab-check">
+  <button class="primary" id="check-run">Check selection</button>
+  <p class="status" id="check-status" aria-live="polite">Select a frame to check.</p>
+  <ul class="hits" id="unread" aria-label="Layers only partly checked"></ul>
+  <div id="results"></div>
+  <details>
+    <summary>Not checked in Figma (<span id="skipped-count">0</span>)</summary>
+    <ul id="skipped"></ul>
+  </details>
+</div>
+
+<div class="panel" id="panel-fill" role="tabpanel" aria-labelledby="tab-fill" hidden>
+  <p class="status">Replaces the text of the selected layers with sample data that passes @dualkit/format. The same seed gives the same samples.</p>
+  <label>Sample
+    <select id="fill-kind"><option value="auto">From each layer's name</option></select>
+  </label>
+  <label>Language
+    <select id="fill-language">
+      <option value="en">English</option>
+      <option value="ar-latn">Arabic, Western digits</option>
+      <option value="ar-arab">Arabic, Arabic-Indic digits</option>
+    </select>
+  </label>
+  <label>Seed
+    <input id="fill-seed" type="number" value="1" step="1">
+  </label>
+  <button class="primary" id="fill-run">Fill selected layers</button>
+  <p class="status" id="fill-status" aria-live="polite"></p>
+</div>
+
+<script>/* UI_SCRIPT */</script>
+</body>
+</html>
