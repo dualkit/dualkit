@@ -5,7 +5,7 @@ on:
       package:
         description: Which package to publish
         type: choice
-        options: [format, starter, rules, lint, convert, cli, mcp] # publish rules, then lint, then convert, then cli: each pins the ones before it. mcp pins format and rules
+        options: [format, starter, rules, lint, convert, cli, mcp] # publish rules, then lint, then convert, then cli: each pins the ones before it. mcp pins exact versions of format and rules, so publish those two first
         default: format
         required: true
       tag:
