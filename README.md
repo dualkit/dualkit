@@ -36,6 +36,7 @@ Dualkit fixes them at the source, in the agent and in the code, and checks any p
 | **[Check](packages/cli/)** | Audit any page for Arabic and RTL bugs, with a shareable Gulf-ready report | `npx dualkit check <url>` |
 | **[Lint](packages/lint/)** | 8 source rules on by default that catch Arabic and RTL bugs in your CSS, HTML, JavaScript and TypeScript, with no browser | `npx dualkit@beta lint .` |
 | **[Convert](packages/convert/)** | Turns an English Next.js or Vite React app into an Arabic one on a new git branch, and proves English did not change | `npx dualkit@beta convert` |
+| **[MCP](packages/mcp/)** | An MCP server for Claude Code, Cursor and Codex: Gulf formats and validators, the rules, and a no-browser check of HTML | `claude mcp add dualkit -- npx -y @dualkit/mcp` |
 
 ## Proof
 
@@ -171,6 +172,7 @@ The most useful help right now:
 | `packages/lint` | The source rules behind `dualkit lint`, with their tests |
 | `packages/convert` | The engine behind `dualkit convert`, with its tests |
 | `packages/cli` | The `dualkit` CLI and its report |
+| `packages/mcp` | The `@dualkit/mcp` server for agents, with its tests |
 | `action` | The GitHub Action that runs check or lint on pull requests |
 | `plugin/skills` | The five skills (`SKILL.md` each) |
 | `cursor/rules` | Cursor rules generated from `plugin/skills` |
