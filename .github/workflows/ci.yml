@@ -16,6 +16,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build:deps
+      - run: npm run build -w @dualkit/mcp
       - run: npx playwright@1.55.0 install --with-deps chromium
       - run: npm run typecheck
       - run: npm test

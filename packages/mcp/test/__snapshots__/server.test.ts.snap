@@ -1,0 +1,220 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`server > lists the four tools with their input schemas 1`] = `
+[
+  {
+    "_meta": undefined,
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "Formats a Gulf value with @dualkit/format. kind money: AED, SAR, QAR, KWD, BHD or OMR in English or Arabic. kind hijri: an Umm al-Qura date in a given time zone. kind numerals: converts between 0-9 and ٠-٩. kind phone: a GCC phone number in national, international or E.164 form.",
+    "execution": {
+      "taskSupport": "forbidden",
+    },
+    "inputSchema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "properties": {
+        "amount": {
+          "description": "money: the amount, such as 1234.5.",
+          "type": "number",
+        },
+        "country": {
+          "description": "phone: AE, SA, QA, KW, BH or OM. Leave it out for an international number, and the country is read from its code.",
+          "enum": [
+            "AE",
+            "SA",
+            "QA",
+            "KW",
+            "BH",
+            "OM",
+          ],
+          "type": "string",
+        },
+        "currency": {
+          "description": "money: AED, SAR, QAR, KWD, BHD or OMR. KWD, BHD and OMR get three decimals.",
+          "enum": [
+            "AED",
+            "SAR",
+            "QAR",
+            "KWD",
+            "BHD",
+            "OMR",
+          ],
+          "type": "string",
+        },
+        "date": {
+          "description": "hijri: an ISO date or date-time, such as 2026-02-18T12:00:00Z.",
+          "maxLength": 1000,
+          "type": "string",
+        },
+        "fractionDigits": {
+          "description": "money: decimals to show. Defaults to the currency's own.",
+          "maximum": 20,
+          "minimum": 0,
+          "type": "integer",
+        },
+        "kind": {
+          "description": "money, hijri, numerals or phone. Each kind reads only the fields marked with its name.",
+          "enum": [
+            "money",
+            "hijri",
+            "numerals",
+            "phone",
+          ],
+          "type": "string",
+        },
+        "locale": {
+          "description": "money and hijri: en or ar. Defaults to en.",
+          "enum": [
+            "en",
+            "ar",
+          ],
+          "type": "string",
+        },
+        "numerals": {
+          "description": "money and hijri: latn for 0-9 or arab for ٠-٩. Defaults to latn.",
+          "enum": [
+            "latn",
+            "arab",
+          ],
+          "type": "string",
+        },
+        "style": {
+          "description": "phone: national (050 123 4567), international (+971 50 123 4567) or e164 (+971501234567). Defaults to national.",
+          "enum": [
+            "national",
+            "international",
+            "e164",
+          ],
+          "type": "string",
+        },
+        "text": {
+          "description": "numerals: the text to convert. phone: the number as typed, in any common form, with Western or Arabic digits.",
+          "maxLength": 1000,
+          "type": "string",
+        },
+        "timeZone": {
+          "description": "hijri: the IANA time zone whose calendar day counts, such as Asia/Riyadh. Required, because the Hijri day changes at local midnight.",
+          "maxLength": 1000,
+          "type": "string",
+        },
+        "to": {
+          "description": "numerals: arab for ٠-٩ or latn for 0-9.",
+          "enum": [
+            "latn",
+            "arab",
+          ],
+          "type": "string",
+        },
+      },
+      "required": [
+        "kind",
+      ],
+      "type": "object",
+    },
+    "name": "format",
+    "title": "Format Gulf values",
+  },
+  {
+    "_meta": undefined,
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "Checks a Gulf IBAN, Emirates ID, Saudi VAT number or GCC phone number with @dualkit/format, and returns its result unchanged: { ok: true, value } or { ok: false, error: { code, message } }. An invalid value is a normal result, not a tool error; the code is stable, so map it to your own copy.",
+    "execution": {
+      "taskSupport": "forbidden",
+    },
+    "inputSchema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "properties": {
+        "country": {
+          "description": "iban and phone only: AE, SA, QA, KW, BH or OM. For iban it requires that country. For phone it reads a national number of that country; leave it out for an international number from any GCC country.",
+          "enum": [
+            "AE",
+            "SA",
+            "QA",
+            "KW",
+            "BH",
+            "OM",
+          ],
+          "type": "string",
+        },
+        "kind": {
+          "description": "iban, emirates_id, saudi_vat or phone.",
+          "enum": [
+            "iban",
+            "emirates_id",
+            "saudi_vat",
+            "phone",
+          ],
+          "type": "string",
+        },
+        "value": {
+          "description": "The value as typed. Spaces, dashes and Arabic digits are fine.",
+          "maxLength": 1000,
+          "type": "string",
+        },
+      },
+      "required": [
+        "kind",
+        "value",
+      ],
+      "type": "object",
+    },
+    "name": "validate",
+    "title": "Validate Gulf identifiers",
+  },
+  {
+    "_meta": undefined,
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "Lists the Arabic and right-to-left rules that dualkit check runs, with each one's severity, fix and docs link, or looks one up by id with why it matters.",
+    "execution": {
+      "taskSupport": "forbidden",
+    },
+    "inputSchema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "properties": {
+        "id": {
+          "description": "A rule id, such as bidi/unisolated-number. Leave it out to list every rule.",
+          "maxLength": 1000,
+          "type": "string",
+        },
+      },
+      "type": "object",
+    },
+    "name": "rules",
+    "title": "Dualkit rules",
+  },
+  {
+    "_meta": undefined,
+    "annotations": {
+      "openWorldHint": false,
+      "readOnlyHint": true,
+    },
+    "description": "Runs the Dualkit rules on an HTML string in jsdom, with no browser: numbers and links that scramble in Arabic text, dates in the wrong order, punctuation at the wrong end, missing lang and dir, mixed digits, Latin punctuation and more. Rules that need layout, fonts or a real browser are listed under notChecked with the reason; run npx dualkit check on a URL for those.",
+    "execution": {
+      "taskSupport": "forbidden",
+    },
+    "inputSchema": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "properties": {
+        "html": {
+          "description": "The HTML of one page or fragment. Scripts do not run and nothing is fetched. Up to 512 KB.",
+          "type": "string",
+        },
+      },
+      "required": [
+        "html",
+      ],
+      "type": "object",
+    },
+    "name": "check_html",
+    "title": "Check HTML for Arabic and RTL bugs",
+  },
+]
+`;
