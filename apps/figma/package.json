@@ -1,0 +1,27 @@
+{
+  "name": "@dualkit/figma",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Dualkit for Figma: check a frame for Arabic and right-to-left problems, and fill text layers with valid Gulf sample data.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@dualkit/format": "*",
+    "@dualkit/rules": "*"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.142.0",
+    "@types/node": "^22.20.5",
+    "@vitest/coverage-v8": "^3.2.7",
+    "esbuild": "^0.25.0",
+    "jsdom": "^26.1.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7"
+  }
+}

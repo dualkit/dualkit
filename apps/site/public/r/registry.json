@@ -173,6 +173,131 @@
           "target": "components/dualkit/Toast.tsx"
         }
       ]
+    },
+    {
+      "name": "gulf-field",
+      "type": "registry:ui",
+      "title": "Gulf field",
+      "description": "The label, note and caret handling the gulf inputs share.",
+      "dependencies": [
+        "@dualkit/format"
+      ],
+      "registryDependencies": [
+        "label"
+      ],
+      "files": [
+        {
+          "path": "gulf/gulf-field.tsx",
+          "type": "registry:ui",
+          "target": "components/gulf/gulf-field.tsx"
+        }
+      ],
+      "docs": "Needs a shadcn project (Tailwind and the shadcn CSS variables). Works with and without `shadcn init --rtl`: set dir=\"rtl\" on <html> or a parent for Arabic. Pass every label, help text and error message as props."
+    },
+    {
+      "name": "gulf-phone-input",
+      "type": "registry:ui",
+      "title": "Gulf phone input",
+      "description": "A phone number from any of the six GCC countries. Reads Arabic-Indic digits, returns E.164 and stays left to right in Arabic.",
+      "dependencies": [
+        "@dualkit/format"
+      ],
+      "registryDependencies": [
+        "input",
+        "https://dualkit.dev/r/gulf-field.json"
+      ],
+      "files": [
+        {
+          "path": "gulf/gulf-phone-input.tsx",
+          "type": "registry:ui",
+          "target": "components/gulf/gulf-phone-input.tsx"
+        }
+      ],
+      "docs": "Needs a shadcn project (Tailwind and the shadcn CSS variables). Works with and without `shadcn init --rtl`: set dir=\"rtl\" on <html> or a parent for Arabic. Pass every label, help text and error message as props."
+    },
+    {
+      "name": "gulf-iban-input",
+      "type": "registry:ui",
+      "title": "Gulf IBAN input",
+      "description": "Groups a Gulf IBAN in fours as it is typed and checks its length and checksum for each country.",
+      "dependencies": [
+        "@dualkit/format"
+      ],
+      "registryDependencies": [
+        "input",
+        "https://dualkit.dev/r/gulf-field.json"
+      ],
+      "files": [
+        {
+          "path": "gulf/gulf-iban-input.tsx",
+          "type": "registry:ui",
+          "target": "components/gulf/gulf-iban-input.tsx"
+        }
+      ],
+      "docs": "Needs a shadcn project (Tailwind and the shadcn CSS variables). Works with and without `shadcn init --rtl`: set dir=\"rtl\" on <html> or a parent for Arabic. Pass every label, help text and error message as props."
+    },
+    {
+      "name": "gulf-national-id-input",
+      "type": "registry:ui",
+      "title": "Gulf national ID input",
+      "description": "An Emirates ID number, hyphenated as it is typed and checked against the 784 prefix and check digit.",
+      "dependencies": [
+        "@dualkit/format"
+      ],
+      "registryDependencies": [
+        "input",
+        "https://dualkit.dev/r/gulf-field.json"
+      ],
+      "files": [
+        {
+          "path": "gulf/gulf-national-id-input.tsx",
+          "type": "registry:ui",
+          "target": "components/gulf/gulf-national-id-input.tsx"
+        }
+      ],
+      "docs": "Needs a shadcn project (Tailwind and the shadcn CSS variables). Works with and without `shadcn init --rtl`: set dir=\"rtl\" on <html> or a parent for Arabic. Pass every label, help text and error message as props."
+    },
+    {
+      "name": "gulf-amount",
+      "type": "registry:ui",
+      "title": "Gulf amount",
+      "description": "An amount in AED, SAR, QAR, KWD, BHD or OMR, with three decimals for the dinars and the rial and Arabic or Western digits.",
+      "dependencies": [
+        "@dualkit/format"
+      ],
+      "registryDependencies": [
+        "input",
+        "https://dualkit.dev/r/gulf-field.json"
+      ],
+      "files": [
+        {
+          "path": "gulf/gulf-amount.tsx",
+          "type": "registry:ui",
+          "target": "components/gulf/gulf-amount.tsx"
+        }
+      ],
+      "docs": "Needs a shadcn project (Tailwind and the shadcn CSS variables). Works with and without `shadcn init --rtl`: set dir=\"rtl\" on <html> or a parent for Arabic. Pass every label, help text and error message as props."
+    },
+    {
+      "name": "gulf-hijri-date",
+      "type": "registry:ui",
+      "title": "Gulf Hijri date",
+      "description": "A date typed once and shown in Gregorian and Umm al-Qura Hijri. The time zone is required.",
+      "dependencies": [
+        "@dualkit/format"
+      ],
+      "registryDependencies": [
+        "input",
+        "https://dualkit.dev/r/gulf-field.json"
+      ],
+      "files": [
+        {
+          "path": "gulf/gulf-hijri-date.tsx",
+          "type": "registry:ui",
+          "target": "components/gulf/gulf-hijri-date.tsx"
+        }
+      ],
+      "docs": "Needs a shadcn project (Tailwind and the shadcn CSS variables). Works with and without `shadcn init --rtl`: set dir=\"rtl\" on <html> or a parent for Arabic. Pass every label, help text and error message as props."
     }
   ]
 }

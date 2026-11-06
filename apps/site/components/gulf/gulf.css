@@ -1,0 +1,51 @@
+/*
+ * Tailwind for the gulf demos only. The site has no Tailwind of its own, so this file builds just the utilities
+ * the gulf components use (no preflight, no global theme variables) and gives them shadcn variables inside .gulf-demo.
+ */
+@import "tailwindcss/utilities" layer(utilities) source(none);
+@source "../../../../packages/starter/gulf";
+@custom-variant dark (&:where([data-theme="dark"] *));
+
+@theme inline reference {
+  --spacing: 0.25rem;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.33;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.43;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5;
+  --font-weight-medium: 500;
+  --leading-none: 1;
+  --radius-md: 8px;
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --font-mono: var(--mono);
+  --breakpoint-md: 48rem;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+/* The shadcn variables, from the site's own colours. */
+.gulf-demo {
+  --background: var(--page);
+  --foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--inverse-fg);
+  --muted-foreground: var(--soft);
+  --destructive: #dc2626;
+  --input: #d4d4d8;
+  --ring: #a1a1aa;
+  color: var(--foreground);
+}
+.gulf-demo :where(input, select) { font: inherit; color: inherit; border-style: solid; }
+.gulf-demo :where(p) { margin: 0; }
+.gulf-demo [lang="ar"] { font-family: var(--arabic); }
+
+.gulf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; width: 100%; }
+.gulf-pane { display: flex; flex-direction: column; gap: 16px; }
+.gulf-result { font-family: var(--mono); font-size: 13px; color: var(--soft); overflow-wrap: anywhere; }

@@ -54,6 +54,7 @@ export default async function Docs() {
           <p className="soft">Each of the eight installs with the shadcn CLI as source you own, along with the shared tokens and styles.</p>
           <CopyCommand command="npx shadcn@latest add https://dualkit.dev/r/amount.json" />
           <p className="small soft">Swap <code>amount</code> for <code>button</code>, <code>date-display</code>, <code>digit-input</code>, <code>field</code>, <code>sheet</code>, <code>tabs</code> or <code>toast</code>. Then import <code>components/dualkit/tokens.css</code> and <code>styles.css</code> once.</p>
+          <p className="small soft">For a shadcn project, the <a href="/components/gulf">Gulf components</a> use your own theme instead: phone, IBAN, Emirates ID, amount and Hijri date inputs.</p>
         </section>
         <section className="doc-block" id="check">
           <h2 className="h2">Check a screen</h2>

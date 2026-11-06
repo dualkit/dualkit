@@ -6,6 +6,8 @@
     "apps/*"
   ],
   "scripts": {
+    "build:deps": "npm run build -w @dualkit/format && npm run build -w @dualkit/rules && npm run build -w @dualkit/lint && npm run build -w @dualkit/convert && npm run build -w dualkit",
+    "pretest": "npm run build:deps",
     "test": "npm run test --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "build": "npm run build -w @dualkit/site",
