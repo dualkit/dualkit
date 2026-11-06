@@ -30,6 +30,8 @@ export type FigmaTextSnapshot = {
   /** The auto-layout direction of the layer's parent, or null when the layer is the root. Recorded for later rules; none reads it yet. */
   parentLayoutMode: FigmaLayoutMode | null
   segments: FigmaSegment[]
+  /** Segments that came back mixed or incomplete and are missing from `segments`, so their text was not checked. */
+  unreadSegments: number
 }
 
 export type FigmaContainerSnapshot = {

@@ -55,13 +55,17 @@ describe('snapshot', () => {
     expect(bare).toMatchObject({ box: { x: 0, y: 0, width: 0, height: 0 }, layoutMode: null, children: [] })
   })
 
-  it('drops segments whose values are mixed', () => {
-    const node = liveText('1:1', 'ab', {
-      getStyledTextSegments: () => [{ characters: 'ab', start: 0, end: 2, fontName: MIXED, fontSize: 16, fontWeight: 400, fontStyle: 'REGULAR', letterSpacing: { unit: 'PIXELS', value: 0 }, lineHeight: { unit: 'AUTO' } }],
+  it('drops segments whose values are mixed or missing, and counts them', () => {
+    const good = { characters: 'c', start: 2, end: 3, fontName: { family: 'Inter', style: 'Regular' }, fontSize: 16, fontWeight: 400, fontStyle: 'REGULAR', letterSpacing: { unit: 'PIXELS', value: 0 }, lineHeight: { unit: 'AUTO' } }
+    const node = liveText('1:1', 'abc', {
+      getStyledTextSegments: () => [{ ...good, characters: 'a', start: 0, end: 1, fontName: MIXED }, { characters: 'b', start: 1, end: 2 }, good],
     })
     const shot = snapshot(node)
     if (shot.kind !== 'text') throw new Error('expected text')
-    expect(shot.segments).toEqual([])
+    expect(shot.segments.map((s) => s.characters)).toEqual(['c'])
+    expect(shot.unreadSegments).toBe(2)
+    const clean = snapshot(liveText('1:2', 'x'))
+    expect(clean).toMatchObject({ unreadSegments: 0 })
   })
 
   it('treats a text root as having no auto-layout parent', () => {

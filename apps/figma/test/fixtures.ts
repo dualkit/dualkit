@@ -21,6 +21,8 @@ type TextOptions = SegmentStyle & {
   height?: number
   align?: FigmaTextSnapshot['textAlignHorizontal']
   autoResize?: FigmaTextSnapshot['textAutoResize']
+  /** Segments the snapshot could not read, so they are missing from `segments`. */
+  unread?: number
   /** Characters split into differently styled pieces; the pieces join into the layer's text. */
   pieces?: ReadonlyArray<{ text: string } & SegmentStyle>
 }
@@ -61,6 +63,7 @@ export function text(characters: string, o: TextOptions = {}): FigmaTextSnapshot
     textAutoResize: o.autoResize ?? 'HEIGHT',
     parentLayoutMode: 'VERTICAL',
     segments,
+    unreadSegments: o.unread ?? 0,
   }
 }
 

@@ -64,6 +64,17 @@ describe('plugin window', () => {
     expect(q('#results').children).toHaveLength(0)
   })
 
+  it('says which layers it could not read fully, and selects one on click', () => {
+    deliver({ type: 'snapshot', note: null, root: frame([text('مرحبا', { id: '6:6', name: 'Odd layer', unread: 1 })]) })
+    expect(q('#check-status').textContent).toBe('No problems found in 1 text layers by the rules that run in Figma. 1 layer has text the plugin could not read, so it was only partly checked.')
+    const unread = q<HTMLButtonElement>('#unread .hit')
+    expect(unread.textContent).toBe('Odd layer')
+    unread.click()
+    expect(sent.at(-1)).toEqual({ type: 'select', id: '6:6' })
+    deliver({ type: 'snapshot', note: null, root: frame([text('مرحبا')]) })
+    expect(q('#unread').children).toHaveLength(0)
+  })
+
   it('reports a check that throws instead of failing silently', () => {
     deliver({ type: 'snapshot', note: null, root: { kind: 'text' } as never })
     expect(q('#check-status').textContent).toMatch(/could not run/)

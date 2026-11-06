@@ -56,6 +56,8 @@ The panel lists these under **Not checked in Figma**, with the reason for each:
 - Rules that read form fields: `bidi/field-direction`, `bidi/field-placeholder`, `content/drops-arabic-digits`.
 - Icon rules: `icons/arrow-points-forward`, `icons/not-mirrored`, `icons/mirrored-by-mistake`. This version does not read arrow direction from vectors.
 
+If Figma returns a text segment with a mixed or missing font value, the plugin cannot check that text. It names those layers above the findings, so a clean result says when it is only partial.
+
 A clean result in Figma does not mean the built screen is clean. Run `dualkit check` on the built page as well.
 
 The adapter also records each text layer's parent auto-layout direction. No rule reads it yet.

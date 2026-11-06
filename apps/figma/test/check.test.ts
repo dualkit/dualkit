@@ -144,6 +144,13 @@ describe('checkFrame: clean fixtures', () => {
     expect(checkFrame(frame([text('نص عربي', { x: 900, lineHeight: { unit: 'PIXELS', value: 18 }, height: 36 })])).findings).toEqual([])
   })
 
+  it('names the layers whose text could not all be read, so a clean result is not taken at face value', () => {
+    const result = checkFrame(frame([text('مرحبا', { id: '3:1', name: 'Title', unread: 2 }), text('أهلا', { id: '3:2' })]))
+    expect(result.findings).toEqual([])
+    expect(result.unread).toEqual([{ layerId: '3:1', layerName: 'Title', segments: 2 }])
+    expect(checkFrame(frame([text('أهلا')])).unread).toEqual([])
+  })
+
   it('lists the rules it did not check', () => {
     const result = checkFrame(frame([]))
     expect(result.notChecked.map((r) => r.id)).toContain('content/missing-lang')

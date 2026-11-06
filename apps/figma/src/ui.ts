@@ -30,13 +30,15 @@ function showTab(mode: Mode): void {
 
 const SEVERITY_LABEL = { error: 'Error', warning: 'Warning', note: 'Note' } as const
 
+function layerButton(layerId: string, layerName: string): HTMLButtonElement {
+  const button = el('button', { className: 'hit', text: layerName || 'Layer' })
+  button.title = 'Select and zoom to this layer'
+  button.addEventListener('click', () => send({ type: 'select', id: layerId }))
+  return button
+}
+
 function renderGroup(g: RuleGroup): HTMLElement {
-  const hits = g.hits.map((h) => {
-    const button = el('button', { className: 'hit', text: h.layerName || 'Layer' })
-    button.title = 'Select and zoom to this layer'
-    button.addEventListener('click', () => send({ type: 'select', id: h.layerId }))
-    return el('li', {}, [button, el('span', { className: 'message', text: h.message })])
-  })
+  const hits = g.hits.map((h) => el('li', {}, [layerButton(h.layerId, h.layerName), el('span', { className: 'message', text: h.message })]))
   const link = el('a', { text: 'Pattern and examples' })
   link.href = g.docs
   link.addEventListener('click', (event) => {
@@ -56,7 +58,11 @@ function renderResult(result: CheckResult, note: string | null): void {
   const summary = total === 0
     ? `No problems found in ${result.layers} text layers by the rules that run in Figma.`
     : `${total} ${total === 1 ? 'problem' : 'problems'} in ${result.layers} text layers.`
-  $('check-status').textContent = note ? `${summary} ${note}` : summary
+  const n = result.unread.length
+  const unread = n === 0 ? null
+    : `${n} ${n === 1 ? 'layer has' : 'layers have'} text the plugin could not read, so ${n === 1 ? 'it was' : 'they were'} only partly checked.`
+  $('check-status').textContent = [summary, unread, note].filter(Boolean).join(' ')
+  $('unread').replaceChildren(...result.unread.map((u) => el('li', {}, [layerButton(u.layerId, u.layerName)])))
   $('results').replaceChildren(...result.groups.map(renderGroup))
   $('skipped-count').textContent = String(result.notChecked.length)
   $('skipped').replaceChildren(...result.notChecked.map((r) =>
@@ -67,6 +73,7 @@ function onSnapshot(message: Extract<ToUi, { type: 'snapshot' }>): void {
   if (message.root === null) {
     $('check-status').textContent = message.note ?? 'Select a frame to check.'
     $('results').replaceChildren()
+    $('unread').replaceChildren()
     return
   }
   try {

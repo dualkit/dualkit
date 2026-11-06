@@ -55,10 +55,12 @@ function toSegment(s: LiveSegment): FigmaSegment | null {
 }
 
 function snapshotText(node: LiveText, parentLayoutMode: FigmaLayoutMode | null): FigmaTextSnapshot {
+  const raw = node.getStyledTextSegments(SEGMENT_FIELDS)
+  const segments = raw.flatMap((s) => toSegment(s) ?? [])
   return {
     kind: 'text', id: node.id, name: node.name, characters: node.characters, box: boxOf(node),
     textAlignHorizontal: node.textAlignHorizontal, textAutoResize: node.textAutoResize, parentLayoutMode,
-    segments: node.getStyledTextSegments(SEGMENT_FIELDS).flatMap((s) => toSegment(s) ?? []),
+    segments, unreadSegments: raw.length - segments.length,
   }
 }
 
