@@ -43,6 +43,8 @@
   #skipped code { margin-inline-start: 6px; }
   label { display: grid; gap: 4px; font-weight: 600; }
   select, input { font: inherit; padding: 6px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--text); }
+  /* Last, so it wins over display: grid on .panel by order as well as by !important. Otherwise both tabs show. */
+  [hidden] { display: none !important; }
 </style>
 </head>
 <body>

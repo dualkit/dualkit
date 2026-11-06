@@ -14,9 +14,13 @@ const deliver = (message: ToUi): void => {
   window.dispatchEvent(new MessageEvent('message', { data: { pluginMessage: message } }))
 }
 const q = <T extends HTMLElement>(selector: string): T => document.querySelector<T>(selector)!
+/** Whether the stylesheet actually shows the element, not just its hidden attribute. */
+const shown = (selector: string): boolean => getComputedStyle(q(selector)).display !== 'none'
 
 beforeAll(async () => {
   const html = readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), '../src/ui.html'), 'utf8')
+  // The head too: the panel's own stylesheet decides what is visible.
+  document.head.innerHTML = /<head>([\s\S]*)<\/head>/.exec(html)![1]!
   document.body.innerHTML = /<body>([\s\S]*)<\/body>/.exec(html)![1]!
   vi.spyOn(window.parent, 'postMessage').mockImplementation((data: unknown) => {
     sent.push((data as { pluginMessage: ToMain }).pluginMessage)
@@ -33,8 +37,8 @@ describe('plugin window', () => {
 
   it('opens on the check tab and asks for a snapshot', () => {
     deliver({ type: 'mode', mode: 'check' })
-    expect(q('#panel-check').hidden).toBe(false)
-    expect(q('#panel-fill').hidden).toBe(true)
+    expect(shown('#panel-check')).toBe(true)
+    expect(shown('#panel-fill')).toBe(false)
     expect(sent.at(-1)).toEqual({ type: 'check' })
   })
 
@@ -67,7 +71,8 @@ describe('plugin window', () => {
 
   it('fills layers with the chosen kind, language and seed', () => {
     q<HTMLButtonElement>('#tab-fill').click()
-    expect(q('#panel-fill').hidden).toBe(false)
+    expect(shown('#panel-fill')).toBe(true)
+    expect(shown('#panel-check')).toBe(false)
     q<HTMLSelectElement>('#fill-kind').value = 'phone-sa'
     q<HTMLSelectElement>('#fill-language').value = 'ar-arab'
     q<HTMLInputElement>('#fill-seed').value = '3'
