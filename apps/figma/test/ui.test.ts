@@ -110,6 +110,16 @@ describe('plugin window', () => {
     expect((sent.at(-1) as Extract<ToMain, { type: 'fill-apply' }>).items[0]).toMatchObject({ kind: 'iban-ae' })
   })
 
+  it('ignores malformed messages from the main thread', () => {
+    deliver({ type: 'snapshot', note: null, root: frame([text('مرحبا')]) })
+    const status = q('#check-status').textContent
+    expect(status).toMatch(/^No problems found/)
+    window.dispatchEvent(new MessageEvent('message', { data: { pluginMessage: { type: 'snapshot', root: 'nope', note: null } } }))
+    window.dispatchEvent(new MessageEvent('message', { data: { pluginMessage: { type: 'mode', mode: 'admin' } } }))
+    window.dispatchEvent(new MessageEvent('message', { data: 'not a plugin message' }))
+    expect(q('#check-status').textContent).toBe(status)
+  })
+
   it('switches back to the check tab and re-checks', () => {
     q<HTMLButtonElement>('#tab-check').click()
     expect(sent.at(-1)).toEqual({ type: 'check' })

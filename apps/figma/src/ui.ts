@@ -1,6 +1,7 @@
 import { checkFrame, type CheckResult, type RuleGroup } from './check'
+import { parseToUi } from './guards'
 import type { Mode, ToMain, ToUi } from './messages'
-import { SAMPLE_KINDS, SAMPLE_LABELS, fillPlan, type FillLayer, type FillOptions, type SampleKind } from './samples'
+import { SAMPLE_KINDS, SAMPLE_LABELS, fillPlan, isSampleKind, type FillLayer, type FillOptions } from './samples'
 
 // The plugin window. It runs the rules and the sample generator, because the iframe has Intl and the main thread does not.
 // Every piece of layer data is written with textContent, never as HTML.
@@ -92,7 +93,7 @@ function fillOptions(): FillOptions {
     seed: Number.isFinite(seed) ? seed : 1,
     locale: language === 'en' ? 'en' : 'ar',
     numerals: language === 'ar-arab' ? 'arab' : 'latn',
-    kind: (SAMPLE_KINDS as readonly string[]).includes(kind) ? (kind as SampleKind) : 'auto',
+    kind: isSampleKind(kind) ? kind : 'auto',
   }
 }
 
@@ -136,8 +137,9 @@ function init(): void {
   $('tab-fill').addEventListener('click', () => showTab('fill'))
   $('check-run').addEventListener('click', () => send({ type: 'check' }))
   $('fill-run').addEventListener('click', () => send({ type: 'fill-request' }))
-  window.addEventListener('message', (event: MessageEvent<{ pluginMessage?: ToUi }>) => {
-    const message = event.data?.pluginMessage
+  window.addEventListener('message', (event: MessageEvent<unknown>) => {
+    const data = event.data
+    const message = typeof data === 'object' && data !== null && 'pluginMessage' in data ? parseToUi(data.pluginMessage) : null
     if (message) onMessage(message)
   })
   send({ type: 'ready' })

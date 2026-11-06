@@ -118,6 +118,13 @@ describe('main thread', () => {
     expect(fake.events.some((e) => e.startsWith('zoom'))).toBe(false)
   })
 
+  it('ignores messages it does not recognise', async () => {
+    const fake = run('check')
+    const before = [fake.posted.length, fake.events.length, fake.notes.length]
+    for (const raw of [null, 'check', { type: 'eval' }, { type: 'select', id: 1 }, { type: 'fill-apply', items: 'all' }]) await send(fake, raw)
+    expect([fake.posted.length, fake.events.length, fake.notes.length]).toEqual(before)
+  })
+
   it('opens only Dualkit documentation links', async () => {
     const fake = run('check')
     await send(fake, { type: 'open', url: 'https://github.com/dualkit/dualkit/blob/main/packages/rules/RULES.md#x' })
@@ -129,7 +136,7 @@ describe('main thread', () => {
     const fake = run('fill')
     await send(fake, { type: 'fill-request' })
     expect(fake.posted.at(-1)).toEqual({ type: 'fill-layers', layers: [{ id: '1:1', name: 'Layer 1:1' }, { id: '1:2', name: 'Layer 1:2' }] })
-    await send(fake, { type: 'fill-apply', items: [{ id: '1:1', text: '050 123 4567' }, { id: '1:2', text: 'y' }, { id: 5 }] })
+    await send(fake, { type: 'fill-apply', items: [{ id: '1:1', kind: 'phone-ae', text: '050 123 4567' }, { id: '1:2', kind: 'phone-ae', text: 'y' }, { id: 5 }, { id: '1:1', kind: 'nope', text: 'z' }] })
     expect(fake.events.slice(-2)).toEqual(['load Inter', 'set 1:1'])
     expect(fake.posted.at(-1)).toEqual({ type: 'filled', filled: 1, skipped: ['1:2'] })
     expect(fake.notes.at(-1)).toMatch(/1 skipped/)

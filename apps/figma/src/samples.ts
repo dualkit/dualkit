@@ -2,15 +2,13 @@ import {
   formatEmiratesId, formatHijri, formatIban, formatMoney, formatSaudiPhone, formatUaePhone, toArabicDigits,
   type Currency, type Locale, type Numerals,
 } from '@dualkit/format'
+import { SAMPLE_KINDS, type SampleKind } from './kinds'
 import { digits, int, mulberry32, pickOne, seedFor, type Random } from './random'
 
 // Valid Gulf sample data for text layers. Every value comes from, or is checked by, @dualkit/format. No personal names:
 // Arabic name spellings wait for a co-author.
 
-export const SAMPLE_KINDS = [
-  'phone-ae', 'phone-sa', 'iban-ae', 'iban-sa', 'emirates-id', 'amount-aed', 'amount-sar', 'amount-kwd', 'date-gregorian', 'date-hijri',
-] as const
-export type SampleKind = (typeof SAMPLE_KINDS)[number]
+export { SAMPLE_KINDS, isSampleKind, type SampleKind } from './kinds'
 
 export const SAMPLE_LABELS: Record<SampleKind, string> = {
   'phone-ae': 'UAE phone', 'phone-sa': 'Saudi phone', 'iban-ae': 'UAE IBAN', 'iban-sa': 'Saudi IBAN', 'emirates-id': 'Emirates ID',

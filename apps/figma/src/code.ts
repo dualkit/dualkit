@@ -1,4 +1,5 @@
-import type { Mode, ToMain, ToUi } from './messages'
+import { parseToMain } from './guards'
+import type { Mode, ToUi } from './messages'
 import { collectTextLayers, snapshot, type LiveNode } from './snapshot'
 
 // The plugin's main thread. It reads and writes layers and nothing else: the rules and the sample generator run in the UI,
@@ -77,22 +78,18 @@ function sendFillLayers(): void {
   post({ type: 'fill-layers', layers })
 }
 
-const isString = (v: unknown): v is string => typeof v === 'string'
-
 async function onMessage(raw: unknown): Promise<void> {
-  const message = raw as ToMain
-  switch (message?.type) {
+  const message = parseToMain(raw)
+  if (message === null) return
+  switch (message.type) {
     case 'ready': return post({ type: 'mode', mode })
     case 'check': return sendSnapshot()
-    case 'select': return isString(message.id) ? selectLayer(message.id) : undefined
+    case 'select': return selectLayer(message.id)
     case 'open':
-      if (isString(message.url) && DOCS_ORIGINS.some((o) => message.url.startsWith(o))) figma.openExternal(message.url)
+      if (DOCS_ORIGINS.some((o) => message.url.startsWith(o))) figma.openExternal(message.url)
       return
     case 'fill-request': return sendFillLayers()
-    case 'fill-apply':
-      if (!Array.isArray(message.items)) return
-      return applyFill(message.items.filter((i) => isString(i?.id) && isString(i?.text)))
-    default:
+    case 'fill-apply': return applyFill(message.items)
   }
 }
 
