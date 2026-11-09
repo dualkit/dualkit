@@ -4,7 +4,7 @@ import { applyEdits } from '../edits'
 import type { LedgerEntry } from '../ledger'
 import type { Edit } from '../types'
 import { lineOf } from './lines'
-import { FUNCTIONS, componentOf, scopeNames, tInScope, type Node } from './scope'
+import { FUNCTIONS, componentOf, idName, scopeNames, tInScope, type Node } from './scope'
 import { hookEdits, importEdits, keyWords, stemOf, styleOf, type Lib } from './strings'
 
 const SKIP = new Set(['loc', 'leadingComments', 'trailingComments', 'innerComments', 'extra'])
@@ -83,6 +83,39 @@ function dataIn(module: Module, reserved: ReadonlySet<string>): Data[] {
     }
   }
   return found
+}
+
+const ROUTE_FILE = /(^|[\\/])(page|layout)\.[jt]sx?$/
+
+/** A route file's `export const metadata = { ... }` when it can become a function, else null. Next reads the export by name, so the function takes the name `generateMetadata`. */
+function metadataIn(module: Module, reserved: ReadonlySet<string>): { statement: Node; declarator: Node; init: Node; strings: Node[] } | null {
+  if (!ROUTE_FILE.test(module.path)) return null
+  // A client module cannot export generateMetadata or import from next-intl/server.
+  if (((module.program.directives as Node[]) ?? []).some((d) => (d.value as Node).value === 'use client')) return null
+  const body = (module.program.body as Node[]) ?? []
+  const named = (statement: Node, name: string): boolean => {
+    const declaration = statement.type === 'ExportNamedDeclaration' ? (statement.declaration as Node | null) : statement
+    if (declaration?.type === 'FunctionDeclaration') return idName(declaration.id as Node) === name
+    return declaration?.type === 'VariableDeclaration' && ((declaration.declarations as Node[]) ?? []).some((d) => idName(d.id as Node) === name)
+  }
+  if (body.some((statement) => named(statement, 'generateMetadata'))) return null
+  const statement = body.find((s) => s.type === 'ExportNamedDeclaration' && (s.declaration as Node | null)?.type === 'VariableDeclaration' && named(s, 'metadata'))
+  const declaration = statement?.declaration as Node | undefined
+  const declarators = (declaration?.declarations as Node[]) ?? []
+  const declarator = declarators[0]
+  const init = declarator?.init as Node | null | undefined
+  if (!statement || declaration?.kind !== 'const' || declarators.length !== 1 || !declarator || init?.type !== 'ObjectExpression') return null
+  const id = declarator.id as Node
+  let read = false
+  visit(module.program, [], (node, above) => {
+    if (node.type !== 'Identifier' || node.name !== 'metadata' || node === id) return
+    const parent = above[above.length - 1]!
+    if (parent.type === 'MemberExpression' && parent.property === node && !parent.computed) return
+    if (parent.type === 'ObjectProperty' && parent.key === node && !parent.computed && !parent.shorthand) return
+    read = true
+  })
+  const strings = read ? null : textsIn(init, reserved)
+  return strings?.length ? { statement, declarator, init, strings } : null
 }
 
 /** Every string used as a type, as in `type Label = 'Comments' | 'Files'`. Such a value is an id the code checks, not text. */
@@ -232,10 +265,38 @@ export function liftData(inputs: DataInput[], lib: Lib, taken: ReadonlySet<strin
       components.set(use.module, (components.get(use.module) ?? new Set()).add(use.component))
     }
   }
-  for (const [module, found] of components) {
+  const serverImports = new Set<Module>()
+  for (const module of lib === 'next-intl' ? modules : []) {
+    const meta = metadataIn(module, reserved)
+    if (!meta) continue
+    const { statement, declarator, init, strings } = meta
     const style = styleOf(module.program, module.text, module.base)
-    const hooks = [...found].map((fn) => hookEdits(fn, lib, module.text, module.base, style))
-    push(module, [...hooks.flatMap((h) => h.edits), ...importEdits(module.program, hooks.flatMap((h) => h.imports), module.base, style)])
+    const q = style.quote
+    const annotation = (declarator.id as Node).typeAnnotation as Node | undefined
+    const type = annotation ? module.text.slice(module.base + (annotation.typeAnnotation as Node).start!, module.base + (annotation.typeAnnotation as Node).end!) : ''
+    const stem = stemOf(module.path)
+    const metaEdits: Edit[] = [
+      { start: module.base + statement.start!, end: module.base + init.start!, text: `export async function generateMetadata()${type ? `: Promise<${type}>` : ''} {\n  const t = await getTranslations()${style.semi}\n  return ` },
+      { start: module.base + init.end!, end: module.base + statement.end!, text: `${style.semi}\n}` },
+    ]
+    for (const literal of strings) {
+      const en = String(literal.value)
+      const { key, isNew } = keyFor(keys, stem, en)
+      if (isNew) entries.push({ key, en, ar: '', status: 'pending', file: module.path, line: lineOf(module.text, module.base + literal.start!) })
+      metaEdits.push({ start: module.base + literal.start!, end: module.base + literal.end!, text: `t(${q}${key}${q})` })
+    }
+    push(module, metaEdits)
+    serverImports.add(module)
+    moved += strings.length
+  }
+  // One import call per module, so two insertions never land on the same offset.
+  for (const module of new Set([...components.keys(), ...serverImports])) {
+    const style = styleOf(module.program, module.text, module.base)
+    const hooks = [...(components.get(module) ?? [])].map((fn) => hookEdits(fn, lib, module.text, module.base, style))
+    const server = serverImports.has(module) ? [{ name: 'getTranslations', source: 'next-intl/server' }] : []
+    const imports = importEdits(module.program, [...hooks.flatMap((h) => h.imports), ...server], module.base, style)
+    // Edits at one offset apply in order, so an import inserted at the top of the file goes first.
+    edits.set(module, [...imports, ...(edits.get(module) ?? []), ...hooks.flatMap((h) => h.edits)])
   }
   const texts = new Map([...edits].map(([module, list]) => [module.path, applyEdits(module.text, list)]))
   return { texts, entries, moved }
