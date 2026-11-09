@@ -8,7 +8,7 @@ import { FUNCTIONS, componentOf, scopeNames, tInScope, type Node } from './scope
 import { hookEdits, importEdits, keyWords, stemOf, styleOf, type Lib } from './strings'
 
 const SKIP = new Set(['loc', 'leadingComments', 'trailingComments', 'innerComments', 'extra'])
-const TEXT_KEYS = new Set(['title', 'label', 'description', 'placeholder', 'subtitle', 'message', 'text', 'alt', 'heading', 'caption'])
+const TEXT_KEYS = new Set(['title', 'label', 'description', 'placeholder', 'subtitle', 'message', 'text', 'alt', 'heading', 'caption', 'group'])
 /** `name` is only text beside one of these, as in a nav item. Elsewhere it is usually a person or an id. */
 const NAV_KEYS = new Set(['href', 'url', 'path', 'to', 'icon'])
 /** Next reads these exports by name, so they cannot become functions. */
@@ -166,6 +166,26 @@ function allUses(data: Data, modules: Module[], known: ReadonlySet<string>, lib:
   return uses.length ? uses : null
 }
 
+type Local = { component: Node; strings: Node[] }
+
+/** Text in `const x = [...]` or `{...}` written straight in a component body, where the hook can reach it. */
+function localData(module: Module, reserved: ReadonlySet<string>, lib: Lib): Local[] {
+  const found: Local[] = []
+  visit(module.program, [], (node, above) => {
+    if (node.type !== 'VariableDeclaration' || node.kind !== 'const') return
+    const component = componentOf(above)
+    if (!component || above[above.length - 1] !== component.body || (lib === 'react-i18next' && component.async)) return
+    if (tInScope([...above.slice(1), node])) return
+    for (const declarator of (node.declarations as Node[]) ?? []) {
+      const init = declarator.init as Node | null
+      if (!init || (declarator.id as Node).type !== 'Identifier' || !['ArrayExpression', 'ObjectExpression'].includes(unwrap(init).type!)) continue
+      const strings = textsIn(init, reserved)
+      if (strings?.length) found.push({ component, strings })
+    }
+  })
+  return found
+}
+
 function parseModule({ path, text }: DataInput): Module | null {
   if (text.includes('use server')) return null
   const outcome = parseSourceOutcome(path, text, path)
@@ -230,6 +250,19 @@ export function liftData(inputs: DataInput[], lib: Lib, taken: ReadonlySet<strin
     for (const use of uses) {
       push(use.module, [{ start: use.module.base + use.node.end!, end: use.module.base + use.node.end!, text: '(t)' }])
       components.set(use.module, (components.get(use.module) ?? new Set()).add(use.component))
+    }
+  }
+  for (const module of modules.filter((m) => !barred.has(normalize(m.path)))) {
+    const stem = stemOf(module.path)
+    for (const { component, strings } of localData(module, reserved, lib)) {
+      push(module, strings.map((literal) => {
+        const en = String(literal.value)
+        const { key, isNew } = keyFor(keys, stem, en)
+        if (isNew) entries.push({ key, en, ar: '', status: 'pending', file: module.path, line: lineOf(module.text, module.base + literal.start!) })
+        return { start: module.base + literal.start!, end: module.base + literal.end!, text: `t('${key}')` }
+      }))
+      moved += strings.length
+      components.set(module, (components.get(module) ?? new Set()).add(component))
     }
   }
   for (const [module, found] of components) {
