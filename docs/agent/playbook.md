@@ -22,11 +22,11 @@ npm run proof -w @dualkit/proof -- --build
 
 ## Weekly scout
 
-Look for new or updated open-source code that closes a weakness in the spec, dependency releases we should take, and changes to Gulf formats or currency symbols. Verify licence and activity. Open one small PR per adoption, or a short note in `docs/agent/scout-log.md` when nothing is worth taking.
+Look for new or updated open-source code that closes a weakness in the spec, dependency releases we should take, and changes to Gulf formats or currency symbols. Verify licence and activity. Run `npm ci` before `npm outdated`, because `npm outdated` without an install proves nothing. Label any claim you could not check against the upstream source as unverified. Open one small PR per adoption, or a short note in `docs/agent/scout-log.md` when nothing is worth taking.
 
 ## Weekly retro
 
-Use the `retro` skill on the week's PRs. Propose changes to this playbook and to tests in a PR. Write the week's score movement in `docs/agent/weekly.md`.
+Use the `retro` skill on the week's PRs. Propose changes to this playbook and to tests in a PR. Write the week's score movement in `docs/agent/weekly.md`. Start by listing unmerged retro PRs. Link to their findings instead of repeating them, and say in the PR when no agent PR has been reviewed in the week.
 
 ## Rules
 
