@@ -13,10 +13,10 @@ No dependencies. It runs in any modern browser, in Node 18 and later, and at the
 | Country | Phone | IBAN | Other |
 | --- | --- | --- | --- |
 | UAE | Yes | Yes | Emirates ID, weekend, Sharjah weekend |
-| Saudi Arabia | Yes | Yes | VAT number, weekend |
-| Qatar | Yes | Yes | Weekend |
-| Kuwait | Yes | Yes | Weekend |
-| Bahrain | Yes | Yes | Weekend |
+| Saudi Arabia | Yes | Yes | National ID and Iqama, VAT number, weekend |
+| Qatar | Yes | Yes | Qatar ID (QID), weekend |
+| Kuwait | Yes | Yes | Civil ID, weekend |
+| Bahrain | Yes | Yes | CPR number, weekend |
 | Oman | Yes | Yes | Weekend |
 
 Every country also has its currency in `formatMoney`. `parseGulfPhone` reads a number from any of the six.
@@ -104,6 +104,28 @@ Four countries use eight-digit numbers, so a bare number can belong to any of th
 parseEmiratesId('784-1990-1234567-6')  // { ok: true, value: { digits, formatted, year: 1990 } }
 isValidEmiratesId('784199012345675')   // false, the check digit is wrong
 ```
+
+## National IDs
+
+```ts
+parseNationalId('1012345672', 'SA')    // { ok: true, value: { country: 'SA', strength: 'checksum', digits, formatted, holder: 'citizen' } }
+parseNationalId('290010112346', 'KW')  // { ok: true, value: { …, birthDate: '1990-01-01' } }
+parseNationalId('29063412345', 'QA')   // { ok: true, value: { …, strength: 'shape', birthYear: '90', nationality: '634' } }
+isValidNationalId('784199012345675', 'AE')  // false, the check digit is wrong
+formatNationalId('784199012345676', 'AE')   // 784-1990-1234567-6
+```
+
+| Country | Document | Check | Also returns |
+| --- | --- | --- | --- |
+| `AE` | Emirates ID | Checksum (Luhn) | `year` |
+| `SA` | National ID or Iqama | Checksum (Luhn) | `holder`: `citizen` or `resident` |
+| `KW` | Civil ID | Checksum (weighted mod 11) and a real birth date | `birthDate` |
+| `QA` | Qatar ID (QID) | Shape: 11 digits starting with 2 or 3 | `birthYear` (two digits), `nationality` (ISO numeric code) |
+| `BH` | CPR number | Shape: 9 digits | |
+
+`strength` tells you which kind of check ran. A `shape` result means the number looks right, not that its check digit matched, because Qatar and Bahrain do not publish one. The Saudi check is the Luhn formula that public libraries use; the Ministry of Interior shares its official formula only on request. Oman is not covered yet, because we have not found an official source for its civil number.
+
+Each country also has its own parser: `parseSaudiId`, `parseKuwaitCivilId`, `parseQatarId` and `parseBahrainCpr`. `NATIONAL_ID_EXAMPLES` holds a made-up number per country that passes, for placeholders and tests.
 
 ## IBAN
 

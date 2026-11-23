@@ -32,5 +32,13 @@ export {
 export { gulfWeek, isGulfWeekend, type GulfRegion, type GulfWeek, type Weekday } from './week'
 export { currencySign } from './currency-sign'
 export { formatEmiratesId, isValidEmiratesId, parseEmiratesId, type EmiratesId, type EmiratesIdError } from './emirates-id'
+export { parseSaudiId, type SaudiId, type SaudiIdError, type SaudiIdHolder } from './saudi-id'
+export { parseKuwaitCivilId, type KuwaitCivilId, type KuwaitCivilIdError } from './kuwait-civil-id'
+export { parseQatarId, type QatarId, type QatarIdError } from './qatar-id'
+export { parseBahrainCpr, type BahrainCpr, type BahrainCprError } from './bahrain-cpr'
+export {
+  NATIONAL_ID_COUNTRIES, NATIONAL_ID_EXAMPLES, NATIONAL_ID_LENGTH, formatNationalId, isValidNationalId, parseNationalId,
+  type NationalId, type NationalIdCountry, type NationalIdError, type NationalIdStrength,
+} from './national-id'
 export { formatIban, isValidIban, parseIban, type GulfIbanCountry, type Iban, type IbanError } from './iban'
 export type { Err, Ok, Result } from './result'

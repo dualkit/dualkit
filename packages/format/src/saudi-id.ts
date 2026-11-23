@@ -18,7 +18,7 @@ export function parseSaudiId(input: string): Result<SaudiId, SaudiIdError> {
   if (!read.ok) return read
   const digits = read.value
   if (digits.length !== LENGTH) return err('invalid_length', 'A Saudi ID or Iqama has 10 digits.')
-  const holder = HOLDERS[digits[0]]
+  const holder = HOLDERS[digits.charAt(0)]
   if (holder === undefined) return err('invalid_prefix', 'A Saudi ID starts with 1, an Iqama with 2.')
   if (!passesLuhn(digits)) return err('invalid_checksum', 'This Saudi ID or Iqama number is not valid. Check for a typo.')
   return ok({ digits, formatted: digits, holder })

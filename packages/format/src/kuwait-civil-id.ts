@@ -32,7 +32,7 @@ export function parseKuwaitCivilId(input: string): Result<KuwaitCivilId, KuwaitC
   if (!read.ok) return read
   const digits = read.value
   if (digits.length !== LENGTH) return err('invalid_length', 'A Kuwait Civil ID has 12 digits.')
-  const century = CENTURIES[digits[0]]
+  const century = CENTURIES[digits.charAt(0)]
   if (century === undefined) return err('invalid_prefix', 'A Kuwait Civil ID starts with 1, 2 or 3.')
   const born = birthDate(digits, century)
   if (born === null) return err('invalid_birth_date', 'The birth date in this Civil ID does not exist. Check for a typo.')
