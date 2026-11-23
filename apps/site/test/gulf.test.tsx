@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
+import { NATIONAL_ID_COUNTRIES } from '@dualkit/format'
 import { GulfDemo } from '../components/gulf/GulfDemos'
 import { GULF_COPY, GULF_SLUGS, gulfInstall } from '../lib/gulf-copy'
 
@@ -62,5 +63,16 @@ describe('Gulf demos', () => {
     const dates = renderToStaticMarkup(<GulfDemo slug="gulf-hijri-date" />)
     expect(dates).toContain('2 Jumada al-Awwal 1448 AH')
     expect(dates).toContain('٢ جمادى الأولى ١٤٤٨ هـ')
+  })
+
+  it('lets you pick any of the five national ID countries in both languages', () => {
+    const html = renderToStaticMarkup(<GulfDemo slug="gulf-national-id-input" />)
+    const t = GULF_COPY.items['gulf-national-id-input']
+    for (const country of NATIONAL_ID_COUNTRIES) {
+      expect(html).toContain(`value="${country}"`)
+      expect(html).toContain(t.en.countries[country])
+      expect(html).toContain(t.ar.countries[country])
+    }
+    expect(html).toContain('&quot;strength&quot;:&quot;checksum&quot;')
   })
 })

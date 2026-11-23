@@ -31,13 +31,13 @@ Dualkit fixes them at the source, in the agent and in the code, and checks any p
 | | What it is | Install |
 | --- | --- | --- |
 | **[Skills](plugin/skills/)** | Five agent skills for Claude Code and Cursor, listed in the Claude plugin directory: RTL layout, Arabic and Latin type pairing, Gulf formats, bilingual copy, converting an app | `/plugin marketplace add dualkit/dualkit` |
-| **[Format](packages/format/)** | Six Gulf currencies, Umm al-Qura dates, Arabic numerals, GCC phones and IBANs for all six countries, Emirates ID, Saudi VAT number, Gulf weekends. No dependencies | `npm i @dualkit/format` |
+| **[Format](packages/format/)** | Six Gulf currencies, Umm al-Qura dates, Arabic numerals, GCC phones and IBANs for all six countries, national IDs for five GCC countries, Saudi VAT number, Gulf weekends. No dependencies | `npm i @dualkit/format` |
 | **[Starter](packages/starter/)** | A bilingual design system to fork: one token file feeds CSS, Tailwind and Figma, plus eight React components | [From the release](#starter) |
 | **[Check](packages/cli/)** | Audit any page for Arabic and RTL bugs, with a shareable Gulf-ready report | `npx dualkit check <url>` |
 | **[Lint](packages/lint/)** | 8 source rules on by default that catch Arabic and RTL bugs in your CSS, HTML, JavaScript and TypeScript, with no browser | `npx dualkit@beta lint .` |
 | **[Convert](packages/convert/)** | Turns an English Next.js or Vite React app into an Arabic one on a new git branch, and proves English did not change | `npx dualkit@beta convert` |
 | **[MCP](packages/mcp/)** | An MCP server for Claude Code, Cursor and Codex: Gulf formats and validators, the rules, and a no-browser check of HTML | `claude mcp add dualkit -- npx -y @dualkit/mcp` |
-| **[Gulf components](packages/starter/gulf/)** | Five shadcn inputs that use your own theme: GCC phone, IBAN, Emirates ID, amount and Hijri date, checked with Format | `npx shadcn@latest add https://dualkit.dev/r/gulf-phone-input.json` |
+| **[Gulf components](packages/starter/gulf/)** | Five shadcn inputs that use your own theme: GCC phone, IBAN, national ID, amount and Hijri date, checked with Format | `npx shadcn@latest add https://dualkit.dev/r/gulf-phone-input.json` |
 | **[Figma plugin](apps/figma/)** | Check a frame against 16 of the 34 rules, and fill it with Gulf sample data. Coming to Figma Community; not tested in Figma yet | [In progress](#figma-plugin) |
 
 ## Proof
@@ -119,7 +119,7 @@ Five inputs for a shadcn project. They use your shadcn theme instead of the Star
 npx shadcn@latest add https://dualkit.dev/r/gulf-phone-input.json
 ```
 
-Swap `gulf-phone-input` for `gulf-iban-input`, `gulf-national-id-input` (Emirates ID for now), `gulf-amount` or `gulf-hijri-date`. Each brings the shared `gulf-field` file. Live English and Arabic demos are at [dualkit.dev/components/gulf](https://dualkit.dev/components/gulf).
+Swap `gulf-phone-input` for `gulf-iban-input`, `gulf-national-id-input` (UAE, Saudi, Kuwait, Qatar and Bahrain IDs), `gulf-amount` or `gulf-hijri-date`. Each brings the shared `gulf-field` file. Live English and Arabic demos are at [dualkit.dev/components/gulf](https://dualkit.dev/components/gulf).
 
 ## Check
 
@@ -175,11 +175,11 @@ Dualkit makes no model calls in convert, and every drafted Arabic string is mark
 claude mcp add dualkit -- npx -y @dualkit/mcp
 ```
 
-It has four tools: `format` (money, Hijri dates, numerals, phones), `validate` (IBAN, Emirates ID, Saudi VAT number, GCC phones), `rules` (the 34 rules and their fixes) and `check_html`. `check_html` runs the 16 rules that work in jsdom on an HTML string, and lists the other 18 as needing a browser, so use `npx dualkit check` for those. The lines for Cursor and Codex are in [the MCP README](packages/mcp/README.md).
+It has four tools: `format` (money, Hijri dates, numerals, phones), `validate` (IBAN, national IDs, Saudi VAT number, GCC phones), `rules` (the 34 rules and their fixes) and `check_html`. `check_html` runs the 16 rules that work in jsdom on an HTML string, and lists the other 18 as needing a browser, so use `npx dualkit check` for those. The lines for Cursor and Codex are in [the MCP README](packages/mcp/README.md).
 
 ## Figma plugin
 
-Coming to Figma Community, and not tested in Figma yet. **Check frame** runs 16 of the 34 rules on the text layers of a frame and lists the other 18 as not checked in Figma, each with a reason. **Fill Gulf samples** fills the selected text with phones, IBANs and Emirates IDs that pass Format, amounts, and Gregorian and Hijri dates. To load it in Figma desktop for development, see [apps/figma](apps/figma/README.md).
+Coming to Figma Community, and not tested in Figma yet. **Check frame** runs 16 of the 34 rules on the text layers of a frame and lists the other 18 as not checked in Figma, each with a reason. **Fill Gulf samples** fills the selected text with phones, IBANs and national IDs that pass Format, amounts, and Gregorian and Hijri dates. To load it in Figma desktop for development, see [apps/figma](apps/figma/README.md).
 
 ## Contributing
 

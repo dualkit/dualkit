@@ -18,6 +18,7 @@ const API: [string, string, string][] = [
   ['parseGulfPhone("+974 3312 3456")', '{ ok: true, value: { country, e164, type } }', 'A number from any of the six GCC countries. It needs a + or 00 and the country code.'],
   ['parseQatarPhone("3312 3456")', '{ ok: true, value: { e164, type } }', 'Also parseKuwaitPhone, parseBahrainPhone and parseOmanPhone, each with format and isValid.'],
   ['parseEmiratesId("784-1990-1234567-6")', '{ ok: true, value: { formatted, year } }', 'Checks the 784 prefix and the Luhn check digit.'],
+  ['parseNationalId("1012345672", "SA")', '{ ok: true, value: { country, strength, holder } }', 'Reads national IDs for the UAE, Saudi Arabia, Kuwait, Qatar and Bahrain. strength says whether a check digit matched or only the shape was checked.'],
   ['parseIban(value, { country: "AE" })', '{ ok: true, value: { formatted, bankCode } }', 'All six countries. Length per country and mod 97.'],
   ['parseSaudiVatNumber("310 1223 9350 0003")', '{ ok: true, value: "310122393500003" }', '15 digits that start and end with 3. Also formatSaudiVatNumber and isValidSaudiVatNumber.'],
   ['gulfWeek("AE")', '{ weekend: [6, 7], firstWorkday: 1 }', 'Weekend days as ISO weekdays for AE, AE-SH, SA, QA, KW, BH and OM. isGulfWeekend(date, region, { timeZone }) checks one date.'],
@@ -58,9 +59,9 @@ export default async function Docs() {
         </section>
         <section className="doc-block" id="gulf">
           <h2 className="h2">Gulf components</h2>
-          <p className="soft">Five inputs for a shadcn project: phone, IBAN, Emirates ID, amount and Hijri date. They use your own shadcn theme instead of the Starter tokens, work with and without <code>shadcn init --rtl</code>, and every check comes from @dualkit/format.</p>
+          <p className="soft">Five inputs for a shadcn project: phone, IBAN, national ID, amount and Hijri date. They use your own shadcn theme instead of the Starter tokens, work with and without <code>shadcn init --rtl</code>, and every check comes from @dualkit/format.</p>
           <CopyCommand command={gulfInstall('gulf-phone-input')} />
-          <p className="small soft">Swap <code>gulf-phone-input</code> for <code>gulf-iban-input</code>, <code>gulf-national-id-input</code>, <code>gulf-amount</code> or <code>gulf-hijri-date</code>. Each brings the shared <code>gulf-field</code> file with it. All labels, help text and error messages come in as props. The ID input reads Emirates ID only for now. Try each one in English and Arabic on the <a href="/components/gulf">Gulf components page</a>.</p>
+          <p className="small soft">Swap <code>gulf-phone-input</code> for <code>gulf-iban-input</code>, <code>gulf-national-id-input</code>, <code>gulf-amount</code> or <code>gulf-hijri-date</code>. Each brings the shared <code>gulf-field</code> file with it. All labels, help text and error messages come in as props. The ID input takes a <code>country</code>: the UAE, Saudi Arabia (ID or Iqama), Kuwait, Qatar or Bahrain. Try each one in English and Arabic on the <a href="/components/gulf">Gulf components page</a>.</p>
         </section>
         <section className="doc-block" id="check">
           <h2 className="h2">Check a screen</h2>
@@ -89,11 +90,11 @@ export default async function Docs() {
           <h2 className="h2">MCP server</h2>
           <p className="soft">@dualkit/mcp gives any MCP client the Gulf formats, the validators and the rules. It runs on your machine over stdio, needs no browser and makes no network calls. In Claude Code:</p>
           <CopyCommand command={MCP_COMMAND} />
-          <p className="small soft">It has four tools. <code>format</code> formats money, Hijri dates, numerals and phones. <code>validate</code> checks an IBAN, Emirates ID, Saudi VAT number or GCC phone and returns format&rsquo;s result unchanged. <code>rules</code> lists the 34 check rules or returns one with its fix. <code>check_html</code> runs the rules on an HTML string in jsdom: 16 of them can run there, and the other 18 are listed as needing a browser, so use <code>npx dualkit check</code> for those. Input is capped at 512 KB and each check stops after 10 seconds. The lines for Cursor and Codex are in the <a href="https://github.com/dualkit/dualkit/blob/main/packages/mcp/README.md">MCP README</a>.</p>
+          <p className="small soft">It has four tools. <code>format</code> formats money, Hijri dates, numerals and phones. <code>validate</code> checks an IBAN, national ID, Saudi VAT number or GCC phone and returns format&rsquo;s result unchanged. <code>rules</code> lists the 34 check rules or returns one with its fix. <code>check_html</code> runs the rules on an HTML string in jsdom: 16 of them can run there, and the other 18 are listed as needing a browser, so use <code>npx dualkit check</code> for those. Input is capped at 512 KB and each check stops after 10 seconds. The lines for Cursor and Codex are in the <a href="https://github.com/dualkit/dualkit/blob/main/packages/mcp/README.md">MCP README</a>.</p>
         </section>
         <section className="doc-block" id="figma">
           <h2 className="h2">Figma plugin</h2>
-          <p className="soft">Coming to Figma Community. It has two commands. Check frame runs 16 of the 34 rules on the text layers of the selected frame and lists the other 18 as not checked in Figma, each with a reason. Fill Gulf samples replaces the selected text with phones, IBANs and Emirates IDs that pass format, amounts, and Gregorian and Hijri dates.</p>
+          <p className="soft">Coming to Figma Community. It has two commands. Check frame runs 16 of the 34 rules on the text layers of the selected frame and lists the other 18 as not checked in Figma, each with a reason. Fill Gulf samples replaces the selected text with phones, IBANs and national IDs that pass format, amounts, and Gregorian and Hijri dates.</p>
           <p className="small soft">It is not on Figma Community yet, and we have not tried it in Figma on a real Arabic frame. The code is in <a href={FIGMA_URL}>apps/figma</a>.</p>
         </section>
         <section className="doc-block">

@@ -1,12 +1,11 @@
 'use client'
 
-import type { GulfCountry } from '@dualkit/format'
+import { NATIONAL_ID_COUNTRIES, NATIONAL_ID_EXAMPLES, parseIban, parseNationalId, type GulfCountry, type NationalIdCountry } from '@dualkit/format'
 import { GulfAmount, readGulfAmount } from '@dualkit/starter/gulf/gulf-amount'
 import { GulfHijriDate, readGulfDate } from '@dualkit/starter/gulf/gulf-hijri-date'
 import { GulfIbanInput } from '@dualkit/starter/gulf/gulf-iban-input'
 import { GulfNationalIdInput } from '@dualkit/starter/gulf/gulf-national-id-input'
 import { GulfPhoneInput, readGulfPhone } from '@dualkit/starter/gulf/gulf-phone-input'
-import { parseEmiratesId, parseIban } from '@dualkit/format'
 import { useState, type ReactNode } from 'react'
 import { GULF_COPY as C, type GulfSlug } from '@/lib/gulf-copy'
 
@@ -57,13 +56,27 @@ function IbanDemo({ lang }: { lang: Lang }) {
   )
 }
 
+/** The country picker sits outside the input, the way a form would ask for nationality or residence first. */
 function NationalIdDemo({ lang }: { lang: Lang }) {
   const t = C.items['gulf-national-id-input'][lang]
-  const demo = useDemo('784199012345676', parseEmiratesId)
+  const [country, setCountry] = useState<NationalIdCountry>(lang === 'ar' ? 'SA' : 'AE')
+  const initial = lang === 'ar' ? '1012345672' : '784199012345676'
+  const demo = useDemo(initial, (v) => parseNationalId(v, country))
+  // A new country starts from its own example, so the demo shows a valid number rather than a trimmed one.
+  const pick = (next: NationalIdCountry) => {
+    setCountry(next)
+    demo.onChange(NATIONAL_ID_EXAMPLES[next])
+  }
   return (
     <Pane lang={lang} result={demo.result}>
-      <GulfNationalIdInput label={t.label} help={t.help} errorMessages={t.errors} value={demo.value} onChange={demo.onChange}
-        onResult={demo.onResult} numerals={lang === 'ar' ? 'arab' : 'latn'} />
+      <label className="gulf-country">
+        <span>{t.country}</span>
+        <select value={country} onChange={(e) => pick(e.target.value as NationalIdCountry)}>
+          {NATIONAL_ID_COUNTRIES.map((c) => <option key={c} value={c}>{t.countries[c]}</option>)}
+        </select>
+      </label>
+      <GulfNationalIdInput label={t.label} help={t.help[country]} errorMessages={t.errors} value={demo.value} onChange={demo.onChange}
+        onResult={demo.onResult} country={country} numerals={lang === 'ar' ? 'arab' : 'latn'} />
     </Pane>
   )
 }

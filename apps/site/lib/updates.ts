@@ -6,6 +6,25 @@ export type Release = {
 
 export const RELEASES: readonly Release[] = [
   {
+    slug: 'gulf-national-ids',
+    date: '2026-11-23',
+    version: '@dualkit/format 0.3.0-beta.0',
+    tags: ['Format', 'Starter', 'MCP', 'Figma'],
+    title: 'National IDs for five Gulf countries',
+    body: [
+      '@dualkit/format now reads national IDs for the UAE, Saudi Arabia, Kuwait, Qatar and Bahrain. parseNationalId(input, country) returns the digits, the formatted number and what the number encodes: whether a Saudi number is a citizen ID or an Iqama, the birth date in a Kuwait Civil ID, and the birth year and nationality code in a Qatar ID.',
+      'Every result has a strength. UAE, Saudi and Kuwait numbers have a check digit, so a checksum result means it matched. Qatar and Bahrain publish no check digit, so their results say shape: the number has the right length and fixed digits, and nothing more. The Saudi check is the Luhn formula that public libraries use, because the Ministry of Interior shares the official one only on request. Oman is not covered yet, because we have not found an official source for its civil number.',
+      'The gulf-national-id-input component takes a country prop and groups, checks and sets its placeholder for that country. It still defaults to the UAE. onResult now also returns country and strength. The demo at /components/gulf has a country picker in English and Arabic. The new Arabic copy is a draft, and it has not had a native review yet.',
+      '@dualkit/mcp 0.2.0-beta.0 adds a national_id kind to validate, with a required country. The emirates_id kind still works. Fill Gulf samples in the Figma plugin now fills Saudi, Kuwait, Qatar and Bahrain IDs too, and picks them from layer names such as Iqama, Civil ID, QID and CPR. Every sample ID is made up.',
+    ],
+    shipped: [
+      { name: '@dualkit/format 0.3.0-beta.0', line: 'parseNationalId, plus parseSaudiId, parseKuwaitCivilId, parseQatarId and parseBahrainCpr' },
+      { name: '@dualkit/mcp 0.2.0-beta.0', line: 'validate reads national IDs for five countries' },
+      { name: 'shadcn registry', line: 'gulf-national-id-input with a country prop' },
+      { name: 'Dualkit for Figma', line: 'National ID samples for five countries. Not on Figma Community yet' },
+    ],
+  },
+  {
     slug: 'gulf-layer',
     date: '2026-11-06',
     version: '@dualkit/mcp 0.1.0-beta.0',
@@ -324,8 +343,8 @@ export const UP_NEXT: readonly RoadmapItem[] = [
     steps: [['Design', true], ['8 source rules', true], ['CLI and Action', true], ['Released', true]] },
   { title: 'The Bench', line: 'How well does AI build Arabic? Find out every month.', state: 'In progress',
     steps: [['Design', true], ['Prompts', true], ['Monthly runner', true], ['Leaderboard page', true], ['First run', false]] },
-  { title: 'More Gulf formats', line: 'Saudi ID and Iqama, and amounts read back from text.', state: 'Coming',
-    steps: [['Saudi ID and Iqama', false], ['parseMoney', false], ['In the Gulf components', false]] },
+  { title: 'More Gulf formats', line: 'National IDs for five GCC countries, and amounts read back from text.', state: 'In progress',
+    steps: [['Saudi ID and Iqama', true], ['Kuwait, Qatar and Bahrain IDs', true], ['In the Gulf components', true], ['parseMoney', false], ['Saudi National Address', false]] },
   { title: 'Listed where agents look', line: 'Dualkit on Context7 and skills.sh.', state: 'Coming',
     steps: [['Context7', false], ['skills.sh', false]] },
   { title: 'Charts in Arabic', line: 'Check rules for right-to-left charts.', state: 'Coming',

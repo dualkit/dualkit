@@ -70,8 +70,8 @@ describe('gulf layer release', () => {
   const r = RELEASES.find((x) => x.slug === 'gulf-layer')!
   const text = [r.title, ...r.body, ...r.shipped.flatMap((s) => [s.name, s.line])].join('\n')
 
-  it('is the newest release, dated the day it shipped', () => {
-    expect(RELEASES[0]?.slug).toBe('gulf-layer')
+  it('comes right after the national IDs release, dated the day it shipped', () => {
+    expect(RELEASES[1]?.slug).toBe('gulf-layer')
     expect(r.date).toBe('2026-11-06')
   })
 
@@ -93,6 +93,30 @@ describe('gulf layer release', () => {
   })
 })
 
+describe('national IDs release', () => {
+  const r = RELEASES.find((x) => x.slug === 'gulf-national-ids')!
+  const text = [r.title, ...r.body, ...r.shipped.flatMap((s) => [s.name, s.line])].join('\n')
+
+  it('is the newest release', () => {
+    expect(RELEASES[0]?.slug).toBe('gulf-national-ids')
+  })
+
+  it('says which checks are shape only, that Oman is missing, and that the Arabic is a draft', () => {
+    expect(text).toContain('Qatar and Bahrain publish no check digit')
+    expect(text).toContain('Oman is not covered yet')
+    expect(text).toContain('The new Arabic copy is a draft')
+    expect(text).not.toMatch(/reviewed by a native|native(ly)? reviewed|native review(ed)? (of|by)/i)
+  })
+
+  it('moves More Gulf formats to in progress with the ID steps ticked', async () => {
+    const { UP_NEXT } = await import('../lib/updates')
+    const formats = UP_NEXT.find((i) => i.title === 'More Gulf formats')!
+    expect(formats.state).toBe('In progress')
+    expect(formats.steps).toContainEqual(['Saudi ID and Iqama', true])
+    expect(formats.steps).toContainEqual(['parseMoney', false])
+  })
+})
+
 describe('gulf layer roadmap', () => {
   it('releases MCP and the Gulf components, and keeps Figma in progress until it is on Figma Community', async () => {
     const { UP_NEXT, progress } = await import('../lib/updates')
@@ -108,7 +132,7 @@ describe('gulf layer roadmap', () => {
 
   it('lists the next set as coming, with nothing ticked', async () => {
     const { UP_NEXT, progress } = await import('../lib/updates')
-    for (const title of ['More Gulf formats', 'Listed where agents look', 'Charts in Arabic', 'Government standards', 'Mobile']) {
+    for (const title of ['Listed where agents look', 'Charts in Arabic', 'Government standards', 'Mobile']) {
       const item = UP_NEXT.find((i) => i.title === title)
       expect(item?.state, title).toBe('Coming')
       expect(progress(item!).done, title).toBe(0)
