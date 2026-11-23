@@ -1,4 +1,4 @@
-import { parseEmiratesId, parseGulfPhone, parseIban, parseSaudiPhone, parseSaudiVatNumber } from '@dualkit/format'
+import { NATIONAL_ID_COUNTRIES, NATIONAL_ID_EXAMPLES, parseEmiratesId, parseGulfPhone, parseIban, parseNationalId, parseSaudiPhone, parseSaudiVatNumber } from '@dualkit/format'
 import { describe, expect, it } from 'vitest'
 import { expectPlainError, json, useClient } from './helpers'
 
@@ -24,6 +24,20 @@ describe('validate', () => {
 
   it.each(['784-1990-1234567-6', '784-1990-1234567-5'])('validates the Emirates ID %s', async (value) => {
     expect(json(await call('validate', { kind: 'emirates_id', value }))).toEqual(parseEmiratesId(value))
+  })
+
+  it.each(NATIONAL_ID_COUNTRIES)('validates a national ID for %s', async (country) => {
+    const value = NATIONAL_ID_EXAMPLES[country]
+    expect(json(await call('validate', { kind: 'national_id', value, country }))).toEqual(parseNationalId(value, country))
+  })
+
+  it('returns a bad national ID as a result', async () => {
+    expect(json(await call('validate', { kind: 'national_id', value: '1012345671', country: 'SA' })))
+      .toMatchObject({ ok: false, error: { code: 'invalid_checksum' } })
+  })
+
+  it.each([{ country: 'OM' }, {}])('names the supported countries for a national ID with %j', async (extra) => {
+    expect(expectPlainError(await call('validate', { kind: 'national_id', value: '1', ...extra }))).toMatch(/AE, SA, KW, QA or BH/)
   })
 
   it.each(['3101 2345 6700 003', '12'])('validates the Saudi VAT number %s', async (value) => {

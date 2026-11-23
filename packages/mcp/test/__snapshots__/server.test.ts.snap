@@ -122,7 +122,7 @@ exports[`server > lists the four tools with their input schemas 1`] = `
       "openWorldHint": false,
       "readOnlyHint": true,
     },
-    "description": "Checks a Gulf IBAN, Emirates ID, Saudi VAT number or GCC phone number with @dualkit/format, and returns its result unchanged: { ok: true, value } or { ok: false, error: { code, message } }. An invalid value is a normal result, not a tool error; the code is stable, so map it to your own copy.",
+    "description": "Checks a Gulf IBAN, national ID (Emirates ID, Saudi ID or Iqama, Kuwait Civil ID, Qatar QID, Bahrain CPR; Oman not yet), Saudi VAT number or GCC phone number with @dualkit/format, and returns its result unchanged: { ok: true, value } or { ok: false, error: { code, message } }. An invalid value is a normal result, not a tool error; the code is stable, so map it to your own copy. A national_id result has strength checksum or shape: Qatar and Bahrain publish no check digit, so shape means the number only looks right.",
     "execution": {
       "taskSupport": "forbidden",
     },
@@ -130,7 +130,7 @@ exports[`server > lists the four tools with their input schemas 1`] = `
       "$schema": "http://json-schema.org/draft-07/schema#",
       "properties": {
         "country": {
-          "description": "iban and phone only: AE, SA, QA, KW, BH or OM. For iban it requires that country. For phone it reads a national number of that country; leave it out for an international number from any GCC country.",
+          "description": "iban, phone and national_id: AE, SA, QA, KW, BH or OM. national_id needs it, and takes AE, SA, KW, QA or BH. For iban it requires that country. For phone it reads a national number of that country; leave it out for an international number from any GCC country.",
           "enum": [
             "AE",
             "SA",
@@ -142,10 +142,11 @@ exports[`server > lists the four tools with their input schemas 1`] = `
           "type": "string",
         },
         "kind": {
-          "description": "iban, emirates_id, saudi_vat or phone.",
+          "description": "iban, emirates_id, national_id, saudi_vat or phone.",
           "enum": [
             "iban",
             "emirates_id",
+            "national_id",
             "saudi_vat",
             "phone",
           ],

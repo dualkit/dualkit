@@ -57,11 +57,18 @@ A Hijri date needs `timeZone`, because the day changes at local midnight.
 
 ### `validate`
 
-Checks an IBAN, Emirates ID, Saudi VAT number or GCC phone number, and returns format's result unchanged. An invalid value is a normal result, not an error, and the `code` is stable, so you can map it to your own Arabic and English copy.
+Checks an IBAN, national ID, Saudi VAT number or GCC phone number, and returns format's result unchanged. An invalid value is a normal result, not an error, and the `code` is stable, so you can map it to your own Arabic and English copy.
 
 ```json
 { "kind": "iban", "value": "AE07 0331 2345 6789 0123 457" }
 → { "ok": false, "error": { "code": "invalid_checksum", "message": "This IBAN is not valid. Check for a typo." } }
+```
+
+`national_id` needs a `country`: `AE` (Emirates ID), `SA` (national ID or Iqama), `KW` (Civil ID), `QA` (QID) or `BH` (CPR). Oman is not covered yet. The result's `strength` is `checksum` when a check digit matched, or `shape` for Qatar and Bahrain, which publish no check digit.
+
+```json
+{ "kind": "national_id", "value": "1012345672", "country": "SA" }
+→ { "ok": true, "value": { "country": "SA", "strength": "checksum", "digits": "1012345672", "formatted": "1012345672", "holder": "citizen" } }
 ```
 
 ### `rules`
