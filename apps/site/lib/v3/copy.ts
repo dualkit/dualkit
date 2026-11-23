@@ -120,7 +120,7 @@ export const V3 = {
       },
       mcp: {
         title: '@dualkit/mcp', status: '4 tools',
-        tools: [['format', 'money, Hijri, numerals, phones'], ['validate', 'IBAN, Emirates ID, VAT, phones'], ['rules', 'the 34 rules and their fixes'], ['check_html', '16 rules, no browser']],
+        tools: [['format', 'money, Hijri, numerals, phones'], ['validate', 'IBAN, national IDs, VAT, phones'], ['rules', 'the 34 rules and their fixes'], ['check_html', '16 rules, no browser']],
       },
       figma: {
         title: 'Dualkit for Figma', status: 'Coming to Figma Community',

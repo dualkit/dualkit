@@ -9,6 +9,8 @@ export const OUT_DIR = join(STARTER, '../../apps/site/public/r')
 const BASE_URL = 'https://dualkit.dev/r'
 const TARGET_DIR = 'components/dualkit'
 const FORMAT = '@dualkit/format'
+/** The gulf inputs need the national ID API, so shadcn add must not install an older format from npm. */
+const GULF_FORMAT = `${FORMAT}@^0.3.0-beta.0`
 
 const SETUP = `Import ${TARGET_DIR}/tokens.css, then ${TARGET_DIR}/styles.css, once in your root layout. Set lang and dir on <html>: lang="ar" dir="rtl" switches to Arabic type and mirrors the layout.`
 
@@ -62,7 +64,7 @@ const GULF_FIELD = {
   type: 'registry:ui',
   title: 'Gulf field',
   description: 'The label, note and caret handling the gulf inputs share.',
-  dependencies: [FORMAT],
+  dependencies: [GULF_FORMAT],
   registryDependencies: ['label'],
   files: [gulfFile('gulf-field')],
   docs: GULF_DOCS,
@@ -73,7 +75,7 @@ const gulf = (name, title, description) => ({
   type: 'registry:ui',
   title,
   description,
-  dependencies: [FORMAT],
+  dependencies: [GULF_FORMAT],
   // Label comes in through gulf-field, which is the only file that imports it.
   registryDependencies: ['input', `${BASE_URL}/gulf-field.json`],
   files: [gulfFile(name)],
@@ -84,7 +86,7 @@ export const GULF_ITEMS = [
   GULF_FIELD,
   gulf('gulf-phone-input', 'Gulf phone input', 'A phone number from any of the six GCC countries. Reads Arabic-Indic digits, returns E.164 and stays left to right in Arabic.'),
   gulf('gulf-iban-input', 'Gulf IBAN input', 'Groups a Gulf IBAN in fours as it is typed and checks its length and checksum for each country.'),
-  gulf('gulf-national-id-input', 'Gulf national ID input', 'An Emirates ID number, hyphenated as it is typed and checked against the 784 prefix and check digit.'),
+  gulf('gulf-national-id-input', 'Gulf national ID input', 'A national ID for the UAE, Saudi Arabia (ID or Iqama), Kuwait, Qatar or Bahrain, grouped as it is typed. UAE, Saudi and Kuwait numbers are checked against their check digit; Qatar and Bahrain get a shape check.'),
   gulf('gulf-amount', 'Gulf amount', 'An amount in AED, SAR, QAR, KWD, BHD or OMR, with three decimals for the dinars and the rial and Arabic or Western digits.'),
   gulf('gulf-hijri-date', 'Gulf Hijri date', 'A date typed once and shown in Gregorian and Umm al-Qura Hijri. The time zone is required.'),
 ]

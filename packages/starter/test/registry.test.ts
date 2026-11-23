@@ -54,10 +54,16 @@ describe('gulf registry items', () => {
     }
   })
 
+  it('describes the national ID input for all five countries', () => {
+    const item = gulf.find((i) => i.name === 'gulf-national-id-input') as Item & { description: string }
+    for (const country of ['UAE', 'Saudi', 'Kuwait', 'Qatar', 'Bahrain']) expect(item.description).toContain(country)
+  })
+
   it('builds on shadcn primitives and format, never on the Dualkit base', () => {
     for (const item of gulf) {
       expect(item.registryDependencies, item.name).not.toContain('https://dualkit.dev/r/base.json')
-      expect(item.dependencies, item.name).toEqual(['@dualkit/format'])
+      // Pinned, so shadcn add never installs a format older than the national ID API.
+      expect(item.dependencies, item.name).toEqual(['@dualkit/format@^0.3.0-beta.0'])
       // Each item declares only the primitives its own file imports; Label comes in through gulf-field.
       expect(item.registryDependencies, item.name).toEqual(
         item.name === 'gulf-field' ? ['label'] : ['input', 'https://dualkit.dev/r/gulf-field.json'],

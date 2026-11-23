@@ -40,7 +40,7 @@ export const COPY = {
     points: [
       ['Money', 'All six Gulf currencies, in English or Arabic, with either digit system.'],
       ['Dates', 'Umm al-Qura Hijri, pinned to the right time zone.'],
-      ['Identity and payments', 'Phones and IBANs for all six GCC countries, Emirates ID with its check digit, and the Saudi VAT number.'],
+      ['Identity and payments', 'Phones and IBANs for all six GCC countries, national IDs for five of them, and the Saudi VAT number.'],
     ] as const,
   },
   starter: {
