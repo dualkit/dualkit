@@ -1,6 +1,6 @@
 import {
-  formatEmiratesId, formatHijri, formatIban, formatMoney, formatSaudiPhone, formatUaePhone, toArabicDigits,
-  type Currency, type Locale, type Numerals,
+  formatEmiratesId, formatHijri, formatIban, formatMoney, formatNationalId, formatSaudiPhone, formatUaePhone, toArabicDigits,
+  type Currency, type Locale, type NationalIdCountry, type Numerals,
 } from '@dualkit/format'
 import { SAMPLE_KINDS, type SampleKind } from './kinds'
 import { digits, int, mulberry32, pickOne, seedFor, type Random } from './random'
@@ -12,6 +12,7 @@ export { SAMPLE_KINDS, isSampleKind, type SampleKind } from './kinds'
 
 export const SAMPLE_LABELS: Record<SampleKind, string> = {
   'phone-ae': 'UAE phone', 'phone-sa': 'Saudi phone', 'iban-ae': 'UAE IBAN', 'iban-sa': 'Saudi IBAN', 'emirates-id': 'Emirates ID',
+  'national-id-sa': 'Saudi ID', 'national-id-kw': 'Kuwait Civil ID', 'national-id-qa': 'Qatar ID', 'national-id-bh': 'Bahrain CPR',
   'amount-aed': 'Amount in AED', 'amount-sar': 'Amount in SAR', 'amount-kwd': 'Amount in KWD',
   'date-gregorian': 'Gregorian date', 'date-hijri': 'Hijri date',
 }
@@ -67,6 +68,33 @@ function emiratesId(rng: Random): string {
   return `${body}${luhnDigit(body)}`
 }
 
+function saudiId(rng: Random): string {
+  const body = `${pickOne(rng, ['1', '2'] as const)}${digits(rng, 8)}`
+  return `${body}${luhnDigit(body)}`
+}
+
+const KUWAIT_WEIGHTS = [2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2] as const
+const kuwaitCheck = (body: string): number => 11 - (KUWAIT_WEIGHTS.reduce((s, w, i) => s + w * Number(body[i]), 0) % 11)
+
+/** Century digit, a real YYMMDD birth date, four serial digits and the check digit. Serials whose check is 10 or 11 have no valid ID, so they are drawn again. */
+function kuwaitCivilId(rng: Random): string {
+  const year = int(rng, 1970, 2005)
+  const date = `${year < 2000 ? '2' : '3'}${pad(year % 100)}${pad(int(rng, 1, 12))}${pad(int(rng, 1, 28))}`
+  for (;;) {
+    const body = `${date}${digits(rng, 4)}`
+    const check = kuwaitCheck(body)
+    if (check < 10) return `${body}${check}`
+  }
+}
+
+/** Qatar, India, Pakistan and Egypt, as ISO 3166 numeric nationality codes. */
+const QATAR_NATIONALITIES = ['634', '356', '586', '818'] as const
+const qatarId = (rng: Random): string => `2${pad(int(rng, 70, 99))}${pickOne(rng, QATAR_NATIONALITIES)}${digits(rng, 5)}`
+
+function nationalId(kind: SampleKind, country: NationalIdCountry, id: string, style: SampleStyle): string {
+  return withNumerals(required(formatNationalId(id, country), kind), style.numerals)
+}
+
 const MINOR: Record<Currency, number> = { AED: 100, SAR: 100, QAR: 100, KWD: 1000, BHD: 1000, OMR: 1000 }
 
 function amount(rng: Random, currency: Currency, style: SampleStyle): string {
@@ -92,6 +120,10 @@ const GENERATORS: Record<SampleKind, Generator> = {
   'iban-ae': (rng, s) => withNumerals(required(formatIban(iban(rng, 'AE')), 'iban-ae'), s.numerals),
   'iban-sa': (rng, s) => withNumerals(required(formatIban(iban(rng, 'SA')), 'iban-sa'), s.numerals),
   'emirates-id': (rng, s) => withNumerals(required(formatEmiratesId(emiratesId(rng)), 'emirates-id'), s.numerals),
+  'national-id-sa': (rng, s) => nationalId('national-id-sa', 'SA', saudiId(rng), s),
+  'national-id-kw': (rng, s) => nationalId('national-id-kw', 'KW', kuwaitCivilId(rng), s),
+  'national-id-qa': (rng, s) => nationalId('national-id-qa', 'QA', qatarId(rng), s),
+  'national-id-bh': (rng, s) => nationalId('national-id-bh', 'BH', digits(rng, 9), s),
   'amount-aed': (rng, s) => amount(rng, 'AED', s),
   'amount-sar': (rng, s) => amount(rng, 'SAR', s),
   'amount-kwd': (rng, s) => amount(rng, 'KWD', s),
@@ -107,7 +139,11 @@ const SAUDI = /saudi|ksa|\bsa\b|\bsar\b|riyal|966|سعود/i
 const KUWAIT = /kuwait|\bkwd\b|dinar|كويت|دينار/i
 const NAME_RULES: ReadonlyArray<[RegExp, (name: string) => SampleKind]> = [
   [/iban|آيبان|ايبان/i, (n) => (SAUDI.test(n) ? 'iban-sa' : 'iban-ae')],
-  [/emirates|\beid\b|national id|id number|هوية/i, () => 'emirates-id'],
+  [/iqama|إقامة|saudi id/i, () => 'national-id-sa'],
+  [/civil id|مدنية/i, () => 'national-id-kw'],
+  [/\bqid\b/i, () => 'national-id-qa'],
+  [/\bcpr\b/i, () => 'national-id-bh'],
+  [/emirates|\beid\b|national id|id number|هوية/i, (n) => (SAUDI.test(n) ? 'national-id-sa' : 'emirates-id')],
   [/phone|mobile|\btel\b|هاتف|جوال/i, (n) => (SAUDI.test(n) ? 'phone-sa' : 'phone-ae')],
   [/amount|price|total|balance|cost|fee|مبلغ|سعر|إجمالي|رصيد/i, (n) => (KUWAIT.test(n) ? 'amount-kwd' : SAUDI.test(n) ? 'amount-sar' : 'amount-aed')],
   [/hijri|هجري/i, () => 'date-hijri'],

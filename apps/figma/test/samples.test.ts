@@ -1,5 +1,5 @@
 import {
-  isValidEmiratesId, isValidSaudiPhone, isValidUaePhone, parseIban, toHijri, toWesternDigits,
+  isValidEmiratesId, isValidNationalId, isValidSaudiPhone, isValidUaePhone, parseIban, toHijri, toWesternDigits,
 } from '@dualkit/format'
 import { describe, expect, it } from 'vitest'
 import { SAMPLE_KINDS, fillPlan, kindForLayerName, sample, type SampleKind, type SampleStyle } from '../src/samples'
@@ -39,6 +39,13 @@ describe('sample', () => {
 
     it(`Emirates IDs pass the Emirates ID validator (${label})`, () => {
       for (const seed of SEEDS) expect(isValidEmiratesId(sample('emirates-id', seed, style))).toBe(true)
+    })
+
+    it(`national IDs pass the national ID validator for their country (${label})`, () => {
+      const kinds = [['national-id-sa', 'SA'], ['national-id-kw', 'KW'], ['national-id-qa', 'QA'], ['national-id-bh', 'BH']] as const
+      for (const [kind, country] of kinds) {
+        for (const seed of SEEDS) expect(isValidNationalId(toWesternDigits(sample(kind, seed, style)), country)).toBe(true)
+      }
     })
 
     it(`amounts show the right currency and decimals (${label})`, () => {
@@ -96,7 +103,9 @@ describe('sample', () => {
 describe('kindForLayerName', () => {
   const cases: Array<[string, SampleKind | null]> = [
     ['Phone', 'phone-ae'], ['Mobile number', 'phone-ae'], ['tel / KSA', 'phone-sa'], ['Saudi phone', 'phone-sa'], ['رقم الجوال', 'phone-ae'],
-    ['IBAN', 'iban-ae'], ['iban sa', 'iban-sa'], ['Emirates ID', 'emirates-id'], ['EID', 'emirates-id'],
+    ['IBAN', 'iban-ae'], ['iban sa', 'iban-sa'], ['Emirates ID', 'emirates-id'], ['EID', 'emirates-id'], ['National ID', 'emirates-id'],
+    ['Iqama', 'national-id-sa'], ['رقم الإقامة', 'national-id-sa'], ['Saudi ID', 'national-id-sa'], ['National ID KSA', 'national-id-sa'],
+    ['Civil ID', 'national-id-kw'], ['QID', 'national-id-qa'], ['CPR number', 'national-id-bh'],
     ['Price', 'amount-aed'], ['Total SAR', 'amount-sar'], ['Balance KWD', 'amount-kwd'], ['Amount', 'amount-aed'],
     ['Hijri date', 'date-hijri'], ['Date', 'date-gregorian'], ['Title', null], ['Valid until', null],
   ]

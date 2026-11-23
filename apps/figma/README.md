@@ -3,7 +3,7 @@
 A Figma plugin with two commands:
 
 - **Check frame** reads the text layers in the selected frame and runs the Dualkit rules that work on Figma data. Findings are grouped by rule, each with its fix and a link to the pattern. Click a layer name to select it and zoom to it.
-- **Fill Gulf samples** replaces the text of the selected layers with sample data: UAE and Saudi phone numbers, UAE and Saudi IBANs, Emirates IDs, amounts in AED, SAR and KWD, and Gregorian and Hijri dates. Phones, IBANs and Emirates IDs pass the validators in `@dualkit/format`. The same seed always gives the same samples.
+- **Fill Gulf samples** replaces the text of the selected layers with sample data: UAE and Saudi phone numbers, UAE and Saudi IBANs, national IDs for the UAE, Saudi Arabia, Kuwait, Qatar and Bahrain, amounts in AED, SAR and KWD, and Gregorian and Hijri dates. Phones, IBANs and IDs pass the validators in `@dualkit/format`. The same seed always gives the same samples.
 
 The plugin has no network access (`allowedDomains: ["none"]`). The rules and the sample generator are bundled into it.
 
@@ -66,7 +66,7 @@ The adapter also records each text layer's parent auto-layout direction. No rule
 
 Select text layers, or a frame that holds them, then pick:
 
-- **Sample:** "From each layer's name" picks a kind from names such as Phone, Mobile, IBAN, Emirates ID, Price, Total, Amount, Date or Hijri, in English or Arabic. A name that mentions Saudi, KSA or SAR gives the Saudi kind, and one that mentions KWD or Kuwait gives KWD. Layers whose names match nothing take the kinds in turn. You can also pick one kind for every layer.
+- **Sample:** "From each layer's name" picks a kind from names such as Phone, Mobile, IBAN, Emirates ID, Iqama, Civil ID, QID, CPR, Price, Total, Amount, Date or Hijri, in English or Arabic. A name that mentions Saudi, KSA or SAR gives the Saudi kind, and one that mentions KWD or Kuwait gives KWD. Layers whose names match nothing take the kinds in turn. You can also pick one kind for every layer.
 - **Language:** English, Arabic with Western digits, or Arabic with Arabic-Indic digits.
 - **Seed:** any whole number. The same seed and the same layers always give the same text.
 
@@ -74,7 +74,7 @@ Fonts are loaded before any text changes. A layer with a missing font is skipped
 
 Arabic Gregorian dates are written as 18/02/2026, because the Arabic month names in use differ across the region and a native co-author has not chosen them yet. Hijri dates use the Umm al-Qura calendar through `formatHijri`. There are no personal names: Arabic name spellings wait for a co-author to check them.
 
-The samples are made up. An IBAN with a valid checksum can still match a real account by chance, so do not use these values outside mockups.
+The samples are made up. An IBAN or ID with a valid checksum can still match a real account or person by chance, so do not use these values outside mockups.
 
 ## Development
 

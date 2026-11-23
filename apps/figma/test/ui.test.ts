@@ -32,7 +32,7 @@ beforeAll(async () => {
 describe('plugin window', () => {
   it('says it is ready and lists every sample kind', () => {
     expect(sent[0]).toEqual({ type: 'ready' })
-    expect(q<HTMLSelectElement>('#fill-kind').options.length).toBe(11)
+    expect(q<HTMLSelectElement>('#fill-kind').options.length).toBe(15)
   })
 
   it('opens on the check tab and asks for a snapshot', () => {
